@@ -23,7 +23,7 @@ export default defineConfig({
 				'./src/styles/custom.css',
 			],
 			social: [
-				{ icon: 'github', label: 'GitHub', href: 'https://github.com/adrianql' },
+				{ icon: 'github', label: 'GitHub', href: 'https://github.com/adrianql5/adrianql5' },
 			],
 			sidebar: [
 				{

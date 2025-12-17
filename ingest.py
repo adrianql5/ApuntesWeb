@@ -308,8 +308,35 @@ import {{ Card, CardGrid }} from '@astrojs/starlight/components';
             index_path.write_text(content, encoding='utf-8')
             print(f"   📝 Creado índice: {index_path}")
         
-        # Nota: No generamos índices para cuatrimestres individuales
-        # ya que causan entradas redundantes en la sidebar de Starlight
+        # Crear índices por cuatrimestre
+        for cuatrimestre, asignaturas in cuatrimestres.items():
+            cuatri_path = curso_path / cuatrimestre
+            index_path = cuatri_path / 'index.mdx'
+            
+            cuatri_title = "Primer Cuatrimestre" if "primer" in cuatrimestre else "Segundo Cuatrimestre"
+            
+            content = f"""---
+title: {cuatri_title}
+description: Asignaturas del {cuatri_title.lower()} - {curso_title}
+---
+
+import {{ Card, CardGrid }} from '@astrojs/starlight/components';
+
+# {cuatri_title}
+
+<CardGrid>
+"""
+            for asig_slug, asig_original in sorted(asignaturas.items()):
+                content += f"""  <Card title="{asig_original}" icon="open-book">
+    [{asig_original}](/ApuntesWeb/{curso}/{cuatrimestre}/{asig_slug}/)
+  </Card>
+"""
+            content += "</CardGrid>\n"
+            
+            if not dry_run:
+                cuatri_path.mkdir(parents=True, exist_ok=True)
+                index_path.write_text(content, encoding='utf-8')
+                print(f"   📝 Creado índice: {index_path}")
 
 
 def main():

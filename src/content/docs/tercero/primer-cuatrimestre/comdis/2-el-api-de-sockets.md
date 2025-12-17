@@ -21,7 +21,7 @@ El **API de Sockets** es la interfaz de programación estándar para la comunica
 
 Un **Socket** se define conceptualmente como un **punto final (endpoint) de comunicación**. Es una abstracción que permite a un proceso enviar y recibir mensajes hacia/desde otro proceso, ya sea en la misma máquina o a través de una red.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251212153151.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153151.png)
 
 Los sockets operan sobre la pila de protocolos **TCP/IP**, que es independiente del fabricante y soporta desde redes locales (LAN) hasta  redes globales (WAN) como internet.
 
@@ -47,7 +47,7 @@ Es un protocolo **no orientado a conexión**. Se basa en el envío de **mensajes
 
 **Uso ideal:** aplicaciones donde la velocidad prima sobre la exactitud, como videoconferencias o telefonía IP ( si se pierde un frame de video, no importa, pero no podemos esperar a retransmitirlo).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251212153251.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153251.png)
 
 ## 2.3.2 TCP (Transmission Control Protocol)
 Es un protocolo **orientado a conexión**. Antes de enviar datos, se establece un canal virtual entre emisor y receptor.
@@ -59,7 +59,7 @@ Es un protocolo **orientado a conexión**. Antes de enviar datos, se establece u
 
 **Uso ideal:** Aplicaciones que requieren integridad de datos total: Web (HTTP), Correo (SMTP), Transferencia de archivos (FTP), Telnet .
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251212153307.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153307.png)
 
 # 2.4 Implementación en Java: Sockets Orientados a Conexión (TCP)
 En el modelo **Stream** (flujo) , la comunicación es exclusiva entre dos procesos conectados. Un socket stream no sirve para hacer "broadcast" a muchos procesos a la vez.
@@ -70,7 +70,7 @@ En el modelo **Stream** (flujo) , la comunicación es exclusiva entre dos proces
 >- El receptor no sabe si lo enviaste todo junto o en dos partes.
 >- **Garantía:** Es una conexión fiable, ordenada y bidireccional, similar a las tuberías (pipes) de Unix.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251212153424.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153424.png)
 
 
 
@@ -79,7 +79,7 @@ El servidor debe estar activo antes que el cliente. El proceso se basa en dos ti
 - **Socket de Conexión (`ServerSocket`):** solo se encarga de esperar clientes en un puerto (hacer `listen`)
 - **Socket de Datos (`Socket`):** cuando llega un cliente, el `ServerSocket` lo acepta y **crea un nuevo socket** dedicado exclusivamente a hablar con ese cliente. Esto permite al servidor seguir aceptando nuevos clientes en el socket de conexión original.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251212153523.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153523.png)
 
 ##  2.4.2 Diagrama de Flujo y Primitivas
 - **Servidor:** Crea el socket (`socket()` ), lo ata a un puerto (`bind()`), y se pone a escuchar (`listen()`)

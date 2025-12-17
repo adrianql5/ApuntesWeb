@@ -11,7 +11,7 @@ Razones para la **segmentación:**
 - **Menor tiempo de transmisión**
 - Una **transmisión** no satura la red con mensajes enormes, sino que da oportunidad a otras transmisiones para que **intercalen** sus paquetes.
 - En caso de **errores** en un paquete, solo hay que transmitir el paquete con errores
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/ejercicios/SolucionesPropias/QuirogaLinaresAdrian_Segmentacion1-1.pdf|QuirogaLinaresAdrian_Segmentacion1-1)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/ejercicios/SolucionesPropias/QuirogaLinaresAdrian_Segmentacion1-1.pdf%7CQuirogaLinaresAdrian_Segmentacion1-1)
 
 Además del tiempo de transmisión, hay que tener en cuenta el **tiempo de almacenamiento y reenvío**. Este es el tiempo que toma recibir y almacenar un paquete en un router y luego reenviarlo al siguiente enlace. Según el diagrama, parece que este almacenamiento y reenvío toma **0.002 segundos** por router. Dado que hay **2 routers intermedios**, el tiempo adicional de reenvío para **2500 paquetes** es 0.004 seg.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241002092759.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241002092759.png)

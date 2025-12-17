@@ -37,7 +37,7 @@ Sin embargo como no tengas internet estás jodido y la instalación obviamente v
 
 Además ya para llegar a este paso deberías saber cómo bootear un SO. Eso lo tengo explicado en un repositorio llamado HyprDebian en mi perfil de github.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251204162155.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251204162155.png)
 
 Cuando lanzas el iso te salta esta pestaña y empieza la magia.
 
@@ -68,14 +68,14 @@ Para cambiarnos de un usuario normal a **superusuario** usamos `su -`, dónde `s
 
 ## 1.2.3 Elección de contraseña
 Lo suyo es escoger una constreña segura, si eres tonto y metiste como contraseña `asdf` y quieres proteger a tu ordenador un mínimo siempre la puedes cambiar gracias al comando `passwd`: 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251204170450.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251204170450.png)
 
 ## 1.2.4 Continuación de la instalación
 En una instalación por red los paquetes se traen de un repositorio remoto a través de http o ftp (ftp no se usa normalmente pero aún hay algunos servidores de debian que lo usan).
 
 Seleccionamos el huso horario. Y realizamos el particionado del disco (modo guiado o manual).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251204171009.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251204171009.png)
 
 ## 1.2.5 Particionado del disco
 Podemos optar por instalar todo el sistema en una sola partición, aunque no es nada recomendable (a ver en verdad es recomendable si no quieres romperte la cabeza o arriesgarte a joder todo el disco). Lo más recomendable es instalar diferentes directorios del sistema en diferentes particiones
@@ -159,7 +159,7 @@ Dos opciones:
 
 ## 1.2.9 Particionamiento manual
 Seleccionamos el disco a particionar y crear nueva tabla de particiones 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251206134702.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251206134702.png)
 
 Creamos una nueva partición indicándole el tamaño, el tipo (primaria o lógica) y la localización (comienzo o final). Con la **BIOS** clásica puede haber 4 primarias o 3 primarias y una extendida, que a su vez se puede dividir en varias lógicas. Con **UEFI** se pueden crear hasta 128 primarias por disco.
 
@@ -236,7 +236,7 @@ Imaginate que tienes dos discos duros, son como dos barras de plastilina dura y 
 - **VG - Volume Group**. En una grupación de PV. Es la bola gigante de plastilina. Puedes coger tus PVs y los mezclas en un solo grupo (`diskvg`). Ahora tienes un montón de espacio libre sumado. Ahora el sistema en vez de ver dos discos pequeños ve uno grande.
 - **LV - Logical Volume**. Particiones lógicas sobre las que se montan los sistemas. Son las **figuras que moldeas** sacando material de la bola grande. Creas particiones virtuales. Creas un LV para el sistema, otro para datos, etc. Si tu figura (LV) se queda pequeña, simplemente coges más plastilina de la bola grande (VG) y la haces más grande al instante, sin reiniciar. Y si te quedas sin espacio simplemente compras un nuevo disco y lo añades al VG.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20250917104001.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020250917104001.png)
 
 ## 1.2.14 Como crear un sistema LVM
 **Crear los PV (Preparar los ingredientes):** reservar espacio para /boot fuera de LVM. El gestor de arranque (GRUB) es muy básico. A veces le cuesta "entender" la complejidad de LVM. Por seguridad, se crea una partición pequeña normal y corriente para el arranque (`/boot`), y el resto del disco se marca como PV (plastilina para el sistema).

@@ -276,7 +276,7 @@ J(θ) = 0 ✅ ¡Ajuste perfecto!
 /________🎯______\ ← Mínimo (mejor θ)
 ```
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251103114208.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251103114208.png)
 
 **Algoritmo** (repetir hasta convergencia):
 

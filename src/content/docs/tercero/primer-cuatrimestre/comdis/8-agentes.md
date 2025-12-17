@@ -235,7 +235,7 @@ Piensa en JADE como el **Sistema Operativo** de los agentes. En lugar de tener q
 ## 8.7.2 La Arquitectura JADE (El "Mundo")
 Una aplicación JADE no es un solo blue, es una estructura distribuida P2P 
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251209183923.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251209183923.png)
 
 Imagina una **Universidad (La Plataforma)**. Una universidad no es un solo edificio. Es una institución formada por varios edificios repartidos por la ciudad (Campus Norte, Campus Sur, Rectorado).
 
@@ -266,7 +266,7 @@ Además tenemos otros agentes disponibles:
 ## 8.7.3 Programación de un Agente
 Un agente es un componente activo con un nombre único y un **AID** (Agent ID)
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251209184001.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251209184001.png)
 
 **El ciclo de vida de un agente es el siguiente:**
 - **Nacimiento (`setup`):** se ejecuta una sola vez al arrancar. Aquí inicializas variables y, lo más importante, **añades los primeros comportamientos** (`addBehaviorur`)  a la "piscina" de tareas.

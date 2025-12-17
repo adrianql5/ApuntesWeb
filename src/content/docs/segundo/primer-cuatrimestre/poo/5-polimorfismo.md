@@ -11,7 +11,7 @@ El **polimorfismo** en herencia es el mecanismo por el cual un objeto se puede *
 -  La clase a la que **pertenece**, aquella cuyo constructor se invocó a través de `new()` 
 - Una de las clases que se encuentran en un **nivel superior** a la clase a la que pertenece. Esto incluye **clases abstractas**, pues la restricción impuesta sobre ellas es que no se pueden instanciar (usar `new()` para invocar sus constructores), pero en este caso el objeto se estaría inicializando usando constructores de otras clases. Que un objeto se comporte como una de sus clases base abstracta sirve para restringir los métodos que puede invocar.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250621201844.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250621201844.png)
 
 # 5.2 Upcasting y Downcasting
 Cuando se hace que un objeto se comporte como una clase distinta a la que pertenece, está forzando un **casting**, un cambio de tipo de dato en él. El casting **no implica una nueva reserva** de memoria: el objeto sigue siendo el mismo, independientemente de los castings que se hagan sobre él. El casting **afecta a la visibilidad** de los atributos y métodos que se pueden invocar desde el objeto.
@@ -20,18 +20,18 @@ Los únicos métodos y atributos accesibles por el objeto al que se le ha hecho 
 - Aquellos definidos explícitamente en la clase a la cual se ha realizado el cast
 - Aquellos que hereda (y tiene acceso) la clase a la que se hizo el cast
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250621202415.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250621202415.png)
 
 ## 5.2.1 Upcasting
 En **upcasting** un objeto de una clase derivada se comporta como su clase base en la jerarquía. Cuando se realiza un upcasting no es necesario indicar de forma explícita a qué clase base se realiza el cast, pues sólo hay una.
 
 `Animal a = new Perro();`  upcasting automático y seguro 
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250621202655.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250621202655.png)
 
 Es el mecanismo de polimorfismo más **habitual**, ya que el natural pensar que un objeto de una clase derivada se comporta como su clase base. Es una **concepto clave en la POO**, porque facilita la toma de decisiones respecto al diseño del programa: si se necesita usar upcasting, entonces se deberá usar herencia.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250621202724.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250621202724.png)
 
 >[!Nota]
 >Si un método está sobrescrito cuando se realiza upcasting, el objeto usará la implementación del método correspondiente a la clase a la que pertenece el objeto, de modo que aunque se comporta como otra clase, no utiliza las implementaciones de los métodos de esa otra clase
@@ -49,7 +49,7 @@ Es una operación no segura (`unsafe`), ya que puede generar una excepción en t
 - Por tanto, se debe **comprobar en tiempo de ejecución** que la clase a la que pertenece el objeto es la clase a la que se realiza en casting usando el operador `instanceof` 
 `<nombre_objeto> instanceof <nombre_paquete>.<nombre_clase>` 
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250621203427.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250621203427.png)
 
 
 # 5.3 Beneficios del Polimorfismo

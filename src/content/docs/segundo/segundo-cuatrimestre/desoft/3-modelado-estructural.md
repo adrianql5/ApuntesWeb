@@ -11,9 +11,9 @@ Una **clase** es una descripción de un conjunto de objetos que comparten atribu
 Los objetos de una misma clase tienen los mismos tipos de **estado** y **comportamiento**. Las clases **colaboran** entre si para satisfacer necesidades. Hay 3 tipos de **relaciones:**
 
 - **Dependencia:** los cambios en la planificación de un elemento pueden afectar a otro, indica utilización.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250225130055.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250225130055.png)
 - **Generalización:** relación padre hijo.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250225130134.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250225130134.png)
 - **Asociación:** relación estructural. Se usa para vincular clases. Ademas tenemos adornos:
 	- **Nombre:** etiqueta que describe la relación
 	- **Rol:** papel que juega cada clase relacionada
@@ -21,8 +21,8 @@ Los objetos de una misma clase tienen los mismos tipos de **estado** y **comport
 	- **Agregación:** es como lo de entidad débil - entidad fuerte de BDI (*asociación todo-partes*).
 	- **Composición:** igual que en POO.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250225130542.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250225131001.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250225130542.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250225131001.png)
 Son la base para diagramas de paquetes, componentes y despliegue. Pueden contener **paquetes**.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250225130831.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250225130831.png)

@@ -12,7 +12,7 @@ Aquellos árboles que se mantiene siempre equilibrados debido a constantes reord
 
 En este tipo de árboles, cada nodo cuenta con un campo llamado **factor de equilibrio**, que almacena *la diferencia entre la altura del subárbol derecho y la altura del subárbol izquierdo* para dicho nodo. Un árbol será equilibrado mientras el valor absoluto de todos los factores de carga sea **menor que 2**.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241002193941.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241002193941.png)
 
 # Inserción
 Se pueden dar varios casos en la inserción:
@@ -29,29 +29,29 @@ Tras una inserción, el nodo insertado pasa a ser **un nodo hoja**, por lo que s
 **4 tipos de rotaciones, I-> Izquierda  D-> Derecha:**
 - **Rotación simple II:** Se produce cuando un nodo tiene **factor -2** y su hijo izquierdo **factor -1**. Se rota hacia la **derecha**, dejando el nodo con factor **-1** como **nuevo padre**, el nodo con factor **-2** como **hijo derecho**, y el nodo que origino el desequilibrio como **hijo izquierdo**.
 - **Rotación simple DD:** Se produce cuando un nodo tiene **factor 2** y su hijo derecho es **factor -1**. Es lo contrario al caso anterior: Rotación a la izquierda, nodo con **factor 1** como **padre**, nodo con **factor 2** como **hijo izquierdo**, y nodo que originó el desequilibrio como **hijo derecho**.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241002200930.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241002200930.png)
 
 - **Rotación compuesta DI:** se produce cuando un nodo tiene **factor 2** y su **hijo derecho**, **factor -1**. Se rota el hijo con factor a la derecha y se sube el nodo que originó el desequilibrio a su posición, y se tiene una **rotación simple DD**.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/Archivos/imagenes/Pasted image 20241002201001.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241002201001.png)
 - **Rotación compuesta ID:** se produce cuando un nodo tiene **factor -2** y su **hijo izquierdo**, **factor 1**. Se rota el hijo con factor **1** a la izquierda y se pone el nodo que causó el desequilibrio en su posición, teniendo una **rotación simple II**
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241002201031.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241002201031.png)
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241002201120.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241002201120.png)
 
 
 ## Rotaciones Complicadas
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241003202659.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241003202659.png)
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241003202732.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241003202732.png)
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241003202813.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241003202813.png)
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241003202924.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241003202924.png)
 # Eliminación
 Se sigue el **mismo algoritmo que en ABB**, pero **incluyendo las reestructuraciones necesarias**:
 - Si el nodo es **hoja**, se suprime
 - Si solo tiene **un descendiente**, se sustituye por su descendiente y se elimina.
 - Si tiene **2 subárboles**, se busca el nodo más a la derecha del **subárbol derecho**, o el nodo más a la izquierda del subárbol derecho, se sustituye, se elimina y se comprueba si hace falta reestructurar.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241002202845.png)
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241002202854.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241002202845.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241002202854.png)

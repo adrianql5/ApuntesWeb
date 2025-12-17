@@ -413,4 +413,4 @@ La operación de reunión externa funciona de forma similar a la operación de r
 
 El tipo de reunion por defecto en la **reunión interna.**
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted image 20241224093618.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted%20image%2020241224093618.png)

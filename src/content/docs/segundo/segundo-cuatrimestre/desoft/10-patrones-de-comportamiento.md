@@ -9,8 +9,8 @@ El **cambio de estado** en un objeto (sujeto) se **notifica** a los objetos **su
 - Un cambio en un objeto requiera modificar otros objetos **sin que importe cuántos** son.
 - Un objeto deba ser capaz de hacer notificaciones a otros **sin hacer suposiciones sobre quiénes** son exactamente.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250423163803.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250423163817.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423163803.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423163817.png)
 
 ## Participantes
 
@@ -22,8 +22,8 @@ El **cambio de estado** en un objeto (sujeto) se **notifica** a los objetos **su
 | **ObservadorConcreto**    | Implementación del observador. Se registra al sujeto y actualiza su estado cuando recibe una notificación.                                           |
 
 ## Estructura
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250423163956.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250423164110.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423163956.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423164110.png)
 ## Ventajas e Inconvenientes
 - **Desacopla el sujeto de los observadores**: pueden evolucionar por separado.
 - Permite una **arquitectura reactiva**, donde los componentes se actualizan automáticamente.
@@ -38,8 +38,8 @@ Permite que un objeto **modifique su comportamiento** cada vez que cambia su est
 - El comportamiento de un objeto **depende de su estado** y cambiar en **tiempo de ejecución**.
 - Algunos métodos presentan estructuras **condicionales con múltiples ramas** formadas por bloques extensos de código.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250423164755.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250423164804.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423164755.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423164804.png)
 
 ## Participantes
 

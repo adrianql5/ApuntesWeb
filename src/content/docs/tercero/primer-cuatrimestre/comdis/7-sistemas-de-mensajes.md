@@ -33,7 +33,7 @@ La principal ventaja de usar MOM (como RabbitMQ) frente a una conexión directa 
 - **Desacomplamiento Estructural (Weak Coupling):** Emisor y receptor no necesitan saber nada el uno del otro (ni IP, ni tipo de servidor). Solo necesitan conocer el **formato del mensaje** y el **destino** lógico.
 - **Conexión Única:** Solo es necesaria la conexión al MOM, no una conexión mallada entre todos los servicios.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251212154927.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212154927.png)
 
 # 7.3 RabbitMQ: Arquitectura y Protocolos AMQP
 **RabbitMQ** es un middleware de mensajería (Message Broker) concebido en 2007. Aunque soporta múltiples protocolos (STOMP, HTTP), su estándar nativo y más potente es **AMQP 0-9-1**.
@@ -62,31 +62,31 @@ El comportamiento del sistema depende totalmente del tipo de _Exchange_ que conf
 - **Uso:** Ideal para patrones "Publish/Subscribe" donde varios sistemas deben reaccionar al mismo evento.
 - **Diagrama conceptual:** Un mensaje entra y se clona hacia la Cola 1 y la Cola 2 simultáneamente.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251211161649.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251211161649.png)
 
 ## 7.4.2 Direct (Directo)
 - **Lógica:** El mensaje va a una cola específica si la **Clave del Mensaje (Routing Key)** coincide **exactamente** con la **Clave de Conexión (Binding Key)** de la cola.
 - **Ejemplo:** Si el mensaje tiene clave `abc` y la Cola 1 está atada con `abc`, el mensaje entra. Si la Cola 2 espera `def`, el mensaje `abc` se descarta para esa cola.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251211161830.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251211161830.png)
 
 ## 7.4.3 Topic (Tema)
 - **Lógica:** Similar al Directo, pero permite coincidencias **parciales** usando comodines (wildcards).
 - **Ejemplo:** Un mensaje con clave `a.b.c` podría entrar en una cola que escuche `a.*` o `*.b.*`.
 - **Diagrama conceptual:** Permite enrutamiento complejo basado en patrones.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251211161938.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251211161938.png)
 
 ## 7.4.4 Header (Cabecera)
 - **Lógica:** Ignora la clave de enrutamiento. En su lugar, inspecciona los **metadatos (headers)** del mensaje para decidir el destino.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251211162106.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251211162106.png)
 
 ## 7.4.5 Default (Nameless)
 - **Lógica:** Es un Exchange predeterminado. Compara la clave del mensaje directamente con el **nombre de la cola**. Si el mensaje tiene clave `cola1`, se entrega a la cola llamada `cola1`.
 - **Nota:** Es el comportamiento por defecto si no se especifica exchange.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251211162157.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251211162157.png)
 
 
 # 7.5 Programación con RabbitMQ

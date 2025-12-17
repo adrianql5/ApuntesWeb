@@ -9,7 +9,7 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 Escrito por **Adrián Quiroga Linares**.
 
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted image 20241003132123.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted%20image%2020241003132123.png)
 
 
 
@@ -21,11 +21,11 @@ Escrito por **Adrián Quiroga Linares**.
 
 
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted image 20241003140849.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted%20image%2020241003140849.png)
 
 # Ejemplo
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted image 20241010125608.png)
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted image 20241010125636.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted%20image%2020241010125608.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted%20image%2020241010125636.png)
 
 
 ---

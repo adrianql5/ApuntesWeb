@@ -10,7 +10,7 @@ La **capa de enlace** es la segunda capa del modelo OSI y se encarga de gestiona
 - **Nodos**: hosts origen y destino y los routers
 - **Enlaces**: LANs o redes punto a punto
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125103956.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125103956.png)
 
 El objetivo principal de esta capa en transmitir bloques de bits de un lado a otro. La capa de enlace organiza los datos en unidades manejables llamadas _tramas_ (_frames_ o _marcos_), las cuales encapsulan información del nivel superior junto con metadatos para su correcta transmisión y recepción.
 
@@ -21,28 +21,28 @@ La unidad de medida o _PDU (Protocol Data Unit)_ de la capa de enlace es la **tr
 
 La capa de enlace se implementa generalmente en la **tarjeta de red** del dispositivo. El sistema operativo transfiere los datos al adaptador de red. Este adaptador añade la cabecera y envía las tramas al medio físico.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125103825.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125103825.png)
 
 Encontramos **dos tipos de enlaces:**
 1. **Punto a Punto:** Enlace directo entre un emisor y un receptor (un único par de dispositivos).
 2. **Difusión:** Un medio compartido donde múltiples emisores y receptores pueden comunicarse (ejemplo: redes Ethernet).
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125103656.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125103656.png)
 
 Los protocolos en esta capa definen el **formato de las tramas** y las acciones a realizar cuando un nodo envía o recibe tramas.
 La **capa de red** encapsula los datos de las capas superiores en tramas, delimitando dónde empieza y termina cada trama. **Controla el acceso al medio físico** mediante protocolos de acceso múltiple (_MAC_), esenciales en medios compartidos. Asegura que las tramas lleguen al receptor mediante confirmaciones y retransmisiones si es necesario. **Regula la velocidad de envío** para evitar saturar al receptor. Utiliza técnicas avanzadas para **identificar errores** en los datos causados por interferencias electromagnéticas o ruido en la señal.  **Repara errores** detectados mediante mecanismos integrados en hardware o software. **Especifica el modo de Transmisión:**
     - **Half-Duplex:** Transmisión en un solo sentido a la vez.
     - **Full-Duplex:** Transmisión simultánea en ambos sentidos.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125104106.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125104106.png)
 
 > [!Recordatorio]
-> ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241108205726.png)
+> ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241108205726.png)
 
 # 5.2 Modelo IEEE 802
 El **modelo IEEE 802** define estándares para **redes de área local** (*LANs*) y **redes de área metropolitana** (*MANs*). Este modelo organiza la **capa de enlace** en dos subcapas principales para manejar la comunicación y garantizar la interoperabilidad entre dispositivos de diferentes fabricantes.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125104820.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125104820.png)
 ## 5.2.1 LLC (Control de Enlace Lógico)
 La **capa LLC** actúa como una interfaz entre las capas superiores (como la capa de red) y la subcapa MAC. Se encarga del **control de errores y de flujo**.
 
@@ -62,7 +62,7 @@ La **capa MAC** es responsable de **ensamblar** los datos en _tramas_ (frames) y
 
 **Maneja la transmisión en medios compartidos**, controlando quién puede enviar en cada momento (evita colisiones). **Detecta y corrige errores** en las tramas cuando sea posible. **Desensambla** las tramas en el receptor, verificando las direcciones y detectando errores.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125104909.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125104909.png)
 
 ## 5.2.3 Relación Entre LLC y MAC
 La subcapa **LLC** es **independiente de la tecnología del medio físico**. Esto significa que los **mismos mecanismos de control de flujo y errores pueden usarse sobre cualquier tecnología subyacente**.
@@ -70,7 +70,7 @@ La subcapa **MAC**, en cambio, está **directamente relacionada con el medio de 
     - Ethernet tiene sus propias reglas para el acceso al medio, diferentes de las usadas en Token Ring o Wi-Fi.
 **Un LLC puede trabajar con múltiples MACs**, lo que hace al modelo IEEE 802 modular y flexible.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125105005.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125105005.png)
 
 # 5.3 Direcciones MAC Ethernet
 La arquitectura de redes combina diferentes tipos de direcciones para identificar dispositivos y facilitar la comunicación. En este contexto, las **direcciones MAC** y las **direcciones IP** desempeñan roles complementarios. La **dirección MAC (Media Access Control)** es un **identificador único asignado a cada adaptador de red o interfaz de red**. Es una dirección física, grabada generalmente en la memoria ROM del adaptador Ethernet durante su fabricación.
@@ -90,7 +90,7 @@ Se puede pensar que la **IP** indica la dirección física de un dispositivo (*l
 
 - **Modo promiscuo:**  En este modo, un adaptador puede aceptar **todas las tramas**, independientemente de su dirección de destino. Útil para herramientas de diagnóstico y análisis de redes, como los analizadores de paquetes (sniffers). Puede activarse manualmente con comandos como `ifconfig eth0 promisc`.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241230190237.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241230190237.png)
 > [!Importante]
 > **Podemos ver que la IP no cambia a lo largo del recorrido, pero la MAC address sí.**
 
@@ -100,12 +100,12 @@ El protocolo **ARP es esencial para traducir las direcciones IP**, que **son ló
 Cuando un dispositivo necesita enviar datos a una dirección IP, primero consulta la **tabla de caché ARP** para verificar si ya tiene la dirección MAC correspondiente. Si la entrada existe, se utiliza directamente. **Si la dirección IP no está en la tabla**, se envía una **solicitud ARP** a través de la red local usando una **trama de broadcast**. Ejemplo: "¿Quién tiene la dirección IP 192.168.1.10?". **Después viene la respuesta ARP donde el dispositivo con la dirección IP indicada responde con su dirección MAC en una **trama** . Ejemplo: "192.168.1.10 está en la dirección `MAC 00:1A:2B:3C:4D:5E`. **Finalmente actualiza la tabla**, la dirección MAC recibida se almacena en la **tabla de caché ARP** para uso futuro. Las entradas en la caché tienen una **duración limitada** (por defecto, 15 minutos).
 
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125110006.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125110006.png)
 # 5.4 Ethernet
 Ethernet es un estándar ampliamente utilizado para redes LAN (Local Area Network). Su simplicidad y versatilidad lo han convertido en el tipo de red más común. Se caracteriza por ser una red **de difusión** y proporcionar un servicio **no fiable**, lo que significa que no garantiza la entrega de datos, dejando el control de errores a capas superiores (como TCP).
 ## 5.4.1 Formato de la trama Ethernet
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125111045.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125111045.png)
 
 **Cabecera** tiene **7 bytes** con el patrón `10101010` repetido. Permite sincronizar al receptor con el emisor. Además tiene el **SFD (Start of Frame Delimiter)** **1 byte** con el patrón `10101011`. Indica el inicio de la trama.
 
@@ -158,7 +158,7 @@ Ethernet ha evolucionado desde sus primeras versiones para soportar redes más r
 ## 5.5.1 Repetidores
 Los repetidores son dispositivos de la **capa física** del modelo OSI que trabajan exclusivamente a nivel de **bits individuales**. Su función principal es **extender la distancia de transmisión copiando y regenerando los bits** que reciben por una interfaz y enviándolos al resto de interfaces conectadas. Se usan en transmisiones largas.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125113116.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125113116.png)
 
 ## 5.6.2 Topología Bus (Obsoleta)
 Esta fue una de las primeras configuraciones utilizadas en redes Ethernet.
@@ -173,7 +173,7 @@ Soporta un número limitado de adaptadores por segmento. No permite más de **4 
 - Banda base (sin modulación).
 - Segmentos de hasta 200 metros.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125113137.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125113137.png)
 
 ## 5.6.3 Topología Estrella
 Es la **configuración predominante en redes Ethernet modernas**. Cada nodo está conectado mediante un **par trenzado** o **fibra óptica** a un dispositivo central (*hub o conmutador | switch*). La comunicación entre nodos siempre pasa a través de este dispositivo central.
@@ -182,17 +182,17 @@ Cada nodo usa **par trenzado** (*limitado a 100m*) o **fibra óptica**. Para vel
 
 Nomenclatura: **T**: Par trenzado. **F, S, L, E**: Fibra óptica.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125113156.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125113156.png)
 
 ## 5.6.4 Hubs (Concentradores)
 Un **hub** es un dispositivo simple que también opera en la **capa física** del modelo OSI. **Regenera y retransmite los bits** que recibe por una interfaz a **todas las demás interfaces**. No distingue entre las tramas que transmite, lo que puede generar **colisiones** si dos adaptadores transmiten simultáneamente. Han quedado obsoletos y han sido reemplazados por dispositivos más avanzados como **switches**.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125113215.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125113215.png)
 
 ## 5.6.5 Bridges (Puentes) y Switches (Conmutadores)
 Los bridges y switches operan en las capas **física** y **de enlace**. Su objetivo principal es **procesar tramas Ethernet, filtrar tráfico y evitar colisiones**.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125113235.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125113235.png)
 
 
 Los **bridges** tienen pocas interfaces (generalmente 2 o 4). Ya no se utilizan en redes modernas.
@@ -202,11 +202,11 @@ Inspeccionan campos como la **dirección destino** para decidir el reenvío. Det
 
 Construyen una **tabla de reenvío** dinámica. La tabla almacena la **dirección MAC**, la **interfaz asociada** y el **tiempo de última actualización**. Inicialmente, la tabla está vacía, y el dispositivo recurre a **difusión**.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125113359.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125113359.png)
 
 Si la dirección de destino está en la tabla,  **la trama se reenvía únicamente por la interfaz correspondiente, evitando colisiones y mejorando la eficiencia**. Si la interfaz origen coincide con la de destino, se filtra la trama (se elimina). Si no está en la tabla el switch utiliza **difusión** para localizar al adaptador.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125113314.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125113314.png)
 
 
 # 5.7 VLANs (Redes de Área Local Virtuales)
@@ -219,7 +219,7 @@ Por lo que si en una empresa la red va **aumentando** vamos a tener que comprar 
 
 Estos problemas se abordan con **switches** compatibles con VLANs, que soporten el estándar IEE 802.1Q (*añade unos campos a la cabecera*). **Estos switches permiten definir múltiples LANs virtuales sobre una única red fija**. Los host de una VLAN se comunican entre si como si solo ellos (*y ningún otro host*) estuvieran conectados al switch.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241231130321.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241231130321.png)
 
 En una **VLAN basada en puertos**, el administrador de la red **divide los puertos** (*interfaces*) **del switch en grupos**.
 **Cada grupo constituye una VLAN**. Se mantienen una tabla de puertos - VLAN. Solo se entregan tramas **entre puertos de la misma VLAN**.
@@ -242,7 +242,7 @@ La conmutación de etiquetas multiprotocolo es un mecanismo de transporte de dat
 
 Así se logró mezclar de forma efectiva las técnicas de **circuitos virtuales de una red de datagramas enrutados**.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125114410.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125114410.png)
 
 **Exp:** bits experimentales, relacionados con la QoS.
 **S:** stack, vale 1 si es la última etiqueta de la jerarquía.
@@ -256,7 +256,7 @@ Los routes compatibles con MPLS cuando reciben una trama:
 - No tocan para nada la cabecera IP.
 
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125114437.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125114437.png)
 
 ## 5.8.2 Cálculo de rutas entre routers compatibles con MPLS
 Para calcular este tipo de rutas se utiliza una extensión de algoritmos como OSPF(open shortest path first). Cada fabricante utiliza el algoritmo que quiera.
@@ -273,12 +273,12 @@ El estándar 802.11 tiene varias versiones (b, a, g, n, etc.), y cada una mejora
 ## 5.9.1 Redes Ad-hoc
 Se crean directamente entre dispositivos sin necesidad de un punto de acceso (Access Point, AP). Son redes **temporales** y de **igual a igual** (peer-to-peer). Solo funcionan mientras los dispositivos están **dentro del radio de alcance**.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125115936.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125115936.png)
 
 ## 5.9.2 Redes distribuidas (Managed)
 Utilizan puntos de acceso (**Access Points, AP**) conectados a una **LAN cableada**. AP conecta a los dispositivos inalámbricos dentro de su radio y los comunica con la LAN troncal. Se usan en redes Wi-Fi gestionadas, como en **oficinas o en casa** con routers Wi-Fi.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125120007.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125120007.png)
 
 
 ## 5.9.3 Protocolo de Acceso al Medio (MACA)
@@ -290,9 +290,9 @@ Si el canal está ocupado, sigue esperando y usa un mecanismo de **backoff expon
 
 No puede detectar colisiones directamente, así que confía en los **ACKs**, después de transmitir, el emisor espera un **ACK** (acuse de recibo) del receptor. Si no recibe el ACK, supone que hubo un problema y **MACA / CSMA/CA (Protocolo de acceso al medio)**.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241231143106.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241231143106.png)
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125120115.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125120115.png)
 
 
 ## 5.9.4 Ejemplo Práctico
@@ -339,14 +339,14 @@ Red de **circuitos virtuales** orientada a conexión. Antes de la transmisión, 
 No hay ACKs ni **retransmisiones**, pero las celdas tienen **control de errores de la cabecera**
 ## 5.10.3 Capas de ATM
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125120225.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125120225.png)
 
 **ATM** puede funcionar sobre **cualquier capa física**. La **capa de adaptación a ATM** (*AAL*) permite que otros protocolos usen las red ATM. Diferentes AAL dependiendo del tipo de servicio:
 - **TCP/IP:** Los datagramas se fragmentan para que quepan en las celas y se reensamblan a la salida.
 - **Audio y vídeo:** se agrupan los datos hasta llenar una celda.
 ## 5.10.4 Identificación de circuitos virtuales**
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125120441.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125120441.png)
 
 En ATM hay dos niveles de conexión:
 - **VCC**(*Virtual Channel Connection*): Canal virtual.
@@ -357,7 +357,7 @@ En ATM hay dos niveles de conexión:
 El identificador de circuito virtual permite distinguir entre caminos virtuales, y dentro de cada camino virtual entre canales.
 ## 5.10.5 Estructura de las celdas ATM
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241125120455.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted%20image%2020241125120455.png)
 
 Dos formatos:
 - **Interfaz usuario-red**

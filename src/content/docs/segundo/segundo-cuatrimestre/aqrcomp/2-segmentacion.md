@@ -15,7 +15,7 @@ El **Ciclo de Instrucción** son las etapas necesarias en un caso general para e
 
 ## 2.1.2 Implementación Monociclo
 En MIPS, **cada instrucción se ejecuta en un ciclo de reloj** (CPI=1). Entonces, es muy importante decidir una longitud de ciclo de reloj adecuada. Como hay instrucciones con **más etapas** de ejecución que otras, se tendrá que escoger una **longitud de ciclo** que permita que se ejecute la **más lenta**. Como consecuencia, el resto de instrucciones tendrán tiempos muerto durante su ciclo de ejecución. 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250419155505.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250419155505.png)
 **Opciones para reducir el ciclo de reloj:** 
 - Mejoras **tecnológicas de los circuitos** que permitan reducir el tiempo de ejecución de **cada etapa**.
 - Mejoras de la **organización del hardware** que pueda ejecutar más de una instrucción **al mismo tiempo**.
@@ -31,19 +31,19 @@ El objetivo es aprovechar todas las etapas a la vez para ir progresando en la ej
 - En cada instante habrá como **máximo una instrucción en cada etapa**.
 - **Idealmente** se inicia **una instrucción cada ciclo** de reloj. 
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250419161430.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250419161430.png)
 
 ## 2.1.4 Tiempo del Pipeline
 **La complejidad del conjunto de instrucciones afecta directamente a la complejidad del pipeline**. Una unidad convencional de ejecución de $N$ etapas tardará en ejecutar una instrucción la suma del tiempo que tarda cada una de las etapas.
 $$T_{comb} = T_1 + ... + T_N$$
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250419162602.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250419162602.png)
 Una unidad **segmentada** con $N$ etapas tardará más en ejecutar cada instrucción por separado, pues tiene que cargar los registros entre cada etapa. El ciclo de reloj debe ser lo suficientemente largo para ejecutar la etapa más lenta y realizar su carga de registros. Por tanto, conviene que **todas las etapas** del pipeline tengan una **duración similar**.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250419163333.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250419163333.png)
 En cada ciclo de reloj se solapa la ejecución de diferentes instrucciones, de manera que, tras una **latencia inicial** igual al tiempo de ejecución de la primera instrucción, se obtiene **una instrucción por ciclo (*idealmente*)**.
 
 $$ T_{clk} = max(T_R+T_A, ..., T_R+T_N)$$
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529165540.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529165540.png)
 
 
 ## 2.1.5 Fases del Pipeline
@@ -52,29 +52,29 @@ $$ T_{clk} = max(T_R+T_A, ..., T_R+T_N)$$
 - Lectura de la Instrucción
 - Actualización del PC
 - En esta etapa se calcula el PC de la siguiente instrucción (útil recordarlo para los saltos que se explican después)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529165843.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529165843.png)
 
 ### ID-Instruction Decodification
 - Decodificación de Instrucciones
 - Lectura de Registros
 - Extensión de Signo de Desplazamientos
 - Calculo de posible dirección de salto
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529170006.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529170006.png)
 
 ### EX- Execution
 - Operación de la ALU sobre registros
 - Alternativamente, cálculo de la dirección de salto final
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529170130.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529170130.png)
 
 ### MEM- Memoria
 - Lectura o escritura en memoria
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529170220.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529170220.png)
 
 ### WB-WriteBack
 - Escritura del resultado en banco de registros
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529170257.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529170257.png)
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529170331.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529170331.png)
 
 
 # 2.2 Riesgos en la Ejecución (Hazards)
@@ -87,10 +87,10 @@ Los riesgos estructurales se producen cuando el **hardware** no puede soportar t
 
 Las razones suelen ser la presencia de unidades funcionales que no están totalmente segmentadas o unidades funcionales no duplicadas. En general, los riesgos estructurales se pueden evitar en el diseño pero encarecen el hardware resultante.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529171211.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529171222.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529171211.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529171222.png)
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529171241.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529171241.png)
 
 
 ## 2.2.2 Riesgos de Datos
@@ -101,21 +101,21 @@ Un riesgo de datos se produce cuando la segmentación **modifica el orden de acc
 
 De estos tres, solamente los riesgos **RAW** pueden darse en una arquitectura de cinco etapas tipo MIPS. Los riesgos de tipo RAW pueden resolverse en algunos casos mediante el uso de la técnica del **envío adelantado** (**forwarding**).
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529172729.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529172744.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529172729.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529172744.png)
 
 
 ### RAW - Read After Write
 Una instrucción intenta leer un dato justo antes de que otra anterior lo escriba. Las instrucciones no pueden ejecutarse en paralelo ni solaparse completamente, provoca una **parada**. Se pueden detectas por **hardware** o por **compilador**
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529172911.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529172911.png)
 
 ### WAR - Write After Read
 Una instrucción intenta modificar un dato antes de que otra anterior lo lea. No puede ocurrir en un MIPS con pipeline de 5 etapas ya que ID es la etapa 2 y WB es la 5, **no provoca una parada**. 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529173058.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529173058.png)
 
 ### WAW - Write After Write
 Una instrucción intenta escribir un dato antes de que otra anterior lo escriba. No puede ocurrir en un MIPS con pipeline de 5 etapas, pues estas siempre se ejecutan en el mismo orden, **no** provoca una **parada**.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529173148.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529173148.png)
 
 ### Soluciones
 **WAR o WAW:** renombrado de registros.
@@ -135,21 +135,21 @@ No hace falta esperar a que el resultado se escriba en el banco de registros. Ya
 Los resultados de las fases **EX** y **MEM** se escriben en **registros de entrada a ALU**.
 La lógica de forwarding selecciona entre entradas reales y registros de forwarding.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529173803.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529173803.png)
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250419171739.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250419171739.png)
 
 **No todos los riesgos se pueden evitar con forwarding.** Si el riesgo no se puede evitar se debe introducir una **detención**.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529174131.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529174150.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529174131.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529174150.png)
 
 **El control de interbloqueo de instrucciones** es un proceso que consiste en detectar cuándo una instrucción **no puede avanzar por dependencia** en operandos con otra, **aunque se aplique adelantamiento**, provocando que se **pare la emisión de instrucciones** hasta que se solucione el bloqueo. La **duración** de la detección depende del **tipo** de instrucciones involucradas. Se detecta en la etapa **ID** pues en ella se averigua qué registros son operandos de entrada. Se activa una parada si: 
 - En la etapa ID hay una instrucción tipo ALU, salto o de almacenamiento. 
 - En la etapa EX se está ejecutando una carga
 - El registro destino de la carga es operando de entrada de la instrucción que está en etapa ID
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250419172454.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250419172454.png)
 
 ## 2.2.3 Riesgos de Control
 **Un riesgo de control** se produce en una instrucción de bifurcación cuando no dispone todavía del **valor sobre el que se debe tomar la decisión de salto**. Los riesgos de control pueden resolverse en **tiempo de compilación** (soluciones estáticas) o en **tiempo de ejecución** (soluciones dinámicas).
@@ -163,31 +163,31 @@ Llamaremos **salto tomado** a la situación en la que se modifica el PC y **salt
 #### Congelar el Pipeline
 Si la instrucción actual es una salto → parar o eliminar del pipeline instrucciones posteriores hasta que se conozca el destino. El **destino** de la bifurcación se conoce en la etapa ID e implica repetir el **FETCH** de la siguiente instrucción. Esta repetición equivale a una detención.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529175857.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529175857.png)
 
 #### Prediccion Prefijada
 ##### No tomada
 Asumir que el salto no será tomado. Se evita modificar el estado del **procesador** hasta que se tiene la confirmación de que el salto no se toma. Si el salto se toma, las instrucciones siguientes se retiran del pipeline y se capta la instrucción en el destino del salto. Transformar instrucciones en NOP.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529181013.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529181013.png)
 
 ##### Tomada
 Asumir que el salto será tomado. Tan pronto como se **decodifica** el salto y se calcula el
 destino se comienza a **captar instrucciones del destino**. En pipeline de 5 etapas no aporta ventajas. No se conoce dirección destino antes que decisión de salto. Útil en procesadores con condiciones complejas y lentas.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529181325.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529181325.png)
 
 #### Decisión Retardada
 La bifurcación se produce después de ejecutar las $n$ instrucciones posteriores a la propia instrucción de bifurcación. En pipeline de 5 etapas → **1 ranura de retraso** (delay slot).
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529182609.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529182609.png)
 
 Las instrucciones $I1, I2, . . . , IN$ se ejecutan independientemente del sentido de la condición de salto.
 La instrucción $IN+1$ solamente se ejecuta si no se produce el salto.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529182707.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529182707.png)
 Caso de salto retrasada con una ranura de retraso. Se espera siempre una instrucción antes de tomar el salto. Es responsabilidad del programador poner código útil en la ranura.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529182918.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529182918.png)
 
 ### Soluciones Dinámicas
 
@@ -199,19 +199,19 @@ Las soluciones dinámicas pueden usar una tabla histórica de saltos (BHT - Bran
 #### Predictor de 1 BIT
 La idea es que si un salto fue efectivo, lo más probable es que vuelva a serlo en un futuro. Para aprovechar esto necesitamos un buffer de predicción de salto. Este buffer es una tabla de un único bit para anotar si el salto fue **tomado** o **no tomado**. A este buffer se accede mirando los lsb de la dirección del salto, y así sabemos si fue tomado o no. En caso de predicción errónea se invierten los bits.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529194334.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529194334.png)
 
 Si tenemos un bucle interno y otro externo, si el salto se toma siempre en el interno, por cada vez que itere el externo, va a volver a tener ese fallo el interno.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529195421.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529195421.png)
 
 #### Predictor de 2 BITS
 La idea es darle una segunda oportunidad antes de cambiar la predicción (inercia). BTH de 2 bits: cuatro estados posibles
 Así le damos la oportunidad de reconsiderar sus errores y disminuir el número de fallos. Se puede generalizar para $n$ bits con $2^n$ estados posibles, aunque son poco adaptativos y por eso no se suelen usar.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529200156.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529200156.png)
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529200641.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529200641.png)
 #### Predictor Basado en Información Local
 Tiene en cuenta la historia del comportamiento **de un mismo salto** para tomar la decisión. 
 - Se almacena el resultado de cada salto correspondiente a sus últimas k ocurrencias
@@ -221,16 +221,16 @@ Tiene en cuenta la historia del comportamiento **de un mismo salto** para tomar 
 
 Usa **dos filtros de decisión** y así evita el 100% de los fallos que sucederían al usar un predictor de 1 bit para secuencias tipo T NT T NT...
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250419183739.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250419183739.png)
 
 #### Predictor Basado en Información Global
 Tiene en cuenta la historia del comportamiento de **las últimas $N$ instrucciones de salto** para tomar una decisión. Se usa un **registro de desplazamiento** para almacenar el **resultado de los saltos**. El contenido del registro indexa una **memoria** que guarda los **bits de estado** correspondientes al filtro de decisión. 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250419183945.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250419183945.png)
 
 #### Predictor Combinado
 Combina un predictor **local** y otro **local**. La **tasa de acierto** de los saltos en procesadores reales depende del **tipo de programa** y suele estas entre 85% y 99%
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250419184121.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250419184121.png)
 
 # 2.3 Operaciones Multiciclo.
 La asignación de un único ciclo a las operaciones de coma flotante requiere un ciclo de reloj extremadamente largo o el uso de una lógica de coma flotante muy compleja (con el consiguiente consumo de recursos). La alternativa a estas opciones es la segmentación de la unidad de coma flotante, por lo que estas instrucciones requerirán múltiples ciclos en la etapa de ejecución.
@@ -241,7 +241,7 @@ Las instrucciones en punto flotante tienen la **misma segmentación** que las en
 
 Se añade un **banco de registros** separado para operaciones en **punto flotante**. Se añade una **unidad de multiplicación** segmentada de **7 etapas** en **enteros y punto flotante**. Se añade una **unidad de suma de 4 etapas** en punto flotante. Se añade una **unidad de división no segmentada** que requiere **varios ciclos** reutilizando la **misma etapa** (en esta unidad no se puede ejecutar una instrucción por ciclo).
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250529201834.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250529201834.png)
 
 **Chequeo de riesgos estructurales**: hay que detectarlos en la unidad de DIV  y en la etapa de WB. Para detectarlos:
 - Para el paso de la instrucción a EX si es una división y hay otra división en ejecución.
@@ -266,10 +266,10 @@ Posibles soluciones:
 - **Parar la emisión de instrucciones** si en la capa EX se detecta **riesgo de excepción**.
 
 Si suceden múltiples excepciones anidadas, se gestiona **la más antigua primera**. 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250419185919.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250419185919.png)
 
 # 2.5 MIPS R4000 (Ha caído en examen)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250419185957.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250419190013.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250419190035.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250419185957.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250419190013.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/archivos/imagenes/Pasted%20image%2020250419190035.png)
 

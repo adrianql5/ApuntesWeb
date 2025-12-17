@@ -27,7 +27,7 @@ Es la única estructura que permite almacenar **tipos primitivos**. Pero present
 - Los **arrays** tienen un tamaño **fijo**, una vez se llega al límite no se pueden añadir más elementos.
 - **No** se pueden **borrar** elementos cuando el array maneja un **tipo primitivo**. Cuando maneja objetos, se pueden eliminar elementos escribiendo `null` en su posición. Como consecuencia, en todos los posteriores recorridos se deberá tener cuidado con estos valores nulos para evitar un error de ejecución.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250618185012.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250618185012.png)
 
 >[!Buenas Prácticas]
 >- Sólo se deben usar array cuando se sabe que el **número de elementos es fijo** y **no** se va a **eliminar** ninguno.
@@ -91,19 +91,19 @@ while (iterador.hasNext()) {
 }
 ```
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250619174446.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250619174446.png)
 
 Un iterador es una forma alternativa al bucle `for-each` para **recorrer los elementos de una colección**.
 - A diferencia de **for-each**, un **iterador** **permite la eliminación de los elementos mientras se recorre la colección**, eliminado tanto los elementos de la colección como del iterador.
 - El **rendimiento de un iterador y de un `for each` es el mismo,** ya que en realidad el compilador interpreta el `for-each` como si fuese un iterador.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250619174742.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250619174742.png)
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250619174742.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250619174742.png)
 
 # 3.4 Listas
 ## 3.4.1 Listas
 `List <E>:` subinterfaz de `Collection`. Además de soportar las operaciones de `Collection`, soporta las que debe tener una lista. **No** se puede **reservar memoria** (instanciar) para un objeto de tipo `List` porque es una interfaz.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250619175147.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250619175147.png)
 
 Los elementos de las `List` tienen un **orden** que está relacionado con la secuencia en que dichos elementos han sido introducidos durante la ejecución. Este orden permite identificar cada elemento con un **índice** que indica su posición en la `List`. Pueden contener **elementos duplicados**.
 
@@ -131,7 +131,7 @@ System.out.println(frutas); // [Banana, Manzana]
 
 ## 3.4.2 ArrayList
 `ArrayList<E>:` clase que implementa la interfaz `List`. **Sí** se puede **reservar memoria** (instanciar) para un objeto de tipo `ArrayList`, pues es una clase.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250619180451.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250619180451.png)
 
 Tiene un **atributo público**, `size`. Las **operaciones de acceso** a sus elementos tienen complejidad **lineal**. Además permite introducir **valores nulos**.
 
@@ -148,13 +148,13 @@ ArrayList<Tipo> nombre = new ArrayList<>(){{ add(...); }};
 ```
 
 Los `ArrayList` se **recorren** usando un bucle `for` normal. Al **eliminar** elementos durante el recorrido habrá que tener cuidado con que el **índice no supere el nuevo tamaño**. Durante el recorrido hay que comprobar que el elemento actual es **distinto** de `null` antes de operar sobre él.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250619181120.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250619181120.png)
 
 En realidad, la clase `ArrayList` encapsula un **array normal** de objetos al que se accede a través de los métodos de la interfaz `List`.
 - La **pila** almacena la **referencia al array de objetos**
 - El **montón** almacena el **array de objetos** y los **demás atributos** de `ArrayList` (`size`)
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241110170215.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020241110170215.png)
 
 ```java
 ArrayList<Integer> numeros = new ArrayList<>(); // Crea un ArrayList con capacidad para 10 elementos
@@ -175,17 +175,17 @@ System.out.println(numeros); // Muestra todos los elementos
 
 ## 3.5.1 Set
 `Set<E>:` subinterfaz de `Collection` que soporta exactamente las mismas operaciones que una `Collection`. **No** se puede **reservar memoria** (instanciar) para un objeto de tipo `Set`, pues es una interfaz.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250619183359.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250619183359.png)
 
 Los elementos del conjunto **son únicos**. Para asegurarse de esto, **se debe sobreescribir el método `equals` de la clase** `E`. Se debe controlar que la **modificación** de los objetos no se dé como resultado que dicho objeto sea igual a otro de los almacenados, porque se generarían inconsistencias cuando las modificaciones **no se realizan con los métodos de `Set`**, si no que se realizan por aliasing. Como consecuencia, **permiten sólo un valor nulo**.
 
 Como es una colección, se **recorre** con un **bucle** `for-each` o un **iterador**, no con un índice.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250619184543.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250619184543.png)
 
 
 ## 3.5.2 HashSet
 `HashSet<E>:` clase que implementa la interfaz `Set`. **Sí** se puede **reservar memoria** para un objeto de tipo `HashSet`, porque es una clase.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250619185256.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250619185256.png)
 Internamente, sus datos se almacenan como las **claves de un objeto `HashMap`**(**se insertan en base al hashCode**).
 - Sus valores están **desordenados**, pues se almacenan en una **tabla hash** de acuerdo a una **función hash**.
 - Las operaciones de **acceso** a sus elementos se realizan en tiempo constante $O(1)$
@@ -210,7 +210,7 @@ for (Integer numero : numeros) {
 # 3.6 Mapas
 ## 3.6.1 Map
 `Map <K,V>:` interfaz que relaciona una clave con un valor de manera que **a partir de la clave se obtiene el valor asociado a ella**. **No** se puede **reservar memoria** para un objeto de tipo Map, porque es una interfaz.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250619190249.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250619190249.png)
 
 Las **claves no pueden estar repetidas**, pero los **objetos sí** (por tantos varias calves pueden tener asociado un mismo valor). Tanto las claves como los valores tienen que ser **objetos**, no pueden ser **tipos primitivos**. Algunas implementaciones permiten almacenar **claves y valores nulos**.
 
@@ -232,11 +232,11 @@ Algunas implementaciones de la interfaz `Map` **no soportan todos sus métodos**
 
 Los objetos almacenados en un `Map` **no se pueden recorrer directamente**, ya que su objetivo es acceder a los valores a partir de las claves, no realiza una búsqueda de datos usando un criterio diferente de las claves. `Map` define métodos para convertir las claves y **valores en estructuras de datos que se pueden recorrer**, lo cual facilita el acceso a cada componente del mapa:
 - `Collection<V> values()`: Devuelve una **colección** con todos los **valores** del mapa, porque no se conoce el orden en el que se insertaron
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241214223841.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020241214223841.png)
 - `Set<K> keySet()`: Devuelve un **conjunto** con todas las claves, porque no puede haber claves duplicadas
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241214223828.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020241214223828.png)
 - `Set<Map.Entry<K, V>> entrySet()`: Devuelve un conjunto con todas las entradas `<clave, valor>`. Devuelve un **conjuntos** porque no puede haber duplas duplicadas.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241214224010.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020241214224010.png)
  
  También se puede usar `Iterator<Map.Entry<String,Contiente>>  entrySet()`
 
@@ -250,7 +250,7 @@ Los objetos almacenados en un `Map` **no se pueden recorrer directamente**, ya q
 `HashMap<K,V>:` clase que implementa la interfaz `Map`. **Sí** se puede **reservar memoria** para un objeto de tipo `HashMap`, pues es una clase.
 
 Los valores del `HashMap` están **desordenados**, pues se almacenan en una **tabla hash** de acuerdo con una **función hash**. Sin embargo, las operaciones de **acceso** a las entradas del `HashMap` se realizan en tiempo constante $O(1)$
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250619191719.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250619191719.png)
 
 Cada clave del mapa está asociada a un **código hash** (**hashcode**), que es un entero generado aleatoriamente a partir de una semilla. Se supone que los `hashCode` son **únicos** para cada objeto, pero como son generados aletoriamente es **imposible asegurar esto**. Por tanto, **cuando se comparan dos entradas** de un `HashMap`
 - Se comparan sus `hashCode:` si  son distintos, se entiende que los objetos son distitnos, si son iguales se pasa al paso 2
@@ -260,7 +260,7 @@ El uso de los `hashCode` simplifica y hace más **eficiente el acceso** a los da
 
 Para **generar** el `hashCode`, es necesario **sobreescribir** el método `hashCode()` heredado de `Object` usando el valor de los **atributos inmutables de la clave** como semillas. La implementación de `hashCode()` en `Object` es un método nativo escrito en C. Se generan `hashCodes` parciales usando estas semillas en el método `hashCode()` de la clase `Objects` (el de `Object` no funciona con valores nulos).
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250619192216.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250619192216.png)
 
 ```Java
 HashMap<K,V> m = new HashMap<>();
@@ -276,9 +276,9 @@ HashMap<K,V> m = new HashMap<>(){{ put(..., ...); }};
 # 3.7 Comparativa
 Según las **características** de los conjuntos de datos escogeremos uno y otro en función de para qué lo necesitamos:
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241110171852.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020241110171852.png)
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241214225539.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020241214225539.png)
 
 Las **listas** ocupan **menos memoria** que los mapas, y los **mapas** son **más rápidos** que las listas. Por lo general:
 - Si hay **restricciones de memoria** respecto a la cantidad de datos a almacenar y la **eficiencia no es la priordad:** `ArrayList

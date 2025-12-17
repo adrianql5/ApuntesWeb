@@ -20,6 +20,10 @@ import argparse
 import re
 from pathlib import Path
 from typing import Dict, List, Tuple
+from urllib.parse import quote
+
+# Extensiones de imagen soportadas
+IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.bmp'}
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -195,9 +199,16 @@ def scan_source_folder(source_path: Path) -> List[Dict]:
     return files_to_copy
 
 
-def copy_files(files_to_copy: List[Dict], dest_base: Path, dry_run: bool = False) -> int:
+def copy_files(files_to_copy: List[Dict], dest_base: Path, image_map: Dict[str, Dict[str, str]], dry_run: bool = False) -> int:
     """
     Copia los archivos a la estructura de destino, añadiendo frontmatter.
+    Convierte rutas de imágenes usando el mapeo proporcionado.
+    
+    Args:
+        files_to_copy: Lista de archivos a copiar
+        dest_base: Directorio base de destino
+        image_map: Diccionario de mapeo de rutas de imágenes
+        dry_run: Si True, no realiza cambios
     
     Returns:
         Número de archivos copiados
@@ -210,6 +221,10 @@ def copy_files(files_to_copy: List[Dict], dest_base: Path, dry_run: bool = False
         cuatrimestre = file_info['cuatrimestre']
         asignatura = file_info['asignatura']
         relative_path = file_info['relative_path']
+        
+        # Clave para buscar en el mapeo de imágenes
+        map_key = f"{curso}/{cuatrimestre}/{asignatura}"
+        asig_images = image_map.get(map_key, {})
         
         # Construir ruta de destino
         dest_path = dest_base / curso / cuatrimestre / asignatura / relative_path
@@ -228,41 +243,60 @@ def copy_files(files_to_copy: List[Dict], dest_base: Path, dry_run: bool = False
             original_content = source.read_text(encoding='utf-8')
             
             # Generar título desde el nombre del archivo (sin extensión)
-            # Eliminar números al inicio como "1. " o "1 - "
             title = source.stem
             title = re.sub(r'^[\d]+[\.\-\s]+', '', title)
             title = title.strip()
             if not title:
                 title = source.stem
             
-            # Convertir sintaxis de imágenes Obsidian a Markdown estándar
-            # ![[archivos/imagenes/...]] -> ![](/ApuntesWeb/images/curso/cuatri/asignatura/archivos/imagenes/...)
+            # Función para convertir rutas de imágenes
+            def convert_image_path(image_path: str) -> str:
+                """Convierte una ruta de imagen local a ruta web."""
+                # Limpiar la ruta
+                clean_path = image_path.strip().lstrip('./')
+                
+                # Buscar en el mapeo de imágenes
+                if clean_path in asig_images:
+                    return asig_images[clean_path]
+                
+                # Buscar solo por nombre de archivo
+                filename = Path(clean_path).name
+                if filename in asig_images:
+                    return asig_images[filename]
+                
+                # Si no encontramos en el mapeo, construir ruta manualmente con URL encoding
+                path_parts = clean_path.split('/')
+                encoded_parts = [quote(part, safe='') for part in path_parts]
+                return f"/ApuntesWeb/images/{curso}/{cuatrimestre}/{asignatura}/{'/'.join(encoded_parts)}"
+            
+            # Convertir sintaxis de imágenes Obsidian: ![[ruta/imagen.png]]
             def convert_obsidian_image(match):
                 image_path = match.group(1)
-                # Construir ruta absoluta a public/images/
-                return f'![](/ApuntesWeb/images/{curso}/{cuatrimestre}/{asignatura}/{image_path})'
+                web_path = convert_image_path(image_path)
+                return f'![]({web_path})'
             
             original_content = re.sub(r'!\[\[([^\]]+)\]\]', convert_obsidian_image, original_content)
             
-            # También convertir sintaxis de imágenes Markdown relativas existentes
-            # ![](./archivos/...) -> ![](/ApuntesWeb/images/...)
-            def convert_relative_image(match):
+            # Convertir sintaxis de imágenes Markdown estándar: ![alt](ruta/imagen.png)
+            def convert_markdown_image(match):
                 alt_text = match.group(1)
                 image_path = match.group(2)
-                # Si es una ruta relativa a archivos, convertir
-                if image_path.startswith('./archivos') or image_path.startswith('archivos'):
-                    clean_path = image_path.lstrip('./')
-                    return f'![{alt_text}](/ApuntesWeb/images/{curso}/{cuatrimestre}/{asignatura}/{clean_path})'
-                return match.group(0)
+                
+                # Solo convertir rutas locales (no URLs externas)
+                if image_path.startswith('http://') or image_path.startswith('https://'):
+                    return match.group(0)
+                if image_path.startswith('/ApuntesWeb/'):
+                    return match.group(0)  # Ya convertida
+                
+                web_path = convert_image_path(image_path)
+                return f'![{alt_text}]({web_path})'
             
-            original_content = re.sub(r'!\[([^\]]*)\]\((\./archivos[^\)]+|archivos[^\)]+)\)', convert_relative_image, original_content)
+            original_content = re.sub(r'!\[([^\]]*)\]\(([^\)]+)\)', convert_markdown_image, original_content)
             
             # Verificar si ya tiene frontmatter
             if original_content.strip().startswith('---'):
-                # Ya tiene frontmatter, copiar tal cual
                 new_content = original_content
             else:
-                # Añadir frontmatter con título
                 frontmatter = f"""---
 title: "{title}"
 ---
@@ -279,12 +313,19 @@ title: "{title}"
     return copied_count
 
 
-def copy_image_folders(source_path: Path, script_dir: Path, dry_run: bool = False) -> int:
+def copy_image_folders(source_path: Path, script_dir: Path, dry_run: bool = False) -> Tuple[int, Dict[str, str]]:
     """
-    Copia las carpetas de imágenes de cada asignatura a public/.
+    Copia todas las imágenes de cada asignatura a public/images/.
+    Busca recursivamente en todas las subcarpetas.
+    
+    Returns:
+        Tuple de (número de imágenes copiadas, diccionario de mapeo de rutas)
+        El diccionario mapea ruta_original -> ruta_web
     """
     copied_count = 0
     public_dir = script_dir / 'public' / 'images'
+    # Mapeo de rutas: nombre_archivo -> ruta_web
+    image_map: Dict[str, Dict[str, str]] = {}  # {curso/cuatri/asig: {nombre_original: ruta_web}}
     
     for subdir, folder_name, curso, cuatrimestre in FOLDER_MAPPING:
         # Construir ruta completa
@@ -305,26 +346,54 @@ def copy_image_folders(source_path: Path, script_dir: Path, dry_run: bool = Fals
                 continue
             
             subject_slug = get_subject_slug(subject_dir.name)
+            key = f"{curso}/{cuatrimestre}/{subject_slug}"
             
-            # Buscar carpeta de archivos/imagenes
-            archivos_path = subject_dir / 'archivos'
-            if archivos_path.exists() and archivos_path.is_dir():
-                # Destino para las imágenes en public/
-                dest_archivos = public_dir / curso / cuatrimestre / subject_slug / 'archivos'
+            if key not in image_map:
+                image_map[key] = {}
+            
+            # Buscar TODAS las imágenes recursivamente en la asignatura
+            for img_file in subject_dir.rglob('*'):
+                if not img_file.is_file():
+                    continue
+                if img_file.suffix.lower() not in IMAGE_EXTENSIONS:
+                    continue
+                
+                # Calcular ruta relativa desde la carpeta de asignatura
+                relative_path = img_file.relative_to(subject_dir)
+                
+                # Destino: public/images/curso/cuatri/asig/ruta_relativa
+                dest_path = public_dir / curso / cuatrimestre / subject_slug / relative_path
+                
+                # URL web con encoding de espacios
+                # /ApuntesWeb/images/curso/cuatri/asig/ruta_relativa (con %20 para espacios)
+                web_path_parts = ['/ApuntesWeb', 'images', curso, cuatrimestre, subject_slug]
+                web_path_parts.extend([quote(part, safe='') for part in relative_path.parts])
+                web_path = '/'.join(web_path_parts)
+                
+                # Guardar en el mapeo usando el nombre del archivo y la ruta relativa
+                # Guardamos múltiples variantes para poder hacer match
+                image_map[key][str(relative_path)] = web_path
+                image_map[key][img_file.name] = web_path
+                # También guardar la ruta con archivos/ o sin ella
+                if str(relative_path).startswith('archivos'):
+                    image_map[key][str(relative_path)] = web_path
                 
                 if dry_run:
-                    print(f"   🖼️  [DRY-RUN] Copiando {archivos_path} -> {dest_archivos}")
+                    print(f"      🖼️  [DRY-RUN] {img_file.name} -> {web_path}")
                 else:
-                    # Copiar toda la carpeta archivos
-                    if dest_archivos.exists():
-                        shutil.rmtree(dest_archivos)
-                    dest_archivos.parent.mkdir(parents=True, exist_ok=True)
-                    shutil.copytree(archivos_path, dest_archivos)
-                    print(f"   🖼️  Copiada carpeta de imágenes: {subject_slug}/archivos")
+                    # Copiar imagen
+                    dest_path.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.copy2(img_file, dest_path)
                 
                 copied_count += 1
+            
+            if not dry_run and copied_count > 0:
+                # Contar imágenes de esta asignatura
+                asig_count = len([k for k in image_map[key].keys()])
+                if asig_count > 0:
+                    print(f"   🖼️  {subject_slug}: {asig_count // 2} imágenes copiadas")
     
-    return copied_count
+    return copied_count, image_map
 
 
 def create_index_files(dest_base: Path, files_to_copy: List[Dict], dry_run: bool = False):
@@ -479,16 +548,16 @@ def main():
     print(f"📊 Total de archivos encontrados: {len(files_to_copy)}")
     print()
     
-    # Copiar archivos
-    print("📋 Copiando archivos...")
+    # Copiar imágenes PRIMERO para tener el mapeo de rutas
+    print("🖼️  Copiando imágenes...")
     print("-" * 40)
-    copied = copy_files(files_to_copy, dest_base, args.dry_run)
+    images_copied, image_map = copy_image_folders(source_path, script_dir, args.dry_run)
     print()
     
-    # Copiar carpetas de imágenes
-    print("🖼️  Copiando carpetas de imágenes...")
+    # Copiar archivos markdown (usando el mapeo de imágenes)
+    print("📋 Copiando archivos...")
     print("-" * 40)
-    images_copied = copy_image_folders(source_path, script_dir, args.dry_run)
+    copied = copy_files(files_to_copy, dest_base, image_map, args.dry_run)
     print()
     
     # Crear índices

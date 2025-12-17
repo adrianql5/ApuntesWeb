@@ -199,7 +199,7 @@ Se hace en dos pasadas:
 
 
 **Ejemplo que usa los pasos 1 y 2:**
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/Pasted image 20251208135015.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208135015.png)
 
 
 # 4.8 Formas Normales

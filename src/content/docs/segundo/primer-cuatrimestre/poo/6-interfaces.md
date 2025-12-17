@@ -25,18 +25,18 @@ Las interfaces **no tienen constructores** porque **no se pueden instanciar**. L
 Para que la interfaz se pueda usar, **alguna clase debe implementarla**, es decir, implementar sus métodos abstractos:
 `public class <nombre_class> implements <nombre_interfaz>` 
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250622131031.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250622131031.png)
 
 Una vez la **interfaz** haya sido implementada, **se comportará como una clase**, pudiendo invocar sus métodos abstractos (usando la implementación de la clase que la implementa), estáticos y por defecto.
 
 Cuando una **clase** implementa una interfaz, **adquiere todos sus métodos**, igual que sucede en la herencia de clases. Entonces, se pueden entender que la clase que implementa una interfaz es su "derivada". Como consecuencia, con interfaces se pueden aplicar todos los conceptos de **herencia,  jerarquías, clases abstractas y polimorfismo**.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250622131050.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250622131050.png)
 
 Una interfaz es **funcionalmente equivalente** a (provee la misma funcionalidad que) una clase abstracta en la que todos los métodos son abstractos, todos los atributos son constantes y no tiene constructores.
 
 Las **diferencias** entre clases abstractas e interfaces son:
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241205195051.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020241205195051.png)
 - Escogeremos **interfaces** cuando queramos establecer de forma clara e inequívoca los métodos que se van a usar en el resto de clases del programa.
 - Escogeremos **clases abstractas** cuando queramos hacer énfasis en la reutilización de código, incluyendo constructores que se invocan desde las clases base.
 
@@ -51,7 +51,7 @@ Los **métodos por defecto** son métodos que se deben declarar e implementar en
 
 Los métodos por defecto se heredan en las clases que implementan la interfaz y en las interfaces derivadas de la interfaz. Puede **sobreescribirse** y en la sobreescritura se puede usar `super` de la siguiente manera: `<nombre_interfaz>.super.<nombre_método>` 
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250622154401.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250622154401.png)
 
 # 6.4 Métodos estáticos
 Los **métodos estáticos** son aquellos que pueden ser invocados sin instanciar la clase en la que están definidos. 
@@ -62,7 +62,7 @@ Los métodos **estáticos no son heredados** ni en las clases ni en las interfac
 
 
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241218164032.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020241218164032.png)
 
 
 | Métodos por defecto                                                                                  | Métodos estáticos                                                                       |
@@ -95,5 +95,5 @@ Entonces, las jerarquías totales combinan los siguientes tipos de relaciones:
 
 Por tanto pueden ser muy **complejas**, pero lo importante es que son **extensibles** de manera relativamente sencilla
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250622160358.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250622160358.png)
 

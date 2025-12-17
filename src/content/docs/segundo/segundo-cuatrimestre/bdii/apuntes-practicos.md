@@ -5,18 +5,18 @@ title: "Apuntes Prácticos"
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 # 1. Seguridad
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250705204145.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705204145.png)
 Se hace revocación en cascada por defecto.  $U4$ y $U5$ mantienen sus permisos porque todavía hay un camino hasta el administrador.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250705204207.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705204207.png)
 Ahora $U4$ y $U5$ pierden sus permisos.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250705204356.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705204356.png)
 Esto generaría una **excepción** porque **RESTRICT** es una opción que impide revocar un privilegio si ese usuario ha dado ese privilegio a otros usuarios.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250705204927.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705204927.png)
 Si le quitamos la opción de dar privilegios y borramos al usuario $U6$ los pierde consecuentemente (los pierde por que se borra, no porquitar el grant option).
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250705205059.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705205059.png)
 
 Aquí el permiso lo concede el **rol** **no el usuario**, por lo que si eliminamos al usuario $U1$, $U6$ sigue manteniendo sus permisos.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250705205228.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705205228.png)
 # 2. Gestión de Transacciones
 ### **Propiedades ACID:** 
 - Atomicidad
@@ -41,7 +41,7 @@ Aquí el permiso lo concede el **rol** **no el usuario**, por lo que si eliminam
 - **Planificación secuenciable:** produce mismo resultado que la secuencial pero empleando concurrencia (no tiene por que ser secuenciable en cuanto a conflictos).
 - **Planificación secuenciable en cuanto a conflictos:** si se intercambian operaciones no conflictivas se obtiene la planificación secuencial.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250704175118.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250704175118.png)
 
 - **Grafo de precedencia:** permite saber si la **planificación es secuenciable en cuanto a conflictos** (*no tiene ciclos*). $T_i \rightarrow T_j$, si tenemos 2 operaciones conflictivas y $T_i$ ejecuta antes la suya que $T_j$
 	En la tabla de arriba tendríamos $T_2 \rightarrow T_1$ y $T_2 \rightarrow T_3$ 
@@ -89,7 +89,7 @@ Emplea 2 operaciones para la conversión de bloqueos
 - `bajar` **de exclusivo a compartido**
 **Los desbloqueos se hacen una vez se compromete o aborta la transacción**
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250704175118.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250704175118.png)
 Si suponemos que después de la última operación de cada $T$ hay un `commit` cumple tanto el **protocolo estricto como el riguroso**. Si no, no los cumple.
 
 ### Prevención de Interbloqueos
@@ -129,7 +129,7 @@ Hay un ciclo
 - $inicio(T_j) \lt fin(T_i) \lt validacion(T_j)$ y además $escritos(T_i) \cap leidos(T_j) = \emptyset$ 
 
 $T1$ (lee (A,B), escribe: C), $T2$ (lee C, escribe A) y $T3$ (lee B, escribe D).
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250704192358.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250704192358.png)
 **Orden de serialización:** $T_1 \rightarrow T_2 \rightarrow T_3$
 
 - **Prueba de validación para $T_2$:**
@@ -186,7 +186,7 @@ Estos métodos no aseguran la secuencialidad pero no importa, funciona igual, el
 - 2º **Fase deshacer:** recorremos desde abajo hasta el **checkpoint**. Cuando veamos un registro de una transacción de la **lista-deshacer** escribimos un **registro de compensación** de la forma `<Ti,Xj,V1>` (**SIEMPRE QUE NO USEMOS MODIFICACIÓN DIFERIDA**). Al encontrar un registro de la forma `<Ti iniciada>` escribimos `<Ti abortada>` y se elimina de la **lista-deshacer**. Repetimos esto hasta que la **lista-deshacer** está vacía.
 
 Fallo en el tiempo 12. $A = 20$ y $B= 60$
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250704203334.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250704203334.png)
 
 **Con modificación inmediata:**
 1º Se rehace todo de arriba a abajo. Añadimos a $T_1$ a la **lista-deshacer**, después la sacamos y añadimos a $T_2$
@@ -230,9 +230,9 @@ Fallo en el tiempo 12. $A = 20$ y $B= 60$
 # 5. Indexación y Asociación
 ### Hashing Estático
 **Cajón (bucket):** unidad de almacenamiento de tamaño fijo que puede guardar uno o más registros. Para indexar en estos cajones los registros usamos funciones hash. 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250705193844.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705193844.png)
 Si los cajones se llenan añadimos **punteros a cajones de desbordamiento:**
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250705193615.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705193615.png)
 Podemos:
 - **Buscar**
 - **Insertar**
@@ -240,27 +240,27 @@ Podemos:
 
 ### Índices Asociativos
 Lo mismo que antes pero en vez de guardar en los cajones registros guardamos índices que apuntan a registros.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250705194123.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705194123.png)
 
 ### Hashing Dinámico
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250705194519.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705194519.png)
 Partimos de esto, donde el  $0$ de la izquierda es la **profundidad global** y el $0$ de la derecha es la **profundidad local**. Si llenamos el cajón y se produce un desbordamiento hay que tener en cuenta lo siguiente:
 - Si la **profundidad local** es menor que la **profundidad global** no pasa nada, simplemente se crea un nuevo cajón y se enlaza con la tabla de la izquierda sin mayor complicación. Además aumentamos la profundidad local de cada cajón.
 - Si la **profundidad local** es igual que la **profundidad global**, habrá que aumentar tanto la profundidad global como la **local** en los cajones implicados, duplicando el tamaño de la tabla, creamos otro cajón y lo enlazamos.
 Ambas implican reordenar los elementos de los cajones y los punteros a los cajones. Sebastián para indexar usa los **msb**.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250705194428.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705194428.png)
 - Insertamos a mozart ($0011$), y va al único bucket que hay.
 - Insertamos a Srinivasan($1111$), y va al al bucket que hay.
 - Sin embargo ahora insertamos a Wu ($1010$), se desborda, comparamos profundidades y dividimos, redistribuimos nuevamente los elementos. Además incrementamos las profundidades
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250705194631.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705194631.png)
 - Insertamos a Einstein($1001$), se vuelve a desbordar, como la profundidad local de ese cajón es menor, se crea uno nuevo se reordenan los punteros y se redistribuyen los elementos nuevamente.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250705202715.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705202715.png)
 
 - Hay ocasiones en las que debemos añadir un cajón de desbordamiento, cuando insertemos varios elementos que tengan la misma clave de inserción y superen el tamaño máximo del bucket. Por lo que simplemente se haría como al fondo de la  imagen
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250705203047.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705203047.png)
 
 # 6. Optimización de Consultas
 1. Reordenar joins para reducir el tamaño de relaciones intermedias.
 2. Aplicar proyecciones tempranas para eliminar atributos innecesarios.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted image 20250705210545.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705210545.png)

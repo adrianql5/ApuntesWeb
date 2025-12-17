@@ -36,10 +36,10 @@ Según el impacto de la innovación:
 La innovación tiene como beneficios la **fidelización de los consumidores, prepara la empresa para el futuro y aumenta la competitividad.**
 
 **Un producto que sale al mercado tiene un terminado ciclo de vida** que se divide en 4 fases. **Para que la empresa logra na cierta estabilidad, es necesario que posea productos en distintas fases**, y que cuando uno alcance la etapa de madurez, tenga sustitutos en etapa de crecimiento.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250211123545.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/archivos/imagenes/Pasted%20image%2020250211123545.png)
 
 Por otra parte, **es muy posible que se llegue a un punto en el que nuestro producto no pueda ser mejorado**, por lo que debemos innovar en **distintos campos del proceso productivo**. Mejoramos su proceso de producción o nuestro modelo de negocio (*Innovación de proceso* y de *Modelo de negocio*).
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250211123852.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/archivos/imagenes/Pasted%20image%2020250211123852.png)
 
 La **estrategia** de una empresa sería el camino para obtener ventaja sobre la competencia en un mercado determinado, analizando el punto de partida de nuestra empresa y la necesidad de saber hacia donde va nuestra organización
  - **Estrategias Porter:**  Costes, diferenciación, enfoque/especialización
@@ -60,10 +60,10 @@ Este análisis se centra en el **conjunto de factores del marco socioeconómico 
  - **Tecnológico:** velocidad de acceso a internet de una ciudad. No podemos introducir un producto que necesite 4G en mitad del monte
  - **Sociocultural:** edad de la población, nivel educativo...
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250211125245.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/archivos/imagenes/Pasted%20image%2020250211125245.png)
 Nos ayuda a conocer mejor el entorno, siendo una empresa más fuerte. 
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250211125354.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/archivos/imagenes/Pasted%20image%2020250211125354.png)
 
 ## 2.2.2 Análisis del contorno micro. Fuerzas competitivas de un sector
 El análisis de las fuerzas competitivas de Porter se utiliza para evaluar la rentabilidad a largo plazo de un sector y se basa en cinco fuerzas clave:
@@ -87,23 +87,23 @@ El análisis DAFO es una herramienta para evaluar las fortalezas, debilidades, o
 
 Este análisis ayuda a la empresa a conocer su situación y determinar la estrategia más adecuada.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250211130527.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/archivos/imagenes/Pasted%20image%2020250211130527.png)
 ## 2.2.4 Metodología Canvas
 Se trata de un **modelo de negocio simple donde se definen las principales características**. 
 
 Solo ocupa una hoja, es visual, flexible (*permite reaccionar, hacer ajustes...*), ofrece una visión global de la organización, entiende la interrelación entre los distintos elementos del modelo. Además es fácil de entender y de aportar información, aporta valor al cliente y es un prototipo que permite representar la idea.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250211131111.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/archivos/imagenes/Pasted%20image%2020250211131111.png)
 - **Propuesta de valor:** describe el paquete de **productos y servicios** que tienen valor para un segmento específico de clientes.
 - **Clientes:** se agrupa en distintos segmentos sobre los que una organización realizará una análisis sobre a cuales servir y cuales ignorar. **Se diseña el modelo de negocio al rededor de un entendimiento de sus necesidades específicas.** Debido a esto, hay marcas que segmenta o mercado e ofrecen productos distintos a públicos distintos.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250211131512.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/archivos/imagenes/Pasted%20image%2020250211131512.png)
 - **Canales:** **describen como una compañía se comunica y lleva su segmento de clientes a su propuesta de valor.** Directors, indirectos, propios y de socios comerciales. Para alcanzar la rentabilidad:
 	- Información o conciencia: como nos damos a conocer
 	- Evaluación: como ayudamos a los clientes a evaluarnos
 	- Compra
 	- Entrega
 	- Postventa
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250211131827.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/archivos/imagenes/Pasted%20image%2020250211131827.png)
 
 - **Relaciones con clientes:** es necesario establecer el **tipo de relación que queremos desenvolver con nuestra clientela**. Las motivaciones pueden ser adquirir nuevos clientes, retener clientes o incrementar ventas. Las relaciones deben poder ser desde personalizadas a automatizadas. También, ser los más eficientes y relevantes posibles, adaptadas a las necesidades del cliente.
 - **Flujo de ingreso:** representa los **ingresos que una empresa genera**, proveniente de distintos segmentos de clientes.
@@ -123,7 +123,7 @@ Solo ocupa una hoja, es visual, flexible (*permite reaccionar, hacer ajustes...*
 - **Estructura de Costes:** describe todos los **costos** que implica la puesta en marcha del modelo de negocio. **Estructuras de costes:** 
 	- **Según los costes:** fijos, variables, de escala o de campo.
 	- **Según el valor:** premium, personalizados.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250211134628.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/archivos/imagenes/Pasted%20image%2020250211134628.png)
 
 # 2.3 El plan de negocio
 El plan de negocio es un documento que describe, de manera general, un negocio y el conjunto de estrategias que se aplicarán para su éxito. Este documento presenta un análisis del mercado y establece el plan de acción que se seguirá para alcanzar los objetivos propuestos.

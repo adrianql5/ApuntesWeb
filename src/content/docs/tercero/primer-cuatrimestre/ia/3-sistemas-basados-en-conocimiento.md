@@ -49,7 +49,7 @@ Por ejemplo:
 >- El **conocimiento** también puede evolucionar, por lo que el sistema debe ser adaptable y actualizable
 
 ## 3.1.4 Estructura de un SE
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251015104635.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251015104635.png)
 
 **Base de conocimiento**, contiene las reglas del tipo **SI** (antecedentes), **ENTONCES** (consecuente). Ejemplo: 
 - SI temperatura > 37°C, ENTONCES el paciente tiene fiebre.
@@ -70,7 +70,7 @@ Por ejemplo:
 **Fuentes externas de datos**, permiten que el sistema reciba información adicional de otras fuentes (sensores, bases de datos, etc).
 
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251015105117.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251015105117.png)
 
 **Memoria de trabajo**. equivalente a la base de hechos; almacena los datos actuales del problema.
 
@@ -113,8 +113,8 @@ Una **situación** es un conjunto de condiciones que se deben cumplirse. **Accio
 - Se aplican sucesivamente reglas que coincidan con los hechos presentes, avanzando hasta alcanzar una meta.
 
 **Ejemplo:**
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251015111318.png)
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251015111342.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251015111318.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251015111342.png)
 
 ### Encadenamiento hacia atrás (Backward Chaining)
 - Usado habitualmente en sistemas expertos cuando se busca responder una pregunta concreta.
@@ -123,21 +123,21 @@ Una **situación** es un conjunto de condiciones que se deben cumplirse. **Accio
 
 **Ejemplo:** Si queremos saber si un paciente tiene infección de garganta, se verifica si cumple las condiciones de varias reglas relacionadas.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251015111612.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251015111612.png)
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251015111926.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251015111926.png)
 
 
 ## 3.2.3 Pseudocódigos
 **Método básico de razonamiento:**
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251015112226.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251015112226.png)
 
 **Verificación de reglas:**
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251015112239.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251015112239.png)
 
-**Encadenamiento hacia adelante:** ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251015112342.png)
+**Encadenamiento hacia adelante:** ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251015112342.png)
 **Encadenamiento hacia atrás:** 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251015112408.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251015112408.png)
 
 
 # 3.3 Conocimientos vs Hechos

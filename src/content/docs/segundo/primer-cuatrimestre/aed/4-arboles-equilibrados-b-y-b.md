@@ -17,14 +17,14 @@ Cuando los datos que queremos almacenar son demasiado grandes para caber en un s
 - **Número de ramas**:
   - Las páginas internas tienen entre `m/2` y `m` ramas, donde `m` es el orden del árbol. La raíz es una excepción y puede tener menos ramas si es la única página en el árbol.
 - **Número de claves**: En una página interna, el número de claves es igual al número de ramas menos uno. Estas claves dividen las ramas de una manera similar a un árbol de búsqueda, es decir, las claves en la rama izquierda son menores y las de la rama derecha son mayores.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241022111013.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022111013.png)
 ### Inserción en un árbol B:
 1. **Búsqueda de la página adecuada**: Primero se localiza la página hoja donde debe ir la nueva clave.
 2. **Inserción directa**: Si la página no está llena, se inserta la nueva clave.
 3. **División de página**: Si la página está llena, se divide en dos. La clave central (mediana) sube al nivel superior (la página padre), y las dos nuevas páginas se conectan a ella.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241022112414.png)
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241022112432.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022112414.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022112432.png)
 ### Búsqueda en un árbol B:
 - La búsqueda comienza en la raíz y, según el valor de la clave, se decide si se encuentra en la página actual o si hay que descender por alguna de las ramas a una página en un nivel inferior.
 
@@ -32,8 +32,8 @@ Cuando los datos que queremos almacenar son demasiado grandes para caber en un s
 1. **Eliminación simple**: Si la página tiene más del mínimo de claves, se elimina directamente.
 2. **Redistribución o fusión**: Si la página tiene el número mínimo de claves, se puede redistribuir claves entre páginas hermanas o fusionar dos páginas hermanas.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241022112639.png)
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241022112657.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022112639.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022112657.png)
 ### Aplicaciones:
 Los árboles B son especialmente útiles en:
 - **Bases de datos**: Reducen la altura del árbol y, por tanto, los accesos a disco, lo que optimiza las búsquedas.
@@ -60,7 +60,7 @@ Los **árboles B+** son una variación de los árboles B diseñada para mejorar 
 - **Elementos solo en hojas**: Todos los elementos reales del árbol están almacenados únicamente en las **páginas hoja**, lo que facilita un recorrido secuencial más eficiente. 
 - **Índices en nodos internos**: Los nodos internos contienen claves que sirven únicamente como índices para guiar las búsquedas, pero no almacenan los datos reales. Estos índices pueden duplicar algunos elementos de las hojas.
 - **Mejor rendimiento en árboles dinámicos**: Debido a que los elementos reales solo se almacenan en las hojas, el árbol no necesita ser reorganizado tan frecuentemente como un árbol B estándar, lo que mejora el rendimiento en aplicaciones donde los datos cambian con frecuencia.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241022115133.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022115133.png)
 #### Ventajas del árbol B+:
 - **Recorrido secuencial rápido**: Los elementos en las hojas están enlazados entre sí, permitiendo un recorrido rápido sin necesidad de volver a los niveles superiores del árbol.
 - **Reorganización minimizada**: Al no mover los elementos reales fuera de las hojas, las inserciones y eliminaciones tienden a ser más simples y menos costosas en términos de reorganización.
@@ -72,8 +72,8 @@ Los **árboles B+** son una variación de los árboles B diseñada para mejorar 
 La inserción en un árbol B+ es similar a la de un árbol B, pero con una diferencia notable en el caso de que una página hoja se llene:
 - **División de páginas**: Cuando una página hoja se llena, se divide en dos y el elemento mediana sube a la página padre.
 - **Elemento duplicado**: El elemento mediana que sube al padre se mantiene en la nueva página hoja derecha. Esto significa que el valor de la mediana aparece en ambas páginas, pero solo en la página hoja es considerado un valor de datos real.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241022115201.png)
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241022115213.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022115201.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022115213.png)
 ---
 
 ### Eliminación en árboles B+:
@@ -83,6 +83,6 @@ La eliminación en los árboles B+ es más simple que en los árboles B porque l
 
 En resumen, los **árboles B+** son más eficientes para recorridos secuenciales y sistemas que requieren búsquedas rápidas y frecuentes, mientras que los **árboles B\*** optimizan el uso del espacio y reducen la frecuencia de las divisiones durante las inserciones.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241022115248.png)
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241022115304.png)
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241022115319.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022115248.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022115304.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022115319.png)

@@ -34,6 +34,33 @@
 }
 
 /* =============================================================================
+   OCULTAR SCROLLBAR Y TOC
+   ============================================================================= */
+
+/* Ocultar la barra lateral derecha (Table of Contents) */
+.right-sidebar,
+starlight-toc,
+.toc-wrapper {
+    display: none !important;
+}
+
+/* Expandir el contenido principal para ocupar el espacio */
+.main-pane {
+    grid-column: 1 / -1;
+}
+
+/* Ocultar scrollbar pero mantener funcionalidad de scroll */
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+* {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+/* =============================================================================
    TIPOGRAFÍA
    ============================================================================= */
 

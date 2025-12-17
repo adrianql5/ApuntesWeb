@@ -261,8 +261,8 @@ def create_index_files(dest_base: Path, files_to_copy: List[Dict], dry_run: bool
     """
     Crea archivos índice para cada nivel de la jerarquía.
     """
-    # Recopilar estructura
-    structure: Dict[str, Dict[str, Dict[str, List[str]]]] = {}
+    # Recopilar estructura con información del primer archivo
+    structure: Dict[str, Dict[str, Dict[str, Dict]]] = {}
     
     for file_info in files_to_copy:
         curso = file_info['curso']
@@ -270,12 +270,29 @@ def create_index_files(dest_base: Path, files_to_copy: List[Dict], dry_run: bool
         asignatura = file_info['asignatura']
         asignatura_original = file_info['asignatura_original']
         
+        # Calcular el slug del archivo destino
+        file_slug = slugify(file_info['source'].stem)
+        
         if curso not in structure:
             structure[curso] = {}
         if cuatrimestre not in structure[curso]:
             structure[curso][cuatrimestre] = {}
         if asignatura not in structure[curso][cuatrimestre]:
-            structure[curso][cuatrimestre][asignatura] = asignatura_original
+            structure[curso][cuatrimestre][asignatura] = {
+                'original': asignatura_original,
+                'first_file': file_slug,
+                'files': []
+            }
+        # Agregar archivo a la lista
+        structure[curso][cuatrimestre][asignatura]['files'].append(file_slug)
+    
+    # Ordenar archivos y determinar el primero alfabéticamente
+    for curso in structure:
+        for cuatri in structure[curso]:
+            for asig in structure[curso][cuatri]:
+                files = sorted(structure[curso][cuatri][asig]['files'])
+                if files:
+                    structure[curso][cuatri][asig]['first_file'] = files[0]
     
     # Crear índices por curso
     for curso, cuatrimestres in structure.items():
@@ -326,9 +343,13 @@ import {{ Card, CardGrid }} from '@astrojs/starlight/components';
 
 <CardGrid>
 """
-            for asig_slug, asig_original in sorted(asignaturas.items()):
+            for asig_slug in sorted(asignaturas.keys()):
+                asig_info = asignaturas[asig_slug]
+                asig_original = asig_info['original']
+                first_file = asig_info['first_file']
+                # Enlazar directamente al primer tema
                 content += f"""  <Card title="{asig_original}" icon="open-book">
-    [{asig_original}](/ApuntesWeb/{curso}/{cuatrimestre}/{asig_slug}/)
+    [{asig_original}](/ApuntesWeb/{curso}/{cuatrimestre}/{asig_slug}/{first_file}/)
   </Card>
 """
             content += "</CardGrid>\n"

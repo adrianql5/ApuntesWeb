@@ -37,6 +37,16 @@
     /* Texto */
     --sl-color-text: #e5e5e5;
     --sl-color-text-accent: #fca5a5;
+
+    /* Grises para modo oscuro */
+    --sl-color-white: #fafafa;
+    --sl-color-gray-1: #e5e5e5;
+    --sl-color-gray-2: #d4d4d4;
+    --sl-color-gray-3: #a3a3a3;
+    --sl-color-gray-4: #525252;
+    --sl-color-gray-5: #262626;
+    --sl-color-gray-6: #171717;
+    --sl-color-black: #0a0a0a;
 }
 
 /* =============================================================================

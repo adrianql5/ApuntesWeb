@@ -1,0 +1,14 @@
+Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+
+La Inteligencia Artificial (IA) es una rama de la ciencia y la tecnología que busca desarrollar sistemas capaces de realizar tareas que, hasta ahora, requerían inteligencia humana. Es importante destacar que, aunque a menudo se habla de IA como si fuera una sola cosa, en la actualidad no existe un modelo general de inteligencia ni de aprendizaje artificial capaz de imitar plenamente la mente humana. Por eso, la mayoría de los avances se centran en **IA de propósito específico** y en sistemas basados en **aprendizaje automático**, especialmente en el llamado aprendizaje profundo.
+
+A lo largo de los últimos años, hemos visto ejemplos muy representativos de este tipo de IA en diferentes campos:
+
+- **Deep Blue vs Kasparov**: En 1997, la computadora Deep Blue de IBM derrotó al campeón mundial de ajedrez Garry Kasparov. Este hito mostró cómo una IA diseñada específicamente para jugar ajedrez podía superar al mejor jugador humano, pero fuera del ajedrez, Deep Blue no tenía ninguna utilidad.
+- **AlphaGo vs Lee Sedol**: En 2016, AlphaGo, un programa de Google DeepMind basado en aprendizaje profundo, ganó al campeón mundial de Go, un juego mucho más complejo que el ajedrez. AlphaGo aprendió estrategias jugando millones de partidas contra sí mismo y otros jugadores.
+- **Boston Dynamics**: Esta empresa ha desarrollado robots capaces de moverse y adaptarse a entornos reales, como el famoso robot perro Spot. Su IA les permite caminar, correr y esquivar obstáculos, pero solo dentro de los límites definidos por sus programadores.
+- **Sandstorm, DARPA Challenge**: Competencias de vehículos autónomos como el DARPA Challenge han impulsado el desarrollo de coches capaces de conducirse solos en situaciones complejas, mostrando el poder de la IA en la robótica y la movilidad.
+- **Elecciones en EE.UU. 2016**: En la política, sistemas de IA han tratado de predecir resultados electorales a partir de datos de búsquedas y redes sociales. Sin embargo, estos sistemas aún presentan limitaciones y pueden reflejar más los sesgos de internet que la realidad política.
+- **GALiWeather**: Sistemas como GALiWeather han conseguido transformar datos meteorológicos en predicciones escritas en lenguaje natural, facilitando el acceso a la información para cualquier usuario.
+
+Estos ejemplos muestran que la IA actual es, fundamentalmente, **específica y limitada**: cada sistema se diseña para resolver problemas concretos y aprende a partir de datos relacionados con ese ámbito. No existe, al menos por ahora, una IA general que pueda aprender y razonar como lo haría un ser humano en cualquier situación. Por eso, la investigación sigue avanzando en la búsqueda de algoritmos y modelos capaces de ampliar estos límites.

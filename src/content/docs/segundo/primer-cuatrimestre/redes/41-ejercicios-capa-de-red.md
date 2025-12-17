@@ -1,0 +1,7 @@
+Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+
+[[archivos/ejercicios/Enunciados/CIDR.pdf|CIDR]]
+![[archivos/ejercicios/SolucionesPropias/QuirogaLinaresAdrian_CIDR.pdf|QuirogaLinaresAdrian_CIDR]]
+
+[[archivos/ejercicios/Enunciados/CabecerasIP.pdf|CabecerasIP]]
+![[archivos/ejercicios/SolucionesPropias/QuirogaLinaresAdrian_CabecerasIP.pdf|QuirogaLinaresAdrian_CabecerasIP]]

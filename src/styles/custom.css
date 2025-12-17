@@ -1,0 +1,224 @@
+/* =============================================================================
+   CUSTOM STYLES - APUNTES UNIVERSITARIOS
+   ============================================================================= */
+
+/* Importar fuentes de Google Fonts - DEBE ir al inicio */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* Variables de color personalizadas */
+:root {
+    /* Colores principales - Azul universitario */
+    --sl-color-accent-low: #1a365d;
+    --sl-color-accent: #2b6cb0;
+    --sl-color-accent-high: #4299e1;
+
+    /* Colores de fondo */
+    --sl-color-bg: #f7fafc;
+    --sl-color-bg-nav: #edf2f7;
+    --sl-color-bg-sidebar: #ffffff;
+
+    /* Tipografía */
+    --sl-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --sl-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+/* Modo oscuro */
+:root[data-theme='dark'] {
+    --sl-color-accent-low: #1a365d;
+    --sl-color-accent: #4299e1;
+    --sl-color-accent-high: #90cdf4;
+
+    --sl-color-bg: #1a202c;
+    --sl-color-bg-nav: #2d3748;
+    --sl-color-bg-sidebar: #1a202c;
+}
+
+/* =============================================================================
+   TIPOGRAFÍA
+   ============================================================================= */
+
+/* Encabezados */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+h1 {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, var(--sl-color-accent) 0%, var(--sl-color-accent-high) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Código inline */
+code:not(pre code) {
+    background: var(--sl-color-bg-nav);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* Bloques de código */
+pre {
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* =============================================================================
+   TARJETAS Y COMPONENTES
+   ============================================================================= */
+
+/* Tarjetas de navegación */
+.card {
+    border-radius: 12px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* =============================================================================
+   SIDEBAR
+   ============================================================================= */
+
+/* Grupos de navegación */
+.sidebar-group-label {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+}
+
+/* Links activos */
+.sidebar-link[aria-current='page'] {
+    background: linear-gradient(90deg, var(--sl-color-accent-low) 0%, transparent 100%);
+    border-left: 3px solid var(--sl-color-accent);
+}
+
+/* =============================================================================
+   CONTENIDO PRINCIPAL
+   ============================================================================= */
+
+/* Tablas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+th {
+    background: var(--sl-color-accent);
+    color: white;
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+}
+
+td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--sl-color-bg-nav);
+}
+
+tr:hover {
+    background: var(--sl-color-bg-nav);
+}
+
+/* Listas */
+ul,
+ol {
+    padding-left: 1.5rem;
+}
+
+li {
+    margin-bottom: 0.5rem;
+}
+
+/* Blockquotes */
+blockquote {
+    border-left: 4px solid var(--sl-color-accent);
+    background: var(--sl-color-bg-nav);
+    padding: 1rem 1.5rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1.5rem 0;
+}
+
+/* =============================================================================
+   ANIMACIONES
+   ============================================================================= */
+
+/* Transiciones suaves */
+a,
+button,
+.card {
+    transition: all 0.2s ease;
+}
+
+/* Fade in para el contenido */
+.main-pane {
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =============================================================================
+   RESPONSIVE
+   ============================================================================= */
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+
+    table {
+        font-size: 0.875rem;
+    }
+
+    th,
+    td {
+        padding: 8px 12px;
+    }
+}
+
+/* =============================================================================
+   MEJORAS DE IMPRESIÓN
+   ============================================================================= */
+
+@media print {
+
+    .sidebar,
+    .header,
+    .toc {
+        display: none !important;
+    }
+
+    .main-pane {
+        margin: 0;
+        padding: 2rem;
+    }
+
+    h1 {
+        background: none;
+        -webkit-text-fill-color: initial;
+        color: #1a365d;
+    }
+}

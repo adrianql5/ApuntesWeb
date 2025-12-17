@@ -33,7 +33,7 @@ Los procesos no solo están "ejecutándose" o "parados". Tienen un ciclo de vida
 
 Sin opciones, `ps` sólo muestra los procesos lanzados desde el terminal actual y con el mismo `EUID` que el usuario que lo lanzó
 
-![](./Pasted image 20251213120909.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251213120909.png)
 
 **Sintaxis Clave (Trucos):**
 - **Estilo UNIX (con guion):** `ps -ef` $\rightarrow$ Muestra **todo** con detalles (formato estándar).
@@ -45,25 +45,25 @@ Algunas opciones:
 - `-u usuario`: muestra los procesos de un usuario
 - `-o formato`: permite definir el formato de salida, por ejemplo
 
-![](./Pasted image 20251213121521.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251213121521.png)
 
 
 **`pstree`**: Muestra la jerarquía. Fundamental para ver quién es el padre de quién (y entender por qué si matas al padre, mueren los hijos).
 
-![](./Pasted image 20251213121741.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251213121741.png)
 
 ### Herramientas Dinámicas (`top`)
 `top` es un monitor en tiempo real.
 - **Load Average (Carga media):** Números clave en la cabecera (1min, 5min, 15min).
     - _Regla de oro:_ Si la carga es mayor al número de núcleos (CPUs) que tienes, hay atasco.
 
-![](./Pasted image 20251213121811.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251213121811.png)
 
 > [!Tip] Debug avanzado: strace
 > 
 > Si un proceso falla y no sabes por qué, strace -p PID te muestra las "tripas": todas las llamadas que el proceso le hace al Kernel (abrir archivos, leer memoria, etc.).
 
-![](./Pasted image 20251213121938.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251213121938.png)
 
 ## 6.1.4 Control y Señales: "Mandar órdenes"
 No "matamos" procesos, les enviamos **señales**. El proceso recibe la señal y decide qué hacer (salvo con SIGKILL).
@@ -115,11 +115,11 @@ Ideal para scripts largos o tareas que no quieres esperar.
 3. Recuperas al frente con `fg`.
 4. **`nohup`**: Vital si vas a cerrar la terminal y no quieres que el proceso muera (inmune a SIGHUP).
 
-![](./Pasted image 20251213122036.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251213122036.png)
 
 El comando `jobs` permite ver la lista de comandos en background lanzados desde el shell, así como su estado (`fg` y `bg` pueden actuar sobre uno de los jobs identificándolo por su número).
 
-![](./Pasted image 20251213123212.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251213123212.png)
 
 ## 6.1.5 Prioridades: `nice` y `renice`
 Linux es "democrático" pero permite favoritismos.
@@ -193,7 +193,7 @@ Los enlaces permiten acceder a un mismo contenido con diferentes nombres. Se ges
 
 - **Comando:** `ln -s destino nombre_enlace`
 
-![](./Pasted image 20251214192819.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251214192819.png)
 
 
 ## 6.2.3 Atributos de un Fichero
@@ -210,7 +210,7 @@ Ejemplo: `-rw--r--r-- 2 luis luis 12 Sep 22 20:19 fichero`
 7. **Fecha:** Última modificación (`mtime`).
 8. **Nombre:** Hasta 255 caracteres (evitar espacios y especiales).
 
-![](./Pasted image 20251214192924.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251214192924.png)
 
 
 ### Tipos de Fechas (Timestamps)
@@ -243,7 +243,7 @@ El efecto de los permisos cambia si se aplica a un fichero o a un directorio:
     - Cualquier usuario que **no** seas tú (el dueño) y que **no** pertenezca al grupo del archivo.
     - _Analogía:_ Gente que pasa por la calle frente a la oficina. Quizás puedan mirar por la ventana (leer), pero no entrar (ejecutar) ni reordenar los muebles (escribir).
 
-![](./Pasted image 20251031172301.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251031172301.png)
 
 ### Modificación de Permisos: `chmod`
 Solo el propietario o `root` pueden cambiarlos.
@@ -525,7 +525,7 @@ LVM se organiza en capas, desde lo físico (abajo) hasta lo lógico (arriba).
 4. **LV (Logical Volume - Volumen Lógico):** Son las particiones virtuales que creamos sacando espacio de la "bolsa" (VG). Es el equivalente a `/dev/sda1` en el mundo clásico.
 5. **Sistema de Ficheros:** Formateo final (`mkfs`) sobre el LV.
 
-![](./Pasted image 20251215122456.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251215122456.png)
 
 **Unidades de Medida:** LVM no trabaja bit a bit, sino en bloques:
 - **PE (Physical Extent):** Unidad básica en la que se divide el Volumen Físico.
@@ -536,7 +536,7 @@ LVM se organiza en capas, desde lo físico (abajo) hasta lo lógico (arriba).
     - _Stripping:_ Datos distribuidos (mayor rendimiento).
     - _Mirroring:_ Espejo (redundancia).
 
-![](./Pasted image 20251215122534.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/Pasted image 20251215122534.png)
 
 ### Comandos de Gestión LVM
 Los comandos siguen una lógica de nombres muy clara según la capa que gestionen: `pv...`, `vg...`, `lv...`.

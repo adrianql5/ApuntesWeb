@@ -10,7 +10,7 @@ Los **casos de uso** capturan el comportamiento deseado del sistema sin especifi
 
 Una **secuencia** es una interacción del sistema con **elementos externos**. Un **actor** es un **rol que juega un usuario** o un sistema al interaccionar con el sistema. El mismo actor puede desenvolver varios roles. Un **escenario** es una instancia del caso de uso.
 
-![](./Pasted image 20250212094804.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250212094804.png)
 
 Los **casos de uso** se especifican textualmente como un flujo de eventos, incluyendo un **escenario** **principal** y sus **alternativas**. Capturan comportamientos sin especificar la implementación, y se realizan creando **colaboraciones** de clases y otros elementos. Un caso de uso bien estructurado denota un comportamiento **simple** e **identificable**, identifica **actores** que interactúan con él. Incorpora comportamiento común incluyendo otros casos de uso y coloca variantes en casos de uso que lo extienden, describe el flujo de eventos con los usuarios por medio de escenarios, y especifica **pre** y **post** **condiciones**.
 
@@ -26,11 +26,11 @@ En la **inclusión**, un caso de uso incorpora el comportamiento de otro, para e
 
 En la **extensión**, un caso de uso modifica el comportamiento de otro en **puntos de extensión**, para describir variaciones.
 
-![](./Pasted image 20250212094921.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250212094921.png)
 
 
 >[!Examen Parcial]
->![](./Pasted image 20250218121619.png)
+>![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250218121619.png)
 >
->![](./Pasted image 20250218121632.png)
+>![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250218121632.png)
 

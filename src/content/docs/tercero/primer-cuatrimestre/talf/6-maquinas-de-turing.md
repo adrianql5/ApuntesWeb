@@ -9,7 +9,7 @@ Una **Máquina de Turing (MT)** es un modelo matemático de computación que con
 
 A diferencia de los autómatas finitos o de pila, la MT puede mover su cabezal de lectura/escritura tanto a la izquierda como a la derecha, y puede modificar los símbolos de la cinta.
 
-![](./Pasted image 20251208153329.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/Pasted image 20251208153329.png)
 
 
 # 6.2 Definición
@@ -44,7 +44,7 @@ Si la cadena no pertenece al lenguaje ($w \notin L(M)$), pueden pasar dos cosas:
 1. La máquina se para en un estado **no final** (porque no hay transición definida).
 2. La máquina entra en un **bucle infinito** y nunca se para.
 
-![](./Pasted image 20251208154716.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/Pasted image 20251208154716.png)
 
 
 # 6.5 Protips

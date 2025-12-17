@@ -24,7 +24,7 @@ for (int iter = 0; iter < MAX_ITER; iter++) {
 }
 ```
 
-![](./Pasted image 20250602161129.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250602161129.png)
 
 ---
 

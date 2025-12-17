@@ -15,7 +15,7 @@ Escrito por **Adrián Quiroga Linares**.
 La **capa de red** en el modelo de Internet es la encargada de transportar los datos desde un host de origen hasta un host de destino, controlando el **encaminamiento y el reenvío de paquetes** a través de la red.  Se implementa tanto en los dispositivos **terminales** como en los **routers**.
 
 > [!Recordatorio]
-> ![](./archivos/imagenes/Pasted image 20241108205726.png)
+> ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241108205726.png)
 
 ### **Host Origen, Host Destino y Router**
 El **host origen** es el qué **recibe el paquete** de la capa de transporte, que encapsula los datos de la aplicación. Se encarga de **encapsular el paquete en un datagrama IP** que contiene la información necesaria para su entrega, como la dirección de origen y destino. **Entrega el datagrama en la capa de enlace**.
@@ -36,7 +36,7 @@ La **capa de red** permite la transmisión de paquetes entre hosts a través de 
 # 4.2 Redes de Conmutación de Paquetes
 Las **redes de conmutación de paquetes** permiten transmitir datos dividiéndolos en **paquetes pequeños**. Estos paquetes viajan a través de la red de manera independiente, siguiendo rutas que pueden variar de un paquete a otro. El término "conmutación de paquetes" se refiere al proceso de enviar estos paquetes a través de varios nodos (por ejemplo, routers) que los redirigen hasta su destino.
 
-![](./archivos/imagenes/Pasted image 20241107162613.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241107162613.png)
 
 
 ## 4.2.1 Redes de Datagramas:
@@ -49,7 +49,7 @@ El servicio proporcionado por las redes de datagramas es de **mejor esfuerzo** (
 Los routers toman decisiones de encaminamiento en función de la dirección IP de destino contenida en la cabecera de cada paquete. Estas decisiones se toman consultando las **tablas de reenvío** de los routers, las cuales pueden actualizarse dinámicamente mediante protocolos de enrutamiento (como **OSPF** o **BGP**). La red de datagramas IP permite que diferentes tipos de redes de enlace de datos (Ethernet, Wi-Fi, 4G, etc.) se conecten entre sí, lo que facilita la **interconexión de redes heterogéneas**.
 
 
-![](./archivos/imagenes/Pasted image 20241107162749.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241107162749.png)
 
 
 ## 4.2.2 Redes de Circuitos Virtuales:
@@ -70,7 +70,7 @@ Finalmente, el nodo 1 envía una **confirmación de aceptación (ACK)** de vuelt
 Una vez que la conexión ha sido establecida, los paquetes subsiguientes llevan el identificador del circuito (VCI). Los routers no necesitan volver a determinar la ruta, ya que esta ha sido preestablecida, y pueden utilizar el **VCI** para encontrar la interfaz de salida correcta.
 
 
-![](./archivos/imagenes/Pasted image 20241107162941.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241107162941.png)
 
 ## **Resumen Comparativo:**
 
@@ -140,7 +140,7 @@ El enfoque de **"Forward Search"** del algoritmo de Dijkstra se basa en mantener
 4. **Repetir el Proceso**:
    - El proceso se repite desde el paso 1, pero ahora se toma el siguiente nodo con el menor coste en la lista **Provisional**. Este nodo se convierte en el nuevo nodo **S** y se repite el proceso de exploración y actualización.
 
-![](./archivos/imagenes/Pasted image 20241107165115.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241107165115.png)
 
 ## 4.3.3 Algoritmo de Vector de Distancias (VD)
 El **encaminamiento de vector de distancias** es un método descentralizado de enrutamiento, donde cada nodo en una red colabora con sus vecinos para determinar la distancia mínima hacia todos los demás nodos. Este método se basa en la propagación gradual de la información de distancias, permitiendo que cada nodo descubra rutas óptimas hacia todos los destinos mediante **iteraciones sucesivas**.
@@ -168,8 +168,8 @@ El **encaminamiento de vector de distancias** es un método descentralizado de e
    - Este proceso continúa iterativamente: cada nodo sigue intercambiando información con sus vecinos y recalculando rutas hasta que ya no se producen cambios en las tablas de distancias de los nodos.
    - En ese momento, el algoritmo **converge**, y cada nodo ha encontrado el camino más corto hacia todos los otros nodos de la red.
 
-![](./archivos/imagenes/Pasted image 20241107171800.png)
-![](./archivos/imagenes/Pasted image 20241107171852.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241107171800.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241107171852.png)
 
 El problema es que si un **nodo** calcula mal sus **distancias** jode a todos los demás, por lo que es poco robusto.
 
@@ -180,7 +180,7 @@ Hay dos niveles de encaminamiento:
 - **Intradominio**: cada SA puede elegir algoritmo
 - **Interdominio**: común para todos los SA
 
-![](./archivos/imagenes/Pasted image 20241107172236.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241107172236.png)
 
 # 4.4 Encaminamiento en Internet (Protocolos de Rutado)
 El encaminamiento en Internet se basa en protocolos de rutado, que **permiten a los routers decidir el mejor camino para enviar paquetes de datos a su destino**. Internet se divide en diferentes sistemas autónomos (SA), que son redes administradas de forma independiente. Estos sistemas usan distintos protocolos de rutado para decidir cómo enviar datos tanto dentro del **SA** (*rutado intra-autónomo*) como entre **SAs** (*rutado inter-autónomo*).
@@ -190,7 +190,7 @@ Usa el rutado intra-autónomo, basado en **vector de distancias** (VD). **Funcio
 - **Mensajes de petición RIP**: solicitan información
 - **Mensajes de respuesta RIP**: envían una lista de hasta 25 redes internas al SA (estos también se envían de forma automática cada 30. En caso de que no se reciba respuesta en 180 segundos, se considera caído).
 
-   ![](./archivos/imagenes/Pasted image 20241107181500.png)
+   ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241107181500.png)
    
 ## 4.4.2 OSPF (Open Shortest Path First):
  Protocolo de enrutamiento intra-autónomo basado en el **estado de enlace** (EE) para intradominios. **Funciona sobre** su propio protocolo de red, utilizando el puerto 89.
@@ -201,7 +201,7 @@ Usa el rutado intra-autónomo, basado en **vector de distancias** (VD). **Funcio
 
 **OSPF** permite la subdivisión del Sistema Autónomo (SA) en áreas jerárquicas, lo que mejora la organización. Cada área ejecuta OSPF internamente, y las comunicaciones entre áreas se gestionan mediante routers de frontera de área (ABR), que encaminan el tráfico hacia fuera del área. Estos ABRs están conectados entre sí en una **área troncal**. Para enrutar fuera del SA, OSPF también utiliza un router de frontera del SA (ASBR).
    
-![](./archivos/imagenes/Pasted image 20241113172544.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241113172544.png)
 
 ## 4.4.3 BGP (Border Gateway Protocol):
 Protocolo de enrutamiento inter-autónomo, **basado en vector de rutas**. **Funciona sobre** TCP (puerto 179).
@@ -214,7 +214,7 @@ Protocolo de enrutamiento inter-autónomo, **basado en vector de rutas**. **Func
 
 **Políticas de Enrutamiento**: BGP permite a los administradores de cada SA definir políticas de enrutamiento específicas, como evitar redirigir el tráfico a través de ciertos proveedores o filtrar rutas hacia determinados destinos. Esto permite un control granular sobre el flujo de tráfico entre SAs.
    
-![](./archivos/imagenes/Pasted image 20241107181934.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241107181934.png)
 ## 4.4.4 Resumen
 - **RIP**: Protocolo de enrutamiento sencillo que intercambia solo la distancia a redes vecinas y está limitado a un máximo de 15 saltos.
 - **OSPF**: Protocolo de estado de enlace que utiliza un mapa completo de la red, actualizando la información periódicamente y calculando el camino más corto con el algoritmo de Dijkstra. Permite balanceo de carga entre rutas de igual costo y organización jerárquica mediante áreas.
@@ -228,7 +228,7 @@ Define el formato de las **direcciones IP**, los campos de los **datagramas**, y
 ## 4.5.1 Direccionamiento IPv4
 Las direcciones **IPv4** son números de 4 bytes (32 bits) que se expresan en un formato de cuatro números decimales separados por puntos, donde cada número representa 1 byte (8 bits). Un ejemplo de dirección IPv4 es `192.168.1.1`. Cada dispositivo conectado a Internet (hosts, routers, etc.) tiene **una dirección IP por cada** **interfaz** (*punto de conexión a la red*). Por ejemplo, en Linux, una interfaz de tarjeta Ethernet puede llamarse `eth0`, una conexión serie `ppp0`, una conexión USB `usb0`, y una conexión inalámbrica `wlan0`.
 
-![](./archivos/imagenes/Pasted image 20241108215013.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241108215013.png)
 
 ### Direcciones IP
 Una dirección IP tiene dos partes:
@@ -243,7 +243,7 @@ Antiguamente las direcciones IP se agrupaban en clases, según los primeros bits
 - **Clase D**: Comienza con `1110`, destinada para **multicast** (envío de datos a varios dispositivos).
 - **Clase E**: Comienza con `1111`, reservada para usos futuros.
 
-![](./archivos/imagenes/Pasted image 20241108215124.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241108215124.png)
 
 Algunas direcciones reservadas por el IANA:
 - **0.0.0.0** → Esta red. Usada para arrancar sistemas sin disco (como en el protocolo DHCP) y en el encaminamiento por defecto.
@@ -280,8 +280,8 @@ Los primeros 24 bits (`192.168.17`) representan la red principal. Los siguientes
 **Número de hosts por subred**: Con 5 bits para hosts, cada subred puede tener $2^5 - 2 = 30$ estaciones (se resta 2 porque no se pueden usar las direcciones de subred y de difusión).
 **Total de direcciones posibles**: $8 \text{ subredes} \times 30 \text{ hosts} = 240 \text{ direcciones}$.
 
-![](./archivos/imagenes/Pasted image 20241113172957.png)
-![](./archivos/imagenes/Pasted image 20241113175935.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241113172957.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241113175935.png)
 
 ### **Redes sin clase, direcciones CIDR (Classless Inter-Domain Routing)**
 En 1993, el sistema tradicional de direcciones IP basado en clases (A, B, C) fue reemplazado por **CIDR (Classless Inter-Domain Routing)**. Este cambio permitió dividir las direcciones IP en redes y hosts con mayor flexibilidad, lo cual ayudó a mejorar la administración de redes y el uso eficiente de las direcciones IP.
@@ -353,7 +353,7 @@ Por ejemplo el router de casa.
 
 ### **Reenvío de un paquete: coincidencia del prefijo más largo**
 
-![](./archivos/imagenes/Pasted image 20241113214248.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241113214248.png)
 
 ### **Agregación de rutas**
 Es un proceso que realizan los routers por el cual toman un **grupo de direcciones de redes contiguas** (bloque CIDR) y las resumen en una sola dirección de red común a todas esas redes. 
@@ -364,7 +364,7 @@ Para obtener la dirección IP **base de agregación de rutas** de debemos compro
 
 En la imagen podemos ver que en la tabla de reenvío del **router B** tendríamos una entrada para A, B, C ,D y E, lo que pasa es que C, D y E van a ser consecutivas y reenviarse por la misma interfaz, así que se agrupan en **una única entrada** y cuando llegue un paquete de cualquiera de esas redes van a ser reenviadas por al **interfaz RB2** y cuando llegue al **router C** ya se decidirá a donde va cada paquete.
 
-![](./archivos/imagenes/Pasted image 20241230113908.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241230113908.png)
 
 
 ## 4.5.3 Datagrama IP
@@ -372,7 +372,7 @@ En la imagen podemos ver que en la tabla de reenvío del **router B** tendríamo
 >Saber diferencias datagrama IPv4 e IPv6
 
 
-![](./archivos/imagenes/Pasted image 20241107185211.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241107185211.png)
 
 **Versión (4 bits)**: Indica la versión del protocolo IP utilizado. Normalmente es IPv4 (valor 4) o IPv6 (valor 6).
 **Longitud de Cabecera (lg. cab.) (4 bits)**: Muestra la longitud de la cabecera en múltiplos de 4 bytes. Esto permite determinar dónde comienza la sección de datos.
@@ -415,9 +415,9 @@ $\text{Desplazamiento (en unidades de 8 bytes)} = \frac{\text{Posición del inic
 
 Este proceso de fragmentación y reensamblaje garantiza que los datagramas puedan adaptarse a diferentes redes con diferentes capacidades de transmisión, permitiendo la comunicación entre sistemas que podrían estar conectados por redes con MTU variables.
 
-![](./archivos/imagenes/Pasted image 20241113215319.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241113215319.png)
 
-![](./archivos/imagenes/Pasted image 20241113215403.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241113215403.png)
 
 ## 4.5.5 Seguridad en IPv4
 El rastreo de paquetes es una técnica que permite a un atacante interceptar y **analizar los paquetes que se transmiten a través de una red**. Este ataque es pasivo, ya que el atacante **no modifica el contenido de los paquetes**, solo los observa y captura.  
@@ -480,7 +480,7 @@ IPv6 mejora la flexibilidad y eficiencia en comparación con IPv4.
 
 ## 4.5.7 Formato del datagrama IPv6
 
-![](./archivos/imagenes/Pasted image 20241107192018.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241107192018.png)
 
 **Versión (4 bits)**: Indica la versión del protocolo IP. Para IPv6, este valor es 6.
 **Clase de Tráfico (8 bits)**: Define la prioridad y clase de tráfico del paquete, permitiendo especificar si debe ser tratado con baja latencia, alta prioridad, etc.
@@ -503,7 +503,7 @@ La transición de IPv4 a IPv6 es un proceso gradual en el cual ambos protocolos 
 
 Consiste en **encapsular** los paquetes IPv6 dentro de paquetes IPv4. Para ello **se añaden cabeceras IPv4** con las direcciones de los routers que no soportan IPv6. Cuando llegan a zonas de **IPv6** se **eliminan dichas cabeceras**.
 
-![](./archivos/imagenes/Pasted image 20241113220741.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241113220741.png)
 
 # 4.6 VPN (Redes Privadas Virtuales)
 Es una red utilizada por una organización que utiliza la red **pública** para comunicarse de forma segura, en vez de tener que crear una propia red, lo que es muy costoso.
@@ -512,13 +512,13 @@ Se usan sistemas de **encriptación** y **autenticación**.
 - **IPSec**: protocolo de seguridad de IP para soportar comunicaciones seguras e implementar VPNs
 - También se pueden implementar mediante **túneles IP**
 
-![](./archivos/imagenes/Pasted image 20241113222103.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241113222103.png)
 ### Túneles IP
 - El **paquete original se encapsula dentro de un nuevo paquete IP** que puede ser transportado por la red subyacente.
 - El **paquete encapsulado se envía a través de una red intermedia**, que **no entiende el contenido, pero si la cabecera que lo encapsula**.
 - En el extremo del túnel, **el encabezado se elimina**, y el paquete original se entrega al destino final.
 
-![](./archivos/imagenes/Pasted image 20241230154927.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241230154927.png)
 
 # 4.7 ICMP (Internet Control Message Protocol)
 ICMP es un protocolo de control que **funciona sobre IP** y permite a **hosts y routers informar sobre errores o problemas de la red**. Aunque opera en la capa de red, no transporta datos de usuario, sino que envía mensajes para mantener el estado y la integridad de la red. **Su entrega no está garantizada**, ya que se encapsula en un datagrama IP.
@@ -527,7 +527,7 @@ Cada mensaje ICMP incluye:
 - **Tipo y Código**: Definen la naturaleza del mensaje (por ejemplo, solicitud de eco, destino inaccesible, tiempo excedido).
 - **8 primeros bytes del datagrama original**: Ayudan a identificar el paquete que causó el error.
 
-![](./archivos/imagenes/Pasted image 20241113222249.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241113222249.png)
 
 **Destino inalcanzable**  
 Lo envía un nodo a la estación origen cuando no puede alcanzar el destino o cuando el datagrama no puede fragmentarse y no puede atravesar una red (tipo ICMP 3).
@@ -581,5 +581,5 @@ Un servidor NAT tiene dos interfaces con direcciones IP distintas:
 
 Los dispositivos de la red privada configuran la IP privada del NAT como su **gateway**, y este modifica los **datos de origen** (IP y puerto) de cada paquete antes de enviarlo al exterior. También mantiene una **tabla de redirección** para asociar cada paquete de respuesta con el dispositivo interno correspondiente.
 
-![](./archivos/imagenes/Pasted image 20241230164029.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/imagenes/Pasted image 20241230164029.png)
 

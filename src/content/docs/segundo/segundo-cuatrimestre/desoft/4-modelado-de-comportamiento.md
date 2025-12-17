@@ -17,7 +17,7 @@ Un **mensaje** es una trasmisión de información entre objetos para desencadena
 - **Creación**
 - **Destrucción**
 
-![](./Pasted image 20250323161253.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250323161253.png)
 
 Las interacciones sirven para modelar **flujo de control** en un sistema o subsistema. La implementación de una operación, o una clase o componente. Los objetos pueden ser **concretos** o **prototípicos**.
 
@@ -31,9 +31,9 @@ Los **diagramas de secuencia** tienen una **linea de vida** que representa la ex
 
 Una **iteración** indica la repetición de un mensaje, y una **bifurcación** representa un mensaje cuya ejecución depende de la evaluación de una condición.
 
-![](./Pasted image 20250323162659.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250323162659.png)
 
-![](./Pasted image 20250323162914.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250323162914.png)
 
 Los diagramas de interacción pueden modelar **colaboraciones** y **escenarios** dentro de una caso de uso. Los **diagramas de secuencia** modelan escenarios o visualizan iteraciones y bifurcaciones sencillas; los de **colaboración** son preferibles para iteraciones y bifurcaciones complejas.
 

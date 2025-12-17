@@ -55,7 +55,7 @@ Para que esto funcione, necesitamos tres actores :
 2. **FIND (Buscar):** El Consumidor busca en el Registro: "¿Quién tiene un servicio de calculadora?".
 3. **BIND (Ligar/Conectar):** El Consumidor obtiene la dirección y conecta directamente con el Proveedor para usarlo.
 
-![](./Pasted image 20251212155730.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251212155730.png)
 
 # 6.3 Implementación de SOA mediante Servicios Web
 Aunque SOA es el concepto, los **Servicios Web** son la implementación técnica más común. Utilizan estándares basados en **XML** para garantizar que cualquier lenguaje (Java, Python, C#) pueda hablar con cualquier otro .
@@ -108,7 +108,7 @@ Visualiza una carta real. Un mensaje SOAP tiene :
     - Es procesado por los "intermediarios" (servidores por los que pasa el mensaje antes de llegar al destino).
 3. **Body (Cuerpo) - Obligatorio:** Aquí va la información real que quiere el usuario (ej: los números a sumar).
 
-![](./Pasted image 20251212155837.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251212155837.png)
 
 >[!Info]
 >**SOAP** es el **Sobre certificado** o la **Caja de envío**. Una vez que sabes qué pedir (gracias al WSDL), no puedes gritarlo ni escribirlo en una servilleta. Tienes que meter tu pedido en una caja estándar que el restaurante acepta.

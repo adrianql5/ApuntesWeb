@@ -5,14 +5,14 @@ title: "1 Ejercicios Capa de Transporte"
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 [[archivos/ejercicios/Enunciados/CheckSumUDP.pdf|CheckSumUDP]]
-![](./archivos/ejercicios/SolucionesPropias/QuirogaLinaresAdrian_CheckSum.pdf|QuirogaLinaresAdrian_CheckSum)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/ejercicios/SolucionesPropias/QuirogaLinaresAdrian_CheckSum.pdf|QuirogaLinaresAdrian_CheckSum)
 
 [[archivos/ejercicios/Enunciados/UtilizacionARQ.pdf|UtilizacionARQ]]
-![](./archivos/ejercicios/SolucionesPropias/QuirogaLinaresAdrian_UtilizacionARQ.pdf|QuirogaLinaresAdrian_UtilizacionARQ)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/ejercicios/SolucionesPropias/QuirogaLinaresAdrian_UtilizacionARQ.pdf|QuirogaLinaresAdrian_UtilizacionARQ)
 
 [[archivos/ejercicios/Enunciados/ProtoTipoTCP.pdf|ProtoTipoTCP]]
 
-![](./archivos/ejercicios/SolucionesPropias/QuirogaLinaresAdrian_ProtoTipoTCP.pdf|QuirogaLinaresAdrian_ProtoTipoTCP)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/ejercicios/SolucionesPropias/QuirogaLinaresAdrian_ProtoTipoTCP.pdf|QuirogaLinaresAdrian_ProtoTipoTCP)
 
 
 [[archivos/ejercicios/Enunciados/CongestionTCP.pdf|CongestionTCP]]

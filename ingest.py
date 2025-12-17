@@ -236,12 +236,26 @@ def copy_files(files_to_copy: List[Dict], dest_base: Path, dry_run: bool = False
                 title = source.stem
             
             # Convertir sintaxis de imágenes Obsidian a Markdown estándar
-            # ![[archivos/imagenes/...]] -> ![](./archivos/imagenes/...)
+            # ![[archivos/imagenes/...]] -> ![](/ApuntesWeb/images/curso/cuatri/asignatura/archivos/imagenes/...)
             def convert_obsidian_image(match):
                 image_path = match.group(1)
-                return f'![](./{image_path})'
+                # Construir ruta absoluta a public/images/
+                return f'![](/ApuntesWeb/images/{curso}/{cuatrimestre}/{asignatura}/{image_path})'
             
             original_content = re.sub(r'!\[\[([^\]]+)\]\]', convert_obsidian_image, original_content)
+            
+            # También convertir sintaxis de imágenes Markdown relativas existentes
+            # ![](./archivos/...) -> ![](/ApuntesWeb/images/...)
+            def convert_relative_image(match):
+                alt_text = match.group(1)
+                image_path = match.group(2)
+                # Si es una ruta relativa a archivos, convertir
+                if image_path.startswith('./archivos') or image_path.startswith('archivos'):
+                    clean_path = image_path.lstrip('./')
+                    return f'![{alt_text}](/ApuntesWeb/images/{curso}/{cuatrimestre}/{asignatura}/{clean_path})'
+                return match.group(0)
+            
+            original_content = re.sub(r'!\[([^\]]*)\]\((\./archivos[^\)]+|archivos[^\)]+)\)', convert_relative_image, original_content)
             
             # Verificar si ya tiene frontmatter
             if original_content.strip().startswith('---'):
@@ -265,11 +279,12 @@ title: "{title}"
     return copied_count
 
 
-def copy_image_folders(source_path: Path, dest_base: Path, dry_run: bool = False) -> int:
+def copy_image_folders(source_path: Path, script_dir: Path, dry_run: bool = False) -> int:
     """
-    Copia las carpetas de imágenes de cada asignatura.
+    Copia las carpetas de imágenes de cada asignatura a public/.
     """
     copied_count = 0
+    public_dir = script_dir / 'public' / 'images'
     
     for subdir, folder_name, curso, cuatrimestre in FOLDER_MAPPING:
         # Construir ruta completa
@@ -294,8 +309,8 @@ def copy_image_folders(source_path: Path, dest_base: Path, dry_run: bool = False
             # Buscar carpeta de archivos/imagenes
             archivos_path = subject_dir / 'archivos'
             if archivos_path.exists() and archivos_path.is_dir():
-                # Destino para las imágenes
-                dest_archivos = dest_base / curso / cuatrimestre / subject_slug / 'archivos'
+                # Destino para las imágenes en public/
+                dest_archivos = public_dir / curso / cuatrimestre / subject_slug / 'archivos'
                 
                 if dry_run:
                     print(f"   🖼️  [DRY-RUN] Copiando {archivos_path} -> {dest_archivos}")
@@ -303,6 +318,7 @@ def copy_image_folders(source_path: Path, dest_base: Path, dry_run: bool = False
                     # Copiar toda la carpeta archivos
                     if dest_archivos.exists():
                         shutil.rmtree(dest_archivos)
+                    dest_archivos.parent.mkdir(parents=True, exist_ok=True)
                     shutil.copytree(archivos_path, dest_archivos)
                     print(f"   🖼️  Copiada carpeta de imágenes: {subject_slug}/archivos")
                 
@@ -472,7 +488,7 @@ def main():
     # Copiar carpetas de imágenes
     print("🖼️  Copiando carpetas de imágenes...")
     print("-" * 40)
-    images_copied = copy_image_folders(source_path, dest_base, args.dry_run)
+    images_copied = copy_image_folders(source_path, script_dir, args.dry_run)
     print()
     
     # Crear índices

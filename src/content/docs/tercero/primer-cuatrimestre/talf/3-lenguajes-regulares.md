@@ -75,7 +75,7 @@ $$L=R*$$
 
 **R:** La unión de todas las expresiones de los bucles en el estado ($r_1 + r_2 + \dots$).
 
-![](./Pasted image 20251020172701.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/Pasted image 20251020172701.png)
 
 
 ## 2 Estados (Inicial $\neq$ Final)
@@ -89,24 +89,24 @@ $$L=(R*+SU*T)*SU*$$
 
 - **$S U^*$**: Una vez te cansas de dar vueltas en el inicio, **viajas al final ($S$)** y puedes quedarte girando allí ($U^*$) para terminar.
 
-![](./Pasted image 20251020172650.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/Pasted image 20251020172650.png)
 
 ## Ejemplo complejo
-![](./Pasted image 20251207213850.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/Pasted image 20251207213850.png)
 
 # 3.4 Conversión de ER  a Autómatas Finitos
 Empleando estas reglas se puede construir un AFD con transiciones epsilon, suelen quedar autómatas gigantescos. Se puede simplificar después o también hay casos donde es obvio el autómata que reconocen
 
 
 $$R+S:L(R)+L(S)$$
-![](./Pasted image 20251020172713.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/Pasted image 20251020172713.png)
 
 $$RS:L(R)(S)$$
-![](./Pasted image 20251020172723.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/Pasted image 20251020172723.png)
 
 $$R*:L(R*)$$
-![](./Pasted image 20251020172732.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/Pasted image 20251020172732.png)
 
 **Ejemplo:**
 
-![](./Pasted image 20251207214613.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/Pasted image 20251207214613.png)

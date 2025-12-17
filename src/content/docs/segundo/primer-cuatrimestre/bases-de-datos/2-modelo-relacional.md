@@ -15,7 +15,7 @@ En el contexto del modelo relacional, una **relación** es el nombre técnico pa
 
 # 2.2 Estructura de las BD Relacionales
 Una base de datos relacional consiste en un conjuntos de **tablas**, a cada una de las cuales se le asigna un nombre **único**. 
-![](./Archivos/imagenes/Pasted image 20241223152609.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted image 20241223152609.png)
 
 Una **Relación** es una **tabla** con filas y columnas resultado del producto cartesiano de conjuntos de elementos de interés.
 
@@ -44,16 +44,16 @@ El modelo relacional incorpora **redundancia controlada** para visualizar las re
 Los valores de **clave externa** están restringidos a valores que existan previamente en la clave candidata referenciada, generando lo que se conoce como **restriccion de integridad referencial.**
 
 
-![](./Archivos/imagenes/Pasted image 20240929191231.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted image 20240929191231.png)
 
 # 2.5 Diagramas de esquema
 No hay definido un modelo concreto de representación, cualquier forma es válida siempre que deje muy claro cuáles son las **claves externas** y a qué claves candidatas hacen referencia.
 
 La gran diferencia entre el **MER** y el **MR** es la existencia o no de **redundancia de atributos**. En el **Modelo Relacional** se representa explícitamente una cierta **redundancia controlada** mediante las claves externas y la integridad referencial. En el **Modelo Entidad-Relación**, simplemente **no puede haber redundancia**.
 
-![](./Archivos/imagenes/Pasted image 20240929190532.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted image 20240929190532.png)
 
-![](./Archivos/imagenes/Pasted image 20241223155153.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted image 20241223155153.png)
 
 > [!Definiciones]
 > **Relación:** tabla con filas y columnas resultado del producto cartesiano de conjuntos de elementos de interés.

@@ -13,7 +13,7 @@ En este tema, nos adentramos en algunos de los algoritmos fundamentales en teor�
 **Concepto de GDA (Grado Dirigido Acíclico):**  
 Un GDA es un grafo dirigido que no contiene ciclos, es decir, no existen caminos que partan de un vértice y regresen a él mismo. En la matriz de caminos de un GDA, los valores en la diagonal siempre son ceros, indicando la ausencia de ciclos. Estos grafos son útiles para representar estructuras donde ciertos elementos deben preceder a otros, como las expresiones aritméticas o las ordenaciones parciales. 
 
-![](./archivos/imagenes/Pasted image 20241110130331.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241110130331.png)
 
 **Ordenación Parcial:**  
 Se trata de una relación que, además de no ser reflexiva (un elemento no se relaciona consigo mismo), es transitiva: si A se relaciona con B y B con C, entonces A se relaciona con C.
@@ -27,7 +27,7 @@ La ordenación topológica es una disposición lineal de los vértices de un gra
 3. **Eliminamos los arcos** que parten del vértice procesado y recalculamos los grados entrantes de los vértices restantes.
 4. Repetimos hasta que la cola esté vacía.
 
-![](./archivos/imagenes/Pasted image 20241110130410.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241110130410.png)
 
 #### 7.2 Cálculo de la Matriz de Caminos: Algoritmo de Warshall
 
@@ -35,9 +35,9 @@ El **Algoritmo de Warshall** permite calcular la matriz de caminos sin realizar 
 $$P_k(i, j) = \min[1, P_{k-1}(i, j) + (P_{k-1}(i, v) \times P_{k-1}(v, j))]$$
 Esto significa que el elemento $(i, j)$ en la matriz se establece en 1 si ya había un camino previo o si existe un camino indirecto a través de un vértice intermedio.
 
-![](./archivos/imagenes/Pasted image 20241110130607.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241110130607.png)
 
-![](./archivos/imagenes/Pasted image 20241110130551.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241110130551.png)
 
 #### 7.3 Camino Más Corto entre dos Vértices: Algoritmo de Dijkstra
 El **Algoritmo de Dijkstra** se usa para encontrar el camino de menor longitud desde un vértice de origen hasta todos los demás vértices en un grafo ponderado. Este es un algoritmo voraz que selecciona, en cada paso, el vértice con el camino mínimo actual y ajusta los caminos de los vértices adyacentes si es necesario. Utiliza:
@@ -51,11 +51,11 @@ Para realizar el algoritmo, se parte de un vértice origen, y a partir de él se
 
 Se repiten estos pasos sobreescribiendo solo el valor de aquellos caminos que tuvieran una longitud mayor a la obtenida por medio del vértice de estudio actual. Como se ve, tiene la desventaja de que si queremos saber el camino mínimo entre cualquier par de vértices, tenemos que realizar el algoritmo partiendo de todos los vértices del grafo y luego comparar.
 
-![](./archivos/imagenes/Pasted image 20241110130652.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241110130652.png)
 
-![](./archivos/imagenes/Pasted image 20241110130714.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241110130714.png)
 
-![](./archivos/imagenes/Pasted image 20241110130732.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241110130732.png)
 
 #### 7.4 Camino más corto entre cualquier par de vértices: Algoritmo de Floyd
 
@@ -67,7 +67,7 @@ En este caso:
 
 Por tanto, la matriz $D_n$, siendo $n$ el número de nodos, nos mostrará los caminos más cortos entre cualquier par de vértices, independientemente de la longitud del camino.
 
-![](./archivos/imagenes/Pasted image 20241110132055.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241110132055.png)
 
 #### 7.5 Control de flujo
 El control de flujo supone la forma de controlar la cantidad de objetos o elementos que se transportan de un lugar a otro. Algunos ejemplos son:
@@ -79,7 +79,7 @@ Muchas veces, lo que se pretende es maximizar el flujo, es decir, transportar la
 
 Para resolver estos problemas de maximización de flujo, se emplea el **Algoritmo de Ford-Fulkerson**, que busca caminos entre el nodo fuente y el sumidero en los que se pueda incrementar el flujo todavía más, para obtener en el sumidero la mayor cantidad de elementos posibles.
 
-![](./archivos/imagenes/Pasted image 20241110132251.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241110132251.png)
 
 #### 7.6 Árbol de expansión de coste mínimo
 A veces, a partir de un grafo no dirigido, se pretenden modelar relaciones simétricas entre elementos. En esta situación, tenemos varias definiciones importantes:
@@ -97,10 +97,10 @@ Para encontrar estos árboles de expansión existen dos algoritmos: el **Algorit
 ##### 7.6.1 Algoritmo de Prim
 Es un **algoritmo voraz**, ya que en cada paso se añade el arco más corto disponible al árbol (mejor solución en cada paso). Se parte de un vértice inicial y se añade el vértice adyacente cuyo arco entre ambos tenga el menor peso. A continuación, entre los vértices ya conectados, se busca el arco de menor peso que conecte sus vértices adyacentes que no hayan sido conectados todavía. Estos pasos se repiten hasta haber conectado todos los vértices.
 
-![](./archivos/imagenes/Pasted image 20241110132337.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241110132337.png)
 
 ##### 7.6.2 Algoritmo de Kruskal
 Se parte del conjunto de vértices del grafo y se selecciona el arco de menor peso, uniendo dos vértices y reduciendo en uno el número de componentes conexas. A continuación, se selecciona el siguiente arco de menor peso que también conecte vértices de dos componentes conexas distintas, reduciendo otra vez el número total en uno. Si no se respetara esta condición, se producirían ciclos. El algoritmo finaliza cuando solo queda una componente conexa.
 
-![](./archivos/imagenes/Pasted image 20241110132356.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted image 20241110132356.png)
 

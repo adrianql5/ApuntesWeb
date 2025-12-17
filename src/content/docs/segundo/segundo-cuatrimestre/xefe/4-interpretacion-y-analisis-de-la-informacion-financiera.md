@@ -54,7 +54,7 @@ Consiste en expresar cada partida de un estado financiero en relación con una v
 - En el **balance general**: Se calcula cuánto representa el **activo corriente** y el **activo a largo plazo** sobre el total de activos.
 - En la **cuenta de pérdidas y ganancias**: Se mide cuánto representa el **costo de materias primas** en relación con las ventas totales.
 
-![](./Pasted image 20250225160548.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250225160548.png)
 ### 2. Porcentajes Horizontales
 El análisis de **porcentajes horizontales** permite evaluar la evolución de diferentes partidas financieras a lo largo del tiempo. Se calcula el **porcentaje de variación** entre dos periodos para identificar tendencias y patrones de crecimiento o disminución.
 
@@ -65,7 +65,7 @@ $$\text{Variación} = \left( \frac{120,000 - 100,000}{100,000} \right) \times 10
 
 Este tipo de análisis ayuda a detectar **tendencias de crecimiento, estabilidad o declive** en los distintos indicadores financieros..
 
-![](./Pasted image 20250225160600.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250225160600.png)
 
 # 4.3 Ratios Financieros
 Los **ratios financieros** son indicadores que se obtienen al comparar dos magnitudes relacionadas dentro de los estados financieros. Estos permiten evaluar diferentes aspectos del desempeño financiero de una empresa.

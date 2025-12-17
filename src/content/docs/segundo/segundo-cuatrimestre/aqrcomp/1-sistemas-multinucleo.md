@@ -38,7 +38,7 @@ Es una clasificación de los procesadores basada en el número de flujos de **in
 | **SIMD** (Single Instruction, Multiple Data)   | 1                      | Múltiples      | Ideal para procesamiento de gráficos y cálculos vectoriales (Ej: GPUs).    |
 | **MISD** (Multiple Instruction, Single Data)   | Múltiples              | 1              | Poco común, usado en sistemas tolerantes a fallos.                         |
 | **MIMD** (Multiple Instruction, Multiple Data) | Múltiples              | Múltiples      | Base de los procesadores multinúcleo modernos.                             |
-![](./Pasted image 20250403153030.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250403153030.png)
 
 
 # 1.4 Conceptos de Procesadores Multinúcleo
@@ -58,7 +58,7 @@ En cada ciclo de reloj se emite una instrucción para ser ejecutada, pero alguna
 
 Con segmentación se usa una **frecuencia de reloj más alta** pues el periodo será de la longitud aproximada de una etapa (se intenta que todas tarden aproximadamente lo mismo).
 
-![](./Pasted image 20250406171108.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250406171108.png)
 
 ## 1.4.2 Tecnologías de Fabricación CMOS
 Los chips tienen **varias capas de transistores** apiladas para ahorrar superficie. El valor numérico que identifica al **nodo tecnológico** es el ancho **mínimo** de una **conexión de** cobre de **nivel 1**, que esta relacionado directamente con la superficie que ocupa el transistor.
@@ -107,7 +107,7 @@ La **frecuencia de reloj** se puede **reducir dinámicamente**, es decir, tomar 
 
 Hay un **límite** en las condiciones de **temperatura** en las que puede funcionar un circuito. Se ha llegado a un **límite de disipación** de potencia (100-200W) debido a cuestiones técnicas y económicas. Mantener el límite en cada nueva generación de microprocesadores requiere **optimizar el consumo de potencia**.
 
-![](./Pasted image 20250406174517.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250406174517.png)
 
 ### **Técnicas para Aumentar la Eficiencia Energética**
 - **No hacer nada:** Cuando una unidad no está en uso, se **detiene su reloj** para evitar consumo innecesario de energía estática o dinámica.
@@ -204,16 +204,16 @@ Existen aplicaciones estructuradas en tareas simples denominadas **Kernels** (co
 
 Esto se logra con **procesadores vectoriales**.
 
-![](./Pasted image 20250406233458.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250406233458.png)
 
 
 Otra posible solución es incluir en los **núcleos de propósito general** la posibilidad de **procesamiento vectorial**. Actualmente se pueden realizar operaciones en paralelo sobre **vectores de 256 bits** (es decir 8 operandos en float o 4 en double).
 
-![](./Pasted image 20250406234018.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250406234018.png)
 
 Las instrucciones vectoriales aumenta la **complejidad de la programación**. El aumento en velocidad suele compensar. Para tamaños de problema grandes se puede llegar a ganar hasta 8x en tiempo de ejecución si se usan operaciones AVX.
 
-![](./Pasted image 20250406234050.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250406234050.png)
 
 ### Microprocesadores Basados en Streaming
 Los microprocesadores basados en streaming extienden el concepto del procesador vectorial (son usados en las tarjetas gráficas de Nvidia). En lugar de organizar la información en vectores, usan **streams**, que son vectores de estructuras. En lugar de instrucciones vectoriales simples, usan **kernels**, que actúan sobre cada uno de los elementos del stream.

@@ -34,7 +34,7 @@ Los **patrones de diseño** son **soluciones reutilizables, probadas y eficiente
 | **Modelo**      | Contiene los datos y lógica de negocio.                           |
 | **Vista**       | Muestra los datos del modelo al usuario.                          |
 | **Controlador** | Gestiona la entrada del usuario y actualiza el modelo o la vista. |
-![](./Pasted image 20250423154458.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250423154458.png)
 
 **Ventajas**:
 - Vista y modelo **desacoplados**: puedes cambiar el aspecto visual sin tocar la lógica.
@@ -73,5 +73,5 @@ Se debe **restringir** el **uso de referencias** a clases concretas, los objetos
 - Principio de DOO: **equilibra el uso de la asociación y la generalización como mecanismos complementarios**. Facilita la **hncia** facilita la construcción, pero la **composición** aporta mayor **flexibilidad**.
 - **Delegación:** modo de asociación que **suple a la herencia** por la cual dos objetos tratan una **petición**, un objeto receptor delega en su **ayudante**. Facilita **combianción de comportamientos** en tiempo de ejecución. 
 
-![](./Pasted image 20250423160509.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250423160509.png)
 

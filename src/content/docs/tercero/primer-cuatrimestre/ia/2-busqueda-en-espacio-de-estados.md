@@ -32,7 +32,7 @@ La resolución de problemas mediante búsqueda implica modelar el problema en t�
 - **Meta:** Lograr la configuración final (orden correcto de piezas).
 - **Criterio de coste:** Número de movimientos realizados.
 
-![](./Pasted image 20251013111115.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251013111115.png)
 
 ## Ejemplo 2: Criptoaritmética
 - **Estados:** Asignación de dígitos a letras.
@@ -75,14 +75,14 @@ Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles solu
 - Explora primero los nodos más cercanos al inicial (por niveles).
 - **Ventajas:** Completa y óptima.
 - **Desventajas:** Alta complejidad espacial y temporal.
-- ![](./Pasted image 20251013111156.png)
+- ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251013111156.png)
 
 
 ### 2. Búsqueda en Profundidad (Depth-First Search)
 - Explora lo más profundo posible antes de retroceder (backtracking).
 - **Ventajas:** Uso eficiente de memoria.
 - **Desventajas:** No siempre es completa ni óptima.
-- ![](./Pasted image 20251013111133.png)
+- ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251013111133.png)
 
 ### 3. Búsqueda en Profundidad Limitada
 - Se establece un límite máximo de profundidad para la exploración.
@@ -139,7 +139,7 @@ Esto nos permite priorizar los nodos que parecen más prometedores, equilibrando
 ## 2.7.3 Ejemplo práctico: Ruta entre ciudades
 **Problema:** Ir de Ferrol a Ourense minimizando la distancia total.
 
-![](./Pasted image 20251013113415.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251013113415.png)
 
 ### Datos del problema:
 - $g(n)$: Distancia real recorrida desde Ferrol hasta la ciudad actual.
@@ -154,7 +154,7 @@ $$f(Santiago) = g(Santiago) + h(Santiago) = 100 + 80 = 180$$
 
 Elegimos Santiago porque tiene menor f(n). Repitiendo este proceso en cada paso, encontramos la ruta más eficiente.
 
-![](./Pasted image 20251013114014.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251013114014.png)
 
 **Resultado:** El algoritmo A* encuentra una distancia total de 230 km.
 
@@ -162,7 +162,7 @@ Elegimos Santiago porque tiene menor f(n). Repitiendo este proceso en cada paso,
 ### Búsqueda avara
 Si solo usamos la heurística (distancia en línea recta), podríamos elegir caminos que parecen más cortos, pero pueden resultar menos eficientes en la realidad.
 
-![](./Pasted image 20251013114041.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/Pasted image 20251013114041.png)
 
 **Resultado:** La distancia total recorrida es mayor, 240 km.
 

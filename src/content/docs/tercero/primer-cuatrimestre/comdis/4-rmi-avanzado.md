@@ -60,7 +60,7 @@ Para que esto funcione, el servidor RMI debe decirle al cliente "donde buscar" l
 - **Detección de falta:** Si el cliente comprueba que **no tiene** la clase del Stub en su disco duro local....
 - **Descarga automática:** ...automáticamente usa la URL que proporcionó el servidor (el `codebase`) para descargar el archivo `.class` a través de HTTP, cargarlo en memoria y usarlo.
 
-![](./Pasted image 20251212154537.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251212154537.png)
 
 # 4.2 El Gestor de Seguridad (Security Manager)
 Al permitir `Stub Downloading`, tu programa cliente está descargando y ejecutando código de una red externa. Esto es un riesgo de seguridad enorme.
@@ -80,7 +80,7 @@ Debes conceder permisos explícitos:
 
 Por buenas prácticas, se recomienda usar gestores de seguridad en **todas** las aplicaciones RMI, incluso si no usas descarga dinámica.
 
-![](./Pasted image 20251212154728.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251212154728.png)
 
 # 4.3 Comunicación Bidireccional: RMI Callbacks
 Hasta ahora, el modelo era **Pull** (Cliente pide $\rightarrow$ Servidor Responde). El servidor era pasivo. Pero, ¿y si el servidor necesita avisa al cliente de algo (ej: una subasta ha terminado, un chat, monitorización)?
@@ -88,7 +88,7 @@ Hasta ahora, el modelo era **Pull** (Cliente pide $\rightarrow$ Servidor Respond
 ## 4.3.1 El Problema del Polling
 Sin callbacks, el cliente tendría que preguntar constantemente: "¿Ya terminó? ¿Ya terminó?". Esto se llama **Polling** y es ineficiente y satura la red.
 
-![](./Pasted image 20251212154348.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251212154348.png)
 
 ## 4.3.2 La Solución: Callback (Llamada inversa)
 El cliente se "registra" en el servidor y espera a que el servidor le llame.
@@ -104,7 +104,7 @@ Para implementar esto, necesitamos **dos interfaces remotas** y **dos juegos de 
 **Interfaz del Cliente (CallbackInterface):** Define el método que el servidor invocará.
 - Ejemplo: `public void callMe(String msg)`.
 
-![](./Pasted image 20251212154409.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251212154409.png)
 
 ## 4.3.4 Flujo de Ejecución
 - **Cliente:** crea un objeto que implementa su interfaz de callback y lo **exporta**.
@@ -246,7 +246,7 @@ public class ClienteConCallback extends UnicastRemoteObject implements Interface
 }
 ``` 
 
-![](./Pasted image 20251212154450.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/Pasted image 20251212154450.png)
 
 
 # 4.4 Serialización y Paso de Objetos

@@ -8,14 +8,14 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 # CASO 01 MOD
 ## Organización de Empresas
 [[Archivos/ejercicios/Caso01MOD_OrganizacionEmpresas.pdf|Caso01MOD_OrganizacionEmpresas]]
-![](./Archivos/resueltos/CASO 01 MOD.pdf|CASO 01 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 01 MOD.pdf|CASO 01 MOD)
 
 ---
 
 # CASO 02 MOD
 ## Gestión del Padrón
 [[Archivos/ejercicios/Caso02MOD_GestionPadron.pdf|Caso02MOD_GestionPadron]]
-![](./Archivos/resueltos/CASO 02 MOD.pdf|CASO 02 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 02 MOD.pdf|CASO 02 MOD)
 ---
 
 # CASO 03
@@ -23,7 +23,7 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 
 [[Archivos/ejercicios/MER_Caso03_EmpresaFormacion.pdf|MER_Caso03_EmpresaFormacion]]
 
-![](./Archivos/resueltos/CASO 03 MOD.pdf|CASO 03 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 03 MOD.pdf|CASO 03 MOD)
 ---
 
 # CASO 04
@@ -31,47 +31,47 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 
 [[Archivos/ejercicios/MER_Caso04_EmpresaPROSA.pdf|MER_Caso04_EmpresaPROSA]]
 
-![](./Archivos/resueltos/CASO 04 MOD.pdf|CASO 04 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 04 MOD.pdf|CASO 04 MOD)
 
 # CASO 05
 ## PINACOTECAS
 [[Archivos/ejercicios/MER_Caso05_Pinacotecas.pdf|MER_Caso05_Pinacotecas]]
-![](./Archivos/resueltos/CASO 05 MOD.pdf|CASO 05 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 05 MOD.pdf|CASO 05 MOD)
 # CASO 08
 
 ## Biblioteca de Universidad
 
 [[Archivos/ejercicios/MER_Caso08_BibliotecaUniversidad.pdf|MER_Caso08_BibliotecaUniversidad]]
 
-![](./Archivos/resueltos/CASO 05 MOD.pdf|CASO 05 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 05 MOD.pdf|CASO 05 MOD)
 
 
 # MER CASO 06
 [[Archivos/ejercicios/MER_Caso06_CursosFormacion.pdf|MER_Caso06_CursosFormacion]]
-![](./Archivos/resueltos/CASO 06 MOD.pdf|CASO 06 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 06 MOD.pdf|CASO 06 MOD)
 
 # MER CASO 07
 [[Archivos/ejercicios/MER_Caso07_EmpresaServiciosAgua.pdf|MER_Caso07_EmpresaServiciosAgua]]
-![](./Archivos/resueltos/CASO 07 MOD.pdf|CASO 07 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 07 MOD.pdf|CASO 07 MOD)
 
 # MER CASO 08
 [[Archivos/ejercicios/MER_Caso08_BibliotecaUniversidad.pdf|MER_Caso08_BibliotecaUniversidad]]
 
-![](./Archivos/resueltos/CASO 08 MOD.pdf|CASO 08 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 08 MOD.pdf|CASO 08 MOD)
 
 # MER CASO 09
 ## Recetas RayosX
 
 [[Archivos/ejercicios/MER_Caso09_RecetasRayosX.pdf|MER_Caso09_RecetasRayosX]]
 
-![](./Archivos/resueltos/CASO 09 MOD.pdf|CASO 09 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 09 MOD.pdf|CASO 09 MOD)
 
 # MER CASO 10
 ## Conflictos Bélicos
 
 [[Archivos/ejercicios/MER_Caso10_ConflictosBelicos.pdf|MER_Caso10_ConflictosBelicos]]
 
-![](./Archivos/resueltos/CASO 10 MOD.pdf|CASO 10 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 10 MOD.pdf|CASO 10 MOD)
 
 
 # MER CASO 11
@@ -79,28 +79,28 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 
 [[Archivos/ejercicios/MER_Caso11_CampeonatoAjedrez.pdf|MER_Caso11_CampeonatoAjedrez]]
 
-![](./Archivos/resueltos/CASO 11 MOD.pdf|CASO 11 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 11 MOD.pdf|CASO 11 MOD)
 
 # MER CASO 12
 [[Archivos/ejercicios/MER_Caso12_EmpresaTrabajoTemporal.pdf|MER_Caso12_EmpresaTrabajoTemporal]]
-![](./Archivos/resueltos/CASO 12 MOD.pdf|CASO 12 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 12 MOD.pdf|CASO 12 MOD)
 
 # MER CASO 13
 [[Archivos/ejercicios/MER_Caso13_EnergiaElectrica.pdf|MER_Caso13_EnergiaElectrica]]
-![](./Archivos/resueltos/CASO 13 MOD.pdf|CASO 13 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 13 MOD.pdf|CASO 13 MOD)
 
 # MER CASO 14
-![](./Archivos/resueltos/CASO 14 MOD.pdf|CASO 14 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 14 MOD.pdf|CASO 14 MOD)
 
 # MER CASO 15
 [[Archivos/ejercicios/MER_Caso15_OrganizacionesNoGubernamentales.pdf|MER_Caso15_OrganizacionesNoGubernamentales]]
-![](./Archivos/resueltos/CASO 15 MOD.pdf|CASO 15 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 15 MOD.pdf|CASO 15 MOD)
 
 # MER CASO 16
 [[Archivos/ejercicios/MER_Caso16_GestionNominas.pdf|MER_Caso16_GestionNominas]]
 
-![](./Archivos/resueltos/CASO 16 MOD.pdf|CASO 16 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 16 MOD.pdf|CASO 16 MOD)
 
 # MER CASO 17
 [[Archivos/ejercicios/MER_Caso17_EmpresaNumismatica.pdf|MER_Caso17_EmpresaNumismatica]]
-![](./Archivos/resueltos/CASO 17 MOD.pdf|CASO 17 MOD)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/resueltos/CASO 17 MOD.pdf|CASO 17 MOD)

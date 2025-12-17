@@ -31,11 +31,11 @@ Si un sistema tiene que atender a $n$ eventos periódicos, el **sistema en tiemp
 - $T_i \rightarrow$ periodo para el evento $i$.
 - $\frac{C_i}{T_i} \rightarrow$ fracción de CPU que está utilizando el evento $i$.
 
-![](./Pasted image 20250524121908.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/soii/Pasted image 20250524121908.png)
 
 En este cálculo se supone que la sobrecarga por cambio de contexto es tan pequeña que se puede ignorar.
-![](./Pasted image 20250524121749.png)
-![](./Pasted image 20250524122115.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/soii/Pasted image 20250524121749.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/soii/Pasted image 20250524122115.png)
 
 Los algoritmos de planificación en tiempo real puede ser:
 - **Estáticos:** toman sus decisiones de planificación antes de que el sistema empiece a ejecutarse. Solo funciona cuando hay disponible de antemano información perfecta acerca del trabajo que se va a realizar y los tiempos límite que se tienen que cumplir
@@ -54,7 +54,7 @@ Se le asigna a cada proceso una prioridad fija, igual a la frecuencia de ocurren
 El planificador ejecuta **siempre** el proceso que esté listo y tenga la mayor prioridad, reemplazando el proceso en ejecución si es necesario. Es el algoritmo estático óptimo.
 Por ejemplo: los procesos $A$, $B$ y $C$ tiene prioridades estática1s de $33$, $25$ y $20$, respectivamente. Por tanto, $C$ tendrá que esperar a que la CPU esté inactiva para poder ejecutarse.
 
-![](./Pasted image 20250524192515.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/soii/Pasted image 20250524192515.png)
 
 # 3.3 EDF: Menor Tiempo de Respuesta Primero
 Es un algoritmo de programación de tiempo real **dinámico**.
@@ -64,8 +64,8 @@ Es un algoritmo de programación de tiempo real **dinámico**.
 
 Cada vez que un proceso necesita tiempo de CPU, anuncia su presencia y su tiempo de respuesta. El planificador mantiene una lista de procesos ejecutables ordenados según su tiempo de respuesta. Ejecuta el primero en la lista (el que tiene el tiempo de respuesta más cercano). Cada vez que un nuevo proceso está listo, se comprueba si su tiempo de respuesta ocurre antes que el del proceso en ejecución. De ser así, el nuevo proceso reemplaza al actual.
 
-![](./Pasted image 20250524123945.png)
-![](./Pasted image 20250524124103.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/soii/Pasted image 20250524123945.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/soii/Pasted image 20250524124103.png)
 
 **¿Por qué falla RMS?** Porque ese algoritmo solo funciona cuando se cumple que:
 

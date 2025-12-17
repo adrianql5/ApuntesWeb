@@ -10,7 +10,7 @@ Escrito por **Adrián Quiroga Linares**.
 - Tienen una **correspondencia directa** con los tipos de datos que es posible representar en un computador
 - En el momento de sus declaración se realiza automáticamente la **reserva de memoria** para la variable
 - **NO TIENEN MÉTODOS**
-![](./archivos/imagenes/Pasted image 20250617154813.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250617154813.png)
 
 ## 2.1.1 Wrappers
 Los tipos de datos primitivos **no son clases**, puesto que no encapsulan ni datos ni métodos que acceden y modifican dichos datos, sino que están directamente vinculados a los **valores de las variables**.
@@ -104,8 +104,8 @@ En Java los **nombres de los objetos son referencias** a la posición de memoria
 - Cuando se asigna un **objeto** `A` otro **objeto** `B`, en realidad **no se realiza una copia** de la memoria que ocupa `A` en la posición de memoria que ocupa `B`.
 - Se está realizando una **asignación de la referencia del objeto `A` a la referencia al objeto `B`** , lo que es decir, ambas referencias apuntan a la misma posición de memoria.
 - La memoria del objeto `A` ya **no está disponible**
-![](./archivos/imagenes/Pasted image 20241011180308.png)
-![](./archivos/imagenes/Pasted image 20241011180401.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241011180308.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241011180401.png)
 
 ## 2.2.1 Aliasing
 - El **aliasing** es la asignación de referencias entre dos objetos.
@@ -156,7 +156,7 @@ public Object clone(){
 
 # 2.3 Máquina Virtual de Java
 Java es un lenguaje interpretado cuya ejecución corre a cargo de lo que se denomina **máquina virtual de Java**.
-![](./archivos/imagenes/Pasted image 20241011185647.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241011185647.png)
 
 
 
@@ -179,7 +179,7 @@ Zona de la memoria en la que el procesador no necesita conocer qué **cantidad d
 - **Objetos creados a lo largo de la ejecución del programa** -> **incluyendo sus atributos aunque sean primitivos** (incluyen a los wrappers, strings y arrays)
 
 
-![](./archivos/imagenes/Pasted image 20241011190805.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241011190805.png)
 
 ## 2.4.2 Almacenamiento de Métodos
 Una clase no ocupa memoria. Las instrucciones de los métodos se cargan en memoria (en la pila) cuando se **crea un objeto** de la clase a la que pertenecen.
@@ -194,14 +194,14 @@ Se encarga de buscar en la memoria del programa  para **identificar qué objetos
 ## 2.5.1 Proceso Básico de Marcado y Borrado
 1. **Marcado:** Se identifican qué zonas de la memoria están siendo usadas y cuáles no, lo cuál puede ser **muy ineficiente** si se deben analizar todos los objetos en el sistema
 
-![](./archivos/imagenes/Pasted image 20250617214556.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250617214556.png)
 
 2. 
 	**Borrado normal (*op1*):** se eliminan de memoria los objetos que no tienen referencias asignadas durante más tiempo y mantiene una **lista** de posibles referencias a la parte de la **memoria** que puede ser utilizada.
-![](./archivos/imagenes/Pasted image 20250617214621.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250617214621.png)
 - **Borrado con compactación (*op1*):** para mejorar rendimiento, además de borrar los objeto no referenciados, se compacta la memoria, moviendo los objetos referenciados a posiciones de memoria consecutivas.
 
-![](./archivos/imagenes/Pasted image 20250617214635.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250617214635.png)
 
 Sin embargo las operaciones de marcado y compactación **son muy ineficientes**, por lo que debemos cambiar el esquema de gestión de memoria.
 
@@ -210,7 +210,7 @@ En la mayoría de los programas, el uso y la eliminación de los objetos **no si
 - El tiempo de supervivencia de los objetos es pequeño
 - A medida que pasa el tiempo, cada vez se mantienen en memoria menos objetos
 Dividimos la memoria en varias partes, llamadas **generaciones**, para facilitar la gestión de la vida de los objetos.
-![](./archivos/imagenes/Pasted image 20241011193122.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241011193122.png)
 - **Young generation:** donde se almacenan los objetos recién creados, a los que se les asigna una fecha. Está formada por el **eden** **space** y el **survivor space** ($S0$ Y $S1$).
 	- Cuando se llena se lanza una recolección de basura menor donde todos los threads se paran (**RB MINOR**). Es muy rápida y puede ser optimizada si se tienen que eliminar muchos objetos.
 	- Los objetos que hayan sobrevivido hasta llegar a la **edad umbral** se trasladan a la generación vieja.
@@ -233,7 +233,7 @@ Dividimos la memoria en varias partes, llamadas **generaciones**, para facilitar
 
 6. En cada **RB minor** se comprueba si los objetos usados superan una determinada edad (8 en las imágenes) en cuyo caso **son promocionados** a la generación antigua, aumentando su edad
 
-![](./archivos/imagenes/Pasted image 20250618172733.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250618172733.png)
 
 ## 2.5.4 Gestión Avanzada de Referencias
 **Eliminar una referencia no elimina al objeto de la memoria, simplemente hace que deje de apuntar al objeto. Esto deja al objeto sin dueño, y por tanto puede ser eliminado por el recolector de basura.**
@@ -269,13 +269,13 @@ Existen **4 tipos de referencias** que se diferencian entre sí en **cómo las m
    - Si sólo quedan referencias débiles a un objeto, el recolector de basura puede eliminar ese objeto.
    - El **acceso** a la referencia fuerte no está asegurado, podría devolver `null`: se realiza con `get` 
    - El recolector de basura las **elimina** de memoria cuando no apuntan a una referencia fuerte o su referencia fuerte es `null` 
-   ![](./archivos/imagenes/Pasted image 20241011195624.png)
+   ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241011195624.png)
 3. **Referencias suaves:**
    - Se crean usando la clase **`SoftReference`** poniendo como **argumento** la referencia fuerte a la que apunta (al objeto al que apunta).
    - El **acceso** a la referencia fuerte está asegurado, aunque se elimine
    -  El recolector de basura elimina los objetos referenciados únicamente por referencias suaves sólo cuando el sistema necesita liberar memoria.
 
-![](./archivos/imagenes/Pasted image 20250618174634.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250618174634.png)
 
 3. **Referencias fantasmas:**
  - Se crean usando la clase `PhantomReference`, pasando el objeto y una `ReferenceQueue` 
@@ -283,7 +283,7 @@ Existen **4 tipos de referencias** que se diferencian entre sí en **cómo las m
 - Sirven para ser notificados cuando el objeto está a punto de ser recogido por el GC, permitiendo realizar tareas de limpieza.
 - El objeto referenciado se pone en la cola antes de ser eliminado, pero nunca se puede acceder a él a través de la referencia fantasma.
  - El **acceso** a la referencia fuerte está asegurado, aunque se elimine, se realiza a través de la cola con `poll`. `get` siempre devuelve `null`, las referencias fantasmas están pensadas para acceder a la memoria cuando las referencias fuertes no están disponibles
-   ![](./archivos/imagenes/Pasted image 20241011200850.png)
+   ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241011200850.png)
 ### Usos principales:
 - **Referencias débiles:** para acceder dinámicamente a la referencia fuerte de un objeto hasta que este ya no esté disponible, evitando crear referencias indiscriminadas (aliasing).
 - **Referencias suaves y fantasmas:** para hacer **cachés en memoria,** de manera que se pueda acceder a referencias fuertes que ya no están disponibles en memoria.
@@ -293,14 +293,14 @@ Los objetos que son cadenas de texto se puzeden crear de dos formas diferentes:
 - **Directamente:** asignando una cadena de texto al objeto, en cuyo caso se almacenan en una zona del montón llamada **String Pool**, de modo que **cada vez que se asigna la misma cadena de texto, se apunta a la dirección que la contiene**
 - **Indirectamente:** el objeto se crea usando un constructor de string, en cuyo caso se almacenan en el montón, pero **fuera del String Pool**, aunque tenga el mismo valor que una cadena previa.
 
-![](./archivos/imagenes/Pasted image 20241011202907.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20241011202907.png)
 
 **String** es una clase de Java, pero **no se comporta** como el resto de las clases en lo que respecta a la asignación entre objetos cuando se usan directamente cadenas de texto. Una cadena de texto es **un objeto inmutable**, es decir, una vez se ha reservado memoria y se le asigna un valor dado, no se puede modificar
 El uso indiscriminado de cadenas de texto puede **disminuir mucho el rendimiento.**
 
 Si se van a realizar múltiples modificaciones sobre una cadena de texto, no se debería de utilizar la clase string. Se debería usar la clase StringBuffer si se vana usar múltiples operaciones sobre cadenas de texto, ya que no se reserva espacio de memoria cada vez que se genera una cadena de texto.
 
-![](./archivos/imagenes/Pasted image 20250618180239.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted image 20250618180239.png)
 
 # 2.7 Método Equals
 - Dos objetos son iguales si ocupan la **misma posición de memoria**. Esto es una condición muy **restrictiva**, ya que podrían existir dos objetos con los mismo atributos en posiciones de memoria distintas.

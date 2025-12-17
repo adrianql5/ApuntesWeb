@@ -22,9 +22,9 @@ Estos datos pueden **replicarse** en varias cachés, lo que reduce la **contenci
 ## 4.1.1 Multiprocesadores UMA
 En los multiprocesadores UMA (*Uniform Memory Access* o multiprocesadores simétricos **SMP**) todos los procesadores comparten una **única memoria** con la **misma latencia** para todos ellos. Tienen un número de cores pequeño ($\leq 8$)
 
-![](./Pasted image 20250527154915.png)
-![](./Pasted image 20250527155414.png)
-![](./Pasted image 20250527155427.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250527154915.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250527155414.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250527155427.png)
 
 ### Condiciones para que haya coherencia
 Un sistema de memoria es **coherente** si cualquier lectura de una dirección devuelve el valor más reciente que se haya escrito para esa dirección
@@ -107,7 +107,7 @@ El protcolo MSI está basado en un **sistema secuencial síncrono** en el que ca
 
 - **Inválido (I):** el bloque **no está físicamente** en la caché o su valor ha sido invalidado por haberse producido una **escritura** en **otra caché**
 
-![](./Pasted image 20250601204604.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250601204604.png)
 
 ### Peticiones que puede generar un nodo con caché
 - Petición de **lectura de un bloque (PtLec)**: se genera como consecuencia de la **lectura del procesador (PrLec)** de una dirección que **no se encuentra en la caché**.
@@ -131,7 +131,7 @@ El protcolo MSI está basado en un **sistema secuencial síncrono** en el que ca
 	- Como consecuencia se producen fallos caché de falsa compartición: un procesador escribe en una línea compartida y la invalida, luego otro procesador lee una palabra diferente de la línea.
 - Fallos de **compartición verdadera (true sharing):** Un procesador escribe en bloque compartido e invalida y luego otro procesador lee del bloque compartido.
 
-![](./Pasted image 20250601215225.png)z
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250601215225.png)z
 
 ## 4.3.2 MESI, Protocolo de Invalidación de 4 Estados
 En MSI, al escribir a una línea en estado S, se debe invalidar en otras cachés y pasar a M, y podría requerir una escritura a memoria si el protocolo la necesita.  
@@ -156,21 +156,21 @@ Por eso, en el protocolo MESI, se define el nuevo estado **Exclusivo**.
 
 - **Inválido (I):** el bloque **no está físicamente** en la caché o su valor ha sido invalidado por haberse producido una **escritura** en **otra caché**.
 
-![](./Pasted image 20250601204518.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250601204518.png)
 
 ## 4.3.4 Problemas de Snooping
 El **bus** de memoria compartida y el **ancho de banda** que requieren los protocolos de snooping es un **cuello de botella** para **escalar** los SMPs. Posibles soluciones:
 - Usar **redes de interconexión punto a punto** con memoria en **bancos**-> tienen mayor ancho de banda
 - Usar un **protocolo basado en directorio**
-![](./Pasted image 20250527175701.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250527175701.png)
 
 ## 4.3.4 Intento de Explicación del Nuevo Sistema de Caché que Dora le copió a la UCM y que no explicó en clase (no fui a clase).
 
-![](./Pasted image 20250601210447.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250601210447.png)
 Se puede medio intuir que dada la tabla esta, no podemos distinguir con visto en fucomp acerca de la división de la instrucción para saber en que línea colocar los datos. Pero dada la imagen se puede razonar tal y como puse yo. 
-![](./Pasted image 20250601210653.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250601210653.png)
 
-Otro ejemplo: ![](./Pasted image 20250601211047.png)
+Otro ejemplo: ![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250601211047.png)
 
 Si nos dice que es **totalmente asociativa** supongo que se puede sustituir por cualquier línea, a no ser que especifique algún tipo de algoritmo.
 
@@ -187,7 +187,7 @@ Cada entrada del directorio informa de:
 - Qué caches tienen copia del bloque
 - Bits de estado del bloque en cada caché
 
-![](./Pasted image 20250527180151.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250527180151.png)
 
 ### Transferencias Generadas
 - En los protocolos de **snooping:** las transiciones de un bloque entre estados suponen **difusiones**
@@ -210,7 +210,7 @@ Las transferencias las genera el controlador de coherencia caché de los nodos i
 	- Directorio de **vector de bits asignado a grupos**
 	- Directorio **limitado**
 
-![](./Pasted image 20250527181041.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/aqrcomp/Pasted image 20250527181041.png)
 
 - Directorio **distribuido entre módulos y cachés:** además de distribuir las filas del directorio en MP, se distribuyen entre las cachés con copia del bloque.
 	- Directorio **encadenado**

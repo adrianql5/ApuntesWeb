@@ -15,7 +15,7 @@ Representa una **fotografía estática** de los objetos (instancias de clases) e
 - No muestra clases, sino **especificaciones de instancias**.
 - Puede incluir objetos de clases abstractas o atributos incompletos (porque es una **especificación**, no una ejecución real).
 
-![](./Pasted image 20250404132035.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250404132035.png)
 
 # 6.2 Diagrama de Paquetes
 ### ¿Qué es?
@@ -34,7 +34,7 @@ Representa cómo se **organiza y agrupa** un sistema en paquetes lógicos.
 ### Analogía
 Como carpetas dentro de otras carpetas en tu computadora, organizadas por temas (funcionalidad, módulo, etc.).
 
-![](./Pasted image 20250404132601.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250404132601.png)
 
 # 6.3 Diagrama de Componentes
 ### ¿Qué es?
@@ -51,7 +51,7 @@ Representa los **componentes físicos** de un sistema de software y sus **depend
 ### Analogía
 Como las piezas de LEGO de un sistema: cada una hace algo y puede ser reemplazada o ensamblada con otras.
 
-![](./Pasted image 20250404132806.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250404132806.png)
 
 # 6.4 Diagrama de Despliegue
 ### ¿Qué es?
@@ -69,7 +69,7 @@ Muestra la **arquitectura física** de un sistema: hardware y software durante l
 ### Analogía
 Como un plano de red de servidores, con los programas que corren en cada uno.
 
-![](./Pasted image 20250404133026.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250404133026.png)
 
 # 6.5 Diagrama de Estados
 ### ¿Qué es?
@@ -86,7 +86,7 @@ Describe cómo **cambia el estado de un objeto** a lo largo del tiempo en respue
 ### Analogía
 Como los estados de una puerta: _abierta_, _cerrada_, _bloqueada_ y cómo cambia según acciones (eventos) como _cerrar()_, _bloquear()_.
 
-![](./Pasted image 20250404133046.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/Pasted image 20250404133046.png)
 
 # 6.6 Diagrama de Actividades
 

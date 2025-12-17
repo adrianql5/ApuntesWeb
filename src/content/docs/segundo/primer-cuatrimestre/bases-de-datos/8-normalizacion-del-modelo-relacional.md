@@ -19,7 +19,7 @@ La **Dependencia Funcional**  es la base de la normalización. Un conjunto de at
 
 Las diversas formas normales van imponiendo sucesivas condiciones a las relaciones que forman la base de datos.
 
-![](./Archivos/imagenes/Pasted image 20241106123439.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted image 20241106123439.png)
 
 
 # 8.2 Primera Forma Normal
@@ -69,7 +69,7 @@ Queremos determinar si $A \rightarrow H$ se puede deducir a partir de $F$.
 
 Por lo tanto, hemos demostrado que $A \rightarrow H$ se cumple, lo que significa que **$A \rightarrow H$ está implicado lógicamente por $F$**.
 
-![](./Archivos/imagenes/Pasted image 20241106162630.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted image 20241106162630.png)
 
 ## 8.6.2 Axiomas de Armstrong
 Los **axiomas de Armstrong**  y sus reglas adicionales permiten descubrir nuevas dependencias funcionales a partir de un conjunto de dependencias dados.
@@ -93,14 +93,14 @@ El **recubrimiento canónico** es el conjunto mínimo equivalente de dependencia
 
 # 8.8 Pasos para la normalización
 
-![](./Archivos/imagenes/Pasted image 20241224121236.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted image 20241224121236.png)
 
 **TIPs:**
 **Está en Boyce-Codd** si todos los determinantes del recubrimiento canónico (*a->B* , *a es el determinante*) forman parte de la clave candidata calculada con el cierre.
 **Si no  están en Boyce-Codd**, localizamos atributos equivalentes (*a->B y B->a*), si pasa esto se llevan todos los atributos equivalentes a una nueva relación y en la relación universal (*U*) se deja solo uno de esos atributos. 
 **Después**, si sigue sin cumplir alguna relacion *a->B* se crea una nueva tabla con los atributos *a,B* y la tabla original se elimina *B*.
 
-![](./Archivos/imagenes/Pasted image 20241224132906.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted image 20241224132906.png)
 Si ponen este tremendo cigarro, para sacar las dependencias funcionales, pensar las multiplicidades que se darían. Si son del tipo 1 a 1 o N a N se determinan mutuamente, si son 1..N o N..1 el lado N determina al lado 1.
 
 

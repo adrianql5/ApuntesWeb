@@ -18,15 +18,15 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 
 **Ley de la Oferta:** un aumento en el precio tiende a aumentar la oferta (*ya que cuento mayor sea el precio de un producto más comerciantes lo querrán vender debido al beneficio que les supone*) y un descenso del precio tiene a disminuirla. La gráfica suele ser una curva.
 
-![](./Pasted image 20250210193715.png)
-![](./Pasted image 20250210193823.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250210193715.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250210193823.png)
 
 **Ley de la Demanda:** un aumento en el precio tiende a disminuir la demanda (*ya que menos consumidores estarán dispuesto a comprar el producto por un valor alto*), mientras que un descenso en el precio la aumenta.
-![](./Pasted image 20250210193957.png)
-![](./Pasted image 20250210194019.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250210193957.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250210194019.png)
 
 El precio tiene al nivel en el que la oferta es igual que la demanda. Este punto de equilibrio no es estático, se mueve conforme a desplazamientos como los anteriormente mencionados.
-![](./Pasted image 20250210194456.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/Pasted image 20250210194456.png)
 
 **Empresa:** entidad que ofrece algún servicio o produce algún bien. Una empresa está compuesta por distintos factores, ya sean humanos, materiales, tecnológicos o financieros, que se combinan para alcanzar determinados objetivos. Por lo general cumplen una serie de funciones en la economía:
 - **Coordinan los factores productivos:** buscan formas de producción más eficientes, la especialización, aumentar la productividad y la necesidad de coordinar diferentes participantes, con el fin de crear valor.

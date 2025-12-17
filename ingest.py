@@ -298,7 +298,7 @@ import {{ Card, CardGrid }} from '@astrojs/starlight/components';
         for cuatri in sorted(cuatrimestres.keys()):
             cuatri_title = "Primer Cuatrimestre" if "primer" in cuatri else "Segundo Cuatrimestre"
             content += f"""  <Card title="{cuatri_title}" icon="document">
-    [{cuatri_title}](/{curso}/{cuatri}/)
+    [{cuatri_title}](./{cuatri}/)
   </Card>
 """
         content += "</CardGrid>\n"
@@ -328,7 +328,7 @@ import {{ Card, CardGrid }} from '@astrojs/starlight/components';
 """
             for asig_slug, asig_original in sorted(asignaturas.items()):
                 content += f"""  <Card title="{asig_original}" icon="open-book">
-    [{asig_original}](/{curso}/{cuatrimestre}/{asig_slug}/)
+    [{asig_original}](./{asig_slug}/)
   </Card>
 """
             content += "</CardGrid>\n"

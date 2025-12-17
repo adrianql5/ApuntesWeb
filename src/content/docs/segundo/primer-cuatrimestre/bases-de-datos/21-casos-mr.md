@@ -1,3 +1,7 @@
+---
+title: "1 Casos MR"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 [[TODOS LOS MER MR y SQL_300722145848-2.pdf]]

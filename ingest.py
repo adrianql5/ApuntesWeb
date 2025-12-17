@@ -197,7 +197,7 @@ def scan_source_folder(source_path: Path) -> List[Dict]:
 
 def copy_files(files_to_copy: List[Dict], dest_base: Path, dry_run: bool = False) -> int:
     """
-    Copia los archivos a la estructura de destino.
+    Copia los archivos a la estructura de destino, añadiendo frontmatter.
     
     Returns:
         Número de archivos copiados
@@ -224,8 +224,32 @@ def copy_files(files_to_copy: List[Dict], dest_base: Path, dry_run: bool = False
             # Crear directorio si no existe
             dest_path.parent.mkdir(parents=True, exist_ok=True)
             
-            # Copiar archivo
-            shutil.copy2(source, dest_path)
+            # Leer contenido original
+            original_content = source.read_text(encoding='utf-8')
+            
+            # Generar título desde el nombre del archivo (sin extensión)
+            # Eliminar números al inicio como "1. " o "1 - "
+            title = source.stem
+            title = re.sub(r'^[\d]+[\.\-\s]+', '', title)
+            title = title.strip()
+            if not title:
+                title = source.stem
+            
+            # Verificar si ya tiene frontmatter
+            if original_content.strip().startswith('---'):
+                # Ya tiene frontmatter, copiar tal cual
+                new_content = original_content
+            else:
+                # Añadir frontmatter con título
+                frontmatter = f"""---
+title: "{title}"
+---
+
+"""
+                new_content = frontmatter + original_content
+            
+            # Escribir archivo con frontmatter
+            dest_path.write_text(new_content, encoding='utf-8')
             print(f"   ✅ {source.name} -> {dest_path}")
         
         copied_count += 1

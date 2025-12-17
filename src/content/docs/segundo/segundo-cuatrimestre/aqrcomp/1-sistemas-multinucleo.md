@@ -1,3 +1,7 @@
+---
+title: "Sistemas Multinúcleo"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 # 1.1 Introducción a la Arquitectura de Computadores y Procesadores Multinúcleo

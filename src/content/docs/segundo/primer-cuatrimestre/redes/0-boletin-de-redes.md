@@ -1,3 +1,7 @@
+---
+title: "BOLETIN DE REDES"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 [[archivos/ejercicios/Enunciados/boletin.pdf|boletin]]

@@ -1,3 +1,7 @@
+---
+title: "Introducción"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 La Inteligencia Artificial (IA) es una rama de la ciencia y la tecnología que busca desarrollar sistemas capaces de realizar tareas que, hasta ahora, requerían inteligencia humana. Es importante destacar que, aunque a menudo se habla de IA como si fuera una sola cosa, en la actualidad no existe un modelo general de inteligencia ni de aprendizaje artificial capaz de imitar plenamente la mente humana. Por eso, la mayoría de los avances se centran en **IA de propósito específico** y en sistemas basados en **aprendizaje automático**, especialmente en el llamado aprendizaje profundo.

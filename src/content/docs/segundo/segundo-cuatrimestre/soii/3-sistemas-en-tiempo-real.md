@@ -1,3 +1,7 @@
+---
+title: "Sistemas en Tiempo Real"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 Un **sistema en tiempo real** recibe estímulos desde dispositivos físicos externos y su buen comportamiento implica:

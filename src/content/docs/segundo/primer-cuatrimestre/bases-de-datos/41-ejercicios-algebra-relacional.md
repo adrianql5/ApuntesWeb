@@ -1,3 +1,7 @@
+---
+title: "1 Ejercicios Álgebra Relacional"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 ### Consultas de Bases de Datos

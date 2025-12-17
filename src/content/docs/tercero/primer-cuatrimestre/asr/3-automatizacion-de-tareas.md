@@ -1,3 +1,7 @@
+---
+title: "Automatización de Tareas"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 En Linux, diferenciar el "cuándo" se ejecuta una tarea es clave. Tenemos dos herramientas principales según nuestras necesidades:

@@ -1,3 +1,7 @@
+---
+title: "La Información Financiera como Base para la toma de Decisiones."
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 >[!Nota]

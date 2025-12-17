@@ -1,3 +1,7 @@
+---
+title: "Examen 2025"
+---
+
 # Mayo 2025
 
 ## 1. Explica brevemente qué hacen las siguientes líneas de bash, indicando el significado de los argumentos y los separadores. Indica también cuál es su salida.

@@ -1,3 +1,7 @@
+---
+title: "Sistemas de Mensajes"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 # 7.1 Introducción y Contexto Histórico

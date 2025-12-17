@@ -1,3 +1,7 @@
+---
+title: "Gramáticas GSC Y GSR"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos 
 
 # 7.1 Gramáticas Sin Restricciones (GSR) - Tipo 0

@@ -1,3 +1,7 @@
+---
+title: "Autómatas con Pila"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos 
 
 **Concepto Intuitivo:** Imagina un Autómata Finito (AFN) que lleva una mochila llena de platos.

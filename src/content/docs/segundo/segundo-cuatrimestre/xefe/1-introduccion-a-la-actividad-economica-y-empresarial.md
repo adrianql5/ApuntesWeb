@@ -1,3 +1,7 @@
+---
+title: "Introducción a la actividad económica y empresarial"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 >[!Nota]

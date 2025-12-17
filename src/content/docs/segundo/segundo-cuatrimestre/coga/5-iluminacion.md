@@ -1,3 +1,7 @@
+---
+title: "Iluminación"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 Una vez realizado el ensamblado de vértices, se pasa al proceso de **rasterizado**, en el que se transforman los objetos que se van a proyectar en una matriz de **píxeles** que se mostrarán por pantalla. Así se obtiene la **correspondencia**de los **puntos de los objetos** con los **puntos de la pantalla**. Esta información compone un **fragmento**.

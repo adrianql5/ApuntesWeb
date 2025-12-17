@@ -1,3 +1,7 @@
+---
+title: "Introducción a UML"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 **UML** es un lenguaje gráfico para visualizar, especificar, construir y documentar. Proporciona una forma estándar de describir los planos de un sistema.

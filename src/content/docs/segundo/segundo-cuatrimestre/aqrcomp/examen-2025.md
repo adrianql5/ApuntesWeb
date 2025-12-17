@@ -1,3 +1,7 @@
+---
+title: "Examen 2025"
+---
+
 # 1. Responder razonadamente
 ### a) Explicar **GPUs Nvidia**, diciendo el tipo de Taxonomía y como aplican el paralelismo
 

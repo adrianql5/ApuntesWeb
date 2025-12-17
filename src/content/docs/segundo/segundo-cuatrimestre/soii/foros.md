@@ -1,3 +1,7 @@
+---
+title: "Foros"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 1. ¿A qué se refiere Tanenbaum cuando dice que no se pueden hacer suposiciones sobre el número de CPUs?

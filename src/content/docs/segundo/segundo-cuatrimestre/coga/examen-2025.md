@@ -1,3 +1,7 @@
+---
+title: "Examen 2025"
+---
+
 # Pregunta 1. Tipo test (3 puntos)
 
 12 preguntas (muchas con respuesta **B**):

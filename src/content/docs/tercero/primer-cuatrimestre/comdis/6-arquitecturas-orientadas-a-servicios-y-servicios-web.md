@@ -1,3 +1,7 @@
+---
+title: "Arquitecturas Orientadas a Servicios y Servicios Web"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 # 6.1 El Problema: Comunicación entre Programas Distantes

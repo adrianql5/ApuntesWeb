@@ -1,3 +1,7 @@
+---
+title: "Agentes"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 # 8. 1 ¿Qué es un Agente? (Conceptos Básicos)

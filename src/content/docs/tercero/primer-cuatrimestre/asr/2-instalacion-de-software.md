@@ -1,3 +1,7 @@
+---
+title: "Instalación de Software"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 # 2.1 Formas de instalación

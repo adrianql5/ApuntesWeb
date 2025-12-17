@@ -1,3 +1,7 @@
+---
+title: "Ontologías"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 # 9.1 El Problema de la Comunicación

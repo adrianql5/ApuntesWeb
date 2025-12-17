@@ -1,3 +1,7 @@
+---
+title: "Foros2"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 1. Reescribe el código ensamblador de la figura 2.29 del Tanenbaum usando XCHG en lugar de TSP como instrucción atómica. 

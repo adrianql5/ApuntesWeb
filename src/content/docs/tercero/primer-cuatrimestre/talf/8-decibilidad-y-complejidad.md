@@ -1,3 +1,7 @@
+---
+title: "Decibilidad y Complejidad"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos 
 
 Hasta ahora hemos estudiado qué pueden hacer las máquinas. En este tema estudiamos sus **límites** (qué no pueden hacer) y su **eficiencia** (cuánto tardan).

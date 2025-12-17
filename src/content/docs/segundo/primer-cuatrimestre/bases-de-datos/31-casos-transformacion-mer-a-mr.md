@@ -1,3 +1,7 @@
+---
+title: "1 Casos Transformación MER a MR"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 # TMM CASO 01 Pinacotecas

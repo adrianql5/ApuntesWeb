@@ -1,3 +1,7 @@
+---
+title: "Instalación de Linux Debian"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 # 1.1 Tipos de Instalación

@@ -1,3 +1,7 @@
+---
+title: "Capa de Red"
+---
+
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 [[4.1 Ejercicios Capa de Red]]

@@ -4,7 +4,7 @@ title: "Capa de Transporte"
 
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
-[[3.1 Ejercicios Capa de Transporte]]
+3
 
 Escrito por **Adrián Quiroga Linares**.
 # 3.1 Introducción

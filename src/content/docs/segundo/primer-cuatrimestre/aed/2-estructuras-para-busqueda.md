@@ -8,7 +8,7 @@ Escrito por **Adrián Quiroga Linares**.
 
 Un uso importante de los árboles, especialmente de los **árboles binarios**, es en **algoritmo de búsqueda**. Para ellos, se han desarrollado **árboles binarios de búsqueda**.
 
-# Árbol Binario de Búsqueda
+# 2.1 Árbol Binario de Búsqueda
 **Árbol binario** en el que, para todo **nodo**, los elementos de su **subárbol izquierdo** tienen un valor menor que él, y todos los elementos de su **subárbol derecho** tienen un valor mayor que él.
 
 Presenta clara ventaja de que **localizar un elemento** es muy fácil y rápido, al estar todos los datos ordenados.
@@ -75,7 +75,7 @@ void suprimir(abb *A, tipoelem E) {
 ```
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240930001829.png)
 
-# Montículo binario
+# 2.2 Montículo binario
 **Árbol binario completo** que da soporte eficiente a las operaciones del **TAD** *cola de prioridad* . Por tanto, sus aplicaciones son las mismas que las aplicaciones de una cola con prioridad.
 Pueden ser *montículos de mínimos*, de forma que los elementos con menor valor tienen **mayor prioridad**, o *montículos de máximos*, en los que los elementos de mayor valor tienen **mayor prioridad**. Por lo general usaremos montículos de mínimos, por que siempre se debe cumplir la condición de que cada nodo tenga un **valor menos que el de cualquiera de sus hijos**. Por tanto se dice que los montículos mantienen un *orden parcial*, ya que no es tan estricto como los **ABB**, pero lo es más que una ordenación aleatoria
 EN este tipo de aplicaciones hay que buscar siempre el elementos de *mayor prioridad*, que *será siempre la raíz*. 
@@ -157,7 +157,7 @@ Consiste en:
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240930004535.png)
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240930004554.png)
 
-# Guía rápida resolver ejercicios tipo
+# 2.3 Guía rápida resolver ejercicios tipo
 ## Crear un árbol binario
 Cogemos el primer elemento que nos den, y el siguiente elemento comparamos si es mayor o menor, si es menor me muevo a la izquierda, si es mayor a derecha, y así hasta que no haya nada.
 Inorden muestra la lista en orden

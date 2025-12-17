@@ -4,7 +4,7 @@ title: "1 Ejercicios Introducción"
 
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
-[[archivos/ejercicios/Enunciados/Segmentacion.pdf]]
+Segmentacion
 
 ### Segmentación
 Razones para la **segmentación:**

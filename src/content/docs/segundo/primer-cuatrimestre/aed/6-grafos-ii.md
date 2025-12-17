@@ -9,7 +9,7 @@ Escrito por **Adrián Quiroga Linares**.
 
 En este tema, nos adentramos en algunos de los algoritmos fundamentales en teoría de grafos. A continuación se explican los principales conceptos y métodos para manipular y analizar grafos, en particular en contextos donde el grafo es dirigido, ponderado o acíclico.
 
-#### 7.1 Ordenación Topológica
+# 6.1 Ordenación Topológica
 **Concepto de GDA (Grado Dirigido Acíclico):**  
 Un GDA es un grafo dirigido que no contiene ciclos, es decir, no existen caminos que partan de un vértice y regresen a él mismo. En la matriz de caminos de un GDA, los valores en la diagonal siempre son ceros, indicando la ausencia de ciclos. Estos grafos son útiles para representar estructuras donde ciertos elementos deben preceder a otros, como las expresiones aritméticas o las ordenaciones parciales. 
 
@@ -29,7 +29,7 @@ La ordenación topológica es una disposición lineal de los vértices de un gra
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241110130410.png)
 
-#### 7.2 Cálculo de la Matriz de Caminos: Algoritmo de Warshall
+# 6.2 Cálculo de la Matriz de Caminos: Algoritmo de Warshall
 
 El **Algoritmo de Warshall** permite calcular la matriz de caminos sin realizar multiplicaciones. Para cada iteración, la matriz de caminos se actualiza basándose en la información de la matriz anterior. La fórmula de actualización es:
 $$P_k(i, j) = \min[1, P_{k-1}(i, j) + (P_{k-1}(i, v) \times P_{k-1}(v, j))]$$
@@ -39,7 +39,7 @@ Esto significa que el elemento $(i, j)$ en la matriz se establece en 1 si ya hab
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241110130551.png)
 
-#### 7.3 Camino Más Corto entre dos Vértices: Algoritmo de Dijkstra
+# 6.3 Camino Más Corto entre dos Vértices: Algoritmo de Dijkstra
 El **Algoritmo de Dijkstra** se usa para encontrar el camino de menor longitud desde un vértice de origen hasta todos los demás vértices en un grafo ponderado. Este es un algoritmo voraz que selecciona, en cada paso, el vértice con el camino mínimo actual y ajusta los caminos de los vértices adyacentes si es necesario. Utiliza:
 - **C:** Conjunto de vértices candidatos.
 - **S:** Conjunto de vértices ya procesados.
@@ -57,7 +57,7 @@ Se repiten estos pasos sobreescribiendo solo el valor de aquellos caminos que tu
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241110130732.png)
 
-#### 7.4 Camino más corto entre cualquier par de vértices: Algoritmo de Floyd
+# 6.4 Camino más corto entre cualquier par de vértices: Algoritmo de Floyd
 
 Para evitar el problema anterior, se implementó el **algoritmo de Floyd**. Este algoritmo, en vez de un vector como en el caso anterior, devuelve una matriz $D$ donde cada campo $(i, j)$ contiene el coste mínimo de los caminos que van desde $i$ hasta $j$. Para realizarel algoritmo, se siguen los mismos pasos que con el **Algoritmo de Wharsall** para encontrar las distintas matrices de caminos de las diferentes longitudes. 
 
@@ -69,7 +69,7 @@ Por tanto, la matriz $D_n$, siendo $n$ el número de nodos, nos mostrará los ca
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241110132055.png)
 
-#### 7.5 Control de flujo
+# 6.5 Control de flujo
 El control de flujo supone la forma de controlar la cantidad de objetos o elementos que se transportan de un lugar a otro. Algunos ejemplos son:
 - Flujo de mercancías entre el lugar donde se producen y donde se reciben.
 - Flujo de personas que realizan un desplazamiento entre dos puntos señalados.
@@ -81,7 +81,7 @@ Para resolver estos problemas de maximización de flujo, se emplea el **Algoritm
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241110132251.png)
 
-#### 7.6 Árbol de expansión de coste mínimo
+# 6.6 Árbol de expansión de coste mínimo
 A veces, a partir de un grafo no dirigido, se pretenden modelar relaciones simétricas entre elementos. En esta situación, tenemos varias definiciones importantes:
 - **Red conectada**: Red (grafo que representa las relaciones entre elementos) en la que desde un vértice se puede llegar a cualquier otro por medio de un camino.
 - **Árbol**: Red que es subconjunto de la red original, siendo también una red conectada, con $n$ nodos y $n - 1$ vértices, y a la que, si se le añade un arco más, se forma un ciclo.
@@ -94,12 +94,12 @@ Buscar un árbol de expansión es una forma de saber si una red es conectada. Lo
 
 Para encontrar estos árboles de expansión existen dos algoritmos: el **Algoritmo de Prim** y el **Algoritmo de Kruskal**.
 
-##### 7.6.1 Algoritmo de Prim
+## 6.6.1 Algoritmo de Prim
 Es un **algoritmo voraz**, ya que en cada paso se añade el arco más corto disponible al árbol (mejor solución en cada paso). Se parte de un vértice inicial y se añade el vértice adyacente cuyo arco entre ambos tenga el menor peso. A continuación, entre los vértices ya conectados, se busca el arco de menor peso que conecte sus vértices adyacentes que no hayan sido conectados todavía. Estos pasos se repiten hasta haber conectado todos los vértices.
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241110132337.png)
 
-##### 7.6.2 Algoritmo de Kruskal
+## 6.6.2 Algoritmo de Kruskal
 Se parte del conjunto de vértices del grafo y se selecciona el arco de menor peso, uniendo dos vértices y reduciendo en uno el número de componentes conexas. A continuación, se selecciona el siguiente arco de menor peso que también conecte vértices de dos componentes conexas distintas, reduciendo otra vez el número total en uno. Si no se respetara esta condición, se producirían ciclos. El algoritmo finaliza cuando solo queda una componente conexa.
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241110132356.png)

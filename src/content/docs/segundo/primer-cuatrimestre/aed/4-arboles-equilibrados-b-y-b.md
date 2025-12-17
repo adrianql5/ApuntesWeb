@@ -8,33 +8,36 @@ Escrito por **Adrián Quiroga Linares**.
 
 Un árbol B es una estructura de datos diseñada para minimizar el número de accesos a disco al gestionar grandes volúmenes de datos. Se utiliza en sistemas de bases de datos, sistemas de archivos y otras aplicaciones donde el almacenamiento y recuperación eficiente de datos son cruciales.
 
-### ¿Por qué surgen los árboles B?
+# 4.1 ¿Por qué surgen los árboles B?
 Cuando los datos que queremos almacenar son demasiado grandes para caber en un solo bloque de disco, es necesario acceder a múltiples bloques. Cada acceso al disco es costoso en términos de tiempo, ya que es mucho más lento que la memoria principal. Para minimizar el número de accesos al disco, los árboles B agrupan nodos en **páginas**, que son bloques de tamaño fijo que pueden ser leídos y escritos de una sola vez desde el disco. 
 
-### Definición de árbol B de orden m:
+# 4.2 Definición de árbol B de orden m:
 - Un **árbol B** está siempre equilibrado, lo que significa que todas las hojas están al mismo nivel. Esto asegura que las operaciones de búsqueda, inserción y eliminación se realicen de manera eficiente.
 - **Páginas**: La unidad básica de almacenamiento en un árbol B es la página, que agrupa nodos con claves. Cada acceso a disco corresponde a leer o escribir una página completa.
 - **Número de ramas**:
   - Las páginas internas tienen entre `m/2` y `m` ramas, donde `m` es el orden del árbol. La raíz es una excepción y puede tener menos ramas si es la única página en el árbol.
 - **Número de claves**: En una página interna, el número de claves es igual al número de ramas menos uno. Estas claves dividen las ramas de una manera similar a un árbol de búsqueda, es decir, las claves en la rama izquierda son menores y las de la rama derecha son mayores.
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022111013.png)
-### Inserción en un árbol B:
+
+# 4.3 Inserción en un árbol B:
 1. **Búsqueda de la página adecuada**: Primero se localiza la página hoja donde debe ir la nueva clave.
 2. **Inserción directa**: Si la página no está llena, se inserta la nueva clave.
 3. **División de página**: Si la página está llena, se divide en dos. La clave central (mediana) sube al nivel superior (la página padre), y las dos nuevas páginas se conectan a ella.
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022112414.png)
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022112432.png)
-### Búsqueda en un árbol B:
+
+# 4.4 Búsqueda en un árbol B:
 - La búsqueda comienza en la raíz y, según el valor de la clave, se decide si se encuentra en la página actual o si hay que descender por alguna de las ramas a una página en un nivel inferior.
 
-### Eliminación en un árbol B:
+# 4.5 Eliminación en un árbol B:
 1. **Eliminación simple**: Si la página tiene más del mínimo de claves, se elimina directamente.
 2. **Redistribución o fusión**: Si la página tiene el número mínimo de claves, se puede redistribuir claves entre páginas hermanas o fusionar dos páginas hermanas.
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022112639.png)
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241022112657.png)
-### Aplicaciones:
+
+# 4.6 Aplicaciones:
 Los árboles B son especialmente útiles en:
 - **Bases de datos**: Reducen la altura del árbol y, por tanto, los accesos a disco, lo que optimiza las búsquedas.
 - **Sistemas de archivos**: Ayudan a gestionar grandes volúmenes de datos almacenados en disco.
@@ -42,7 +45,7 @@ Los árboles B son especialmente útiles en:
 
 En resumen, los árboles B son fundamentales para la eficiencia de las operaciones de búsqueda, inserción y eliminación cuando se trabaja con grandes volúmenes de datos en sistemas de almacenamiento masivo.
 
-# Árboles B* 
+# 4.7 Árboles B* 
 Los **árboles B\*** son una optimización de los árboles B estándar. Su objetivo es reducir el número de divisiones (o splits) que ocurren durante las inserciones. En lugar de dividir una página inmediatamente cuando se llena, los elementos se redistribuyen entre las páginas hermanas. Este enfoque pospone la división hasta que tanto la página original como sus hermanas están llenas.
 
 **Características clave:**
@@ -53,7 +56,7 @@ Este enfoque es útil para reducir el número de accesos a disco, ya que las div
 
 ---
 
-# Árboles B+
+# 4.8 Árboles B+
 Los **árboles B+** son una variación de los árboles B diseñada para mejorar el rendimiento en recorridos secuenciales y búsquedas rápidas.
 
 **Características clave:**

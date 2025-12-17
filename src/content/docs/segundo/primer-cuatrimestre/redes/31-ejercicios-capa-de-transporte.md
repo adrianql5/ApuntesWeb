@@ -4,18 +4,18 @@ title: "1 Ejercicios Capa de Transporte"
 
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
-[[archivos/ejercicios/Enunciados/CheckSumUDP.pdf|CheckSumUDP]]
+CheckSumUDP
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/ejercicios/SolucionesPropias/QuirogaLinaresAdrian_CheckSum.pdf%7CQuirogaLinaresAdrian_CheckSum)
 
-[[archivos/ejercicios/Enunciados/UtilizacionARQ.pdf|UtilizacionARQ]]
+UtilizacionARQ
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/ejercicios/SolucionesPropias/QuirogaLinaresAdrian_UtilizacionARQ.pdf%7CQuirogaLinaresAdrian_UtilizacionARQ)
 
-[[archivos/ejercicios/Enunciados/ProtoTipoTCP.pdf|ProtoTipoTCP]]
+ProtoTipoTCP
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/redes/archivos/ejercicios/SolucionesPropias/QuirogaLinaresAdrian_ProtoTipoTCP.pdf%7CQuirogaLinaresAdrian_ProtoTipoTCP)
 
 
-[[archivos/ejercicios/Enunciados/CongestionTCP.pdf|CongestionTCP]]
+CongestionTCP
 ### 1. Mecanismos de Control de Congestión en TCP
 
 El protocolo TCP utiliza varios mecanismos para manejar la congestión en redes, permitiendo que el emisor adapte su tasa de transmisión según las condiciones de la red. A continuación, se explican los mecanismos principales:

@@ -4,7 +4,7 @@ title: "Grafos I"
 
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
-## Grafos I 
+# 5.1 Grafos I 
 Los **grafos** son estructuras de datos que representan relaciones arbitrarias entre objetos, a diferencia de los árboles que suelen reflejar jerarquías. Un grafo está compuesto por:
 
 - **Vértices o nodos (V)**: Son los puntos que representan los objetos.
@@ -32,7 +32,7 @@ Los grafos tienen muchas aplicaciones prácticas, como:
 - Circuitos eléctricos.
 - Diagramas de flujo de algoritmos.
 
-## Representación de Grafos
+# 5.2 Representación de Grafos
 
 Los grafos se pueden representar de diferentes maneras, dependiendo de la operación a realizar:
 
@@ -60,7 +60,7 @@ Los grafos se pueden representar de diferentes maneras, dependiendo de la operac
 - Más compleja de manejar por el uso de punteros.
 - Ineficiente para encontrar todos los arcos que llegan a un nodo.
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241027191306.png)
-## Recorridos en Grafos
+# 5.3 Recorridos en Grafos
 
 ### Recorrido en anchura (BFS - Breadth-First Search)
 - Se comienza desde un nodo y se visitan todos sus nodos adyacentes. Luego se continúa con los adyacentes de esos nodos, y así sucesivamente.
@@ -71,7 +71,7 @@ Los grafos se pueden representar de diferentes maneras, dependiendo de la operac
 - Puede implementarse de manera **recursiva** o utilizando una **pila** como estructura auxiliar.
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241027190004.png)
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241027190032.png)
-## Componentes conexas
+# 5.4 Componentes conexas
 
 ### Componentes conexas en un grafo no dirigido
 1. Se realiza un recorrido desde cualquier vértice, almacenando los nodos visitados.
@@ -93,7 +93,7 @@ $$G \neq D(n) \cap  A(n) \Longrightarrow \text {G no es fuertemente conexo}$$
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241027190815.png)
 - En un grafo fuertemente conexo, todas las entradas de la matriz de caminos tienen un 1 excepto la diagonal principal.
 
-## Puntos de articulación
+# 5.5 Puntos de articulación
 Un **punto de articulación** es un nodo que, si se elimina junto con sus arcos, divide una componente conexa en dos o más componentes.
 
 ### Algoritmo para encontrar puntos de articulación

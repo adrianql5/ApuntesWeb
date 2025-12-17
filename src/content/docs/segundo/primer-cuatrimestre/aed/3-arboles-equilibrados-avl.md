@@ -14,7 +14,7 @@ En este tipo de árboles, cada nodo cuenta con un campo llamado **factor de equi
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241002193941.png)
 
-# Inserción
+# 3.1 Inserción
 Se pueden dar varios casos en la inserción:
 - Si las ramas **izquierda y derecha tienen misma altura**, da igual donde se inserte, que al insertar solo se producirá un nuevo **factor de equilibrio de 1 o -1**, con lo que el árbol sigue estando equilibrado.
 - Si las ramas **izquierda y derecha difieren en su altura en 1 unidad**: 
@@ -47,7 +47,8 @@ Tras una inserción, el nodo insertado pasa a ser **un nodo hoja**, por lo que s
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241003202813.png)
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020241003202924.png)
-# Eliminación
+
+# 3.2Eliminación
 Se sigue el **mismo algoritmo que en ABB**, pero **incluyendo las reestructuraciones necesarias**:
 - Si el nodo es **hoja**, se suprime
 - Si solo tiene **un descendiente**, se sustituye por su descendiente y se elimina.

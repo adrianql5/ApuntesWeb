@@ -8,7 +8,7 @@ Escrito por **Adrián Quiroga Linares**.
 
 Un árbol es una **estructura de datos no lineal** con un organización jerárquica de elementos  **homogéneos** (del mismo tipo), donde cada elemento tiene un único **padre**, pero generar varios **hijos**.
 
-# Conceptos Básicos:
+# 1.1 Conceptos Básicos:
 - **Nodo:** cada elemento componente del árbol
 - **Ascendientes:** nodos de los niveles superiores
 - **Descendientes:** nodos sucesores de uno dado, niveles inferiores
@@ -28,7 +28,7 @@ Un árbol es una **estructura de datos no lineal** con un organización jerárqu
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926162942.png)
 
-# Tipos de Árbol
+# 1.2 Tipos de Árbol
 ## Árbol Binario:
 Árbol donde cada nodo tiene como máximo grado 2 (*2 nodos hijo*).
 
@@ -49,7 +49,7 @@ Un árbol es una **estructura de datos no lineal** con un organización jerárqu
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926163341.png)
 **Un árbol binario completo es equilibrado**
 
-# TAD ABIN EXPLICADO
+# 1.3 TAD ABIN EXPLICADO
 Abin será un puntero a un struct, por ello hacemos
 ```c
 typedef struct celda *Abin
@@ -145,7 +145,7 @@ void modificar(abin A, tipoelem E){
 }
 ```
 
-# Recorridos
+# 1.4 Recorridos
 Se usan para enumerar los elementos del árbol
 ## Recorrido en anchura
 Consiste en recorrer los distintos niveles de forma ordenada, del menos al mayor. Implementación no recursiva mediante una **cola** como estructura auxiliar.
@@ -177,7 +177,7 @@ Utilizamos una **pila**:
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926172441.png)
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926172458.png)
 
-# Árboles de Expresión
+# 1.5 Árboles de Expresión
 * **A+B**: *+* es el nodo padre, *A* el hijo izquierdo y *B* el hijo derecho
 * Si a los árboles de expresión se les realiza el recorrido **inorden** , obtenemos la notación natural de la operación matemática. 
 * Usamos 2 pilas, una de *operadores* y otra de *operandos* . Se van apilando hasta llegar a un operador cuya prioridad es menor o igual que la del tope de la pila. Esto provoca que se desapile en dicha pila  y se vaya formando la expresión en la pila de *operandos* con los operadores desapilados.

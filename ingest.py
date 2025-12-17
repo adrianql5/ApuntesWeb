@@ -97,6 +97,41 @@ def slugify(text: str) -> str:
     return text
 
 
+def clean_wikilinks(content: str) -> str:
+    """
+    Limpia los WikiLinks de Obsidian del contenido.
+    
+    Convierte:
+    - [[ruta/archivo|TextoVisible]] -> TextoVisible
+    - [[ruta/archivo]] -> archivo (nombre sin extensión)
+    - [[archivo.pdf]] -> archivo
+    
+    Esto es especialmente importante para los encabezados,
+    para que el Table of Contents se genere limpio.
+    """
+    def replace_wikilink(match):
+        full_link = match.group(1)
+        
+        # Si tiene alias (|), usar el texto después del |
+        if '|' in full_link:
+            parts = full_link.split('|', 1)
+            return parts[1].strip()
+        
+        # Si no tiene alias, extraer el nombre del archivo
+        # Quitar la ruta y la extensión
+        filename = full_link.split('/')[-1]  # Último elemento de la ruta
+        # Quitar extensión si existe
+        if '.' in filename:
+            filename = filename.rsplit('.', 1)[0]
+        return filename.strip()
+    
+    # Reemplazar todos los WikiLinks [[...]]
+    # No afecta a las imágenes ![[...]] porque ya fueron procesadas antes
+    cleaned = re.sub(r'\[\[([^\]]+)\]\]', replace_wikilink, content)
+    
+    return cleaned
+
+
 def should_ignore_file(filename: str) -> bool:
     """Determina si un archivo debe ser ignorado."""
     # Verificar extensión
@@ -292,6 +327,9 @@ def copy_files(files_to_copy: List[Dict], dest_base: Path, image_map: Dict[str, 
                 return f'![{alt_text}]({web_path})'
             
             original_content = re.sub(r'!\[([^\]]*)\]\(([^\)]+)\)', convert_markdown_image, original_content)
+            
+            # Limpiar WikiLinks de Obsidian [[...]] (para encabezados limpios en TOC)
+            original_content = clean_wikilinks(original_content)
             
             # Verificar si ya tiene frontmatter
             if original_content.strip().startswith('---'):

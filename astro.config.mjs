@@ -5,15 +5,16 @@ import starlight from '@astrojs/starlight';
 // https://astro.build/config
 // GitHub Pages: https://adrianql5.github.io/ApuntesWeb/
 export default defineConfig({
-	site: 'https://adrianql5.github.io',
+	site: 'https://adrianql5.github.io/ApuntesWeb',
 	base: '/ApuntesWeb',
+	trailingSlash: 'always',
 	integrations: [
 		starlight({
 			title: 'Apuntes Universitarios',
 			description: 'Apuntes de Ingeniería Informática organizados por curso y asignatura',
-			defaultLocale: 'es',
+			defaultLocale: 'root',
 			locales: {
-				es: {
+				root: {
 					label: 'Español',
 					lang: 'es',
 				},

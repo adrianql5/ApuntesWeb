@@ -1,6 +1,8 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
+import remarkMath from 'remark-math';
+import rehypeKatex from 'rehype-katex';
 
 // https://astro.build/config
 // GitHub Pages: https://adrianql5.github.io/ApuntesWeb/
@@ -8,6 +10,10 @@ export default defineConfig({
 	site: 'https://adrianql5.github.io/ApuntesWeb',
 	base: '/ApuntesWeb',
 	trailingSlash: 'always',
+	markdown: {
+		remarkPlugins: [remarkMath],
+		rehypePlugins: [rehypeKatex],
+	},
 	integrations: [
 		starlight({
 			title: 'Apuntes Universitarios',
@@ -21,6 +27,7 @@ export default defineConfig({
 			},
 			customCss: [
 				'./src/styles/custom.css',
+				'./node_modules/katex/dist/katex.min.css',
 			],
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/adrianql5/adrianql5' },

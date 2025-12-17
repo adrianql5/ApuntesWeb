@@ -15,7 +15,7 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 La actividad económica da lugar a la existencia de múltiples y complejas **relaciones** entre los distintos sujetos o entidades económicas. Como esta actividad económica se desenvuelve en un entorno de incertidumbre los agentes económicos necesitan la **información financiera** que les permita disminuir la incertidumbre existente para la toma de decisiones.
 
 
-![[Pasted image 20250211161402.png]]
+![](./Pasted image 20250211161402.png)
 
 
 # 3.2 La contabilidad
@@ -27,7 +27,7 @@ Los trabajadores son usuarios **externos a la empresa**. Tienen una relación **
 
 
 # 3.3 Los agentes económicos
-![[Pasted image 20250211161718.png]]
+![](./Pasted image 20250211161718.png)
 
 # 3.4 El Patrimonio
 El patrimonio es el conjunto de bienes, derechos y obligaciones debidamente valorado que posee una unidad económica. Este conjunto le permite cubrir sus necesidades o llevar a cabo su actividad productiva. Se trata de un concepto estático, ya que muestra la situación financiera de la empresa en un momento determinado.

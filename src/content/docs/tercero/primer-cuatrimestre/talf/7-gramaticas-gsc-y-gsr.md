@@ -23,7 +23,7 @@ Donde:
 - **Máquina Equivalente:** Son reconocidos por la **Máquina de Turing** estándar.
 
 **Ejemplo:**
-![[Pasted image 20251208155849.png]]
+![](./Pasted image 20251208155849.png)
 
 # 7.2 Gramáticas Sensibles al Contexto (GSC) - Tipo 1
 Estas gramáticas imponen restricciones sobre las GSR. La idea principal es que las sustituciones dependen de lo que rodea a la variable ("el contexto") y la cadena nunca se hace más pequeña.
@@ -45,7 +45,7 @@ La característica más importante para identificar una GSC es la longitud.
 - Esto significa que la gramática **nunca "encoge"** la cadena (excepto posiblemente para generar la cadena vacía $\lambda$ si el lenguaje lo permite)10.
 
 **Ejemplo:**
-![[Pasted image 20251208155833.png]]
+![](./Pasted image 20251208155833.png)
 
 **Relación con Máquinas**
 - **Lenguaje que generan:** Lenguajes Sensibles al Contexto (LSC).
@@ -104,7 +104,7 @@ Para $ww$ o $a^{2n}$. Una variable se divide en dos, o transporta una copia de s
 - **Límite:** Solo puedo relacionar **dos** contadores a la vez o estructuras anidadas. No puedo cruzar relaciones.
 - _Ejemplo:_ $L = \{ a^n b^n \mid n \ge 0 \}$.
 
-![[Pasted image 20251208171958.png]]
+![](./Pasted image 20251208171958.png)
 
 ### 3. Lenguajes Sensibles al Contexto (Tipo 1)
 
@@ -118,7 +118,7 @@ Para $ww$ o $a^{2n}$. Una variable se divide en dos, o transporta una copia de s
     
 - _Ejemplo:_ $L = \{ a^n b^n c^n \mid n \ge 1 \}$.
 
-![[Pasted image 20251208172052.png]]
+![](./Pasted image 20251208172052.png)
 
 
 ### 4. Lenguajes Recursivamente Enumerables (Tipo 0)
@@ -129,6 +129,6 @@ Para $ww$ o $a^{2n}$. Una variable se divide en dos, o transporta una copia de s
 
 - Si te dan un problema lógico complejo que no tiene restricciones de estructura simple. Generalmente, en los exámenes, se centran en los tres anteriores, salvo que pregunten por problemas de parada o indecidibilidad.
 
-![[Pasted image 20251208172118.png]]
+![](./Pasted image 20251208172118.png)
 
 

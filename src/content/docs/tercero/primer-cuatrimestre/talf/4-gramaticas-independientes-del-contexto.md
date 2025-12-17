@@ -199,7 +199,7 @@ Se hace en dos pasadas:
 
 
 **Ejemplo que usa los pasos 1 y 2:**
-![[Pasted image 20251208135015.png]]
+![](./Pasted image 20251208135015.png)
 
 
 # 4.8 Formas Normales

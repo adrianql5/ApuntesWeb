@@ -17,7 +17,7 @@ Se dice que hay una relación del tipo **"es un/a** entre una clase derivada y u
 - **Herencia jerárquica:** las clases $B$ y $C$ heredan los atributos y métodos de la clase $A$, de modo que se diferencian por sus atributos y métodos propios.
 - **Herencia múltiple:** la clase $C$ hereda los atributos y métodos de las clases $A$ y $B$, por lo que hará falta definir **políticas de herencia** si $A$ y $B$ tienen métodos comunes.
 
-![[archivos/imagenes/Pasted image 20250619215709.png]]
+![](./archivos/imagenes/Pasted image 20250619215709.png)
 
 ### 4.1.2 Beneficios de la Herencia
 El principal beneficio es la **reutilización de código**, pues un segmento de código que ya ha sido desarrollado, depurado y validado en una clase se usa en otro sin tener que cambiarlo. Esto **simplifica el código**, porque evita tener que implementar varias veces el mismo método.
@@ -42,7 +42,7 @@ La **composición** es el mecanismo por el cual una clase contiene **objetos de 
 - **Genera mucho más código y mucho más complejo** para hacer lo mismo que consigue la herencia.
 - **Es más lento de desarrollar** que la herencia, pues la construcción de nuevas clases se realiza desde cero.
 
-![[archivos/imagenes/Pasted image 20250620215945.png]]
+![](./archivos/imagenes/Pasted image 20250620215945.png)
 
 # 4.3 Herencia contra Composición
 Debemos escoger composición sobre herencia cuando:
@@ -52,9 +52,9 @@ Debemos escoger composición sobre herencia cuando:
 - Existe la posibilidad de que las **clases base cambien:** la herencia complicaría el desarrollo
 - Las clases derivadas tendrían que **sobreescribir** muchos métodos: la herencia complicaría el desarrollo.
 
-![[archivos/imagenes/Pasted image 20250702092040.png]]
+![](./archivos/imagenes/Pasted image 20250702092040.png)
 
-![[archivos/imagenes/Pasted image 20241111104218.png]]
+![](./archivos/imagenes/Pasted image 20241111104218.png)
 
 # 4.3 Herencia en Java
 En java se **imponen restricciones** sobre la herencia:
@@ -62,7 +62,7 @@ En java se **imponen restricciones** sobre la herencia:
 - Los atributos y métodos se heredan en función del **tipo de acceso** que tengan en la clase.
 
 ## 4.3.1 Revisitando el tipo de Acceso
-![[archivos/imagenes/Pasted image 20250620220559.png]]
+![](./archivos/imagenes/Pasted image 20250620220559.png)
 - `private:` la clase derivada **nunca hereda** el atributo/método
 - `public:` la clase derivada **siempre hereda** el atributo/método
 - `acceso a paquete:` la clase derivada **solo hereda** el atributo/método si se encuentra en el **mismo paquete** que la clase base
@@ -71,7 +71,7 @@ En java se **imponen restricciones** sobre la herencia:
 Como los atributos privados no se heredan, **se podrían hacer públicos** o protegidos. Esto eliminaría (si son públicos) o debilitaría (si son protegidos) la encapsulación. Por tanto, los atributos se **mantienen privados**, ya que se considera que la **encapsulación tiene más beneficios que la herencia**:
 - Sin encapsulación, el desarrollo, mantenimiento y validación de los programas sería mucho más difícil.
 - Sin encapsulación, la composición no tiene sentido.
-![[archivos/imagenes/Pasted image 20250620221008.png]]
+![](./archivos/imagenes/Pasted image 20250620221008.png)
 
 >[!Buenas Prácticas]
 >- Los **atributos** son **siempre privados**, aunque se use herencia
@@ -95,14 +95,14 @@ Como se dijo antes, los **constructores** de la clase **no se heredan**, ya que 
 	- Si la clase base tiene algún constructor explícito, uno de ellos tendrá que ser sin argumentos.
 	- Si la clase base no tiene ningún constructor explícito, el constructor por defecto es suficiente.
 
-![[archivos/imagenes/Pasted image 20250620222532.png]]
+![](./archivos/imagenes/Pasted image 20250620222532.png)
 
 - En los constructores de la clase derivada **con argumentos:**
 	- **No se invoca automáticamente** a ningún **constructor de la clase base**, ya que no se puede garantizar que exista alguno con los mismos argumentos.
 	- Por tanto, habrá que invocar **manualmente** el constructor de la clase base que se considere oportuno. Para poder hacer esto necesitamos `super(args)`, que es un método que nos permite acceder desde la clase derivada a los atributos, métodos y constructores de la clase base que tengan cierto nivel de visibilidad. 
 		- `super(args)` sólo nos permite acceder a los elementos de la clase base inmediatamente superior a la clase derivada donde se invoca.
 
-![[archivos/imagenes/Pasted image 20250702092836.png]]
+![](./archivos/imagenes/Pasted image 20250702092836.png)
 
 Java debe **crear un objeto completo de tipo Infanteria**, pero ese objeto también es, internamente, un objeto de tipo CartaDeEquipamiento (su clase base).
 
@@ -116,7 +116,7 @@ Java debe **crear un objeto completo de tipo Infanteria**, pero ese objeto tambi
  **Necesidad de construir desde lo más general a lo más específico:**
     - La subclase depende de que la clase base esté correctamente inicializada (por ejemplo, que los atributos privados de la base estén listos).
 
-![[archivos/imagenes/Pasted image 20250620222555.png]]
+![](./archivos/imagenes/Pasted image 20250620222555.png)
 
 # 4.4 Sobreescritura de Métodos
 La **sobreescritura de métodos** es un mecanismo mediante el cual un método heredado de una clase base vuelve a ser implementado de manera distinta en la clase derivada. Para sobrescribir un método, se usa la palabra clave `@Override` sobre la reimplementación en la clase derivada.
@@ -126,13 +126,13 @@ La **sobreescritura de métodos** es un mecanismo mediante el cual un método he
 
 Se puede aprovechar la implementación original de un método en su sobreescritura usando `super()`. Al llamar al método `super()` en la sobreescritura en la clase derivada, se invoca la implementación de la clase base del método que se está sobreescribiendo. Se usa `super()` y no se invoca directamente el método pues la clase derivada no sabría distinguir si nos referimos a la sobreescritura o la implementación de la clase base.
 
-![[archivos/imagenes/Pasted image 20250621114446.png]]
+![](./archivos/imagenes/Pasted image 20250621114446.png)
 
 Todas las clases creadas en Java son derivadas de `Object`, por lo que heredan todos sus métodos:
 - `getClass:` indica la clase a la que pertenece el objeto que lo invoca
 - `notify` y `wait:` orientados a la gestión de los hilos
 - `finalize:` se invoca cuando el recolector de basura elimina el objeto de la memoria del programa. Es necesario sobreescribirlo.
-![[archivos/imagenes/Pasted image 20250621114508.png]]
+![](./archivos/imagenes/Pasted image 20250621114508.png)
 
 
 
@@ -145,7 +145,7 @@ Una clase debería ser abstracta cuando no es necesario que tenga objetos pues t
 
 Se suelen usar como **clases base** de otras clases que sí son instanciables, ocupando los primeros niveles de la jerarquía de clases. Por tanto, deben tener **implementados** la mayor cantidad posible de métodos para que las clases derivadas puedan heredarlos y así favorecer la **reutilización de código**.
 
-![[archivos/imagenes/Pasted image 20250621115814.png]]
+![](./archivos/imagenes/Pasted image 20250621115814.png)
 
 Una clase abstracta:
 - Puede tener atributos de cualquier tipo
@@ -166,7 +166,7 @@ Los **métodos abstractos** son métodos que no tienen cuerpo, es decir, no est�
 Todas las clases que contengan métodos abstractos son **clases abstractas**.
 Los métodos abstractos tienen que estar **implementados** en **todas las clases derivadas** de la clase abstracta a la que pertenecen siempre que estas **no sean abstractas**.
 
-![[archivos/imagenes/Pasted image 20250621120051.png]]
+![](./archivos/imagenes/Pasted image 20250621120051.png)
 
 
 # 4.6 Clases, Atributos y Métodos Finales
@@ -181,7 +181,7 @@ Los **atributos finales** son atributos cuyo valor, una vez establecido, no se p
 Se suelen definir en **clases abstractas** accesibles por todas las clases que las usan
 Se suelen establecer como `static` para poder usarlas sin tener que crear un objeto de la clase en la que están definidas. La palabra clave `static` para atributos o métodos hace que se almacenen en la memoria estática, permitiendo que estén disponibles desde el inicio del programa sin tener que instanciar su clase.
 
-![[archivos/imagenes/Pasted image 20250621120652.png]]
+![](./archivos/imagenes/Pasted image 20250621120652.png)
 
 >[!Importante]
 >**Qué se hereda??**

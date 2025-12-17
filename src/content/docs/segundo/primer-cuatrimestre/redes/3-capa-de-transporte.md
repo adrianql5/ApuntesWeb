@@ -11,7 +11,7 @@ Escrito por **Adrián Quiroga Linares**.
 La capa de transporte es un componente clave en la arquitectura de redes, cuya función es asegurar que los datos enviados desde una aplicación en el origen **lleguen de manera correcta** al proceso de destino. 
 
 > [!Recordatorio]
-> ![[archivos/imagenes/Pasted image 20241108205726.png]]
+> ![](./archivos/imagenes/Pasted image 20241108205726.png)
 
 La **capa de transporte** se encarga de **preparar los datos para la transmisión**, recibe los **datos** que le pasa la **capa de aplicación** y los prepara para su transmisión dependiendo de si se utiliza **TCP o UDP**. Debe decidir si **fragmenta los datos en segmentos** (*TCP*) o simplemente les **añade una cabecera** (*UDP*). Una vez los **datos llegan al destino** se debe encargar de reconstruir los mensaje que fueran segmentados y entregarlos al **proceso correcto** en el sistema receptor.
 
@@ -22,7 +22,7 @@ La capa de transporte está presente solo en los dispositivos de origen y destin
  **TCP (Transmission Control Protocol)**:
  TCP divide los mensajes en **segmentos más pequeños**. A cada segmento le añade una **cabecera de control** para asegurar la correcta transmisión y el control de errores. 
 
-![[archivos/imagenes/Pasted image 20241018195754.png]]
+![](./archivos/imagenes/Pasted image 20241018195754.png)
 
 **UDP (User Datagram Protocol)**:
 UDP **no realiza segmentación** de mensajes ni garantiza la entrega ordenada. Simplemente **añade una cabecera a los datos y los envía. Es más rápido, pero menos fiable que TCP**.
@@ -35,7 +35,7 @@ La **multiplexión** es el proceso en el cual la capa de transporte recoge datos
 ## 3.2.2 Demultiplexión
 La **demultiplexión** ocurre en el lado del **receptor**. Aquí, la capa de transporte **recibe segmentos de la capa de red**, reconstruye los mensajes originales y los **distribuye a los sockets correspondiente**s en función de los números de puerto que identifican a cada socket. De esta manera, los procesos en el lado del receptor pueden recoger los mensajes que les corresponden.
 
-![[archivos/imagenes/Pasted image 20241018200435.png]]
+![](./archivos/imagenes/Pasted image 20241018200435.png)
 
 ## 3.2.3 Identificación mediante puertos
 Para identificar a qué socket corresponde un mensaje, se usan los **números de puerto**, que son enteros de 16 bits (*0-65535*). Estos números permiten diferenciar qué **proceso** debe recibir los datos en el sistema. 
@@ -44,14 +44,14 @@ Los puertos entre 0-1023 están reservados para servicios bien conocidos (*como 
 
 Y los puertos restantes son los **Puertos Efímeros** que son los que se usan cuando por ejemplo abrimos varias pestañas de **firefox simultáneamente**, como no podemos usar el mismo puerto, el SO asigna a cada ventana un puerto efímero diferente, y al cerrarlas se liberan.
 
-![[archivos/imagenes/Pasted image 20241018200452.png]]
+![](./archivos/imagenes/Pasted image 20241018200452.png)
 
 ## 3.2.4 Multiplexión y Demultiplexión con sockets sin conexión (UDP)
 En el caso de **UDP** (User Datagram Protocol), los sockets se identifican únicamente por la dirección **IP de destino y el puerto de destino**. Por ejemplo, un servidor que proporciona la hora del día a múltiples clientes (como el servicio daytime en el puerto 13) recibe datagramas de diferentes clientes y responde a cada uno de forma individual. Todos los datagramas se entregan al mismo puerto de destino, pero el puerto de origen permite que el servidor sepa a quién responder.
 
 Si dos segmentos UDP tienen diferentes direcciones IP y/o números de puerto de origen, pero la misma dirección IP de destino y el mismo número puerto de destino, entonces los dos segmentos se enviarán al mismo proceso de destino a través del mismo socket de destino
 
-![[archivos/imagenes/Pasted image 20241229124710.png]]
+![](./archivos/imagenes/Pasted image 20241229124710.png)
 
 ## 3.2.5 Multiplexión y Demultiplexión con sockets orientados a conexión (TCP)
 En el caso de **TCP** (Transmission Control Protocol), los sockets se identifican con una tupla de 4 elementos: **la dirección IP de origen, la dirección IP de destino, el puerto de origen y el puerto de destino**.  Por tanto, cuando un segmento TCP llega a un host procedente de la red, el host emplea los cuatro valores para **dirigir** (demultiplexar) el segmento al **socket apropiado**.
@@ -59,7 +59,7 @@ En el caso de **TCP** (Transmission Control Protocol), los sockets se identifica
 En particular, y al contrario de lo que ocurre con UDP, dos segmentos TCP entrantes con direcciones IP de origen o números de puerto de origen diferentes (con la excepción de un segmento TCP que transporte la solicitud original de establecimiento de conexión) **serán dirigidos a dos sockets distintos**. Cada conexión es atendida por un **proceso o hilo**.
 
 
-![[archivos/imagenes/Pasted image 20241229130340.png]]
+![](./archivos/imagenes/Pasted image 20241229130340.png)
 
 En TCP, hay dos tipos de sockets:
 1. **Socket de servidor**: Solo espera conexiones de clientes.
@@ -76,7 +76,7 @@ En el emisor, **UDP** coge el mensaje que se va a enviar y le añade una cabecer
 
 La suma de comprobación se usa para detectar errores en el segmento (tanto en los datos como en la cabecera). En el **origen**, **se suman todas las palabras de 16 bits del segmento**. Luego se realiza un complemento **a 1 del resultado y se inserta en el campo de suma de comprobación**. Al llegar al destino, se **recalcula** la suma de comprobación **y si coincide con la original, significa que el paquete llegó sin errores**.
    
-![[archivos/imagenes/Pasted image 20241019190923.png]]
+![](./archivos/imagenes/Pasted image 20241019190923.png)
 
 En el receptor, **UDP** verifica si el segmento llegó sin errores utilizando la suma de comprobación. Si no hay errores, los datos se pasan al **socket** para ser procesados por la **aplicación**.
 
@@ -104,12 +104,12 @@ En este protocolo, el emisor envía un paquete y luego **se detiene a esperar un
    
 **Si se pierden paquetes**, si un paquete se **pierde** en el camino o **llega con errores**, el receptor **no enviará el ACK**. El emisor tiene un **temporizador** que empieza a contar cuando se envía el paquete. Si no recibe el ACK antes de que **el temporizador expire, retransmite el paquete**.
 
-![[archivos/imagenes/Pasted image 20250118163415.png]]
+![](./archivos/imagenes/Pasted image 20250118163415.png)
 **Si se pierde el ACK**, el emisor no sabrá que el receptor recibió el paquete. Entonces, cuando el **temporizador** expire, retransmitirá el paquete. El receptor, al recibir un paquete duplicado (*porque ya lo procesó antes*), simplemente reconoce que es un **duplicado** , **lo descarta** y **envía el ACK correspondiente nuevamente**.
 
 **Si el temporizador se configura con un tiempo muy corto o hay congestión en la red**, tanto los **paquetes como los ACK pueden retrasarse**.  El emisor puede recibir **duplicados de ACKs o de paquetes debido a este retraso**, pero los identifica por el número de secuencia y los **ignora si ya fueron procesados**.
 
-![[archivos/imagenes/Pasted image 20250118163434.png]]
+![](./archivos/imagenes/Pasted image 20250118163434.png)
 
 ### **NAK**
 Un **NAK** (*Negative-Acknowledge Character*) implica que si se recibe, el protocolo retransmite el último paquete y espera a recibir un mensaje ACK o NAK del receptor en respuesta al paquete de datos retransmitido.
@@ -120,18 +120,18 @@ Cuando recibe un paquete **fuera de secuencia**, el receptor envía un **paquete
 
 Sin embargo si vence el temporizador, se van a enviar **paquetes duplicados todo el tiempo**. Por ello debemos hacer que en vez de dos, **tres ACKs** equivalen a un **NAK.** 
 
-![[archivos/imagenes/Pasted image 20250118163323.png]]
+![](./archivos/imagenes/Pasted image 20250118163323.png)
 
 ### **Inconveniente de parar y esperar**
 La **poca utilización de enlace:**
 
-![[archivos/imagenes/Pasted image 20241114191723.png]]
+![](./archivos/imagenes/Pasted image 20241114191723.png)
 
 La **utilización del enlace** es la proporción del tiempo en que el emisor realmente está enviando datos, frente al tiempo total (que incluye tanto la transmisión como la espera). Es decir, es el **tiempo útil** dividido por el **tiempo total**. Se calcula de la siguiente forma:
 
 $$U = \frac{t_{\text{trans}}}{RTT + t_{\text{trans}}}$$
 
-![[archivos/imagenes/Pasted image 20250118165635.png]]
+![](./archivos/imagenes/Pasted image 20250118165635.png)
 ## 3.2.2 ARQ con ventana deslizante (entubamiento)
 El protocolo **ARQ con ventana deslizante**, también conocido como **entubamiento**, es una mejora sobre el protocolo "parar y esperar", y su principal ventaja es que **reduce el tiempo perdido** esperando confirmaciones (*ACKs*). En lugar de enviar un paquete y esperar una confirmación antes de enviar el siguiente, el emisor puede enviar **varios paquetes consecutivos** (*hasta un número máximo $N$ antes de recibir los ACKs*). Esto mejora considerablemente la **utilización del enlace**.
 
@@ -144,7 +144,7 @@ $$
 N \geq 1 + \frac{RTT}{t_{\text{trans}}}
 $$
 
-![[archivos/imagenes/Pasted image 20250118170617.png]]
+![](./archivos/imagenes/Pasted image 20250118170617.png)
 
 **La ventana emisora** es el conjunto de 1 hasta $N$ paquetes que el emisor **puede enviar antes de recibir una confirmación**. Estos paquetes pueden haber sido enviados, pero aún **no han sido reconocidos**. 
    
@@ -156,37 +156,37 @@ Tanto el emisor como el receptor **deben poder almacenar varios paquetes en memo
 
 El emisor envía varios paquetes de manera consecutiva sin esperar una confirmación por cada uno. La ventana del emisor se va desplazando conforme el emisor recibe los ACKs de los paquetes. Por ejemplo, si la ventana tiene un tamaño de  $N = 5$, el emisor puede enviar 5 paquetes, pero la ventana solo avanzará cuando reciba confirmaciones de los paquetes. Cuando se recibe un ACK, la ventana **"desliza"** y permite que el **emisor envíe más paquetes**.
 
-![[archivos/imagenes/Pasted image 20241019205036.png]]
+![](./archivos/imagenes/Pasted image 20241019205036.png)
 
 ### **Retroceso N (Go-Back-N, GBN):** 
 El receptor solo acepta paquetes en orden. Si un paquete se pierde o llega con errores, el receptor **descarta todos los paquetes que lleguen después del paquete problemático**. El emisor debe reenviar no solo el paquete que falló, sino también todos los paquetes siguientes. Los ACKs son **acumulativos**, lo que significa que un ACK para un paquete también **confirma la recepción de todos los paquetes anteriores**. No se pueden enviar paquetes desordenados.
-![[archivos/imagenes/Pasted image 20250118172206.png]]
+![](./archivos/imagenes/Pasted image 20250118172206.png)
 
-![[archivos/imagenes/Pasted image 20241114194736.png]]
+![](./archivos/imagenes/Pasted image 20241114194736.png)
 $N=4$
-![[archivos/imagenes/Pasted image 20250118171206.png]]
+![](./archivos/imagenes/Pasted image 20250118171206.png)
 ### **Repetición selectiva:**
 El receptor puede aceptar paquetes **fuera de orden**. Si un paquete **se pierde o llega con errores**, el receptor puede almacenar los paquetes posteriores y **solo solicitar la retransmisión del paquete perdido**. Solo se retransmiten los **paquetes que se pierden o llegan con errores**, lo que mejora la eficiencia en comparación con Go-Back-N. Se envía un ACK para cada paquete recibido correctamente, incluso si llegan fuera de orden.
-![[archivos/imagenes/Pasted image 20250118172256.png]]
-![[archivos/imagenes/Pasted image 20241114194656.png]]
+![](./archivos/imagenes/Pasted image 20250118172256.png)
+![](./archivos/imagenes/Pasted image 20241114194656.png)
 
 $N=4$
-![[archivos/imagenes/Pasted image 20250118172336.png]]
+![](./archivos/imagenes/Pasted image 20250118172336.png)
 
 # 3.3 TCP
 TCP (*Transmission Control Protocol*) es un protocolo que asegura una transmisión de datos fiable. TCP asigna **números de secuencia a los segmentos de datos**. Estos números de secuencia son de 32 bits y tienen algunas particularidades:
    - **Inicialización aleatoria**: En lugar de comenzar en 0, TCP elige un número aleatorio (llamémoslo $x$) como punto de partida, lo que ayuda a diferenciar distintas conexiones y reducir posibles problemas de seguridad.
    - **Incremento en función de los bytes enviados:** Cada segmento tiene su propio número de secuencia, que es igual al número del último byte del segmento anterior más el número de bytes del segmento actual.
 
-![[archivos/imagenes/Pasted image 20241027104559.png]]
+![](./archivos/imagenes/Pasted image 20241027104559.png)
 
 En muchas comunicaciones, los datos se transmiten en ambas direcciones. TCP optimiza el envío de datos y reconocimientos (*ACK*) utilizando una técnica llamada **superposición o piggybacking**. Esto significa que cuando un segmento de datos llega al receptor, este puede esperar un momento a enviar el ACK, **combinándolo con los datos de respuesta para reducir el número de transmisiones**.
 
-![[archivos/imagenes/Pasted image 20241027104623.png]]
+![](./archivos/imagenes/Pasted image 20241027104623.png)
 
 TCP utiliza **ACK acumulativos**, si el emisor envía varios segmentos, **un solo ACK puede confirmar múltiples segmentos**, lo cual es más eficiente. Si el emisor no recibe un ACK dentro del tiempo del temporizador, **solo retransmitirá el segmento específico no reconocido**, optimizando el uso de ancho de banda. Puede aceptar también **segmentos en desorden** y esperar a que lleguen después los intermedios.
    
-![[archivos/imagenes/Pasted image 20241027104711.png]]
+![](./archivos/imagenes/Pasted image 20241027104711.png)
 
 Cuando el temporizador expira, **TCP retransmite el segmento y duplica el tiempo de espera del temporizador**. Este ajuste progresivo del temporizador ayuda a mejorar el rendimiento en redes con retrasos fluctuantes.
 
@@ -223,13 +223,13 @@ TCP establece la **conexión** a través de el **three-way handshake** para sinc
 
 Tras la confirmación, se pueden enviar datos en ambas direcciones.
 
-![[archivos/imagenes/Pasted image 20241027105422.png]]
+![](./archivos/imagenes/Pasted image 20241027105422.png)
 
 **Desconexión:** La desconexión es un proceso en dos pasos:
    - Cuando una de las partes desea finalizar la conexión, envía una solicitud de desconexión (FIN). La otra parte envía un ACK para reconocerla y también envía un FIN.
    - Ambas partes cierran el flujo en la dirección opuesta. 
 
-![[archivos/imagenes/Pasted image 20241027105452.png]]
+![](./archivos/imagenes/Pasted image 20241027105452.png)
 
 ## 3.3.2 Estructura del segmento TCP
 
@@ -250,7 +250,7 @@ números de frecuencia.
 >
 >La fórmula viene de la definición de ventana de recepción, donde es el tamaño máximo de paquetes que el receptor puede recibir y procesar pero que no confirmado. Se expresa en bytes.
 
-![[archivos/imagenes/Pasted image 20241027105921.png]]
+![](./archivos/imagenes/Pasted image 20241027105921.png)
 
 Tiene **puerto origen** y **puerto destino**. **Número de secuencia** inicializado en un número aleatorio.
 **Número de reconocimiento**, número de bytes recibidos correctamente siempre que el bit **ACK** está activado. En caso de no estarlo, este campo no se usa. **Longitud de la cabecera**
@@ -277,16 +277,16 @@ La congestión en redes TCP ocurre cuando **demasiados paquetes intentan atraves
 ### **Memoria Infinita en los Routers**
 Imaginemos que los routers pueden almacenar una cantidad infinita de datos. En este caso, conforme la tasa de envío de paquetes se acerca a la **capacidad del enlace**, los paquetes comienzan a acumularse en la cola del router, **generando retrasos**. Estos retrasos se van acumulando con cada nuevo paquete, creando un "cuello de botella". 
 
-![[archivos/imagenes/Pasted image 20241229170859.png]]
+![](./archivos/imagenes/Pasted image 20241229170859.png)
 
 ### **Memoria Finita en un Router**
 Cuando la cola se llena, el router empieza a **descartar paquetes**. Esto obliga al emisor a **retransmitir** los paquetes perdidos, lo que, a su vez, **aumenta aún más la carga en la red y agrava la congestión**.
 
-![[archivos/imagenes/Pasted image 20241229170914.png]]1
+![](./archivos/imagenes/Pasted image 20241229170914.png)1
 ### **Múltiples Routers**
 Cuando hay varios routers en el camino, si un paquete **se pierde a mitad del camino**,  los routers anteriores han gastado recursos procesando un paquete que finalmente no llegó a su destino. Esto reduce la eficiencia general de la red, ya que se desperdicia capacidad en procesar paquetes que no alcanzarán su destino.
 
-![[archivos/imagenes/Pasted image 20241229170931.png]]
+![](./archivos/imagenes/Pasted image 20241229170931.png)
 
 Tasa de transmisión entre 0 y C/2: todo se recibe OK y con **retardo finito**.
 
@@ -315,7 +315,7 @@ $$
 
 Cuando ocurre una pérdida o se alcanza el umbral, TCP abandona el inicio lento y pasa a la siguiente fase.
 
-![[archivos/imagenes/Pasted image 20241027110812.png]]
+![](./archivos/imagenes/Pasted image 20241027110812.png)
 
 
 ### **AIMD (Additive Increase, Multiplicative Decrease):**
@@ -325,7 +325,7 @@ Se basa en dos principios:
 
 **Decremento multiplicativo** cuando se detecta congestión (por ejemplo, a través de la pérdida de paquetes), la ventana de congestión se **reduce a la mitad** (una disminución multiplicativa).
   
-![[archivos/imagenes/Pasted image 20241027110833.png]]
+![](./archivos/imagenes/Pasted image 20241027110833.png)
 
 
 > [!INFO]
@@ -346,7 +346,7 @@ Por ejemplo:
   - A partir de ahí, el crecimiento se vuelve lineal.
 
 
-![[archivos/imagenes/Pasted image 20241027110849.png]]
+![](./archivos/imagenes/Pasted image 20241027110849.png)
 
 ### **Recuperación Rápida en TCP**
 La **recuperación rápida** es un mecanismo dentro de TCP diseñado para mejorar la **recuperación de la ventana de congestión** después de una **pérdida de paquetes**.
@@ -365,7 +365,7 @@ Cuando TCP recibe **tres ACKs duplicados**, interpreta esto como una señal de c
 
 
 
-![[archivos/imagenes/Pasted image 20241115181211.png]]
+![](./archivos/imagenes/Pasted image 20241115181211.png)
 
 
 > [! Info]
@@ -378,8 +378,8 @@ Cuando TCP recibe **tres ACKs duplicados**, interpreta esto como una señal de c
 ## 3.4.4 Imparcialidad
 Cuando varias conexiones TCP **comparten un enlace**, ajustan su **tasa de envío automáticamente para repartir la capacidad disponible** del enlace de manera equitativa. Por ejemplo, si dos conexiones TCP comparten un enlace de 10 Mbps, cada una recibirá aproximadamente 5 Mbps.
 
-![[archivos/imagenes/Pasted image 20241027110946.png]]
+![](./archivos/imagenes/Pasted image 20241027110946.png)
 
-![[archivos/imagenes/Pasted image 20241027110958.png]]
+![](./archivos/imagenes/Pasted image 20241027110958.png)
 
 Sin embargo, cuando se introduce una conexión **UDP** junto con TCP, la conexión UDP, al **no tener control de congestión**, puede **acaparar la mayor parte del ancho de banda**. Del mismo modo, si se establece una conexión TCP junto con nueve conexiones TCP paralelas, el enlace se repartirá en una proporción de 1/10 para la primera conexión y 9/10 para las demás.

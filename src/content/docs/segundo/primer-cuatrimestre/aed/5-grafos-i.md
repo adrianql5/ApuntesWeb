@@ -49,7 +49,7 @@ Los grafos se pueden representar de diferentes maneras, dependiendo de la operac
 **Desventajas**:
 - No permite eliminar nodos fácilmente, ya que implicaría modificar toda la matriz.
 - Poco eficiente en grafos dispersos, ya que muchas posiciones estarán llenas de ceros.
-![[archivos/imagenes/Pasted image 20241027191347.png]]
+![](./archivos/imagenes/Pasted image 20241027191347.png)
 ### Lista de adyacencia
 - Cada nodo tiene asociada una lista enlazada que contiene los nodos con los que es adyacente.
   
@@ -59,25 +59,25 @@ Los grafos se pueden representar de diferentes maneras, dependiendo de la operac
 **Desventajas**:
 - Más compleja de manejar por el uso de punteros.
 - Ineficiente para encontrar todos los arcos que llegan a un nodo.
-![[archivos/imagenes/Pasted image 20241027191306.png]]
+![](./archivos/imagenes/Pasted image 20241027191306.png)
 ## Recorridos en Grafos
 
 ### Recorrido en anchura (BFS - Breadth-First Search)
 - Se comienza desde un nodo y se visitan todos sus nodos adyacentes. Luego se continúa con los adyacentes de esos nodos, y así sucesivamente.
 - Utiliza una **cola** para almacenar los nodos a visitar.
-![[archivos/imagenes/Pasted image 20241027184251.png]]
+![](./archivos/imagenes/Pasted image 20241027184251.png)
 ### Recorrido en profundidad (DFS - Depth-First Search)
 - A partir de un nodo, se recorre cada vértice adyacente hasta no encontrar más nodos no visitados.
 - Puede implementarse de manera **recursiva** o utilizando una **pila** como estructura auxiliar.
-![[archivos/imagenes/Pasted image 20241027190004.png]]
-![[archivos/imagenes/Pasted image 20241027190032.png]]
+![](./archivos/imagenes/Pasted image 20241027190004.png)
+![](./archivos/imagenes/Pasted image 20241027190032.png)
 ## Componentes conexas
 
 ### Componentes conexas en un grafo no dirigido
 1. Se realiza un recorrido desde cualquier vértice, almacenando los nodos visitados.
 2. Si todos los vértices fueron visitados, el grafo es conexo.
 3. Si no, los vértices visitados forman una componente conexa. Se repite el proceso con un vértice no visitado.
-![[archivos/imagenes/Pasted image 20241027190122.png]]
+![](./archivos/imagenes/Pasted image 20241027190122.png)
 ### Componentes fuertemente conexas en un dígrafo
 1. Se obtiene el conjunto de descendientes de un nodo. $D(n)$
 2. Se obtiene el conjunto de sus ascendientes. $A(n)$
@@ -86,11 +86,11 @@ $$G = D(n) \cap  A(n) \Longrightarrow \text {G es fuertemente conexo}$$
 $$G \neq D(n) \cap  A(n) \Longrightarrow \text {G no es fuertemente conexo}$$
 
 
-![[archivos/imagenes/Pasted image 20241027190143.png]]
-![[archivos/imagenes/Pasted image 20241027190733.png]]
+![](./archivos/imagenes/Pasted image 20241027190143.png)
+![](./archivos/imagenes/Pasted image 20241027190733.png)
 ## Matriz de caminos
 - Se obtiene multiplicando la matriz de adyacencia por sí misma repetidamente. La matriz resultante indica la existencia de caminos de diferente longitud entre nodos.
-![[archivos/imagenes/Pasted image 20241027190815.png]]
+![](./archivos/imagenes/Pasted image 20241027190815.png)
 - En un grafo fuertemente conexo, todas las entradas de la matriz de caminos tienen un 1 excepto la diagonal principal.
 
 ## Puntos de articulación
@@ -98,16 +98,16 @@ Un **punto de articulación** es un nodo que, si se elimina junto con sus arcos,
 
 ### Algoritmo para encontrar puntos de articulación
 1. Se realiza un recorrido en profundidad, numerando los nodos.
-![[archivos/imagenes/Pasted image 20241027190947.png]]
-![[archivos/imagenes/Pasted image 20241027191024.png]]
+![](./archivos/imagenes/Pasted image 20241027190947.png)
+![](./archivos/imagenes/Pasted image 20241027191024.png)
 2. Para cada nodo $v$, se calcula $Bajo(v)$, que es el mínimo de:
    - Su número $Num(v)$.
    - El menor número de los vértices alcanzados por aristas hacia atrás.
    - El menor valor de $Bajo$ entre sus descendientes.
-![[archivos/imagenes/Pasted image 20241027191108.png]]
+![](./archivos/imagenes/Pasted image 20241027191108.png)
 3. Un nodo es punto de articulación si:
    - Es la raíz del recorrido y tiene al menos dos hijos.
    - Tiene un hijo $u$ tal que $Num(v) \leq Bajo(u)$.
 
-![[archivos/imagenes/Pasted image 20241027191148.png]]
-![[archivos/imagenes/Pasted image 20241027191223.png]]
+![](./archivos/imagenes/Pasted image 20241027191148.png)
+![](./archivos/imagenes/Pasted image 20241027191223.png)

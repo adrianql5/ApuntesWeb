@@ -7,10 +7,10 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 Una vez realizado el ensamblado de vértices, se pasa al proceso de **rasterizado**, en el que se transforman los objetos que se van a proyectar en una matriz de **píxeles** que se mostrarán por pantalla. Así se obtiene la **correspondencia**de los **puntos de los objetos** con los **puntos de la pantalla**. Esta información compone un **fragmento**.
 
 En la **pipeline fija (OpenGl 1.2)** hay poco control sobre el proceso de rasterizado e interpolación .
-![[Pasted image 20250426103637.png]]
+![](./Pasted image 20250426103637.png)
 
 En el **retained mode (Opengl 3.3)** el **fragment shader** permite trabajar a muy bajo nivel sobre los fragmentos.
-![[Pasted image 20250426103811.png]]
+![](./Pasted image 20250426103811.png)
 
 
 # 5.1 La Luz
@@ -29,7 +29,7 @@ $$𝐼(λ) = I_R(λ) + I_V(λ) + I_A(λ)$$
 
 Por esta razón, en las imágenes de síntesis **se caracteriza un color** por medio de sus **componentes RGB**. Existen **modelos más precisos** que realizan una discretización mucho más fina del espectro luminoso.
 
-![[Pasted image 20250426104850.png]]
+![](./Pasted image 20250426104850.png)
 
 
 ## 5.1.2 Teoría del Color: Colores Aditivos
@@ -39,11 +39,11 @@ La **teoría de los colores aditivos** se basa en la combinación de luz para cr
 - La **ausencia total** produce negro
 
 En OpenGl los colores de los vértices se especifican con `glCOlor3f(R,G,B)`, con valores para los componentes RGB en un rango [0,1] o [0,255]. OpenGl usa la síntesis aditiva porque los **monitores y pantallas** funcionan emitiendo luz en estos tres colores primarios.
-![[Pasted image 20250426105319.png]]
+![](./Pasted image 20250426105319.png)
 ## 5.1.3 Interpolación del Color
 En Opengl, se interpola el **color de las caras** a partir del color de los **vértices** que las forman. Por ejemplo, para obtener la siguiente imagen, se dibujan 3 triangulos y la intensidad final es la suma de los tres.
 
-![[Pasted image 20250426105523.png]]
+![](./Pasted image 20250426105523.png)
 
 # 5.2 Modelos de Iluminación
 Hay dos grandes tipos de modelos de iluminación: 
@@ -106,7 +106,7 @@ Donde:
 - $I_a$: Intensidad ambiental en todo punto del espacio.
 - $K_a$: Coeficiente de reflexión ambiental del objeto (**entre 0 y 1**). Un valor de 1 significa que el objeto refleja toda la luz ambiental.
 
-![[Pasted image 20250401125247.png]]
+![](./Pasted image 20250401125247.png)
 ### Luz Difusa o Luz Lambert
 Está asociada a un **foco de luz**.
 Su variación implica cambios de intensidad o de posición del foco.
@@ -125,7 +125,7 @@ Donde
 - $\vec L$: Vector de iluminación (unitario).
 
 
-![[Pasted image 20250401125322.png]]
+![](./Pasted image 20250401125322.png)
 
 ### Luz Especular o Luz de Phong
 Está asociada a un **foco intenso de luz**.
@@ -150,7 +150,7 @@ Donde:
 - $\vec V$: Vector que apunta al observador.
 
 
-![[Pasted image 20250401125425.png]]
+![](./Pasted image 20250401125425.png)
 
 ### Luz Emisiva
 Da apariencia de que el objeto emite luz.
@@ -174,6 +174,6 @@ I_B &= I_{aB} \cdot K_a \cdot C_{dB} + I_{LB} \cdot f_{at} \cdot \left( K_d \cdo
 $$
 
 # 5.4 Resumen
-![[Pasted image 20250426114239.png]]
+![](./Pasted image 20250426114239.png)
 
 

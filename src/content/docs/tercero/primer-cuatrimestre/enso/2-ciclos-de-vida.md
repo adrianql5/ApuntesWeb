@@ -10,11 +10,11 @@ Un **ciclo de vida** es una sucesión de etapas por las que pasa el software des
 La **elección de un ciclo de vida** se realiza de acuerdo con la naturaleza del proyecto, los métodos a usar, y los controles y entregas requeridos.
 
 # 2.2 Ciclo de vida en Cascada
-![[Pasted image 20251103134023.png]]
+![](./Pasted image 20251103134023.png)
 
 Es el ciclo más antiguo. Exige un enfoque sistemático y **secuencial** del desarrollo de software. Se dice que el modelo en cascada está guiado por documentos, ya que **nunca empieza la siguiente fase antes de que se presente el documento de la anterior.**
 
-![[Pasted image 20251103134147.png]]
+![](./Pasted image 20251103134147.png)
 
 ## 2.1.1 Fases
 1. **Ingeniería y análisis del sistema:** define las interralaciones del software con otros elementos del sistema más complejo en el que ese englobado; es decir, se asignan funciones del sistema al software. Por tanto, comprende los requisitos globales a nivel de sistema, mediante un análisis y diseño a alto nivel.
@@ -58,7 +58,7 @@ Resulta idóneo en **proyectos con un nivel alto de incertidumbre**, donde los r
 
 También es de especial interés en aplicaciones que presenten mucha interacción con el usuario, o algoritmos evolutivos. La aplicación no debe contar con una gran complejidad, o las ventajas de la construcción de prototipos se verán superadas por el esfuerzo de un prototipo que habrá que deshechar o modificar mucho. El cliente debe estar dispuesto a probar un prototipo.
 
-![[Pasted image 20251103213813.png]]
+![](./Pasted image 20251103213813.png)
 
 ## 2.3.2 Beneficios de los prototipos
 - Permiten probar la eficiencia en condiciones similares a las que existirán durante la utilización del sistema.
@@ -91,7 +91,7 @@ También es de especial interés en aplicaciones que presenten mucha interacció
 - Es imposible una **predicción de costes fiable**
 
 # 2.4 Ciclo de vida Incremental
-![[Pasted image 20251103214927.png]]
+![](./Pasted image 20251103214927.png)
 
 Combina elementos del **modelo lineal** en cascada con la **filosofía iterativa** construcción de prototipos. Para ello, se va creando el sistema software mediante incrementos, aportando nuevas funcionalidades o requisitos. De este modo el software ya no se ve como un producto con una fecha de entrega, sino como una **integración de sucesivos refinamientos**.
 
@@ -128,7 +128,7 @@ Con esta automatización, se reduce la duración de las fases del ciclo de vida 
 
 
 # 2.6 Modelo en Espiral
-![[Pasted image 20251103224556.png]]
+![](./Pasted image 20251103224556.png)
 
 Es un **modelo iterativo que combina las principales ventajas del modelo de ciclo de vida en cascada y el modelo de construcción de prototipos**. Su principal característica es incorporar el **análisis de riesgos** en el propio ciclo de vida, de modo que los prototipos son usados para reducir el riesgo, incluso permitiendo finalizar el proyecto antes de embarcarse en el desarrollo final so mp se considera viable.
 
@@ -167,7 +167,7 @@ Se definen un total de cuatro sectores:
 
 **Proceso de gestión de riesgo:** proceso destinado a modificar un riesgo, para reducir su impacto.
 
-![[Pasted image 20251104095543.png]]
+![](./Pasted image 20251104095543.png)
 
 ### Anticipación a los riesgos
 Consta de cuatro actividades:
@@ -186,4 +186,4 @@ Consta de cuatro actividades:
 
 - **Gestión de riesgos:** supervisar el desarrollo del proyecto continuamente, de forma que se detecten los riesgos tan pronto como aparezcan. Para ello, se definen indicadores cuantificables para cada riesgo, así como sus umbrales de alerta.
 
-![[Pasted image 20251104102026.png]]
+![](./Pasted image 20251104102026.png)

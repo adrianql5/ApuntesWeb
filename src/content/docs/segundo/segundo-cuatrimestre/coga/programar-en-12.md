@@ -56,7 +56,7 @@ int main(int argc, char** argv) {
 ![Double Buffering and Page Flipping (The Java™ Tutorials > Bonus >  Full-Screen Exclusive Mode API)](https://docs.oracle.com/javase/tutorial/figures/extra/fullscreen/doubleBuffering.gif)
 - RGBA-> red green blue y a es para la intensidad
 - Usamos el z-buffer-> que almacena información sobre que objetos están más alejados de la cámara, le damos como valor por defecto 1.0 al borrado de este buffer, si ponemos 0.0 no se verá casi ningún objeto.
-![[Pasted image 20250228223346.png]]
+![](./Pasted image 20250228223346.png)
 
 # 2 Modelado
 ## 2.1 Primitivas
@@ -66,7 +66,7 @@ Para especificar un vértice se usa `glVertex`, que puede tomar de 2 a 4 paráme
 
 Para delimitar los vértices se usa `glBegin(MACRO)` y `glEnd()`.
 
-![[Pasted image 20250228224206.png]]
+![](./Pasted image 20250228224206.png)
 >[!Nota]
 >Si se introduce un número incorrecto de vértices, se ignorarán los últimos sobrantes
 
@@ -74,7 +74,7 @@ Por defecto, un punto se dibuja como un píxel en la pantalla y una línea como 
 - El tamaño de los puntos se puede cambiar con `glPointSize(tamaño)` y el grosor de las líneas con `glLineWidth(grosor)`.
 - El color de los puntos se puede cambiar con `glColor3f(R,G,B)` 
 
-![[Pasted image 20250429184615.png]]
+![](./Pasted image 20250429184615.png)
 
 ``` c++
 #include <windows.h>
@@ -166,15 +166,15 @@ También existe la versión `Wire` en vez de `Solid`
 Hay dos posibles métodos para colocar los valores apropiados en la matriz de transformación:
 - Como la matriz se almacena como un **array de 16 elementos**, estos se pueden establecer **manualmente**. `glLoadMatrix(array)` para carga el `array` en la matriz activa.
 
-![[Pasted image 20250429205116.png]]
+![](./Pasted image 20250429205116.png)
 - La otra alternativa a estas funciones es usar las funciones de **transformación** (`glTranslatef`, `glRotatef`, `glScalef`). Las matrices $T$, $R$ y $S$ que generan estas funciones se van multiplicando sobre la matriz activa. El productos de matrices **no es conmutativo**, así que hay que tener cuidado con el orden en el que se usan estas funciones: **la primera función en aplicarse será la última en escribirse en el código**.
 	- Los movimientos que depende unos de otros se pueden heredar consecutivamente. Para ello, se almacenan versiones de la matriz de transformación en una **pila**, de manera que **la actual será la que está más arriba**.
 	- `glPushMatrix()`: almacena en la pila una copia de la matriz activa en la segunda posición de la pila
 	- `glPopMatrix()`: elimina de la pila la matriz que está en la primera posición.
 
-![[Pasted image 20250429210038.png]]
-![[Pasted image 20250429210148.png]]
-![[Pasted image 20250429210228.png]]
+![](./Pasted image 20250429210038.png)
+![](./Pasted image 20250429210148.png)
+![](./Pasted image 20250429210228.png)
 
 # 4 Visión
 En OpenGL 1.2 el trabajo sobre la cámara (la view matrix y projection matrix) se reúne en la **matriz de proyección** `GL_PROJECTION`.
@@ -190,7 +190,7 @@ En OpenGL 1.2 el trabajo sobre la cámara (la view matrix y projection matrix) s
 	- Los  parámetros delimitan el frustrum, que tiene forma de cubo (por defecto (-1,1,-1,1,-1,1)).
 	- Una vez definido el frustrum, se pueden generar las diferentes proyecciones multivista moviendo la cámara.
 
-![[Pasted image 20250429212153.png]]
+![](./Pasted image 20250429212153.png)
 
 - `gluPerspective(fovy, aspect, near, far)`: para realizar una **proyección perspectiva**
 	- `fovy` es el ángulo de de apertura del frustrum, normalmente 45 o 60
@@ -198,8 +198,8 @@ En OpenGL 1.2 el trabajo sobre la cámara (la view matrix y projection matrix) s
 	- `near` determina la distancia desde la cámara hasta el PP.
 	- `far` determina la distancia desde la cámara hasta el fondo del frustrum
 
-![[Pasted image 20250429212233.png]]
-![[Pasted image 20250429212203.png]]
+![](./Pasted image 20250429212233.png)
+![](./Pasted image 20250429212203.png)
 
 
 # 5 Iluminación (crazy shi)
@@ -231,7 +231,7 @@ float direccion[4]={1,1,1,0}
 glLightfv(GL_LIGHT0, GL_POSITION, direccion)
 ```
 
-![[Pasted image 20250429213822.png]]
+![](./Pasted image 20250429213822.png)
 
 ### Luces Locales
 Se definen como las direccionales, pero el cuarto elemento del vector vale 1.
@@ -243,18 +243,18 @@ glLightfv(GL_LIGHT_0, GL_POSITION, posicion)
 glLightfv(GL_LIGHT_0, GL_DIRECTION, direccion)
 ```
 
-![[Pasted image 20250429214039.png]]
+![](./Pasted image 20250429214039.png)
 
 ### Focos de luz
 Se definen als locales pero con una determinada **apertura**.
 `glLightf(GL_LIGHT_0, GL_SPOT_CUTOFF, angulo)`, angulo entre 0 y 180.
-![[Pasted image 20250429214152.png]]
+![](./Pasted image 20250429214152.png)
 
 ## 5.2 Propiedades de la Luz
 Para especificar las propiedades de la luz:
 - `glLightf(Luz, Parámetro, Valor)` (escalar)
 - `glLightfv(Luz, Parámetro, PunteroAVector)` (vector)
-![[Pasted image 20250429214417.png]]
+![](./Pasted image 20250429214417.png)
 
 ## 5.6 Propiedades de los Materiales
 El modelo de iluminación de Opengl aproxima el **color** de un material en función de la luz que **indice** sobre él y la que es capaz de **reflejar**. 
@@ -273,10 +273,10 @@ Las propiedades sobre la capacidad de **reflexión**:
 Para especificar las propiedades del material en cada polígono:
 - `void glMaterial{if}{v}(Cara, parámetro, punteroAVector)` 
 
-![[Pasted image 20250429215449.png]]![[Pasted image 20250429215513.png]]
+![](./Pasted image 20250429215449.png)![](./Pasted image 20250429215513.png)
 
 ## 5.7 Cálculo del color en cada Vértice
-![[Pasted image 20250429215831.png]]
+![](./Pasted image 20250429215831.png)
 
 ## 5.8 Sombreado Plano
 **Cada cara** tiene una **única normal** y cada uno de los puntos que la forman tiene el **mismo color**. La normal de cada cara se puede **calcular** a partir de los vértices o se puede **especificar** para un conjunto de ellos. Es el modelo de iluminación más **simple y eficiente**.
@@ -287,8 +287,8 @@ Para especificar las propiedades del material en cada polígono:
 **Cada vértices** tiene su **propia normal**y el color de cada punto de las caras se calcula mediante **interpolación bilineal de los colores de de sus vértices**. La normal de cada vértice se calcula por defecto como la **media de las normales de las caras** (calculadas a partir de los vértices que las forman) de las que forma parte ese vértice. También se puede **especificar para cada vértice**. Da un efecto de sombreado suave más **realista** para superficies **curvas**.
 `glEnable(GL_SMOOTH)`
 `glShadeModel(GL_SMOOTH)` 
-![[Pasted image 20250429220704.png]]
-![[Pasted image 20250429220711.png]]
+![](./Pasted image 20250429220704.png)
+![](./Pasted image 20250429220711.png)
 
 ### Phong Shading
 **Cada vértice** tiene su **propio normal** y la **normal de cada punto de las caras** se calcula mediante **interpolación bilineal**. Es la más **realista** de todas, pero consume más **recursos**. OpenGL **no la implementa** directamente, es **responsabilidad del programador** interpolar las normales y asociarlas a todos los puntos

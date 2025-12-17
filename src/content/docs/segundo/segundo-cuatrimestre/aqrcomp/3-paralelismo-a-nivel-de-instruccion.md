@@ -11,9 +11,9 @@ El **desenrollamiento** de bucles consiste en entrelazar la ejecución de instru
 
 (Cuando en los enunciados pone planificación de lazo se refiere a que reordenemos o desenrollemos el código que nos dan).
 
-![[Pasted image 20250529205205.png]]
-![[Pasted image 20250529205229.png]]
-![[Pasted image 20250529205253.png]]
+![](./Pasted image 20250529205205.png)
+![](./Pasted image 20250529205229.png)
+![](./Pasted image 20250529205253.png)
 
 
 # 3.2 Emisión Múltiple
@@ -34,10 +34,10 @@ Usan **planificación estática** donde el **compilador** debe **eliminar alguno
 
 
 
-![[Pasted image 20250428222902.png]]
+![](./Pasted image 20250428222902.png)
 
 Para poder hacer la emisión dual debemos añadir hardware adicional:
-![[Pasted image 20250428222829.png]]
+![](./Pasted image 20250428222829.png)
 
 Las arquitecturas **VLIW** (Very Long Instruction Word) ven los paquetes como una **instrucción muy larga** por ejemplo:
 - Una operación con enteros o una operación de salto
@@ -48,9 +48,9 @@ Es necesario encontrar paralelismo estáticamente ya que no hay hardware de dete
 
 Se forman paquetes de emisión con una instrucción **ALU** o un **salto** seguida de una instrucción de **load** o **store**. Las instrucciones no utilizadas se rellenan con **NOP**.
 
-![[Pasted image 20250529214216.png]]
+![](./Pasted image 20250529214216.png)
 
-![[Pasted image 20250601161242.png]]
+![](./Pasted image 20250601161242.png)
 # 3.4 Emisión Múltiple Dinámica
 La **emisión múltiple estática** la **cpu** examina el flujo de instrucciones y selecciona las que se deben emitir en cada ciclo. Los procesadores que la realizan denominan **procesadores superescalares**.
 
@@ -61,7 +61,7 @@ Evita la necesidad de **planificación** del **compilador**, ya que se realiza p
 
 La **planificación dinámica** consiste en **reordenar** las instrucciones para reducir las paradas a la vez que se mantiene el flujo de datos del programa. Puede gestionar casos en los que las **dependencias no** se conocen en **tiempo de compilación**.
 
-![[Pasted image 20250529214733.png]]
+![](./Pasted image 20250529214733.png)
 
 **Motivos para hacer planificación dinámica:**
 - No todas las paradas son **predecible** (por ejemplo, los fallos de caché).
@@ -70,7 +70,7 @@ La **planificación dinámica** consiste en **reordenar** las instrucciones para
 - **Instruction commit:** proceso que se produce cuando una instrucción actualiza su resultado en el **archivo de registros**.
 
 Tenemos el siguiente **camino de datos:**
-![[Pasted image 20250530095222.png]]
+![](./Pasted image 20250530095222.png)
 
 - **Lectura de múltiples instrucciones en orden**
 - **Decodificación de múltiples instrucciones en orden**
@@ -79,7 +79,7 @@ Tenemos el siguiente **camino de datos:**
 	- Si los operandos fuente de la instrucción están disponibles en el **banco de registros** o en el **buffer de terminación/reodenamiento**, se copian en la **estación de reserva**, y se realiza la **emisión de la instrucción** (envío a una unidad de ejecución) en cuanto la unidad está disponible.
 	- Si falta algún operando fuente en la instrucción (por una dependencia), la instrucción queda retenida en la estación de reserva hasta que el dato está disponible; cuando la unidad funcional correspondiente produce el dato esperado, se copia en la estación de reserva y la instrucción queda lista para su ejecución.
 		El renombrado de registros se realiza mediante **estaciones de reserva** (RS), que tienen una **entrada** por cada **instrucción** en **ejecución**. 
-		![[Pasted image 20250429115334.png]]
+		![](./Pasted image 20250429115334.png)
 		
 		Campos de una entrada en la RS:
 		- $B$: indica si la entrada está ocupada por una instrucción o libre
@@ -114,10 +114,10 @@ Algoritmo diseñado para permitir a un procesador ejecutar instrucciones fuera d
 - **WAW (Write After Write):** Se evita con renombramiento de registros.
 - **WAR (Write After Read):** Se evita porque las instrucciones no escriben directamente hasta la fase final.
 
-![[Pasted image 20250429121045.png]]
-![[Pasted image 20250530103547.png]]
+![](./Pasted image 20250429121045.png)
+![](./Pasted image 20250530103547.png)
 
-![[Pasted image 20250601175601.png]]
+![](./Pasted image 20250601175601.png)
 
 >[!Nota] Manda huevos ir hasta Alemania para tener una explicación decente
 > https://www.youtube.com/watch?v=YH2fFu-35L8
@@ -155,7 +155,7 @@ Posibles estados para una instrucción:
 	- Si el destino es un registro: coincide con **completada**
 	- Si el destino es la memoria: se escribe en la caché de datos
 
-![[Pasted image 20250429123014.png]]
+![](./Pasted image 20250429123014.png)
 
 
 

@@ -12,8 +12,8 @@ La **abstract factory** aporta una **interfaz** para crear **familias de objetos
 - Configurar un sistema escogiendo una sola **familia de productos** entre varias.
 - Si cada **familia** está diseñada para el **uso conjunto de sus productos**.
 - Para proporcionar **bibliotecas de productos**de los que sólo se revelan sus interfaces.
-![[Pasted image 20250423161150.png]]
-![[Pasted image 20250423161202.png]]
+![](./Pasted image 20250423161150.png)
+![](./Pasted image 20250423161202.png)
 
 ## Participantes:
 - **FabricaAbstracta**: Declara una interfaz para operaciones que crean produtos abstractos. 
@@ -23,7 +23,7 @@ La **abstract factory** aporta una **interfaz** para crear **familias de objetos
 - **Cliente**: Usa interfaces de clases abstractas
 
 ## Estructura
-![[Pasted image 20250404174537.png]]
+![](./Pasted image 20250404174537.png)
 ## Ventajas e Inconvenientes
 - **Consistencia** entre productos de una familia.
 - Fácil de **sustituir familias enteras**.
@@ -36,7 +36,7 @@ La **abstract factory** aporta una **interfaz** para crear **familias de objetos
 El **factory method** define una **interfaz** para **crear objetos** cediendo a las **subclases** la decisión sobre **qué clase instanciar**. Se usa cuando: 
 - Una clase no puede prever la clase de objetos que debe crear.
 
-![[Pasted image 20250423161447.png]]
+![](./Pasted image 20250423161447.png)
 
 ## Participantes:
 - **Producto:** define la interfaz de los objetos creados
@@ -45,7 +45,7 @@ El **factory method** define una **interfaz** para **crear objetos** cediendo a 
 - **CreadorConcreto:** Redefine el método de fabricación para devolver una instancia de **ProductoConcreto.**
 
 ## Estructura
-![[Pasted image 20250404173912.png]]
+![](./Pasted image 20250404173912.png)
 
 ## Ventajas y Desventajas
 - Código desacoplado.

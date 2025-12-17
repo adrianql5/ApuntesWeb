@@ -26,7 +26,7 @@ $$A = (Q, \Sigma, \delta, q_0, F)$$
 - $F$: Donde ganamos (doble círculo).
 
 
-![[Pasted image 20251009161639.png]]
+![](./Pasted image 20251009161639.png)
 
 
 # 2.2 Autómata Finito No Determinista (AFN)
@@ -46,7 +46,7 @@ $$\delta: Q \times (\Sigma \cup \{\varepsilon\}) \to 2^Q$$
 - **Traducción:** La función devuelve un **conjunto de estados** (potencia de $Q$), no un estado único. Puede devolver un conjunto vacío $\emptyset$ (callejón sin salida).
 
 
-![[Pasted image 20251009161852.png]]
+![](./Pasted image 20251009161852.png)
 
 **En el AFN,** puedes estar en varios estados a la vez y elegir entre múltiples caminos.
 
@@ -61,10 +61,10 @@ Para resolver ejercicios de conversión, necesitas dominar la **Clausura-ε**.
 - **Pregunta:** "¿A dónde puedo llegar desde aquí sin gastar ni una moneda (símbolo)?"
 - **Regla:** La `clausura-ε(q)` siempre incluye al propio estado $q$ más cualquier estado alcanzable solo con flechas $\varepsilon$.
 
-![[Pasted image 20251207211118.png]]
+![](./Pasted image 20251207211118.png)
 
 La clausura de la imagen anterior sería: 
-![[Pasted image 20251207211142.png]]
+![](./Pasted image 20251207211142.png)
 
 **Algoritmo para sacar la clausura:**
 1. Sitúate en un estado (ej: $q_0$).
@@ -94,7 +94,7 @@ Como el AFN puede estar en varios sitios a la vez, **cada estado del nuevo AFD s
 4. **Estados Finales:** Cualquier estado del AFD (A, B, C...) que contenga **al menos un** estado final del AFN original, se convierte en estado final.
 
 **Ejemplo práctico:**
-![[Pasted image 20251020130206.png]]
+![](./Pasted image 20251020130206.png)
 
 # 2.5 Minimización de AFD
 **Objetivo:** Encontrar el autómata más pequeño posible que haga exactamente lo mismo. Elimina redundancia.
@@ -116,5 +116,5 @@ Como el AFN puede estar en varios sitios a la vez, **cada estado del nuevo AFD s
 
 5. Reconstrucción: Cada grupo final es un único estado en el autómata minimizado.
 
-![[Pasted image 20251020130827.png]]
+![](./Pasted image 20251020130827.png)
 

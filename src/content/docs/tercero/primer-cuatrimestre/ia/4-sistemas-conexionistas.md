@@ -19,11 +19,11 @@ Una neurona biológica es una célula especializada que:
 - Si la suma de señales supera un umbral, genera un **potencial de acción**
 - Transmite la señal a otras neuronas a través del **axón**
 
-![[Pasted image 20251102174452.png]]
+![](./Pasted image 20251102174452.png)
 
 **Concepto clave**: El potencial de acción es una respuesta "todo o nada": o la neurona se activa completamente, o no se activa.
 
-![[Pasted image 20251102174623.png]]
+![](./Pasted image 20251102174623.png)
 
 
 ## 2.2 La Neurona Artificial: Modelo Simple
@@ -41,7 +41,7 @@ La neurona artificial es una abstracción matemática que replica este comportam
 y = f(Σ(wᵢ × xᵢ) + bias)
 ```
 
-![[Pasted image 20251102174752.png]]
+![](./Pasted image 20251102174752.png)
 
 
 ## 4.3 Tipos de Neuronas Artificiales
@@ -93,14 +93,14 @@ El **bias** es un término adicional que permite ajustar el umbral de activació
 y = f(Σ(wᵢ × xᵢ) + b)
 ```
 
-![[Pasted image 20251102175036.png]]
+![](./Pasted image 20251102175036.png)
 
 **Con bias integrado** (técnica común):
 - Se añade una entrada adicional x₀ = 1
 - Su peso asociado w₀ actúa como bias
 - Simplifica la notación: y = f(Σ(wᵢ × xᵢ)) donde i va de 0 a n
 
-![[Pasted image 20251102175126.png]]
+![](./Pasted image 20251102175126.png)
 
 
 # 4.5 Arquitecturas de Redes Neuronales
@@ -123,9 +123,9 @@ y = f(Σ(wᵢ × xᵢ) + b)
 
 **Algoritmo de entrenamiento**: Backpropagation (1986)
 
-![[Pasted image 20251102175342.png]]
+![](./Pasted image 20251102175342.png)
 
-![[Pasted image 20251102180300.png]]
+![](./Pasted image 20251102180300.png)
 ## 4.5.3 Redes Recurrentes
 **Características**:
 - Contienen conexiones hacia atrás (ciclos)
@@ -134,9 +134,9 @@ y = f(Σ(wᵢ × xᵢ) + b)
 
 **Ejemplo**: Redes de Hopfield (1982) - funcionan como memoria asociativa
 
-![[Pasted image 20251102175412.png]]
+![](./Pasted image 20251102175412.png)
 
-![[Pasted image 20251102180310.png]]
+![](./Pasted image 20251102180310.png)
 
 # 4.6 Características de las RNA
 1. **Estructura paralela y distribuida**:
@@ -286,23 +286,23 @@ Espero que esta reestructuración te ayude a comprender mejor los sistemas conex
 ### Descripción del problema
 Detectar números dibujados para decir a que carácter se corresponden. Nuestro cerebro nada más ve un 3 dibujado sabe que es un 3, pero a un ordenador esto le puede costar un poco más. Por ello partimos de una cuadrícula de píxeles con diferentes valores de iluminación.
 
-![[Pasted image 20251103104552.png]]
+![](./Pasted image 20251103104552.png)
 
 ## Cómo aborda la Red Neuronal el Problema
 Empleando la estructura multicapa
 
-![[Pasted image 20251103104724.png]]
+![](./Pasted image 20251103104724.png)
 
 Para ellos tenemos las neuronas de entrada, que se corresponden a cada uno de los píxeles anteriores. Estas neuronas toman un valor entre 0 y 1 y son encargadas de transmitir su valor a las neuronas de cada capa intermedia. Para ello podemos pensar el problema subdividiendo lo qué es un número para identificar patrones. Por ejemplo un 8 sería un círculo arriba un círculo abajo: 
 
-![[Pasted image 20251103105102.png]]
+![](./Pasted image 20251103105102.png)
 
-![[Pasted image 20251103105122.png]]
+![](./Pasted image 20251103105122.png)
 
 Y podemos también subdividir este subpatrón en otro más pequeño, de forma que las neuronas de la segunda capa lo detecten. 
 
 Cada una de las líneas que unen cada nodo son los pesos y toman ciertos valores para que se activen las neuronas. Nuestro objetivo es que en cada capa se activen determinadas neuronas, la función que determina si se activa o no no es más que la suma de cada termino de entrada por su correspondiente peso. 
 
-![[Pasted image 20251103105925.png]]
+![](./Pasted image 20251103105925.png)
 
 Y para calcular esos pesos, debemos entrenar a la red neuronal, usando el método del descenso gradiente. Esto nos permitirá ir modificando los pesos para que de una solución válida mientras que la red siga fallando (por ello tenemos un conjunto de datos de entrenamiento y uno de prueba). La forma de optimizar estos pesos se verá en el siguiente tema.

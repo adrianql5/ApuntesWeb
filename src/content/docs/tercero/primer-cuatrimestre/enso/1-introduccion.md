@@ -28,7 +28,7 @@ El software se degrada, pero se desarrolla y se reutiliza
 - **No se fabrica, se desarrolla:** esto implica que el coste de desarrollo de la primera unidad es superior a los costes de producción de otras campos, pero el coste unitario decrece hasta hacerse casi imperceptible en comparación con cualquier otra ingeniería.
 - **No se estropea, se degrada:** a diferencia de otros productos que empiezan con una alta tasa de fallos y la reducen hasta que empieza a crecer otra vez, el software ideal solo tiene la primera pendiente: empieza con una alta tasa de fallos y la  reduce hasta estabilizarse para siempre. Pero se degrada, por lo que con el tiempo y con las actualizaciones y mejoras necesarios, va aumentando y reduciendo su tasa de fallos.
 
-![[Pasted image 20250920191706.png]]
+![](./Pasted image 20250920191706.png)
 
 Además, **se puede desarrollar a medida** (personalizado) y se distinguen:
 - **Productos genéricos:** software enlatado, producido por una organización para introducir en el mercado dirigido a clientes. Mucho gasto

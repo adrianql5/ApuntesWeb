@@ -37,14 +37,14 @@ Son los medios físicos por los que se realizan las transmisiones. Cables o tran
 ## Routers (rutadores o encaminadores)
 Dispositivos que interconectan los enlaces. Los datos llegan al router por uno de los enlaces y este los reenvía a través de otros. Así tenemos una ruta entre origen y destino
 
-![[archivos/imagenes/Pasted image 20240926205653.png]]
+![](./archivos/imagenes/Pasted image 20240926205653.png)
 
 ## Protocolos
 Internet funciona porque todos sus componentes ejecutan los mismos protocolos, es decir, siguen las mismas reglas y el mismo formato para las comunicaciones. Distinguimos 2 tipos de protocolos: 
 - **Protocolos básicos**: necesarios para que funcione Internet (*TCP/IP*)
 - **Protocolos de aplicación:** necesarios para que funcionen ciertas apps. Como *HTTP* (*web*), **SMTP** (*correo*), etc.
 
-![[archivos/imagenes/Pasted image 20241108204812.png]]
+![](./archivos/imagenes/Pasted image 20241108204812.png)
 
 ## Proveedores de Internet (ISP)
 Internet está operado por *numerosas compañías*. En el caso de Internet, distinguimos los siguientes proveedores de servicios de Internet (**ISP**):
@@ -95,7 +95,7 @@ UDP es ideal para aplicaciones donde la **velocidad** es más importante que la 
 # 1.3 Redes de Conmutación de Circuitos (CC)
 En una red de este tipo, antes de transmitir los datos hay una fase de conexión en la que se **reservan los recursos hardware** que se usaran. Estos quedan reservados y no pueden ser utilizados por otra transmisión. Durante la **fase de conexión** se establece la **ruta**. La **transmisión** finaliza con una fase de **desconexión** que libera a todos los recursos.
 
-![[../BASES DE DATOS/Archivos/imagenes/Pasted image 20240928200143.png]]
+![](./../BASES DE DATOS/Archivos/imagenes/Pasted image 20240928200143.png)
 
 Tenemos los siguientes circuitos conmutados:
 - **Sin multiplexado:** por cada enlace solo se puede realizar **una transmisión** de cada vez. 
@@ -103,19 +103,19 @@ Tenemos los siguientes circuitos conmutados:
 
 ## 1.3.1 Multiplexado por División en Frecuencia (DFM).
 
-![[archivos/imagenes/Pasted image 20240928201433.png]]
+![](./archivos/imagenes/Pasted image 20240928201433.png)
 
 Por un **mismo enlace** se pueden enviar varias transmisiones si **modulamos** a una frecuencia distinta cada una de ellas. Por ejemplo las transmisiones por radio.
 En los **receptores**, las distintas **frecuencias** se pueden separar mediante **filtros**:
 
-![[archivos/imagenes/Pasted image 20240928201049.png]]
+![](./archivos/imagenes/Pasted image 20240928201049.png)
 
 ## 1.3.2 Multiplexado por división en tiempo (TDM)
-![[archivos/imagenes/Pasted image 20240928201459.png]]
+![](./archivos/imagenes/Pasted image 20240928201459.png)
 
 Se asigna **periódicamente** una **ranura de tiempo** a cada transmisión. Una vez completado un ciclo (*marco*) se comienza de nuevo.
 
-![[archivos/imagenes/Pasted image 20240928201224.png]]
+![](./archivos/imagenes/Pasted image 20240928201224.png)
 
 Las **redes de conmutación de circuitos** son **derrochadoras** puesto que reservan recursos aunque no los vayan a usar.
 
@@ -124,7 +124,7 @@ Las **redes de conmutación de circuitos** son **derrochadoras** puesto que rese
 
 Los **routers** funcionan como **conmutadores de paquetes**, usualmente operando mediante almacenamiento y reenvío. Cuando el paquete llega al router, se procesa y almacena en la **cola de salida** hasta que le llega el turno para pasar al enlace (*siguiente router*). **Si la cola se llena, se descarta el paquete**.
 
-![[archivos/imagenes/Pasted image 20240928202058.png]]
+![](./archivos/imagenes/Pasted image 20240928202058.png)
 
 ## 1.4.1 Retardo
 Componentes del **retardo:**
@@ -170,14 +170,14 @@ Razones para la **segmentación:**
 - Una **transmisión** no satura la red con mensajes enormes, sino que da oportunidad a otras transmisiones para que **intercalen** sus paquetes.
 - En caso de **errores** en un paquete, solo hay que transmitir el paquete con errores.
 
-![[archivos/imagenes/Pasted image 20241002092759.png]]
+![](./archivos/imagenes/Pasted image 20241002092759.png)
 
 ## 1.4.4 Redes de Datagramas
 En las **redes de datagramas** cada paquete se maneja de forma independiente. No se establece ninguna conexión antes de que los datos sean enviados. 
 
 **Cada paquete** tiene en su **cabecera** la dirección **IP de destino**. Cuando llega a un router, este leer la dirección y decir por qué camino enviarlo, colocándolo en en la **cola de salida más adecuada**.  Esto se conoce como **encaminamiento** y se usa una **tabla de rutas** para decidir a qué cola se debe enviar el paquete. Estas tablas se actualizan continuamente para reflejar los cambios en la red. Los routers además **no almacenan ninguna información** sobre los paquetes anteriores, por lo que paquetes de **la misma transmisión** pueden seguir rutas **diferentes** y podrían llegar al destino desordenados.
 
-![[archivos/imagenes/Pasted image 20240928204914.png]]
+![](./archivos/imagenes/Pasted image 20240928204914.png)
 
 Si se cae un enlace de la red, los paquetes pueden ser **redirigidos** por otras rutas, sin embargo, no hay garantía de que los paquetes lleguen en el **orden correcto** o que todos lleguen. Son ideales para redes **grandes y heterogéneas** como **Internet**, donde es difícil planificar una ruta fija debido a la complejidad de la red.
 
@@ -186,12 +186,12 @@ En las **redes de circuitos virtuales**, se establece una **conexión lógica** 
 
 Se necesita **una solicitud de conexión** por parte del **host origen** antes de comenzar a enviar datos, tras esto, la red **planifica una ruta** hacia el destino y asigna **un número de circuito virtual** a esa ruta. Los paquetes van a llevar ese **número de circuito virtual en la cabecera**, y los routers usarán ese número para dirigir a los paquetes, por lo que todos los paquetes de la **misma transmisión** seguirán el mismo camino (*a diferencia de la red de datagramas que iban todos a su bola*). Finalmente se produce la **solicitud de desconexión** y se liberan los recursos asociados a esa transmisión.
 
-![[archivos/imagenes/Pasted image 20240929132100.png]]
+![](./archivos/imagenes/Pasted image 20240929132100.png)
 
 El número de **circuito virtual** puede cambiar de una enlace a otro, lo que permite **reutilizar números de circuitos virtuales** en diferentes enlaces, lo que ahorra espacio en las cabeceras de los paquetes y nos evita **tener que mantener una tabla global** con todos los circuitos virtuales de la red. Cada routes solo necesita saber qué números de circuito son válidos en los enlaces locales.
 
-![[archivos/imagenes/Pasted image 20240929132525.png]]
-![[archivos/imagenes/Pasted image 20240929133447.png]]
+![](./archivos/imagenes/Pasted image 20240929132525.png)
+![](./archivos/imagenes/Pasted image 20240929133447.png)
 
 Ofrece una **ruta fija** para todos los paquetes, por lo que **llegan en orden y no se pierden**. Es más fiable para ciertas aplicaciones. Sin embargo, no es tan flexible como las redes de datagramas. Si algún enlace en la ruta falla, **toda la transmisión se ve afectada**. Son más adecuadas para redes más **pequeñas y controladas** donde se requiere mayor fiabilidad y velocidad en las transmisiones.
 
@@ -211,7 +211,7 @@ Ofrece una **ruta fija** para todos los paquetes, por lo que **llegan en orden y
 Todos los **host** reciben las transmisiones pero solo la procesa el **destinatario**. La **wifi** es un ejemplo.
 Internet es una red de **datagramas**, así los especifica **IP** (*TCP/IP*). Sin embargo algunas capas de internet funcionan con otro tipo de tecnología: **conmutación de circuitos, circuitos virtuales o difusión**.
 
-![[archivos/imagenes/Pasted image 20240929133820.png]]
+![](./archivos/imagenes/Pasted image 20240929133820.png)
 
 # 1.6 Acceso a Internet
 EL accesos **residencial a Internet** se puede hacer de 4 formas:
@@ -224,25 +224,25 @@ El **acceso empresarial** se suele hacer mediante redes locales *Ethernet, Wifi*
 ## 1.6.1 Módem Telefónico
 Usa la **línea telefónica** como si la transmisión a Internet fuese una llamada de voz normal. Primero llama al número telefónico del **ISP**(*Internet Service Provider*) y una vez establece la conexión convierte la señal digital en una analógica modulada. Esto se llama **modulación**: 
 
-![[archivos/imagenes/Pasted image 20240929134602.png]]
+![](./archivos/imagenes/Pasted image 20240929134602.png)
 
 EL **receptor** realiza la operación contraria, **demodulación**. **Módem**: **modular-demodular**.
 El problema es que las señales de voz que usa el sistema telefónico tienen **ancho de banda de frecuencia estrecha**. Como este ancho de banda solo puede conseguirse una velocidad de 50 kbps mediante modulación, era muy lento. Se conectaba el ordenador a la línea telefónica y las ondas transportaban la información.
 ## 1.6.2 ADSL
 **Línea digital asimétrica del suscriptor**. Trata de **aprovechar todo el ancho de banda** en frecuencias del cable que conecta nuestra casa con la **central telefónica**. Hay que tener en cuenta que en las llamadas la capacidad de este cable es desaprovechada (*solo usamos los primeros 4KHz del ancho de banda aprox de 1MHz*):
 
-![[archivos/imagenes/Pasted image 20240929135241.png]]
+![](./archivos/imagenes/Pasted image 20240929135241.png)
 
 Usa **multiplexión por división en frecuencia**, dividiendo el ancho de banda en 3 canales. EL primero transmite la voz telefónica, el segundo para el envío de Internet (*subida*) y el tercero para la recepción(*bajada*). El de **bajada es el de mayor velocidad**, porque el usuario **descarga más de lo que sube**.
 
-![[archivos/imagenes/Pasted image 20240929135437.png]]
+![](./archivos/imagenes/Pasted image 20240929135437.png)
 
 Se pueden transmitir hasta 10 Mbps. Permite usar **teléfono y conexión a Internet por separado**.
 
-![[archivos/imagenes/Pasted image 20240929135551.png]]
+![](./archivos/imagenes/Pasted image 20240929135551.png)
 
 ## 1.6.3 Cable HFC (híbrido y coaxial)
-![[archivos/imagenes/Pasted image 20240929135754.png]]
+![](./archivos/imagenes/Pasted image 20240929135754.png)
 
 La **cabecera final** es equivalente a la central telefónica, está centraliza todas las transmisiones de abonados que desde aquí pasan a Internet a través de un router. De aquí los **troncales de fibra** conectan a los nodos de fibra que a su vez mediante cable coaxial para dar servicios de **TV, Teléfono e Internet**.
 Las troncales se hacen a partir de fibra porque necesitan mucha capacidad, el resto de **línea coaxial** (*barato y fácil de instalar*). Todos los cables son multiplexados (*TDM y FDM*).
@@ -254,7 +254,7 @@ Las troncales se hacen a partir de fibra porque necesitan mucha capacidad, el re
 - **ODN** (Optical Distribution Network): desde el OLT a los usuarios
 - **ONT** (Optical Network Termination): conversión de señales ópticas ↔ eléctricas
 
-![[archivos/imagenes/Pasted image 20240929140504.png]]
+![](./archivos/imagenes/Pasted image 20240929140504.png)
 
 ## 1.6.5 Acceso Empresarial
 Mediante una **LAN** conectada aun router y a un **ISP** con enlace dedicado
@@ -266,7 +266,7 @@ Mediante una **LAN** conectada aun router y a un **ISP** con enlace dedicado
 - Acceso a Internet mediante un nodo en el Cesga que
 enlaza con RedIris (gestiona la red pública)
 
-![[archivos/imagenes/Pasted image 20240929142123.png]]
+![](./archivos/imagenes/Pasted image 20240929142123.png)
 
 # 1.7 Medios de Transmisión
 Distinguimos entre:
@@ -279,15 +279,15 @@ El **par trenzado** (*TP*) es el cable de tupo telefónico, Consta de 2 hilos de
 En el **apantallado** (*STP*), que es de mayor calidad, el par esta recubierto de una película de metal con el objetivo de disminuir perdidas
 El par **sin apantallar** (*UTP*), carece de este recubrimientos. Las categoría 1 y 2 son las de peor calidad y se usan en telefonía, y las de categoría 3 se usan en redes locales de 10Mbps y la de categoría 5 en las de 100Mbps.
 
-![[archivos/imagenes/Pasted image 20241108205115.png]]
+![](./archivos/imagenes/Pasted image 20241108205115.png)
 
 ## 1.7.2 Cable Coaxial
 El cable **coaxial** esta formador por dos conductores: uno central sólido y otro exterior formador por una **malla de hilos finos** que recubre al primero.
 Entre ambos hay plástico, la ventaja de esta disposición es que la radiación queda atrapada entre ambos y no escapa al espacio, **evitando pérdidas**.
 
-![[archivos/imagenes/Pasted image 20240929151338.png]]
+![](./archivos/imagenes/Pasted image 20240929151338.png)
 
-![[archivos/imagenes/Pasted image 20241108205153.png]]
+![](./archivos/imagenes/Pasted image 20241108205153.png)
 
 Hay 2 calidades, el de **50 ohmios** que se utiliza para transmitir señales digitales en banda base (*sin modular*) en algunas redes locales. Y también el de **75 ohmios** de mejor calidad, se utiliza en banda ancha (*con modulación*) en las redes de **cable CGH** y permite cientos de canales de **TV, teléfono e Internet**.
 
@@ -295,9 +295,9 @@ Hay 2 calidades, el de **50 ohmios** que se utiliza para transmitir señales dig
 En vez de trasmitir señales eléctricas, **transmite luz**, evitando pérdidas por radiación. Las fibras se hacer a partir de vidrio o plástico transparente y ultrapuro.
 Tienen baja **atenuación**, por lo que pueden usarse hasta distancias de 100km **sin repetidores**. Son finas como un cabello, por lo que dentro de un conducto de pueden alojar miles
 
-![[archivos/imagenes/Pasted image 20240929151648.png]]
+![](./archivos/imagenes/Pasted image 20240929151648.png)
 
-![[archivos/imagenes/Pasted image 20241108205225.png]]
+![](./archivos/imagenes/Pasted image 20241108205225.png)
 
 **Precio elevado**, **Capacidad de Transmisión Mayor que cualquier Cable**.
 ##### Fibra Multimodo
@@ -315,7 +315,7 @@ Velocidad de enlace n × 51,8 Mbps
 La **arquitectura en capas** se utiliza para facilitar el diseño de los protocolos de comunicación. Consiste en dividir la comunicación en **tareas independientes** y poner cada una de ellas en una capa. Las **capas superiores** utilizan los servicios de las inferiores. La arquitectura en capas permite **conectar computadores** y sistemas muy diferentes con la única condición de que respeten las especificaciones de cada capa.
 **Cada capa es independiente de las demás**.  **Aunque las transmisiones son en vertical, los protocolos pueden diseñarse como si fuesen horizontales**. Cada capa puede ignorar el contenido de las capas contiguas, añadiendo instrucciones para el destinatario de cada capa.
 
-![[archivos/imagenes/Pasted image 20241108205352.png]]
+![](./archivos/imagenes/Pasted image 20241108205352.png)
 
 En la **Capa de Aplicación**, se localizan los procesos que se comunican entre sí mediante mensajes. Por ejemplo si queremos comunicar 2 procesos (*un servidor con un cliente*). Para que se pueda realizar hay que acordar un **protocolo**: formato para los mensajes y unas reglas. Los datos se llaman **mensajes**.
 
@@ -327,4 +327,4 @@ La **Capa de Enlace** se encarga de los **detalles de bajo nivel** de la transmi
 
 La **Capa Física** trabaja a nivel de bits: convierte los bits **0 y 1** en **pulsos**, señales eléctricas. Conforma el pulso dándole la correspondiente forma, tensión y duración. También define las características mecánicas y físicas del medio de transmisión.
 
-![[archivos/imagenes/Pasted image 20241108205808.png]]
+![](./archivos/imagenes/Pasted image 20241108205808.png)

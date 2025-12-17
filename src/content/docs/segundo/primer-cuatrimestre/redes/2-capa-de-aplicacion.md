@@ -10,10 +10,10 @@ Escrito por **Adrián Quiroga Linares**.
 # 2.1 Introducción
 La capa de aplicación se ocupa de la **comunicación entre procesos.** El esquema típico se muestra en la siguiente figura:
 
-![[archivos/imagenes/Pasted image 20241108210200.png]]
+![](./archivos/imagenes/Pasted image 20241108210200.png)
 
 > [!Recordatorio]
-> ![[archivos/imagenes/Pasted image 20241108205726.png]]
+> ![](./archivos/imagenes/Pasted image 20241108205726.png)
 >
 
 La comunicación de dos procesos, tanto en el **mismo host** como en hosts diferentes, se hace **enviando mensajes**. Para que los mensajes sean comprendidos hay que establecer un **protocolo**. El **protocolo** facilita la programación. Hay que programar tanto las funciones de envío como las de recepción y si tenemos un protocolo claro de programación será más fácil.
@@ -43,20 +43,20 @@ Cuando un **navegador** solicita una **página web**, el primer objeto que se de
 ## 2.2.1 Conexiones No Persistentes
 Con **conexiones no persistentes** se utiliza una conexión **TCP** distinta para transferir cada uno de los objetos. Pueden ser o en **serie** o **paralelas**. Son en **serie** si se espera a que acabe la **conexión TCP** previa antes de que comience la siguiente. Son **paralelas** si se inician varias **conexiones TCP** a la vez.
 
-![[archivos/imagenes/Pasted image 20240929184416.png]]
+![](./archivos/imagenes/Pasted image 20240929184416.png)
 
-![[archivos/imagenes/Pasted image 20240929184609.png]]
+![](./archivos/imagenes/Pasted image 20240929184609.png)
 
 ## 2.2.2 Conexiones Persistentes
 Con **conexiones persistentes** se utiliza la misma **conexión TCP** para conseguir **varios objetos** o incluso varias **páginas web** diferentes. Típicamente el **servidor** cierra la **conexión TCP** cuando no ha sido utilizada durante cierto tiempo.
 Existen dos versiones de **conexiones persistentes**, en la versión **sin entubamiento**, el cliente sólo pide un nuevo objeto cuando el previo ha sido recibido. En la versión **con entubamiento** el cliente puede hacer peticiones de varios objetos antes de recibir los anteriores. El modo por defecto de **HTTP/1.1**  es **persistente con entubamiento**.
 
-![[archivos/imagenes/Pasted image 20240929184949.png]]
+![](./archivos/imagenes/Pasted image 20240929184949.png)
 
 ## 2.2.3 Tiempo de transferencia de una página web
 El transferencia del primer objeto $2RTT +Ttransmision$, esto se debe a que necesitamos conocer el **layout** de la página web para obtener el resto de objetos. En cambio, **el tiempo de transferencia** de los siguientes objetos depende del tipo de conexión.
 
-![[archivos/imagenes/Pasted image 20241005172705.png]]
+![](./archivos/imagenes/Pasted image 20241005172705.png)
 
 - **Tiempo de ida y vuelta (*RTT round-trip time*):** Es el tiempo que tarda una solicitud de red en ir de un punto de partida a uno de destino y volver al punto de partida. La solicitud no deja de ser un paquete muy pequeño. El $RTT$ incluye los retardos de propagación de los paquetes, los retardos de cola en los routers y switches intermedios y los retardos de procesamiento de los paquetes.
 - **Tiempo de transmisión del fichero:** tiempo que pasa entre que el host escribe en el enlace el primer bit del paquete hasta el último.
@@ -71,7 +71,7 @@ $$\text{Tiempo total} = RTT + t_{\text{trans}}$$
 El protocolo HTTP define cómo se envían y reciben mensajes entre un cliente (por ejemplo, un navegador web) y un servidor (el sitio web al que se accede). Estos mensajes se separan en **cabeceras** (headers) y un **cuerpo** (body), donde la cabecera contiene información de control y el cuerpo contiene los datos solicitados o enviados, como páginas web o imágenes.
 
 **Peticiones (Request)**: El cliente las envía al servidor para solicitar recursos, como páginas web o imágenes.
-![[archivos/imagenes/Pasted image 20241005175747.png]]
+![](./archivos/imagenes/Pasted image 20241005175747.png)
 
 El significado de estos campos es el siguiente:
 - **método**: `GET` (página normal) o `POST` (formulario)
@@ -91,7 +91,7 @@ El significado de estos campos es el siguiente:
 Esta estructura permite que el servidor entienda qué acción debe realizar, sobre qué recurso y con qué parámetros adicionales.
 
 **Mensaje de respuesta:** El servidor responde con los recursos solicitados o con información sobre el éxito o fracaso de la petición.
-![[archivos/imagenes/Pasted image 20241005180931.png]]
+![](./archivos/imagenes/Pasted image 20241005180931.png)
 
 El significado de estos campos es similar al de los mensajes de petición, pero:
 - **cod**: es la codificación de la frase (por ejemplo, `200, OK`; `404, Not Found`; `400, Bad Request`)
@@ -160,7 +160,7 @@ Una de las limitaciones importantes de FTP es que **no cifra los datos**, incluy
 
 # 2.4 SMTP: Protocolo Transferencia. Correo Sencillo
 
-![[archivos/imagenes/Pasted image 20241012131936.png]]
+![](./archivos/imagenes/Pasted image 20241012131936.png)
 
 **SMTP (Simple Mail Transfer Protocol)** es el protocolo estándar para la transferencia de **correo electrónico** entre servidores. SMTP se encarga de **enviar correos** desde el cliente (el remitente) hacia un servidor de correo, y también entre servidores de correo. 
 >[!Nota]
@@ -192,7 +192,7 @@ El **sistema de correo electrónico** consta de varias partes:
 4. **SMTP** transmite el correo del servidor origen al servidor destino, donde el mensaje queda almacenado en el buzón del destinatario.
 5. **El destinatario** puede, en cualquier momento, acceder a su correo y descargarlo mediante protocolos como **POP3**, **IMAP**, o directamente a través de un navegador web usando **HTTP**.
 
-![[archivos/imagenes/Pasted image 20241012133330.png]]
+![](./archivos/imagenes/Pasted image 20241012133330.png)
 
 SMTP también maneja casos en los que no se puede entregar el correo de inmediato:
 - Si el **servidor de correo destino** está **fuera de servicio** o no responde, el servidor origen pone el mensaje en una **cola de espera**.
@@ -285,7 +285,7 @@ El DNS utiliza un protocolo que permite a los hosts (computadoras) solicitar tra
 **Servidores autoritativos:** todas las organizaciones que tienen hosts accesibles públicamente a través de internet deben proporcionar registros DNS accesibles públicamente que establezcan la correspondencia entre los nombres de dichos hosts y sus direcciones IPs.
 Una organización puede elegir implementar su propio servidor DNS autoritativo para almacenar estos registros.
 
-![[archivos/imagenes/Pasted image 20250121163148.png]]
+![](./archivos/imagenes/Pasted image 20250121163148.png)
 
 **Servidores Locales**: Son los que manejan las consultas de los hosts en una red local. Cada host tiene una lista de estos servidores, que a menudo son proporcionados por el ISP (Proveedor de Servicios de Internet). El host comienza consultando el primer servidor de la lista.
 
@@ -297,11 +297,11 @@ Una organización puede elegir implementar su propio servidor DNS autoritativo p
 ## 2.6.2 Tipos de Consultas a Servidores DNS
 **Consultas Recursivas**: En este tipo de consulta, cada servidor de nombres se encarga de interrogar al siguiente hasta obtener la respuesta final.
 
-![[archivos/imagenes/Pasted image 20241013171148.png]]
+![](./archivos/imagenes/Pasted image 20241013171148.png)
 
 **Consultas Iterativas**: En este caso, el servidor de nombres local se pone en contacto con todos los servidores necesarios para obtener la información.
 
-![[archivos/imagenes/Pasted image 20241013171228.png]]
+![](./archivos/imagenes/Pasted image 20241013171228.png)
 
 ## 2.6.3 Caché DNS
 Cuando un servidor DNS obtiene una traducción, **almacena una copia en su memoria local** (disco o RAM) **para futuras consultas**. Esta caché se utiliza para responder a **consultas repetidas** de manera más rápida. Las entradas de la caché se eliminan después de un tiempo específico (generalmente, cada dos días).
@@ -309,7 +309,7 @@ Cuando un servidor DNS obtiene una traducción, **almacena una copia en su memor
 ## 2.6.4 Mensajes DNS
 Existen **dos tipos de mensajes** en el DNS: **Consultas** y **Respuestas**. Ambos mensajes tienen un formato similar, que consta de una cabecera con información de control y un cuerpo que contiene las consultas y respuestas.
 
-![[archivos/imagenes/Pasted image 20241013171434.png]]
+![](./archivos/imagenes/Pasted image 20241013171434.png)
 
 1. **Cabecera**: Contiene 6 campos, algunos de los cuales son en binario:
    - **Identificación**: Un número de 16 bits que identifica la consulta, permitiendo que un host realice múltiples consultas simultáneamente.
@@ -322,7 +322,7 @@ Existen **dos tipos de mensajes** en el DNS: **Consultas** y **Respuestas**. Amb
    - **Servidores Autorizados**: Indica los servidores de nombres autorizados que se pueden consultar para un dominio específico.
    - **Información Adicional**: Incluye datos que no fueron solicitados explícitamente.
 
- ![[archivos/imagenes/Pasted image 20241013171414.png]]
+ ![](./archivos/imagenes/Pasted image 20241013171414.png)
 
 # 2.7 Distribución de contenidos
 La distribución de contenidos se refiere a las diversas **técnicas** utilizadas para gestionar y entregar contenidos digitales (*como páginas web, archivos de audio, video, etc.*) de manera eficiente, reduciendo el tiempo de carga y mejorando la experiencia del usuario. 
@@ -332,7 +332,7 @@ Los accesos a servidores centralizados pueden ser lentos por la **congestión de
 ## 2.7.1 Caché Web (Servidor Proxy)
 La **caché web** implica la utilización de un **servidor intermedio**, conocido como **proxy**, que gestiona todas las peticiones web de los usuarios en una red. Este servidor proxy normalmente es proporcionado por el **ISP**. 
 
-![[archivos/imagenes/Pasted image 20241013173230.png]]
+![](./archivos/imagenes/Pasted image 20241013173230.png)
 
 El navegador establece una **conexión TCP** con la **caché web** y envía una solicitud HTTP para el objeto a la caché web. La caché comprueba si tiene una **copia** del objeto almacenada localmente, si la tiene devuelve el objeto.
 Si no tiene el objeto, abre una **conexión TCP** con el servidor origen y envía una solicitud HTTP para obtener el objeto. Cuando recibe este objeto **almacena una copia localmente** y se lo envía como mensaje de respuesta HTTP al cliente.
@@ -341,7 +341,7 @@ Los usuarios deben configurar sus navegadores para utilizar el servidor proxy, i
 
 Puede haber un **esquema jerárquico de proxies**, donde varios proxies se comunican entre sí para optimizar aún más la distribución.
 
-![[archivos/imagenes/Pasted image 20241013173336.png]]
+![](./archivos/imagenes/Pasted image 20241013173336.png)
 
 ## 2.7.2 Redes de Distribución de Contenidos (CDN)
 El objetivo es aumentar la velocidad y reducir la latencia. Las usan empresas que tienen páginas web muy visitadas (Youtube).
@@ -354,7 +354,7 @@ Cuando se indica al navegador del host de un usuario que extraiga un **vídeo** 
 
 >[!Aclaración] Si estas en España, no te va a mandar a un conjunto de servidores de Etiopía por ejemplo. Si todo el mundo accede a los servidores de Islandia, posiblemente colapsen.
 
-![[archivos/imagenes/Pasted image 20241229110333.png]]
+![](./archivos/imagenes/Pasted image 20241229110333.png)
 
 ## 2.7.3 Redes P2P (de Igual a Igual)
 Las **redes P2P** permiten a los usuarios actuar tanto como clientes como servidores, compartiendo archivos entre sí. Al unirse a una red P2P, los usuarios pueden descargar y compartir contenido desde sus propios discos duros. Esto implica que no dependen de que haya un **servidor activo funcionando**.
@@ -378,11 +378,11 @@ Sin embargo, si falla el **host central** falla todo. El host central tiene que 
 ### **Directorio Descentralizado**
 **Kaaza** .Consiste en distribuir el directorio entre algunos de los usuarios P2P. Ciertos usuarios son designados como líderes en función de ciertos criterios (*velocidad de las conexiones, antigüedad en la red, etc*).
 
-![[archivos/imagenes/Pasted image 20241013173858.png]]
+![](./archivos/imagenes/Pasted image 20241013173858.png)
 
 Cada líder es responsable de atender las consultas de un grupo de usuarios que tiene a su cargo. Las consultas que no puede resolver por sí mismo las redirecciona a los otros líderes con los que está conectado. Esto origina una red de superposición (red virtual sobre la red real) con la correspondencia siguiente:
 
-![[archivos/imagenes/Pasted image 20241013173929.png]]
+![](./archivos/imagenes/Pasted image 20241013173929.png)
 
 Se resuelven así el problema del **centralizado** que tenía un único punto de fallo y el cuello de botella. 
 
@@ -394,6 +394,6 @@ En una **aplicación** P2P **clásica**, una vez que un usuario ha descargado un
 
 Este método de descarga puede mejorarse si la descarga de los ficheros se hace por **segmentos**. Un usuario que ha descargado un segmento de un fichero puede convertirse a su vez en **servidor de dicho segmento** antes de que complete la descarga del fichero.
 
-![[archivos/imagenes/Pasted image 20241013174117.png]]
+![](./archivos/imagenes/Pasted image 20241013174117.png)
 
 Podemos pensarlo como que cada usuario tiene fragmentos de 1 GB de una película pirata, y después si un usuario quiere verla, los junta en su ordenador. Van dpm pa piratear y no te pueden denunciar.

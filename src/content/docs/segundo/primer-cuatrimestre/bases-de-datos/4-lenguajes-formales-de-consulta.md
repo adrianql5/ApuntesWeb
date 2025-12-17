@@ -38,7 +38,7 @@ Relación -> entre paréntesis
 $$ \Pi_{ID, nombre, sueldo}(profesor) $$
 
 
-![[Archivos/imagenes/Pasted image 20241010154722.png]]
+![](./Archivos/imagenes/Pasted image 20241010154722.png)
 
 ## **Composición de operaciones**
 Las operaciones relacionales se pueden **componer** para realizar consultas más complejas. Por ejemplo, si queremos obtener los nombres de todos los profesores del departamento de Física:
@@ -61,7 +61,7 @@ $$ \Pi_{asignatura\_id}(\sigma_{semestre = "Otoño" \land año = 2009}(sección)
 La intersección devuelve las tuplas que están presentes tanto en una tabla como en otra.
 $Π_asignatura_id(σ_semestre = 'Otoño' ∧ año = 2009(sección))∩ Π_asignatura_id(σ_semestre = 'Primavera' ∧ año = 2010(sección))$
 
-![[Archivos/imagenes/Pasted image 20241010163442.png]]
+![](./Archivos/imagenes/Pasted image 20241010163442.png)
 
 ## Reunión Externa
 La **reunión externa** es una variación de la reunión natural que preserva las tuplas de una o ambas tablas, incluso si no encuentran coincidencias. Rellena los valores faltantes con `NULL`.
@@ -69,28 +69,28 @@ La **reunión externa** es una variación de la reunión natural que preserva la
 Existen tres tipos de reuniones externas:
 1. **Reunión externa por la izquierda (⟕)**: preserva todas las tuplas de la relación izquierda.
 
-![[Archivos/imagenes/Pasted image 20241223175048.png]]
+![](./Archivos/imagenes/Pasted image 20241223175048.png)
 
 2. **Reunión externa por la derecha (⟖)**: preserva todas las tuplas de la relación derecha.
 
-![[Archivos/imagenes/Pasted image 20241223175108.png]]
+![](./Archivos/imagenes/Pasted image 20241223175108.png)
 
 3. **Reunión externa completa (⟗)**: preserva todas las tuplas de ambas relaciones. Equivalente a la union más la intersección
 
-![[Archivos/imagenes/Pasted image 20241223175121.png]]
+![](./Archivos/imagenes/Pasted image 20241223175121.png)
 ## Producto Cartesiano (×)
 Comprime información procedente de dos relaciones y crea una relación cuyo nº de atributos es la suma de atributos de las 2 relaciones combinadas y su nº de tuplas es el producto de las tuplas de ambas relaciones (*binaria*).
 
 
 
-![[Archivos/imagenes/Pasted image 20241010161142.png]]
+![](./Archivos/imagenes/Pasted image 20241010161142.png)
 
-![[Archivos/imagenes/Pasted image 20241010162013.png]]
+![](./Archivos/imagenes/Pasted image 20241010162013.png)
 
 ## Reunión Natural (⋈)
 La **reunión natural** (natural join) combina dos relaciones pero solo conserva las tuplas donde los valores de los atributos comunes coinciden. Es como un producto cartesiano seguido de una selección y proyección para mantener solo las coincidencias en los atributos comunes.
 
-![[Archivos/imagenes/Pasted image 20241010162649.png]]
+![](./Archivos/imagenes/Pasted image 20241010162649.png)
 
 ## Reunión Zeta (⋈_θ)
 La **reunión zeta** (o theta join) es una operación similar a la reunión natural, pero permite especificar una condición arbitraria entre las tuplas, no necesariamente de igualdad en los atributos comunes.
@@ -155,7 +155,7 @@ La operación de **agregación** permite aplicar funciones como suma, promedio, 
 - **Agregación**: permite aplicar funciones como `sum`, `avg`, `count`, `min`, y `max` para resumir datos en una relación. También permite agrupar los datos por ciertos atributos antes de aplicar la función de agregación, como calcular el promedio por departamento.
 
 
-![[Archivos/imagenes/Pasted image 20241010165429.png]]
+![](./Archivos/imagenes/Pasted image 20241010165429.png)
 
 # 4.5 Cálculo Relacional de Tuplas
 
@@ -171,7 +171,7 @@ Esto representa el conjunto de todas las tuplas `t` tales que el predicado `P` e
 
 El cálculo relacional de tuplas es equivalente en potencia expresiva al álgebra relacional básico (sin operaciones relacionales extendidas). Esto significa que todas las expresiones del álgebra relacional pueden representarse en el cálculo relacional de tuplas y viceversa.
 
-![[Archivos/imagenes/Pasted image 20241010175505.png]]
+![](./Archivos/imagenes/Pasted image 20241010175505.png)
 
 # 4.6 Cálculo Relacional de Dominios
 Lenguaje **no procedimental**.
@@ -188,6 +188,6 @@ $$
 donde $x_1, x_2, \ldots, x_n$ representan las variables de dominio. $P$ representa una **fórmula compuesta por átomos**, como era el caso en el cálculo relacional de tuplas.
 
 
-![[Archivos/imagenes/Pasted image 20241010182544.png]]
+![](./Archivos/imagenes/Pasted image 20241010182544.png)
 
 Un **lenguaje** que puede usarse para producir cualquier relación se denomina **relacionalmente completo**. Los tres explicados en este tema son relacionalmente completos.

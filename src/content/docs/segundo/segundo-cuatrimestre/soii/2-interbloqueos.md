@@ -27,7 +27,7 @@ Cuando los procesos necesitan varios recursos, simplemente se adquieren uno desp
 - Si los procesos piden los recursos en distinto orden, pueden aparecer interbloqueos:
 	- Uno de los procesos adquiere su primer recurso e inmediatamente después el otro proceso adquiere el otro recurso. Entonces, ambos procesos se bloquearán cuando intenten solicitar el recurso que les falta.
 
-![[Pasted image 20250523185649.png]]
+![](./Pasted image 20250523185649.png)
 
 # 2.2 Introducción a los Interbloqueos
 Un conjunto de procesos está en **interbloqueo** si cada proceso del conjunto esa esperando un evento que sólo puede ser ocasionado por otro proceso del conjunto. 
@@ -55,16 +55,16 @@ Estas cuatro condiciones se pueden modelas mediante grafos dirigidos, los **graf
 	- Arco de **recurso a proceso:** el recurso fue solicitado previamente por, y asignado a , y actualmente es contenido por ese proceso
 	- Arco de **proceso a recurso:** el proceso está actualmente bloqueado en espera de ese recurso.
 
-![[Pasted image 20250523191303.png]]
+![](./Pasted image 20250523191303.png)
 
 Un **ciclo** en el grafo indica que hay **interbloqueo** que involucra a los procesos y recursos en el ciclo. Permiten ver si una secuencia de peticiones y liberaciones conduce al interbloqueo realizándolas paso a paso, y después de cada paso **comprobando** si el grafo tiene algún ciclo.
 
 Por ejemplo, si tenemos los procesos $A$, $B$ y $C$ y tres recursos $R$, $S$ y $T$. El SO es libre de ejecutar cualquier proceso desbloqueado en cualquier momento. 
 - Si se ejecutan los 3 procesos **secuencialmente**, uno detrás de otro, no aparecen interbloqueos (ya que no hay competencia por los recursos), pero **tampoco** tiene **paralelismo**.
-![[Pasted image 20250523191337.png]]
+![](./Pasted image 20250523191337.png)
 
 - Si tenemos la siguiente ejecución **concurrente**, después de haber realizado la petición 4, $A$ se bloquea en espera de $S$. Después, $B$ y $C$ se bloquean también. Aparece un ciclo, y, por tanto, un **interbloqueo**.
-![[Pasted image 20250523191549.png]]
+![](./Pasted image 20250523191549.png)
 
 ## 2.2.3 Estrategias para abordar los Interbloqueos
 - **Ignorar** el problema
@@ -87,7 +87,7 @@ Se usará el grafo de recursos para determinar si existe un interbloqueo, por lo
 5. Elegir un arco saliente desmarcado al azar y marcarlo. Después seguirlo hasta el nuevo nodo actual e ir al paso 3.
 6. Si este nodo es el inicial, el gráfico no contiene ciclos y el algoritmo termina. En caso contrario, ahora hemos llegado a un punto muerto. Eliminarlo y regresar al nodo anterior; es decir, el que estaba justo antes de éste, hacerlo el nodo actual e ir al paso 3.
 
-![[Pasted image 20250523193356.png]]
+![](./Pasted image 20250523193356.png)
 
 En otras palabras: se toman los nodos de uno en uno, como la raíz de lo que se espera sea un árbol, y se realiza una búsqueda de un nivel de profundidad en él. Si se regresa a un nodo que ya se encontró, hay un ciclo. Si agota todos los arcos de cualquier nodo, regresa al anterior.
 
@@ -108,7 +108,7 @@ Todos los procesos están desmarcados al principio y se van marcando conforme pr
 2. Si se encuentra dicho proceso, agregar la i-ésima fila de $C$ a $A$, marcar el proceso y regresar al paso 1.
 3. Si no existe dicho proceso, el algoritmo termina.
 
-![[Pasted image 20250523195606.png]]
+![](./Pasted image 20250523195606.png)
 Se supone que todos los procesos **mantienen** todos los recursos adquiridos **hasta que terminan**. Aunque el algoritmo **no es determinístico** (ya que puede ejecutar los procesos en cualquier orden posible), el **resultado siempre es el mismo**.
 
 En otras palabras: se busca un proceso que se pueda ejecutar hasta completarse, es decir, que tenga demandas de recursos que se puedan satisfacer con los recursos disponibles actuales. El proceso seleccionado se ejecuta hasta que termina y devuelve sus recursos a la reserva. Después se marca como completado.
@@ -149,7 +149,7 @@ Este es un modelo para lidiar con dos procesos, $A$ y $B$, y dos recursos, una i
 - Uso de recursos de $A \rightarrow I_1 - I_3$ impresora, $I_2- I_4$ trazador.
 - Uso de recursos de $B \rightarrow I_6 - I_8$ impresora, $I_5- I_7$ trazador.
 
-![[Pasted image 20250524092259.png]]
+![](./Pasted image 20250524092259.png)
 
 Las regiones sombreadas son en especial interesantes. La región con las líneas que se inclinan de **suroeste a noreste** representa cuando **ambos procesos tienen la impresora**. La regla de exclusión mutua hace imposible entrar a esta región. 
 
@@ -173,7 +173,7 @@ Ejemplo: se tienen los procesos $A$, $B$ y $C$ y 10 instancias de un mismo recur
 5. Cuando $C$ se complete, se obtiene la figura E
 6. Ahora $A$ puede obtener las seis instancias del recurso que necesita y también completarse.
 
-![[Pasted image 20250524095331.png]]
+![](./Pasted image 20250524095331.png)
 
 1. Si partimos de la figura A anterior, $A$ solicita y obtiene 1 recurso, se llega a la figura B, que muestra un estado **inseguro**.
 2. Si se ejecuta $B$ exclusivamente, hasta que pida y obtenga todos sus recursos, se llega a la figura C.
@@ -181,7 +181,7 @@ Ejemplo: se tienen los procesos $A$, $B$ y $C$ y 10 instancias de un mismo recur
 4. Ahora no hay manera de continuar, sólo hay 4 instancias libres y ambos procesos activos necesitan 5 de cada uno.
 Tampoco funcionaría si a partir del paso 0 se ejecutase $A$ o $B$. Entonces, el paso de la figura $A$ a la $B$ supuso convertir un estado seguro a uno inseguro.
 
-![[Pasted image 20250524095952.png]]
+![](./Pasted image 20250524095952.png)
 
 Un **estado inseguro no es un estado de interbloqueo**, pues el sistema puede ejecutarse durante cierto tiempo.
 La diferencia entre un estado seguro y uno inseguro es que, desde un estado seguro, el sistema puede **garantizar** que todos los procesos terminarán. Desde uno inseguro no se puede dar esa garantía.
@@ -194,7 +194,7 @@ Ejemplo: cuatro procesos $A$, $B$, $C$ y $D$ y 10 instancias de un mismo recurso
 2. Si se llega a la situación de la figura B, se habrá alcanzado un estado **seguro** (se puede ejecutar $C$ hasta que termine y libere sus recursos, después $D$ o $B$, y así sucesivamente).
 3. Si a partir de la figura B se otorga una petición de $B$ para una unidad, se llegaría a la figura C, que muestra un estado **inseguro** (si todos los procesos pidieran repentinamente todos los recursos que necesitan no se podría satisfacer a ninguno).
 
-![[Pasted image 20250524194052.png]]
+![](./Pasted image 20250524194052.png)
 
 Un estado **inseguro no tiene por qué conducir a un interbloqueo**. Puede ser que a partir de la figura $C$ algún proceso solicite una cantidad de recursos menor a su máximo.
 
@@ -212,7 +212,7 @@ El algoritmo para determinar si un estado es seguro es el mismo que se usaba par
 	- Cuando todos los procesos estén marcados: estado inicial era seguro
 	- No se encuentra ningún proceso desmarcado que cumpla la condición del paso 1: hay interbloqueo.
 
-![[Pasted image 20250524102323.png]]
+![](./Pasted image 20250524102323.png)
 Ejemplo:
 1. EL estado de la figura es seguro
 2. Si el proceso $B$ pide una impresora, se le puede otorgar ya que el estado resultante también es seguro ($D$ puede terminar, y después $A$ o $E$, seguidos por el resto)
@@ -267,11 +267,11 @@ Así, el grafo de asignación de recursos **nunca** puede tener **ciclos**. Desm
 - Con un número arbitrario de procesos y recursos: en cada instante, uno de los recursos asignados será el más alto. El proceso que lo contenga nunca pedirá un recurso que ya está asignado. En un momento dado, terminará y liberará sus recursos. En ese punto, otro proceso contendrá el recurso más alto y también podrá terminar.
 	- Entonces existe un escenario en el que todos los procesos terminan, así que no hay interbloqueo.
 
-![[Pasted image 20250524110807.png]]
+![](./Pasted image 20250524110807.png)
 
 Una variación del método anterior es retirar el requerimiento de que los recursos se adquieran en una secuencia cada vez más estricta, y simplemente obligar a que ningún proceso pueda solicitar un **recurso con numeración menor que los que ya contiene**.
 
 El ordenamiento numérico soluciona el problema, pero puede ser **imposible encontrar un ordenamiento** que satisfaga a todos los procesos cuando el número de recursos potenciales y usos distintos es muy grande.
 
-![[Pasted image 20250524111023.png]]
+![](./Pasted image 20250524111023.png)
 

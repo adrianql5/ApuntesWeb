@@ -13,7 +13,7 @@ Para entender dónde estamos, primero debemos contrastar este nuevo modelo con l
 - **Acoplamiento:** Alto. Los procesos deben estar activos y sincronizados; si el enlace cae, la colaboración falla.
 - **Limitación:** En aplicaciones complejas con miles de interacciones, interpretar mensajes y mantener protocolos se vuelve una tarea "inabordable".
 
-![[Pasted image 20251212153753.png]]
+![](./Pasted image 20251212153753.png)
 
 >[!Info]
 > **Orientado a datos** es como mandar una carta o formulario. El énfasis está en el **contenido** del mensaje. Los procesos intercambian paquetes de datos con un formato acordado y el receptor debe abrir el paquete, leer los datos y decidir qué hacer con ellos. Es menos intuitivo porque te obliga a pensar en protocolos de comunicación en lugar de en la lógica del programa.
@@ -26,7 +26,7 @@ Para entender dónde estamos, primero debemos contrastar este nuevo modelo con l
 >[!Info]
 > **Orientado a acciones** es como dar una orden directa. El énfasis está en **invocar una operación** (un verbo, una acción). No piensas en "enviar datos", sino en ejecutar una función específica (método) sobre un objeto, pasando los datos simplemente como argumentos. Aunque ocurre red por debajo, para ti como programador es "pedir que se haga algo".
 
-![[Pasted image 20251212153710.png]]
+![](./Pasted image 20251212153710.png)
 
 # 3.2 Conceptos Fundamentales
 Antes de escribir código, debemos definir rigurosamente la terminología arquitectónica.
@@ -65,7 +65,7 @@ A nivel **lógico**, parece que el cliente llama directamente al servidor. A niv
 >
 > Si el Stub y Skeleton son los que escriben y leen las cartas, el **Soporte de Ejecución** es el **servicio de correos** y el sistema de transporte.
 
-![[Pasted image 20251212153832.png]]
+![](./Pasted image 20251212153832.png)
 
 # 3.3 De RPC a RMI: El salto Tecnológico
 ## 3.1 Remote Procedure Call (RPC)
@@ -73,7 +73,7 @@ RMI no nació de la nada. Su ancestro es **RPC**, popularizado en los años 80.
 - En RPC, un proceso llama a un **procedimiento** (función C) en otro proceso
 - Utiliza herramientas como `rpcgen` para crear los stubs automáticamente.
 
-![[Pasted image 20251212153852.png]]
+![](./Pasted image 20251212153852.png)
 
 ## 3.2 Java RMI (Remote Method Invocation)
 RMI es la evolución **Orientada a Objetos de RPC**, exclusiva para el ecosistema Java
@@ -81,7 +81,7 @@ RMI es la evolución **Orientada a Objetos de RPC**, exclusiva para el ecosistem
 - Utiliza un **Registro RMI** (`rmiregistry`) para la localización de servicios.
 
 
-![[Pasted image 20251212153934.png]]
+![](./Pasted image 20251212153934.png)
 
 # 3.4 Implementación en Java RMI
 Para construir una aplicación distribuida, Java RMI impone una metodología estricta basada en interfaces.
@@ -115,7 +115,7 @@ Una vez compiladas las clases, se usa el compilador RMI para generar los proxies
 >A día de hoy se generan de forma automática a no ser que uses una versión inferior a java 5 (que debe ser la puta mierda que usa el profesor, el pavo no actualiza su asignatura desde 2008).
 
 
-![[Pasted image 20251212154109.png]]
+![](./Pasted image 20251212154109.png)
 
 
 # 3.5 El Registro y la Puesta en Marcha
@@ -232,4 +232,4 @@ Para no perderte en la práctica, sigue este "algoritmo" riguroso extraído del 
     - **Cliente:** Necesita `Interfaz.class`, `Client.class`, `Stub.class`.
 
 
-![[Pasted image 20251212154141.png]]
+![](./Pasted image 20251212154141.png)

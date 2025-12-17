@@ -32,7 +32,7 @@ Hay un **demonio de impresión** que comprueba de forma periódica si hay archiv
 - $A$ almacena el nombre de un archivo que quiere imprimir en la posición 7 de la cola y actualiza `IN` a 8
 - Se ejecuta el demonio de paginación, no detecta nada extraño, pero el **archivo de $B$ nunca se imprime**.
 
-![[Pasted image 20250523112423.png]]
+![](./Pasted image 20250523112423.png)
 
 # 1.2 Regiones Críticas
 Para **evitar las carreras críticas** es necesaria una **exclusión mutua**, esto asegura que, si un proceso está utilizando datos compartidos, los demás no podrán acceder a ellos. Una **región crítica** es una parte del programa que accede a memoria compartida. 
@@ -43,7 +43,7 @@ Para que varios procesos **cooperen en paralelo** de manera **correcta** y **efi
 - Un proceso no puede **bloquear** a otro **sin** estar en su **región crítica**.
 - Ningún proceso debe **esperar indefinidamente** al acceso a la región crítica.
 
-![[Pasted image 20250523112935.png]]
+![](./Pasted image 20250523112935.png)
 
 # 1.3 Exclusión Mutua con Espera Ocupada
 Todas estas soluciones implican una **espera ocupada**, la espera ocupada es la **evaluación continua de una variable hasta que aparezca cierto valor**, lo cual desperdicia tiempo de CPU.
@@ -66,7 +66,7 @@ Consiste en usar una **variable de turno compartida**, de manera que esta lleve 
 
 Sin embargo esto **viola** la condición de que **un proceso no puede bloquear a otro sin estar en su región crítica**. Además los procesos trabajan al **ritmo del más lento**.
 
-![[Pasted image 20250523114759.png]]
+![](./Pasted image 20250523114759.png)
 
 ## 1.3.4 Solución de Peterson
 La implementación presentada es válida para mantener la exclusión mútua de 2 procesos, Se puede realizar para más, pero es mucho más compleja.
@@ -77,7 +77,7 @@ Cumple **todas las condiciones**, pero implica una **espera ocupada**.
 
 Si el compilador cambie en `entrar_region()` el **orden** de la escritura en el **vector** y la en la variable `turno`, ambos procesos podrían estar dentro a la vez. Si ambos procesos invocasen `entrar_region()` más o menos a la vez, podrían aparecer **carreras críticas** en la variable `turno`, pero sólo entrará en la región aquel cuyo PID quede almacenado.
 
-![[Pasted image 20250523120448.png]]
+![](./Pasted image 20250523120448.png)
 
 ## 1.3.5 Instrucción TSL
 Consiste en usar una **instrucción atómica** `TSL reg, lock` (*Test and Set Lock*), que lee el contenido de la palabra `lock` de memoria, lo guarda en un registro `reg` y después almacena un valor distinto de `0` en la dirección de memoria de `lock`.
@@ -86,12 +86,12 @@ Se garantiza que las operaciones leer y almacenar la palabra en memoria son **in
 
 Para conseguir esto, la CPU que ejecuta `TSL` **bloquea el bus de memoria**, impidiendo que otras CPUs accedan a ella hasta que acabe. Bloquear el bus de memoria es muy **distinto a desactivar interrupciones**, pues sí afecta al resto de procesadores. El **SO** y el **hardware** deben ayudar.
 
-![[Pasted image 20250523121813.png]]
+![](./Pasted image 20250523121813.png)
 
 ### Instrucción XCHG
 Funciona igual que la solución con `TSL`, pero usando la **instrucción atómica** `XCHG reg,lock` (*exchange*), que intercambia el contenido de la palabra `lock` de memoria con el registro `reg`. Es la implementación que usan las CPUs de **Intel**.
 
-![[Pasted image 20250523122551.png]]
+![](./Pasted image 20250523122551.png)
 
 # 1.4 Dormir y Despertar
 La solución de Peterson y las de `TSL` y `XCHG` son correctas, pero requieren una espera ocupada. La espera ocupada no sólo **desperdicia tiempo de CPU**, si no que también puede provocar un **problema de inversión de prioridades:**
@@ -120,7 +120,7 @@ Este método produce **condiciones de carrera** porque el **acceso a** `cuenta` 
 
 Para evitar esto, se podría usar un **bit de espera de despertar**, de manera que cuando se envía una señal de despertar a un proceso que no está dormido, se fija ese bit, y la próxima vez que ese proceso se intente dormir, no lo hará y restablecerá el bit. Esto funcionaría para este ejemplo simple, pero si hay más de un consumidor y/o productor un único bit será insuficiente.
 
-![[Pasted image 20250523125353.png]]
+![](./Pasted image 20250523125353.png)
 
 # 1.5 Semáforos
 Un **semáforo** es una variable entera que se usa para **contar** el número de **señales de despertar** guardadas para uso futuro. Puede tomar valor:
@@ -152,7 +152,7 @@ Se usan 3 semáforos:
 - `vacías`: contabiliza el número de ranuras vacías (inicialmente N). Es un semáforo de **sincronización**.
 - `mutex`: asegura que el consumidor y productor no tengan acceso al buffer al mismo tiempo. Es un semáforo **binario**.
 
-![[Pasted image 20250523131735.png]]
+![](./Pasted image 20250523131735.png)
 
 # 1.6 Mutexes
 Un **mutex** es una variable con dos estados: **abierto** (desbloqueado) o **cerrado** (bloqueado). Se puede representar en un único bit, pero en la práctica se suelen representar con un entero con valor:
@@ -162,7 +162,7 @@ Un **mutex** es una variable con dos estados: **abierto** (desbloqueado) o **cer
 Son **versiones simplificadas de los semáforos**, pues no tienen la habilidad de contar, sólo sirve para administrar la **exclusión mutua**. Se implementan con **facilidad** y **eficiencia** es espacio de usuario siempre que esté disponible la instrucción `TSL` o `XCHG`, por lo que son especialmente útiles en **paquetes de hilos implementados en espacio de usuario**.
 
 Cuando un hilo (o proceso) necesita acceder a una región crítica llama a `mutex_lock`, de manera que si el mutex está abierto (es decir, la región crítica está disponible), puede entrar a la región. En caso contrario, se bloquea hasta que el que está en la región salga y llame a `mutex_unlock`. Si hay varios hilos bloqueados por el mutex al llamar a `mutex_unlock`, se selecciona uno de ellos al azar y se permite que entre a la región.
-![[Pasted image 20250523155858.png]]
+![](./Pasted image 20250523155858.png)
 
 El código de `mutex_lock` es similar al de `entrar_region` de la solución con `TSL`, pero tienen una diferencia crucial:
 - Cuando `entrar_region` no puede entrar a la región crítica, continúa evaluando el mutex en una **esperar ocupada**. Si los hilos están a **nivel de usuario**, **no** hay un **reloj** que detenga a los hilos después de cierto tiempo, por lo que un hilo que intente entrar a una región crítica ocupada iterará indefinidamente y nunca adquirirá el acceso, pues nunca se ejecutará el hilo que está en la región crítica.
@@ -192,8 +192,8 @@ Sirven para bloquear hilos hasta que se cumpla una determinada **condición**. L
 	- El hilo despertado volverá a competir por el mutex, po rlo que, una vez lo adquiera, debe **comprobar si la condición que lo despertó sigue cumpliéndose**, pues desde que se envió la señal hasta la adquisición del mutex podría dejar de ser cierta.
 - `pthread_cond_broadcast`: envía una señal a varios hilos para despertarlos
 
-![[Pasted image 20250523161845.png]]
-![[Pasted image 20250523162101.png]]
+![](./Pasted image 20250523161845.png)
+![](./Pasted image 20250523162101.png)
 
 # 1.7 Monitores (esto no lo pregunta nide)
 Aunque los **semáforos** pudieran parecer una manera muy sencilla de realizar la IPC, el programador debe ser extremadamente **cuidadoso** al usarlos. Para facilitar la escritura de programas correctos, se usa una primitiva de sincronización de **mayor nivel**, los monitores. 
@@ -224,8 +224,8 @@ Aunque `wait` y  `signal` se parecen a `sleep` y `wakeup` , la exclusión mutua 
 Los monitores son un **concepto de lenguaje de programación**, y muchos lenguajes no los tienen. En realidad estos lenguajes **tampoco** tienen **semáforos** en sí, pero se agregan fácilmente mediante una **biblioteca**.
 Los monitores no funcionan en **sistemas distribuidos** con varias CPUs con su propia **memoria privada** conectadas por una **red de área local**.
 
-![[Pasted image 20250523164102.png]]
-![[Pasted image 20250523164113.png]]
+![](./Pasted image 20250523164102.png)
+![](./Pasted image 20250523164113.png)
 
 # 1.8 Pasaje de Mensajes
 El **pasaje de mensajes** es un método de comunicación de procesos que se basa en las siguientes syscalls:
@@ -267,7 +267,7 @@ Otra forma de usar los buzones es para eliminar el uso del buffer completamente 
 
 Es más **fácil de implementar** que un esquema de mensajes con buffer. Pero es **menos flexible** debido a que el emisor y receptor se ven obligados a ejecutarse a paso de bloqueo.
 
-![[Pasted image 20250523171015.png]]
+![](./Pasted image 20250523171015.png)
 
 # 1.9 Barreras
 Este método de sincronización está destinado a **grupos de procesos**, en vez de las situaciones con dos procesos de tipo productor-consumidor.
@@ -275,7 +275,7 @@ Algunas aplicaciones se dividen en **fases y tienen la regla** de que **ningún 
 
 Para lograr esto, se coloca una **barrera** ejecutando la primitiva `barrier`, **al final de cada fase**. Cuando un proceso llega ante la barrera, se **bloquea** hasta que todos llegan a ella.
 
-![[Pasted image 20250523171334.png]]
+![](./Pasted image 20250523171334.png)
 
 # 1.10 Problemas clásicos del IPC
 ## 1.10.1 Problema de los lectores y escritores
@@ -288,15 +288,15 @@ Mientras haya un lectores activo, se admitiran los siguientes. Por tanto, siempr
 
 Para evitar estas esperas en los escritores, se podría hacer que cuando llegue un lector y haya un escritor en espera, el **lector se suspenda detrás del escritor**. Así, cada escritor esperará a que terminen los lectores que estaban activos cuando llegó, pero no esperará a los que llegaron después de él. Así se logra una **menor concurrencia** y, por tanto, un menor rendimiento.
 
-![[Pasted image 20250523172125.png]]
+![](./Pasted image 20250523172125.png)
 
 ## 1.10.2 Problema de los Filósofos Comelones
 El **problema de los filśofos comelones** modela procesos que compiten por el **acceso exclusivo** a un **número limitado de recursos**. Hay $N$ filósofos sentados alrededor de una mesa circular, cada uno delante de un plato, que alternan entre comer y pensar. Para comer, necesitan dos tenedores. Hay un tenedor entre cada par de platos. Cuando un filósofo trata de comer, intenta adquirir sus tenedores izquierdo y derecho, **uno a la vez**, en cualquier **orden**. Si tiene éxito al adquirir ambos, come por un momento, deja los tenedores y después sigue pensando.
 
 La solución más obvia sería que `tomar_tenedor` provoque una **espera** hasta que el **tenedor** esté disponible y luego lo tome. Pero esto no funciona, porque si todos los filósofos toman sus tenedores izquierdos a la vez, ninguno podrá tomar el derecho y habrá un **interbloqueo**.
 
-![[Pasted image 20250523173232.png]]
-![[Pasted image 20250523173218.png]]
+![](./Pasted image 20250523173232.png)
+![](./Pasted image 20250523173218.png)
 
 Para evitar el interbloqueo, después de tomar un tenedor se **comprueba si el otro está disponible**. Si no lo está, el filósofo regresa el tenedor que había tomado, **espera** cierto tiempo y repite todo el proceso. Pero tampoco funciona, si todos los filósofos comienzan el algoritmo a la vez y toman sus tenedores izquierdos, verían que los derechos están ocupados, así que dejarían los izquierdos, esperarían, volverían a tomar todos a la vez los derechos, y así consecutivamente, entrando en **inanición**.
 
@@ -306,4 +306,4 @@ Para evitar el interbloqueo y la inanición se protegen las instrucciones que va
 
 Para conseguir el máximo paralelismo posible se usa un **array** `estado` para llevar registro de si cada filósofo está comiendo, pensando o hambriento. Un filósofo sólo se puede mover al estado de **comer si ningún vecino está comiendo**. Para ello se usa un array de $N$ semáforos de manera que los filósofos hambrientos puedan bloquearse si los tenedores que necesitan están ocupados.
 
-![[Pasted image 20250523174120.png]]
+![](./Pasted image 20250523174120.png)

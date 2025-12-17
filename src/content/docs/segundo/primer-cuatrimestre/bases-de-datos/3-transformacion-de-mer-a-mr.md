@@ -9,7 +9,7 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 Escrito por **Adrián Quiroga Linares**.
 
 
-![[Archivos/imagenes/Pasted image 20241003132123.png]]
+![](./Archivos/imagenes/Pasted image 20241003132123.png)
 
 
 
@@ -21,11 +21,11 @@ Escrito por **Adrián Quiroga Linares**.
 
 
 
-![[Archivos/imagenes/Pasted image 20241003140849.png]]
+![](./Archivos/imagenes/Pasted image 20241003140849.png)
 
 # Ejemplo
-![[Archivos/imagenes/Pasted image 20241010125608.png]]
-![[Archivos/imagenes/Pasted image 20241010125636.png]]
+![](./Archivos/imagenes/Pasted image 20241010125608.png)
+![](./Archivos/imagenes/Pasted image 20241010125636.png)
 
 
 ---

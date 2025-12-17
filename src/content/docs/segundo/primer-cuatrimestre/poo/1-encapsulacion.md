@@ -29,7 +29,7 @@ Las clases contienen dos tipos de código:
 
 
 Para resolver **el problema de integridad** de los datos, las **únicas funciones** que pueden acceder a los atributos, tanto para leerlos como para escribir sobre ellos, son las funciones de la clase.
-![[archivos/imagenes/Pasted image 20241007110227.png]]
+![](./archivos/imagenes/Pasted image 20241007110227.png)
 
 Tenemos **cuatro tipos de acceso**, que se pueden tanto aplicar a los **atributos como a métodos**.
 - **Público (public):** **cualquier** método de cualquier clase del programa puede acceder a los atributos y métodos.
@@ -70,7 +70,7 @@ Si se intentase usar el atributo en este estado, se generaría un error de ejecu
 
 Al declarar una instancia de una **clase**, no se reservará memoria para dicho objeto tampoco. Si no se inicializa con el operador `new`, provocará un error de compilación.
 
-![[archivos/imagenes/Pasted image 20250615175148.png]]
+![](./archivos/imagenes/Pasted image 20250615175148.png)
 
 Un **constructor** es un método que **no devuelve ningún tipo de dato**. Se invoca para:
 - **Reservar memoria** para un objeto y sus atributos.

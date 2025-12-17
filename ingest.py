@@ -235,6 +235,14 @@ def copy_files(files_to_copy: List[Dict], dest_base: Path, dry_run: bool = False
             if not title:
                 title = source.stem
             
+            # Convertir sintaxis de imágenes Obsidian a Markdown estándar
+            # ![[archivos/imagenes/...]] -> ![](./archivos/imagenes/...)
+            def convert_obsidian_image(match):
+                image_path = match.group(1)
+                return f'![](./{image_path})'
+            
+            original_content = re.sub(r'!\[\[([^\]]+)\]\]', convert_obsidian_image, original_content)
+            
             # Verificar si ya tiene frontmatter
             if original_content.strip().startswith('---'):
                 # Ya tiene frontmatter, copiar tal cual
@@ -253,6 +261,52 @@ title: "{title}"
             print(f"   ✅ {source.name} -> {dest_path}")
         
         copied_count += 1
+    
+    return copied_count
+
+
+def copy_image_folders(source_path: Path, dest_base: Path, dry_run: bool = False) -> int:
+    """
+    Copia las carpetas de imágenes de cada asignatura.
+    """
+    copied_count = 0
+    
+    for subdir, folder_name, curso, cuatrimestre in FOLDER_MAPPING:
+        # Construir ruta completa
+        if subdir:
+            folder_path = source_path / subdir / folder_name
+        else:
+            folder_path = source_path / folder_name
+        
+        if not folder_path.exists():
+            continue
+        
+        # Recorrer subcarpetas (asignaturas)
+        for subject_dir in folder_path.iterdir():
+            if not subject_dir.is_dir():
+                continue
+            
+            if should_ignore_folder(subject_dir.name):
+                continue
+            
+            subject_slug = get_subject_slug(subject_dir.name)
+            
+            # Buscar carpeta de archivos/imagenes
+            archivos_path = subject_dir / 'archivos'
+            if archivos_path.exists() and archivos_path.is_dir():
+                # Destino para las imágenes
+                dest_archivos = dest_base / curso / cuatrimestre / subject_slug / 'archivos'
+                
+                if dry_run:
+                    print(f"   🖼️  [DRY-RUN] Copiando {archivos_path} -> {dest_archivos}")
+                else:
+                    # Copiar toda la carpeta archivos
+                    if dest_archivos.exists():
+                        shutil.rmtree(dest_archivos)
+                    shutil.copytree(archivos_path, dest_archivos)
+                    print(f"   🖼️  Copiada carpeta de imágenes: {subject_slug}/archivos")
+                
+                copied_count += 1
     
     return copied_count
 
@@ -413,6 +467,12 @@ def main():
     print("📋 Copiando archivos...")
     print("-" * 40)
     copied = copy_files(files_to_copy, dest_base, args.dry_run)
+    print()
+    
+    # Copiar carpetas de imágenes
+    print("🖼️  Copiando carpetas de imágenes...")
+    print("-" * 40)
+    images_copied = copy_image_folders(source_path, dest_base, args.dry_run)
     print()
     
     # Crear índices

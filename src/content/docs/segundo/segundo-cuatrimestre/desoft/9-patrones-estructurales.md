@@ -9,9 +9,9 @@ Organiza objetos en **estructura de árbol** para representar jerarquías. Permi
 -  Representar jerarquías de objetos **parte-todo**.
 - Obviar diferencias entre los **individuos** y sus **composiciones**.
 
-![[Pasted image 20250423162658.png]]
-![[Pasted image 20250423162707.png]]
-![[Pasted image 20250423162718.png]]
+![](./Pasted image 20250423162658.png)
+![](./Pasted image 20250423162707.png)
+![](./Pasted image 20250423162718.png)
 
 ## Participantes
 
@@ -23,7 +23,7 @@ Organiza objetos en **estructura de árbol** para representar jerarquías. Permi
 | **Cliente**    | Usa objetos a través de la interfaz del componente, sin preocuparse si es hoja o compuesto.                          |
 
 ## Estructura
-![[Pasted image 20250423144129.png]]
+![](./Pasted image 20250423144129.png)
 ## Ventajas e Inconvenientes
 - Permite **composición recursiva**, es decir, compuestos dentro de compuestos.
 - Simplifica el código del cliente al unificar el tratamiento de todos los elementos.
@@ -37,8 +37,8 @@ Asigna/retira **responsabilidades adicionales** a un objeto particular **dinámi
 - Otorgar o revocar responsabilidades a objetos individuales de manera dinámica y transparente.
 - Cuando no es viable la extensión mediante herencia
 
-![[Pasted image 20250423163052.png]]
-![[Pasted image 20250423163104.png]]
+![](./Pasted image 20250423163052.png)
+![](./Pasted image 20250423163104.png)
 
 ## Participantes
 
@@ -49,7 +49,7 @@ Asigna/retira **responsabilidades adicionales** a un objeto particular **dinámi
 | **Decorador**          | Clase abstracta que implementa la interfaz y contiene una referencia a un componente. |
 | **DecoradorConcreto**  | Añade funcionalidades específicas al componente envolviendo su comportamiento.        |
 ## Estructura
-![[Pasted image 20250423144302.png]]
+![](./Pasted image 20250423144302.png)
 
 ## Ventajas e Inconvenientes
 - Mucho más **flexible que la herencia**: puedes combinar decoradores fácilmente.

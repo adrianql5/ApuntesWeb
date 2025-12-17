@@ -28,7 +28,7 @@ $$
 \end{aligned}
 $$
 
-![[Pasted image 20250426124057.png]]
+![](./Pasted image 20250426124057.png)
 
 `glENable(GL_DEPTH_TEST)`: activa la prueba de profundidad
 `glDisable(GL_DEPTH_TEST)`: desactiva la prueba de profundidad, por lo que dibuja según el orden en el que recibe los fragmentos, aunque estén detrás
@@ -73,7 +73,7 @@ Posibles **soluciones:**
 - Aumentar la precisión del z-buffer si es posible
 - Elegir bien el near y far
 - Separar un poco los objetos
-![[Pasted image 20250426161710.png]]
+![](./Pasted image 20250426161710.png)
 # 7.2 Atenuación
 **Atenuación:** la intensidad de iluminación decrece a medida que aumenta la distancia a la fuente de luz.
 
@@ -91,9 +91,9 @@ La **niebla** es un efecto especial utilizado para **difuminar** los objetos seg
 El efecto niebla se puede aplicar de dos formas:
 - Basado en **tablas** (cálculo por píxel), más preciso
 - Basado en **vértices**, más eficiente pero menos preciso.
-![[Pasted image 20250426161749.png]]
+![](./Pasted image 20250426161749.png)
 
-![[Pasted image 20250426161738.png]]
+![](./Pasted image 20250426161738.png)
 `glEnable(GL_FOG)`, activa la niebla.
 
 Para especificar la densidad, color y tipo de niebla:
@@ -105,7 +105,7 @@ Para especificar la densidad, color y tipo de niebla:
 - `GL_EXP`-> $f=e^{-density*z}$
 - `GL_EXP2`-> $f=e^{-(density*z)^2}$
 
-![[Pasted image 20250426161801.png]]
+![](./Pasted image 20250426161801.png)
 
 # 7.4 MipMapping
 El **mipmapping** consiste en asociar **varias texturas** de **distintas calidades** a la misma superficie para mostrar una de ellas en función de su profundidad.
@@ -130,11 +130,11 @@ if (data)
 }
 ``` 
 
-![[Pasted image 20250426162218.png]]
+![](./Pasted image 20250426162218.png)
 
 # 7.5 SkyBox
 La **skybox** es una caja que contiene el escenario en su interior sobre cuyo interior se aplica una textura de cielo. También se puede usar una semicircunferencia o $dome$.
-![[Pasted image 20250426163050.png]]
+![](./Pasted image 20250426163050.png)
 # 7.6 Colisiones
 Teóricamente, para saber si dos objetos están colisionando se debe comprobar **para cada una de las caras** de ambos si se interseca con alguna de las del otro. Como esto es muy costoso, se suelen **envolver los objetos** en una **forma geométrica** más simple, como una **caja** , una **esfera**, un cilindro o un elipsoide.
 
@@ -147,12 +147,12 @@ $$dist = \sqrt{(x_1-x_2)^2+(y_1-y_2)^2+(z_1-z_2)^2}$$
 ```c++
 if(dist<(r1+r2)->colision)
 ```
-![[Pasted image 20250426163109.png]]
+![](./Pasted image 20250426163109.png)
 ## 7.6.2 Bounding Boxes
 Las **bounding boxes** están definidas por un **punto mínimo** (xMIn, yMin, zMin) y un **punto máximo** (xMax, yMax, zMax)
 
-![[Pasted image 20250426163123.png]]
-![[Pasted image 20250426163552.png]]
+![](./Pasted image 20250426163123.png)
+![](./Pasted image 20250426163552.png)
 Hay dos manera de comprobar si las dos cajas colisionan:
 - **Axis Aligned Bounding Boxes (AAB):** se usan **cajas alineadas con los ejes**. Se basa en comprobar si **alguna de las 8 esquinas** de la caja está dentro de la caja de otro: 
 ```c++
@@ -163,7 +163,7 @@ El método es más fácil, rápido y barato de calcular.
 - **Separated Axis Test (SAT):** se usan **segmentos, triángulos y cajas no alineadas con los ejes**.
 	- Dos objetos **no colisionan si existe al menos un eje de proyección en el cual al proyectarlo no se superponen**.
 
-![[Pasted image 20250426163525.png]]
+![](./Pasted image 20250426163525.png)
 
 # 7.7 Árboles, particionado del espacio y mapas
-![[Pasted image 20250426163658.png]]
+![](./Pasted image 20250426163658.png)

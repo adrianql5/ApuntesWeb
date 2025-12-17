@@ -41,7 +41,7 @@ Un **Conjunto de Entidades** es un grupo de objetos con existencia física o con
 
 La **Extensión** de un conjuntos de entidades se refiere a la colección real de entidades que pertenecen al conjunto de entidades en cuestión.
 
-![[Archivos/imagenes/Pasted image 20241223100308.png]]
+![](./Archivos/imagenes/Pasted image 20241223100308.png)
 
 ## 1.2.2 Conjuntos de Relaciones
 Una **Relación** es una asociación entre varias **entidades**. La relación *Tutor*, asocia a la entidad *profesor* con la entidad *alumno*.
@@ -52,7 +52,7 @@ La asociación entre conjuntos de entidades se conoce como **participación**. L
 
 La función que desempeña una entidad en una relación se denomina **rol**. Los roles suelen ser implícitos y no se especifican. Sin embargo, si en una relación intervienen entidades de un **mismo conjunto** desempeñaran diferentes roles. Este caso se denomina **Conjunto de Relaciones Recursivo**.
 
-![[Archivos/imagenes/Pasted image 20241223100445.png]]
+![](./Archivos/imagenes/Pasted image 20241223100445.png)
 
 El conjunto de relaciones es **binario** si, involucra a solo 2 conjuntos de entidades. Si involucra a 3 **terciario**, etc. El número de conjuntos de entidades que participan en un conjunto de relaciones es el **grado** de ese conjunto de relaciones.
 
@@ -71,7 +71,7 @@ Para cada atributo hay un conjuntos de valores permitidos llamado **dominio**.
 * **Derivados** (su valor se puede obtener a partir del valor de otros atributos o entidades relacionados, el valor de estos atributos **nunca se almacena**).
 Los atributos además pueden tomar valores nulos.
 
-![[Archivos/imagenes/Pasted image 20241223100856.png]]
+![](./Archivos/imagenes/Pasted image 20241223100856.png)
 
 # 1.3 Restricciones
 Las **restricciones** determinan la semántica de la BD, es decir, su comportamiento. Una base de datos con los mismo conjuntos de entidades y relaciones será diferente si sus restricciones son diferentes.
@@ -88,9 +88,9 @@ Expresa el **número de entidades** a las que otra entidad se puede asociar medi
 
 * **Varios a varios:** cada entidad de *A* se asocia con cualquiera de *B* y viceversa
 
-![[Archivos/imagenes/Pasted image 20240926114823.png]]
+![](./Archivos/imagenes/Pasted image 20240926114823.png)
 
-![[Archivos/imagenes/Pasted image 20240926114909.png]]
+![](./Archivos/imagenes/Pasted image 20240926114909.png)
 ## 1.3.2 Restricciones de Participación
 Se dice que la **participación** de un conjunto de entidades *E* en un conjunto de relaciones *R* es **total** si cada entidad de *E* participa, al menos en una relación de *R*.
 
@@ -108,7 +108,7 @@ Cada atributo que describe una propiedad de un conjunto, **está sólo una vez**
 
 # 1.5 Diagramas Entidad-Relación
 
-![[Archivos/imagenes/Pasted image 20240926130215.png]]
+![](./Archivos/imagenes/Pasted image 20240926130215.png)
 
 Otro concepto nuevo es el de **conjunto de entidades fuertes o débiles**, las **débiles** necesitan la existencia de un conjunto de entidades **fuertes**. Se dice **conjunto de entidades débiles** a aquel conjunto de entidades que no tiene atributos suficientes que le permitan formar una **clave primaria**. Si tienen clave primaria son **conjuntos de entidades fuertes**.
 
@@ -116,7 +116,7 @@ La relación que asocia a conjuntos de entidades fuertes y débiles se llama **r
 
 Aunque los conjuntos de entidades débiles no tienen clave primaria, hace falta un medio para distinguir entre todas las entidades del conjunto de entidades débiles que dependen de una entidad fuerte concreta. El **discriminador** (*clave parcial*) de un conjunto de entidades débiles es un conjunto de atributos que permite que se haga esta distinción.
 
-![[Archivos/imagenes/Pasted image 20241223121236.png]]
+![](./Archivos/imagenes/Pasted image 20241223121236.png)
 
 # 1.6 Modelo Entidad-Relación Extendido
 Los conjuntos de entidades pueden incluir **subgrupos** de entidades que se diferencian de alguna forma de las demás entidades del conjunto. Las **subclases** tienen las mismas entidades que las superclases pero **agrupadas** en base al cumplimiento de alguna característica. Este proceso de establecimiento de subgrupos dentro del conjunto de entidades se denomina **especialización**.
@@ -135,7 +135,7 @@ La **generalización** es la relación de contención que existe entre el conjun
 
 Se puede entender como el proceso contrario a la **especialización**. En la especialización se "*segmenta*" una **superclase** y en la generalización se "*juntan*" varias **subclases** para construir una **superclase**.
 
-![[Archivos/imagenes/Pasted image 20241223103952.png]]
+![](./Archivos/imagenes/Pasted image 20241223103952.png)
 
 Además podemos diferenciar entre **jerarquía** y **retículo,** en la jerarquía un conjunto de entidades dado sólo puede estar implicado como conjunto de entidades de nivel inferior en una relación, es decir, tienen **herencia única**. 
 **Retículo:** si un conjunto de entidades es de nivel inferior en más de una relación tiene **herencia múltiple** y se denomina retículo.

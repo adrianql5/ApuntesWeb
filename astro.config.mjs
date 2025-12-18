@@ -16,7 +16,7 @@ export default defineConfig({
 	},
 	integrations: [
 		starlight({
-			title: 'Apuntes Universitarios',
+			title: 'Apuntes Ingeniería Informática',
 			description: 'Apuntes de Ingeniería Informática organizados por curso y asignatura',
 			defaultLocale: 'root',
 			locales: {
@@ -70,6 +70,33 @@ export default defineConfig({
 						name: 'viewport',
 						content: 'width=device-width, initial-scale=1.0',
 					},
+				},
+				{
+					tag: 'script',
+					content: `
+						document.addEventListener('DOMContentLoaded', function() {
+							// Crear contenedor de controles Zen
+							const zenControls = document.createElement('div');
+							zenControls.className = 'zen-controls';
+							zenControls.innerHTML = \`
+								<button class="zen-btn" id="zen-sidebar-btn" title="Toggle Menú Lateral">☰</button>
+								<button class="zen-btn" id="zen-toc-btn" title="Toggle Sinopsis">📑</button>
+							\`;
+							document.body.appendChild(zenControls);
+							
+							// Toggle Sidebar (menú izquierdo)
+							document.getElementById('zen-sidebar-btn').addEventListener('click', function() {
+								document.body.classList.toggle('zen-hide-sidebar');
+								this.classList.toggle('active');
+							});
+							
+							// Toggle TOC (sinopsis derecha)
+							document.getElementById('zen-toc-btn').addEventListener('click', function() {
+								document.body.classList.toggle('zen-hide-toc');
+								this.classList.toggle('active');
+							});
+						});
+					`,
 				},
 			],
 			components: {

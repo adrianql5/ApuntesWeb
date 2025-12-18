@@ -50,6 +50,115 @@
 }
 
 /* =============================================================================
+   OCULTAR SCROLLBARS (manteniendo funcionalidad de scroll)
+   ============================================================================= */
+
+/* Webkit (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+/* Firefox */
+* {
+    scrollbar-width: none;
+}
+
+/* IE/Edge legacy */
+* {
+    -ms-overflow-style: none;
+}
+
+/* Asegurar que html y body también oculten scrollbar */
+html,
+body {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    display: none;
+    width: 0;
+    height: 0;
+}
+
+/* =============================================================================
+   MODO ZEN - Ocultar menús laterales
+   ============================================================================= */
+
+/* Botones flotantes de Modo Zen */
+.zen-controls {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 8px;
+    z-index: 1000;
+}
+
+.zen-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: var(--sl-color-accent);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+}
+
+.zen-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.zen-btn.active {
+    background: var(--sl-color-accent-high);
+}
+
+/* Ocultar sidebar izquierdo cuando zen-hide-sidebar está activo */
+body.zen-hide-sidebar .sidebar {
+    display: none !important;
+}
+
+body.zen-hide-sidebar #starlight__sidebar {
+    display: none !important;
+}
+
+body.zen-hide-sidebar nav[aria-label="Main"] {
+    display: none !important;
+}
+
+/* Expandir contenido cuando sidebar está oculto */
+body.zen-hide-sidebar .main-frame {
+    margin-inline-start: 0 !important;
+}
+
+body.zen-hide-sidebar main {
+    margin-inline-start: 0 !important;
+}
+
+/* Ocultar TOC (sidebar derecho) cuando zen-hide-toc está activo */
+body.zen-hide-toc .right-sidebar {
+    display: none !important;
+}
+
+body.zen-hide-toc starlight-toc {
+    display: none !important;
+}
+
+body.zen-hide-toc aside[data-pagefind-ignore] {
+    display: none !important;
+}
+
+/* =============================================================================
    TIPOGRAFÍA
    ============================================================================= */
 

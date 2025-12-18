@@ -85,77 +85,92 @@ body::-webkit-scrollbar {
 }
 
 /* =============================================================================
-   MODO ZEN - Ocultar menús laterales
+   MODO ZEN - Ocultar menús laterales con transiciones suaves
    ============================================================================= */
 
-/* Botones flotantes de Modo Zen */
+/* Contenedor de botones Zen - en el header */
 .zen-controls {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    top: 12px;
+    right: 140px;
     display: flex;
-    gap: 8px;
+    gap: 6px;
     z-index: 1000;
 }
 
 .zen-btn {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: none;
-    background: var(--sl-color-accent);
-    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: 1px solid var(--sl-color-gray-4);
+    background: var(--sl-color-bg-nav);
+    color: var(--sl-color-text);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    opacity: 0.7;
 }
 
 .zen-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    opacity: 1;
+    background: var(--sl-color-accent);
+    color: white;
+    border-color: var(--sl-color-accent);
 }
 
 .zen-btn.active {
-    background: var(--sl-color-accent-high);
+    background: var(--sl-color-accent);
+    color: white;
+    border-color: var(--sl-color-accent);
+    opacity: 1;
 }
 
-/* Ocultar sidebar izquierdo cuando zen-hide-sidebar está activo */
-body.zen-hide-sidebar .sidebar {
-    display: none !important;
+/* Sidebar izquierdo - con transición suave */
+#starlight__sidebar,
+.sidebar,
+nav[aria-label="Main"] {
+    transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
 }
 
-body.zen-hide-sidebar #starlight__sidebar {
-    display: none !important;
-}
-
+/* Ocultar sidebar izquierdo con animación */
+body.zen-hide-sidebar #starlight__sidebar,
+body.zen-hide-sidebar .sidebar,
 body.zen-hide-sidebar nav[aria-label="Main"] {
-    display: none !important;
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none;
+    width: 0 !important;
+    min-width: 0 !important;
+    overflow: hidden;
 }
 
 /* Expandir contenido cuando sidebar está oculto */
-body.zen-hide-sidebar .main-frame {
-    margin-inline-start: 0 !important;
-}
-
+body.zen-hide-sidebar .main-frame,
 body.zen-hide-sidebar main {
     margin-inline-start: 0 !important;
+    transition: margin 0.3s ease;
 }
 
-/* Ocultar TOC (sidebar derecho) cuando zen-hide-toc está activo */
-body.zen-hide-toc .right-sidebar {
-    display: none !important;
+/* Sidebar derecho (TOC) - con transición suave */
+.right-sidebar,
+starlight-toc,
+aside[data-pagefind-ignore] {
+    transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
 }
 
-body.zen-hide-toc starlight-toc {
-    display: none !important;
-}
-
+/* Ocultar TOC con animación */
+body.zen-hide-toc .right-sidebar,
+body.zen-hide-toc starlight-toc,
 body.zen-hide-toc aside[data-pagefind-ignore] {
-    display: none !important;
+    transform: translateX(100%);
+    opacity: 0;
+    pointer-events: none;
+    width: 0 !important;
+    min-width: 0 !important;
+    overflow: hidden;
 }
 
 /* =============================================================================

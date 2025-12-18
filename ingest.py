@@ -97,39 +97,72 @@ def slugify(text: str) -> str:
     return text
 
 
+def clean_markdown_headers(content: str) -> str:
+    """
+    Limpia los encabezados Markdown de enlaces de Obsidian y Markdown.
+    Procesa línea por línea para mayor precisión.
+    
+    Transformaciones:
+    - [[Ruta/archivo|TextoVisible]] -> TextoVisible
+    - [[Ruta/archivo]] -> archivo
+    - [Texto](URL) -> Texto
+    
+    Preserva:
+    - Caracteres especiales como números, puntos, +, - que forman parte del título
+    - Ejemplos: "# 4.8 Árboles B+" permanece igual
+    """
+    lines = content.split('\n')
+    cleaned_lines = []
+    
+    for line in lines:
+        # Detectar si es una línea de encabezado (empieza con # seguido de espacio o más #)
+        is_header = re.match(r'^(#+)\s', line)
+        
+        if is_header:
+            # Limpiar WikiLinks con alias: [[ruta|texto]] -> texto
+            line = re.sub(r'\[\[[^\]]*\|([^\]]+)\]\]', r'\1', line)
+            
+            # Limpiar WikiLinks sin alias: [[ruta/archivo.ext]] -> archivo
+            def extract_filename(match):
+                path = match.group(1)
+                # Obtener solo el nombre del archivo (última parte de la ruta)
+                filename = path.split('/')[-1]
+                # Quitar extensión si existe
+                if '.' in filename:
+                    filename = filename.rsplit('.', 1)[0]
+                return filename
+            
+            line = re.sub(r'\[\[([^\]|]+)\]\]', extract_filename, line)
+            
+            # Limpiar enlaces Markdown: [texto](url) -> texto
+            line = re.sub(r'\[([^\]]+)\]\([^\)]+\)', r'\1', line)
+        else:
+            # Para líneas que no son encabezados, también limpiar WikiLinks
+            # pero preservar el resto del contenido
+            
+            # WikiLinks con alias: [[ruta|texto]] -> texto
+            line = re.sub(r'\[\[[^\]]*\|([^\]]+)\]\]', r'\1', line)
+            
+            # WikiLinks sin alias: [[ruta/archivo.ext]] -> archivo
+            def extract_filename_body(match):
+                path = match.group(1)
+                filename = path.split('/')[-1]
+                if '.' in filename:
+                    filename = filename.rsplit('.', 1)[0]
+                return filename
+            
+            line = re.sub(r'\[\[([^\]|]+)\]\]', extract_filename_body, line)
+        
+        cleaned_lines.append(line)
+    
+    return '\n'.join(cleaned_lines)
+
+
 def clean_wikilinks(content: str) -> str:
     """
-    Limpia los WikiLinks de Obsidian del contenido.
-    
-    Convierte:
-    - [[ruta/archivo|TextoVisible]] -> TextoVisible
-    - [[ruta/archivo]] -> archivo (nombre sin extensión)
-    - [[archivo.pdf]] -> archivo
-    
-    Esto es especialmente importante para los encabezados,
-    para que el Table of Contents se genere limpio.
+    Wrapper para compatibilidad. Llama a clean_markdown_headers.
     """
-    def replace_wikilink(match):
-        full_link = match.group(1)
-        
-        # Si tiene alias (|), usar el texto después del |
-        if '|' in full_link:
-            parts = full_link.split('|', 1)
-            return parts[1].strip()
-        
-        # Si no tiene alias, extraer el nombre del archivo
-        # Quitar la ruta y la extensión
-        filename = full_link.split('/')[-1]  # Último elemento de la ruta
-        # Quitar extensión si existe
-        if '.' in filename:
-            filename = filename.rsplit('.', 1)[0]
-        return filename.strip()
-    
-    # Reemplazar todos los WikiLinks [[...]]
-    # No afecta a las imágenes ![[...]] porque ya fueron procesadas antes
-    cleaned = re.sub(r'\[\[([^\]]+)\]\]', replace_wikilink, content)
-    
-    return cleaned
+    return clean_markdown_headers(content)
 
 
 def should_ignore_file(filename: str) -> bool:

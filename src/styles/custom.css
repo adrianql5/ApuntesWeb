@@ -85,6 +85,23 @@ body::-webkit-scrollbar {
 }
 
 /* =============================================================================
+   HERO - Imagen circular con borde
+   ============================================================================= */
+
+/* Hacer la imagen del hero circular */
+.hero img,
+[data-template="splash"] .hero img {
+    border-radius: 50% !important;
+    border: 4px solid var(--sl-color-accent) !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 0 8px rgba(220, 38, 38, 0.1) !important;
+    object-fit: cover !important;
+    aspect-ratio: 1 / 1 !important;
+    max-width: 280px !important;
+    max-height: 280px !important;
+}
+
+/* =============================================================================
    MODO ZEN - Ocultar menús laterales con transiciones suaves
    ============================================================================= */
 

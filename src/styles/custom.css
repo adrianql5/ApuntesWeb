@@ -128,79 +128,125 @@ body::-webkit-scrollbar {
     opacity: 1;
 }
 
-/* Sidebar izquierdo - con transición suave */
+/* =============================================================================
+   MODO ZEN - TRANSICIONES SUAVES
+   ============================================================================= */
+
+/* ============ SIDEBAR IZQUIERDO ============ */
+
+/* Transición base para sidebar izquierdo (siempre activa) */
 #starlight__sidebar,
 .sidebar,
-nav[aria-label="Main"] {
-    transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+nav[aria-label="Main"],
+.sidebar-pane,
+.sl-sidebar,
+aside.sidebar {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
 }
 
-/* Ocultar sidebar izquierdo con animación */
+/* Ocultar sidebar izquierdo cuando tiene la clase zen-hide-sidebar */
 body.zen-hide-sidebar #starlight__sidebar,
 body.zen-hide-sidebar .sidebar,
-body.zen-hide-sidebar nav[aria-label="Main"] {
-    transform: translateX(-100%);
-    opacity: 0;
-    pointer-events: none;
-    width: 0 !important;
-    min-width: 0 !important;
-    overflow: hidden;
+body.zen-hide-sidebar nav[aria-label="Main"],
+body.zen-hide-sidebar .sidebar-pane,
+body.zen-hide-sidebar .sl-sidebar,
+body.zen-hide-sidebar aside.sidebar {
+    transform: translateX(-100%) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
 }
 
-/* Expandir contenido cuando sidebar está oculto */
+/* Transición base para contenido principal */
+.main-frame,
+main {
+    transition: margin 0.3s ease-in-out !important;
+}
+
+/* Expandir contenido cuando sidebar izquierdo está oculto */
 body.zen-hide-sidebar .main-frame,
 body.zen-hide-sidebar main {
     margin-inline-start: 0 !important;
-    transition: margin 0.3s ease;
 }
 
-/* Sidebar derecho (TOC) - con transición suave */
+/* ============ SIDEBAR DERECHO (TOC/Sinopsis) ============ */
+
+/* Transición base para sidebar derecho (siempre activa) */
 .right-sidebar,
-starlight-toc,
-aside[data-pagefind-ignore] {
-    transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+starlight-toc {
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
 }
 
-/* Ocultar TOC con animación */
+/* Ocultar sidebar derecho cuando tiene la clase zen-hide-toc */
 body.zen-hide-toc .right-sidebar,
-body.zen-hide-toc starlight-toc,
-body.zen-hide-toc aside[data-pagefind-ignore] {
-    transform: translateX(100%);
-    opacity: 0;
-    pointer-events: none;
-    width: 0 !important;
-    min-width: 0 !important;
-    overflow: hidden;
+body.zen-hide-toc starlight-toc {
+    transform: translateX(100%) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+
+/* Expandir contenido cuando TOC está oculto */
+body.zen-hide-toc main,
+body.zen-hide-toc article {
+    margin-inline-end: 0 !important;
+}
+
+/* ============ AMBOS OCULTOS ============ */
+
+/* Cuando ambos sidebars están ocultos, maximizar contenido */
+body.zen-hide-sidebar.zen-hide-toc .main-frame,
+body.zen-hide-sidebar.zen-hide-toc main,
+body.zen-hide-sidebar.zen-hide-toc article {
+    max-width: 100% !important;
+    margin-inline: auto !important;
 }
 
 /* =============================================================================
-   HEADER - Arreglar selector de tema cortado
+   HEADER - Limpieza del selector de tema
    ============================================================================= */
 
-/* Evitar que el selector de tema se corte */
-starlight-theme-select,
-.sl-select {
-    min-width: auto !important;
-    overflow: visible !important;
+/* Ocultar completamente el selector de tema original */
+starlight-theme-select {
+    position: relative;
 }
 
-/* Ocultar texto del selector, mostrar solo icono */
-starlight-theme-select select,
-.sl-select select {
-    width: 40px !important;
-    padding-right: 0 !important;
-    text-indent: -9999px;
-    background-position: center !important;
+/* Ocultar el select dropdown y sus iconos */
+starlight-theme-select select {
+    display: none !important;
 }
 
-/* Alternativa: dar más espacio al header */
-header.header {
-    padding-inline: 1rem;
+/* Ocultar icono de luna, flechas y SVGs dentro del selector de tema */
+starlight-theme-select svg,
+starlight-theme-select .icon,
+starlight-theme-select::after,
+starlight-theme-select::before,
+.sl-select svg,
+.sl-select::after {
+    display: none !important;
 }
 
-.right-group {
-    gap: 0.5rem;
-    flex-shrink: 0;
+/* Ocultar el label del tema si existe */
+starlight-theme-select label,
+starlight-theme-select span:not(.theme-toggle-btn) {
+    display: none !important;
+}
+
+/* Estilo del botón de tema personalizado (creado por JS) */
+.theme-toggle-btn {
+    background: none !important;
+    border: none !important;
+    font-size: 1.3rem !important;
+    cursor: pointer !important;
+    padding: 6px 10px !important;
+    opacity: 0.85;
+    transition: opacity 0.2s ease, transform 0.2s ease !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-toggle-btn:hover {
+    opacity: 1 !important;
+    transform: scale(1.1);
 }
 
 /* =============================================================================

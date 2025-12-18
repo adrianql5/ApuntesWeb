@@ -76,26 +76,66 @@ export default defineConfig({
 					tag: 'script',
 					content: `
 						document.addEventListener('DOMContentLoaded', function() {
-							// Crear contenedor de controles Zen
-							const zenControls = document.createElement('div');
-							zenControls.className = 'zen-controls';
-							zenControls.innerHTML = \`
-								<button class="zen-btn" id="zen-sidebar-btn" title="Toggle Menú Lateral">☰</button>
-								<button class="zen-btn" id="zen-toc-btn" title="Toggle Sinopsis">📑</button>
-							\`;
-							document.body.appendChild(zenControls);
+							// Detectar si estamos en una página splash (sin sidebar)
+							const isSplashPage = document.querySelector('[data-template="splash"]') !== null ||
+								window.location.pathname === '/ApuntesWeb/' ||
+								window.location.pathname === '/ApuntesWeb';
 							
-							// Toggle Sidebar (menú izquierdo)
-							document.getElementById('zen-sidebar-btn').addEventListener('click', function() {
-								document.body.classList.toggle('zen-hide-sidebar');
-								this.classList.toggle('active');
-							});
+							// Solo mostrar controles Zen si hay sidebars
+							const hasSidebar = document.querySelector('#starlight__sidebar, .sidebar, nav[aria-label="Main"]') !== null;
+							const hasToc = document.querySelector('.right-sidebar, starlight-toc') !== null;
 							
-							// Toggle TOC (sinopsis derecha)
-							document.getElementById('zen-toc-btn').addEventListener('click', function() {
-								document.body.classList.toggle('zen-hide-toc');
-								this.classList.toggle('active');
-							});
+							if (!isSplashPage && (hasSidebar || hasToc)) {
+								// Crear contenedor de controles Zen
+								const zenControls = document.createElement('div');
+								zenControls.className = 'zen-controls';
+								zenControls.innerHTML = \`
+									<button class="zen-btn" id="zen-sidebar-btn" title="Toggle Menú Lateral">☰</button>
+									<button class="zen-btn" id="zen-toc-btn" title="Toggle Sinopsis">📑</button>
+								\`;
+								document.body.appendChild(zenControls);
+								
+								// Toggle Sidebar (menú izquierdo)
+								document.getElementById('zen-sidebar-btn').addEventListener('click', function() {
+									document.body.classList.toggle('zen-hide-sidebar');
+									this.classList.toggle('active');
+								});
+								
+								// Toggle TOC (sinopsis derecha)
+								document.getElementById('zen-toc-btn').addEventListener('click', function() {
+									document.body.classList.toggle('zen-hide-toc');
+									this.classList.toggle('active');
+								});
+							}
+							
+							// Convertir selector de tema en toggle de click
+							const themeSelect = document.querySelector('starlight-theme-select');
+							if (themeSelect) {
+								const select = themeSelect.querySelector('select');
+								if (select) {
+									// Crear botón personalizado para reemplazar el select
+									const themeBtn = document.createElement('button');
+									themeBtn.className = 'theme-toggle-btn';
+									themeBtn.innerHTML = '🌓';
+									themeBtn.title = 'Cambiar tema';
+									themeBtn.style.cssText = 'background:none;border:none;font-size:1.2rem;cursor:pointer;padding:4px 8px;opacity:0.8;transition:opacity 0.2s;';
+									
+									themeBtn.addEventListener('mouseenter', () => themeBtn.style.opacity = '1');
+									themeBtn.addEventListener('mouseleave', () => themeBtn.style.opacity = '0.8');
+									
+									themeBtn.addEventListener('click', function(e) {
+										e.preventDefault();
+										const currentTheme = document.documentElement.getAttribute('data-theme');
+										const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+										document.documentElement.setAttribute('data-theme', newTheme);
+										localStorage.setItem('starlight-theme', newTheme);
+									});
+									
+									// Ocultar select original y añadir botón
+									select.style.display = 'none';
+									themeSelect.appendChild(themeBtn);
+								}
+							}
 						});
 					`,
 				},

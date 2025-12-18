@@ -18,6 +18,7 @@ export default defineConfig({
 		starlight({
 			title: 'Apuntes Ingeniería Informática',
 			description: 'Apuntes de Ingeniería Informática organizados por curso y asignatura',
+			tableOfContents: { minHeadingLevel: 1, maxHeadingLevel: 3 },
 			defaultLocale: 'root',
 			locales: {
 				root: {

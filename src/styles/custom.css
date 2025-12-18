@@ -438,6 +438,110 @@ button,
     td {
         padding: 8px 12px;
     }
+
+    /* Ocultar controles Zen en móvil - el sidebar de Starlight ya tiene su propio toggle */
+    .zen-controls,
+    div.zen-controls,
+    body .zen-controls,
+    .zen-controls .zen-btn,
+    #zen-sidebar-btn,
+    #zen-toc-btn {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    /* Ajustes para el sidebar en móvil */
+    #starlight__sidebar,
+    .sidebar,
+    .sl-sidebar {
+        width: auto !important;
+        min-width: auto !important;
+    }
+
+    /* Asegurar que el contenido principal ocupe todo el ancho en móvil */
+    .main-frame,
+    main,
+    article {
+        margin-inline-start: 0 !important;
+        margin-inline-end: 0 !important;
+        max-width: 100% !important;
+    }
+
+    /* Ajustar padding del contenido en móvil */
+    .sl-container {
+        padding-inline: 1rem;
+    }
+
+    /* Ajustar el header en móvil */
+    header.header {
+        padding-inline: 0.5rem;
+    }
+
+    /* Asegurar que las tablas sean scrollables horizontalmente */
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    /* Mejorar legibilidad de blockquotes en móvil */
+    blockquote {
+        padding: 0.75rem 1rem;
+        margin: 1rem 0;
+    }
+
+    /* Reducir espaciado de listas en móvil */
+    ul,
+    ol {
+        padding-left: 1.25rem;
+    }
+}
+
+/* =============================================================================
+   RESPONSIVE - Breakpoint de Starlight (50rem = 800px)
+   ============================================================================= */
+
+@media (max-width: 50rem) {
+
+    /* Ocultar controles Zen en el breakpoint de Starlight */
+    .zen-controls,
+    div.zen-controls,
+    body .zen-controls,
+    .zen-controls .zen-btn,
+    #zen-sidebar-btn,
+    #zen-toc-btn {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    /* Ocultar sidebar derecho (TOC) en móvil */
+    .right-sidebar,
+    starlight-toc,
+    nav.right-sidebar {
+        display: none !important;
+    }
+
+    /* Asegurar que el contenido principal use todo el ancho */
+    .sl-container {
+        max-width: 100% !important;
+        padding-inline: 1rem;
+    }
+
+    /* Mejorar legibilidad del contenido principal */
+    .content-panel {
+        padding: 1rem;
+    }
+
+    /* Mejorar visualización del hero en móvil */
+    .hero img,
+    [data-template="splash"] .hero img {
+        max-width: 180px !important;
+        max-height: 180px !important;
+    }
 }
 
 /* =============================================================================

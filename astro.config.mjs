@@ -95,9 +95,9 @@ export default defineConfig({
 								\`;
 								document.body.appendChild(zenControls);
 								
-								// Toggle Sidebar (menú izquierdo)
+								// Toggle Sidebar (menú izquierdo) - usa clase sidebar-collapsed
 								document.getElementById('zen-sidebar-btn').addEventListener('click', function() {
-									document.body.classList.toggle('zen-hide-sidebar');
+									document.body.classList.toggle('sidebar-collapsed');
 									this.classList.toggle('active');
 								});
 								

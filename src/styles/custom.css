@@ -134,26 +134,34 @@ body::-webkit-scrollbar {
 
 /* ============ SIDEBAR IZQUIERDO ============ */
 
-/* Transición base para sidebar izquierdo (siempre activa) */
+/* Estado base del sidebar izquierdo - VISIBLE con transición */
 #starlight__sidebar,
 .sidebar,
 nav[aria-label="Main"],
 .sidebar-pane,
 .sl-sidebar,
 aside.sidebar {
-    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out !important;
+    /* Transición suave de width y opacity */
+    transition: width 0.3s ease-in-out,
+        min-width 0.3s ease-in-out,
+        opacity 0.3s ease-in-out,
+        padding 0.3s ease-in-out !important;
+    overflow: hidden;
 }
 
-/* Ocultar sidebar izquierdo cuando tiene la clase zen-hide-sidebar */
-body.zen-hide-sidebar #starlight__sidebar,
-body.zen-hide-sidebar .sidebar,
-body.zen-hide-sidebar nav[aria-label="Main"],
-body.zen-hide-sidebar .sidebar-pane,
-body.zen-hide-sidebar .sl-sidebar,
-body.zen-hide-sidebar aside.sidebar {
-    transform: translateX(-100%) !important;
+/* Ocultar sidebar izquierdo cuando body tiene clase sidebar-collapsed */
+body.sidebar-collapsed #starlight__sidebar,
+body.sidebar-collapsed .sidebar,
+body.sidebar-collapsed nav[aria-label="Main"],
+body.sidebar-collapsed .sidebar-pane,
+body.sidebar-collapsed .sl-sidebar,
+body.sidebar-collapsed aside.sidebar {
+    width: 0 !important;
+    min-width: 0 !important;
     opacity: 0 !important;
+    padding: 0 !important;
     pointer-events: none !important;
+    overflow: hidden !important;
 }
 
 /* Transición base para contenido principal */
@@ -163,8 +171,8 @@ main {
 }
 
 /* Expandir contenido cuando sidebar izquierdo está oculto */
-body.zen-hide-sidebar .main-frame,
-body.zen-hide-sidebar main {
+body.sidebar-collapsed .main-frame,
+body.sidebar-collapsed main {
     margin-inline-start: 0 !important;
 }
 

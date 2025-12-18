@@ -159,6 +159,36 @@ body.zen-hide-toc aside[data-pagefind-ignore] {
 }
 
 /* =============================================================================
+   HEADER - Arreglar selector de tema cortado
+   ============================================================================= */
+
+/* Evitar que el selector de tema se corte */
+starlight-theme-select,
+.sl-select {
+    min-width: auto !important;
+    overflow: visible !important;
+}
+
+/* Ocultar texto del selector, mostrar solo icono */
+starlight-theme-select select,
+.sl-select select {
+    width: 40px !important;
+    padding-right: 0 !important;
+    text-indent: -9999px;
+    background-position: center !important;
+}
+
+/* Alternativa: dar más espacio al header */
+header.header {
+    padding-inline: 1rem;
+}
+
+.right-group {
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* =============================================================================
    TIPOGRAFÍA
    ============================================================================= */
 

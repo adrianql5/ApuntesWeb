@@ -4,283 +4,218 @@ title: "Sistemas Conexionistas"
 
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
-# 4.1 Introducción
-Los **sistemas conexionistas** o **Redes Neuronales Artificiales (RNA)** son modelos computacionales inspirados en el funcionamiento del cerebro humano. Representan una **dualidad científica y tecnológica** en la Inteligencia Artificial:
 
-- **Bioinspiración**: Imitan la estructura y funcionamiento de las neuronas biológicas
-- **Tecnoinspiración**: Crean soluciones tecnológicas prácticas basadas en estos principios
+# 4.1 Introducción: Del Símbolo a la Neurona
+A diferencia de los sistemas expertos (donde un humano programa las reglas), los sistemas conexionistas se inspiran en la estructura física del cerebro para **aprender** esas reglas a partir de ejemplos.
 
+>[!Nota]
+> En las diapositivas de mierda de la asignatura van saltando de sistema conexionista a red neuronal de forma muy alegre. Conceptualmente son lo mismo, capaz que lo dicen así porque interpretan que los sistemas conexionistas son el paradigma y las **RNA** la implementación.
 
-# 4.2 De la Neurona Biológica a la Artificial
-## 4.2.1 La Neurona Biológica
-Una neurona biológica es una célula especializada que:
-- Recibe señales eléctricas a través de **dendritas**
-- Procesa estas señales en el **soma** (cuerpo celular)
-- Si la suma de señales supera un umbral, genera un **potencial de acción**
-- Transmite la señal a otras neuronas a través del **axón**
+- **Dualidad**: Combinan la **Bioinspiración** (imitan el cerebro) con la **Tecnoinspiración** (modelos matemáticos para el cálculo) .
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251102174452.png)
+- **Evolución Histórica**:    
+    - _1943_: Modelo de McCulloch & Pitts (lógica binaria).
+    - _1957_: El **Perceptrón** de Rosenblatt (primera regla de aprendizaje).
+    - _1969_: Minsky y Papert demuestran las limitaciones (problema XOR), provocando un "invierno de la IA".
+    - _1986_: Renacer con el algoritmo de Retropropagación (Backpropagation) para redes multicapa 2.
 
-**Concepto clave**: El potencial de acción es una respuesta "todo o nada": o la neurona se activa completamente, o no se activa.
+>[!Nota]
+> Peceptrón es lo mismo que neurona artificial pero estos fenómenos siempre tienen que estar dando la nota con los nombres. Aunque bue hay un pequeño matiz, normalmente te refieres a una **neurona artificial con función de activación escalón (binaria)** si hablas de perceptrón.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251102174623.png)
+# 4.2 La Neurona Artificial: Unidad Básica
+Al igual que en biología, la neurona es la unidad de procesamiento. Existe una analogía directa entre las partes biológicas y el modelo matemático:
 
+| **Biología**  | **Modelo Matemático (Artificial)** | **Función**                                       |
+| ------------- | ---------------------------------- | ------------------------------------------------- |
+| **Dendritas** | Entradas ($x_i$)                   | Reciben señales de otras neuronas o del exterior. |
+| **Sinapsis**  | Pesos ($w_i$)                      | Determinan la importancia/fuerza de cada entrada. |
+| **Soma**      | Función de suma ($\sum$)           | Agrega todas las señales ponderadas.              |
+| **Axón**      | Salida ($y$)                       | Transmite el resultado si se supera un umbral.    |
 
-## 2.2 La Neurona Artificial: Modelo Simple
-La neurona artificial es una abstracción matemática que replica este comportamiento:
+### Modelo Matemático
 
-**Componentes básicos**:
-1. **Entradas (x₁, x₂, ..., xₙ)**: Señales que recibe la neurona
-2. **Pesos (w₁, w₂, ..., wₙ)**: Importancia de cada entrada (equivalente a las sinapsis)
-3. **Suma ponderada**: Σ(wᵢ × xᵢ)
-4. **Función de activación**: Determina la salida según el resultado de la suma
-5. **Salida (y)**: Resultado final de la neurona
+Una neurona calcula una suma ponderada de sus entradas más un sesgo (bias), y pasa el resultado por una función de activación.
 
-**Fórmula básica**:
-```
-y = f(Σ(wᵢ × xᵢ) + bias)
-```
-
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251102174752.png)
+$$z = \sum_{i} x_i \cdot w_i + b$$
+- **$x_i$**: Señales de entrada.
+- **$w_i$**: Pesos sinápticos (el "conocimiento" de la red se almacena aquí).    
+- **$b$ (Bias)**: Umbral de activación (matemáticamente equivale a un peso extra $w_0$ con entrada fija $+1$).
 
 
-## 4.3 Tipos de Neuronas Artificiales
-### 4.3.1 Neurona Binaria con Umbral
+### Funciones de Activación ($\varphi$)
+Determinan la salida final de la neurona:
 
-**Funcionamiento**: 
-- Si Σ(wᵢ × xᵢ) ≥ umbral → salida = 1
-- Si Σ(wᵢ × xᵢ) < umbral → salida = 0
-
-**Ejemplo práctico**:
-```
-Entradas: x₁=1, x₂=0, x₃=1
-Pesos: w₁=0.5, w₂=0.3, w₃=0.4
-Umbral = 0.7
-
-Cálculo: (1×0.5) + (0×0.3) + (1×0.4) = 0.9
-Como 0.9 ≥ 0.7 → salida = 1
-```
-
-## 4.3.2 Neurona Lineal Rectificada (ReLU)
-**Función de activación**:
-```
-f(x) = max(0, x)
-```
-
-**Características**:
-- Si entrada < 0 → salida = 0
-- Si entrada ≥ 0 → salida = entrada
-- Muy utilizada en redes profundas modernas por su simplicidad computacional
-
-## 4.3.3 Neurona Sigmoidal
-**Función de activación**:
-```
-f(x) = 1 / (1 + e^(-x))
-```
-
-**Características**:
-- Salida entre 0 y 1 (continua)
-- Forma de "S"
-- Útil para probabilidades y funciones diferenciables
-- Permite gradientes para aprendizaje
+1. **Escalón (Binaria)**: Salida 1 si supera el umbral, 0 si no. (Modelo original). Es una decisión rígida.
+2. **Lineal Rectificada (ReLU)**: Si $z < 0$ sale 0; si $z \ge 0$ sale $z$ ($y = \max(0, z)$). Actúa como un filtro de "pase". Si la señal es relevante (positiva), la deja pasar tal cual; si es irrelevante (negativa), la anula por completo.
+3. **Sigmoidal**: Transforma la salida en un valor suave entre 0 y 1 (probabilidad). Fórmula: $y = \frac{1}{1+e^{-z}}$. En lugar de decir "Es un gato" (1) o "No es un gato" (0), la neurona dice "Hay un 85% de probabilidad de que sea un gato" (0.85).
 
 
-## 4.4 Representación con Bias
-El **bias** es un término adicional que permite ajustar el umbral de activación:
+Se aplican **al final del procesamiento de la neurona**, justo después de calcular la suma ponderada y antes de enviar la señal a la siguiente capa.
 
-**Sin bias integrado**:
-```
-y = f(Σ(wᵢ × xᵢ) + b)
-```
+**El proceso paso a paso es:**
+1. **Recepción**: La neurona recibe las entradas ($x_1, x_2...$) multiplicadas por sus pesos ($w_1, w_2...$).
+2. Suma ($z$): Se suman todos estos valores más el sesgo ($b$). Esto ocurre en la "unión sumadora" ($\Sigma$).
+$$z = \sum x_i w_i + b$$    
+3. Activación ($\varphi$): Aquí es donde se aplica la función. El valor $z$ entra en la "caja" de la función de activación y se transforma en la salida final $y$.
+$$y = \varphi(z)$$
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251102175036.png)
-
-**Con bias integrado** (técnica común):
-- Se añade una entrada adicional x₀ = 1
-- Su peso asociado w₀ actúa como bias
-- Simplifica la notación: y = f(Σ(wᵢ × xᵢ)) donde i va de 0 a n
-
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251102175126.png)
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221180319.png)
 
 
-# 4.5 Arquitecturas de Redes Neuronales
-## 4.5.1 Perceptrón Simple
-**Estructura**:
-- Una capa de entrada
-- Una capa de salida (una o más neuronas)
-- Sin capas ocultas
+# 4.3 Análisis Geométrico: ¿Qué "ve" una neurona?
+El documento _Análisis del comportamiento..._ nos muestra que una sola neurona funciona como un **clasificador lineal**.
 
-**Limitación fundamental**: Solo puede resolver problemas **linealmente separables**
+- **Frontera de decisión**: La neurona divide el espacio en dos zonas (ej. Clase A y Clase B).
 
-## 4.5.2 Red Multicapa Feedforward (hacia adelante)
-**Estructura**:
-- Capa de entrada
-- Una o más **capas ocultas**
-- Capa de salida
-- Conexiones solo hacia adelante (sin ciclos)
+- Matemáticamente, esta frontera es una recta (o hiperplano) definida por:    
+$$x_1 \cdot w_1 + x_2 \cdot w_2 + b = 0$$    
+- **Interpretación**:
+    - A un lado de la recta, la suma es positiva $\rightarrow$ La neurona se activa ($y=1$).
 
-**Ventaja**: Puede resolver problemas **no linealmente separables**
+    - Al otro lado, la suma es negativa $\rightarrow$ La neurona se apaga ($y=0$) 5.
 
-**Algoritmo de entrenamiento**: Backpropagation (1986)
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251102175342.png)
+> **Nota de estudio**: Los pesos $w$ definen la inclinación de la recta y el bias $b$ define su desplazamiento respecto al origen.
+
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221181612.png)
+
+
+En la parte superior ves escritas las "instrucciones" o la configuración de esta neurona específica:
+- **$w_1 = 2$**: El peso de la entrada 1.
+- **$w_2 = 2$**: El peso de la entrada 2.
+- **$b = 1$**: El bias (sesgo).
+
+
+La neurona calcula una suma: $(x_1 \cdot w_1) + (x_2 \cdot w_2) + b$.
+
+La frontera (la línea dibujada) es el punto exacto donde esa suma da 0. Es el límite entre dispararse o no. Si sustituimos los valores en la fórmula:
+$$2x_1 + 2x_2 + 1 = 0$$
+
+Para poder dibujarla en un gráfico de ejes $X$ e $Y$ (donde $x_2$ actúa como la $Y$ vertical y $x_1$ como la $X$ horizontal), despejamos $x_2$:
+1. Pasamos el resto al otro lado: $2x_2 = -2x_1 - 1$
+2. Dividimos todo por 2: $x_2 = -x_1 - \frac{1}{2}$
+
+¡Mira la esquina inferior derecha de la imagen! Ahí está escrita exactamente esa fórmula final: $x_2 = -\frac{1}{2} - x_1$ (aunque el orden está invertido, es lo mismo).
+
+Aquí es donde ves el efecto del **bias**.
+- **Si el bias fuera 0**: La línea pasaría exactamente por el cruce de los ejes (el origen).
+- **Como el bias es 1**: La ecuación nos dice que la línea corta el eje vertical en **$-1/2$** (o -0.5).
+- **Visualmente**: Puedes ver en el dibujo que la línea diagonal **no pasa por el centro**, sino que está desplazada hacia abajo y a la izquierda. Ese desplazamiento es culpa del bias.
+
+
+La línea divide el papel en dos territorios:
+- Zona $+ \rightarrow$ zona de $y=1$:
+    Es todo el espacio que queda arriba y a la derecha de la línea. Cualquier punto que caiga aquí (por ejemplo, el punto $(1, 1)$) hará que la suma sea positiva ($>0$).
+    - _Interpretación_: La neurona se **activa** (dispara un 1).
+
+- Zona $- \rightarrow$ zona de $y=0$:    
+    Es el espacio que queda abajo y a la izquierda (marcado con una flecha y un signo menos). Cualquier punto aquí (por ejemplo, $(-2, -2)$) hará que la suma sea negativa ($<0$).
+    - _Interpretación_: La neurona se **inhibe** (se queda en 0).
+
+
+# 4.4 Arquitecturas de Red
+Las neuronas se agrupan para resolver problemas complejos:
+
+1. **Monocapa (Perceptrón Simple)**: Solo entradas y salida. Solo resuelve problemas lineales.
+
+2. **Multicapa (Feedforward)**:    
+    - Añade **capas ocultas** entre la entrada y la salida.
+    - Permite resolver problemas no lineales.
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251102180300.png)
-## 4.5.3 Redes Recurrentes
-**Características**:
-- Contienen conexiones hacia atrás (ciclos)
-- Tienen "memoria" de estados anteriores
-- Útiles para secuencias y series temporales
 
-**Ejemplo**: Redes de Hopfield (1982) - funcionan como memoria asociativa
+3. **Recurrentes**:    
+    - Tienen bucles de retroalimentación (la salida vuelve a entrar).
+    - Tienen "memoria" temporal, útiles para series de datos o texto.        
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251102175412.png)
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251102180310.png)
 
-# 4.6 Características de las RNA
-1. **Estructura paralela y distribuida**:
-   - Múltiples neuronas procesan información simultáneamente
-   - El conocimiento se distribuye en los pesos de las conexiones
+# 4.5 El Aprendizaje (Algoritmo del Perceptrón)
+¿Cómo aprende la red? Ajustando sus pesos ($w$) iterativamente basándose en el error cometido. Es un aprendizaje **supervisado** (necesitamos ejemplos con la respuesta correcta).
 
-2. **Aprendizaje desde datos**:
-   - No se programan explícitamente
-   - Aprenden patrones a partir de ejemplos
+>[!Nota] Acordase de que perceptrón -> neurona artificial
 
-3. **Modificación de pesos sinápticos**:
-   - El aprendizaje ocurre ajustando los pesos wᵢ
-   - Similar a la plasticidad sináptica cerebral
-
-
-# 4.7 Aprendizaje en Redes Neuronales
-
-## 4.7.1 Aprendizaje Supervisado
-**Proceso**:
-1. Se proporciona un **conjunto de entrenamiento**: pares (entrada, salida_deseada)
-2. La red procesa cada entrada y produce una salida
-3. Se calcula el **error**: diferencia entre salida_real y salida_deseada
-4. Se ajustan los **pesos** para minimizar el error
-
-**Ejemplo**:
-```
-Problema: Clasificar emails como spam (1) o no spam (0)
-
-Conjunto de entrenamiento:
-- ("oferta increíble", "compra ahora") → 1 (spam)
-- ("reunión mañana a las 10") → 0 (no spam)
-- ("gana dinero fácil") → 1 (spam)
-```
-
-## 4.7.2 Algoritmo de Convergencia del Perceptrón
-
-**Pasos básicos**:
-
-```
-1. Inicializar pesos aleatoriamente
-2. Para cada ejemplo (x, d) del conjunto de entrenamiento:
-   a. Calcular salida: y = f(Σ(wᵢ × xᵢ))
-   b. Calcular error: e = d - y
-   c. Actualizar pesos: wᵢ(nuevo) = wᵢ(antiguo) + η × e × xᵢ
-   (donde η es la tasa de aprendizaje)
-3. Repetir hasta que no haya errores o se alcance un máximo de iteraciones
-```
-
-**Propiedades**:
-- **Garantiza convergencia** si existe solución (problema linealmente separable)
-- **No converge** si el problema no es linealmente separable
+**Algoritmo de Convergencia del Perceptrón**:
+1. **Inicialización**: Poner los pesos a 0 o valores aleatorios.
+2. **Activación**: Presentar un ejemplo $x(n)$ y calcular la respuesta real $y(n)$.
+3. Adaptación de Pesos (Regla de aprendizaje):
+$$w(n+1) = w(n) + \eta \cdot [d(n) - y(n)] \cdot x(n)$$    
+    - $w(n)$: Peso actual.
+    - $\eta$: **Tasa de aprendizaje** (cuánto cambiamos el peso en cada paso).
+    - $d(n)$: Salida deseada (correcta).
+    - $y(n)$: Salida obtenida (real).
 
 
-# 4.8 Separabilidad Lineal
-## 4.8.1 Clases Linealmente Separables
-**Definición**: Dos clases son linealmente separables si puedes dibujar una **línea recta** (en 2D) o un **hiperplano** (en dimensiones superiores) que las separe completamente.
-
-**Ejemplo visual (2D)**:
-```
-Clase A: ●    ●    ●
-                        │ ← Línea separadora
-Clase B:           ○    ○    ○
-```
-
-**Funciones lógicas linealmente separables**:
-- AND: 
-- OR: 
-- NOT: 
-
-## 4.8.2 Clases No Linealmente Separables
-**Definición**: No existe ninguna línea recta que pueda separar las clases.
-
-**Ejemplo: Función XOR**
-
-```
-Tabla de verdad:
-x₁ | x₂ | XOR
-0  | 0  | 0
-0  | 1  | 1
-1  | 0  | 1
-1  | 1  | 0
-
-Representación gráfica:
-  x₂
-  1│ 1(●)    0(○)
-   │
-  0│ 0(○)    1(●)
-   └─────────── x₁
-    0         1
-```
-
-**Problema**: No hay una línea recta que separe los 1s de los 0s.
-
-**Solución**: 
-- Un perceptrón simple **NO puede** resolver XOR
-- Se necesita una **red multicapa** con al menos una capa oculta
+**Lógica del algoritmo**:
+- Si la red acierta ($d=y$), el término $[d-y]$ es 0 $\rightarrow$ No se cambian los pesos.
+- Si falla, los pesos se ajustan en la dirección del error para corregirlo la próxima vez.
 
 
-# 4.9 Backpropagation: Entrenando Redes Multicapa
-Backpropagation (retropropagación) es el algoritmo que permite entrenar redes con capas ocultas.
 
-**Proceso**:
-1. **Forward pass** (hacia adelante):
-   - Los datos fluyen desde la entrada hasta la salida
-   - Se calcula la salida de cada neurona capa por capa
+# 4.6 Limitaciones y Soluciones: El Problema XOR
+### Problemas Linealmente Separables
+**Limitación del Perceptrón Simple**: Solo puede clasificar conjuntos **linealmente separables** (aquellos que se pueden separar con una sola línea recta). Son los problemas "fáciles" para una neurona.
 
-2. **Cálculo del error**:
-   - Se compara la salida obtenida con la salida deseada
-
-3. **Backward pass** (hacia atrás):
-   - El error se propaga hacia atrás
-   - Se calcula la contribución de cada peso al error total
-   - Se usan derivadas (gradientes) para determinar cómo ajustar cada peso
-
-4. **Actualización de pesos**:
-   - Cada peso se ajusta en dirección opuesta al gradiente (descenso de gradiente)
-
-**Por qué es importante**: Sin backpropagation, no podríamos entrenar redes profundas modernas.
-
-# 4.10 Resumen de Conceptos Clave
-
-| Concepto                  | Explicación Simple                                                            |
-| ------------------------- | ----------------------------------------------------------------------------- |
-| **Neurona Artificial**    | Unidad básica que suma entradas ponderadas y aplica una función de activación |
-| **Pesos**                 | Parámetros que determinan la importancia de cada entrada                      |
-| **Bias**                  | Término que permite ajustar el umbral de activación                           |
-| **Función de activación** | Transforma la suma ponderada en la salida final                               |
-| **Perceptrón**            | Red de una sola capa, solo resuelve problemas linealmente separables          |
-| **Red Multicapa**         | Red con capas ocultas, puede resolver problemas más complejos                 |
-| **Backpropagation**       | Algoritmo para entrenar redes multicapa mediante gradientes                   |
-| **Separabilidad lineal**  | Propiedad que determina si un perceptrón simple puede resolver el problema    |
-
-Los sistemas conexionistas evolucionaron desde modelos simples (perceptrón) hasta arquitecturas complejas (deep learning). Los conceptos fundamentales son:
-
-1. Imitación de neuronas biológicas mediante matemáticas
-2. Aprendizaje mediante ajuste de pesos
-3. Limitaciones del perceptrón simple (solo problemas lineales)
-4. Poder de las redes multicapa (problemas no lineales)
-5. Backpropagation como motor del aprendizaje profundo
-
-Espero que esta reestructuración te ayude a comprender mejor los sistemas conexionistas. Si necesitas profundizar en algún concepto específico o más ejemplos, no dudes en preguntar.
+- **¿Por qué son lineales?** Porque una sola neurona (Perceptrón Simple) funciona matemáticamente dibujando **una línea recta** (como vimos en la imagen anterior: $x_1 \cdot w_1 + x_2 \cdot w_2 + b = 0$).
+   
+- **Ejemplo Clásico (AND y OR)**:    
+    - Imagínate la función lógica **AND** (Y). Solo es "verdad" (1) si ambas entradas son 1.
+    - Si pintas esto en una gráfica, el punto (1,1) es el único "positivo". Los otros tres (0,0), (0,1), (1,0) son "negativos".
+    - **Prueba visual**: Puedes dibujar una línea que deje al (1,1) en una esquina y a los otros tres en el otro lado 1.
 
 
-# Ejemplo Clave para Entender esta maraña de Conceptos
+### Problemas No Linealmente Separables (El caso XOR)
+Son los problemas "difíciles" donde una sola neurona falla estrepitosamente.
+
+- **¿Por qué son no lineales?** Porque la estructura de los datos es compleja. Una sola recta no basta.
+
+- **El Ejemplo Maldito: XOR (O Exclusivo)**.    
+    - La regla del XOR es: "Es verdad (1) si una es verdadera y la otra falsa. Si son iguales, es falso (0)".
+    - **Puntos Positivos (1)**: (0,1) y (1,0).
+    - **Puntos Negativos (0)**: (0,0) y (1,1).
+    - **Prueba visual**: Dibuja estos cuatro puntos en un papel. Intenta separar los positivos de los negativos con **una sola línea recta**. ¡Es imposible! Si separas uno, dejas al otro en el lado equivocado. Siempre te dejas uno fuera .
+
+- **¿Qué pasa si intentas usar un Perceptrón Simple?**    
+    - El algoritmo de aprendizaje nunca termina (entra en bucle) o se queda con un error muy alto, moviendo la línea desesperadamente de un lado a otro sin encontrar solución .
+
+
+### ¿Cómo se soluciona lo "No Lineal"?
+Si una sola línea (una neurona) no puede separar los datos, ¿qué haces? **Usas más líneas**.
+
+Aquí es donde entran las **Redes Neuronales Multicapa**:
+1. **Capa Oculta**: Usas dos neuronas para dibujar **dos rectas distintas**. Una recta separa un grupo y la otra recta separa el otro.
+2. **Capa de Salida**: Combina la información de esas dos rectas para dar la respuesta final.
+
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221185532.png)
+
+**Observando la imagen de arriba:**
+**La Parte Izquierda:** Aquí vemos el espacio de entrada ($x_1$ vs $x_2$) con 4 puntos:
+- **Signos Menos Rojos (-)**: Están en `(0,0)` y `(1,1)`. Son los casos donde la salida debe ser **0** (Falso).
+- **Cruces Verdes (+)**: Están en `(0,1)` y `(1,0)`. Son los casos donde la salida debe ser **1** (Verdadero).
+
+**El Problema:** Como ves, es imposible dibujar una sola línea recta que deje a todas las cruces verdes a un lado y a los signos rojos al otro.
+
+La Solución: La imagen muestra dos líneas (una naranja y una azul).
+- La línea **naranja** separa el rojo de abajo `(0,0)`.
+- La línea **azul** separa el rojo de arriba `(1,1)`.
+- La zona "válida" (Verde) es la franja que queda **entre medias** de las dos líneas.
+
+**La Parte Derecha:** Aquí vemos cómo se construye esa "franja" usando neuronas. Es una red con una **capa oculta** de dos neuronas ($h_1$ y $h_2$).
+- **Neurona Naranja ($h_1$)**:    
+    - Fíjate en su ecuación: $20x_1 + 20x_2 - 10$.
+    - Esta neurona es la responsable de dibujar la **línea naranja** del gráfico. Se activa si la suma de las entradas es suficiente para superar el primer umbral. Básicamente dice: _"¿Estamos por encima de (0,0)?"_.
+
+- **Neurona Azul ($h_2$)**:    
+    - Fíjate en su ecuación: $-20x_1 - 20x_2 + 30$ (pesos negativos).
+    - Esta neurona dibuja la **línea azul**. Se activa si las entradas **no** son demasiado grandes. Básicamente dice: _"¿Estamos por debajo de (1,1)?"_.
+
+- **Neurona de Salida ($y$)**:    
+    - Recibe las señales de la Naranja y la Azul.
+    - Su trabajo es hacer una operación **AND**: Solo se activa si la Naranja dice "SÍ" (estamos encima de la primera línea) **Y** la Azul dice "SÍ" (estamos debajo de la segunda línea).
+
+
+# 4.7 Caso Real Más Complejo (No Entra)
 [¿Qué es una Red neuronal](https://www.youtube.com/watch?v=jKCQsndqEGQ)
 
 ### Descripción del problema

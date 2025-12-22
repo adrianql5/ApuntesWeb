@@ -1,190 +1,190 @@
 ---
-title: "Búsqueda en espacio de estados"
+title: "Búsqueda en Espacio de Estados"
 ---
 
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
-# 2.1 Introducción
-La búsqueda en espacios de estados es una técnica fundamental en Inteligencia Artificial para resolver problemas. Consiste en explorar todas las posibles configuraciones (estados) que puede tener un sistema, aplicando reglas (operadores) que transforman un estado en otro, hasta encontrar uno que cumpla el objetivo (meta).
+# 2.1 Conceptos Principales
+Para resolver problemas en IA, formalizamos el mundo como un conjunto de estados y transiciones.
 
-Ejemplo: En el ajedrez, los estados son las posiciones de las piezas en el tablero y las jugadas posibles son los operadores.
+1. **Espacio de Estados**: Conjunto de todos los estados alcanzables desde el estado inicial mediante una secuencia de operadores
+2. **Estado Inicial**: Descripción de partida del sistema
+3. **Operadores (Acciones)**: Reglas que transforman un estado en otro (ej. mover una pieza, mover el hueco en un puzle)
+4. **Prueba de Meta (Goal Test)**: Condición que determina si un estado es la solución
+5. **Costo de Ruta** ($g(n)$): Costo acumulado desde el inicio hasta el estado actual (ej.  número de movimientos, distancia en km)
 
-# 2.2 Tipos de métodos de búsqueda
+**La Función de Evaluación ($f(n)$):** Es una fórmula matemática fundamental para guiar la búsqueda, decidiendo qué nodo es el más "prometedor" para expandir a continuación. Asigna un valor numérico a cada nodo que representa la estimación de cuán bueno es ese camino para llegar a la solución.  Permite ordenar los nodos en la "frontera" de búsqueda. El algoritmo siempre elegirá expandir el nodo con el mejor valor $f(n)$ (generalmente el menor valor si hablamos de costes).
 
-| Método             | Descripción                                                                                                                                             | Tipo de solución |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| **Preciso**        | Específico para el problema, encuentra la solución óptima.                                                                                              | Exacta           |
-| **Heurístico**     | Usa conocimientos del problema para aproximar la solución o aumentar eficiencia.                                                                        | Aproximada       |
-| **Metaheurístico** | Generaliza procedimientos heurísticos para mejorar eficiencia, evitando quedarse en mínimos locales e intensificando la búsqueda en zonas prometedoras. | Aproximada       |
-# 2.3 Conceptos Clave en Búsqueda de Soluciones
-La resolución de problemas mediante búsqueda implica modelar el problema en términos formales. Los conceptos fundamentales son:
+**Componentes típicos**: 
+$$f(n) = g(n) + h(n)$$
 
-- **Estado:** Representa una configuración posible del sistema (por ejemplo, cómo están las piezas en un tablero).
-- **Operador:** Acción que transforma un estado en otro (como mover una pieza, cambiar una letra, etc).
-- **Secuencia de estados:** Camino que enlaza el estado inicial con el estado meta a través de operadores.
-- **Prueba de meta:** Permite verificar si un estado cumple el objetivo deseado.
-- **Condición de parada:** Criterio que determina cuándo se debe detener la búsqueda (por ejemplo, alcanzar la meta o agotar las posibilidades).
+- $g(n)$: Lo que ya has recorrido (costo real desde el inicio hasta $n$)
+- $h(n)$: Lo que te falta (estimación heurística desde $n$ hasta la meta)
 
-# 2.4 Ejemplos de Modelado de Problemas
-## Ejemplo 1: 8-puzzle (8-quebracabezas)
-- **Estados:** Posiciones de las piezas en el tablero.
-- **Operadores:** Movimiento del espacio vacío en dirección ↑, ↓, →, ←.
-- **Meta:** Lograr la configuración final (orden correcto de piezas).
-- **Criterio de coste:** Número de movimientos realizados.
+# 2.2 Estrategias de Búsqueda:  Paso a Paso
+Las estrategias se dividen en **Ciegas** (sin información del dominio) y **Heurísticas** (con información/estimaciones).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251013111115.png)
-
-## Ejemplo 2: Criptoaritmética
-- **Estados:** Asignación de dígitos a letras.
-- **Operadores:** Cambiar una letra por un dígito (sin repetir dígitos).
-- **Meta:** Todas las letras convertidas y la operación aritmética resulta correcta.
-- **Criterio de coste:** Generalmente cero, solo interesa la validez de la solución.
-
-# 2.5 Espacio de Estados y Grafos de Búsqueda
-- El **espacio de estados** es el conjunto de todas las configuraciones alcanzables desde el estado inicial, aplicando cualquier secuencia de operadores.
-- La **búsqueda** consiste en encontrar un estado meta y, opcionalmente, la ruta para alcanzarlo.
-- Muchas veces, este espacio se representa mediante un **grafo**, donde los **nodos** son los estados y las **aristas** las acciones.
-
-
-## Consideraciones en Problemas Complejos
-- En problemas grandes, es inviable explorar todas las alternativas.
-- Cuando hay varias soluciones, basta con encontrar una que sea "suficiente".
-- Se emplean **heurísticas** para guiar la búsqueda hacia los caminos más prometedores.
-
-> **Heurística:** Es un criterio basado en conocimiento del problema que ayuda a seleccionar los operadores o acciones más prometedoras, descartando opciones poco útiles.  
+> **Heurística:** Es un criterio basado en conocimiento del problema que ayuda a seleccionar los operadores o acciones más prometedoras, descartando opciones poco útiles.
 > **Una heurística es como un "atajo inteligente" que evita búsquedas exhaustivas.**
 
-# 2.6 Estrategias de búsqueda a ciegas
-Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles soluciones sin información adicional sobre cuál camino puede ser mejor. Se utilizan principalmente en problemas donde no se tiene una heurística clara para guiar la búsqueda.
 
+## 2.2.1 Búsqueda a Ciegas (No Informada)
+Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles soluciones sin información adicional sobre cuál camino puede ser mejor. Se utilizan principalmente en problemas donde no se tiene una **heurística** clara para guiar la búsqueda.
 
-## 2.6.1 Propiedades y Terminología
 - **Búsqueda completa:** garantiza encontrar una solución si existe.
 - **Búsqueda óptima:** garantiza encontrar la mejor solución disponible.
 - **Complejidad temporal:** número total de nodos explorados durante la búsqueda.
-- **Complejidad espacial:** número máximo de nodos almacenados en memoria simultáneamente.
+- **Complejidad espacial:** número máximo de nodos almacenados en memoria simultáneamente
 
-**Símbolos clave:**
-- **r**: factor de ramificación (promedio de sucesores por nodo)
-- **p**: profundidad de la solución
-- **m**: profundidad máxima
-- **l**: límite de profundidad
+**Símbolos:** 
+- **r:** factor de ramificación (promedio de sucesores por nodo)
+- **p:** profundidad de la solución
+- **m:** profundidad máxima
+- **l:** límite de profundidad
 
-## 2.6.2 Tipos de Estrategias
-### 1. Búsqueda en Amplitud (Breadth-First Search)
-- Explora primero los nodos más cercanos al inicial (por niveles).
-- **Ventajas:** Completa y óptima.
-- **Desventajas:** Alta complejidad espacial y temporal.
-- ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251013111156.png)
+### Búsqueda en Amplitud (Breadth-First Search - BFS)
+**Funcionamiento**: Explora nivel por nivel. Primero visita el nodo raíz, luego todos sus hijos, luego los nietos, etc.
 
+**Estructura de datos**: Usa una lista ABIERTA como cola FIFO (Primero en entrar, primero en salir)
 
-### 2. Búsqueda en Profundidad (Depth-First Search)
-- Explora lo más profundo posible antes de retroceder (backtracking).
-- **Ventajas:** Uso eficiente de memoria.
-- **Desventajas:** No siempre es completa ni óptima.
-- ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251013111133.png)
+**Propiedades**: 
+- **Completa**: Sí, encuentra la solución si existe (en espacios finitos)
+- **Óptima**: Sí, pero solo si el costo de los operadores es uniforme
+- **Problema**: Consume muchísima memoria ($O(r^p)$) porque guarda todos los nodos del nivel actual
 
-### 3. Búsqueda en Profundidad Limitada
-- Se establece un límite máximo de profundidad para la exploración.
-- Evita ciclos infinitos, pero puede perder soluciones si el límite es bajo.
+### Búsqueda en Profundidad (Depth-First Search - DFS)
+**Funcionamiento**: Explora una rama hasta el final antes de retroceder.  Si llega a un punto muerto, vuelve atrás. 
 
-### 4. Búsqueda en Profundidad Iterativa
-- Aplica búsqueda en profundidad con límites crecientes, combinando ventajas de amplitud y profundidad.
-- Es completa y óptima (en espacios finitos).
+**Estructura de datos**:  Usa una lista ABIERTA como pila LIFO (Último en entrar, primero en salir)
 
-### 5. Búsqueda Bidireccional
-- Realiza la búsqueda simultáneamente desde el estado inicial y desde el objetivo, esperando que ambas se encuentren.
-- Reduce la complejidad temporal y espacial.
-
-## 2.6.3 Comparativa de Estrategias
-
-| Estrategia     | Completa | Óptima | Tiempo     | Espacio    |
-| -------------- | -------- | ------ | ---------- | ---------- |
-| Amplitud       | Sí       | Sí     | O(r^p)     | O(r^p)     |
-| Profundidad    | No*      | No     | O(r^m)     | O(r*m)     |
-| Prof. limitada | No*      | No     | O(r*l)     | O(r*l)     |
-| Iterativa      | Sí       | Sí     | O(r^p)     | O(r^p)     |
-| Bidireccional  | Sí       | Sí     | O(r^(p/2)) | O(r^(p/2)) |
-
-\* Solo completa en espacios finitos y sin bucles.
+**Propiedades**:
+- **Completa**: No (puede caer en bucles infinitos o ramas infinitas)
+- **Óptima**: No (puede encontrar una solución muy profunda antes que una corta)
+- **Ventaja**: Muy eficiente en memoria ($O(r \cdot m)$), solo guarda la rama actual
 
 
-# 2.7 Búsqueda Heurística 
-La **búsqueda heurística** es una técnica fundamental de la inteligencia artificial para encontrar soluciones "buenas" en problemas complejos, donde explorar todas las posibilidades sería inviable. A diferencia de las estrategias ciegas, utiliza información relevante del problema para guiar la exploración y suele ser mucho más eficiente.
+### Otras Búsquedas
+- **En profundidad limitada.** Se establece un límite máximo de profundidad para la exploración. Evita ciclos infinitos, pero puede perder soluciones si el límite es bajo.
+- **En profundidad iterativa.** Aplica búsqueda en profundidad con límites crecientes, combinando ventajas de amplitud y profundidad. Es completa y óptima (en espacios finitos).
+- **Bidireccional.** Realiza la búsqueda simultáneamente desde el estado inicial y desde el objetivo, esperando que ambas se encuentren. Reduce la complejidad temporal y espacial.
 
-## 2.7.1 ¿Cómo funciona la búsqueda heurística?
-La búsqueda heurística evalúa cada posible estado (o nodo) utilizando una **función de evaluación**, que combina:
+Aquí está la tabla transcrita a formato Markdown:
 
-- $g(n)$: El coste real acumulado desde el estado inicial hasta el nodo actual.
-- $h(n)$: Una estimación heurística del coste que falta para llegar desde el nodo actual a la solución (generalmente es una distancia).
+| Estrategia | Completa | Óptima | Tiempo | Espacio |
+|------------|----------|--------|---------|---------|
+| Amplitud | Sí | Sí | O(r^p) | O(r^p) |
+| Profundidad | No* | No | O(r^m) | O(r*m) |
+| Prof. limitada | No* | No | O(r*l) | O(r*l) |
+| Iterativa | Sí | Sí | O(r^p) | O(r^p) |
+| Bidireccional | Sí | Sí | O(r^(p/2)) | O(r^(p/2)) |
 
-La función de evaluación se expresa como:
-
-$$f(n) = g(n) + h(n)$$
-
-Esto nos permite priorizar los nodos que parecen más prometedores, equilibrando el progreso real y la estimación futura.
-
-## 2.7.2 Tipos de búsqueda según la función de evaluación
-- **Búsqueda de coste uniforme:**  
-  Solo se tiene en cuenta el coste real recorrido.  
-  $$f(n) = g(n)$$
-- **Búsqueda avara ("greedy"):**  
-  Solo se considera la estimación heurística, buscando el nodo que parece más cerca de la meta, sin considerar el coste recorrido.  
-  $$f(n) = h(n)$$
-- **Algoritmo A\*:**  
-  Combina ambos factores, buscando el camino más prometedor y eficiente.  
-  $$f(n) = g(n) + h(n)$$
+\* Solo completa en espacios finitos y sin bucles. 
 
 
-## 2.7.3 Ejemplo práctico: Ruta entre ciudades
-**Problema:** Ir de Ferrol a Ourense minimizando la distancia total.
+## 2.2.2 Búsqueda Heurística (Informada)
+A diferencia de la búsqueda a ciegas (que explora sin rumbo), la búsqueda informada utiliza una "pista" o estimación llamada **Heurística ($h(n)$)**.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251013113415.png)
+- **¿Qué es una Búsqueda Informada?** Es aquella que tiene conocimiento sobre el problema (como un mapa o una brújula) para estimar cuánto falta para llegar a la meta. Esto le permite **ordenar** las opciones y probar primero las que parecen más prometedoras, en lugar de probarlas al azar1111.
 
-### Datos del problema:
-- $g(n)$: Distancia real recorrida desde Ferrol hasta la ciudad actual.
-- $h(n)$: Distancia en línea recta desde la ciudad actual hasta Ourense (heurística optimista).
+Antes de ver los algoritmos, debemos distinguir cómo toman decisiones:
 
-### Ejemplo de cálculo con el algoritmo A*:
-Supón que desde Betanzos puedes ir a Santiago o a Guitiriz.  
-Calculamos para cada opción:
+### Concepto Clave: Irrevocable vs. Tentativa
 
-$$f(Guitiriz) = g(Guitiriz) + h(Guitiriz) = 120 + 70 = 190$$
-$$f(Santiago) = g(Santiago) + h(Santiago) = 100 + 80 = 180$$
-
-Elegimos Santiago porque tiene menor f(n). Repitiendo este proceso en cada paso, encontramos la ruta más eficiente.
-
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251013114014.png)
-
-**Resultado:** El algoritmo A* encuentra una distancia total de 230 km.
+| **Tipo de Estrategia** | **Definición Sencilla**                                                                                                                                                       | **Ejemplo Real**                                                                                                                         |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| **Irrevocable**        | **"Quemar las naves"**. Tomas una decisión y avanzas sin guardar el camino de vuelta. No puedes rectificar. Si te equivocas, fallas. Ahorra mucha memoria pero es arriesgada. | Escalar una montaña en la niebla: solo subes por donde está más empinado. Si llegas a un pico falso, no puedes bajar y buscar otro pico. |
+| **Tentativa**          | **"Dejar migas de pan"**. Guardas información de las alternativas no exploradas. Si un camino no funciona, puedes volver atrás (rectificar) y probar otro.                    | Explorar un laberinto con un hilo atado a la entrada. Si hay un muro, regresas por el hilo y pruebas otro pasillo.                       |
 
 
-### Búsqueda avara
-Si solo usamos la heurística (distancia en línea recta), podríamos elegir caminos que parecen más cortos, pero pueden resultar menos eficientes en la realidad.
+### Búsqueda Retroactiva (Backtracking)
+_Tipo: **Tentativa** (Permite rectificar)_
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251013114041.png)
+Es una estrategia inteligente que intenta no gastar memoria. Avanza en profundidad, pero si se equivoca, vuelve sobre sus pasos.
 
-**Resultado:** La distancia total recorrida es mayor, 240 km.
+- **Funcionamiento**:
+    - Elige el mejor hijo disponible (usando la heurística para ordenar) y avanza.
+    - **Gestión de memoria estricta**: Solo recuerda el **camino actual** (la ruta activa desde el inicio), no todo el árbol.
+    - **Vuelta atrás**: Si llega a un "callejón sin salida" (punto muerto), retrocede al padre y prueba el siguiente hijo prometedor 2.
 
-**Conclusión:**  
-En general, A* suele ofrecer mejores resultados que la búsqueda avara, aunque depende de la calidad de la heurística utilizada.
+- **Utilidad**: Ideal cuando tienes muy poca memoria pero necesitas encontrar una solución, aunque no sea la más corta.
+
+### Búsqueda Ávara (Greedy / Primero el Mejor)
+_Tipo: **Tentativa** (En su versión general)_
+
+Es la versión general de "guiarse por la intuición". A diferencia de la escalada pura, esta estrategia sí puede guardar una lista de alternativas pendientes (lista ABIERTA).
+
+- **Estrategia**: Selecciona siempre el nodo que parece estar más cerca de la meta ($h(n)$ más bajo) de entre todos los disponibles en la frontera de búsqueda.
+
+- Función de evaluación:    
+$$f(n) = h(n)$$    
+    _(Solo importa la estimación a la meta)_3.
+    
+- **Riesgo**: Aunque es más flexible que la escalada (porque guarda alternativas), es **miope**. Como ignora el coste del camino recorrido ($g(n)$), puede encontrar soluciones, pero no garantiza que sean las óptimas (puede dar muchos rodeos innecesarios) y no es completa en espacios con bucles4.
 
 
-## 2.7.4 ¿Qué es una heurística?
-Una **heurística** es una función que estima el coste que falta para alcanzar la solución desde un estado dado.  
-Su objetivo es orientar la búsqueda hacia los caminos más prometedores y descartar opciones menos útiles.  
-Las heurísticas **admisibles** (optimistas) nunca sobrestiman el coste real que falta, lo que puede garantizar soluciones óptimas cuando se usa A*.
+### Algoritmo de Escalada (Hill Climbing)
+_Tipo: **Irrevocable** (Versión estricta del algoritmo ávaro)_
 
-## 2.7.5 Ejemplos de heurísticas en el 8-puzzle
+Es el ejemplo clásico de estrategia irrevocable. Busca la cima de la montaña dando siempre el paso que más sube, sin mirar atrás.
 
-Para resolver el 8-quebracabezas, podemos usar distintas heurísticas:
+- **Estrategia**: Evalúa los vecinos y se mueve _inmediatamente_ al que tiene mejor heurística (parece estar más cerca de la meta), **descartando y olvidando el resto**.
 
-1. **Número de piezas fuera de lugar:**  
-   Cuenta cuántas piezas están en posición incorrecta.  
-   Es una estimación sencilla pero útil.
+- **Función de evaluación**: $f(n) = h(n)$ (Solo importa lo que falta)5.
 
-2. **Distancia Manhattan:**  
-   Suma la distancia (en movimientos permitidos) entre cada pieza y su posición objetivo, ignorando las demás piezas.
+- **Riesgo**: Como no guarda la historia ni alternativas, puede quedarse atrapado en **máximos locales** (una pequeña colina que parece la cima pero no lo es) o **mesetas** (donde todos los pasos son iguales y no sabe a dónde ir)6666.
 
-Si tienes varias heurísticas admisibles, puedes combinar ambas tomando el valor mayor para cada estado, obteniendo una estimación más precisa y aún admisible.
+### Algoritmo A* (A-Estrella)
+_Tipo: **Tentativa** (La más completa)_
+
+Es la estrategia estrella porque equilibra la precaución con la eficiencia. Guarda alternativas (es tentativa) y evalúa el coste total.
+
+- **Estrategia**: No solo mira cuán cerca parece estar la meta ($h$), sino cuánto le ha costado llegar hasta ahí ($g$).
+
+- Función de evaluación: $$f(n) = g(n) + h(n)$$    
+    _(Costo Total = Costo ya pagado + Costo estimado restante)_7.
+
+- **Propiedad Clave**: Si la heurística es **admisible** (nunca es pesimista, es decir, $h(n) \leq$ coste real), A* garantiza encontrar la solución **óptima** (la más barata/corta) y es **completa** (siempre encuentra solución)8.
+
+# 2.3 Fórmulas Clave y Resumen de Fórmulas
+La función de evaluación cambia según el algoritmo:
+
+| Algoritmo      | Fórmula de Evaluación $f(n)$ | Significado                                                                                                  |
+| -------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Costo Uniforme | $f(n) = g(n)$                | Solo importa el costo acumulado (busca lo más barato hasta ahora). Equivalente a Amplitud si costos iguales. |
+| Voraz (Greedy) | $f(n) = h(n)$                | Solo importa la cercanía estimada a la meta (miope).                                                         |
+| A*             | $f(n) = g(n) + h(n)$         | Balance entre costo real y estimado. Busca la solución más barata globalmente.                               |
+
+# 2.4 Caso de Estudio Práctico: Ruta en Ciudades Gallegas
+Este caso ilustra la diferencia entre ser "miope" (Voraz) y ser "inteligente" (A*).
+
+**El Problema**: Ir de Ferrol a Ourense
+- $g(n)$: Distancia real por carretera (tramos negros en el mapa)
+- $h(n)$: Distancia en línea recta a Ourense (números rojos en paréntesis)
+
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251220193002.png)
+
+### A. Ejecución Búsqueda Voraz ($f=h$)
+Solo mira la distancia recta a la meta. 
+
+1.  Ferrol va a Betanzos
+2. Betanzos tiene vecinos: Santiago ($h=80$) y Guitiriz ($h=70$)
+3. **Decisión**: Elige Guitiriz porque $70 < 80$ (parece más cerca)
+4. **Resultado**: Termina encontrando una ruta de 240 km. **No es la mejor**. 
+
+### B. Ejecución Búsqueda A* ($f = g + h$)
+Mira el pasado ($g$) y el futuro ($h$).
+
+1. Ferrol va a Betanzos ($g=50$)
+2. En Betanzos, evalúa opciones:
+   - Ruta por Guitiriz: $g(50+70) + h(70) = 120 + 70 = 190$
+   - Ruta por Santiago:  $g(50+50) + h(80) = 100 + 80 = 180$
+3. **Decisión**:  Elige Santiago porque $180 < 190$. Aunque Santiago parece más lejos en línea recta, el costo total estimado es menor. 
+4. **Resultado**:  Encuentra la ruta óptima de 230 km pasando por Santiago y Silleda. 
+
+
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221164938.png)
+
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221164952.png)
+
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221165007.png)
 

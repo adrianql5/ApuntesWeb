@@ -329,7 +329,7 @@ nano
   ```
 
 
-### #### Política de Versiones (`policy`)
+### Política de Versiones (`policy`)
 Este es el comando más técnico y útil para diagnosticar problemas. Te dice **de dónde** viene un paquete y **qué versión** tiene prioridad.
 
 Muestra tres datos clave:
@@ -415,7 +415,7 @@ El comando `make` lee el `Makefile` generado en el paso anterior y empieza a com
 - **`make`**: Compila el código (traduce C/C++ a binario). Tarda desde segundos hasta horas.
 - **`make clean`**: Si la compilación falla o quieres empezar de cero, esto borra todos los archivos temporales creados.
 
-### ### Instalación (`make install`)
+### Instalación (`make install`)
 Copia los binarios finales y las librerías a sus destinos definitivos (normalmente `/usr/bin`, `/usr/lib`, etc.).
 
 - **Permisos:** Si instalas en directorios del sistema, necesitas `sudo make install`. Si usaste `--prefix` a tu carpeta, no hace falta.

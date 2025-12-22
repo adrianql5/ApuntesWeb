@@ -2,90 +2,69 @@
 title: "Aprendizaje no Supervisado"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+# 6.1 Cambio de Paradigma: De la Etiqueta a la Estructura
+En la **Regresión Lineal y Logística** (temas anteriores), siempre teníamos un conjunto de datos con la respuesta correcta: $\{(x^{(1)}, y^{(1)}), ...\}$. La máquina aprendía comparando su predicción con esa $y$.
 
-# 6.1 Introducción
-En aprendizaje no supervisado trabajamos con datos sin etiquetas. El sistema "descubre" estructura (patrones, grupos) basándose en similitud entre ejemplos.
-
-El significado de los grupos lo pone el diseñador: la máquina agrupa, tu interpretas (por ejemplo: "este grupos son tallas M", "este segmento son clientes frecuentes").
-
-Conceptos clave: 
-- Medida de similitud/distancia adecuada al problema
-- Función objetivo que cuantifique qué tan buena es la agrupación
-- Criterios para elegir el número de grupos
-
-Ejemplos de usos:
-- Segmentación de clietnes
-- Detección de anomalías /outliers
-- Compresión de colores en imágenes
-- Agrupación de documentos por temática
-
-# 6.2 Método K-medias
-Queremos $k$ clústeres donde cada punto pertenezca al centroide más cercano, minimizando la suma de distancias al centroide del clúster.
-
-$$
-J\big(c^{(1)},\dots,c^{(m)},\mu_1,\dots,\mu_K\big)
-= \frac{1}{m}\sum_{i=1}^{m} \left\| x^{(i)} - \mu_{c^{(i)}} \right\|^{2}
-$$
-
-y el problema es
-
-$$
-\min_{c^{(1)},\dots,c^{(m)},\;\mu_1,\dots,\mu_K} J.
-$$
-
-- $x^{(i)} \in \mathbb{R}^n$: el punto (ejemplo) número $i$ del conjunto de datos. Hay $m$ puntos en total.
-- $K$: número de clústeres que queremos encontrar.
-- $c^{(i)} \in \{1,\dots,K\}$: índice del clúster asignado al punto $x^{(i)}$.
-- $\mu_k \in \mathbb{R}^n$: el centroide (media) del clúster \(k\).
-- $\mu_{c^{(i)}}$: el centroide del clúster al que se asignó \(x^{(i)}\).
-- $\|\cdot\|$: norma euclídea. $\| x - y \|^{2}$ es el cuadrado de la distancia euclídea entre dos puntos.
-
-La función $J$ mide la dispersión interna de los clústeres: suma (promedio) de las distancias cuadráticas de cada punto a su centroide. Minimizar $J$ equivale a:
-- Hacer que cada punto esté lo más cerca posible de su "centro representativo".
-- Minimizar la variabilidad intra‑clúster.
-
-En otras palabras: queremos clústeres compactos.
+En el **Aprendizaje No Supervisado**, la situación cambia radicalmente:
+- **Datos**: Solo tenemos $x$ (Datos sin etiquetar). No hay $y$.
+- **Objetivo**: El algoritmo debe encontrar **estructuras**, patrones o agrupamientos en los datos por sí mismo.
+- **Rol del Humano**: Es el diseñador quien, a posteriori, le da significado a esos grupos (ej. "Este grupo son clientes VIP", "Este grupo son clientes en riesgo").
 
 
-Supón datos 1D: $x = \{1, 2, 8, 9\}$ y $K=2$.
-- Inicialmente centroides $\mu_1=1, \mu_2=9$.
-- Asignaciones: {1,2} → clúster 1; {8,9} → clúster 2.
-- Coste:
-  $$
-  J = \frac{1}{4} \big[(1-1)^2 + (2-1)^2 + (8-9)^2 + (9-9)^2\big] = \frac{1}{4}(0+1+1+0)=0.5
-  $$
-- Recalcular centroides: $\mu_1 = (1+2)/2 = 1.5,\; \mu_2 = (8+9)/2 = 8.5$.
-- Nuevo coste:
-  $$
-  J = \frac{1}{4} \big[(1-1.5)^2 + (2-1.5)^2 + (8-8.5)^2 + (9-8.5)^2\big] = \frac{1}{4}(0.25+0.25+0.25+0.25)=0.25
-  $$
-- Ya las asignaciones no cambian, convergió en un mínimo local (que aquí es también el global).
+# 6.2 El Algoritmo K-Medias (K-Means)
+Es el algoritmo más popular y sencillo para resolver problemas de **Agrupamiento (Clustering)**. Su objetivo es dividir los datos en **$K$** grupos (clusters).
 
-El algoritmo funciona de la siguiente forma:
-1. Inicializa $k$ centroides (aleatorios en principio)
-2. Asignación: asigna a cada punto el centroide más cercano
-3. Actualización: recalcula cada centroide como la media de los puntos asignados
-4. Repite 2-3 hasta la convergencia
 
-Ejemplo:
-Datos 2D (altura/peso simplificado):  
-$A(1,1), B(1.5,2), C(3,4), D(5,7), E(3.5,5), F(4.5,5), G(3.5,4.5).$  
-$k=2$, inicializa centroides en $A(1,1) y D(5,7)$.
+Es un proceso iterativo ("bucle") que funciona como un baile de centros de gravedad.
 
-- Asignación (distancia euclídea):
-    - Cerca de $A: A, B$
-    - Cerca de $D: C, D, E, F, G$
-- Actualización de centroides:
-    - $μ1 = media(A,B) = ((1+1.5)/2, (1+2)/2) = (1.25, 1.5)$
-    - $μ2 = media(C,D,E,F,G) = (3.9, 5.1)$
-- Siguiente iteración: vuelve a asignar con los nuevos centroides y repite hasta estabilizar.
+1. **Inicialización**:    
+    - Decidimos cuántos grupos queremos ($K$).
+    - Elegimos aleatoriamente $K$ puntos del mapa para que sean los **Centroides** iniciales ($\mu_1, \mu_2, ..., \mu_K$).
 
-# 6.3 Elegir el número de clústeres
-Empleamos el método del codo, donde se calcula la inercia para $k=1,2,...k$. El codo es el punto donde añadir más clústeres  ya apenas reduce el coste.
+2. **Bucle (Repetir hasta converger)**:    
+    - **Paso A: Asignación de grupos:** Para cada dato ($x^{(i)}$), calculamos la distancia a todos los centroides y lo "pintamos" del color del centroide más cercano.
+$$c^{(i)} := \text{índice del centroide más cercano a } x^{(i)}$$        
+    - **Paso B: Movimiento de Centroides:** Calculamos la media (promedio) de todos los puntos que pertenecen a un grupo y movemos el centroide a esa nueva posición central.
+$$\mu_k := \text{promedio de los puntos asignados al grupo } k$$
+El algoritmo se detiene cuando los centroides ya no se mueven (convergencia).
 
-Por ejemplo no podemos hacer una talla por persona ($k=n$) ni una sola talla para todos ($k=1$). Buscas el mínimo $k$ que capte bien la variabilidad de la población con un coste razonable.
 
-# 6.4 Buenas prácticas
-Eliminar los outilers, pueden arrastar los centroides, por lo que es importante detectatlos y filtrarlos. 
+# 6.3 La Función de Coste (Distorsión)
+Al igual que en la regresión teníamos el error cuadrático, aquí necesitamos medir "qué tan mal" están agrupados los datos. A esta función se le llama Función de Distorsión ($J$):
 
+$$J(c, \mu) = \frac{1}{m} \sum_{i=1}^{m} ||x^{(i)} - \mu_{c^{(i)}}||^2$$
+
+- **Significado**: Mide la suma de las distancias al cuadrado entre cada punto y el centroide de su grupo.
+- **Objetivo**: Queremos minimizar $J$. Si $J$ es bajo, significa que los puntos están muy "apretaditos" alrededor de su centroide (buen agrupamiento).
+
+
+# 6.4 Problemas y Soluciones
+## 6.4.1 El Problema de los Mínimos Locales
+Como los centroides iniciales se eligen **al azar**, a veces tenemos mala suerte.
+
+- **Riesgo**: Los centroides pueden quedarse "atascados" en una mala posición (Mínimo Local) y no encontrar la mejor agrupación posible (Óptimo Global).
+
+- **Solución**: No ejecutes el algoritmo una sola vez.    
+    1. Ejecuta K-Medias muchas veces (ej. 50 o 100 veces) con inicializaciones aleatorias diferentes.
+    2. Calcula la Distorsión $J$ final para cada intento.
+    3. Quédate con la solución que tenga la **menor distorsión**.
+
+
+## 6.4.2 ¿Cómo elegir el número de grupos (K)?
+A veces el número de grupos es obvio, pero otras veces no. ¿Son 3 grupos o 4?
+
+1. **Método del Codo (Elbow Method)**:
+    - Ejecutas el algoritmo variando $K$ (ej. $K=1, 2, 3, 4, 5...$).
+    - Graficas la función de coste $J$ vs. $K$.
+    - Al aumentar los grupos, el error siempre baja. Pero buscamos el punto donde la curva hace un **codo** (deja de bajar rápido y empieza a bajar lento). Ese es el $K$ óptimo.
+
+2. **Propósito del Mercado (Market Purpose)**:    
+    - A veces el "Codo" no es claro. En ese caso, el $K$ lo dicta el negocio.
+    - _Ejemplo (Tallas de Camisetas)_: Tienes datos de altura y peso. Podrías hacer 3 grupos (S, M, L) o 5 grupos (XS, S, M, L, XL). La decisión depende de tu estrategia de ventas, no solo de la matemática.
+
+
+# 6.5 Resumen de Conexiones
+Para tu esquema mental global:
+- **Regresión Lineal**: Predice un número (Supervisado).
+- **Regresión Logística**: Predice una clase binaria (Supervisado).
+- **K-Medias**: Descubre grupos sin etiquetas (No Supervisado). Usa distancias geométricas (como los vecinos cercanos) y medias iterativas.

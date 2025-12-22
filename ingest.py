@@ -7,10 +7,18 @@ Este script escanea las carpetas de apuntes en formato Markdown y las copia
 a la estructura de contenido del proyecto Astro Starlight.
 
 Uso:
-    python ingest.py [--source-dir RUTA] [--dry-run]
+    python ingest.py <directorio> [--dry-run]
+    
+    Donde <directorio> es el nombre de la carpeta de apuntes a procesar.
+    El script detectará automáticamente a qué curso y cuatrimestre corresponde.
+
+Ejemplos:
+    python ingest.py 3-TEORIA-1-CUATRI          # Actualiza tercero/primer-cuatrimestre
+    python ingest.py 2-TEORIA-1-CUATRI          # Actualiza segundo/primer-cuatrimestre
+    python ingest.py ~/Escritorio/3-TEORIA-1-CUATRI  # Ruta completa también funciona
+    python ingest.py 3-TEORIA-1-CUATRI --dry-run     # Simula sin hacer cambios
 
 Opciones:
-    --source-dir    Directorio padre donde están las carpetas de origen (default: ../)
     --dry-run       Simula la copia sin hacer cambios reales
 """
 
@@ -19,7 +27,7 @@ import shutil
 import argparse
 import re
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 from urllib.parse import quote
 
 # Extensiones de imagen soportadas
@@ -29,12 +37,19 @@ IMAGE_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.gif', '.svg', '.webp', '.bmp'}
 # CONFIGURACIÓN
 # =============================================================================
 
-# Mapeo de carpetas de origen a estructura de destino
-# Formato: (subdirectorio, carpeta, curso-destino, cuatrimestre-destino)
-FOLDER_MAPPING: List[Tuple[str, str, str, str]] = [
-    ("2ºCarrera", "2-TEORIA-1-CUATRI", "segundo", "primer-cuatrimestre"),
-    ("2ºCarrera", "2-TEORIA-2-CUATRI", "segundo", "segundo-cuatrimestre"),
-    ("", "3-TEORIA-1-CUATRI", "tercero", "primer-cuatrimestre"),
+# Mapeo de patrones de carpetas a estructura de destino
+# El script detectará automáticamente basándose en el nombre de la carpeta
+# Formato: (patrón-regex, curso-destino, cuatrimestre-destino)
+FOLDER_PATTERNS: List[Tuple[str, str, str]] = [
+    (r"2-TEORIA-1-CUATRI", "segundo", "primer-cuatrimestre"),
+    (r"2-TEORIA-2-CUATRI", "segundo", "segundo-cuatrimestre"),
+    (r"3-TEORIA-1-CUATRI", "tercero", "primer-cuatrimestre"),
+    (r"3-TEORIA-2-CUATRI", "tercero", "segundo-cuatrimestre"),
+    (r"4-TEORIA-1-CUATRI", "cuarto", "primer-cuatrimestre"),
+    (r"4-TEORIA-2-CUATRI", "cuarto", "segundo-cuatrimestre"),
+    # Patrones adicionales para flexibilidad
+    (r"1-TEORIA-1-CUATRI", "primero", "primer-cuatrimestre"),
+    (r"1-TEORIA-2-CUATRI", "primero", "segundo-cuatrimestre"),
 ]
 
 # Mapeo de nombres de asignaturas a slugs
@@ -207,9 +222,104 @@ def get_subject_slug(subject_name: str) -> str:
     return slugify(subject_name)
 
 
-def scan_source_folder(source_path: Path) -> List[Dict]:
+def detect_folder_type(folder_path: Path) -> Optional[Tuple[str, str]]:
+    """
+    Detecta automáticamente el curso y cuatrimestre basándose en el nombre de la carpeta.
+    
+    Args:
+        folder_path: Path de la carpeta a analizar
+        
+    Returns:
+        Tuple (curso, cuatrimestre) o None si no se pudo detectar
+    """
+    folder_name = folder_path.name
+    
+    for pattern, curso, cuatrimestre in FOLDER_PATTERNS:
+        if re.search(pattern, folder_name, re.IGNORECASE):
+            return (curso, cuatrimestre)
+    
+    return None
+
+
+def clean_dest_folder(dest_base: Path, curso: str, cuatrimestre: str, dry_run: bool = False) -> int:
+    """
+    Limpia el contenido de la carpeta destino antes de regenerar.
+    Borra todas las carpetas de asignaturas pero preserva el index.mdx.
+    
+    Args:
+        dest_base: Directorio base de destino (src/content/docs)
+        curso: Nombre del curso (ej: 'tercero')
+        cuatrimestre: Nombre del cuatrimestre (ej: 'primer-cuatrimestre')
+        dry_run: Si True, no realiza cambios
+        
+    Returns:
+        Número de carpetas eliminadas
+    """
+    cuatri_path = dest_base / curso / cuatrimestre
+    deleted_count = 0
+    
+    if not cuatri_path.exists():
+        return 0
+    
+    print(f"🗑️  Limpiando contenido anterior en: {cuatri_path}")
+    
+    for item in cuatri_path.iterdir():
+        # Preservar archivos index
+        if item.name.startswith('index'):
+            continue
+        
+        if item.is_dir():
+            if dry_run:
+                print(f"   [DRY-RUN] Eliminaría carpeta: {item.name}")
+            else:
+                shutil.rmtree(item)
+                print(f"   🗑️  Eliminada carpeta: {item.name}")
+            deleted_count += 1
+    
+    return deleted_count
+
+
+def clean_images_folder(script_dir: Path, curso: str, cuatrimestre: str, dry_run: bool = False) -> int:
+    """
+    Limpia las imágenes de la carpeta public/images para el curso/cuatrimestre.
+    
+    Args:
+        script_dir: Directorio del script
+        curso: Nombre del curso
+        cuatrimestre: Nombre del cuatrimestre
+        dry_run: Si True, no realiza cambios
+        
+    Returns:
+        Número de carpetas de imágenes eliminadas
+    """
+    images_path = script_dir / 'public' / 'images' / curso / cuatrimestre
+    deleted_count = 0
+    
+    if not images_path.exists():
+        return 0
+    
+    print(f"🗑️  Limpiando imágenes anteriores en: {images_path}")
+    
+    for item in images_path.iterdir():
+        if item.is_dir():
+            if dry_run:
+                print(f"   [DRY-RUN] Eliminaría carpeta: {item.name}")
+            else:
+                shutil.rmtree(item)
+                print(f"   🗑️  Eliminada carpeta: {item.name}")
+            deleted_count += 1
+    
+    return deleted_count
+
+
+def scan_source_folder(folder_path: Path, curso: str, cuatrimestre: str) -> List[Dict]:
     """
     Escanea una carpeta de origen y devuelve la lista de archivos a copiar.
+    
+    Args:
+        folder_path: Path de la carpeta a escanear
+        curso: Nombre del curso detectado
+        cuatrimestre: Nombre del cuatrimestre detectado
     
     Returns:
         Lista de diccionarios con información de cada archivo:
@@ -221,48 +331,41 @@ def scan_source_folder(source_path: Path) -> List[Dict]:
     """
     files_to_copy = []
     
-    for subdir, folder_name, curso, cuatrimestre in FOLDER_MAPPING:
-        # Construir ruta completa
-        if subdir:
-            folder_path = source_path / subdir / folder_name
-        else:
-            folder_path = source_path / folder_name
-        
-        if not folder_path.exists():
-            print(f"⚠️  Carpeta no encontrada: {folder_path}")
+    if not folder_path.exists():
+        print(f"⚠️  Carpeta no encontrada: {folder_path}")
+        return files_to_copy
+    
+    print(f"📁 Escaneando: {folder_path}")
+    
+    # Recorrer subcarpetas (asignaturas)
+    for subject_dir in folder_path.iterdir():
+        if not subject_dir.is_dir():
             continue
         
-        print(f"📁 Escaneando: {folder_path}")
+        if should_ignore_folder(subject_dir.name):
+            print(f"   ⏭️  Ignorando carpeta: {subject_dir.name}")
+            continue
         
-        # Recorrer subcarpetas (asignaturas)
-        for subject_dir in folder_path.iterdir():
-            if not subject_dir.is_dir():
+        subject_slug = get_subject_slug(subject_dir.name)
+        print(f"   📚 Asignatura: {subject_dir.name} -> {subject_slug}")
+        
+        # Recorrer archivos .md recursivamente
+        for md_file in subject_dir.rglob('*.md'):
+            if should_ignore_file(md_file.name):
+                print(f"      ⏭️  Ignorando: {md_file.name}")
                 continue
             
-            if should_ignore_folder(subject_dir.name):
-                print(f"   ⏭️  Ignorando carpeta: {subject_dir.name}")
-                continue
+            # Calcular ruta relativa dentro de la asignatura
+            relative_path = md_file.relative_to(subject_dir)
             
-            subject_slug = get_subject_slug(subject_dir.name)
-            print(f"   📚 Asignatura: {subject_dir.name} -> {subject_slug}")
-            
-            # Recorrer archivos .md recursivamente
-            for md_file in subject_dir.rglob('*.md'):
-                if should_ignore_file(md_file.name):
-                    print(f"      ⏭️  Ignorando: {md_file.name}")
-                    continue
-                
-                # Calcular ruta relativa dentro de la asignatura
-                relative_path = md_file.relative_to(subject_dir)
-                
-                files_to_copy.append({
-                    'source': md_file,
-                    'relative_path': relative_path,
-                    'curso': curso,
-                    'cuatrimestre': cuatrimestre,
-                    'asignatura': subject_slug,
-                    'asignatura_original': subject_dir.name,
-                })
+            files_to_copy.append({
+                'source': md_file,
+                'relative_path': relative_path,
+                'curso': curso,
+                'cuatrimestre': cuatrimestre,
+                'asignatura': subject_slug,
+                'asignatura_original': subject_dir.name,
+            })
     
     return files_to_copy
 
@@ -384,10 +487,17 @@ title: "{title}"
     return copied_count
 
 
-def copy_image_folders(source_path: Path, script_dir: Path, dry_run: bool = False) -> Tuple[int, Dict[str, str]]:
+def copy_image_folders(folder_path: Path, script_dir: Path, curso: str, cuatrimestre: str, dry_run: bool = False) -> Tuple[int, Dict[str, str]]:
     """
     Copia todas las imágenes de cada asignatura a public/images/.
     Busca recursivamente en todas las subcarpetas.
+    
+    Args:
+        folder_path: Path de la carpeta de origen
+        script_dir: Directorio del script
+        curso: Nombre del curso
+        cuatrimestre: Nombre del cuatrimestre
+        dry_run: Si True, no realiza cambios
     
     Returns:
         Tuple de (número de imágenes copiadas, diccionario de mapeo de rutas)
@@ -398,71 +508,64 @@ def copy_image_folders(source_path: Path, script_dir: Path, dry_run: bool = Fals
     # Mapeo de rutas: nombre_archivo -> ruta_web
     image_map: Dict[str, Dict[str, str]] = {}  # {curso/cuatri/asig: {nombre_original: ruta_web}}
     
-    for subdir, folder_name, curso, cuatrimestre in FOLDER_MAPPING:
-        # Construir ruta completa
-        if subdir:
-            folder_path = source_path / subdir / folder_name
-        else:
-            folder_path = source_path / folder_name
-        
-        if not folder_path.exists():
+    if not folder_path.exists():
+        return copied_count, image_map
+    
+    # Recorrer subcarpetas (asignaturas)
+    for subject_dir in folder_path.iterdir():
+        if not subject_dir.is_dir():
             continue
         
-        # Recorrer subcarpetas (asignaturas)
-        for subject_dir in folder_path.iterdir():
-            if not subject_dir.is_dir():
+        if should_ignore_folder(subject_dir.name):
+            continue
+        
+        subject_slug = get_subject_slug(subject_dir.name)
+        key = f"{curso}/{cuatrimestre}/{subject_slug}"
+        
+        if key not in image_map:
+            image_map[key] = {}
+        
+        # Buscar TODAS las imágenes recursivamente en la asignatura
+        for img_file in subject_dir.rglob('*'):
+            if not img_file.is_file():
+                continue
+            if img_file.suffix.lower() not in IMAGE_EXTENSIONS:
                 continue
             
-            if should_ignore_folder(subject_dir.name):
-                continue
+            # Calcular ruta relativa desde la carpeta de asignatura
+            relative_path = img_file.relative_to(subject_dir)
             
-            subject_slug = get_subject_slug(subject_dir.name)
-            key = f"{curso}/{cuatrimestre}/{subject_slug}"
+            # Destino: public/images/curso/cuatri/asig/ruta_relativa
+            dest_path = public_dir / curso / cuatrimestre / subject_slug / relative_path
             
-            if key not in image_map:
-                image_map[key] = {}
+            # URL web con encoding de espacios
+            # /ApuntesWeb/images/curso/cuatri/asig/ruta_relativa (con %20 para espacios)
+            web_path_parts = ['/ApuntesWeb', 'images', curso, cuatrimestre, subject_slug]
+            web_path_parts.extend([quote(part, safe='') for part in relative_path.parts])
+            web_path = '/'.join(web_path_parts)
             
-            # Buscar TODAS las imágenes recursivamente en la asignatura
-            for img_file in subject_dir.rglob('*'):
-                if not img_file.is_file():
-                    continue
-                if img_file.suffix.lower() not in IMAGE_EXTENSIONS:
-                    continue
-                
-                # Calcular ruta relativa desde la carpeta de asignatura
-                relative_path = img_file.relative_to(subject_dir)
-                
-                # Destino: public/images/curso/cuatri/asig/ruta_relativa
-                dest_path = public_dir / curso / cuatrimestre / subject_slug / relative_path
-                
-                # URL web con encoding de espacios
-                # /ApuntesWeb/images/curso/cuatri/asig/ruta_relativa (con %20 para espacios)
-                web_path_parts = ['/ApuntesWeb', 'images', curso, cuatrimestre, subject_slug]
-                web_path_parts.extend([quote(part, safe='') for part in relative_path.parts])
-                web_path = '/'.join(web_path_parts)
-                
-                # Guardar en el mapeo usando el nombre del archivo y la ruta relativa
-                # Guardamos múltiples variantes para poder hacer match
+            # Guardar en el mapeo usando el nombre del archivo y la ruta relativa
+            # Guardamos múltiples variantes para poder hacer match
+            image_map[key][str(relative_path)] = web_path
+            image_map[key][img_file.name] = web_path
+            # También guardar la ruta con archivos/ o sin ella
+            if str(relative_path).startswith('archivos'):
                 image_map[key][str(relative_path)] = web_path
-                image_map[key][img_file.name] = web_path
-                # También guardar la ruta con archivos/ o sin ella
-                if str(relative_path).startswith('archivos'):
-                    image_map[key][str(relative_path)] = web_path
-                
-                if dry_run:
-                    print(f"      🖼️  [DRY-RUN] {img_file.name} -> {web_path}")
-                else:
-                    # Copiar imagen
-                    dest_path.parent.mkdir(parents=True, exist_ok=True)
-                    shutil.copy2(img_file, dest_path)
-                
-                copied_count += 1
             
-            if not dry_run and copied_count > 0:
-                # Contar imágenes de esta asignatura
-                asig_count = len([k for k in image_map[key].keys()])
-                if asig_count > 0:
-                    print(f"   🖼️  {subject_slug}: {asig_count // 2} imágenes copiadas")
+            if dry_run:
+                print(f"      🖼️  [DRY-RUN] {img_file.name} -> {web_path}")
+            else:
+                # Copiar imagen
+                dest_path.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copy2(img_file, dest_path)
+            
+            copied_count += 1
+        
+        if not dry_run and copied_count > 0:
+            # Contar imágenes de esta asignatura
+            asig_count = len([k for k in image_map[key].keys()])
+            if asig_count > 0:
+                print(f"   🖼️  {subject_slug}: {asig_count // 2} imágenes copiadas")
     
     return copied_count, image_map
 
@@ -578,10 +681,9 @@ def main():
         epilog=__doc__
     )
     parser.add_argument(
-        '--source-dir',
+        'directorio',
         type=str,
-        default=os.path.expanduser('~/Escritorio'),
-        help='Directorio padre donde están las carpetas de origen (default: ~/Escritorio)'
+        help='Directorio de apuntes a procesar (ej: 3-TEORIA-1-CUATRI o ruta completa)'
     )
     parser.add_argument(
         '--dry-run',
@@ -593,23 +695,70 @@ def main():
     
     # Rutas
     script_dir = Path(__file__).parent.absolute()
-    source_path = Path(args.source_dir).absolute()
     dest_base = script_dir / 'src' / 'content' / 'docs'
+    
+    # Resolver el directorio de origen
+    input_path = Path(args.directorio)
+    
+    # Si es una ruta relativa/nombre, buscar en ~/Escritorio
+    if not input_path.is_absolute():
+        # Primero intentar como ruta relativa al directorio actual
+        if input_path.exists():
+            folder_path = input_path.absolute()
+        else:
+            # Buscar en ~/Escritorio
+            escritorio = Path(os.path.expanduser('~/Escritorio'))
+            folder_path = escritorio / input_path
+            
+            # Si no existe directamente, buscar en subdirectorios comunes
+            if not folder_path.exists():
+                # Intentar en 2ºCarrera
+                alt_path = escritorio / '2ºCarrera' / input_path
+                if alt_path.exists():
+                    folder_path = alt_path
+    else:
+        folder_path = input_path
+    
+    folder_path = folder_path.absolute()
+    
+    # Verificar que existe
+    if not folder_path.exists():
+        print(f"❌ Error: No se encontró el directorio: {folder_path}")
+        print(f"   Intentado también en ~/Escritorio y ~/Escritorio/2ºCarrera")
+        return
+    
+    # Detectar curso y cuatrimestre
+    detected = detect_folder_type(folder_path)
+    if not detected:
+        print(f"❌ Error: No se pudo detectar el tipo de carpeta: {folder_path.name}")
+        print("   El nombre debe seguir el patrón: X-TEORIA-Y-CUATRI")
+        print("   Ejemplos: 2-TEORIA-1-CUATRI, 3-TEORIA-2-CUATRI, etc.")
+        return
+    
+    curso, cuatrimestre = detected
     
     print("=" * 60)
     print("🎓 INGESTA DE APUNTES UNIVERSITARIOS")
     print("=" * 60)
-    print(f"📂 Origen: {source_path}")
-    print(f"📂 Destino: {dest_base}")
+    print(f"📂 Origen: {folder_path}")
+    print(f"📂 Destino: {dest_base / curso / cuatrimestre}")
+    print(f"📚 Detectado: {curso} / {cuatrimestre}")
     if args.dry_run:
         print("🔍 Modo: DRY-RUN (sin cambios reales)")
     print("=" * 60)
     print()
     
+    # Limpiar contenido anterior
+    print("🗑️  Limpiando contenido anterior...")
+    print("-" * 40)
+    clean_dest_folder(dest_base, curso, cuatrimestre, args.dry_run)
+    clean_images_folder(script_dir, curso, cuatrimestre, args.dry_run)
+    print()
+    
     # Escanear archivos
     print("🔍 Escaneando carpetas de origen...")
     print("-" * 40)
-    files_to_copy = scan_source_folder(source_path)
+    files_to_copy = scan_source_folder(folder_path, curso, cuatrimestre)
     print()
     
     if not files_to_copy:
@@ -622,7 +771,7 @@ def main():
     # Copiar imágenes PRIMERO para tener el mapeo de rutas
     print("🖼️  Copiando imágenes...")
     print("-" * 40)
-    images_copied, image_map = copy_image_folders(source_path, script_dir, args.dry_run)
+    images_copied, image_map = copy_image_folders(folder_path, script_dir, curso, cuatrimestre, args.dry_run)
     print()
     
     # Copiar archivos markdown (usando el mapeo de imágenes)
@@ -641,6 +790,7 @@ def main():
     print("=" * 60)
     print("✅ INGESTA COMPLETADA")
     print(f"   Archivos procesados: {copied}")
+    print(f"   Imágenes copiadas: {images_copied}")
     if args.dry_run:
         print("   (Modo DRY-RUN - no se realizaron cambios)")
     print("=" * 60)

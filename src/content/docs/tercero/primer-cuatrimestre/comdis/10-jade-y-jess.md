@@ -108,3 +108,19 @@ Se crea una clase Java que implementa la interfaz `jess.Userfunction` (ej. `Jess
 
 ## 10.5.3 Acceso Directo al Agente (Nivel Alto)
 Se puede insertar el propio objeto `Agent` dentro del motor Jess usando `Rete.add(Agent)`. Esto permite invocar cualquier método público del agente (incluyendo `send`) directamente desde el código de las reglas usando la sintaxis de reflexión de Jess.
+
+
+# 10.6 Conclusión de la Asignatura
+Una vez más se demuestra que el grado presenta una dejadez considerable por parte de las "vacas sagradas" de la facultad. Y es que no puede ser:  estas personas son reconocidísimas en sus ámbitos, publican 300 artículos, acuden a congresos internacionales...  pero cuando llega el momento de pensar en sus alumnos y proporcionarles una bibliografía de calidad con la cual puedan aprender los conceptos de forma intuitiva, te sueltan un PDF de 2001 robado de otra universidad o presentaciones sin orden lógico alguno, llenas de palabras sueltas y esquemas incomprensibles. 
+
+Eso sí, si te quejas, la alternativa que te ofrecen es el libro de turno de 1990 escrito en alemán por un médico francés.  Y apáñate tú para conseguirlo y entenderlo.
+
+**La situación es insostenible.** Es frecuente encontrarse con: 
+- Documentación completamente desactualizada 
+- Materiales de dudosa procedencia sin adaptar al contexto actual
+- Presentaciones caóticas sin estructura pedagógica
+- Bibliografía obsoleta, inaccesible o en idiomas que nadie domina
+
+**¿Tan difícil es hacer las cosas bien?** Otras carreras universitarias lo consiguen. No se pide la perfección, pero sí un mínimo de coherencia y actualización en los materiales docentes. 
+
+Considero que el grado debería aprender de otras titulaciones y mejorar urgentemente este aspecto. Con la jubilación progresiva de las viejas vacas sagradas de la universidad, espero sinceramente que esta situación mejore con el tiempo y que la nueva generación de profesorado traiga una renovación real en la calidad docente, no solo en la investigadora.

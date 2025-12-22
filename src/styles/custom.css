@@ -163,7 +163,27 @@ aside.sidebar {
         min-width 0.3s ease-in-out,
         opacity 0.3s ease-in-out,
         padding 0.3s ease-in-out !important;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* Contenedor interno del sidebar - permitir scroll */
+#starlight__sidebar .sidebar-content,
+#starlight__sidebar>div,
+.sidebar-pane>div,
+.sl-sidebar-content {
+    overflow-y: auto;
+    max-height: 100vh;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+#starlight__sidebar .sidebar-content::-webkit-scrollbar,
+#starlight__sidebar>div::-webkit-scrollbar,
+.sidebar-pane>div::-webkit-scrollbar,
+.sl-sidebar-content::-webkit-scrollbar {
+    display: none;
+    width: 0;
 }
 
 /* Ocultar sidebar izquierdo cuando body tiene clase sidebar-collapsed */

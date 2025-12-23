@@ -106,3 +106,24 @@ Un AP puede decir "OK" de dos formas. En los ejercicios te especificarán cuál 
 - Si te dan $k = i - j$ $\rightarrow$ Transfórmalo en **$i = k + j$**.
     - Significa: Las 'a' (i) deben ser iguales a la suma de 'b' (j) + 'c' (k).
     - Estrategia: Apila las 'a'. Las 'b' borran 'a'. Las 'c' borran las 'a' que queden.
+
+
+# 5.5 Lema del Bombeo para Lenguajes Independientes del Contexto
+Sea $L$ un lenguaje independiente del contexto. Entonces existe una constante $n$ (llamada cte. de bombeo) tal que cualquier cadena $z$ perteneciente a $L$ puede descomponerse en 5 partes, $z=uvwxy$, cumpliendo: 
+1. **$|vwx| \le n$**: La "ventana" donde ocurre el bombeo tiene un tamaño limitado.
+2. **$vx \neq \epsilon$**: Al menos una de las dos partes que se bombean ($v$ o $x$) debe contener algo (no pueden estar ambas vacías).
+3. Para todo $k \ge 0$, la cadena $u v^k w x^k y \in L$:  Si repetimos $v$ y $x$ el mismo número de veces ($k$), la cadena resultante sigue perteneciendo al lenguaje.
+
+Si no cumple el lema, no estamos ante un Lenguaje Independiente del Contexto.
+
+Ejemplo: $$L = \{ a^i b^j c^k \mid k = i/j; \ i, j, k \ge 1 \}$$
+Y nos dan como componentes (llaman a $y$ $z$): 
+- $u = a^{2n-2}$
+- $v = a^2$
+- $w = \lambda$ (nada)
+- $x = b$
+- $z = b^{n-1} c^2$
+
+Si usamos $k=0$ en la expresión $uv^k wx^k z$, nos queda $uwz$ por lo que tendríamos $a^{2n} b^n c^2$ . Además mirando el lenguaje sabemos que se debe cumplir que $N(c)=\frac{N(a)}{N(b)}$ . Por lo que podemos sustituir y comprobar si se cumple o no:
+$$2=\frac{2n-2}{n-1}$$
+Por lo que vemos que cumple el lema (también siguen el orden de $abc$), no podemos demostrar que no sea un LIC. Y así seguiríamos probando con los $k$ que nos digan. Aunque a simple vista ya se puede afirmar que no lo será porque los $LIC$ no tienen la capacidad de realizar multiplicaciones, solo sumar y contar.

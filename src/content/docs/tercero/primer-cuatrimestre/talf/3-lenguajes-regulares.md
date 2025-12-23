@@ -82,7 +82,7 @@ $$L=R*$$
 Te queda el estado Inicial ($q_0$) y el Final ($q_f$), con flechas de ida, vuelta y bucles propios.
 $$L=(R*+SU*T)*SU*$$
 
-- __$(R*+SU*T)*$: Es todo lo que puedes hacer **empezando y acabando en el inicio**.
+- $(R*+SU*T)*$ : Es todo lo que puedes hacer empezando y acabando en el inicio.
     - O giras en el inicio ($R$).
     - O vas al final, giras allí y vuelves ($S \cdot U^* \cdot T$).
     - Todo esto repetido las veces que quieras ($^*$).
@@ -110,3 +110,36 @@ $$R*:L(R*)$$
 **Ejemplo:**
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251207214613.png)
+
+# 3.5 Lema del Bombeo para Lenguajes Regulares
+>[!Nota]
+>Esto en prácticas no lo dimos, y ns si cae en el final o no pero en anteriores finales lo pregunta. Y claro no se si en la teórica lo dijo porque ir a la teórica nunca fue opción.
+
+Sea $L$ un lenguaje regular. Entonces existe un número entero $p \geq 1$ tal que cualquier cadena $w$ perteneciente a $L$ con longitud $|w| \ge p$ puede dividirse en tres partes, $w = xyz$, cumpliendo las siguientes tres condiciones:
+- **$|y| > 0$** (o lo que es lo mismo, $y \neq \epsilon$): La parte central no puede estar vacía.
+- **$|xy| \le p$**: La parte que se repite ocurre dentro de los primeros $p$ caracteres.
+- **Para todo $k \ge 0$, la cadena $xy^kz \in L$**: Podemos repetir la parte $y$ tantas veces como queramos (o borrarla con $k=0$) y la cadena resultante seguirá perteneciendo al lenguaje.
+
+Podemos pensarlo como:
+- **$x$ (El prefijo):** El camino desde el inicio hasta antes de entrar al bucle.
+- **$y$ (El bucle):** La parte de la cadena que hace que el autómata de una vuelta y regrese al mismo estado. Por eso puedes repetirla ($k$ veces) y el autómata sigue feliz en ese bucle.
+- **$z$ (El sufijo):** El camino desde que sales del bucle hasta el estado final.
+
+El Lema del Bombeo no garantiza que el lenguaje sea regular, porque aunque lo cumpla podría no serlo. Lo que es seguro es que si no lo cumple, no es regular.
+
+
+Ejemplo: $L = \{ a^i b^j \mid j = 2i \}$. Eso implica que $N_b = 2 \cdot N_a$ y a mayores se debe de respetar el orden. Normalmente nos darán algo así: 
+- $x = a^{(n/2)-1}$ (Aporta $\frac{n}{2}-1$ aes, 0 bes).
+- $y = abb$ (Aporta 1 a, 2 bes).
+- $z = b^{n-2}$ (Aporta 0 aes, $n-2$ bes).
+
+Y nos dirán que probemos con varios $k$ si se cumple o no. Si por ejemplo usamos $k=2$
+$$w' = a^{(n/2)-1} \cdot (abb) \cdot (abb) \cdot b^{n-2}$$
+Ya podemos apreciar simple vista que va a fallar porque tenemos $abbabb$ lo cual no cumple el orden, por ello no tenemos un lenguaje regular. Pero si nos dicen que $k=0$ tendríamos
+$$w' = x \cdot z$$
+$$w' = a^{(n/2)-1} \cdot b^{n-2}$$
+
+Y aprovechamos $N_b = 2 \cdot N_a$ para sustituir:
+$$2 \cdot (\frac{n}{2} - 1) = n - 2$$
+
+Vemos que el lema del bombeo no falla, pero esto no significa que sea regular.

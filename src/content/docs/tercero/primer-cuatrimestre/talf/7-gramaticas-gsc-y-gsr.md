@@ -10,7 +10,7 @@ Como su nombre indica, son las gramáticas más flexibles y potentes. No tienen 
 **Definición y Reglas**
 Una GSR se define formalmente como $G=(NT,T,S,P)$.
 
-Sus producciones tienen la forma genérica:
+Sus prod4ucciones tienen la forma genérica:
 $$x \rightarrow y$$
 
 Donde:

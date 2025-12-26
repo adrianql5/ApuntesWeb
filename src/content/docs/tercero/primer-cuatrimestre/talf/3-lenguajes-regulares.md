@@ -30,8 +30,7 @@ Para leer una ER correctamente, debes conocer la jerarquía de operaciones (como
 >     
 > 3. **Unión (Lo más débil):** Al final se suma. ($a + (bc^*)$)
 >     
-> 
-> _Usa paréntesis si quieres cambiar esto: $(a+b)^_$.*
+> Usa paréntesis si quieres cambiar esto: $(a+b)^*$
 
 # 3.2 Álgebra de las ER
 Estas igualdades sirven para simplificar expresiones complejas
@@ -50,9 +49,8 @@ Estas igualdades sirven para simplificar expresiones complejas
 La idea es desmantelar el autómata estado por estado hasta que solo quede una "super-flecha" del inicio al final con la Expresión Regular completa.
 
 **Algoritmo:**
-1. **Limpieza:** Elimina los **estados sumideros** (o "de muerte") que no llegan a ningún lado.
-2. **Limpieza:** Elimina los **estados sumideros** (o "de muerte") que no llegan a ningún lado. Al quitarlo, debes "recablear" las conexiones para no perder información (ver la "Regla del Puente" abajo).
-3. Resultado Final:
+1. **Limpieza:** Elimina los **estados sumideros** (o "de muerte") que no llegan a ningún lado. Al quitarlo, debes "recablear" las conexiones para no perder información (ver la "Regla del Puente" abajo). **Si son finales no los borres**.
+2. Resultado Final:
 	- Si el estado inicial es también final: Te quedará 1 solo estado.
 	- Si son distintos: Te quedarán 2 estados.
 	- _Nota:_ Si hay múltiples estados finales, calcula la ER para cada uno por separado (ignorando que los otros son finales) y únelas con un $+$ al final.
@@ -96,7 +94,6 @@ $$L=(R*+SU*T)*SU*$$
 
 # 3.4 Conversión de ER  a Autómatas Finitos
 Empleando estas reglas se puede construir un AFD con transiciones epsilon, suelen quedar autómatas gigantescos. Se puede simplificar después o también hay casos donde es obvio el autómata que reconocen
-
 
 $$R+S:L(R)+L(S)$$
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020172713.png)

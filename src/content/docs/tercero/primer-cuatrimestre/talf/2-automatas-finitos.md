@@ -54,8 +54,6 @@ $$\delta: Q \times (\Sigma \cup \{\varepsilon\}) \to 2^Q$$
 # 2.3 Transiciones $\varepsilon$ (Epsilon) y `Clausura-ε`
 Una transición $\varepsilon$ es un **teletransporte**. Permite al autómata cambiar de estado **sin leer nada** de la cinta de entrada. Te permite estar en varios estados al mismo tiempo
 
-Una transición $\varepsilon$ es un **teletransporte**. Permite al autómata cambiar de estado **sin leer nada** de la cinta de entrada.
-
 Para resolver ejercicios de conversión, necesitas dominar la **Clausura-ε**.
 
 - **Pregunta:** "¿A dónde puedo llegar desde aquí sin gastar ni una moneda (símbolo)?"
@@ -77,6 +75,7 @@ La clausura de la imagen anterior sería:
 > - $Clausura(q_0) = \{q_0, q_1, q_2\}$
 > - $Clausura(q_1) = \{q_1, q_2\}$
 >
+
 
 # 2.4 Equivalencia y Conversión: AFN → AFD
 Los ordenadores reales no son "adivinos" (no son no-deterministas). Para programar un AFN, primero debemos convertirlo a AFD.
@@ -118,3 +117,19 @@ Como el AFN puede estar en varios sitios a la vez, **cada estado del nuevo AFD s
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020130827.png)
 
+# 2.6 Equivalencia entre Estados
+Dos estados $p$ y $q$ son equivalentes si son **indistinguibles** para un observador externo.
+
+Imagínate que metemos el estado $p$ en una caja negra y el estado $q$ en otra. Tú no puedes ver el dibujo del autómata. Solo puedes meter cadenas de texto (inputs) y ver si la luz de "Aceptado" se enciende o no.
+- Si para **cualquier** cadena infinita de pruebas que se te ocurra, las dos cajas siempre coinciden (o ambas aceptan, o ambas rechazan), entonces los estados son **equivalentes**.
+- Si encuentras **una sola** cadena donde una caja dice "Sí" y la otra "No", entonces son **distinguibles** (no equivalentes).
+
+
+## Definición Formal
+Sea un autómata (o dos) sobre un alfabeto $\Sigma$. Dos estados $p$ y $q$ son equivalentes (se denota $p \equiv q$) si y solo si:
+$$\forall w \in \Sigma^* : (\hat{\delta}(p, w) \in F \iff \hat{\delta}(q, w) \in F)$$
+
+**Traducción:**
+Para toda palabra $w$ (desde la cadena vacía hasta una palabra de un millón de letras), si partimos de $p$ y leemos $w$, el resultado final (aceptación o rechazo) debe ser exactamente el mismo que si partimos de $q$ y leemos esa misma $w$.
+
+Por lo que si nos dicen que si dos lenguajes regulares son equivalentes entre sí si los estados iniciales de sus correspondientes AFD son equivalentes

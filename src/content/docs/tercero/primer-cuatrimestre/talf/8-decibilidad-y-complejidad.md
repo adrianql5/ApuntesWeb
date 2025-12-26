@@ -52,20 +52,20 @@ Clasificamos los lenguajes según lo difícil que es para una máquina aceptarlo
 
 ### Definiciones Formales
 
-| **Clase** | **Definición**    | **Tipo de Máquina**    | **Tiempo**                                                      |
-| --------- | ----------------- | ---------------------- | --------------------------------------------------------------- |
-| **P**     | **Polinómico**    | MT **Determinista**    | Se resuelve en tiempo $n^k$ (polinómico)8.                      |
-| **NP**    | **No Polinómico** | MT **No Determinista** | Se resuelve en tiempo $n^k$ (polinómico) usando "adivinación"9. |
+| **Clase** | **Definición**    | **Tipo de Máquina**    | **Tiempo**                                                     |
+| --------- | ----------------- | ---------------------- | -------------------------------------------------------------- |
+| **P**     | **Polinómico**    | MT **Determinista**    | Se resuelve en tiempo $n^k$ (polinómico).                      |
+| **NP**    | **No Polinómico** | MT **No Determinista** | Se resuelve en tiempo $n^k$ (polinómico) usando "adivinación". |
 
 > **Nota:** $NP$ no significa "No Polinómico" literalmente en inglés, sino "Nondeterministic Polynomial time".
 
 ### Relación entre P y NP
-1. **$P \subseteq NP$:** Todo problema que una máquina determinista resuelve rápido, una no determinista también puede resolverlo rápido (simplemente no usa su capacidad de adivinar)10.
+1. **$P \subseteq NP$:** Todo problema que una máquina determinista resuelve rápido, una no determinista también puede resolverlo rápido (simplemente no usa su capacidad de adivinar).
 2. **La gran pregunta:** ¿$P = NP$? Nadie lo sabe. Se asume que $P \neq NP$, es decir, que hay problemas en NP que son intrínsecamente difíciles.
 
 ### Tratabilidad
 - **Problemas Tratables (Clase P):** Son viables de resolver en la práctica (ej: ordenar una lista).
-- **Problemas Intratables:** Aunque son computables, requieren tantos recursos (tiempo exponencial) que no son viables para entradas grandes11. Según la tesis de Cook-Karp, todo lo que está fuera de P se considera intratable.
+- **Problemas Intratables:** Aunque son computables, requieren tantos recursos (tiempo exponencial) que no son viables para entradas grandes. Según la tesis de Cook-Karp, todo lo que está fuera de P se considera intratable.
 
 # 8.5 Reducibilidad y NP-Completo
 Para estudiar los problemas más difíciles, usamos la técnica de **reducción**.

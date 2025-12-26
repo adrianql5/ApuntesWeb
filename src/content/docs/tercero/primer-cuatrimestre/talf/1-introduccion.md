@@ -21,136 +21,152 @@ Piensa en esta asignatura como el **"Diseño de Máquinas que leen cosas"**. Tod
 2. **Proceso:** La máquina (el autómata) procesa símbolo a símbolo.
 3. **Output:** La máquina responde **SÍ** (Aceptado/Válido) o **NO** (Rechazado/Inválido).
 
-# 1.2 Utilidad de los autómatas, gramáticas y expresiones regulares
-Los conceptos abstractos que veremos son la base de herramientas que usas a diario:
+# 1.2 El Ecosistema de la Teoría de Autómatas
+## 1.1 El "Trío Sagrado": Lenguaje, Gramática y Máquina
+Imagina que quieres preparar un plato específico. Necesitas tres elementos distintos pero conectados. Aquí veremos qué es cada uno y dónde se usan en la vida real:
 
-**Autómatas Finitos (DFA/NFA):** El motor de búsqueda de patrones. 
-- _Uso real:_ **Ctrl+F** en Word, validación de emails en formularios web.
+### 1. El Lenguaje (El Plato Final)
+Es el concepto abstracto. Es el **conjunto de cadenas (palabras)** que queremos aceptar como válidas.
+- **Definición:** El objetivo final.
+- **Ejemplo:** "El conjunto de todos los emails válidos" o "Todo el código C++ que funciona".
 
-**Gramáticas (Sintaxis):** Reglas de construcción.
-- _Uso real:_ **Compiladores**. Cuando VS Code te marca un error rojo, es porque tu código rompió las reglas de la gramática del lenguaje.
+### 2. La Gramática (La Receta) [Sintaxis]
+Son las **reglas generativas**. Te dicen cómo construir una cadena válida paso a paso. Es el ente "constructor".
+- **Función:** Definir la estructura correcta.
+- **Uso real:** **Compiladores**. Cuando VS Code te marca un error en rojo, es porque tu código rompió las reglas de la gramática del lenguaje.
 
-**Expresiones Regulares:** Búsqueda compacta.
-- _Uso real:_ Filtrado de datos y comandos `grep` en Linux.
+### 3. El Autómata (El Crítico de Comida) [Reconocedor]
+Es la **máquina que verifica**. Le das una cadena y te dice "Sí, pertenece al lenguaje" o "No, rechazada". Es el motor de búsqueda.
+- **Función:** Buscar patrones y validar.
+- **Uso real:** **Ctrl+F** en Word, validación de formularios web o el comando `grep` en Linux (usando Expresiones Regulares para búsquedas compactas).
+
+>[!Importante] La Relación Fundamental:
+> 
+> Para cada tipo de Lenguaje, existe una Gramática que lo genera y una Máquina que lo reconoce. Son tres caras de la misma moneda.
 
 
 # 1.3 El "Diccionario" de la Asignatura
 **Peligro de Examen:** Confundir estos términos es la causa #1 de suspensos
 
-| **Concepto**         | **Símbolo** | **Definición Formal**                                           | **💡 Analogía Práctica**                                                             |
-| -------------------- | ----------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| **Alfabeto**         | $\Sigma$    | Conjunto finito y no vacío de símbolos. Ej: $\Sigma = \{0, 1\}$ | Las **piezas de Lego** disponibles. (No puedes usar piezas que no estén en la caja). |
-| **Palabra / Cadena** | $w, x, y$   | Secuencia finita de símbolos de $\Sigma$.                       | Una **torre** construida con esas piezas.                                            |
-| **Longitud**         | $           | w                                                               | $                                                                                    |
-| **Lenguaje**         | $L$         | Conjunto de cadenas ($L \subseteq \Sigma^*$).                   | El **manual de instrucciones** que dice qué torres son válidas.                      |
-## **La Cadena Vacía ($\varepsilon$ o $\lambda$) vs. El Lenguaje Vacío ($\emptyset$):**
-Error conceptual más común
+| **Concepto**         | **Símbolo** | **Definición Formal**                                                 | **💡 Analogía Práctica**                                                                |
+| -------------------- | ----------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| **Alfabeto**         | $\Sigma$    | Conjunto finito y no vacío de símbolos (ej: $\{0, 1\}$ o $\{a, b\}$). | Las **piezas de Lego** disponibles en la caja. No puedes usar piezas que no estén aquí. |
+| **Palabra / Cadena** | $w, x, y$   | Secuencia finita de símbolos del alfabeto.                            | Una **torre** específica construida con esas piezas.                                    |
+| **Longitud**         | $           | Número de símbolos de w                                               | $                                                                                       |
+| **Lenguaje**         | $L$         | Conjunto de palabras ($L \subseteq \Sigma^*$).                        | La **foto de la colección** de todas las torres que hemos decidido que son válidas.     |
 
- **Cadena Vacía ($\varepsilon$):** Es una palabra que **no tiene símbolos**.
-- Longitud: $|\varepsilon| = 0$.
-- _Analogía:_ Es como un string vacío en programación `""`. Existe, pero no tiene nada dentro.
- 
-**Lenguaje Vacío ($\emptyset$):** Es un lenguaje que **no contiene ninguna palabra**.
-- _Analogía:_ Una carpeta vacía.
+
+# 1.4 Conceptos Críticos y Operaciones
+## 1.4.1 El error más común: Cadena Vacía vs. Lenguaje Vacío
+Es fundamental distinguir entre "tener una caja vacía" y "tener una caja con una hoja en blanco dentro".
+1. **Cadena Vacía ($\varepsilon$ o $\lambda$):**
+    - Es una palabra que existe, pero **no tiene símbolos**.
+    - Su longitud es 0 ($|\varepsilon| = 0$).
+    - _Analogía:_ Un string vacío en programación `""`.
+
+2. **Lenguaje Vacío ($\emptyset$):**    
+    - Es un conjunto que **no contiene ninguna palabra** (ni siquiera la vacía).
+    - _Analogía:_ Una carpeta de archivos vacía.
 
 
 > **Regla de oro:**
-> 
-> - $L = \{\varepsilon\}$ $\rightarrow$ Un lenguaje que contiene una palabra (la vacía). **No está vacío.**
->     
-> - $L = \emptyset$ $\rightarrow$ Un lenguaje sin palabras.
->
+> - $L = \{\varepsilon\}$ $\rightarrow$ Un lenguaje que contiene una palabra (la vacía). **NO está vacío.**
+> - $L = \emptyset$ $\rightarrow$ Un lenguaje sin palabras. **ESTÁ vacío.**
 
+## 1.4.2 Operaciones Básicas
+Al igual que sumamos números, aquí operamos con palabras y lenguajes.
 
-# 1.4 Operaciones básicas
-### Sobre Palabras
-- **Concatenación ($xy$):** Pegar $y$ detrás de $x$. **OJO:** No es conmutativa ($ab \neq ba$).
+**Sobre Palabras (Cadenas):**
+- **Concatenación ($xy$):** Pegar $y$ detrás de $x$. **OJO:** El orden importa ($ab \neq ba$).
 - **Potencia ($x^i$):** Repetir la cadena $i$ veces. (Ej: $a^3 = aaa$).
-- **Reflexión ($x^{-1}$):** Leerla al revés (de derecha a izquierda).
+- **Reflexión / Inversa ($x^R$ o $x^{-1}$):** Leerla al revés (de derecha a izquierda).
 
-### Sobre Lenguajes
-Además de Unión ($\cup$), Intersección ($\cap$) y Diferencia ($-$), existen operaciones críticas en esta teoría:
-1. **Concatenación ($L_1 \cdot L_2$):** Combina cada palabra de $L_1$ con cada palabra de $L_2$.
-2. **Cierre de Kleene / Estrella ($L^*$):** 
-    - Representa **cero o más** repeticiones de palabras del lenguaje.
-    - Siempre incluye la cadena vacía $\varepsilon$.
-    - $\Sigma^*$ = El conjunto de **todas** las palabras posibles que se pueden formar con el alfabeto.
+**Sobre Lenguajes (Conjuntos):**
+- **Concatenación ($L_1 \cdot L_2$):** Combina _cada_ palabra del primer lenguaje con _cada_ palabra del segundo.
+- **Cierre de Kleene / Estrella ($L^*$):** La operación más importante.
+    - Representa repetir palabras del lenguaje **cero o más veces**.
+    - **Siempre** incluye la cadena vacía $\varepsilon$.
+    - **$\Sigma^*$**: Significa "El conjunto de **todas** las palabras posibles que se pueden formar con el alfabeto".
 
+## 1.4.3 Determinismo
+El determinismo es **previsibilidad absoluta**. En un sistema determinista, si conoces el estado actual y la entrada que llega, sabes con certeza matemática qué va a pasar después. No hay dudas, no hay elecciones.
 
-# 1.5 Conceptos Fundamentales
-## El "Trío Sagrado": Lenguaje, Gramática y Máquina
-Imagina que quieres preparar un plato de comida específico. Para que ese plato exista, necesitas tres elementos que están íntimamente conectados pero son distintos:
+El no determinismo es la capacidad de **elegir** o **explorar múltiples futuros a la vez**. Ante una misma situación, la máquina puede tener varias opciones válidas de movimiento (o ninguna).
 
-1. **El Lenguaje (El Plato Final):** Es el conjunto de cadenas (palabras) que queremos validar o generar. Es el concepto abstracto.
-    - _Ejemplo:_ "El conjunto de todos los emails válidos".
+# 1.5 La Jerarquía de Chomsky: Las "Muñecas Rusas"
+Aquí es donde entra el lío de los nombres. No son categorías aisladas, son **niveles de complejidad** concéntricos.
+- **Regla de Oro:** Cada nivel **incluye** a todos los anteriores (es un subconjunto estricto).
+- _Ejemplo:_ Todo lo que es Regular (Nivel 3) es TAMBIÉN Independiente del Contexto (Nivel 2), Sensible al Contexto (Nivel 1) y Rec. Enumerable (Nivel 0).
 
-2. **La Gramática (La Receta):** Son las reglas generativas. Te dice cómo construir una cadena válida paso a paso. Es el "constructor".
-    - _Ejemplo:_ `Email -> Texto @ Texto . Dominio`
+Vamos del más simple (restrictivo) al más potente (libre).
 
-3. La Máquina / Autómata (El Crítico de Comida):
-    Es el mecanismo que verifica. Le das una cadena y te dice "Sí, pertenece al lenguaje" o "No, rechazada". Es el "reconocedor".
-
-
-> La Relación Fundamental:
-> 
-> Para cada tipo de Lenguaje, existe una Gramática que lo genera y una Máquina que lo reconoce. Son tres caras de la misma moneda.
-
-
-## La Jerarquía: Las "Muñecas Rusas"
-Aquí es donde entra el lío de los nombres. No son categorías aisladas, son **niveles de complejidad**.
-- Cada nivel **incluye** al anterior.
-- Todo lo que es Regular (Nivel 3) es TAMBIÉN Independiente del Contexto (Nivel 2), etc.
-Vamos del más simple (y restrictivo) al más potente (y libre).
-
-### Nivel 3: Lo Regular (Lo más simple)
-Aquí no hace falta memoria compleja, solo saber "dónde estoy".
+### Nivel 3: Lo Regular (Sin Memoria)
+Aquí la máquina es muy tonta. No tiene memoria auxiliar, solo sabe "en qué estado está ahora mismo".
 - **Lenguaje:** Regular.
-- **Gramática:** Regular (Lineal por la derecha o izquierda). Reglas muy rígidas ($A \to aB$).
-- **Máquina:** **Autómata Finito (AFD/AFN)**.
-    - _¿Qué puede hacer?_ Patrones simples, búsquedas de texto.
-    - _¿Qué NO puede hacer?_ Contar (no sabe si hay el mismo número de 'a' que de 'b').
-    - _Ejemplo:_ Validar un email o un número de teléfono.
+- **Gramática:** Regular (Lineal por la derecha o izquierda). Reglas muy rígidas (Lineal por la derecha o izquierda). Reglas muy rígidas ($A \to aB$ o $A \to a$).
+- **Máquina:** **Autómata Finito (AFD / AFN)**.
+	- **¿Determinismo?** **EQUIVALENTE**. Da igual si es determinista o no, tienen la misma potencia.
+	- **Ejemplo Real:** Validar un email, buscar con `Ctrl+F`.
+	- **Ejemplo Matemático:** $a^*$ (cualquier número de 'a'), o números de dos cifras.
+	- **Limitación:** No sabe contar indefinidamente (no distingue $a^n b^n$).
 
 
-### Nivel 2: Independiente del Contexto (La estructura)
-Aquí añadimos una memoria tipo "pila" (LIFO). Podemos recordar cosas para cerrarlas después.
+### Nivel 2: Independiente del Contexto (Memoria de Pila)
+Aquí añadimos una memoria tipo "pila" (LIFO - Last In, First Out). Podemos guardar cosas, pero solo podemos leer la que está arriba del todo.
 - **Lenguaje:** Independiente del Contexto (LIC).
 - **Gramática:** Independiente del Contexto (GIC). Reglas tipo $A \to \alpha$ (una variable cambia por cualquier cosa).
-- **Máquina:** **Autómata con Pila (Pushdown)**.
-    - _¿Qué puede hacer?_ Anidar cosas. Paréntesis `(( ))`, estructuras `if-then-else`, contar pares ($a^n b^n$).
-    - _¿Qué NO puede hacer?_ Depender del contexto cruzado (ej: $a^n b^n c^n$).
-    - _Ejemplo:_ La sintaxis de lenguajes de programación (Java, C, Python).
+- **Máquina:** **Autómata con Pila (AP)**.
+	- **Determinismo:** Aquí **NO** son equivalentes.
+	    - El **AP No Determinista** es el "jefe" del Nivel 2. Reconoce **toda** la clase de los **Lenguajes Independientes del Contexto (LIC)**.
+	    - El **AP Determinista** es menos potente (reconoce un subconjunto menor).Reconoce un **subconjunto estricto**: los **Lenguajes Independientes del Contexto Deterministas**.
+	- **Ejemplo Real:** La sintaxis de lenguajes de programación (Java, C, Python), HTML (etiquetas que se abren y cierran).
+	- **Ejemplo Matemático:** $a^n b^n$ (mismo número de a's que de b's).
+	- **Limitación:** No puede comparar tres cosas a la vez ($a^n b^n c^n$).
 
 
-### Nivel 1: Sensible al Contexto (El contexto importa)
-Aquí la memoria es una cinta, pero limitada al tamaño de la palabra. Podemos mirar alrededor.
+### Nivel 1: Sensible al Contexto (Memoria Acotada)
+Aquí la memoria es una cinta, podemos movernos y reescribir, pero **no podemos usar más espacio del que ocupa la palabra de entrada**.
 
 - **Lenguaje:** Sensible al Contexto.
 - **Gramática:** Sensible al Contexto (GSC). Reglas donde importa qué hay a los lados ($xAy \to xBy$).
-- **Máquina:** **Autómata Linealmente Acotado**.
-    - _¿Qué puede hacer?_ Coordinar tres o más conteos ($a^n b^n c^n$) y verificar que una variable ha sido declarada antes de usarse (contexto real).
-    - _Ejemplo:_ El lenguaje natural (español, inglés) en muchos aspectos gramaticales complejos.
+- **Máquina:** **Autómata Linealmente Acotado (ALA/LBA)**.
+	- **Concepto clave:** Es una MT con cinta limitada por muros a izquierda y derecha.
+	- **Ejemplo Real:** El lenguaje natural (la concordancia gramatical compleja en español o inglés).
+	- **Ejemplo Matemático:** $a^n b^n c^n$ (tres conteos coordinados).
+
+>[!Nota]
+>- **ALA No Determinista:** Reconoce los **Lenguajes Sensibles al Contexto** (Tipo 1 de Chomsky). Esta es la definición estándar que se suele usar.
+>- **ALA Determinista:** Reconoce los **Lenguajes Sensibles al Contexto Deterministas** (más limitados que los no deterministas).
 
 
 ### Nivel 0: Recursivamente Enumerable (El poder total)
-Aquí no hay límites. Si se puede calcular, está aquí.
+Aquí no hay límites. Memoria infinita. Si existe un algoritmo para calcularlo, está aquí.
 - **Lenguaje:** Recursivamente Enumerable.
 - **Gramática:** Irrestricta (Sin restricciones).
-- **Máquina:** **Máquina de Turing**.
-    - _¿Qué puede hacer?_ Cualquier algoritmo computable por un ordenador actual.
-    - _El peligro:_ La máquina podría quedarse pensando para siempre (bucle infinito) y nunca responder.
+- **Máquina:** **Máquina de Turing (MT)**.
+	- **¿Determinismo?** **EQUIVALENTE**. El no determinismo no añade potencia, solo velocidad teórica (P vs NP).
+	- **El Gran Peligro:** La máquina podría **no detenerse nunca** (bucle infinito) si la palabra no es válida.
+
+Dentro del Nivel 0, existe una subdivisión vital para aprobar las preguntas de Verdadero/Falso.
+
+| **Tipo de Lenguaje**                 | **¿Qué hace la máquina si la palabra es VÁLIDA?** | **¿Qué hace si la palabra es INVÁLIDA?**                    | **¿Es seguro?**         |
+| ------------------------------------ | ------------------------------------------------- | ----------------------------------------------------------- | ----------------------- |
+| **Recursivo** (Decidible)            | Para y dice **SÍ**.                               | Para y dice **NO**.                                         | ✅ Sí, siempre responde. |
+| **Rec. Enumerable** (Semi-decidible) | Para y dice **SÍ**.                               | Puede parar y decir NO... **O quedarse en bucle infinito**. | ❌ No, puede colgarse.   |
+
+# 1.6 Tabla Resumen Definitiva (La "Chuleta")
+| **Nivel Chomsky** | **Lenguaje**      | **Máquina (Autómata)**  | **Determinismo vs No Det.**                 | **Ejemplo Matemático Clave**   |
+| ----------------- | ----------------- | ----------------------- | ------------------------------------------- | ------------------------------ |
+| **Tipo 3**        | Regular           | **Autómata Finito**     | Equivalentes ✅                              | $a^* b^*$ (Patrones)           |
+| **Tipo 2**        | Indep. Contexto   | **Autómata de Pila**    | **DIFERENTES** ❌ (El No-Det es más potente) | $a^n b^n$ (Pares, Palíndromos) |
+| **Tipo 1**        | Sensible Contexto | **Linealmente Acotado** | _(Complejo, se asume No-Det)_               | $a^n b^n c^n$ (Tríos)          |
+| **Tipo 0**        | Rec. Enumerable   | **Máquina de Turing**   | Equivalentes ✅                              | Cualquier algoritmo            |
 
 
-## Tabla Resumen Definitiva (La "Chuleta")
-
-| **Nivel (Chomsky)** | **LENGUAJE**      | **GRAMÁTICA**           | **MÁQUINA (Autómata)**           | **Poder Principal**                     |
-| ------------------- | ----------------- | ----------------------- | -------------------------------- | --------------------------------------- |
-| **Tipo 3**          | Regular           | Regular                 | **Autómata Finito** (AFD/AFN)    | Sin memoria (solo estados).             |
-| **Tipo 2**          | Indep. Contexto   | GIC (Context-Free)      | **Autómata con Pila**            | Memoria LIFO (paréntesis, anidación).   |
-| **Tipo 1**          | Sensible Contexto | GSC (Context-Sensitive) | **Autómata Linealmente Acotado** | Memoria acotada (relaciones complejas). |
-| **Tipo 0**          | Rec. Enumerable   | Irrestricta             | **Máquina de Turing**            | Memoria infinita (Cómputo universal).   |
-
-### ¿Cómo recordarlo?
-1. **AFD:** Un interruptor de luz (encendido/apagado). Simple.
-2. **Pila:** Una pila de platos (solo toco el de arriba). Estructura.
-3. **Turing:** Un ordenador con memoria infinita. Dios.
+| **Tipo de Máquina**                    | **¿Es más potente la No Determinista?**         | **Razón**                                                                                                                                                       |
+| -------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Autómata Finito**                    | **NO** (Son equivalentes)                       | Existe un algoritmo mecánico para convertir cualquier no determinista en uno determinista sin perder información.                                               |
+| **Autómata de Pila**                   | **SÍ**                                          | El determinista está limitado (solo reconoce lenguajes sin ambigüedad). El no determinista reconoce **todos** los independientes del contexto.                  |
+| **Autómata Linealmente Acotado (ALA)** | **¿?** (Problema Abierto / Se asume que **SÍ**) | En teoría es una incógnita matemática no resuelta. Pero en la asignatura, el **No Determinista** es el que define los Lenguajes Sensibles al Contexto (Tipo 1). |
+| **Máquina de Turing**                  | **NO** (Son equivalentes)                       | Cualquier cálculo de una MT no determinista puede ser simulado por una determinista (aunque tarde más tiempo).                                                  |
+| **Complejidad (P vs NP)**              | **SÍ** (En tiempo)                              | Aunque resuelven lo mismo, la No Determinista lo hace en tiempo polinómico (rápido), mientras que la determinista podría tardar siglos.                         |

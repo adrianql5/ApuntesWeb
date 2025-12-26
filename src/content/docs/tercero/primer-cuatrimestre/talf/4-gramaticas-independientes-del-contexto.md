@@ -41,7 +41,7 @@ Son las que generan los Lenguajes Regulares (los mismos que vimos en el Tema 2 y
 **Estructura Rígida:**
 - **Lineal Derecha:** $A \to \text{terminal} \cdot \text{Variable}$ (ej: $A \to aB$) o $A \to \text{terminal}$ ($A \to a$).
 - **Lineal Izquierda:** $A \to \text{Variable} \cdot \text{terminal}$ (ej: $A \to Ba$).
-    
+
 
 > **¡Ojo!** No puedes mezclar reglas lineales por derecha e izquierda en la misma gramática. Si lo haces, se convierte en Tipo 2 (GIC) y deja de ser Regular.
 
@@ -50,7 +50,20 @@ Son las que generan los Lenguajes Regulares (los mismos que vimos en el Tema 2 y
 
 $$L(G) = \{ w ∈ T* | S ⇒* w \}$$
 
-Esto significa: El lenguaje generado por $G$ es el conjunto de todas las palabras formadas **solo por terminales** que se pueden derivar desde $S$.
+Se lee así: _"El lenguaje $L$ generado por la gramática $G$ es el conjunto de cadenas $w$..."_
+1. **$w \in T^*$**:
+    - Esto impone la condición principal: la cadena resultante $w$ debe estar formada **únicamente por símbolos Terminales** ($T$).
+    - El asterisco ($*$) es el **Cierre de Kleene**, que significa "cualquier combinación de terminales".
+    - **¿Por qué es importante?** Porque durante la derivación intermedia puedes tener cosas como $aSb$ (que mezcla terminales y variables). La fórmula te dice que eso **no** es parte del lenguaje final todavía; solo lo es cuando desaparecen todas las letras mayúsculas (Variables).
+
+2. **$\mid$**:    
+    - Significa "tal que" o "que cumplen la condición de que...".
+    
+3. $S \Rightarrow * w$:
+    - **$S$**: Debes empezar obligatoriamente desde el **Símbolo Inicial**.
+    - **$\Rightarrow^*$**: La flecha doble con asterisco significa **"se deriva en cero o más pasos"**. Es decir, no importa si tardas 1 paso o 1.000 pasos en llegar.
+    - **$w$**: Debes llegar a la palabra final.
+
 
 **Ejemplo:**
 ```
@@ -68,6 +81,16 @@ T = {a, b}
 
 
 # 4.5 Árboles de Derivación vs Derivaciones
+**Derivar** es el proceso de construir una cadena de texto válida (una palabra) aplicando las reglas de la gramática paso a paso.
+
+Se empieza con el **Símbolo Inicial** (generalmente llamado $S$) y se van sustituyendo las variables (letras mayúsculas) por lo que dictan las reglas (producciones) hasta que solo quedan **terminales** (letras minúsculas o símbolos finales que ya no se pueden cambiar).
+
+Es básicamente un juego de **"buscar y reemplazar"**:
+- **Entrada:** El símbolo inicial $S$.
+- **Acción:** Eliges una variable presente en tu cadena actual, buscas una regla que le aplique y la sustituyes.
+- **Fin:** Cuando ya no quedan variables (letras mayúsculas), has terminado la derivación.
+
+
 Es importante distinguir entre el **proceso** y la **estructura**.
 1. **Derivación (Texto):** Es la secuencia de pasos paso a paso.
     - $S \Rightarrow aA \Rightarrow abB \Rightarrow abb$
@@ -78,8 +101,60 @@ Es importante distinguir entre el **proceso** y la **estructura**.
     - Nodos: Variables intermedias.
 
 
+
+Gramática:
+1. $E \rightarrow E + E$
+2. $E \rightarrow E * E$
+3. $E \rightarrow id$ (donde 'id' es un número o variable)
+
+**Objetivo:** Generar el árbol para la cadena: **$id + id * id$**
+
+Empezamos con el símbolo inicial $E$.
+
+Miramos nuestra cadena objetivo ($id + id * id$). Vemos que hay una suma principal (o una multiplicación, depende de cómo decidamos estructurarlo, pero asumamos la suma primero para este ejemplo).
+
+Aplicamos la regla $E \rightarrow E + E$.
+- De la raíz $E$ salen tres hijos: $E$, $+$ y $E$.
+
+Ahora tenemos:
+- Un $E$ a la izquierda.
+- Un $+$ en el medio (ya es terminal, se queda quieto).
+- Un $E$ a la derecha.
+
+Miramos la cadena objetivo: la primera parte es solo id. Así que al $E$ de la izquierda le aplicamos la regla $E \rightarrow id$.
+
+Para la segunda parte, necesitamos id \* id. Así que al $E$ de la derecha no lo convertimos en id directamente, sino que le aplicamos la regla de multiplicación: $E \rightarrow E * E$
+
+Ahora el árbol ha crecido. Los nuevos $E$ que creamos para la multiplicación se convierten cada uno en `id` usando la regla $E \rightarrow id$.
+
+
 # 4.6 Ambigüedad
-**Definición de Examen:** Una gramática es ambigua si existe **al menos una cadena** que tiene **dos o más árboles de derivación distintos**.
+**Definición de Examen:** Una gramática es ambigua si existe **al menos una cadena** que tiene **dos o más árboles de derivación distintos**. Pueden tener derivaciones distintas y no ser ambiguas, por ejemplo: 
+1. $S \rightarrow AB$
+2. $A \rightarrow a$
+3. $B \rightarrow b$
+
+Queremos generar la cadena: **$ab$** Podemos hacerlo con dos "derivaciones" diferentes (cambiando el orden en que sustituimos las letras):
+
+**Derivación 1 (Por la izquierda):**
+1. $S \Rightarrow AB$
+2. $S \Rightarrow \textbf{a}B$ (Sustituyo A primero)
+3. $S \Rightarrow a\textbf{b}$ (Sustituyo B después)
+
+**Derivación 2 (Por la derecha):**
+1. $S \Rightarrow AB$
+2. $S \Rightarrow A\textbf{b}$ (Sustituyo B primero)
+3. $S \Rightarrow \textbf{a}b$ (Sustituyo A después)
+
+¿Son derivaciones diferentes?
+SÍ. La lista de pasos es distinta. En una escribí la 'a' antes y en la otra escribí la 'b' antes.
+
+¿Son árboles diferentes?
+NO. Si dibujas el árbol, el resultado es idéntico en ambos casos:
+- La raíz es $S$.
+- De $S$ salen dos ramas: $A$ y $B$.
+- De $A$ cuelga una $a$.
+- De $B$ cuelga una $b$.
 
 **Caso típico:** Operaciones matemáticas sin paréntesis ni precedencia.
 - `3 + 4 * 5` $\to$ ¿Es `(3+4)*5` o `3+(4*5)`? Si la gramática permite ambos árboles, es mala (ambigua).
@@ -202,7 +277,7 @@ Se hace en dos pasadas:
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208135015.png)
 
 
-# 4.8 Formas Normales
+# 4.8 Formas Normales (FNC-Chomsky)
 **Objetivo:** Estandarizar la gramática para que todas las reglas sean "cortas" y binarias. Es fundamental para el algoritmo CYK (análisis sintáctico).
 
 **Solo se permiten 2 tipos de reglas:**

@@ -23,9 +23,68 @@ Diferencias clave con el autómata finito:
 2. **$Z_0$ (Fondo de Pila):** El símbolo que está en la pila antes de empezar nada. Nos avisa de que "la pila está vacía".
 3. $\delta$ (Función de Transición): La "ley" del movimiento.
 $$\delta : Q \times (\Sigma \cup \{\varepsilon\}) \times \Gamma \to P(Q \times \Gamma^*)$$
-    - **Input:** Estado actual + Símbolo entrada (o $\varepsilon$) + **Símbolo en la CIMA de la pila**.
-    - **Output:** Nuevo estado + **Cadena para reemplazar la cima**.
 
+Lo que está antes de la flecha ($\to$) son las 3 condiciones que se tienen que cumplir para que la máquina pueda moverse. Significa: "Para hacer un movimiento, necesito saber..."
+1. **$Q$ (Estado actual):** ¿En qué círculo estoy ahora mismo? (Ej: estoy en $q_0$).
+2. **$\Sigma \cup \{\varepsilon\}$ (Lo que leo en la cinta):**
+    - **$\Sigma$:** ¿Qué letra estoy leyendo de la palabra de entrada? (Ej: una 'a').
+    - **$\cup \{\varepsilon\}$:** O también puedo **no leer nada** (usar $\varepsilon$). Esto permite al autómata hacer movimientos "gratis" o espontáneos sin consumir letras de la entrada.
+
+3. **$\Gamma$ (Tope de la Pila):** ¿Qué símbolo está encima del todo en la pila? (Ej: hay una 'Z').    
+    - _Nota:_ A diferencia del autómata finito, aquí **es obligatorio** mirar y sacar (pop) el símbolo superior de la pila para decidir.
+
+**En resumen (Izquierda):** "Estoy en el estado $q$, leo la letra $a$ y saco de la pila el símbolo $Z$. Lo que está después de la flecha es la consecuencia. Significa: "Esto es lo que voy a hacer..."
+1. **$P(...)$ (Partes de / Conjunto Potencia):**
+    - Esto es crucial. La $P$ indica que el resultado es un **conjunto de opciones**, no una sola.
+    - Esto confirma que es un **Autómata NO Determinista**. Ante una misma situación, la función puede devolver varias parejas de (estado, pila) posibles.
+2. **$Q$ (Nuevo Estado):** ¿A qué estado me voy ahora? (Ej: me muevo a $q_1$).    
+3. **$\Gamma^*$ (Lo que escribo en la Pila):**
+    - Aquí decides qué metes de vuelta en la pila. Como tiene el asterisco ($*$), significa que puedes escribir una cadena de **cualquier longitud** de símbolos de pila.
+
+La parte $\Gamma^*$ es la palanca de cambios de la memoria:
+- **Si escribes $\varepsilon$ (vacío):** Has sacado el tope para leerlo y no metes nada. $\to$ **Desapilar (POP)**
+- **Si escribes el mismo símbolo que sacaste (ej: 'Z'):** Lo sacaste y lo volviste a meter igual. $\to$ **Quedarse igual (No-Op)**.
+- **Si escribes dos o más símbolos (ej: 'AZ'):** Sacaste 'Z' y metes 'AZ'. Has añadido 'A' encima. $\to$ **Apilar (PUSH)**.
+
+
+Imagina esta transición concreta derivada de tu fórmula:
+$$\delta(q_0, a, Z) = \{ (q_1, AZ) \}$$
+
+**Lectura:**
+1. **Situación:** Estoy en estado $q_0$, leo una 'a' en la entrada y el tope de la pila es 'Z'.
+2. **Acción:**
+    - Cambio al estado $q_1$.
+    - Sustituyo la 'Z' que saqué por la cadena "AZ".
+    - **Efecto:** He guardado (apilado) una A sobre la Z.
+
+En este tema solo se habla de los APN, pero para preguntas tipo test hay que saber lo siguiente.
+
+## 5.1.1 Autómata de Pila NO Determinista (APN)
+Es el modelo estándar y el más potente de los dos.
+- **Comportamiento:** Ante una misma situación (mismo estado, misma entrada y mismo símbolo en el tope de la pila), la máquina puede tener **varias opciones** de movimiento.
+    - Puede elegir desapilar, no hacer nada, o apilar diferentes cosas.
+    - La máquina "adivina" mágicamente cuál es el camino correcto para aceptar la cadena.
+
+- **Lenguajes que reconoce:** Reconoce **todos** los **Lenguajes Independientes del Contexto (LIC)** (o Libres de Contexto).
+    - _Ejemplo clásico:_ Los palíndromos pares ($ww^R$, como "anitalavalatina"). La máquina necesita el no determinismo para "adivinar" cuándo ha llegado exactamente a la mitad de la palabra y debe empezar a comprobar la segunda parte con la pila.
+
+## 5.1.2 Autómata de Pila Determinista (APD)
+Es una versión restringida y **menos potente**.
+- **Comportamiento:** Ante una situación dada (estado, entrada, tope de pila), existe **como máximo una** acción posible.
+    - Nunca hay duda de qué hacer. Es predecible, como un programa de ordenador normal.
+
+- **Lenguajes que reconoce:** Reconoce los **Lenguajes Independientes del Contexto Deterministas**.    
+    - Estos lenguajes están "a medio camino entre los lenguajes regulares y los independentes al contexto" .
+    - Son un subconjunto estricto. **No todos** los lenguajes libres de contexto pueden ser reconocidos por un APD.
+
+
+| **Característica**        | **AP NO Determinista (APN)**                                        | **AP Determinista (APD)**                                  |
+| ------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------- |
+| **Capacidad de elección** | Múltiples transiciones posibles.                                    | Solo una transición posible.                               |
+| **Potencia**              | **Mayor**. Reconoce toda la familia de lenguajes de contexto libre. | **Menor**. Solo reconoce un subconjunto.                   |
+| **Lenguajes**             | Lenguajes Independientes del Contexto (LIC).                        | Lenguajes Indep. del Contexto **Deterministas**.           |
+| **Ejemplo de Lenguaje**   | Palíndromos ($ww^R$) sin marcar el centro.                          | Código de programación (C, Java), expresiones aritméticas. |
+| **Equivalencia**          | **NO es equivalente al Determinista.**                              | **NO es equivalente al No Determinista.**                  |
 
 # 5.2 Mecánica de Transición (Cómo leer los arcos)
 Esta es la parte vital para los ejercicios prácticos. En los diagramas verás arcos con la etiqueta:

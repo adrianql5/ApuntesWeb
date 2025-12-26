@@ -10,7 +10,7 @@ Como su nombre indica, son las gramáticas más flexibles y potentes. No tienen 
 **Definición y Reglas**
 Una GSR se define formalmente como $G=(NT,T,S,P)$.
 
-Sus prod4ucciones tienen la forma genérica:
+Sus producciones tienen la forma genérica:
 $$x \rightarrow y$$
 
 Donde:
@@ -29,7 +29,7 @@ Donde:
 Estas gramáticas imponen restricciones sobre las GSR. La idea principal es que las sustituciones dependen de lo que rodea a la variable ("el contexto") y la cadena nunca se hace más pequeña.
 
 **Definición y Reglas**
-Una GSC tiene producciones de la forma5:
+Una GSC tiene producciones de la forma:
 $$\alpha A \beta \rightarrow \alpha \gamma \beta$$
 
 Desglosemos qué significa esto:
@@ -42,15 +42,32 @@ Desglosemos qué significa esto:
 La característica más importante para identificar una GSC es la longitud.
 
 - La longitud de la parte derecha ($y$) debe ser **igual o mayor** que la de la parte izquierda ($x$).
-- Esto significa que la gramática **nunca "encoge"** la cadena (excepto posiblemente para generar la cadena vacía $\lambda$ si el lenguaje lo permite)10.
+- Esto significa que la gramática **nunca "encoge"** la cadena (excepto posiblemente para generar la cadena vacía $\lambda$ si el lenguaje lo permite).
 
 **Ejemplo:**
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208155833.png)
 
 **Relación con Máquinas**
 - **Lenguaje que generan:** Lenguajes Sensibles al Contexto (LSC).
-- **Máquina Equivalente:** Son reconocidos por los **Autómatas Linealmente Acotados (ALA)**. Un ALA es básicamente una Máquina de Turing que solo tiene permiso para usar la parte de la cinta donde está escrita la entrada (espacio finito).
+- **Máquina Equivalente:** Son reconocidos por los **Autómatas Linealmente Acotados (ALA)**. Es una Máquina de Turing (MT) no determinista con su cinta limitada por ambos extremos, siendo el tamaño de la cinta fijo . Imagina una MT normal, que tiene papel infinito para hacer cálculos. Un ABA, en cambio, solo tiene el espacio que ocupa la palabra de entrada (y quizás unas pocas casillas más fijas a los lados). No puede pedir más papel. Para que la cabeza lectora no se "caiga" de la cinta, tiene dos símbolos especiales (marcadores) en los extremos izquierdo y derecho que le dicen "hasta aquí puedes llegar" .
 
+
+**La fórmula del Lenguaje $L(M)$**. **L(M)** significa **"El Lenguaje de la Máquina M"**. En términos sencillos: es la lista VIP de palabras que la máquina acepta.
+$$L(M) = \{w \in \Sigma^+ : q_0[w] \vdash^* [x_1 q_f x_2], q_f \in F...\}$$
+- **`[` (Marcador izquierdo):** Es el muro de la izquierda.
+    - La fórmula $\delta(q_i, [) = (q_j, [, D)$ significa: "Si la cabeza está en el estado $q_i$ y lee el muro `[`, pasa al estado $q_j$, **deja el muro intacto** (`[`) y se mueve a la **Derecha** ($D$)".
+    - En resumen: **Rebota hacia dentro**. No puede atravesarlo ni borrarlo.
+
+- **`]` (Marcador derecho):** Es el muro de la derecha.    
+    - La fórmula $\delta(q_i, ]) = (q_j, ], I)$ significa: "Si lee el muro `]`, **lo deja intacto** y se mueve a la **Izquierda** ($I$)".
+    - En resumen: **Rebota hacia dentro**.
+
+Se traduce así:
+1. Tomas una palabra de entrada $w$.
+2. La encierras entre los muros: `[w]`.
+3. Empiezas en el estado inicial $q_0$.
+4. La máquina procesa ($\vdash^*$) moviéndose dentro de esos muros.
+5. Si la máquina llega a un estado final ($q_f \in F$) manteniendo los muros intactos ($[x_1 ... x_2]$), entonces **acepta** la palabra.
 
 # 7.3 Protips
 #### 1. El Mensajero (Commutation)

@@ -63,17 +63,13 @@ $$y = \varphi(z)$$
 
 
 # 4.3 Análisis Geométrico: ¿Qué "ve" una neurona?
-El documento _Análisis del comportamiento..._ nos muestra que una sola neurona funciona como un **clasificador lineal**.
-
+Una sola neurona funciona como un **clasificador lineal**.
 - **Frontera de decisión**: La neurona divide el espacio en dos zonas (ej. Clase A y Clase B).
-
 - Matemáticamente, esta frontera es una recta (o hiperplano) definida por:    
 $$x_1 \cdot w_1 + x_2 \cdot w_2 + b = 0$$    
 - **Interpretación**:
     - A un lado de la recta, la suma es positiva $\rightarrow$ La neurona se activa ($y=1$).
-
-    - Al otro lado, la suma es negativa $\rightarrow$ La neurona se apaga ($y=0$) 5.
-
+    - Al otro lado, la suma es negativa $\rightarrow$ La neurona se apaga ($y=0$).
 
 > **Nota de estudio**: Los pesos $w$ definen la inclinación de la recta y el bias $b$ define su desplazamiento respecto al origen.
 
@@ -102,7 +98,6 @@ Aquí es donde ves el efecto del **bias**.
 - **Como el bias es 1**: La ecuación nos dice que la línea corta el eje vertical en **$-1/2$** (o -0.5).
 - **Visualmente**: Puedes ver en el dibujo que la línea diagonal **no pasa por el centro**, sino que está desplazada hacia abajo y a la izquierda. Ese desplazamiento es culpa del bias.
 
-
 La línea divide el papel en dos territorios:
 - Zona $+ \rightarrow$ zona de $y=1$:
     Es todo el espacio que queda arriba y a la derecha de la línea. Cualquier punto que caiga aquí (por ejemplo, el punto $(1, 1)$) hará que la suma sea positiva ($>0$).
@@ -113,22 +108,33 @@ La línea divide el papel en dos territorios:
     - _Interpretación_: La neurona se **inhibe** (se queda en 0).
 
 
-# 4.4 Arquitecturas de Red
-Las neuronas se agrupan para resolver problemas complejos:
 
-1. **Monocapa (Perceptrón Simple)**: Solo entradas y salida. Solo resuelve problemas lineales.
 
-2. **Multicapa (Feedforward)**:    
-    - Añade **capas ocultas** entre la entrada y la salida.
-    - Permite resolver problemas no lineales.
+# 4.4 Arquitecturas de Red: ¿Cómo organizamos las neuronas?
+No basta con tener neuronas; la clave es cómo las conectamos entre sí. Dependiendo de las conexiones, la red sirve para cosas muy distintas.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251102180300.png)
+## 4.4.1 Redes Monocapa (Perceptrón Simple)
+Es la forma más básica.
+- **Estructura:** Tienes una capa de entradas y una capa de salida. Las entradas se conectan directamente a las salidas.
+- **Flujo:** La información va en un solo sentido (hacia adelante).
+- **Limitación:** Como vimos en el apartado 4.6, estas redes **solo pueden resolver problemas lineales**. Si los datos no se pueden separar con una línea recta (como el problema XOR), esta red falla.
+- **Matemáticamente:** Es simplemente $Salida = Función(Entrada \cdot Peso)$.
 
-3. **Recurrentes**:    
-    - Tienen bucles de retroalimentación (la salida vuelve a entrar).
-    - Tienen "memoria" temporal, útiles para series de datos o texto.        
+## 4.4.2 Redes Multicapa (Feedforward)
+Aquí es donde la IA se pone interesante.
+- **Estructura:** Entre la entrada y la salida, metemos capas intermedias llamadas **Capas Ocultas**.
+- **¿Por qué "Ocultas"?** Se llaman así no porque "no se vean en el diseño" (eso es falso), sino porque no tienen conexión directa con el mundo exterior (ni con los datos de entrada brutos ni con la respuesta final).
+- **Función:** Rompen la linealidad.
+    - La primera capa detecta patrones simples (bordes).
+    - La capa oculta combina esos patrones simples para crear formas complejas (curvas, esquinas).
+    - Esto permite resolver problemas **no lineales** (como el XOR, explicado al final).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251102175412.png)
+## 4.4.3. Redes Recurrentes (ej. Redes de Hopfield)
+- **Estructura:** Tienes bucles. La salida de una neurona puede volver hacia atrás y conectarse a la entrada de sí misma o de otras neuronas anteriores.
+- **Superpoder: La Memoria.** Al tener bucles, la información "da vueltas" y persiste en el tiempo.
+- **Uso:** Son vitales para datos secuenciales (texto, audio, series temporales) porque la red recuerda lo que pasó en el instante anterior.
+
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251227152922.png)
 
 
 # 4.5 El Aprendizaje (Algoritmo del Perceptrón)
@@ -150,7 +156,7 @@ $$w(n+1) = w(n) + \eta \cdot [d(n) - y(n)] \cdot x(n)$$
 **Lógica del algoritmo**:
 - Si la red acierta ($d=y$), el término $[d-y]$ es 0 $\rightarrow$ No se cambian los pesos.
 - Si falla, los pesos se ajustan en la dirección del error para corregirlo la próxima vez.
-
+- $\eta$: debe ser muy pequeño para no provocar cambios significativos en cada iteración, pero no tanto como para evitar o realentizar la convergencia.
 
 
 # 4.6 Limitaciones y Soluciones: El Problema XOR

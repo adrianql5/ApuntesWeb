@@ -44,7 +44,10 @@ $$h_\theta(x) = \theta_0 + \theta_1 x$$
 - $\theta_0$: El punto de corte (Bias).
 - $\theta_1$: La pendiente (Peso).
 
-- _Conexión_: ¿Te suena? Es idéntico a la parte interna de una neurona: $w \cdot x + b$.    
+**_Conexión Clave_**: ¿Te suena? Es idéntico a la parte interna de una neurona ($z = w \cdot x + b$).
+- Por esto, en el examen, un **Regresor Lineal** es lo mismo que una **Neurona Artificial con función de activación Lineal (Identidad)**.    
+- Si a esa suma no le pones función de activación (o la función es $f(x)=x$), la neurona se comporta exactamente como este modelo de regresión.
+
 
 ## 5.3.2 La Función de Coste ($J(\theta)$)
 Para aprender, necesitamos medir cuánto nos equivocamos. Usamos el Error Cuadrático Medio (MSE):
@@ -54,7 +57,7 @@ $$J(\theta_0, \theta_1) = \frac{1}{2m} \sum (h_\theta(x^{(i)}) - y^{(i)})^2$$
 - Básicamente: "Calcula la diferencia entre lo que predijiste y el valor real, elévalo al cuadrado (para que sea siempre positivo) y haz la media".
 
 - **Objetivo**: Encontrar los $\theta$ (pesos) que hagan que esta $J$ sea **mínima** (cero error idealmente).
-
+- La función de coste de un **regresor lineal** mide lo bien o mal que opera el regresor lineal en un conjunto de datos. Es una función convexa.
 
 ## 5.3.3 Generalización: Regresión Lineal Multivariable
 El modelo básico ($h_\theta(x) = \theta_0 + \theta_1 x$) solo sirve si hay una única característica de entrada. Pero el mundo es complejo.
@@ -92,6 +95,8 @@ Imagina que quieres predecir cuánto vas a gastar en electricidad ($y$) basándo
     - Al añadir el término al cuadrado ($x^2$), la fórmula puede curvarse y crear esa "U".
     - **Conclusión**: El modelo aprende que el gasto sube en _ambos extremos_ de la temperatura.
 
+>[!Nota] 
+> En un regresor polinomial, cuanto mayor es el grado del polinomio, mejor podemos ajustar el modelo a su conjunto de entrenamiento. No implica que vaya a funcionar mejor el modelo, seguramente haya alto overfitting.
 
 # 5.4 Regresión Logística (Para Clasificación)
 ## 5.4.1 La hipótesis
@@ -133,9 +138,7 @@ La Regresión Logística está diseñada por naturaleza para responder "Sí/No" 
 - **Datos**: $y \in \{0, 1, 2, ..., n\}$.
 - **Estrategia**: Usamos la técnica **"Uno contra Todos" (One-vs-All)**.
 
-**¿Cómo funciona "Uno contra Todos"?**
 En lugar de entrenar un solo clasificador complejo, entrenamos varios clasificadores binarios:
-
 1. **Transformamos el problema**:
     - Imagina que tienes 3 clases: Triángulos, Cuadrados y Círculos.
     - Entrenas el **Clasificador 1**: ¿Es un Triángulo o NO? (Juntas cuadrados y círculos en el grupo "NO").
@@ -171,7 +174,7 @@ $$\theta_j := \theta_j - \alpha \frac{\partial}{\partial \theta_j} J(\theta_0, \
 
 - **Tasa de Aprendizaje ($\alpha$)**: Es el **tamaño del paso**.
     - Si $\alpha$ es muy pequeño: El aprendizaje es lentísimo (pasitos de bebé).        
-    - Si $\alpha$ es muy grande: Podemos "saltarnos" el mínimo y nunca converger (pasos de gigante) 8.
+    - Si $\alpha$ es muy grande: Podemos "saltarnos" el mínimo y nunca converger (pasos de gigante).
 
 - _Conexión_: Este es el mismo principio matemático que usaba el Perceptrón para actualizar sus pesos ($w_{nuevo} = w_{viejo} + \Delta w$).
 
@@ -184,24 +187,40 @@ $$\theta_j := \theta_j - \alpha \frac{\partial}{\partial \theta_j} J(\theta_0, \
 Cuando entrenamos un modelo, podemos fallar por dos extremos opuestos:
 
 ## 5.6.1 Underfitting (Subajuste / Alto Sesgo)
-El modelo es **demasiado simple** para explicar los datos.
+Ocurre cuando el modelo es **demasiado simple** e ignora la información de los datos porque "ya cree saber la respuesta"
 - _Ejemplo_: Intentar ajustar una línea recta a datos que forman una curva parabólica.
 - _Síntoma_: Tiene mucho error tanto en el entrenamiento como en la prueba. No aprende bien.
 
 ## 5.6.2 Overfitting (Sobreajuste / Alta Varianza)
-El modelo es **demasiado complejo**. Se aprende de memoria los datos de entrenamiento, incluido el ruido.
+Ocurre cuando el modelo es **demasiado complejo** y sensible. Presta tanta atención a los detalles y al ruido de los datos de entrenamiento que, si le cambias un poco los datos, cambia totalmente su predicción. **No aprende, memoriza**.
 - _Ejemplo_: Un polinomio de grado 10 que pasa por _todos_ los puntos haciendo zig-zag.
-- _Síntoma_: Error bajísimo en entrenamiento, pero altísimo en datos nuevos (falla al generalizar)9.
+- _Síntoma_: Error bajísimo en entrenamiento, pero altísimo en datos nuevos (falla al generalizar).
 
 
 
 # 5.7 Solución: Regularización
 ¿Cómo evitamos el Overfitting si queremos usar modelos complejos (muchas variables)?
 
-La **Regularización** consiste en "castigar" al modelo si usa pesos ($\theta$) muy grandes. Modificamos la Función de Coste añadiendo un término extra:
+La **Regularización** consiste en "castigar" al modelo si usa pesos ($\theta$) muy grandes. Modificamos la Función de Coste añadiendo un término extra.
 
-$$J(\theta) = \text{Error Original} + \lambda \sum \theta_j^2$$
+Imagina una función matemática (un polinomio) que hace muchas curvas locas para pasar por todos los puntos (Overfitting). Para que una curva suba y baje bruscamente en distancias cortas, necesita multiplicar las variables por números muy grandes (pesos $\theta$ altos).
+- Si obligamos a que esos números ($\theta$) sean **pequeños**, la curva se vuelve más **suave, plana y sencilla**, evitando esos zig-zags extremos.
 
-- **$\lambda$ (Lambda)**: Es el parámetro de regularización.
-    - Si $\lambda$ es alto: Obligamos a que los pesos $\theta$ sean muy pequeños (casi cero), simplificando el modelo (evita overfitting).
-    - Si $\lambda$ es cero: Volvemos a la regresión normal (riesgo de overfitting)10.
+La función de coste $J(\theta)$ es lo que el ordenador intenta minimizar (hacer lo más pequeña posible).
+$$J(\theta) = \underbrace{\text{Error de Predicción}}_{\text{"Qué tan bien acierto"}} + \underbrace{\lambda \sum \theta_j^2}_{\text{"Impuesto por complejidad"}}$$
+$$J(\theta) = \frac{1}{2m} \left[ \sum_{i=1}^{m} (h_\Theta(x^{(i)}) - y^{(i)})^2 + \lambda \sum_{j=1}^{m} \theta_j^2 \right]$$
+
+Imagina que eres un profesor evaluando a un alumno (el modelo):
+1. **Error Original:** Es la nota del examen. Quieres que falle lo menos posible.
+2. **Término de Regularización ($\lambda \sum \theta^2$):** Es una multa por usar "chuletas" o respuestas demasiado complicadas.
+
+El papel de Lambda ($\lambda$): El tamaño de la multa. El parámetro $\lambda$ es el "juez" que decide cuánto nos importa la simplicidad frente a la precisión exacta:
+- Si $\lambda$ es muy ALTO (Multa enorme):
+    El modelo dice: "¡Oye, usar pesos grandes me sale carísimo en la fórmula! Mejor pongo casi todos los pesos ($\theta$) cercanos a cero para que el coste total sea bajo".
+    - _Consecuencia:_ El modelo se vuelve una línea casi plana. Es **demasiado simple** (riesgo de _Underfitting_).
+
+- Si $\lambda$ es 0 (Sin multa):    
+    El modelo dice: "Solo me importa acertar los puntos, no me importa si uso ecuaciones complicadísimas".
+    - _Consecuencia:_ El modelo hace zig-zags locos para tocar todos los puntos. Es **demasiado complejo** (riesgo de _Overfitting_).
+
+La regularización busca el equilibrio perfecto (un $\lambda$ intermedio) donde el modelo acierte lo suficiente (bajo error) pero manteniendo una curva suave (pesos bajos) para poder generalizar bien con datos nuevos. Reducir varianza, atenua el efecto de la correlación entre predictores y minimiza la influencia en el modelo de los predictores menos relevantes. Por lo general, aplicando regularización se consiguen modelos con mayor poder predictivo (generalización).

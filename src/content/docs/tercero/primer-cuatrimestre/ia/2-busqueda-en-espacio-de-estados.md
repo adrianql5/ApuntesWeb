@@ -21,6 +21,11 @@ $$f(n) = g(n) + h(n)$$
 - $g(n)$: Lo que ya has recorrido (costo real desde el inicio hasta $n$)
 - $h(n)$: Lo que te falta (estimación heurística desde $n$ hasta la meta)
 
+>[!Info]
+>**Tipos de grafos generados en los procesos de búsqueda:**
+>- **Explícito:** Es un grafo que **ya está construido y guardado en la memoria** del ordenador antes de empezar a buscar nada.
+>- **Implícito:** Es un grafo que **no existe en memoria**, sino que se va **generando a medida que avanzas**. Se define mediante reglas.
+
 # 2.2 Estrategias de Búsqueda:  Paso a Paso
 Las estrategias se dividen en **Ciegas** (sin información del dominio) y **Heurísticas** (con información/estimaciones).
 
@@ -31,6 +36,7 @@ Las estrategias se dividen en **Ciegas** (sin información del dominio) y **Heur
 ## 2.2.1 Búsqueda a Ciegas (No Informada)
 Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles soluciones sin información adicional sobre cuál camino puede ser mejor. Se utilizan principalmente en problemas donde no se tiene una **heurística** clara para guiar la búsqueda.
 
+**Características de una búsqueda:**
 - **Búsqueda completa:** garantiza encontrar una solución si existe.
 - **Búsqueda óptima:** garantiza encontrar la mejor solución disponible.
 - **Complejidad temporal:** número total de nodos explorados durante la búsqueda.
@@ -70,13 +76,13 @@ Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles solu
 
 Aquí está la tabla transcrita a formato Markdown:
 
-| Estrategia | Completa | Óptima | Tiempo | Espacio |
-|------------|----------|--------|---------|---------|
-| Amplitud | Sí | Sí | O(r^p) | O(r^p) |
-| Profundidad | No* | No | O(r^m) | O(r*m) |
-| Prof. limitada | No* | No | O(r*l) | O(r*l) |
-| Iterativa | Sí | Sí | O(r^p) | O(r^p) |
-| Bidireccional | Sí | Sí | O(r^(p/2)) | O(r^(p/2)) |
+| Estrategia     | Completa | Óptima          | Tiempo         | Espacio        |
+| -------------- | -------- | --------------- | -------------- | -------------- |
+| Amplitud       | Sí       | Sí              | $O(r^p)$       | $O(r^p)$       |
+| Profundidad    | No*      | No              | $O(r^m)$       | $O(r*m)$       |
+| Prof. limitada | No*      | Si cuando $l>p$ | $O(r*l)$       | $O(r*l)$       |
+| Iterativa      | Sí       | Sí              | $O(r^p)$       | $O(r*p)$       |
+| Bidireccional  | Sí       | Sí              | $O(r^{(p/2)})$ | $O(r^{(p/2)})$ |
 
 \* Solo completa en espacios finitos y sin bucles. 
 
@@ -84,7 +90,7 @@ Aquí está la tabla transcrita a formato Markdown:
 ## 2.2.2 Búsqueda Heurística (Informada)
 A diferencia de la búsqueda a ciegas (que explora sin rumbo), la búsqueda informada utiliza una "pista" o estimación llamada **Heurística ($h(n)$)**.
 
-- **¿Qué es una Búsqueda Informada?** Es aquella que tiene conocimiento sobre el problema (como un mapa o una brújula) para estimar cuánto falta para llegar a la meta. Esto le permite **ordenar** las opciones y probar primero las que parecen más prometedoras, en lugar de probarlas al azar1111.
+- **¿Qué es una Búsqueda Informada?** Es aquella que tiene conocimiento sobre el problema (como un mapa o una brújula) para estimar cuánto falta para llegar a la meta. Esto le permite **ordenar** las opciones y probar primero las que parecen más prometedoras, en lugar de probarlas al azar.
 
 Antes de ver los algoritmos, debemos distinguir cómo toman decisiones:
 
@@ -108,19 +114,8 @@ Es una estrategia inteligente que intenta no gastar memoria. Avanza en profundid
 
 - **Utilidad**: Ideal cuando tienes muy poca memoria pero necesitas encontrar una solución, aunque no sea la más corta.
 
-### Búsqueda Ávara (Greedy / Primero el Mejor)
-_Tipo: **Tentativa** (En su versión general)_
-
-Es la versión general de "guiarse por la intuición". A diferencia de la escalada pura, esta estrategia sí puede guardar una lista de alternativas pendientes (lista ABIERTA).
-
-- **Estrategia**: Selecciona siempre el nodo que parece estar más cerca de la meta ($h(n)$ más bajo) de entre todos los disponibles en la frontera de búsqueda.
-
-- Función de evaluación:    
-$$f(n) = h(n)$$    
-    _(Solo importa la estimación a la meta)_3.
-    
-- **Riesgo**: Aunque es más flexible que la escalada (porque guarda alternativas), es **miope**. Como ignora el coste del camino recorrido ($g(n)$), puede encontrar soluciones, pero no garantiza que sean las óptimas (puede dar muchos rodeos innecesarios) y no es completa en espacios con bucles4.
-
+>[!Nota]
+> Si $f(n)=g(n)$ es una búsqueda no informada
 
 ### Algoritmo de Escalada (Hill Climbing)
 _Tipo: **Irrevocable** (Versión estricta del algoritmo ávaro)_
@@ -129,32 +124,53 @@ Es el ejemplo clásico de estrategia irrevocable. Busca la cima de la montaña d
 
 - **Estrategia**: Evalúa los vecinos y se mueve _inmediatamente_ al que tiene mejor heurística (parece estar más cerca de la meta), **descartando y olvidando el resto**.
 
-- **Función de evaluación**: $f(n) = h(n)$ (Solo importa lo que falta)5.
+- **Función de evaluación**: $f(n) = h(n)$ (Solo importa lo que falta).
 
-- **Riesgo**: Como no guarda la historia ni alternativas, puede quedarse atrapado en **máximos locales** (una pequeña colina que parece la cima pero no lo es) o **mesetas** (donde todos los pasos son iguales y no sabe a dónde ir)6666.
+- **Riesgo**: Como no guarda la historia ni alternativas, puede quedarse atrapado en **máximos locales** (una pequeña colina que parece la cima pero no lo es) o **mesetas** (donde todos los pasos son iguales y no sabe a dónde ir).
 
 ### Algoritmo A* (A-Estrella)
-_Tipo: **Tentativa** (La más completa)_
-
-Es la estrategia estrella porque equilibra la precaución con la eficiencia. Guarda alternativas (es tentativa) y evalúa el coste total.
+_Tipo: **Tentativa**_
+La más completa es la estrategia estrella porque equilibra la precaución con la eficiencia. Guarda alternativas (es tentativa) y evalúa el coste total.
 
 - **Estrategia**: No solo mira cuán cerca parece estar la meta ($h$), sino cuánto le ha costado llegar hasta ahí ($g$).
 
 - Función de evaluación: $$f(n) = g(n) + h(n)$$    
-    _(Costo Total = Costo ya pagado + Costo estimado restante)_7.
+    _(Costo Total = Costo ya pagado + Costo estimado restante)_.
 
-- **Propiedad Clave**: Si la heurística es **admisible** (nunca es pesimista, es decir, $h(n) \leq$ coste real), A* garantiza encontrar la solución **óptima** (la más barata/corta) y es **completa** (siempre encuentra solución)8.
+- **Propiedad Clave**: Si la heurística es **admisible** (nunca es pesimista, es decir, $h(n) \leq$ coste real), A* garantiza encontrar la solución **óptima** (la más barata/corta) y es **completa** (siempre encuentra solución).
 
-# 2.3 Fórmulas Clave y Resumen de Fórmulas
-La función de evaluación cambia según el algoritmo:
+> [!Info]
+> Una heurística admisible u optimista: siempre suponer casos en los que la realidad será peor que la estimación.
+> 
+> **Si eres Pesimista (h > coste real):** Imagina que hay un atajo secreto que tarda 15 minutos. Pero tu heurística es pesimista y le dice al algoritmo: "Por ese callejón vas a tardar 1 hora".
+>- **Consecuencia:** El algoritmo se asusta, ve un coste altísimo y **no explora ese camino**.
+>- **Resultado:** Pierdes la oportunidad de encontrar el mejor camino (la solución óptima) porque tu estimación te engañó diciendo que era malo.
+>
+>**Si eres Optimista (h <= coste real):** Tu heurística le dice al algoritmo: "Por ese callejón parece que tardas solo 5 minutos".
+>- **Consecuencia:** Como parece un camino barato, el algoritmo **lo explora**.  
+>- **Resultado:** Al entrar, se da cuenta de que en realidad son 15 minutos (la realidad es peor que la estimación, como dice tu nota), pero **al menos lo exploró**.  
+   > - A* prefiere equivocarse pensando que un camino es "demasiado bueno" (porque así lo comprueba) que equivocarse pensando que es "demasiado malo" (porque entonces lo ignora y podría ser la solución).
 
-| Algoritmo      | Fórmula de Evaluación $f(n)$ | Significado                                                                                                  |
-| -------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| Costo Uniforme | $f(n) = g(n)$                | Solo importa el costo acumulado (busca lo más barato hasta ahora). Equivalente a Amplitud si costos iguales. |
-| Voraz (Greedy) | $f(n) = h(n)$                | Solo importa la cercanía estimada a la meta (miope).                                                         |
-| A*             | $f(n) = g(n) + h(n)$         | Balance entre costo real y estimado. Busca la solución más barata globalmente.                               |
 
-# 2.4 Caso de Estudio Práctico: Ruta en Ciudades Gallegas
+En el caso del 8-puzzle se acostumbra a usar estas **heurísticas:**
+**Misplaced Tiles (Piezas Descolocadas)**: Es la más simple. Simplemente **cuentas cuántas fichas no están en su posición final**.
+- **Cálculo:** Si la ficha '1' está en la casilla del '2', suma 1. Si la '2' está bien colocada, suma 0.
+- **Ejemplo:** Si 5 fichas están mal puestas, $h(n) = 5$
+
+**Distancia de Hamming:** En el contexto del 8-puzzle, es **sinónimo de "Misplaced Tiles"**.
+- Proviene de la teoría de la información (número de posiciones en las que dos cadenas de símbolos difieren). Aquí compara el "estado actual" con el "estado meta" y cuenta las diferencias.
+
+**Distancia de Manhattan (City Block):** Es más precisa (y más informada) que la anterior.
+- **Cálculo:** Para cada ficha, calculas cuántas casillas debe moverse (horizontal + vertical) para llegar a su destino. Luego **sumas todas esas distancias**.
+- **Por qué se llama así:** Porque simula moverse por las calles de Manhattan (en cuadrícula), no puedes ir en diagonal.
+- _Ejemplo:_ Si la ficha '1' está a 2 casillas a la derecha y 1 abajo de su meta, su distancia es 3.
+
+**Heurística de Gaschnig:** es una **relajación** del problema. Asume que puedes mover cualquier ficha a la posición del hueco (teletransportándola), no solo las adyacentes.
+- **Cálculo:** Cuenta el número de intercambios necesarios para resolver el puzle si pudieras intercambiar el hueco con **cualquier** ficha del tablero para ponerla en su sitio de un solo movimiento.
+- Suele dar un valor entre la de Hamming y la real.
+
+
+# 2.3 Caso de Estudio Práctico: Ruta en Ciudades Gallegas
 Este caso ilustra la diferencia entre ser "miope" (Voraz) y ser "inteligente" (A*).
 
 **El Problema**: Ir de Ferrol a Ourense
@@ -188,3 +204,48 @@ Mira el pasado ($g$) y el futuro ($h$).
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221165007.png)
 
+
+# 2.4 Destellos de calidad del Senén en clase
+## 2.4.1 ¿Qué es el Problema del Viajante de Comercio (TSP)?
+Imagina que eres un repartidor de Amazon.
+- Tienes una lista de **100 ciudades** que visitar.
+- Sales de la central (digamos, la ciudad 0).
+- **Reglas:** Tienes que visitar todas las ciudades **una sola vez** y volver al punto de partida.
+- **Objetivo:** Encontrar la ruta más corta posible para ahorrar gasolina.
+
+Esto es el **TSP (Traveling Salesperson Problem)**. En informática es famoso porque es muy difícil de resolver perfectamente cuando hay muchas ciudades, ya que el número de combinaciones posibles es gigantesco.
+
+## 2.4.2 ¿Qué es el "Tamaño del Espacio de Búsqueda"?
+Es una forma técnica de preguntar: **"¿Cuántas rutas distintas posibles existen en total en el universo?"**. Para calcularlo en este problema (100 ciudades, empezando en la 0), usamos matemáticas de combinatoria (permutaciones):
+1. La **Ciudad 0** está fija al principio y al final. No la puedes mover.
+2. Te quedan **99** ciudades libres para barajar.
+3. El número de formas de ordenar esas 99 ciudades es:
+    $99×98×97×...×1=99!$
+
+Este número es inmensamente grande (mayor que el número de átomos en el universo). Por eso es imposible probarlas todas una por una.
+
+## 2.4.3 ¿Qué es el Entorno (Contorna) y su Tamaño?
+Aquí es donde entra la confusión habitual. Si el "Espacio de Búsqueda" es toda la biblioteca, el **Entorno** son solo **los libros que puedes alcanzar con la mano sin moverte**. Los algoritmos de búsqueda local (como Escalada o Tabú) no ven todo el espacio a la vez. Funcionan paso a paso modificando la ruta actual.
+- **Definición:** El entorno es el conjunto de **todas las rutas "vecinas"** que puedes generar aplicando **un solo operador** a tu ruta actual.
+- **El Operador:** Normalmente usamos el "intercambio de dos ciudades" (swap).
+
+**Cálculo del Tamaño del Entorno (N):** La pregunta es: _"¿Cuántas parejas de ciudades puedo elegir para intercambiar?"_.
+1. Tenemos **99 ciudades** móviles (recuerda: la ciudad 0 es fija, esa no se toca).
+2. El operador elige **2** de ellas para cambiarlas de sitio.
+3. Matemáticamente es una **combinación sin repetición**:
+    $N=299×98​$
+
+**Diferencia Clave:**
+- **Espacio de Búsqueda (99!):** Todas las soluciones que existen.
+- **Entorno (≈4851):** Las opciones que tiene el algoritmo _en cada paso_ para decidir hacia dónde moverse.
+
+## 2.4.4 ¿Qué es la Búsqueda Tabú?
+Es una **estrategia** inteligente para moverse por ese entorno sin atascarse.
+- El algoritmo genera el entorno (las 4851 opciones vecinas).
+- Elige la mejor opción para moverse.
+- **El problema:** Podría quedarse atrapado haciendo y deshaciendo el mismo cambio (ej: cambiar Madrid-Barna y luego Barna-Madrid).
+- **La solución (Tabú):** Tiene una "memoria" de los últimos cambios.
+- **La regla:** "Si acabo de probar este cambio, está **prohibido (tabú)** volver a hacerlo o deshacerlo durante un número X de turnos".
+
+
+**Nota para el examen:** Usar Búsqueda Tabú **NO cambia el tamaño del espacio de búsqueda** (99! sigue siendo 99!). Lo que hace es guiar _qué partes_ de ese espacio exploramos para no perder tiempo en círculos, por lo que el contorno inicial es más grande que el resto.

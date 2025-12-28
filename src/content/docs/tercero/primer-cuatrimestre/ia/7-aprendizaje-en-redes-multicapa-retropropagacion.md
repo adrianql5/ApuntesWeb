@@ -2,101 +2,110 @@
 title: "Aprendizaje en Redes Multicapa, Retropropagación"
 ---
 
-# 7.1 El Problema: ¿De quién es la culpa?
-En un **Perceptrón Simple** (una sola capa, neurona artificial), entrenar es fácil porque sabemos cuál es la respuesta correcta ($t$) y cuál es la que dio la neurona ($y$). El error es simplemente $(t - y)$.
+# 7.1 El Problema: El Juego de la Culpa
+En un **Perceptrón Simple** (una sola neurona), si el sistema falla, sabemos que la culpa es de esa única neurona. El error es fácil de calcular: `Objetivo - Salida`.
 
-En una **Red Multicapa**, tenemos neuronas ocultas en medio.
-- Si la red se equivoca en la salida final, ¿qué neurona oculta tuvo la culpa?
-- No tenemos un "objetivo correcto" para las capas intermedias.    
-- **Solución**: Necesitamos un mecanismo para enviar la información del error desde la salida **hacia atrás**, repartiendo la "culpa" entre las neuronas ocultas proporcionalmente a sus pesos. Esto es la **Retropropagación**.
+En una **Red Multicapa** (Deep Learning), tenemos un problema grave: **El Problema de Asignación de Crédito**.
+- Si la red dice "Gato" y era "Perro", la neurona de salida se equivocó.
+- Pero, ¿por qué se equivocó? Quizás porque la neurona oculta de la capa anterior le pasó un dato malo.
+- ¿Y por qué esa neurona oculta le pasó un dato malo? Quizás porque la anterior a ella falló.
 
-
-# 7.2 Fundamento Matemático
-El objetivo es el mismo que en la Regresión: Minimizar la función de Error Global ($E$).
-
-$$E = \frac{1}{2} \sum (t - y)^2$$
-
-- **$t$ (Target / Objetivo)**: Es la respuesta correcta (el examen resuelto). Ejemplo: "Esto es un perro (1)".
-- **$y$ (Yield / Salida)**: Es lo que respondió la red. Ejemplo: "Creo que es un gato (0)".
-- **$(t - y)$**: Es la diferencia. Si debía ser 1 y dijo 0, el error es 1.
-- **$^2$ (Al cuadrado)**: Elevamos al cuadrado para que los errores negativos no se cancelen con los positivos (y para castigar más los errores grandes).
-- **$\frac{1}{2}$**: Es un truco matemático. Cuando hagamos la derivada más tarde, el exponente $2$ bajará, se multiplicará por $\frac{1}{2}$ y se cancelarán ($2 \cdot 0.5 = 1$). Solo está ahí para facilitar las cuentas después.
-
-Para minimizar este error, usamos el **Descenso por Gradiente**. Necesitamos saber cómo cambiar cada peso ($w$) para reducir el error. Matemáticamente, esto implica calcular la **Derivada del Error respecto a cada peso** ($\frac{\partial E}{\partial w}$).
-
-### La Importancia de la Función Sigmoide
-Aquí es donde la función escalón (del Perceptrón antiguo) falla, porque no es derivable (tiene un salto brusco).
-
-Usamos la Función Sigmoide ($f(z) = \frac{1}{1+e^{-z}}$) porque es suave y su derivada es muy fácil de calcular y computacionalmente barata:
-
-$$f'(z) = f(z) \cdot (1 - f(z))$$
-
-(La derivada se calcula usando el propio valor de salida de la neurona, ¡muy eficiente!).
+No tenemos un "profesor" para las capas intermedias. **La Retropropagación** es el método matemático para enviar la "culpa" del error desde el final hacia atrás, capa por capa, para saber cuánto ajustar cada peso interno.
 
 
-# 7.3 El Algoritmo: Ciclo de Dos Pasos
-El entrenamiento ocurre en un bucle repetitivo con dos fases claramente diferenciadas:
+# 7.2 Definiciones Previas: Anatomía de la Señal
+Para entender las fórmulas, primero debemos distinguir qué pasa dentro de cada neurona.
+1. Entrada Neta ($Net$ o $z$): Es la suma bruta de lo que recibe la neurona.
+$$Net_j = \sum (x_i \cdot w_{ij})$$ 
+	- _Es el "ruido total" antes de filtrar._
 
-## Fase 1: Propagación Hacia Adelante (Forward Pass)
-La red actúa normal, como si estuviera prediciendo.
-1. Introducimos los datos ($x$) en la capa de entrada.
-2. La señal viaja capa por capa, calculando sumas ponderadas y activaciones.
-3. Obtenemos la salida final ($y$) y calculamos el error comparando con el objetivo ($t$).
+2. Salida ($y$ o $Out$): Es el resultado procesado tras pasar el filtro (sigmoide).
+$$y_j = f(Net_j)$$    
+    - _Es lo que la neurona "grita" a la siguiente capa._
 
-## Fase 2: Propagación Hacia Atrás (Backward Pass)
-Aquí ocurre el aprendizaje. Calculamos un valor $\delta$ (delta) que representa el "error local" de cada neurona.
-
-1. Capa de Salida: Es fácil. El error es la diferencia directa con el objetivo, multiplicada por la derivada de la función de activación.
-$$\delta_{salida} = (t - y) \cdot f'(z)$$
-	- **$(t - y)$**: **El Error**. "Te equivocaste por tanto".
-	- **$f'(z)$**: **La Derivada**. Esto asusta, pero significa **"Sensibilidad"**.
-	    - Imagina que la neurona estaba muy segura (dio un 1 o un 0 rotundo). Su sensibilidad es baja (cuesta hacerla cambiar de opinión).
-	    - Si la neurona estaba dudosa (dio 0.5), su sensibilidad es alta.
-	    - **Traducción**: "Tu culpa es igual al tamaño del error multiplicado por lo fácil que es hacerte cambiar de opinión".
-
-
-2. Capas Ocultas: Aquí está la magia. Como no tenemos objetivo $t$, calculamos el error como la suma ponderada de los errores de la capa siguiente (hacia la que enviamos señal).
-$$\delta_{oculta} = (\sum \delta_{siguiente} \cdot w_{conexion}) \cdot f'(z)$$    
-	- **$\delta_{siguiente}$**: Es la culpa de la neurona a la que le enviamos el dato (la neurona de salida). "Si la de arriba tiene mucha culpa, y yo le hablé, yo tengo culpa".
-	- **$w_{conexion}$**: Es el peso de mi conexión con ella. "Si yo le hablé muy alto (peso alto), tengo mucha culpa. Si mi conexión con ella es casi cero, no es mi culpa".
-	- **$\sum$ (Suma)**: Sumo las culpas que me llegan de _todas_ las neuronas a las que estoy conectado.
-    - _Interpretación_: "Si mi conexión con la siguiente neurona es fuerte ($w$ alto) y esa neurona tiene mucho error ($\delta$ alto), entonces yo soy muy responsable de ese error".
+>[!Importante]
+>Para poder usar Retropropagación, necesitamos una función de activación que sea **suave y continua** (derivable en todo punto). Usamos la **Sigmoide**:
+>$$f(z) = \frac{1}{1+e^{-z}}$$
+>Esta función curva suavemente la entrada, transformando cualquier número (del $-\infty$ al $+\infty$) en un valor entre **0 y 1**.
+>
+>Lo mejor de la Sigmoide no es solo su forma, sino que su derivada es increíblemente fácil de calcular en un ordenador. La derivada se puede expresar en función de la propia salida de la neurona ($y$ o $f(z)$):
+>$$f'(z) = f(z) \cdot (1 - f(z))$$
+> Para calcular la pendiente (sensibilidad) de la neurona, no necesitas volver a hacer cálculos complejos con exponenciales ($e^{-z}$). Si la neurona ya sabe su salida ($y$), simplemente calculas $y \cdot (1-y)$.
 
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251222113406.png)
+3. **Objetivo ($t$):** El valor correcto que _deberíamos_ haber obtenido (solo existe al final de la red).    
 
-# 7.4 Actualización de Pesos
-Una vez tenemos los $\delta$ (la "culpa") de cada neurona, actualizamos los pesos usando la regla delta generalizada.
+
+# 7.3 El Fundamento Matemático: El Descenso del Gradiente
+Nuestro objetivo es minimizar el **Error Global ($E$)**. Definimos el error cuadrático medio:
+
+$$E = \frac{1}{2} (t - y)^2$$
+
+- **$\frac{1}{2}$**: Es un truco matemático. Al derivar $x^2$, el 2 baja ($2x$). Al multiplicarlo por $1/2$, se cancelan. Nos simplifica la vida.    
+- **Derivada**: Para aprender, necesitamos saber la pendiente. Si cambio el peso $w$, ¿el error sube o baja?
+
+## La Necesidad de la Derivada (La Regla de la Cadena)
+Queremos cambiar un peso $w$ que está en el medio de la red. Pero ese peso no toca el Error ($E$) directamente.
+
+1. El peso $w$ cambia la **Entrada Neta ($Net$)**.
+2. La Entrada Neta cambia la **Salida ($y$)**.
+3. La Salida cambia el **Error ($E$)**.
+
+Por la Regla de la Cadena, la derivada total es la multiplicación de estos pasos:
+$$\frac{\partial E}{\partial w} = \frac{\partial E}{\partial y} \cdot \frac{\partial y}{\partial Net} \cdot \frac{\partial Net}{\partial w}$$
+
+Aquí es donde nace el concepto de **DELTA ($\delta$)**. Para no escribir todo eso, llamamos $\delta$ (Delta o Error Local) a la parte que combina el Error y la Activación: **"Cuánto contribuye la neurona al error total"**.
+
+
+# 7.4 El Algoritmo: Ciclo de Dos Pasos
+El aprendizaje ocurre repitiendo estos dos pasos.
+
+## Paso 1: Propagación Hacia Adelante (Forward Pass)
+La red funciona normalmente.
+1. Metemos los datos en la entrada.
+2. Calculamos **Entradas Netas** y **Salidas** capa por capa hasta el final.
+3. Comparamos la salida final con el objetivo real.
+
+## Paso 2: Propagación Hacia Atrás (Backward Pass) - Calculando Deltas
+Ahora calculamos el error local ($\delta$) de cada neurona.
+
+**A. Para la Neurona de Salida (Sabemos la respuesta):**
+Aquí es fácil. La culpa es la diferencia directa con la realidad, multiplicada por la sensibilidad de la neurona (su derivada).
+$$\delta_{salida} = (t - y) \cdot f'(Net)$$
+- **$(t - y)$**: El error bruto.
+- **$f'(Net)$**: La derivada de la función sigmoide. Significa "¿Qué tan fácil era hacer cambiar de opinión a esta neurona?".
+
+**B. Para las Neuronas Ocultas (La Magia):**
+No tenemos $(t-y)$. Calculamos la culpa "escuchando las quejas" de las neuronas de la siguiente capa a las que alimentamos.
+$$\delta_{oculta} = f'(Net) \cdot \sum (\delta_{siguiente} \cdot w_{conexion})$$
+
+- **$\sum (\delta \cdot w)$**: Sumo las culpas de las neuronas siguientes ponderadas por mi conexión con ellas. "Si la neurona siguiente tiene un error gigante ($\delta$ alto) y yo le grité muy fuerte ($w$ alto), yo tengo mucha culpa".
+
+
+# 7.5 Actualización de Pesos (El Aprendizaje)
+Una vez que cada neurona tiene su "nota de culpa" ($\delta$), actualizamos los pesos para corregir el error.
 
 $$w_{nuevo} = w_{actual} + \Delta w$$
 
-Donde el cambio ($\Delta w$) se calcula como:
-$$\Delta w = \eta \cdot \delta \cdot \text{entrada}$$
+La corrección ($\Delta w$) se calcula así:
 
-- **$\eta$ (Eta - Tasa de aprendizaje)**: Es la **Prudencia**. Es un número pequeño (ej. 0.1).
-    - "Aunque tengas mucha culpa, no vamos a cambiar el peso de golpe a lo loco, lo cambiaremos poquito a poco para no romper nada".
-- **$\delta$ (Delta - La Culpa)**: Es la **Dirección**. Nos dice si el error fue por exceso o por defecto.
-- **$x_{entrada}$ (La entrada)**: Es la **Evidencia**.
-    - Si la entrada ($x$) era 0, esa conexión no estaba activa, así que _ese peso_ no contribuyó al error. Si $x$ es 0, todo se multiplica por 0 y el peso no se toca. ¡Solo corregimos los pesos que participaron!
+$$\Delta w = \eta \cdot \delta \cdot \text{Entrada}_{origen}$$
 
-
-# 7.5 Resumen del Algoritmo
-Según el documento _Retropropagación del error.pdf_, el algoritmo completo es:
-
-1. **Inicializar pesos**: Valores pequeños y aleatorios (¡Importante no ponerlos todos a cero o la red no aprende!).
-2. **Repetir** (hasta que el error sea bajo):
-    - Para cada ejemplo de entrenamiento $(X, T)$:
-        1. **Forward**: Calcular las salidas de todas las capas hasta el final.
-        2. **Error Salida**: Calcular $\delta_k$ para las neuronas de salida.
-        3. **Backward**: Calcular $\delta_j$ para las neuronas ocultas (usando los $\delta_k$ y los pesos $w_{jk}$).
-        4. Update: Actualizar todos los pesos de la red:
-$$w_{ij} \leftarrow w_{ij} + \eta \cdot \delta_j \cdot y_i$$
-
-Aquí tienes una versión que mantiene un tono más profesional en general pero incorpora toques informales y críticos del texto original:
+**Desglose de la fórmula:**
+1. **$\eta$ (Tasa de aprendizaje):** La **Prudencia**. "Aunque el error sea grande, corregimos poco a poco para no pasarnos".
+2. **$\delta$ (Delta del destino):** La **Dirección del Error**. "¿Debo subir o bajar el peso?".
+3. **$\text{Entrada}_{origen}$ (Salida de la anterior):** La **Evidencia**. "Solo corregimos el peso si la neurona de origen estaba activa. Si envió un 0, este peso no tuvo nada que ver en el resultado, así que no se toca".
 
 
+# 7.6 Resumen del Algoritmo Completo
+1. **Inicializar pesos:** Valores pequeños aleatorios (nunca todos a cero).
+2. **Repetir** hasta que el error sea bajo:
+    - **Forward:** Calcular todas las $Net$ y $y$ desde el inicio hasta el fin.
+    - **Cálculo de Error ($\delta$) Salida:** Usando $(t-y)$.
+    - **Backpropagation:** Calcular los $\delta$ ocultos trayendo el error desde el futuro hacia el pasado usando los pesos.
+    - **Update:** Modificar todos los pesos ($w$) usando la fórmula $\eta \cdot \delta \cdot y$.
 
-# 7.6 Conclusión de la Asignatura
+# 7.7 Conclusión de la Asignatura
 Una vez más se demuestra que el grado presenta una dejadez considerable por parte de las "vacas sagradas" de la facultad. Y es que no puede ser:  estas personas son reconocidísimas en sus ámbitos, publican 300 artículos, acuden a congresos internacionales...  pero cuando llega el momento de pensar en sus alumnos y proporcionarles una bibliografía de calidad con la cual puedan aprender los conceptos de forma intuitiva, te sueltan un PDF de 2001 robado de otra universidad o presentaciones sin orden lógico alguno, llenas de palabras sueltas y esquemas incomprensibles. 
 
 Eso sí, si te quejas, la alternativa que te ofrecen es el libro de turno de 1990 escrito en alemán por un médico francés.  Y apáñate tú para conseguirlo y entenderlo.
@@ -110,3 +119,5 @@ Eso sí, si te quejas, la alternativa que te ofrecen es el libro de turno de 199
 **¿Tan difícil es hacer las cosas bien?** Otras carreras universitarias lo consiguen. No se pide la perfección, pero sí un mínimo de coherencia y actualización en los materiales docentes. 
 
 Considero que el grado debería aprender de otras titulaciones y mejorar urgentemente este aspecto. Con la jubilación progresiva de las viejas vacas sagradas de la universidad, espero sinceramente que esta situación mejore con el tiempo y que la nueva generación de profesorado traiga una renovación real en la calidad docente, no solo en la investigadora.
+
+Otra asignatura te lo paso, pero en esta no me jodas. Es imposible que con todos los conocimientos sobre IA que tienes y la cantidad de herramientas que existen, no te salga de dentro redactar unos apuntes propios mediante el uso de la IA. 

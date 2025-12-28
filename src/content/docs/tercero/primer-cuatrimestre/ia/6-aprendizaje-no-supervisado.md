@@ -14,7 +14,6 @@ En el **Aprendizaje No Supervisado**, la situación cambia radicalmente:
 # 6.2 El Algoritmo K-Medias (K-Means)
 Es el algoritmo más popular y sencillo para resolver problemas de **Agrupamiento (Clustering)**. Su objetivo es dividir los datos en **$K$** grupos (clusters).
 
-
 Es un proceso iterativo ("bucle") que funciona como un baile de centros de gravedad.
 
 1. **Inicialización**:    
@@ -27,7 +26,6 @@ $$c^{(i)} := \text{índice del centroide más cercano a } x^{(i)}$$
     - **Paso B: Movimiento de Centroides:** Calculamos la media (promedio) de todos los puntos que pertenecen a un grupo y movemos el centroide a esa nueva posición central.
 $$\mu_k := \text{promedio de los puntos asignados al grupo } k$$
 El algoritmo se detiene cuando los centroides ya no se mueven (convergencia).
-
 
 # 6.3 La Función de Coste (Distorsión)
 Al igual que en la regresión teníamos el error cuadrático, aquí necesitamos medir "qué tan mal" están agrupados los datos. A esta función se le llama Función de Distorsión ($J$):

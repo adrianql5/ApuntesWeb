@@ -20,6 +20,9 @@ Se clasifica la IA según su objetivo final (compararse con humanos o ser idealm
 | ------------------ | ---------------------------------------------------------------- | --------------------------------------------------------------------- |
 | **Pensamiento**    | **Modelado Cognitivo** (intentar imitar cómo piensa el cerebro). | **Leyes del Pensamiento** (Lógica formal, silogismos).                |
 | **Comportamiento** | **Test de Turing** (actuar de forma indistinguible a un humano). | **Agentes Racionales** (actuar para maximizar el resultado esperado). |
+|                    |                                                                  |                                                                       |
+
+El Test de Turing tiene como referencia el comportamiento humano.
 
 ## 1.1.3 La Triada de la IA Moderna
 El auge actual de la IA (desde 2010) se debe a la convergencia de tres factores:
@@ -74,13 +77,13 @@ $$Y = f \left( \sum_{i=1}^{m} (W_i \cdot X_i) + b \right)$$
 # 1.3 Conexiones: "Wetware" vs. Hardware
 Una comparación crítica para entender por qué la IA es diferente a la inteligencia biológica:
 
-| **Característica** | **Cerebro Humano (Wetware)**                     | **Computador (Hardware)**                                   |
-| ------------------ | ------------------------------------------------ | ----------------------------------------------------------- |
-| **Evolución**      | Biológica (lenta, 100k años sin cambios).        | Tecnológica (exponencial, Ley de Moore).                    |
-| **Procesamiento**  | Paralelo masivo (10 mil millones de neuronas)12. | Serial (muy rápido en secuencia).                           |
-| **Fortalezas**     | Percepción, sentido común, aprendizaje general.  | Cálculos matemáticos, lógica formal, almacenamiento masivo. |
-| **Consumo**        | Muy eficiente (~20 Watts).                       | Muy costoso (Megavatios en supercomputadores).              |
-| **Velocidad**      | "Lenta" (disparo neuronal en ms).                | "Rápida" (ciclos de reloj en nanosegundos).                 |
+| **Característica** | **Cerebro Humano (Wetware)**                    | **Computador (Hardware)**                                   |
+| ------------------ | ----------------------------------------------- | ----------------------------------------------------------- |
+| **Evolución**      | Biológica (lenta, 100k años sin cambios).       | Tecnológica (exponencial, Ley de Moore).                    |
+| **Procesamiento**  | Paralelo masivo (10 mil millones de neuronas).  | Serial (muy rápido en secuencia).                           |
+| **Fortalezas**     | Percepción, sentido común, aprendizaje general. | Cálculos matemáticos, lógica formal, almacenamiento masivo. |
+| **Consumo**        | Muy eficiente (~20 Watts).                      | Muy costoso (Megavatios en supercomputadores).              |
+| **Velocidad**      | "Lenta" (disparo neuronal en ms).               | "Rápida" (ciclos de reloj en nanosegundos).                 |
 
 **Conexión clave:** La IA actual intenta emular la capacidad de aprendizaje del cerebro (redes neuronales) utilizando la velocidad de cálculo del hardware para compensar la falta de eficiencia biológica.
 

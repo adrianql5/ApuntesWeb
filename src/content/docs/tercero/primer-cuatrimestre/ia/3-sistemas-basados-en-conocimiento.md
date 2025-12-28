@@ -26,7 +26,6 @@ No sirven para todo. Se recomiendan cuando:
 - **No existe un algoritmo tradicional** para resolverlo.    
 - Existen expertos humanos capaces de articular ese conocimiento.
 
-
 Historia y Ejemplos 
 - **Dendral (1965)**: Identificación de compuestos químicos.
 - **Mycin (años 70)**: Diagnóstico de infecciones bacterianas.
@@ -57,14 +56,29 @@ Para que una máquina "razone", necesita separar lo que _sabe_ (conocimiento) de
 ### Lógica Formal (La base matemática)
 Es la forma más rigurosa de representar relaciones.
 
-- **Lógica Proposicional**: Usa afirmaciones verdaderas/falsas y operadores (AND, OR, NOT, Implicación). Se basa en reglas de inferencia como el **Modus Ponens** (Si $p \to q$ y tengo $p$, entonces $q$) o **Modus Tollens**.
+- **Lógica Proposicional**: Usa afirmaciones verdaderas/falsas y operadores (AND, OR, NOT, Implicación). Se basa en reglas de inferencia.Imagina siempre una regla condicional: **$P \to Q$** ("Si pasa P, entonces pasa Q"):
+	- **Modus Ponens:** Si la regla es cierta ($P \to Q$) y la condición ($P$) se cumple, entonces la consecuencia ($Q$) **también es cierta**.
+	- **Modus Tollens**. Si la regla es cierta ($P \to Q$), pero vemos que la consecuencia ($Q$) **NO** ha ocurrido, entonces la causa ($P$) **tampoco pudo ocurrir**.
 
-- **Lógica de Predicados**: Más potente. Introduce cuantificadores ("Para todo", "Existe"), constantes (objetos) y predicados (relaciones como `es-padre(x,y)`).
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251226214639.png)
+
+- **Lógica de Predicados**: 
+	1. **Objetos (Constantes):** Las cosas del mundo real (ej: `Juan`, `Ana`, `Coche`).
+	2. **Predicados:** Son las **propiedades** o **relaciones** que afectan a los objetos. Se escriben como funciones:
+	    - `es_hombre(Juan)` $\to$ Predicado de propiedad.
+	    - `es_hermano(Juan, Ana)` $\to$ Predicado de relación.
+	
+	3. **Variables:** Usamos letras ($x, y$) para referirnos a "cualquier cosa" sin especificar quién.    
+	4. **Cuantificadores:** Las herramientas poderosas mencionadas en tus apuntes:
+	    - **Universal ($\forall$ - "Para todo"):** Permite crear reglas generales.
+	        - _Ejemplo:_ $\forall x$ (Si $x$ es humano $\to$ $x$ es mortal).
+	    - **Existencial ($\exists$ - "Existe"):** Indica que hay al menos uno.
+	        - _Ejemplo:_ $\exists x$ (Padre($x$, Juan)) $\to$ "Existe alguien que es el padre de Juan".
+
 
 
 ### Reglas de Producción y Sistemas Basados en Reglas (SBR) 
 Es la estructura más utilizada en los Sistemas Expertos. Cuando representamos el conocimiento de esta forma, hablamos de **Sistemas Basados en Reglas**.
-
 - **Unidad básica**: La Regla de Producción.
     - Formato: `SI <condición/situación> ENTONCES <acción>`.
 
@@ -76,13 +90,12 @@ Es la estructura más utilizada en los Sistemas Expertos. Cuando representamos e
 - **Ejemplo**:    
     - _Regla_: SI "coche no arranca" Y "batería < 10V" ENTONCES "cambiar batería".
 
-> Lo importante de la sección 3.4 es esto, lo otro lo tiene el tipo tirao por la presentación sin ningún tipo de sentido.
 
 ### Redes Semánticas
 Representación gráfica mediante grafos.
 - Nodos = Conceptos/Objetos (ej. "Juan", "Persona").
 
-- Arcos = Relaciones o herencia (ej. "es un", "tipo de"). Permite heredar propiedades (si Juan es Persona, y Persona tiene altura, Juan tiene altura)13131313.
+- Arcos = Relaciones o herencia (ej. "es un", "tipo de"). Permite heredar propiedades (si Juan es Persona, y Persona tiene altura, Juan tiene altura).
 
 
 # 3.5 Estrategias de Razonamiento (El Motor en acción)
@@ -96,6 +109,21 @@ Una vez tenemos reglas y hechos, ¿cómo los procesa el motor? Existen dos estra
 - **Ejemplo (Coches)**: Sé que "el coche no arranca" y "batería < 10V" $\to$ Deduzco "cambiar batería".
 
 - **Algoritmo**: Ciclo de **Equiparar** (ver qué reglas se cumplen) $\to$ **Resolver** (elegir una del conjunto conflicto) $\to$ **Aplicar** (ejecutarla).
+
+El **conjunto conflicto** es el grupo de reglas que, en un momento determinado del razonamiento, **cumplen todas sus condiciones** (antecedentes) en base a los hechos disponibles y **aún no fueron ejecutadas**.
+
+Es decir, no es una sola regla, sino la colección de **todas las reglas posibles** que el sistema _podría_ ejecutar en ese instante porque sus requisitos ("SI...") son ciertos.
+
+El **principio de refracción** evita la aplicación reiterada de una **regla aplicable**. Imagina que no existiera este principio. Tienes la siguiente situación:
+- **Hecho:** `(temperatura 40)`
+- **Regla:** `SI temperatura > 38 ENTONCES imprime "Tiene Fiebre"`
+
+**¿Qué pasaría sin refracción?**
+1. **Ciclo 1:** El motor ve que la temperatura es 40. Se cumple la regla. **Acción:** Imprime "Tiene Fiebre".
+2. **Ciclo 2:** El motor vuelve a mirar los hechos. La temperatura _sigue_ siendo 40 (nadie la ha borrado). La regla se cumple de nuevo. **Acción:** Imprime "Tiene Fiebre".
+3. **Ciclo 3:** La temperatura sigue siendo 40... **Acción:** Imprime "Tiene Fiebre".
+
+El sistema entraría en un **bucle infinito**, repitiendo la misma acción una y otra vez, porque la condición sigue siendo verdad. Para que no pase, el motor de inferencia dice: _"Vale, esta regla se cumple con el dato (temperatura 40), PERO yo ya ejecuté esta regla exacta con este dato exacto en el ciclo anterior. Así que no la voy a volver a meter en el conjunto conflicto hasta que los datos cambien."_
 
 
 ### Encadenamiento Hacia Atrás (Backward Chaining)
@@ -133,136 +161,120 @@ Es fundamental entender que programar un Sistema Experto no es programar un algo
 Es una herramienta de software diseñada para desarrollar **Sistemas Expertos** y sistemas basados en reglas. Funciona mediante un paradigma de **programación declarativa**: tú dices _qué_ sabes (hechos) y _qué_ hacer si ocurren ciertas cosas (reglas), y el motor decide _cuándo_ hacerlo.
 
 
-## Arquitectura: Los 3 Pilares
-Para entender cualquier código en CLIPS, debes distinguir estos tres elementos:
+## Los 3 Pilares de la Memoria
+Debes distinguir claramente entre estos tres espacios:
+1. **Base de Conocimiento (Knowledge Base):** Es donde se almacena la "inteligencia" estática del programa. Aquí viven las Reglas (`defrule`), las Plantillas (`deftemplate`) y las definiciones de hechos iniciales (`deffacts`).
+    - _Se llena usando:_ El comando `(load)`.
 
-1. **Memoria de Trabajo (Working Memory)**: Es la "pizarra" donde están escritos los datos actuales (Hechos). Es volátil (cambia mientras el programa corre).
+2. **Memoria de Trabajo (Working Memory):** Es la "pizarra" volátil donde están los datos actuales (los Hechos). Cambia constantemente.    
+    - _Se llena usando:_ Los comandos `(reset)` y `(assert)`.
 
-2. **Base de Conocimiento (Knowledge Base)**: Donde están guardadas las Reglas (Lógica estática).
+3. **Motor de Inferencia:** El "cerebro" que compara constantemente la _Memoria de Trabajo_ con la _Base de Conocimiento_ para ver qué reglas activar.    
 
-3. **Motor de Inferencia**: El "cerebro" que compara constantemente los Hechos con las Reglas para ver cuál se puede activar.
+## Los Hechos (Datos)
+### 1. Tipos de Hechos
+- **Vectores Ordenados:** Listas simples. `(Pedro 45 V)`. Rígidos.
+- **Plantillas (Deftemplates):** Estructurados con campos. `(Persona (Nombre Juan) (Edad 30))`. Flexibles.
+
+### 2. Propiedades Críticas para el Examen (⚠️ IMPORTANTE)
+**a) El Hecho Especial `f-0` (initial-fact)**
+- **¿Qué es?** Es el "hecho cero". El primer dato que CLIPS crea automáticamente cuando reinicias el sistema.
+- **¿Para qué sirve?** Actúa como una chispa de arranque. Permite que se disparen reglas que no tienen condiciones específicas en su parte izquierda (reglas que quieres que se ejecuten "siempre" al principio).
+- **Prohibición:** **El usuario NO puede definir ni manipular el hecho f-0**. Está reservado. Si intentas hacer `(assert (f-0 ...))` o borrarlo manualmente sin cuidado, el sistema puede fallar o ignorarte.
+
+**b) Unicidad (Conjuntos)**
+- La memoria de CLIPS es un **conjunto matemático**, no una lista.
+- **No hay duplicados:** Si intentas añadir un hecho idéntico a uno que ya existe (mismos campos, mismos valores), CLIPS **no hace nada**. No crea un duplicado ni genera un nuevo ID. Simplemente mantiene el viejo.
+
+## El Ciclo de Vida: De Cargar a Ejecutar
+Aquí es donde suelen pillar en las preguntas tipo test (como la pregunta 14 de tu imagen). El orden lógico es:
+### 1. `(clear)`: El Borrado Total
+- **Acción:** Elimina **TODO**. Deja el sistema vacío, como recién instalado.
+- **Efecto:** Borra hechos, reglas, templates y deffacts.
+
+### 2. `(load "archivo.clp")`: La Carga
+- **Acción:** Lee un archivo de texto `.clp` línea por línea.
+- **Efecto (⚠️ OJO):**
+    - Carga las definiciones (`defrule`, `deftemplate`, `deffacts`) en la **Base de Conocimiento**.
+    - **NO ejecuta nada.**
+    - **NO mete hechos en la Memoria de Trabajo** (a menos que haya `asserts` sueltos fuera de reglas, lo cual es mala práctica).
+    - Los hechos definidos en `deffacts` se quedan "en espera", memorizados, pero aún no activos.
+
+### 3. `(reset)`: El Reinicio y Preparación
+Este comando es el puente entre la teoría (lo cargado) y la práctica (la memoria). Realiza 3 pasos estrictos:
+1. **Borra** todos los hechos actuales de la Memoria de Trabajo (`retract *`).
+2. **Crea** automáticamente el hecho **`f-0` (initial-fact)**.
+3. **Activa** todos los hechos que estaban definidos en los `deffacts` que cargaste previamente con `load`, metiéndolos ahora sí en la Memoria de Trabajo.
+
+### 4. `(run)`: La Ejecución
+- **Acción:** Arranca el Motor de Inferencia.
+- **Efecto:** El motor mira los hechos que `reset` acaba de poner, busca reglas que coincidan (Pattern Matching), las mete en la Agenda y las ejecuta hasta que no queden más
+
+## La Agenda y el Orden de Ejecución (⚠️ MUY IMPORTANTE)
+La Agenda es la lista de tareas pendientes del sistema.
+
+### ¿Qué hay dentro de la Agenda?
+No contiene solo reglas, ni solo hechos. Contiene **Activaciones (Instancias)**.
+- Definición de Activación: Es la pareja formada por:
+$$Regla + Hechos Específicos (IDs)$$    
+- _Ejemplo:_ Si tienes la regla "Si tienes hambre, come" y el hecho "tengo hambre", en la agenda aparece: `Activación: Regla_Comer + Hecho_f-1`.
+
+### ¿Cómo decide CLIPS qué ejecutar primero? (Resolución de Conflictos)
+Si hay varias reglas en la agenda (Conjunto Conflicto), CLIPS tiene que elegir una. El orden por defecto suele ser **Salience + LIFO (Depth Strategy)**.
+
+**A. Salience (Prioridad Explícita)**
+- Puedes dar "rangos militares" a las reglas.
+- `(declare (salience 100))`: Esta regla es VIP. Se ejecutará antes que una de salience 0.
+- Rango: de -10,000 a +10,000.
+
+**B. Recency (Recencia - LIFO)**
+- Si dos reglas tienen la misma prioridad (salience), ¿cuál va primero?
+- **Regla de oro:** CLIPS favorece a los hechos **más recientes**.
+- _Comportamiento de Pila (Stack):_ El último hecho que entró (`assert`) es el primero que dispara reglas. Esto permite que el sistema se centre en "lo último que ha pasado" antes de volver a tareas antiguas.
+
+### 3. Casos que se pueden dar en la Agenda
+**Caso 1: Agenda Vacía**
+- Si haces `(run)` y no hay activaciones, el programa termina inmediatamente. No hace nada.
+
+**Caso 2: Una regla coincide con varios hechos distintos**
+- Imagina la regla: `Si (número ?n) => imprimir ?n`.
+- Hechos: `(número 1)` y `(número 2)`.
+- **Resultado:** En la agenda habrá **dos activaciones** distintas de la misma regla. La regla se ejecutará dos veces (una para el 1 y otra para el 2).
+
+**Caso 3: Principio de Refracción (Loop Prevention)**
+- **Pregunta de examen:** ¿Se ejecuta una regla infinitamente si el hecho sigue ahí?
+- **Respuesta:** **NO**. CLIPS recuerda que ya ejecutó la regla `R1` con el hecho `f-1`. Aunque `f-1` siga existiendo, esa activación específica se borra de la agenda para no repetirse eternamente. Solo se volverá a activar si modificas el hecho (porque al modificarlo cambia su ID o su "timestamp").
 
 
-## 3Los Hechos (Datos)
-Representan el estado del mundo. En el examen te pondrán código y tendrás que identificar qué tipo de hecho es.
+## Ejemplo Práctico de Traza
+Imagina que tienes este archivo `enfermedades.clp`:
+Fragmento de código
+```c
+; DEFINICIÓN DE DATOS INICIALES (La lista de la compra)
+(deffacts mis-datos
+   (temperatura 40)
+   (garganta_inflamada)
+)
 
-### A. Tipos de Hechos
-1. **Vectores Ordenados (Ordered Facts)**:
-    - Son listas simples. El significado depende de la posición.
-    - _Ejemplo_: `(Pedro 45 V)` $\rightarrow$ Debes saber de memoria que el primero es nombre, el segundo edad, etc. Es rígido y propenso a errores.
-
-2. **Registros (Deftemplates)**:    
-    - Estructuras con campos nombrados (slots). Son flexibles y claros.
-    - Si no das valor a un campo, se pone `nil` (nulo).
-    - _Sintaxis_:        
-        Fragmento de código
-```
-(deftemplate Persona
-    (field Nombre)
-    (field Edad))
-   
-; Uso:
-(assert (Persona (Nombre Juan) (Edad 30)))
- ```
-
-
-### B. Gestión de Hechos (Comandos Clave)
-Estos comandos modifican la Memoria de Trabajo. Es vital entender qué hace cada uno para seguir la traza del programa:
-
-| **Comando**     | **Acción**       | **Detalle Importante para Examen**                                           |
-| --------------- | ---------------- | ---------------------------------------------------------------------------- |
-| **`assert`**    | Añade un hecho.  | CLIPS le asigna un ID único (ej. `f-1`).                                     |
-| **`retract`**   | Borra un hecho.  | Se usa el ID: `(retract 1)`.                                                 |
-| **`modify`**    | Modifica campos. | **Ojo**: En realidad borra el hecho viejo y crea uno nuevo con **nuevo ID**. |
-| **`duplicate`** | Copia un hecho.  | Crea un clon (nuevo ID) cambiando solo lo que indiques.                      |
-
-
-## Las Reglas (Lógica)
-Estructura fundamental: SI (Condiciones) ENTONCES (Acciones).
-
-En CLIPS se separan por la flecha =>.
-
-
-```
-(defrule nombre-regla
-   ; PARTE IZQUIERDA (LHS - Antecedente)
-   (Condicion 1)
-   (Condicion 2)
+; REGLA
+(defrule detectar-fiebre
+   (temperatura ?t&:(> ?t 38))
    =>
-   ; PARTE DERECHA (RHS - Consecuente)
-   (Accion 1)
+   (printout t "Tienes fiebre" crLF)
 )
 ```
 
-### Conceptos de Lectura de Reglas
-1. **Matching (Emparejamiento)**: Para que una regla se active, **TODOS** los patrones del LHS deben cumplirse a la vez (es un **AND** implícito).
-
-2. **Variables (`?nombre`)**:    
-    - Sirven para capturar valores de un hecho y usarlos.
-    - _Ejemplo_: `(temperatura ?t)` $\rightarrow$ "Busca un hecho temperatura y guarda su valor en la variable `?t`".
-
-3. **Restricciones**:    
-    - `?t&:(> ?t 39)` $\rightarrow$ Léelo como: "La variable `t` **Y** (`&`) tal que `t` sea mayor que 39".
-
-4. **Comodines (`$?`)**:    
-    - Indica "cero o más campos". Útil cuando no sabes la longitud exacta de un vector.
-
-
-## Ciclo de Ejecución (El Motor)
-En el examen te pedirán seguir la traza (qué pasa paso a paso).
-
-1. **`(clear)`**: Borra TODO (reglas y hechos). Deja el sistema en blanco.
-2. **`(reset)`**:
-    - Borra los hechos actuales.
-    - Restaura los hechos iniciales (definidos con `deffacts` si los hubiera).
-    - Deja el sistema listo para empezar.
-3. **`(run)`**:
-    - Arranca el motor.
-    - El motor mira los hechos $\rightarrow$ Busca reglas que coincidan $\rightarrow$ Ejecuta las acciones.
-    - **Importante**: Si una acción (`assert`) añade un hecho nuevo, el motor se para, reevalúa todas las reglas con el nuevo dato, y sigue.
-4. **`(facts)`**: Muestra la lista actual de hechos en memoria.
-
-
-## Ejemplo Práctico de Traza (Lectura de Código)
-Si te dan este código, así es como debes "leerlo" mentalmente:
-
-**Código:**
-```
-(defrule regla-fiebre
-   (temperatura ?t&:(> ?t 39))  ; Condición 1: T > 39
-   =>
-   (assert (fiebre))            ; Acción: Añadir hecho fiebre
-)
-
-(defrule regla-infeccion
-   (fiebre)                     ; Condición 1
-   (garganta_inflamada)         ; Condición 2
-   =>
-   (assert (infeccion_bacteriana)) ; Acción
-)
-```
-
-**Situación (Hechos iniciales):**
-1. `(assert (temperatura 40))`
-2. `(assert (garganta_inflamada))`
-
-**Traza Lógica (Lo que ocurre al hacer `run`):**
-1. El motor ve `temperatura 40`.
-2. Comprueba `regla-fiebre`: ¿40 > 39? **Sí**. $\rightarrow$ **Se activa**.
-3. **Ejecución**: Se añade el hecho `(fiebre)` a la memoria.
-4. El motor ve el nuevo hecho `(fiebre)`.
-5. Comprueba `regla-infeccion`:
-    - ¿Existe `(fiebre)`? **Sí** (acaba de crearse).
-    - ¿Existe `(garganta_inflamada)`? **Sí** (estaba al principio).
-6. **Ejecución**: Se añade el hecho `(infeccion_bacteriana)`.
-7. No hay más reglas que se cumplan. Fin.
-
-
-**Resultado final (`facts`):**
-- `f-0 (temperatura 40)`
-- `f-1 (garganta_inflamada)`
-- `f-2 (fiebre)`
-- `f-3 (infeccion_bacteriana)`
-
-
+**Secuencia de Comandos:**
+1. **(load "enfermedades.clp")**:
+    - CLIPS lee el archivo. Memoriza que existe una regla `detectar-fiebre` y un grupo de datos `mis-datos`.
+    - _Estado Memoria Trabajo:_ **VACÍA**. (Ni siquiera f-0).
+2. **(reset)**:
+    - Paso 1: Borra lo que hubiera (no borra reglas)
+    - Paso 2: Crea `f-0 (initial-fact)`.
+    - Paso 3: Lee el `deffacts mis-datos` y hace assert de `f-1 (temperatura 40)` y `f-2 (garganta_inflamada)`.
+    - _Estado Memoria Trabajo:_ `f-0, f-1, f-2`.
+3. **(run)**:
+    - El motor ve `f-1 (temperatura 40)`.
+    - La regla `detectar-fiebre` se activa (porque 40 > 38).
+    - Sale por pantalla: "Tienes fiebre".
 

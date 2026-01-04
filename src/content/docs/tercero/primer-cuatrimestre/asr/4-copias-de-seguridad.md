@@ -106,13 +106,53 @@ Están diseñados para trabajar a bajo nivel con sistemas de ficheros ext2/ext3/
 - **Ventaja:** Respetan permisos, fechas y saben si un archivo se movió. Soportan los "niveles" nativamente.
 - **Fichero clave:** `/var/lib/dumpdates` (Aquí anota cuándo hizo el último backup para calcular los incrementales).
 
+`dump`, su función es volcar los datos del sistema de ficheros a un destino (cinta, archivo o disco remoto).
+`dump [-nivel][opciones][ficheros_a_salvar]`
+
 ```shell
-# Hacer backup completo (nivel 0) de /home en cinta (/dev/st0) y actualizar fechas (-u)
+# 1. Backup COMPLETO (Nivel 0) de la partición /home en una cinta
+# Es importante usar el dispositivo (/dev/sda2) o el punto de montaje.
 dump -0u -f /dev/st0 /home
 
-# Hacer backup incremental (nivel 5)
-dump -5u -f /dev/st0 /home
+# 2. Backup INCREMENTAL (Nivel 1)
+# Solo guarda lo modificado desde el último Nivel 0.
+dump -1u -f /dev/st0 /home
+
+# 3. Backup a un archivo normal (si no tienes cintas)
+dump -0u -f /mnt/backup_disco_externo/home_full.dump /home
 ``` 
+
+`restore`, permite recuperar desde un fichero completo o restaurar archivos sueltos. 
+ **Importante:** `restore` siempre extrae los datos **en el directorio donde te encuentres situado** en ese momento.
+`restore acción [opciones][ficheros_a_salvar]`.
+
+```shell
+# 1. Vamos al sitio donde queremos dejar el fichero recuperado (seguridad)
+cd /tmp
+
+# 2. Abrimos el backup en modo interactivo
+restore -if /dev/st0
+
+# Ahora estás dentro de una consola propia de restore (>).
+# Comandos dentro de restore:
+# > ls        (listar ficheros del backup)
+# > cd usuario (entrar en carpetas)
+# > add informe.pdf (marcar el fichero que quieres recuperar)
+# > extract   (ejecutar la extracción)
+# > quit      (salir)
+```
+
+```shell
+# 1. Es OBLIGATORIO ir al directorio raíz del nuevo disco
+cd /mnt/nuevo_home
+
+# 2. Restaurar todo el contenido del backup nivel 0
+restore -rf /dev/st0
+
+# (Si tuvieras incrementales nivel 1, 2... tendrías que restaurarlos 
+# después en orden secuencial).
+``` 
+
 
 ## `tar` (Tape ARchiver - El estándar)
 Empaqueta archivos. Es el más usado para backups de carpetas específicas.

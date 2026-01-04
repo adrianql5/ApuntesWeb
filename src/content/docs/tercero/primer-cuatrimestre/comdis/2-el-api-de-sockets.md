@@ -85,24 +85,26 @@ El servidor debe estar activo antes que el cliente. El proceso se basa en dos ti
 - **Servidor:** Crea el socket (`socket()` ), lo ata a un puerto (`bind()`), y se pone a escuchar (`listen()`)
 - **Servidor:** llama a `accept()`. Esta es una **operación bloqueante**. El proceso servidor se duerme hasta que alguien llame a la puerta.
 - **Cliente:** crea su socket y solicita conexión (`connect()`) a la IP/Puerto del servidor
-- **Handshake:** se establece la conexión. EL método `accept()` del servidor despierta y devuelve un nuevo objeto socket para la comunicación.
+- **Handshake:** se establece la conexión. El método `accept()` del servidor despierta y devuelve un nuevo objeto socket para la comunicación.
 - **Intercambio:** ambos usan flujos de entrada/salida (`InputStream/OutputStream`) para `read()` y `write()`
 - **Cierre:** se usa `close()` para terminar la conexión
 
 >[!Info]
->Todas estas operaciones que aparecen entre paréntesis son proporcionadas por Unix, si haces en un terminal man funcion, te pone la info. Son funciones de la API de sockets facilitadas
+>Todas estas operaciones que aparecen entre paréntesis son proporcionadas por Unix, si haces en un terminal `man funcion`, te pone la info. Son funciones de la API de sockets.
 
 ## 2.4.3 Código Java Esencial (TCP)
 En Java, usamos `java.net.ServerSocket` y `java.net.Socket`.
 
 **Servidor:**
 ```java
-ServerSocket serverSocket = new ServerSocket(8189); // Puerto de escucha
+ServerSocket serverSocket = new ServerSocket(puerto); // Puerto de escucha
 Socket incoming = serverSocket.accept(); // BLOQUEANTE: Espera cliente
 // Una vez aquí, tenemos conexión. Obtenemos los streams:
 DataInputStream in = new DataInputStream(incoming.getInputStream());
 DataOutputStream out = new DataOutputStream(incoming.getOutputStream());
-// Leer y Escribir...
+// Leer y Escribir
+out.writeByte(5);
+System.out.println(in.readByte());
 ```
 
 >[!Info]
@@ -114,7 +116,7 @@ DataOutputStream out = new DataOutputStream(incoming.getOutputStream());
 
 **Cliente:**
 ```java
-Socket socket = new Socket("direccion_servidor", 8189); // Intenta conectar
+Socket socket = new Socket("direccion_servidor", puerto asignado en servidor); // Intenta conectar
 // Si no hay excepción, estamos conectados.
 ``` 
 
@@ -246,6 +248,18 @@ DatagramPacket dp = new DatagramPacket(data, data.length, receiverHost, 2345);
 ds.send(dp); // Envío "fuego y olvido"
 ```
 
+**Constructores de `DatagramPacket`:**
+```java
+DatagramPacket(byte[] data, int length, InetAddress receiver, int port);
+
+DatagramPacket(byte[] data, int length);
+```
+
+El primero sirve para enviar una paquete UDP, el parámetro data almacena el contenido del mensaje, `length` indica el tamaño del mensaje y la dirección y el puerto se corresponden con los datos del receptor del mensaje.
+
+El segundo sirve para recibir paquetes UDP, data es la variable que almacena el mensaje recibido y length indica el tamaño máximo del mensaje a recibir.
+
+
 # 2.6 Técnicas Avanzadas y Robustez
 ## 2.6.1 Gestión de Bloqueos (Timeouts)
 Por defecto, leer de un socket (`read` o `receive`) congela el programa eternamente si no llegan datos. Para evitar "cuelgues" indefinidos en sistemas distribuidos reales, debemos programar un **Timeout**.
@@ -263,6 +277,10 @@ La multidifusión permite enviar un solo paquete y que sea recibido por un grupo
 
 >[!Info]
 Una IP de Clase D es una dirección lógica de 32 bits que comienza por `1110`, utilizada para identificar un **grupo de interés** compartido en lugar de una máquina física específica. Direcciones que empiezan en un rango entre [224-239].
+
+> [!Nota]
+> **Broadcast:** difusión a todos los dispositivos de una red
+> **Multicast:** difusión a todos los dispositivos de una subred
 
 # 2.7 Hilos en Java
 Un **hilo** es una secuencia de control dentro de un proceso que ejecuta instrucciones de manera independiente.

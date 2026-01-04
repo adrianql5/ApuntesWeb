@@ -53,9 +53,8 @@ Algunas opciones:
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251213121741.png)
 
 ### Herramientas Dinámicas (`top`)
-`top` es un monitor en tiempo real.
-- **Load Average (Carga media):** Números clave en la cabecera (1min, 5min, 15min).
-    - _Regla de oro:_ Si la carga es mayor al número de núcleos (CPUs) que tienes, hay atasco.
+`top` es un monitor en tiempo real. En la **cabecera** podemos ver la hora actual, tiempo que el sistema lleva encendido, el número de usuarios conectados y la carga media del sistema para los últimos 1, 5, y 15 minutos. El número total de tareas y resumen por estado y el estado de ocupación de la CPU y la memoria. En un sistema de n núcleos el máximo de uso de CPU es n × 100 %.
+
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251213121811.png)
 
@@ -133,7 +132,7 @@ Linux es "democrático" pero permite favoritismos.
 | **`renice`** | Ya ejecutándose: `renice 10 -p PID` | Usuarios normales solo pueden _bajar_ prioridad (hacerse más _nice_). |
 
 >[!Info]
->`ulimit` El comando interno de bash ulimit permite controlar los recursos de los que dispone un proceso arrancado por el shell. `ulimit [opciones] [limite]`2
+>`ulimit` El comando interno de bash ulimit permite controlar los recursos de los que dispone un proceso arrancado por el shell. `ulimit [opciones] [limite]`
 
 ## 6.1.6 Recursos y el Sistema `/proc`
 ### `/proc` y `/sys` (Sistemas de Archivos Virtuales)
@@ -169,7 +168,7 @@ El sistema define siete tipos distintos. Se pueden identificar usando el comando
 | **Dispositivos Caracteres** | `c`                  | Hardware con E/S byte a byte (ej. teclado).   | `mknod` / `rm`             |
 | **Dispositivos Bloques**    | `b`                  | Hardware con E/S por bloques (ej. discos).    | `mknod` / `rm`             |
 | **Tuberías (Named Pipes)**  | `p`                  | Comunicación entre procesos (FIFO).           | `mknod` / `rm`             |
-| l**Sockets**                | `s`                  | Comunicación de procesos en red.              | `socket()` / `rm`          |
+| **Sockets**                 | `s`                  | Comunicación de procesos en red.              | `socket()` / `rm`          |
 
 **Nota:** El comando `file [nombre_fichero]` analiza el contenido para determinar qué es (ej. PDF, ASCII, PNG).
 

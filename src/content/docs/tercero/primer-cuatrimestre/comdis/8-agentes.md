@@ -4,7 +4,10 @@ title: "Agentes"
 
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
-# 8. 1 ¿Qué es un Agente? (Conceptos Básicos)
+>[!Nota]
+>La cantidad de relleno que hay en este tema es histórico y mira que intenté quitar la mayor cantidad de mierda posible.
+
+# 8.1 ¿Qué es un Agente? (Conceptos Básicos)
 Imagina un **mayordomo digital**. A diferencia de un programa normal (como una calculadora) que espera a que tú le des órdenes paso a paso, el mayordomo sabe qué quieres y actúa por su cuenta para conseguirlo.
 
 > **Definición Clave:** Un agente es un sistema informático situado en un entorno, capaz de realizar acciones de forma **autónoma** y flexible para cumplir los objetivos de su "dueño" (usuario).
@@ -25,6 +28,8 @@ Para que un programa sea considerado un "Agente", debe cumplir estas propiedades
 
 4. **Habilidad Social:** Interactúa con otros agentes o humanos (coopera, negocia o compite).    
 
+5. **Movilidad:** El agente tiene la capacidad de viajar de nodo en nodo de la red preservando su estado
+
 
 # 8.3 El Entorno 
 **El entorno es "el mundo" donde vive el agente.**
@@ -43,7 +48,6 @@ Clasificar el entorno es vital porque **determina la dificultad** de diseñar el
 > **Resumen:** El entorno más difícil es **Inaccesible, No determinista, Dinámico y Continuo** (como el mundo real). El más fácil es Accesible, Determinista, Estático y Discreto (como un puzzle).
 
 
-
 # 8.4 Arquitecturas de Agentes 
 La arquitectura es el "cerebro" del agente. Define cómo pasa de **Percibir (sensores)** a **Actuar (actuadores)**. Las ordenamos de la más "tonta" a la más compleja.
 
@@ -57,8 +61,27 @@ Son como insectos. No "piensan" ni tienen memoria compleja.
 - **Ejemplo:** Un termostato (Si T < 20º $\rightarrow$ Encender calefacción).
 
 - **Subsunción (Rodney Brooks):** Es un tipo famoso de arquitectura reactiva organizada en capas de comportamientos simples (ej: evitar obstáculos) que, al sumarse, crean un comportamiento complejo (caminar).
- 
-## B. Arquitecturas Deliberativas (Basadas en Lógica)
+
+## B. Arquitecturas Basadas en Lógica (El enfoque purista)
+Es el modelo teórico clásico. El agente funciona como un **matemático**: todo lo que percibe lo convierte en fórmulas para "demostrar" qué acción debe tomar.
+- **Funcionamiento:** Su "cerebro" es una base de datos de conocimiento lógico.
+    1. **Representación:** Usa **Lógica de Primer Orden** para describir el estado del mundo.
+    2. **Deducción:** Usa reglas lógicas para deducir qué acción realizar.
+
+- El Ciclo Lógico (Formal):
+    El agente usa tres funciones matemáticas clave:
+    1. **$Ver(s)$:** Transforma lo que ven los sensores ($s$) en una percepción ($P$).
+    2. **$Próximo(D, P)$:** Actualiza su base de datos interna ($D$) combinando lo que ya sabía con la nueva percepción.
+    3. **$Acción(D)$:** Consulta su base de datos y decide lógicamente qué acción ($A$) ejecutar.
+
+- **Ventajas:**    
+    - **Elegancia:** Es una representación muy clara, limpia y formal.
+
+- **Desventajas:**    
+    - **Lentitud extrema:** La deducción lógica tiene una complejidad temporal muy alta.
+    - **Abstracción difícil:** Es muy complicado traducir el mundo real (que es caótico) a símbolos lógicos perfectos.
+
+## C. Arquitecturas Deliberativas
 Son como filósofos o jugadores de ajedrez.
 
 - **Funcionamiento:** Tienen un modelo simbólico del mundo (un mapa mental). Antes de actuar, razonan lógicamente para buscar un plan que les lleve a su meta.
@@ -67,7 +90,7 @@ Son como filósofos o jugadores de ajedrez.
 
 - **Desventaja:** Son lentos. En entornos de tiempo real (dinámicos), pueden quedarse "pensando" mientras el mundo cambia y los atropella.    
 
-## C. Arquitectura B.D.I. (Belief, Desire, Intention)
+## D. Arquitectura B.D.I. (Belief, Desire, Intention)
 Es la arquitectura deliberativa más famosa porque imita el razonamiento humano práctico.
 
 1. **Creencias (Beliefs):** Lo que el agente _sabe_ o cree saber del mundo (Información).
@@ -78,7 +101,7 @@ Es la arquitectura deliberativa más famosa porque imita el razonamiento humano 
     - _Agente Audaz:_ Elige un plan y lo sigue ciegamente hasta terminar o fallar. (Rápido, pero terco).
     - _Agente Cauto:_ Para a cada paso para ver si el plan sigue siendo válido. (Seguro, pero muy lento).
 
-## D. Arquitecturas Híbridas (Lo mejor de ambos mundos)
+## E. Arquitecturas Híbridas (Lo mejor de ambos mundos)
 La mayoría de sistemas modernos usan esto. Combinan una parte reactiva (para reflejos rápidos) y una deliberativa (para planes a largo plazo).
 
 Se organizan en Capas:
@@ -213,6 +236,33 @@ Los protocolos definen el "baile" de mensajes entre agentes. Un protocolo es el 
 - **FIPA-English-Auction:** Subasta clásica (hacia arriba). El subastador sube el precio hasta que nadie más puje.
 - **FIPA-Dutch-Auction:** Subasta holandesa (hacia abajo). Empieza muy alto y baja hasta que alguien dice "mío".
 
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251230104116.png)
+
+**INFORM:** Es el acto más básico.
+- **Qué significa:** "Te cuento esto que sé y asumo que es verdad".
+- **Ejemplo:** Un sensor de temperatura dice: _"Hace 25 grados"_.
+- **Ojo:** El receptor no está obligado a hacer nada, solo "toma nota".
+
+**CFP (Call For Proposal):** El "Llamamiento".
+- **Qué significa:** "Tengo un problema, ¿quién me lo soluciona y qué condiciones me ponéis?". No es una orden, es una invitación a negociar.
+- **Ejemplo:** _"Necesito un taxi para ir al aeropuerto, ¿quién me lleva y por cuánto?"_
+
+**PROPOSE:** La "Oferta".
+- **Qué significa:** Respuesta a un CFP. El agente dice que puede hacerlo y bajo qué condiciones.
+- **Ejemplo:** _"Yo te llevo por 20 euros"_.
+
+**ACCEPT-PROPOSAL:** El "Trato hecho".
+- **Qué significa:** El que envió el CFP ha recibido varias ofertas (proposals) y elige esta.
+- **Ejemplo:** _"Vale, tú me llevas por 20 euros. Vente"_.
+
+**REJECT-PROPOSAL:** El "No, gracias".  
+- **Qué significa:** Has recibido la oferta, pero no te interesa (porque es cara, porque ya elegiste a otro, etc.).
+- **Ejemplo:** _"30 euros es muy caro, paso de ti"_.
+
+>[!Danger]
+> Se dice que el profesor tiene este protocolo tatuado en la espalda y que incluso ha llamado a sus hijos FIPA e English Auction. Si no lo usas en sus prácticas se calienta una burrada, a pesar de que haya sido creado por un medico holandés en el 1836 y sea la mierda más ineficiente nunca jamás creada.
+>
+
 ### C. Protocolos de Intermediación
 Cuando no sabes quién puede hacer el trabajo, usas un intermediario.
 - **FIPA-Brokering:** Le pides algo al bróker, él busca al agente adecuado, consigue la respuesta y **te la devuelve él mismo**. (Tú no ves al agente final).
@@ -345,3 +395,19 @@ if (msg != null) {
 **Forma bloqueante:**
 - Detiene toda la ejecución hasta que llega un mensaje.
 - **Peligro:** Como congela el único hilo del agente, **nunca lo uses dentro de un Behaviour**. Úsalo solo en `setup()` o en hilos separados.
+
+
+>[!Info] JADE: Diferencia entre `block()` y `blockingReceive()`
+>
+>**1. `myBehaviour.block()` (Enfoque Colaborativo)**
+>- **Mecanismo:** Es un bloqueo **lógico**. Marca el comportamiento como "en espera" y devuelve el control al planificador del agente.  
+>- **El Hilo (Thread):** **No se detiene.** El agente aprovecha para ejecutar otros comportamientos concurrentes.  
+>- **Despertador:** El comportamiento se reactiva automáticamente cuando llega un **nuevo mensaje** a la cola del agente.
+>- **Uso:** Es la forma correcta de esperar mensajes dentro del método `action()`.
+  >
+>**2. `myAgent.blockingReceive()` (Enfoque Bloqueante)**
+>- **Mecanismo:** Es una llamada **síncrona**.  
+>- **El Hilo (Thread):** **Se bloquea físicamente.** Detiene por completo el flujo de ejecución del hilo Java del agente.  
+>- **Consecuencia:** El agente se "congela" totalmente. Ningún otro comportamiento puede ejecutarse hasta que llegue el mensaje esperado.  
+>- **Uso:** Evitar en comportamientos cíclicos. Útil solo en la inicialización (`setup()`) o fases lineales estrictas.
+

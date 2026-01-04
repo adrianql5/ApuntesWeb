@@ -56,8 +56,6 @@ $$\frac{\partial E}{\partial w} = \frac{\partial E}{\partial y} \cdot \frac{\par
 
 Aquí es donde nace el concepto de **DELTA ($\delta$)**. Para no escribir todo eso, llamamos $\delta$ (Delta o Error Local) a la parte que combina el Error y la Activación: **"Cuánto contribuye la neurona al error total"**.
 
-Tienes esta fórmula general para calcular cómo cambiar el peso:
-
 
 # 7.4 El Algoritmo: Ciclo de Dos Pasos
 El aprendizaje ocurre repitiendo estos dos pasos.

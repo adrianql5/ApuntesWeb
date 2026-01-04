@@ -14,7 +14,7 @@ Para entender P2P, primero debemos mirar que lo que queremos sustituir: el model
 
 La computación P2P es el intercambio directo de recursos (procesamiento, almacenamiento, ancho de banda) entre sistemas.
 - **Democracia:** todos los nodos son a la vez **clientes y servidores**
-- **Autonomía:** no hay una autoridad central s; los nodos entran y salen de la red dinámicamente.
+- **Autonomía:** no hay una autoridad central ; los nodos entran y salen de la red dinámicamente.
 
 **Beneficio Clave:** La **Escalabilidad**. Cuantos más usuarios (consumidores) entran, más recursos (donantes) hay disponibles. El sistema crece orgánicamente con la demanda .
 
@@ -48,7 +48,7 @@ Aprendiendo de los dos anteriores, Kazaa introdujo el concepto de **Super-nodos 
 ## 5.2.4 El Problema del "Free Riding" (El gorrón)
 Un desafío social de estas redes es que requieren altruismo. Estudios en Gnutella mostraron que el **63% de los usuarios nunca compartían nada**, solo descargaban. El 15% de los usuarios aportaba el 94% del contenido.
 
-## 5.2.3 Freenet
+## 5.2.5 Freenet
 En las generaciones anteriores (Napster, Gnutella, Kazaa), la identidad era transparente: los usuarios sabían de quién descargaban y los demás sabían quién enviaba una consulta . Esto generaba problemas de privacidad y legales
 
 **Freenet** surge con un objetivo distinto: **el Anonimato**.
@@ -62,27 +62,31 @@ En las generaciones anteriores (Napster, Gnutella, Kazaa), la identidad era tran
     - Es imposible saber si un nodo está **consumiendo** (leyendo) el dato o simplemente **reenviándolo**.
     - Esto crea una "negación plausible" para los usuarios de la red.
 
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251229135101.png)
+
 # 5.3 Segunda Generación: Sistemas Estructurados (DHTs)
 Las redes anteriores (Napster, Gnutella) no garantizan que encuentres un archivo aunque exista, o son ineficientes. La academia (universidades/investigación) propuso una solución matemática: las **Tablas Hash Distribuidas (DHT)**.
 
 ## 5.3.1 ¿Qué es una DHT?
-Es una estructura de datos gigante repartida entre todos los ordenadores del mundo P2P.
-- Funciona con pares **(Clave, Valor)**.
-- **Objetivo:** Garantizar que podemos encontrar el nodo responsable de un dato en un número pequeño de pasos (normalmente $O(\log N)$).
+Una **Tabla Hash Distribuida** es una clase de sistema distribuido descentralizado que ofrece un servicio de búsqueda (lookup) similar a una tabla hash clásica (pares `clave` → `valor`), pero con una diferencia fundamental:
+- **Distribución:** Los datos (pares clave-valor) no están en un solo ordenador. Están **repartidos** entre todos los nodos participantes de la red.
+- **Responsabilidad:** Cada nodo es responsable de un pequeño rango de claves.
+- **Enrutamiento:** Cualquier nodo puede encontrar eficientemente ($O(\log N)$) qué otro nodo tiene el dato que busca, sin necesidad de un servidor central.
 - **Interfaz Genérica:** Solo necesitas dos operaciones:
     - `put(key, value)`: Guarda algo.
     - `value = get(key)`: Recupera algo.
 
 A continuación, los tres algoritmos principales de DHT
-
-## 5.3.2 Chord (EL anillo)
+## 5.3.2 Chord (El anillo)
 Imagina una mesa redonda gigante o un reloj.
 
 **El Círculo Identificador (The Identifier Circle):**
 - **La Mesa:** Imagina que todos los ordenadores (Nodos) y todos los archivos (Claves) tienen un número de identificación (ID) único (por ejemplo, del 0 al 100).
 - **Organización:** Los nodos se sientan alrededor de la mesa ordenados por su número (el nodo 5, luego el 20, luego el 38...).
 - **La Regla de Oro (Sucesor):** ¿Quién guarda la llave del archivo número 54? No se la damos al nodo 54 (porque igual no existe), sino al **primer nodo que encontremos igual o mayor que 54** siguiendo las agujas del reloj.
-    - _Ejemplo del PDF:_ La clave `K54` se guarda en el nodo `N56` porque es su "sucesor" inmediato en el círculo .
+    - _Ejemplo:_ La clave `K54` se guarda en el nodo `N56` porque es su "sucesor" inmediato en el círculo .
+
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251229140838.png)
 
 **La Tabla de Dedos (Finger Table) - El Atajo:**
 Si el nodo 1 quiere hablar con el nodo 50, podría pasar el mensaje al vecino de al lado (nodo 2), y este al 3... pero tardaría mucho ($O(N)$). Para evitar esto, Chord usa "dedos" mágicos.
@@ -121,3 +125,5 @@ Olvídate de anillos y códigos. Piensa en un mapa gigante (un plano cartesiano 
 - **Guardar datos:** Si quieres guardar un archivo, haces una fórmula matemática (hash) que te da unas coordenadas, por ejemplo `(x=0.8, y=0.3)`. El archivo se guarda en el ordenador que sea "dueño" del rectángulo donde cae ese punto.
 - **Enrutamiento:** Si yo estoy en la zona `(0,0)` y quiero enviar algo a `(1,1)`, simplemente le paso el mensaje a mi vecino de la derecha o de arriba, acercándome geométricamente al destino.
 
+>[!Nota]
+>Yo ns pa que manda estudiar estos algoritmos, nunca los preguntó en el final. Yo creo que simplemente le dio pereza recortar la presentación que robó a otra universidad. Por norma general los profesores consideran que su tiempo vale más que el nuestro.

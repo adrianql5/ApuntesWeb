@@ -69,7 +69,7 @@ Es la forma más rigurosa de representar relaciones.
 	    - `es_hermano(Juan, Ana)` $\to$ Predicado de relación.
 	
 	3. **Variables:** Usamos letras ($x, y$) para referirnos a "cualquier cosa" sin especificar quién.    
-	4. **Cuantificadores:** Las herramientas poderosas mencionadas en tus apuntes:
+	4. **Cuantificadores:** Las herramientas poderosas:
 	    - **Universal ($\forall$ - "Para todo"):** Permite crear reglas generales.
 	        - _Ejemplo:_ $\forall x$ (Si $x$ es humano $\to$ $x$ es mortal).
 	    - **Existencial ($\exists$ - "Existe"):** Indica que hay al menos uno.

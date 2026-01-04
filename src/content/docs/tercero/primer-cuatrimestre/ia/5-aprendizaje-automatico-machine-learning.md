@@ -182,6 +182,24 @@ $$\theta_j := \theta_j - \alpha \frac{\partial}{\partial \theta_j} J(\theta_0, \
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251222094417.png)
 
 
+### Ecuación Normal (Alternativa al descenso gradiente)
+Es una forma alternativa de encontrar el valor óptimo de $\theta$. La diferencia fundamental está en **cómo** llegan a la solución:
+- **Descenso del Gradiente (Iterativo):** Empiezas con valores aleatorios y vas ajustando poco a poco (iteraciones) hasta minimizar el error. Necesitas elegir un "learning rate" ($\alpha$).
+- **Ecuación Normal (Analítica):** Usas álgebra lineal para resolver el problema de golpe. Es como tener una fórmula mágica que te "teletransporta" directamente al punto más bajo de la función de coste, sin dar pasos. Encuentra la solución exacta matemáticamente.
+
+$$\theta = (X^T X)^{-1} X^T y$$
+Aunque parece intimidante, la lógica es similar a resolver una ecuación simple como $5x = 10$. Para despejar $x$, dividirías por 5 (o multiplicarías por el inverso $5^{-1}$). En el mundo de las matrices:
+1. Queremos encontrar $\theta$ tal que $X\theta \approx y$
+2. No podemos simplemente "dividir" por la matriz $X$.
+3. La operación $(X^T X)^{-1} X^T$ es, en términos muy simplificados, la forma matricial de "pasar la $X$ al otro lado dividiendo" para despejar la $\theta$.
+
+| **Característica**           | **Descenso del Gradiente**                                                    | **Ecuación Normal (La de tu imagen)**                                                                                                                                          |
+| ---------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Learning Rate ($\alpha$)** | Necesitas elegir uno y ajustarlo.                                             | **No necesitas** elegir nada.                                                                                                                                                  |
+| **Iteraciones**              | Muchas iteraciones.                                                           | **Ninguna**. Es un solo cálculo directo.                                                                                                                                       |
+| **Complejidad**              | Funciona bien incluso con millones de características ($n$ grande). $0(kn^2)$ | Se vuelve **muy lenta** si tienes muchas características (p.ej., $n > 10,000$) porque calcular la inversa de una matriz $(X^T X)^{-1}$ es costoso computacionalmente. $O(n^3)$ |
+| **Resultado**                | Aproximado (muy cercano al óptimo).                                           | Exacto (el óptimo matemático). Aunque a veces puede no funcionar porque no toda matriz es invertible.                                                                          |
+
 
 # 5.6 Problemas Fundamentales: Sesgo vs. Varianza
 Cuando entrenamos un modelo, podemos fallar por dos extremos opuestos:

@@ -13,7 +13,7 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 
 
 # 5.1 Expresiones regulares
-Las **expresiones regulares** permiten reconocer en texto una serie de cadas de caracteres que siguen un patrón:
+Las **expresiones regulares** permiten reconocer en texto una serie de cadenas de caracteres que siguen un patrón:
 - Los ficheros de configuración y logs de Unix son normalmente ficheros de texto.
 - Muchos comandos de procesamiento y búsqueda de texto como `grep`, `egrep`, `sed`, `awk` o `vi` usan expresiones regulares
 
@@ -31,7 +31,7 @@ Se distinguen las expresiones regulares básicas y las extendidas, más completa
   >  
 >- **Los pipes (tuberías `|`):** Son el mecanismo que conecta la salida estándar (stdout) de un comando con la entrada estándar (stdin) del siguiente, permitiendo filtrar con expresiones regulares datos generados "al vuelo".
 
-## 5.1.1 Com`andos `egrep y `sed -r`
+## 5.1.1 Comandos `egrep` y `sed -r`
 Estos comandos permiten utilizar **Expresiones Regulares Extendidas (ERE)**, lo que simplifica la escritura de patrones complejos (como grupos `()` o alternancias `|`) sin necesidad de "escapar" tantos caracteres con la barra invertida `\`.
 
  **El comando `egrep:`** busca parones en ficheros de texto. 
@@ -46,7 +46,7 @@ egrep [opciones] 'patrón' archivo
  **El comando`sed -r:`** Es un editor de flujo de texto. Aunque tiene muchas funciones, su uso más frecuente con expresiones regulares es para **sustituir** texto.
 
 - **Opción `-r`:** Habilita las expresiones regulares extendidas (en versiones modernas se usa `-E`, pero `-r` es el clásico en GNU/Linux).
-- **Sintaxis de sustitución:** `s` (substitute), `patrón` (lo que busco), `reemplazo` (lo nuevo) y `g` (global - todas las veces que aparezca en la línea).
+- **Sintaxis de sustitución:** `s` (substituye), `patrón` (lo que busco), `reemplazo` (lo nuevo) y `g` (global - todas las veces que aparezca en la línea).
 
 ```bash
 sed -r 's/patrón/sustitución/g' archivo
@@ -84,7 +84,7 @@ egrep "$IP" conexiones.log
 ```
 
 
-**Importante**: no debemos confundir las expresiones regulares con los como- dines para la sustitución de nombres de ficheros (glob). Por ejemplo, el asterisco * como comodín indica cualquier cadena en nombres de fichero, mientras que como expresión regular es repetición
+**Importante**: no debemos confundir las expresiones regulares con los comodines para la sustitución de nombres de ficheros (glob). Por ejemplo, el asterisco * como comodín indica cualquier cadena en nombres de fichero, mientras que como expresión regular es repetición.
 
 | **Característica**      | **Comodines (Globbing)**                      | **Expresiones Regulares (Regex)**         |
 | ----------------------- | --------------------------------------------- | ----------------------------------------- |
@@ -105,16 +105,16 @@ La regla de oro es: **La mayoría de los caracteres son literales**, es decir, c
 
 La excepción son los **metacaracteres**, símbolos con significado especial que definen el patrón.
 
-| **Símbolo** | **Función** | **Significado**                                      | **Ejemplo**                | **Coincide con...**              |
-| ----------- | ----------- | ---------------------------------------------------- | -------------------------- | -------------------------------- |
-| **`.`**     | Comodín     | Cualquier carácter (excepto salto de línea).         | `a.c`                      | "abc", "axc", "a@c"              |
-| **`[ ]`**   | Clase       | Cualquiera de los caracteres dentro.                 | `[abc]`                    | "a", "b", "c"                    |
-| **`[^ ]`**  | Negación    | Cualquier carácter **que no esté** dentro.           | `[^abc]`                   | "d", "z", "1" (pero no a, b o c) |
-| **`^`**     | Ancla       | Inicio de línea.                                     | `^abc`                     | Líneas que empiezan por "abc"    |
-| **`$`**     | Ancla       | Final de línea.                                      | `abc$`                     | Líneas que terminan en "abc"     |
-| **`\`**     | Escape      | Quita el significado especial al siguiente carácter. | `\.`                       | Un punto literal "."             |
-| **`         | `**         | Lógica                                               | Operador OR (alternancia). | `a                               |
-| **`( )`**   | Grupo       | Agrupa patrones y permite capturarlos.               | `(ab)+`                    | "ab", "abab", "ababab"           |
+| **Símbolo** | **Función** | **Significado**                                      | **Ejemplo**   | **Coincide con...**              |
+| ----------- | ----------- | ---------------------------------------------------- | ------------- | -------------------------------- |
+| **`.`**     | Comodín     | Cualquier carácter (excepto salto de línea).         | `a.c`         | "abc", "axc", "a@c"              |
+| **`[ ]`**   | Clase       | Cualquiera de los caracteres dentro.                 | `[abc]`       | "a", "b", "c"                    |
+| **`[^ ]`**  | Negación    | Cualquier carácter **que no esté** dentro.           | `[^abc]`      | "d", "z", "1" (pero no a, b o c) |
+| **`^`**     | Ancla       | Inicio de línea.                                     | `^abc`        | Líneas que empiezan por "abc"    |
+| **`$`**     | Ancla       | Final de línea.                                      | `abc$`        | Líneas que terminan en "abc"     |
+| **`\`**     | Escape      | Quita el significado especial al siguiente carácter. | `\.`          | Un punto literal "."             |
+| **`\|`**    | Lógica      | Operador OR (alternancia).                           | `gato\|perro` | "gato", "perro"                  |
+| **`( )`**   | Grupo       | Agrupa patrones y permite capturarlos.               | `(ab)+`       | "ab", "abab", "ababab"           |
 
 **Cuantificadores de repetición:** Estos afectan al carácter o grupo que tienen **inmediatamente a su izquierda**
 
@@ -186,7 +186,7 @@ Las expresiones regulares son "codiciosas" por naturaleza: intentan abarcar la *
 ```shell
  #concuerda con direcciones de e-mail
  \w+@\w+\.\w+((\.\w+)*)? 
-  ``` 
+``` 
 
 `\w` (word character) es un atajo para no tener que escribir `[a-zA-Z0-9_]`.
 - **`\w`** = Cualquier letra (a-z), número (0-9) o guion bajo (_).
@@ -207,7 +207,7 @@ El concepto avanzado aquí es la **Agrupación Anidada** para estructuras repeti
 
 Este es el ejemplo más importante para un administrador de sistemas. **Las expresiones regulares NO saben matemáticas**. No saben que 32 es mayor que 31. Solo ven caracteres.
 
-Para validar un rango numérico (como los días del 1 al 31), tenemos que **descomponer el número en patrones de texto** usando el operador **OR (`|`)**.ç
+Para validar un rango numérico (como los días del 1 al 31), tenemos que **descomponer el número en patrones de texto** usando el operador **OR (`|`)**.
 
 | **Caso** | **Regex**   | **Explicación**                            | **Números que cubre** |
 | -------- | ----------- | ------------------------------------------ | --------------------- |

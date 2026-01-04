@@ -31,39 +31,47 @@ Para entender dónde estamos, primero debemos contrastar este nuevo modelo con l
 # 3.2 Conceptos Fundamentales
 Antes de escribir código, debemos definir rigurosamente la terminología arquitectónica.
 
-## 3.2.1 Tipos de Objetos
-- **Objeto Local:** sus métodos solo pueden ser invocados por un proceso que se ejecuta en el mismo computador (mismo espacio de direcciones).
-- **Objeto Distribuido (Remoto):** sus métodos pueden ser invocados por un proceso situado en un ordenador distintos conectado por red
+## 3.2.1 Tipos de Objetos y Alcance
+La distinción fundamental no es física (ordenadores distintos), sino lógica (espacios de memoria distintos).
 
-## 3.2.2 La arquitectura de intermediarios (Proxies)
-Dado que el cliente no puede tocar físicamente la memoria del servidor, necesitamos intermediarios que creen la ilusión de localidad. 
-- **Objeto Servidor:** es la entidad que exporta el servicio y ejecuta la lógica real.
-- **Referencia:** un puntero lógico que permite localizar al objeto en la red
-- **Registro de Objetos:** un servicio de directorio (como una guía telefónica) donde el servidor registra sus objetos y el cliente busca referencias
+- **Objeto Local:** Es un objeto convencional. Sus métodos solo pueden ser invocados por referencias que residen en la misma **Máquina Virtual (JVM)**. La llamada es directa a través de la pila de ejecución (stack).
+- **Objeto Distribuido (Remoto):** Es un objeto que reside en una JVM distinta (ya sea en el mismo ordenador o en otro conectado por red). Para invocarlo, el cliente debe utilizar mecanismos de red, ya que no tiene acceso directo a su memoria.
 
->[!Info]
-> En el contexto de RMI, **exportar un servicio** es el acto de **hacer visible y accesible** un objeto local para el resto del mundo.
+## 3.2.2 La Arquitectura de Intermediarios (Proxies)
+Dado que el cliente no puede acceder físicamente a la memoria del servidor, necesitamos una arquitectura que cree la **ilusión de localidad** (transparencia de red).
 
-### El Mecanismo de Sub y Skeleton
-La comunicación no es directa. A nivel físico, ocurre lo siguiente:
-- **Cliente:** invoca el método sobre un **Proxy de Cliente (Stub)**.
-- **Marshalling (Empaquetado):** el Stub empaqueta los argumentos y la petición y los pasa al soporte de ejecución (runtime).
-- **Red:** los datos viajan al servidor
-- **Skeleton (Proxy del Servidor):** el soporte de ejecución del servidor recibe los datos, los desempaqueta (**Unmarshalling**) y se los pasa al Skeleton.
-- **Invocación Real:** el Skeleton invoca al método en el objeto real, obtiene el resultado, lo empaquea y lo envía de vuelta.
+- **Objeto Servidor (Implementación):** La instancia real de la clase que ejecuta la lógica del negocio. Reside en la memoria (Heap) del servidor.
+- **Referencia Remota:** Un identificador único que permite localizar al objeto específico dentro de un servidor específico en la red.    
+- **RMI Registry (Registro):** Un servicio de nombres (similar a una guía telefónica o DNS) donde el servidor registra (publica) sus objetos remotos asociados a un nombre, y el cliente los busca para obtener su referencia.
 
-A nivel **lógico**, parece que el cliente llama directamente al servidor. A nivel **físico**, los datos atraviesan capas de proxies, soporte de ejecución y red
+> [!Info] **Exportar un objeto** significa indicar a la JVM que ese objeto estará disponible para recibir llamadas externas. Esto implica abrir un puerto TCP y dejar un hilo de ejecución a la escucha de peticiones para ese objeto.
 
->[!Info]
-> Un **proxy** es un intermediario. Es un componente de software que se hace pasar por otra cosa para ocultar la complejidad de la red (en este caso para entenderlo, aunque su definición rigurosa es otra). Su trabajo es que el cliente crea que está hablando con el objeto real, cuando en realidad está halando con un representante local que gestiona el envío de la petición a través de la red.
->
-> Imagina que quieres hablar con un gran empresario (el Objeto Servidor) que vive en otro país. No puedes gritarle directamente.
-> - **El Stub (tu representante local):** es como un **doble** del empresario que está en tu oficina. Tú le hablas a él como si fuera el real. Él no sabe la respuesta, pero toma nota de tu pregunta, la mete en un sobre (**marshalling**) y la echa al correo. Para tu código, el Stub es el servidor
-> - **El Skeleton (El secretario del empresario):** está en la oficina del empresario real. Su trabajo es recibir el sobre del correo, abrirlo (**unmarshalling**), leerle la pregunta al empresario real, apuntar la respuesta, meterla en otro sobre y enviarla de vuelta.
+### El Mecanismo de Stub y Skeleton
+La comunicación sigue el patrón _Proxy_. El flujo **real** de una invocación remota es:
+1. **Cliente:** Invoca un método sobre el **Stub** (creyendo que es el objeto real).
+2. **Stub (Proxy del Cliente):**
+    - Realiza el **Marshalling** (serialización): convierte los argumentos del método en un flujo de bytes compatible con la red.
+    - Envía la petición a través de la red usando el sistema de transporte.
+3. **Red:** Los bytes viajan del cliente al servidor.    
+4. **Skeleton (Dispatcher del Servidor):**
+    - Recibe la petición de red.
+    - Realiza el **Unmarshalling** (deserialización): reconstruye los argumentos originales a partir de los bytes recibidos.
+    - Identifica qué método se quiere llamar.
+5. **Invocación Real:** El Skeleton llama al método en el **Objeto Servidor** real.  
+6. **Retorno:** El Objeto Servidor devuelve el resultado al Skeleton, quien lo empaqueta (**Marshalling**) y lo envía de vuelta al Stub (que hará el **Unmarshalling** final para el cliente).
+
+> [!Note] Nota Técnica En versiones modernas de Java (post-1.2), los _Skeletons_ explícitos ya no se generan manualmente. La JVM utiliza **Reflexión (Reflection)** y Proxies dinámicos para manejar este proceso, pero el concepto teórico de "Skeleton" como la pieza que desempaqueta en el lado servidor sigue siendo válido para entender la arquitectura.
+
+> [!Info] Analogía: El Empresario y el Intérprete Imagina que quieres hablar con un empresario japonés (el **Objeto Servidor**) pero tú solo hablas español.
 > 
-> El Stub simula ser el servidor en el lado del cliente. El Skeleton recibe los mensajes de red y llama al servidor real
->
-> Si el Stub y Skeleton son los que escriben y leen las cartas, el **Soporte de Ejecución** es el **servicio de correos** y el sistema de transporte.
+> - **El Stub (Tu intérprete):** Está contigo. Tú le hablas en español. Él "empaqueta" (traduce) tu mensaje y lo envía por teléfono. Para ti, hablar con el intérprete es como hablar con el empresario.
+>     
+> - **La Red:** La línea telefónica.
+>     
+> - **El Skeleton (El secretario del empresario):** Está en Japón. Recibe el mensaje, lo "desempaqueta" (traduce al japonés) y se lo dice al empresario. Luego toma la respuesta del empresario, la traduce y te la envía de vuelta.
+>     
+> 
+> El **Soporte de Ejecución (Runtime)** sería la compañía telefónica que garantiza que la señal llegue de un lado a otro
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153832.png)
 
@@ -75,13 +83,13 @@ RMI no nació de la nada. Su ancestro es **RPC**, popularizado en los años 80.
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153852.png)
 
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153934.png)
+
 ## 3.2 Java RMI (Remote Method Invocation)
 RMI es la evolución **Orientada a Objetos de RPC**, exclusiva para el ecosistema Java
 - Permite pasar objetos completos como parámetros o valores de retorno, no solo tipos de datos primitivos.
 - Utiliza un **Registro RMI** (`rmiregistry`) para la localización de servicios.
 
-
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153934.png)
 
 # 3.4 Implementación en Java RMI
 Para construir una aplicación distribuida, Java RMI impone una metodología estricta basada en interfaces.
@@ -120,6 +128,7 @@ Una vez compiladas las clases, se usa el compilador RMI para generar los proxies
 
 # 3.5 El Registro y la Puesta en Marcha
 ## 3.5.1 El RMI Registry
+
 Es un servicio simple que se ejecuta por defecto en el puerto TCP 1099. Actúa como un mapa de `String` $\rightarrow$ `Objeto`.
 - Se puede iniciar desde consola: `rmiregistry`
 -  O desde código Java: `LocateRegistry.createRegistry(puerto)` 
@@ -228,8 +237,17 @@ Para no perderte en la práctica, sigue este "algoritmo" riguroso extraído del 
 4. **Desarrollar Servidor:** Crear `Server.java` que instancia `Impl` y hace `Naming.rebind`.
 5. **Desarrollar Cliente:** Crear `Client.java` que hace `Naming.lookup` y usa la interfaz.
 6. **Despliegue de Ficheros:**
-    - **Servidor:** Necesita `Interfaz.class`, `Impl.class`, `Skeleton.class`, `Server.class`.
+    - **Servidor:** Necesita `Interfaz.class`, `Impl.class`,`Stub.class`, `Skeleton.class`, `Server.class`.
     - **Cliente:** Necesita `Interfaz.class`, `Client.class`, `Stub.class`.
 
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212154141.png)
+
+>[!Nota] La foto esta en teoría está mal, en el nodo del servidor también hace falta el Skel a mayores del Stub
+
+
+>[!Important]
+> **Java RMI** es por naturaleza multihilo. Cuando recibe una petición de un cliente, por ejemplo si un cliente $A$ invoca a un método remoto $A$, el entorno de ejecución de Java RMI creará un hilo para ejecutar ese método remoto. Si al mismo tiempo otro cliente $B$ le manda otra petición, creará otro hilo. Ambos hilos pueden ejecutar el mismo código del objeto remoto **en paralelo**. 
+>
+> Para que funcione **todo el código debe ser Thread Safe**.
+

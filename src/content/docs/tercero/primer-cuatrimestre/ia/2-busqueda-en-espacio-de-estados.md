@@ -233,8 +233,8 @@ Aquí es donde entra la confusión habitual. Si el "Espacio de Búsqueda" es tod
 1. Tenemos **99 ciudades** móviles (recuerda: la ciudad 0 es fija, esa no se toca).
 2. El operador elige **2** de ellas para cambiarlas de sitio.
 3. Matemáticamente es una **combinación sin repetición**:
-    $N=299×98​$
-
+    $N=\frac{99×98}{2}​$
+que
 **Diferencia Clave:**
 - **Espacio de Búsqueda (99!):** Todas las soluciones que existen.
 - **Entorno (≈4851):** Las opciones que tiene el algoritmo _en cada paso_ para decidir hacia dónde moverse.

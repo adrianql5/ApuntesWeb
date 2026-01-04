@@ -6,7 +6,7 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 
 
 >[!Info]
-La mayoría de cosas de este tema a día de hoy están obsoletas y no se usan. Java RMI tampoco se suele usar mucho. 
+RMI avanzado, menudo puto fenómeno, era mejor que lo llamase RMI retrasado. La mayoría de cosas de este tema a día de hoy están obsoletas y no se usan. Java RMI tampoco se suele usar mucho. 
 
 
 ### Era Clásica (la puta mierda de la que hablan las diapositivas)
@@ -23,7 +23,7 @@ Esta es la metodología original (JDK 1.1 - 1.4) y la que se detalla explícitam
     - **En el Cliente:** Necesitabas tener físicamente el archivo `_Stub.class` (copiado a mano o descargado vía web). El cliente invocaba métodos sobre este objeto físico.
     - **En el Servidor:** Existía un objeto **Skeleton** real interpuesto. El flujo era rígido: `Red -> Objeto Skeleton -> Objeto Real`. El Skeleton era el único que sabía cómo desempaquetar los datos para esa clase específica.
 
-### La Era Moderna
+### La Era Moderna (esto no entra)
 Con la evolución del lenguaje, Java eliminó la necesidad de generar código "sucio" intermedio, haciendo el proceso transparente.
 - **¿Qué se usa ahora?** Se usan **Proxies Dinámicos** y **Reflexión**. Los archivos físicos `_Stub` y `_Skel` han desaparecido del flujo de trabajo diario.
 - **El Proceso Automático:**
@@ -45,7 +45,7 @@ Imagina que quieres pedir comida a un restaurante (el Servidor). Para saber qué
 - **Sin Stub Downloading (Forma manual):** Tú tienes una copia impresa del menú en tu casa. Si el restaurante cambia sus platos o precios, tu menú de papel queda obsoleto. Llamarás pidiendo algo que ya no existe o con el precio equivocado. Para arreglarlo, tendrías que ir físicamente al restaurante, recoger el nuevo menú y volver a casa.
     - _En Informática:_ Esto equivale a tener que copiar manualmente el archivo `Stub.class` en cada ordenador de cada cliente cada vez que actualizas el código del servidor. Si tienes 100 clientes, es inviable.
 
-- **Con Stub Downloading (Forma dinámica):** Tú no guardas el menú. Cuando quieres pedir, entras en la web del restaurante y ves el menú actual en ese preciso instante. Si el restaurante cambia el menú, tú ves el cambio automáticamente la próxima vez que entres.    
+- **Con Stub Downloading (Forma dinámica):** Tú no guardas el menú. Cuando quieres pedir, entras en la web del restaurante y ves el menú actual en ese preciso instante. Si el restaurante cambia el menú, tú ves el cambio automáticamente la próxima vez que entres.   
     - _En Informática:_ El cliente no necesita tener el archivo `Stub.class` instalado en su disco duro. Cuando se conecta, el sistema le dice: "Oye, para hablar conmigo necesitas este código, descárgalo de aquí ahora mismo".
 
 ## 4.1.2 Implementación Técnica
@@ -78,9 +78,58 @@ Debes conceder permisos explícitos:
 - **Descargar Stubs:** Permiso para conectar al puerto 80 (HTTP)
 - **Conexiones efímeras:** Permiso para que puertos dinámicos ( '`1024-65535`) usados en la comunicación de vuelta.
 
+```java
+// archivo: cliente.policy
+grant {
+    // 1. Permiso para hablar con el Registry (puerto 1099 normalmente)
+    // "connect": poder llamar. "resolve": poder buscar la IP.
+    permission java.net.SocketPermission "localhost:1099", "connect, resolve";
+
+    // 2. Permiso para conexiones efímeras (puertos dinámicos que usa RMI para responder)
+    // *:1024-65535 significa "cualquier IP" en el rango de puertos del 1024 al final.
+    // "accept": permite recibir llamadas de vuelta del servidor.
+    permission java.net.SocketPermission "*:1024-", "connect, accept, resolve";
+    
+    // 3. Si descargas código de un servidor web (ej. puerto 80)
+    permission java.net.SocketPermission "miservidorweb.com:80", "connect";
+};
+```
+
 Por buenas prácticas, se recomienda usar gestores de seguridad en **todas** las aplicaciones RMI, incluso si no usas descarga dinámica.
 
+El fichero `.policy` **no se aplica a "un objeto" (como el Stub), se aplica a toda la Máquina Virtual Java (JVM)** que está ejecutando ese programa.
+
+Cuando activas el `RMISecurityManager`, pones a **toda la aplicación** en un estado de "cuarentena" o "libertad condicional". Por defecto, Java asume que **nadie** (ni el código descargado, ni tu propio código del servidor) tiene permiso para hacer operaciones de red.
+
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212154728.png)
+
+>[!Nota]
+>Nuevamente la imagen está mal, o eso diría yo, le falta en el nodo del servidor tener el stub.class también. En la presentación del tipo tiene ambos. Que el muy fenómeno de esta bibliografía es muy loco.
+
+#### A. Policy del Cliente (Foco: Salir)
+El cliente necesita permiso para **ir** al servidor.
+
+```java
+grant {
+    // Permiso para CONECTAR (connect) con el servidor
+    permission java.net.SocketPermission "ip_del_servidor:1024-", "connect, resolve";
+    permission java.net.SocketPermission "ip_del_servidor:1099", "connect, resolve";
+};
+```
+
+#### B. Policy del Servidor (Foco: Entrar y Registrarse)
+El servidor necesita permiso para **recibir** visitas y **registrarse**.
+
+```java
+grant {
+    // Permiso para ACEPTAR (accept/listen) conexiones de cualquiera
+    permission java.net.SocketPermission "*:1024-", "accept, listen, connect, resolve";
+    
+    // Permiso para hablar con el Registry (connect)
+    permission java.net.SocketPermission "localhost:1099", "connect, resolve";
+};
+```
+
 
 # 4.3 Comunicación Bidireccional: RMI Callbacks
 Hasta ahora, el modelo era **Pull** (Cliente pide $\rightarrow$ Servidor Responde). El servidor era pasivo. Pero, ¿y si el servidor necesita avisa al cliente de algo (ej: una subasta ha terminado, un chat, monitorización)?
@@ -139,7 +188,8 @@ public interface InterfaceServidor extends Remote {
 }
 ```
 
-**El Servidor (Implementación)**. El servidor debe mantener una lista de los clientes conectados para poder avisarles luego. El PDF sugiere usar un `Vector` para almacenar estas referencia.
+**El Servidor (Implementación)**. El servidor debe mantener una lista de los clientes conectados para poder avisarles luego. 
+
 ```java
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException;
@@ -247,6 +297,13 @@ public class ClienteConCallback extends UnicastRemoteObject implements Interface
 ``` 
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212154450.png)
+
+>[!Nota] 
+>Nuevamente la puta imagen vuelve a estar mal, en el lado del cliente faltaría un `ImplCliente_Skell.class` y en el del servidor un `ImplServidor_Skell.class`. Además de que se podrían meter los `java.policy`. 
+>
+>En sus presentaciones tengo entendido que también cuela imágenes a drede para que la gente que no va a clases presenciales las falle (esta pregunta no hay examen que no la ponga, y ya me dirás tu a mí que tipo de conocimiento demuestras por saber meter archivos en máquinas diferentes).
+>
+> No entiendo por qué el tipo en vez de poner erratas a drede para que la gente que no va a clase falle, no le da por preguntarse por qué la gente no va a clase.
 
 
 # 4.4 Serialización y Paso de Objetos

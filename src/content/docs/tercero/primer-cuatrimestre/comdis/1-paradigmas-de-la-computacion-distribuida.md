@@ -21,7 +21,7 @@ Imagina un programa en tu portátil (Word, Calculadora). Eso es convencional. Un
 # 1.2 Los Cimientos (Nivel Bajo)
 Aquí es donde todo empieza. Es el nivel de abstracción más bajo.
 
-## 1.2.1 El Paso de Mensajes (Message Passing)
+## El Paso de Mensajes (Message Passing)
 **Concepto Principal:** es el paradigma fundamental. Cualquier cosa que ocurra en Internet, en el fondo, es un mensaje llendo de A a B. Es como pasarse notitas en clase. Tú escribes un papel (petición), se lo das a un compañero y esperas que te devuelva otro papel (respuesta).
 
 **Detalle Técnico:**
@@ -38,9 +38,9 @@ Cuando tu navegador pide una web, por debajo está abriendo un socket y pasando 
 >[!Info]
 > Una **primitiva** es la operación más básica y elemental que te ofrece un sistema o lenguaje, es un ladrillo indivisibles con el construyes cosas más grandes
 >
-> Un **socket** es un **enchufe** de software. Es el punto final (endpoint) de una comunicación bidireccional entre dos programas a través de la red. Imagina que tu ordenador es un bloque de pisos. EL **Socket** es la puerta de un apartamento específico (identificado por una IP y un Puerto). Si quieres enviar una carta a otro edificio, necesitas saber la dirección del edificio (IP) y el número de puerta (Puerto) del destinatario. 
+> Un **socket** es un **enchufe** de software. Es el punto final (endpoint) de una comunicación bidireccional entre dos programas a través de la red. Imagina que tu ordenador es un bloque de pisos. El **Socket** es la puerta de un apartamento específico (identificado por una IP y un Puerto). Si quieres enviar una carta a otro edificio, necesitas saber la dirección del edificio (IP) y el número de puerta (Puerto) del destinatario. 
 > 
-> Usamos `connect`/`disconnect`  cuando necesito fiabilidad absoluta y un canal estable. Antes de enviar datos, debes descolgar el teléfono (`connect`) y al terminal colgar (`disconnect`). Garantiza que los datos llegan y en orden (**Servicio orientado a conexión**). No se usa (**servicio n orientado a conexión**) cuando la velocidad es más importante que la fiabilidad, o cuando envías mensajes sueltos. Solo se hace `send` y `receive` sin llamar antes. `Connect` tarda tiempo.
+> Usamos `connect`/`disconnect`  cuando necesito fiabilidad absoluta y un canal estable. Antes de enviar datos, debes descolgar el teléfono (`connect`) y al terminal colgar (`disconnect`). Garantiza que los datos llegan y en orden (**Servicio orientado a conexión**). No se usa (**servicio no orientado a conexión**) cuando la velocidad es más importante que la fiabilidad, o cuando envías mensajes sueltos. Solo se hace `send` y `receive` sin llamar antes. `Connect` tarda tiempo.
 
 # 1.3 Arquitecturas Básicas
 Una vez sabemos pasar mensajes, ¿cómo organizamos a los participantes?
@@ -79,7 +79,9 @@ Se usa en BitTorrent, Videoconferencias, Blockchain, aplicaciones de chat, etc.
 Aquí intentamos que el programador se olvide de que existen cables de red. Queremos programar como si todo estuviera en mi ordenador".
 
 >[!Info]
-> El middleware es una capa de software que se sitúa entre el sistema operativo y las aplicaciones distribuidas. Su función es **abstraer la heterogeneidad**.
+> El middleware es una capa de software que se sitúa entre el sistema operativo y las aplicaciones distribuidas. Oculta la hetereogeneidad del hardware y del software subyacente, proporcionando un modelo programación uniforme.
+>
+> Definición del libro: Middleware hace referencia al software que actúa como intermediario entre procesos independientes. Los sistemas de mensajes son unos de los tipos de middleware, los ORB o broker de peticiones son otros.
 
 ## 1.4.1 RPC (Remote Procedure Call)
 **Concepto Principal:** Abstracción que permite llamar a una función que está en otro ordenador como si fuera una función local. Imagina que en tu código escribes `calcularSuma(5, 10)`. Tú no sabes si esas suma la hace tu CPU o superordenador en Japón. RPC se encarga de enviar el 5 y el 10 a Japón esperar, y devolverte 15.
@@ -114,7 +116,7 @@ A veces no queremos respuesta inmediata. A veces queremos "dejar un recado".
 **Concepto Principal:** Message-Oriente Middleware (MOM). Un intermediario gestiona colas de mensajes, permitiendo comunicación **asíncrona**.
 
 >[!Info]
-> **Desacomplamiento** es eliminar las dependencias rígidas entre dos sistemas. Podemos diferenciar 2 tipos:
+> **El desacomplamiento** consiste en eliminar las dependencias rígidas entre dos sistemas. Podemos diferenciar 2 tipos:
 > - **Temporal:** el emisor y el receptor **no necesitan estar conectados a la vez**. Yo envío el mensaje a las 10:00, me desconecto, y tú lo recibes a las 14:00.
 > - **Espacial:** el emisor no necesita saber la dirección IP o identidad exacta del receptor, solo envía el mensaje a un buzón.
 
@@ -130,6 +132,9 @@ A veces no queremos respuesta inmediata. A veces queremos "dejar un recado".
 - Un proceso (Publisher) dice: "!Ha marcado Rodrygo Ganges!" (Evento)
 - El sistema distribuye este mensaje a todos los que se hayan "suscrito" al tema "Fútbol"
 
+>[!Nota]
+> 9 meses para marcar, qué jugador.
+
 Por ejemplo, notificaciones de Youtube, Feeds de Twitter, Grupos de Whatsapp.
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212152923.png)
@@ -138,7 +143,7 @@ Por ejemplo, notificaciones de Youtube, Feeds de Twitter, Grupos de Whatsapp.
 Estos modelos son más específicos, pero interesantes.
 
 ## 1.6.1 Servicios de Red
-Los servicios se "registran" en un directorio. El cliente busca en el directorio "necesito imprimir", y el directorio le da la dirección e la impresora disponible. Es autoconfigurable.
+Los servicios se "registran" en un directorio. El cliente busca en el directorio "necesito imprimir", y el directorio le da la dirección de la impresora disponible. Es autoconfigurable.
 
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250921121700.png)

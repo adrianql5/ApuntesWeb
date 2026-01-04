@@ -57,7 +57,7 @@ En un sistema RabbitMQ, la comunicación no es directa de "A" a "B". Fluye a tra
 # 7.4 Tipos de Exchange (Estrategias de Enrutamiento)
 El comportamiento del sistema depende totalmente del tipo de _Exchange_ que configuremos. Tenemos 5 estrategias fundamentales.
 
-## 7.4.1 Fanaout (Difusión)
+## 7.4.1 Fanout (Difusión)
 - **Lógica:** El mensaje se envía a **todas** las colas conectadas al exchange, ignorando la clave del mensaje.
 - **Uso:** Ideal para patrones "Publish/Subscribe" donde varios sistemas deben reaccionar al mismo evento.
 - **Diagrama conceptual:** Un mensaje entra y se clona hacia la Cola 1 y la Cola 2 simultáneamente.
@@ -103,7 +103,7 @@ Esta distinción es crítica para entender el código:
 >**Analogía:** La _Conexión_ es la autopista (cable) que llega al servidor. Los _Canales_ son los carriles individuales por donde viajan los coches (mensajes). Se usa una sola conexión y múltiples canales para ser eficientes.
 
 ## 7.5.2 Desarrollo del Productor
-El objetivo del productos es conectarse y dejar un mensaje en una cola.
+El objetivo del productor es conectarse y dejar un mensaje en una cola.
 
 **Paso 1: Configurar la Conexión**
 Usamos una `ConnectionFactory` para definir los parámetros del productor.
@@ -120,7 +120,7 @@ Se recomienda usar la estructura `try (...)` de Java para que la conexión y el 
 ```java
 try (Connection connection = factory.newConnection();
      Channel channel = connection.createChannel()) {
-    ``` 
+``` 
 
 
 **Paso 3: Declarar la Cola (Idempotencia)**
@@ -128,6 +128,17 @@ Antes de enviar nada, debemos asegurarnos de que el destino existe.
 
 ```java
 channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+
+// queueDeclare(queue, durable, exclusive, autoDelete, arguments)
+
+// 1. queue (String): El nombre de la cola (ej: "mi_cola").
+// 2. durable (boolean): false = Si RabbitMQ se reinicia, la cola (y sus mensajes) DESAPARECEN. 
+//                       true = La cola se guarda en disco y sobrevive al reinicio.
+// 3. exclusive (boolean): false = Otros conexiones/canales pueden acceder a esta cola.
+//                         true = Solo ESTA conexión puede usarla (útil para colas temporales privadas).
+// 4. autoDelete (boolean): false = La cola se queda ahí aunque no haya nadie escuchando.
+//                          true = La cola se borra sola cuando el último consumidor se desconecta.
+// 5. arguments (Map): null = Sin configuración extra (se usa para TTL, longitud máxima, etc.).
 ``` 
 
 > **Concepto Clave (Idempotencia):** Esta operación es _idempotente_. Significa que si la cola ya existe, no hace nada; si no existe, la crea. Esto evita errores si ejecutas el programa múltiples veces.
@@ -173,6 +184,16 @@ Le indicamos al canal que empiece a consumir mensajes de la cola específica usa
 
 ```java
 channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -> { });
+
+// basicConsume(queue, autoAck, deliverCallback, cancelCallback)
+
+// 1. queue (String): De qué cola quieres leer.
+// 2. autoAck (boolean): true = "Modo disparo y olvido". RabbitMQ borra el mensaje en cuanto te lo envía, 
+//                       sin esperar a que le digas que lo procesaste bien. (Rápido pero arriesgado).
+//                       false = Tienes que enviar un 'ack' manual después de procesar.
+// 3. deliverCallback: La función (lambda) que se ejecuta CADA VEZ que llega un mensaje.
+// 4. cancelCallback: La función que se ejecuta si el servidor cancela al consumidor (raro, por ejemplo si la cola se borra).
+
 ``` 
 
 ## 7.5.4 Estrategias de Enrutamiento (Exchanges)

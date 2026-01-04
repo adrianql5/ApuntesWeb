@@ -92,6 +92,9 @@ $$L=(R*+SU*T)*SU*$$
 ## Ejemplo complejo
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251207213850.png)
 
+>[!Nota]
+> Cuando hice el ejercicio de arriba se me fue la pinza. En $ER_1$ donde pone un $+$ es una multiplicación y lo mismo en $ER_2$. $ER_1=(1+(00*10*11*0))*(00*1*)0*$. 
+
 # 3.4 Conversión de ER  a Autómatas Finitos
 Empleando estas reglas se puede construir un AFD con transiciones epsilon, suelen quedar autómatas gigantescos. Se puede simplificar después o también hay casos donde es obvio el autómata que reconocen
 

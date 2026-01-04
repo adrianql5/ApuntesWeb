@@ -5,12 +5,13 @@ title: "Instalación de Software"
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
 # 2.1 Formas de instalación
+
 Podemos clasificar la instalación en dos grandes familias según cómo nos llega el software:
 
-| **Método**                            | **Descripción**                                                                 | **Ventajas ✅**                                                                                                                   | **Inconvenientes ❌**                                                                                                         |
-| ------------------------------------- | ------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
-| **Paquetes Precompilados (Binarios)** | El programa ya viene "cocinado" y listo para ejecutarse. Es el estándar actual. | • **Instalación rápida.**<br><br>  <br><br>• Gestión automática de dependencias.<br><br>  <br><br>• Actualizaciones sencillas.   | • Menor optimización (genérico para todas las CPUs).<br><br>  <br><br>• Menos personalizable.                                |
-| **Desde Código Fuente (Compilación)** | Descargas el código "crudo" y tu ordenador lo traduce a lenguaje máquina.       | • **Máxima optimización** (adaptado a tu hardware específico).<br><br>  <br><br>• Puedes activar/desactivar funciones concretas. | • **Complejo y lento.**<br><br>  <br><br>• Gestión manual de errores.<br><br>  <br><br>• Difícil de desinstalar limpiamente. |
+| **Método**                                                                | **Descripción**                                                                                                     | **Ventajas ✅**                                                                                                                                                                                                                                           | **Inconvenientes ❌**                                                                                                                                                                                                                                                       |
+| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Paquetería / Binarios**<br><br>  <br><br>_(Estándar: .deb, .rpm, .exe)_ | El programa ya viene compilado ("cocinado") desde el servidor. Tú solo descargas el ejecutable listo para usar.     | • **Instalación rápida:** No consume CPU procesando.<br><br>  <br><br>• **Gestión de dependencias:** El gestor (APT/DNF) descarga las librerías necesarias automáticamente.<br><br>  <br><br>• **Actualizaciones sencillas:** Un comando actualiza todo. | • **Menor personalización:** Viene con las opciones que decidió el creador, no tú.<br><br>  <br><br>• **Optimización genérica:** Está hecho para funcionar en cualquier CPU, no exprime al 100% la tuya específica.                                                        |
+| **Código Fuente**<br><br>  <br><br>_(Compilación manual)_                 | Descargas el código "crudo" (texto legible por humanos) y tu ordenador lo traduce a lenguaje máquina (compilación). | • **Máxima optimización:** El programa se adapta a la arquitectura exacta de tu procesador.<br><br>  <br><br>• **Control total:** Puedes activar o desactivar funciones específicas antes de "cocinarlo".                                                | • **Lento y Complejo:** Tarda tiempo en compilar (CPU al 100%).<br><br>  <br><br>• **Dependencias manuales:** A menudo fallará si te falta una librería.<br><br>  <br><br>• **Difícil de desinstalar:** Si no usas herramientas extra, puede dejar "basura" en el sistema. |
 
 ## 2.1.1 Gestores de paquetes
 En la mayoría de distribuciones, usamos **Gestores de Paquetes**. Estos programas consultan una base de datos central (repositorios), descargan el software y lo instalan.
@@ -123,13 +124,13 @@ Aquí ya no usamos el nombre del archivo, sino el **nombre del paquete** (ej: `w
 
 ```bash
 dpkg -r wget
-     ```
+```
 
 2. **Purgar (`purge`):** Desinstala el programa y **borra también la configuración**. Limpieza total.
 
 ```bash
 dpkg -P wget
-      ```   
+```   
 
 ### Reconfiguración
 Si un paquete ya instalado da problemas o quieres cambiar sus opciones iniciales (como el idioma o la distribución de teclado):
@@ -326,7 +327,7 @@ nano
   Depends: libncursesw6
   Depends: libtinfo6
   Suggests: spell
-  ```
+```
 
 
 ### Política de Versiones (`policy`)
@@ -411,7 +412,6 @@ Ejecutamos el script `./configure` que viene con el código (generado por herram
 
 ## Compilación (`make`)
 El comando `make` lee el `Makefile` generado en el paso anterior y empieza a compilar.
-
 - **`make`**: Compila el código (traduce C/C++ a binario). Tarda desde segundos hasta horas.
 - **`make clean`**: Si la compilación falla o quieres empezar de cero, esto borra todos los archivos temporales creados.
 

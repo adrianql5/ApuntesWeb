@@ -59,7 +59,7 @@ Si esto falla estamos jodidos porque la tienes que configurar tu a mano completa
 
 Después le ponemos un nombre a la máquina e indicar el dominio. El nombre de la máquina (**hostname**) es como te llamas tú o como quieres que se le llame a tu PC para diferenciarlo de otros en la misma red (bastante más cómodo que andarle metiendo la ip para comunicarse con el). El dominio es como tu apellidos, si vas a usar tu pc para ti no tiene mucho sentido ponérselo. Sim embargo si estas en una empresa es bastante útil.
 
-Por último se fija el password del superusuario (root) y crear un usuario no privilegiado. 
+Por último se fija el password del superusuario (root) y se crea un usuario no privilegiado. 
 
 ## 1.2.2 Cuenta del superusuario
 Es un usuario especial que actúa como administrador del sistema. Tiene acceso a todos los ficheros y directorios del sistema, puede crear otros usuarios o eliminarlos. Además puede tanto borrar como instalar software del sistema o aplicaciones. Puede detener cualquier proceso que se está ejecutando en el sistema. Hasta puede detener y reiniciar el sistema.
@@ -78,7 +78,7 @@ Seleccionamos el huso horario. Y realizamos el particionado del disco (modo guia
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251204171009.png)
 
 ## 1.2.5 Particionado del disco
-Podemos optar por instalar todo el sistema en una sola partición, aunque no es nada recomendable (a ver en verdad es recomendable si no quieres romperte la cabeza o arriesgarte a joder todo el disco). Lo más recomendable es instalar diferentes directorios del sistema en diferentes particiones
+Podemos optar por instalar todo el sistema en una sola partición, aunque no es nada recomendable (a ver en verdad es recomendable si no quieres romperte la cabeza o arriesgarte a joder todo el disco). Lo más recomendable es instalar diferentes directorios del sistema en diferentes particiones.
 
 Para entender bien lo que es una **partición** imagínate que tu disco duro es una **nave industrial vacía**. Una partición es levantar paredes para dividir esa nave en **habitaciones separadas**. Físicamente sigue siendo el mismo edificio pero lógicamente, lo que ocurre en una habitación no afecta al resto. Si se inunda el baño (una partición), no se te van a mojar los muebles del salón.
 
@@ -94,7 +94,7 @@ Se recomienda poner directorios en diferentes particiones porque:
 	- Si lo tienes **separado:** tienes una partición para el sistema y otra diferentes para tus datos, por lo que puedes borrar, formatear y reinstalar el sistema operativo 50 veces en la primera partición y tus fotos en `/home` siguen intactas.
 
 - Caso de `/var`: Imagínate que un programa se vuelve loco y empiez a escribir errores en un archivo de texto sin parar
-	- **Todo en una partición:** el archivo crece hasta llenar el disco y el ordenador se bloque
+	- **Todo en una partición:** el archivo crece hasta llenar el disco y el ordenador se bloquea
 	- `/var` **separado:** el archivo llena `/var` pero `/` sigue con espacio y el ordenador sigue funcionando.
 
 ## 1.2.6 Fylesystem Hierarchy Standard
@@ -103,34 +103,35 @@ Se recomienda poner directorios en diferentes particiones porque:
 
 ### Las Herramientas (programas)
 En lugar de tener una carpeta por programa, Linux separa los archivos en diferentes "cajas" según quién los usa y para qué:
-- `bin` (Binaries): es la **caja de herramientas de emergencia**. Contiene lo mínimo para que el sistema funcione (como `ls` para listar archivos o `cp` para copiar). Si se rompe todo, esto debe estar disponible.
-- `/sbin`(System Binaries): son herramientas exclusivas para el **administrador del sistema**. Aquí están los comandos para formatear discos, configurar redes, etc. Un usuario normal no los puede usar.
+- `/bin/` (Binaries): es la **caja de herramientas de emergencia**. Contiene lo mínimo para que el sistema funcione (como `ls` para listar archivos o `cp` para copiar). Si se rompe todo, esto debe estar disponible.
+- `/sbin/`(System Binaries): son herramientas exclusivas para el **administrador del sistema**. Aquí están los comandos para formatear discos, configurar redes, etc. Un usuario normal no los puede usar.
 - `/usr/`(User System Resources): aquí es donde vive el 90% del software "normal". Es como el almacén general.
 	- `/usr/bin`: aquí están chrome, libreoffice, etc
 	- `/usr/local`: aquí va lo que instalar tú manualmente para no mezclarlo con lo que trae el sistema
-- `/opt`(Optional): es para software extraño o comercial que no sigue las reglas de Linux
+- `/opt`(Optional): es para software extraño o comercial que no sigue las reglas de Linux. Son aplicaciones que requieren un subdirectorio separado del resto.
 
 ### La sala de máquinas y configuración
 - `/boot`: es el **botón de encendido**. Contiene los mapas y las instrucciones exactas para arrancar el ordenador
-- `/etc`: es el **panel de control**. Aquí no hay programas, solo archivos de texto con configuraciones. Si por ejemplo quieres cambiar la IP, está en un archivo en `etc`.
-- `/lib`: son las **piezas de repuesto compartidas**. Los programas de `/bin` necesitan estas piezas para funcionar.
+- `/etc`: es el **panel de control**. Aquí no hay programas, solo archivos de texto con configuraciones. Si por ejemplo quieres cambiar la IP, está en un archivo en `etc`. Scripts de configuración.
+- `/lib`: son las **piezas de repuesto compartidas**. Los programas de `/bin` necesitan estas piezas para funcionar. Librerías.
 
 ### Los despachos
-- `/home`: es tu **despacho personal**. Aquí hay una carpeta con tu nombre. Es el único sitio donde guardar fotos, descargar y documentos libremente, fuera de aquí no tienes permiso para escribir.
+- `/home`: es tu **despacho personal**. Aquí hay una carpeta con tu nombre. Es el único sitio donde guardar fotos, descargar y documentos libremente, fuera de aquí no tienes permiso para escribir. Es el directorio donde están los directorios de los distintos usuarios.
 - `/root`: **despacho blindado del superusuario**.
 
 ### El almacén dinámico y temporal
 - `/var` (variable): piensa en esto como el **buzón de correos y el libro de reclamaciones**. Aquí se guardan cosas que crecen y cambian constantemente
 - `/tmp`(temporal): es la **pizarra borrable**. Los programas escriben notas aquí mientras trabajan cuando reinicias el ordenador, todo lo que hay aquí se borra.
+- `/srv`: datos de servicios proporcionados por el sistema
 
 ### Las conexiones externas
-- `/media`: es automático. Si metes un usb, el sistema crea una carpeta aquí automáticamente para que veas el contenido
-- `/mnt`: es manual. Se usa históricamente para que el administrador "pegue" discos duros o redes temporalmente
+- `/media`: es automático. Si metes un usb, el sistema crea una carpeta aquí automáticamente para que veas el contenido. Es el punto de montaje para medios removibles
+- `/mnt`: es manual. Se usa históricamente para que el administrador "pegue" discos duros o redes temporalmente. Es el punto de montaje para otros sistemas temporales (por ejemplo, el montaje de una unidad de red, de una partición de otro sistema operativo, etc)
 
 ### Los fantasmas (directorios virtuales)
 Son complejos de entender puesto que **no existen en el disco duro**. Son ilusiones creadas por el sistema operativo en la memoria RAM.
-- `/proc` y `/sys`: son una ventana al cerebro del ordenador en tiempo real, si entras en `/proc/cpuinfo`, no lees un archivo guardo, lees directamente lo que el procesador le está diciendo al SO en ese milisegudno
-- `/dev` (devices): en linux, **todo es un archivo**. Tu ratón es un archivo, tu disco duro es un archivo. Están aquí.
+- `/proc` y `/sys`: son una ventana al cerebro del ordenador en tiempo real, si entras en `/proc/cpuinfo`, no lees un archivo guardo, lees directamente lo que el procesador le está diciendo al SO en ese milisegudno. `/proc` contiene información del sistema y `/sys` contiene información de dispositivos 
+- `/dev` (devices): en linux, **todo es un archivo**. Tu ratón es un archivo, tu disco duro es un archivo. Es un directorio que contiene seudoficheros de acceso a periférico
 
 
 ## 1.2.7 Esquemas de particionamiento
@@ -147,7 +148,7 @@ El objetivo es la simplicidad y proteger tus datos, por lo que se recomiendan 3 
 
 ### Sistema multiusuario
 El objetivo es la seguridad y que el servidor nunca se apague. Hay que evitar que uno de los múltiples usuarios sea capaz de cargarse todo el sistema, por ello hay múltiples particiones:
-- Separar `/var` y `/tmp` , imágina que un usuario ejecuta un programa mal hecho que empieza a generar errores infinitos o a descargar archivos basura sin parar. **Si todo está junto** se llena el disco entero y el sistema operativo se queda sin espacio y el **servidor colapsa**. Si tenemos `/var` separado el archivo de errores solo llena la partición, sin afecta a `/` el servidor seguirá funcionando.
+- Separar `/var` y `/tmp` , imágina que un usuario ejecuta un programa mal hecho que empieza a generar errores infinitos o a descargar archivos basura sin parar. **Si todo está junto** se llena el disco entero y el sistema operativo se queda sin espacio y el **servidor colapsa**. Si tenemos `/var` separado el archivo de errores solo llena la partición, sin afectar a `/` el servidor seguirá funcionando.
 - Separar `/usr` sirve para protegerse de virus y hackers, puesto que es donde viven los programas ejecutables. Si lo pones en una partición aparte, puedes activarla como **solo lectura**, esto implica que una vez instalado el sistema, pones un candado a esa partición. Aunque entre un virus o un hacker, no podrá modificar los archivos ejecutables para infectarlos, porque estará prohibido. Tus usuarios no podrán bajarse apps de forma libre.
 
 
@@ -205,7 +206,7 @@ Un **proxy** es un intermediario.
 ## 1.2.12 Instalación del gestor de arranque
 Podemos tener diferentes distribuciones de Linux y Windows en el mismo ordenador, cada una con sus correspondientes particiones. El gestor de arranque (cargador o *bootloader*) nos permite seleccionar el SO  a arrancar.
 
-- Las distribuciones **Linux** usando el cargador **GRUB** (GRand Unified Bootloader)
+- Las distribuciones **Linux** usan el cargador **GRUB** (GRand Unified Bootloader)
 - Cuando el sistema se inicia, la **BIOS** carga el gestor de arranque que nos permite seleccionar el SO y a continuación transfiere el control al programa de inicio del correspondiente SO (localizado en /boot)
 
 Tenemos dos posibilidades a la hora de instalarlo:
@@ -258,13 +259,19 @@ Imaginate que tienes dos discos duros, son como dos barras de plastilina dura y 
 Al arrancar el ordenador se realizan las siguientes operaciones:
 
 ## BIOS/UEFI (El vigilante de seguridad)
-El vigilante (BIOS) llega al edificio oscuro:
-- **Chequeo:** comprueba que el edificio no se cae (mira si hay RAM, teclado, pantalla).
-- **Decisión:** mira sus instrucciones: ¿A quién le doy las llaves?. Puede dárselas al disco duro, al USB o a la red.
-- **Acción:** encuentra el disco rudo principal y llama al encargado de la puerta (el **MRB/GPT**).
+El vigilante (firmware de la placa base) llega al edificio oscuro y empieza su turno:
+- **Chequeo (POST):** Comprueba que el edificio no se cae (mira si la RAM, el teclado y la pantalla funcionan).
+- **Decisión:** Mira su lista de tareas para ver el orden de arranque. ¿A quién le doy las llaves? ¿Al disco duro, al USB o a la red?
+- **Lectura del Disco:** Encuentra el disco duro principal. Aquí cambia según el sistema:
+    - **Si es MBR (Antiguo):** El vigilante va a la puerta de entrada (primer sector) y despierta a quien esté allí durmiendo (ejecuta el código ciego del MBR).
+    - **Si es GPT (Moderno):** El vigilante **lee un mapa en la pared** (La Tabla de Particiones GUID). El mapa le dice: _"El Recepcionista está en la oficina 1"_. El vigilante va allí y lo busca.
+
 
 ## Gestor de Arranque - GRUB (El recepcionista)
-El vigilante se pira y deja al recepcionista (GRUB). Su trabajo es mostrar un menú: ¿Qué sistema operativo quieres hoy?. Una vez eliges, el recepcionista va al almacén (`/boot`), saca al **Gerente** (**kernel**) y lo despierta (carga el kernel en memoria).
+Una vez que el vigilante ha localizado y despertado al recepcionista (GRUB), el vigilante se retira.
+- **El Menú:** El trabajo del recepcionista es saludarte y mostrarte un menú: _"¿Qué sistema operativo quiere usar hoy?"_.
+- **La Elección:** Si no tocas nada, elige la opción por defecto. Si eliges tú (ej. Linux), el recepcionista mira en su lista dónde están las llaves de ese sistema.
+- **El Traspaso:** Va al almacén (`/boot`), saca al **Gerente** (**Kernel**) y lo despierta (carga el kernel en la memoria RAM), cediéndole el control total del edificio.
 
 ## El kernel e initframs (El gerente y su mochila)
 El **kernel** es el cerebro del sistema, el gerente. Pero tiene un problema. Imagina que las herramientas para abrir las puertas del centro comercial están guardadas dentro del centro comercial:
@@ -297,7 +304,7 @@ Paralelismo: antiguamente se despertaba a los empleados uno a uno. `systemd` es 
 
 `systemctl status ssh`  comprueba si hay servidor de ssh.
 
-Si haces `systemctl stop ssh`, el servicio se para ahora. Pero si no haces `disable`, al reiniciar el PC, volverá a arrancar.
+Si haces `systemctl stop ssh`, el servicio se para ahora. Pero si no haces `disable`, al reiniciar el PC, volverá a arrancar. También existe `systemctl restart ssh`
 
 ## Los Targets (Los niveles de alerta)
 `systemd` puede poner el ordenador en diferetes modos o estados de ánimo, llamados Targets.
@@ -309,7 +316,7 @@ Si haces `systemctl stop ssh`, el servicio se para ahora. Pero si no haces `disa
 **Graphical (Modo Normal):** arranca todo lo anterior + la interfaz gráfica (ventanas, ratón, escritorio). Es como usas tu PC normalmente.
 
 >[!Nota]
-> **Shell** (cáscara, concha). Si el **kenerl** (núcleo) es la parte blanda y vital de una nuez, el **Shell** es la cáscara dura que lo rodea.
+> **Shell** (cáscara, concha). Si el **kernel** (núcleo) es la parte blanda y vital de una nuez, el **Shell** es la cáscara dura que lo rodea.
 >
 > Un **shell** es un programa informático que actúa como **intérprete de comandos**. Es el intermediario o traductor entre tú y el kernel. 
 >
@@ -345,7 +352,7 @@ Para verificar esta detección y diagnosticar problemas, disponemos de herramien
 
 
 ## 1.4.2 Información de Bajo Nivel (BIOS/DMI)
-El comando `demicode` vuelca la información de la **DMI** (Desktop Management Interface). Es fundamental porque nos dice **qué hardware físico hay conectado**, incluso si el sistema operativo no tiene drivers para usarlo.
+El comando `dmidecode` vuelca la información de la **DMI** (Desktop Management Interface). Es fundamental porque nos dice **qué hardware físico hay conectado**, incluso si el sistema operativo no tiene drivers para usarlo.
 
 - **¿Qué muestra?** Modelo de placa base, slots de RAM ocupados/libres, versión de BIOS, números de serie, etc.
 - **Uso común:** Saber cuánta RAM máxima soporta tu placa o qué modelo exacto de RAM tienes sin abrir el PC.
@@ -428,7 +435,7 @@ Módulos del Kernel (`*.ko`)
 Son los "drivers" de Linux. No son programas normales, son piezas de código que se insertan en el kernel vivo.
 - `lsmod`: Lista lo que está cargado (ej. `nvidia`, `snd_hda_intel`).
 - `modprobe [modulo]`: Carga un módulo (inteligente, carga dependencias).
-- `rmmod [modulo]`: Descarga un módulo (si no se está usando).
+- `rmmod [modulo]`: Elimina un módulo (si no se está usando).
 
 ### Directorios virtuales
 Son directorios mágicos. **No están en el disco duro**, sino en la memoria RAM. Son la forma que tiene el Kernel de "hablar" contigo.

@@ -70,23 +70,80 @@ Se traduce así:
 5. Si la máquina llega a un estado final ($q_f \in F$) manteniendo los muros intactos ($[x_1 ... x_2]$), entonces **acepta** la palabra.
 
 # 7.3 Protips
-#### 1. El Mensajero (Commutation)
-Es el truco más importante. Si necesitas generar $a^n b^n c^n$, no puedes hacerlo de golpe.
+## 7.3.1 El Mensajero (Commutation)
+**Problema:** Tienes variables mezcladas (ej: $A B A B$) pero necesitas ordenarlas (ej: $A A B B$). En una Gramática Independiente del Contexto (CFG) no puedes cambiar el orden una vez generado. En una GSC, sí.
 
-Generas $a B C$ y luego mueves la $B$ o la $C$ a su sitio.
+**La Estrategia:** Creas una regla que permite que dos variables intercambien lugares.
 
-- **Regla de tráfico:** $C B \to B C$ (Permite que la C "adelante" a la B).
+### Cómo:
+1. **Generación:** Generas pares o tríos desordenados.
+2. **Tráfico:** Usas reglas de la forma $XY \to YX$ para mover la variable "mensajera" a su posición correcta.
+3. **Conversión:** Solo cuando están en orden, se convierten en terminales.
 
-#### 2. El Muro (Boundary)
+### Ejemplo Práctico: $L = \{a^n b^n c^n\}$
+Queremos generar $aabbcc$.
 
-A veces necesitas saber dónde acaba la cadena para convertir variables en letras finales. Usamos marcadores de inicio/fin.
+Intentamos generar bloques $ABC$.
+1. **Regla de Inicio:** $S \to aSBc \mid abc$ (Esto genera algo como $a(abc)Bc \to aabcBc$).
+    - _Problema:_ Tenemos una $c$ antes de una $B$. El orden está mal: $...cBc...$
 
-- _Ejemplo:_ $\# A B C \#$. Cuando una variable toca la pared ($\#$), se transforma.
+2. **Regla del Mensajero:** $cB \to Bc$.    
+    - _Traducción:_ Si una $c$ ve una $B$ a su derecha, le dice "Pasa tú primero". La $B$ viaja a la izquierda sobre la $c$.
+
+Derivación visual:
+$$aab\mathbf{cB}c \xrightarrow{cB \to Bc} aab\mathbf{Bc}c$$
+
+> **Resultado:** Ahora las $B$ están con las $b$ y las $c$ con las $c$.
+
+## 7.3.2 El Muro (Boundary)
+**Problema:** En las GSC, las reglas son peligrosas. Si tienes la regla $A \to a$, podrías aplicarla demasiado pronto, antes de que la cadena esté ordenada.
+
+**La Estrategia:** Usar símbolos especiales (Centinelas) que marcan el principio o el final de la cadena. Las variables no se convierten en terminales hasta que tocan "El Muro", y luego el cambio se propaga como un efecto dominó.
+
+### Cómo funciona:
+1. **Colocar el Muro:** Tu regla inicial pone topes. $S \to \# T \#$.
+2. **Contacto:** Una variable solo cambia si toca el muro. $B\# \to b\#$.
+3. **Propagación:** El cambio se contagia de derecha a izquierda (o viceversa). $A b \to a b$.
+
+### Ejemplo Práctico: Convertir variables a letras ordenadamente
+Imagina que tienes la cadena $AAABBB$. Quieres pasarla a minusculas ($aaabbb$) pero solo si **todo** está listo.
+1. Colocamos muro al final: $AAABBB\#$
+2. **Regla de Gatillo:** $B\# \to b\#$ (La última B toca el muro y se transforma).
+3. Regla de Dominó: $Bb \to bb$ (Una B mayúscula ve una b minúscula a su derecha y se transforma).
+$$AAAB\mathbf{Bb} \to AAAB\mathbf{bb}$$  
+4. Regla de Cruce de Frontera: $Ab \to ab$ (El cambio pasa de las B a las A).
+$$AA\mathbf{Ab}bb \to AA\mathbf{ab}bb$$
+> **Por qué es útil:** Garantiza que no te queden letras sueltas en medio de variables no procesadas.
 
 
-#### 3. El Clonador
-Para $ww$ o $a^{2n}$. Una variable se divide en dos, o transporta una copia de sí misma.
+## 7.3.2 El Clonador
+**Problema:** Necesitas duplicar información exacta, como en el lenguaje $L = \{ww\}$ (ej: $abcabc$) o $a^{2n}$.
 
+**La Estrategia:** Una variable genera un par (el original y la copia) y una de ellas actúa como "Mensajero" viajando hasta su nueva posición.
+
+### Cómo funciona:
+Para hacer $ww$ (copiar la palabra exacta):
+1. **Generar Pares:** Por cada letra que quieras añadir, generas su par.
+    - Si quieres 'a', generas $X_a Y_a$.
+2. **Transporte:** $Y_a$ es el clon. Debe viajar saltando sobre las $X$ hasta llegar a la segunda mitad de la palabra.    
+3. **Regla de Salto:** $Y_a X_b \to X_b Y_a$ (El clon salta sobre otras letras base).
+
+### Ejemplo Práctico: $L = \{ww\}$ con $\Sigma=\{0, 1\}$
+Queremos generar $0101$.
+
+1. **Semilla:** $S \to C_0 S \mid C_1 S \mid \dots$ (Donde $C_0$ representa el par "Original 0 + Clon 0").
+    - Digamos que $C_0$ en realidad genera $X_0 Y_0$.
+
+2. **Generación:** Generas $X_0 Y_0 X_1 Y_1$.    
+    - Aquí tienes "Original 0", "Clon 0", "Original 1", "Clon 1".
+    - Orden actual: 0, 0, 1, 1.
+    - Orden deseado: 0, 1, 0, 1.
+
+3. **Movimiento (Mensajero):** El $Y_0$ (Clon 0) debe moverse a la derecha.    
+    - Regla: $Y_0 X_1 \to X_1 Y_0$.
+    - Cadena: $X_0 \mathbf{Y_0 X_1} Y_1 \Rightarrow X_0 \mathbf{X_1 Y_0} Y_1$.
+
+4. **Finalización:** Ahora tienes $X_0 X_1 Y_0 Y_1$ (Grupo 1 separado de Grupo 2). Los conviertes a terminales.
 
 # 7.4 Identificar Grámaticas y Lenguajes
 ## Gramáticas

@@ -48,13 +48,12 @@ Es la **máquina que verifica**. Le das una cadena y te dice "Sí, pertenece al 
 # 1.3 El "Diccionario" de la Asignatura
 **Peligro de Examen:** Confundir estos términos es la causa #1 de suspensos
 
-| **Concepto**         | **Símbolo** | **Definición Formal**                                                 | **💡 Analogía Práctica**                                                                |
-| -------------------- | ----------- | --------------------------------------------------------------------- | --------------------------------------------------------------------------------------- |
-| **Alfabeto**         | $\Sigma$    | Conjunto finito y no vacío de símbolos (ej: $\{0, 1\}$ o $\{a, b\}$). | Las **piezas de Lego** disponibles en la caja. No puedes usar piezas que no estén aquí. |
-| **Palabra / Cadena** | $w, x, y$   | Secuencia finita de símbolos del alfabeto.                            | Una **torre** específica construida con esas piezas.                                    |
-| **Longitud**         | $           | Número de símbolos de w                                               | $                                                                                       |
-| **Lenguaje**         | $L$         | Conjunto de palabras ($L \subseteq \Sigma^*$).                        | La **foto de la colección** de todas las torres que hemos decidido que son válidas.     |
-
+| **Concepto** | **Símbolo** | **Definición Formal**                                    | **💡 Analogía Práctica**                       |
+| ------------ | ----------- | -------------------------------------------------------- | ---------------------------------------------- |
+| **Alfabeto** | $\Sigma$    | Conjunto finito y no vacío de símbolos (ej: $\{0, 1\}$). | Las **piezas de Lego** disponibles.            |
+| **Palabra**  | $w, x, y$   | Secuencia finita de símbolos del alfabeto.               | Una **torre** construida con esas piezas.      |
+| **Longitud** | \|w\|       | Número de símbolos de $w$.                               | La **altura** de esa torre (nº de piezas).     |
+| **Lenguaje** | $L$         | Conjunto de palabras ($L \subseteq \Sigma^*$).           | La **foto de la colección** de torres válidas. |
 
 # 1.4 Conceptos Críticos y Operaciones
 ## 1.4.1 El error más común: Cadena Vacía vs. Lenguaje Vacío

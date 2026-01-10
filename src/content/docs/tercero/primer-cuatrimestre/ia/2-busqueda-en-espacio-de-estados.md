@@ -23,8 +23,8 @@ $$f(n) = g(n) + h(n)$$
 
 >[!Info]
 >**Tipos de grafos generados en los procesos de búsqueda:**
->- **Explícito:** Es un grafo que **ya está construido y guardado en la memoria** del ordenador antes de empezar a buscar nada.
->- **Implícito:** Es un grafo que **no existe en memoria**, sino que se va **generando a medida que avanzas**. Se define mediante reglas.
+>- **Explícito:** Es la **representación teórica** o virtual del espacio de estados completo. Se define únicamente mediante el **estado inicial** y los **operadores** (reglas de transición), ya que sus nodos se generan dinámicamente bajo demanda y no se almacenan en memoria debido a su tamaño potencialmente infinito.
+>- **Implícito:** Es el **subgrafo real** que el algoritmo de búsqueda ha generado y **almacenado en la memoria** del ordenador durante su ejecución. Está formado por los nodos que han sido visitados o expandidos (listas ABIERTA y CERRADA) en el intento de encontrar la solución.
 
 # 2.2 Estrategias de Búsqueda:  Paso a Paso
 Las estrategias se dividen en **Ciegas** (sin información del dominio) y **Heurísticas** (con información/estimaciones).

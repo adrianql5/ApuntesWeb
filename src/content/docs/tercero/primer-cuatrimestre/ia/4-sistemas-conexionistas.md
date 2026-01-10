@@ -8,9 +8,6 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 # 4.1 Introducción: Del Símbolo a la Neurona
 A diferencia de los sistemas expertos (donde un humano programa las reglas), los sistemas conexionistas se inspiran en la estructura física del cerebro para **aprender** esas reglas a partir de ejemplos.
 
->[!Nota]
-> En las diapositivas de mierda de la asignatura van saltando de sistema conexionista a red neuronal de forma muy alegre. Conceptualmente son lo mismo, capaz que lo dicen así porque interpretan que los sistemas conexionistas son el paradigma y las **RNA** la implementación.
-
 - **Dualidad**: Combinan la **Bioinspiración** (imitan el cerebro) con la **Tecnoinspiración** (modelos matemáticos para el cálculo) .
 
 - **Evolución Histórica**:    
@@ -18,9 +15,6 @@ A diferencia de los sistemas expertos (donde un humano programa las reglas), los
     - _1957_: El **Perceptrón** de Rosenblatt (primera regla de aprendizaje).
     - _1969_: Minsky y Papert demuestran las limitaciones (problema XOR), provocando un "invierno de la IA".
     - _1986_: Renacer con el algoritmo de Retropropagación (Backpropagation) para redes multicapa 2.
-
->[!Nota]
-> Peceptrón es lo mismo que neurona artificial pero estos fenómenos siempre tienen que estar dando la nota con los nombres. Aunque bue hay un pequeño matiz, normalmente te refieres a una **neurona artificial con función de activación escalón (binaria)** si hablas de perceptrón.
 
 # 4.2 La Neurona Artificial: Unidad Básica
 Al igual que en biología, la neurona es la unidad de procesamiento. Existe una analogía directa entre las partes biológicas y el modelo matemático:
@@ -49,6 +43,14 @@ Determinan la salida final de la neurona:
 2. **Lineal Rectificada (ReLU)**: Si $z < 0$ sale 0; si $z \ge 0$ sale $z$ ($y = \max(0, z)$). Actúa como un filtro de "pase". Si la señal es relevante (positiva), la deja pasar tal cual; si es irrelevante (negativa), la anula por completo.
 3. **Sigmoidal**: Transforma la salida en un valor suave entre 0 y 1 (probabilidad). Fórmula: $y = \frac{1}{1+e^{-z}}$. En lugar de decir "Es un gato" (1) o "No es un gato" (0), la neurona dice "Hay un 85% de probabilidad de que sea un gato" (0.85).
 
+>[!Danger]
+>Cuidado con la **terminología**, en función de la función de activación que se use, cambia el nombre de la neurona.
+>
+>|**Nombre**|**Función de Activación (f(z))**|**Salida**|**Interpretación**|
+|---|---|---|---|
+|**Regresor Lineal**|**Identidad** (Ninguna)<br><br>  <br><br>$f(z) = z$|Números Reales<br><br>  <br><br>$(-\infty, +\infty)$|**Predicción**<br><br>  <br><br>"La casa vale 250.000€"|
+|**Regresor Logística**|**Sigmoide**<br><br>  <br><br>$f(z) = \frac{1}{1+e^{-z}}$|Probabilidad<br><br>  <br><br>$(0, 1)$|**Clasificación Suave**<br><br>  <br><br>"Hay un 85% de probabilidad de que sea spam"|
+|**Perceptrón**|**Escalón** (Step)<br><br>  <br><br>$f(z) = 1$ si $z>0$|Binaria<br><br>  <br><br>$\{0, 1\}$|**Clasificación Dura**<br><br>  <br><br>"Es spam (1). Punto."|
 
 Se aplican **al final del procesamiento de la neurona**, justo después de calcular la suma ponderada y antes de enviar la señal a la siguiente capa.
 
@@ -221,29 +223,15 @@ La Solución: La imagen muestra dos líneas (una naranja y una azul).
     - Su trabajo es hacer una operación **AND**: Solo se activa si la Naranja dice "SÍ" (estamos encima de la primera línea) **Y** la Azul dice "SÍ" (estamos debajo de la segunda línea).
 
 
-# 4.7 Caso Real Más Complejo (No Entra)
-[¿Qué es una Red neuronal](https://www.youtube.com/watch?v=jKCQsndqEGQ)
+# 4.7 Neurona de BIAS
+Matemáticamente, el bias es el término $b$ en la ecuación de una recta:
+$$y = m \cdot x + b$$
+En una neurona, la fórmula es:
+$$z = (w_1 \cdot x_1 + \dots) + \mathbf{b}$$Sirve para **desplazar** la función de activación hacia la izquierda o la derecha.En teoría, la fórmula es $Sumatoria + b$. Pero en programación (y álgebra lineal), sumar un número suelto $b$ al final de una multiplicación de matrices es molesto computacionalmente. Preferimos que todo sean multiplicaciones ordenadas.
 
-### Descripción del problema
-Detectar números dibujados para decir a que carácter se corresponden. Nuestro cerebro nada más ve un 3 dibujado sabe que es un 3, pero a un ordenador esto le puede costar un poco más. Por ello partimos de una cuadrícula de píxeles con diferentes valores de iluminación.
+Para arreglar esto, usamos un **truco arquitectónico**: Inventamos una "Neurona de Bias".
+- **Qué es:** Es una neurona de entrada extra que añadimos artificialmente a la capa.3
+- **Su valor:** Siempre vale **1**. Nunca cambia.
+- **Su peso:** El peso ($w_0$) que conecta esta neurona falsa con la siguiente capa **es el valor del bias**.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251103104552.png)
-
-## Cómo aborda la Red Neuronal el Problema
-Empleando la estructura multicapa
-
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251103104724.png)
-
-Para ellos tenemos las neuronas de entrada, que se corresponden a cada uno de los píxeles anteriores. Estas neuronas toman un valor entre 0 y 1 y son encargadas de transmitir su valor a las neuronas de cada capa intermedia. Para ello podemos pensar el problema subdividiendo lo qué es un número para identificar patrones. Por ejemplo un 8 sería un círculo arriba un círculo abajo: 
-
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251103105102.png)
-
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251103105122.png)
-
-Y podemos también subdividir este subpatrón en otro más pequeño, de forma que las neuronas de la segunda capa lo detecten. 
-
-Cada una de las líneas que unen cada nodo son los pesos y toman ciertos valores para que se activen las neuronas. Nuestro objetivo es que en cada capa se activen determinadas neuronas, la función que determina si se activa o no no es más que la suma de cada termino de entrada por su correspondiente peso. 
-
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251103105925.png)
-
-Y para calcular esos pesos, debemos entrenar a la red neuronal, usando el método del descenso gradiente. Esto nos permitirá ir modificando los pesos para que de una solución válida mientras que la red siga fallando (por ello tenemos un conjunto de datos de entrenamiento y uno de prueba). La forma de optimizar estos pesos se verá en el siguiente tema.
+Estas neuronas no se cuentan como el resto de neuronas, por si preguntan en el test el número de neuronas de una red.

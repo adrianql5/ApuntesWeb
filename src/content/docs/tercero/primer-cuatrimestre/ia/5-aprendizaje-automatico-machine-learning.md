@@ -179,7 +179,10 @@ $$\theta_j := \theta_j - \alpha \frac{\partial}{\partial \theta_j} J(\theta_0, \
 - _Conexión_: Este es el mismo principio matemático que usaba el Perceptrón para actualizar sus pesos ($w_{nuevo} = w_{viejo} + \Delta w$).
 
 
-En modelos simples, como el perceptrón, el regresor lineal (tambíen polinómico y multivariable) y el regresor logístico la función de coste es convexa y converge, como en la imagen.
+En modelos simples, como el perceptrón, el regresor lineal (tambíen polinómico y multivariable) y el regresor logístico la función de coste es convexa y converge, como en la imagen. 
+
+>[!Nota]
+>Tras revisar el examen del 2021 el profesor considera que la función de coste no tiene por qué ser ni convexa ni cóncava, el motivo ni puta idea supongo que usará un error distinto al MSE. Es bastante loco.
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260110105920.png)
 
@@ -221,6 +224,8 @@ Ocurre cuando el modelo es **demasiado complejo** y sensible. Presta tanta atenc
 - _Síntoma_: Error bajísimo en entrenamiento, pero altísimo en datos nuevos (falla al generalizar).
 
 
+La primera línea representa la regresión lineal y la segunda la logística.
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260110115630.png)
 
 # 5.7 Solución: Regularización
 ¿Cómo evitamos el Overfitting si queremos usar modelos complejos (muchas variables)?
@@ -248,3 +253,6 @@ El papel de Lambda ($\lambda$): El tamaño de la multa. El parámetro $\lambda$ 
     - _Consecuencia:_ El modelo hace zig-zags locos para tocar todos los puntos. Es **demasiado complejo** (riesgo de _Overfitting_).
 
 La regularización busca el equilibrio perfecto (un $\lambda$ intermedio) donde el modelo acierte lo suficiente (bajo error) pero manteniendo una curva suave (pesos bajos) para poder generalizar bien con datos nuevos. Reducir varianza, atenua el efecto de la correlación entre predictores y minimiza la influencia en el modelo de los predictores menos relevantes. Por lo general, aplicando regularización se consiguen modelos con mayor poder predictivo (generalización).
+
+
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260110115720.png)

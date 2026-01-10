@@ -154,9 +154,6 @@ Es fundamental entender que programar un Sistema Experto no es programar un algo
 
 
 # 3.7 CLIPS (C Language Integrated Production System)
->[!Nota]
->Esto no debería de caer en el final, pero más vale prevenir que curar
-
 ## ¿Qué es CLIPS?
 Es una herramienta de software diseñada para desarrollar **Sistemas Expertos** y sistemas basados en reglas. Funciona mediante un paradigma de **programación declarativa**: tú dices _qué_ sabes (hechos) y _qué_ hacer si ocurren ciertas cosas (reglas), y el motor decide _cuándo_ hacerlo.
 

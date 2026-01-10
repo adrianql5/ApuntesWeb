@@ -128,7 +128,6 @@ Una vez compiladas las clases, se usa el compilador RMI para generar los proxies
 
 # 3.5 El Registro y la Puesta en Marcha
 ## 3.5.1 El RMI Registry
-
 Es un servicio simple que se ejecuta por defecto en el puerto TCP 1099. Actúa como un mapa de `String` $\rightarrow$ `Objeto`.
 - Se puede iniciar desde consola: `rmiregistry`
 -  O desde código Java: `LocateRegistry.createRegistry(puerto)` 

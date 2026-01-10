@@ -340,7 +340,7 @@ synchronized(objetoCerrojo) {
 }
 ```
 
-2.  **Método Sincronizado:** Todo el método es crítico; el cerrojo es el propio objeto (`this`) .
+2.  **Método Sincronizado:** Todo el método es crítico; el cerrojo es el propio objeto (`this`) . Por lo que no se puede usar ningún otro método del código mientras esté ocupado este.
 ```java
 public synchronized void metodo() { ... }
 ``` 

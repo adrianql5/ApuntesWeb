@@ -75,7 +75,7 @@ No "matamos" procesos, les enviamos **señales**. El proceso recibe la señal y 
 | **9**  | **SIGKILL** | `kill -9 PID`     | "¡MUERE!"            | **Brutal.** El Kernel arranca el proceso de la CPU. Puede corromper datos.          |
 | **2**  | **SIGINT**  | `Ctrl + C`        | Interrumpir          | Cancela el comando actual en terminal.                                              |
 | **1**  | **SIGHUP**  | -                 | Recargar             | Se usa para reiniciar _daemons_ y que relean su configuración sin detenerse.        |
-| **20** | **SIGTSTP** | `Ctrl + Z`        | Pausa                | Detiene el proceso y lo deja en segundo plano (estado T).                           |
+| **20** | **SIGSTOP** | `Ctrl + Z`        | Pausa                | Detiene el proceso y lo deja en segundo plano (estado T).                           |
 
 ### Comandos de Envío
 - **`kill [señal] PID`**: Envía señal a un ID específico.
@@ -265,21 +265,20 @@ Solo el propietario o `root` pueden cambiarlos.
 
 
 ### Permisos Especiales
-Afectan a la ejecución y seguridad del sistema.
+Afectan a la ejecución y seguridad del sistema. Funcionan mediante **UID** (User ID) y **GID** (Group ID), los números internos que Linux usa para identificar usuarios y grupos.
 
-Linux no le importan los nombres como "Juan" o "María"; solo entiende de números.
-- **UID (User ID):** Es el número de identificación único de un usuario.
-    - El usuario **root** (superadministrador) siempre tiene el UID `0`.
-    - Los usuarios normales suelen empezar desde el `1000`.
-- **GID (Group ID):** Es el número de identificación del grupo.
+**Regla visual (Mayúsculas vs Minúsculas):** Estos permisos se "superponen" visualmente sobre el permiso de ejecución (`x`).
+- **Minúscula (`s`, `t`):** El permiso especial está activo **Y** hay permiso de ejecución (`x`). (Correcto).
+- **Mayúscula (`S`, `T`):** El permiso especial está activo **PERO NO** hay ejecución. (Suele ser un error o inútil; piensa en **S**top).
 
 **Ejemplo:** Cuando haces un `ls -l`, tú ves `luis`, pero el sistema internamente está chequeando el número `1001`.
 
-| **Permiso**    | **Letra**      | **Valor Octal** | **Descripción**                                                                                               |
-| -------------- | -------------- | --------------- | ------------------------------------------------------------------------------------------------------------- |
-| **SetUID**     | `s` (en user)  | 4000            | El proceso se ejecuta con los permisos del **propietario** del fichero (ej. `passwd`).                        |
-| **SetGID**     | `s` (en group) | 2000            | El proceso se ejecuta con los permisos del **grupo** del fichero.                                             |
-| **Sticky Bit** | `t`            | 1000            | Usado en directorios (ej. `/tmp`). Solo el dueño del archivo o del directorio puede borrar un fichero dentro. |
+| **Permiso**    | **Letra** | **Valor Octal** | **Descripción**                                                                                                                                                           |
+| -------------- | --------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **SetUID**     | `s` / `S` | 4000            | El proceso se ejecuta con los permisos del **propietario** (ej. `passwd`). Se ve en el bloque de _User_.                                                                  |
+| **SetGID**     | `s` / `S` | 2000            | **Archivos:** Se ejecuta con permisos del grupo.<br><br>  <br><br>**Directorios:** Los archivos nuevos **heredan el grupo** de la carpeta. Se ve en el bloque de _Group_. |
+| **Sticky Bit** | `t` / `T` | 1000            | Usado en directorios (ej. `/tmp`). Solo el dueño del archivo puede borrarlo, aunque otros tengan permiso de escritura. Se ve en el bloque _Others_.                       |
+
 - **Fijar:** `chmod u+s file`, `chmod g+s file`, `chmod +t dir`.
 
 >[!Info]
@@ -674,6 +673,8 @@ Son scripts más amigables que hacen preguntas interactivas.
 - **`passwd [usuario]`**: Cambia la contraseña.
     - `-e`: Fuerza al usuario a cambiarla en el próximo inicio de sesión.
 
+- `gpasswd`: Para cambiar la contraseña de un grupo
+
 - **`chage`**: Gestiona la caducidad (expiration) de la contraseña.    
     - _Ejemplo:_ Obligar a cambiar la clave cada 90 días.
 
@@ -805,9 +806,7 @@ _Atención:_ Si usas DHCP, este archivo suele sobrescribirse automáticamente co
 
 
 ## 6.5.3 Comandos de Gestión y Configuración
-Aunque existen herramientas modernas (como `ip`), el texto se centra en las herramientas clásicas ("net-tools").
-
-###  `ifconfig` (Interface Configuration)
+### `ifconfig` (Interface Configuration)
 Muestra el estado o configura la IP temporalmente (se pierde al reiniciar).
 - **Lectura (`ifconfig eth0`):**
     - **UP / RUNNING:** La tarjeta está encendida y tiene cable conectado.
@@ -845,23 +844,8 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
     - `H` (Host): Ruta a una sola máquina, no a una red.
 
 La estructura general para modificar rutas es:
-`route [acción] [tipo] destino [máscara] [pasarela] [dispositivo]`
+`route [add|del] [default] [-net|-host] destino [netmask máscara] [gw pasarela] [dev interfaz]`
 
-**A. Acciones Básicas**
-- **`add`**: Añade una nueva ruta.
-- **`del`**: Borra una ruta existente.
-
-**B. Opciones y Parámetros**
-Aquí es donde definimos los detalles de la ruta:
-
-|**Opción**|**Descripción**|**Ejemplo**|
-|---|---|---|
-|**`-net`**|Indica que el destino es una **red** completa (varios ordenadores). Requiere máscara.|`route add -net ...`|
-|**`-host`**|Indica que el destino es un **único ordenador** (una IP específica).|`route add -host ...`|
-|**`netmask [máscara]`**|Define el tamaño de la red destino.|`netmask 255.255.255.0`|
-|**`gw [IP]`**|**Gateway (Pasarela)**. Indica a qué router debemos enviarle el paquete para que llegue al destino.|`gw 192.168.1.1`|
-|**`dev [interfaz]`**|Fuerza que el paquete salga por una tarjeta específica. A veces es opcional si el sistema lo deduce solo.|`dev eth1`|
-|**`default`**|Palabra clave para referirse a la "Ruta por defecto" (0.0.0.0).|`route add default gw ...`|
 
 ### `netstat` (Estadísticas de Red)
 Muestra qué puertos están abiertos y quién está conectado.

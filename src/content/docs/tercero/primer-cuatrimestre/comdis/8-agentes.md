@@ -307,11 +307,14 @@ Imagina una **Universidad (La Plataforma)**. Una universidad no es un solo edifi
 > Cuando decimos "Un contenedor JADE corre sobre una JVM", significa que para arrancar JADE, necesitas tener instalado Java y ejecutar el proceso. **1 Contenedor = 1 Proceso de Java abierto en tu ordenador.**
 
 Además tenemos otros agentes disponibles:
-- **RMA (Remote Management Agent):** es la consola principal (la ventana que se abre al inicio), controla la plataforma, mata agentes, lanza otros agentes y monitoriza contenedores remotos.
-- **Sniffer Agent:** fundamental para entender qué pasa. Muestra un diagrama visual de quién envía mensajes a quién (como flechas entre líneas de vida)
-- **Introspector Agent:** es como una radiografía. Te permite ver el **estado interno** de un agente: qué comportamientos está ejecutando ahora mismo y el valor de sus variables
-- **Log Manager Agent:** gestionar los logs de la plataforma en tiempo de ejecución. Permite cambiar qué nivel de detalle se guarda
-- **Dummy Agent:** un agente manual para enviar mensajes de prueba a ver si tu sistema responde. 
+- **RMA (Remote Management Agent):** Es la consola principal (la ventana que se abre al inicio). Controla la plataforma, mata agentes, lanza otros agentes y monitoriza contenedores remotos.
+- **DF (Directory Facilitator):** Son las **"Páginas Amarillas"** del sistema.
+    - **Función:** Permite que los agentes se encuentren entre sí por lo que _hacen_ y no por su nombre.
+    - **Ejemplo:** Un agente se registra aquí diciendo "Yo ofrezco el servicio de impresión". Otro agente que necesite imprimir consultará al DF: "¿Quién imprime?", y el DF le dará la dirección del primero.
+- **Sniffer Agent:** Fundamental para entender qué pasa. Muestra un diagrama visual de quién envía mensajes a quién (como flechas entre líneas de vida en un diagrama de secuencia).
+- **Introspector Agent:** Es como una radiografía. Te permite ver el **estado interno** de un agente: qué comportamientos (`Behaviours`) está ejecutando ahora mismo, la cola de mensajes pendientes y el valor de sus variables.
+- **Log Manager Agent:** Gestiona los logs de la plataforma en tiempo de ejecución. Permite cambiar qué nivel de detalle se guarda sin tener que reiniciar el programa.
+- **Dummy Agent:** Un agente manual para enviar mensajes de prueba y comprobar si tu sistema responde correctamente.
 
 ## 8.7.3 Programación de un Agente
 Un agente es un componente activo con un nombre único y un **AID** (Agent ID)

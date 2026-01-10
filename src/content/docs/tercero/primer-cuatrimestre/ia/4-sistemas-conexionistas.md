@@ -143,7 +143,7 @@ Aquí es donde la IA se pone interesante.
 >[!Nota] Acordase de que perceptrón -> neurona artificial
 
 **Algoritmo de Convergencia del Perceptrón**:
-1. **Inicialización**: Poner los pesos a 0 o valores aleatorios.
+1. **Inicialización**: Poner los pesos a 0.
 2. **Activación**: Presentar un ejemplo $x(n)$ y calcular la respuesta real $y(n)$.
 3. Adaptación de Pesos (Regla de aprendizaje):
 $$w(n+1) = w(n) + \eta \cdot [d(n) - y(n)] \cdot x(n)$$    

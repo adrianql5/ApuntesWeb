@@ -52,6 +52,18 @@ egrep [opciones] 'patrón' archivo
 sed -r 's/patrón/sustitución/g' archivo
 ```
 
+>[!Nota] **Caracteres especiales en el reemplazo (`&` y `\1`):**
+>
+>Cuando usamos expresiones regulares en `sed`, la parte del "reemplazo" permite reciclar texto que hemos encontrado en la parte del "patrón":
+>
+>1. **Los paréntesis `(...)`**: En el patrón de búsqueda `(.*)\.foo`, los paréntesis sirven para **capturar** y guardar en memoria una parte del texto (en este caso, todo lo que haya antes del punto). 
+>2. **`\1` (Retroreferencia)**: Recupera el contenido guardado en el **primer** par de paréntesis.
+>	- Si tuviéramos más paréntesis, usaríamos `\2`, `\3`, etc.
+>	- _En el ejemplo:_ `\1` contiene solo el nombre del archivo (sin la extensión).
+>3. **`&` (Coincidencia completa)**: Es una variable especial que contiene **todo el texto** que coincidió con el patrón de búsqueda completo.
+>	- _En el ejemplo:_ `&` contiene el nombre del archivo original completo (nombre + extensión).
+
+
 Ambos comandos siguen la filosofía Unix:
 - **Entrada:** Pueden leer de un fichero o de la **entrada estándar (stdin)** a través de una tubería (`|`).
 - **Uso de Comillas:** Es vital proteger la expresión regular para que la Shell no la interprete antes de tiempo.

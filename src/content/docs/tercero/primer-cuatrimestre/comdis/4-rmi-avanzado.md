@@ -104,7 +104,7 @@ Cuando activas el `RMISecurityManager`, pones a **toda la aplicación** en un es
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212154728.png)
 
 >[!Nota]
->Nuevamente la imagen está mal, o eso diría yo, le falta en el nodo del servidor tener el stub.class también. En la presentación del tipo tiene ambos. Que el muy fenómeno de esta bibliografía es muy loco.
+>Nuevamente la imagen está mal, o eso diría yo, le falta en el nodo del servidor tener el stub.class también. En la presentación del tipo tiene ambos. Que el muy fenómeno tenga esta bibliografía es muy loco.
 
 #### A. Policy del Cliente (Foco: Salir)
 El cliente necesita permiso para **ir** al servidor.
@@ -114,6 +114,7 @@ grant {
     // Permiso para CONECTAR (connect) con el servidor
     permission java.net.SocketPermission "ip_del_servidor:1024-", "connect, resolve";
     permission java.net.SocketPermission "ip_del_servidor:1099", "connect, resolve";
+    permission java.net.SocketPermission "ip_del_servidor_web:80", "connect, resolve";
 };
 ```
 
@@ -315,6 +316,10 @@ Es el mecanismo para convertir un objeto (su código y sus datos) en una secuenc
 
 ## 4.4.2 Requisito Fundamental
 Para pasar un objeto como argumento en RMI, la clase de ese objeto **debe implementar la interfaz `java.io.Serializable`**. Si no lo hace, RMI lanzará una excepción al intentar enviarlo.
+
+Todos los atributos dentro del objeto también deben ser serializables (primitivos, Strings, o referencias a otros objetos Serializables).
+
+Si hay datos que no quieres enviar (ej: una contraseña o una conexión a BD abierta), debes marcarlos con la palabra clave `transient`.
 
 ## 4.4.3 Ejemplo Práctico: Integración Numérica
 **Problema:** Calcular una integral compleja requiere mucha CPU.

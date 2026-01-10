@@ -4,6 +4,9 @@ title: "Instalación de Linux Debian"
 
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
+>[!Importante]
+>Estos apuntes están bien para entender ciertos conceptos complejos. Sin embargo si quieres sacar nota en el examen (ya te aviso que complicado), yo complementaría con los del profe porque tiene más ejemplos e información más concisa. 
+
 # 1.1 Tipos de Instalación
 A la hora de instalar un sistema, tenemos que tener en cuenta el tipo de funciones que va a desempeñar. 
 - **Sistema de escritorio:** usado en tareas rutinarias

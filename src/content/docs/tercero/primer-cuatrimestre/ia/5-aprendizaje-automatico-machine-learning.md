@@ -58,6 +58,7 @@ $$J(\theta_0, \theta_1) = \frac{1}{2m} \sum (h_\theta(x^{(i)}) - y^{(i)})^2$$
 
 - **Objetivo**: Encontrar los $\theta$ (pesos) que hagan que esta $J$ sea **mínima** (cero error idealmente).
 - La función de coste de un **regresor lineal** mide lo bien o mal que opera el regresor lineal en un conjunto de datos. Es una función convexa.
+- Esto es una función de coste convexa.
 
 ## 5.3.3 Generalización: Regresión Lineal Multivariable
 El modelo básico ($h_\theta(x) = \theta_0 + \theta_1 x$) solo sirve si hay una única característica de entrada. Pero el mundo es complejo.
@@ -70,7 +71,6 @@ $$\text{Si }\theta = \begin{bmatrix} \theta_0 \\ \theta_1 \\ \theta_2 \end{bmatr
 $$
 
 $$\theta^T x = [\theta_0, \theta_1, \theta_2] \times \begin{bmatrix} x_0 \\ x_1 \\ x_2 \end{bmatrix}=\theta_0 x_0 + \theta_1 x_1 + \theta_2 x_2$$
-
 
 
 ## 5.3.4 Adaptación a Curvas: Regresión Polinómica
@@ -179,7 +179,13 @@ $$\theta_j := \theta_j - \alpha \frac{\partial}{\partial \theta_j} J(\theta_0, \
 - _Conexión_: Este es el mismo principio matemático que usaba el Perceptrón para actualizar sus pesos ($w_{nuevo} = w_{viejo} + \Delta w$).
 
 
+En modelos simples, como el perceptrón, el regresor lineal (tambíen polinómico y multivariable) y el regresor logístico la función de coste es convexa y converge, como en la imagen.
+
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260110105920.png)
+
+En el descenso por gradiente en modelos no lineales, como las redes neuronales, no asegura alcanzar el mínimo global ya que puede quedares en un mínimo local. Por lo tanto la inicialización de los parámetros (los pesos) es importante ya que determina el punto inicial del descenso por gradiente. Tal y como se ve en esta imagen.
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251222094417.png)
+
 
 
 ### Ecuación Normal (Alternativa al descenso gradiente)

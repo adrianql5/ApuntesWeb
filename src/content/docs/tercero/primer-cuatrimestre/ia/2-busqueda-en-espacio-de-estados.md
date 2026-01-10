@@ -74,17 +74,13 @@ Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles solu
 - **En profundidad iterativa.** Aplica búsqueda en profundidad con límites crecientes, combinando ventajas de amplitud y profundidad. Es completa y óptima (en espacios finitos).
 - **Bidireccional.** Realiza la búsqueda simultáneamente desde el estado inicial y desde el objetivo, esperando que ambas se encuentren. Reduce la complejidad temporal y espacial.
 
-Aquí está la tabla transcrita a formato Markdown:
-
-| Estrategia     | Completa | Óptima          | Tiempo         | Espacio        |
-| -------------- | -------- | --------------- | -------------- | -------------- |
-| Amplitud       | Sí       | Sí              | $O(r^p)$       | $O(r^p)$       |
-| Profundidad    | No*      | No              | $O(r^m)$       | $O(r*m)$       |
-| Prof. limitada | No*      | Si cuando $l>p$ | $O(r*l)$       | $O(r*l)$       |
-| Iterativa      | Sí       | Sí              | $O(r^p)$       | $O(r*p)$       |
-| Bidireccional  | Sí       | Sí              | $O(r^{(p/2)})$ | $O(r^{(p/2)})$ |
-
-\* Solo completa en espacios finitos y sin bucles. 
+| Estrategia     | Completa         | Óptima | Tiempo         | Espacio        |
+| -------------- | ---------------- | ------ | -------------- | -------------- |
+| Amplitud       | Sí               | Sí     | $O(r^p)$       | $O(r^p)$       |
+| Profundidad    | No               | No     | $O(r^m)$       | $O(r*m)$       |
+| Prof. limitada | Si cuando $l>p$* | No     | $O(r^l)$       | $O(r*l)$       |
+| Iterativa      | Sí               | Sí     | $O(r^p)$       | $O(r*p)$       |
+| Bidireccional  | Sí               | Sí     | $O(r^{(p/2)})$ | $O(r^{(p/2)})$ |
 
 
 ## 2.2.2 Búsqueda Heurística (Informada)

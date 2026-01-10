@@ -57,6 +57,64 @@ El `JessBehaviour` debe gestionar la carga del motor y su ciclo de ejecución.
     - Se invoca `jess.run(MAX_JESS_PASSES)`.
     - **Gestión de inactividad:** Se compara el número de pases ejecutados con el máximo permitido. Si `ejecutados < maximo`, significa que el motor se detuvo porque **no hay más reglas aplicables**. En este caso, debemos bloquear el comportamiento (`block()`) para no consumir CPU inútilmente.
 
+```java
+import jade.core.Agent;
+import jade.core.behaviours.CyclicBehaviour;
+import jade.lang.acl.ACLMessage;
+import jess.*; // Importamos la librería de Jess
+
+public class AgenteJess extends Agent {
+    
+    // El motor de inferencia (El cerebro)
+    private Rete motor;
+
+    protected void setup() {
+        motor = new Rete();
+        try {
+            // Cargar las reglas desde un fichero .clp
+            motor.batch("mis_reglas.clp");
+            motor.reset(); // Llevar los hechos al estado inicial
+        } catch (JessException e) { e.printStackTrace(); }
+
+        // Añadimos el "Puente" entre JADE y JESS
+        addBehaviour(new PuenteJadeJess());
+    }
+
+    private class PuenteJadeJess extends CyclicBehaviour {
+        public void action() {
+            try {
+                boolean actividad = false;
+
+                // 1. RECEPCIÓN: Traducir Mensajes JADE -> Hechos JESS
+                ACLMessage msg = myAgent.receive();
+                if (msg != null) {
+                    // Convertimos el mensaje en un hecho para que Jess lo vea
+                    // Ejemplo: (mensaje (contenido "fuego") (emisor "sensor1"))
+                    String hecho = "(mensaje (contenido " + msg.getContent() + "))";
+                    motor.assertString(hecho);
+                    actividad = true;
+                }
+
+                // 2. RAZONAMIENTO: Ejecutar JESS paso a paso
+                // ¡¡OJO AL EXAMEN!!: Usamos run(1), NO run().
+                // Esto dispara MÁXIMO 1 regla. Si hay 100 pendientes, las hará en los siguientes ciclos.
+                int reglasDisparadas = motor.run(1);
+                
+                if (reglasDisparadas > 0) {
+                    actividad = true;
+                }
+
+                // 3. COLABORACIÓN
+                // Solo nos bloqueamos si NO hay mensajes Y Jess NO tiene reglas por disparar.
+                if (!actividad) {
+                    block();
+                }
+
+            } catch (JessException e) { e.printStackTrace(); }
+        }
+    }
+}
+``` 
 
 ## 10.3.2 Inserción de Hechos (Facts)
 Para que el motor razone, necesita datos. Debemos proveer métodos para insertar hechos y despertar al comportamiento si estaba dormido.

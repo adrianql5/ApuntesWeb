@@ -23,8 +23,8 @@ $$f(n) = g(n) + h(n)$$
 
 >[!Info]
 >**Tipos de grafos generados en los procesos de búsqueda:**
->- **Explícito:** Es la **representación teórica** o virtual del espacio de estados completo. Se define únicamente mediante el **estado inicial** y los **operadores** (reglas de transición), ya que sus nodos se generan dinámicamente bajo demanda y no se almacenan en memoria debido a su tamaño potencialmente infinito.
->- **Implícito:** Es el **subgrafo real** que el algoritmo de búsqueda ha generado y **almacenado en la memoria** del ordenador durante su ejecución. Está formado por los nodos que han sido visitados o expandidos (listas ABIERTA y CERRADA) en el intento de encontrar la solución.
+>- **Implícito:** Es la **representación teórica** o virtual del espacio de estados completo. Se define únicamente mediante el **estado inicial** y los **operadores** (reglas de transición), ya que sus nodos se generan dinámicamente bajo demanda y no se almacenan en memoria debido a su tamaño potencialmente infinito.
+>- **Explícito:** Es el **subgrafo real** que el algoritmo de búsqueda ha generado y **almacenado en la memoria** del ordenador durante su ejecución. Está formado por los nodos que han sido visitados o expandidos (listas ABIERTA y CERRADA) en el intento de encontrar la solución.
 
 # 2.2 Estrategias de Búsqueda:  Paso a Paso
 Las estrategias se dividen en **Ciegas** (sin información del dominio) y **Heurísticas** (con información/estimaciones).
@@ -60,6 +60,8 @@ Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles solu
 - **Óptima**: Sí, pero solo si el costo de los operadores es uniforme
 - **Problema**: Consume muchísima memoria ($O(r^p)$) porque guarda todos los nodos del nivel actual
 
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111113547.png)
+
 ### Búsqueda en Profundidad (Depth-First Search - DFS)
 **Funcionamiento**: Explora una rama hasta el final antes de retroceder.  Si llega a un punto muerto, vuelve atrás. 
 
@@ -70,6 +72,7 @@ Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles solu
 - **Óptima**: No (puede encontrar una solución muy profunda antes que una corta)
 - **Ventaja**: Muy eficiente en memoria ($O(r \cdot m)$), solo guarda la rama actual
 
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111113603.png)
 
 ### Otras Búsquedas
 - **En profundidad limitada.** Se establece un límite máximo de profundidad para la exploración. Evita ciclos infinitos, pero puede perder soluciones si el límite es bajo.
@@ -113,7 +116,7 @@ Es una estrategia inteligente que intenta no gastar memoria. Avanza en profundid
 - **Utilidad**: Ideal cuando tienes muy poca memoria pero necesitas encontrar una solución, aunque no sea la más corta.
 
 >[!Nota]
-> Si $f(n)=g(n)$ es una búsqueda no informada
+> Si $f(n)=g(n)$ es una búsqueda no informada, el backtracking no se si el profesor lo considera o no como búsqueda heurísitca.
 
 ### Algoritmo de Escalada (Hill Climbing/Primeiro o mellor)
 _Tipo: **Irrevocable** (Versión estricta del algoritmo ávaro)_

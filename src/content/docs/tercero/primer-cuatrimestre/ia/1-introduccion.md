@@ -119,7 +119,7 @@ La IA no es solo una tecnología aislada, sino el motor de una nueva fase indust
 
 ## 1.5.2 Automatización y Empleo
 ### La Matriz de Automatización
-No todos los trabajos se automatizan igual. Se clasifican según la capacidad requerida (Manual vs. Cognitiva) y el tipo de tarea (Sistemática vs. No sistemática)5:
+No todos los trabajos se automatizan igual. Se clasifican según la capacidad requerida (Manual vs. Cognitiva) y el tipo de tarea (Sistemática vs. No sistemática):
 
 |**Tipo de Tarea**|**Capacidad Manual**|**Capacidad Cognitiva**|
 |---|---|---|

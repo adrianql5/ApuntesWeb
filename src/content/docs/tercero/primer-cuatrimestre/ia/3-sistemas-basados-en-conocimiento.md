@@ -173,7 +173,7 @@ Debes distinguir claramente entre estos tres espacios:
 - **Vectores Ordenados:** Listas simples. `(Pedro 45 V)`. Rígidos.
 - **Plantillas (Deftemplates):** Estructurados con campos. `(Persona (Nombre Juan) (Edad 30))`. Flexibles.
 
-### 2. Propiedades Críticas para el Examen (⚠️ IMPORTANTE)
+### 2. Propiedades Críticas para el Examen (IMPORTANTE)
 **a) El Hecho Especial `f-0` (initial-fact)**
 - **¿Qué es?** Es el "hecho cero". El primer dato que CLIPS crea automáticamente cuando reinicias el sistema.
 - **¿Para qué sirve?** Actúa como una chispa de arranque. Permite que se disparen reglas que no tienen condiciones específicas en su parte izquierda (reglas que quieres que se ejecuten "siempre" al principio).
@@ -191,7 +191,7 @@ Aquí es donde suelen pillar en las preguntas tipo test (como la pregunta 14 de 
 
 ### 2. `(load "archivo.clp")`: La Carga
 - **Acción:** Lee un archivo de texto `.clp` línea por línea.
-- **Efecto (⚠️ OJO):**
+- **Efecto (OJO):**
     - Carga las definiciones (`defrule`, `deftemplate`, `deffacts`) en la **Base de Conocimiento**.
     - **NO ejecuta nada.**
     - **NO mete hechos en la Memoria de Trabajo** (a menos que haya `asserts` sueltos fuera de reglas, lo cual es mala práctica).
@@ -207,7 +207,7 @@ Este comando es el puente entre la teoría (lo cargado) y la práctica (la memor
 - **Acción:** Arranca el Motor de Inferencia.
 - **Efecto:** El motor mira los hechos que `reset` acaba de poner, busca reglas que coincidan (Pattern Matching), las mete en la Agenda y las ejecuta hasta que no queden más
 
-## La Agenda y el Orden de Ejecución (⚠️ MUY IMPORTANTE)
+## La Agenda y el Orden de Ejecución ( MUY IMPORTANTE)
 La Agenda es la lista de tareas pendientes del sistema.
 
 ### ¿Qué hay dentro de la Agenda?

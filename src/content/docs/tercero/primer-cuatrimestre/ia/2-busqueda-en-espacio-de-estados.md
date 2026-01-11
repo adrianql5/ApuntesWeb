@@ -48,6 +48,8 @@ Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles solu
 - **m:** profundidad máxima
 - **l:** límite de profundidad
 
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111102954.png)
+
 ### Búsqueda en Amplitud (Breadth-First Search - BFS)
 **Funcionamiento**: Explora nivel por nivel. Primero visita el nodo raíz, luego todos sus hijos, luego los nietos, etc.
 
@@ -113,7 +115,7 @@ Es una estrategia inteligente que intenta no gastar memoria. Avanza en profundid
 >[!Nota]
 > Si $f(n)=g(n)$ es una búsqueda no informada
 
-### Algoritmo de Escalada (Hill Climbing)
+### Algoritmo de Escalada (Hill Climbing/Primeiro o mellor)
 _Tipo: **Irrevocable** (Versión estricta del algoritmo ávaro)_
 
 Es el ejemplo clásico de estrategia irrevocable. Busca la cima de la montaña dando siempre el paso que más sube, sin mirar atrás.
@@ -124,6 +126,9 @@ Es el ejemplo clásico de estrategia irrevocable. Busca la cima de la montaña d
 
 - **Riesgo**: Como no guarda la historia ni alternativas, puede quedarse atrapado en **máximos locales** (una pequeña colina que parece la cima pero no lo es) o **mesetas** (donde todos los pasos son iguales y no sabe a dónde ir).
 
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111103721.png)
+
+
 ### Algoritmo A* (A-Estrella)
 _Tipo: **Tentativa**_
 La más completa es la estrategia estrella porque equilibra la precaución con la eficiencia. Guarda alternativas (es tentativa) y evalúa el coste total.
@@ -133,7 +138,7 @@ La más completa es la estrategia estrella porque equilibra la precaución con l
 - Función de evaluación: $$f(n) = g(n) + h(n)$$    
     _(Costo Total = Costo ya pagado + Costo estimado restante)_.
 
-- **Propiedad Clave**: Si la heurística es **admisible** (nunca es pesimista, es decir, $h(n) \leq$ coste real), A* garantiza encontrar la solución **óptima** (la más barata/corta) y es **completa** (siempre encuentra solución).
+- **Propiedad Clave**: Si la heurística es **admisible** (nunca es pesimista, es decir, $h(n) \leq$ coste real), A* garantiza encontrar la solución **óptima** (la más barata/corta) y es **completa** (siempre encuentra solución, sea admisible o no la heurística).
 
 > [!Info]
 > Una heurística admisible u optimista: siempre suponer casos en los que la realidad será peor que la estimación.
@@ -165,6 +170,7 @@ En el caso del 8-puzzle se acostumbra a usar estas **heurísticas:**
 - **Cálculo:** Cuenta el número de intercambios necesarios para resolver el puzle si pudieras intercambiar el hueco con **cualquier** ficha del tablero para ponerla en su sitio de un solo movimiento.
 - Suele dar un valor entre la de Hamming y la real.
 
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111103757.png)
 
 # 2.3 Caso de Estudio Práctico: Ruta en Ciudades Gallegas
 Este caso ilustra la diferencia entre ser "miope" (Voraz) y ser "inteligente" (A*).

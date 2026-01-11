@@ -145,6 +145,8 @@ $$\Delta w = \eta \cdot \delta \cdot x_{entrada}$$
     - **Backpropagation:** Calcular los $\delta$ ocultos trayendo el error desde el futuro hacia el pasado usando los pesos.
     - **Update:** Modificar todos los pesos ($w$) usando la fórmula $\eta \cdot \delta \cdot y$.
 
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111104725.png)
+
 # 7.8 Conclusión de la Asignatura
 Una vez más se demuestra que el grado presenta una dejadez considerable por parte de las "vacas sagradas" de la facultad. Y es que no puede ser:  estas personas son reconocidísimas en sus ámbitos, publican 300 artículos, acuden a congresos internacionales...  pero cuando llega el momento de pensar en sus alumnos y proporcionarles una bibliografía de calidad con la cual puedan aprender los conceptos de forma intuitiva, te sueltan un PDF de 2001 robado de otra universidad o presentaciones sin orden lógico alguno, llenas de palabras sueltas y esquemas incomprensibles. 
 

@@ -160,6 +160,8 @@ $$w(n+1) = w(n) + \eta \cdot [d(n) - y(n)] \cdot x(n)$$
 - Si falla, los pesos se ajustan en la dirección del error para corregirlo la próxima vez.
 - $\eta$: debe ser muy pequeño para no provocar cambios significativos en cada iteración, pero no tanto como para evitar o realentizar la convergencia.
 
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111104420.png)
+
 
 # 4.6 Limitaciones y Soluciones: El Problema XOR
 ### Problemas Linealmente Separables

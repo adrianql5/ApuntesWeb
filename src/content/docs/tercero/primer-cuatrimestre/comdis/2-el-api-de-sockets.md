@@ -129,6 +129,9 @@ Para solucionar esto, usamos **Hilos (Threads)**. El objetivo es que el hilo pri
 1. **Hilo Principal (El Conserje):** Su único trabajo es estar en el bucle `accept()`.
 2. **Hilos Trabajadores (Los Botones):** Cuando llega un cliente, el conserje crea un nuevo hilo, le pasa el socket del cliente y vuelve a la puerta a esperar al siguiente.
 
+>[!Nota]
+>Los hilos se explican con más detalle al final del tema
+
 **Servidor:**
 ```java
 import java.net.*;
@@ -328,6 +331,9 @@ La Java Virtual Machine (JVM) gestiona los hilos a través de varios estados:
     - Puede ceder paso con `yield()`.
 4. **Bloqueado (Blocked):** Inactivo esperando un evento (E/S, fin de `sleep`, `notify`, etc.) .
 5. **Finalizado (Terminated):** Terminó el método `run()`.
+
+> [!Info]
+> Si haces `hilo.start()` sobre un hilo que ya esta corriendo se lanza una excepción, si quieres lanzar dos veces el mismo hilo, sus referencias han de ser diferentes.
 
 ## 2.7.3 Sincronización (Sección Crítica)
 Para evitar conflictos cuando varios hilos acceden a recursos compartidos, Java usa **cerrojos (locks)** mediante la palabra clave `synchronized`. Solo un hilo puede estar dentro de un bloque sincronizado a la vez.

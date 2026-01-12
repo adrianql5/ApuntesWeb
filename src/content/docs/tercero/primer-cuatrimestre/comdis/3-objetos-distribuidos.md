@@ -236,13 +236,9 @@ Para no perderte en la práctica, sigue este "algoritmo" riguroso extraído del 
 4. **Desarrollar Servidor:** Crear `Server.java` que instancia `Impl` y hace `Naming.rebind`.
 5. **Desarrollar Cliente:** Crear `Client.java` que hace `Naming.lookup` y usa la interfaz.
 6. **Despliegue de Ficheros:**
-    - **Servidor:** Necesita `Interfaz.class`, `Impl.class`,`Stub.class`, `Skeleton.class`, `Server.class`.
+    - **Servidor:** Necesita `Interfaz.class`, `Impl.class`, `Server.class`, `Skeleton.class`.
     - **Cliente:** Necesita `Interfaz.class`, `Client.class`, `Stub.class`.
 
-
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212154141.png)
-
->[!Nota] La foto esta en teoría está mal, en el nodo del servidor también hace falta el Skel a mayores del Stub
 
 
 >[!Important]

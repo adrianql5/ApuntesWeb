@@ -101,10 +101,10 @@ El fichero `.policy` **no se aplica a "un objeto" (como el Stub), se aplica a to
 
 Cuando activas el `RMISecurityManager`, pones a **toda la aplicación** en un estado de "cuarentena" o "libertad condicional". Por defecto, Java asume que **nadie** (ni el código descargado, ni tu propio código del servidor) tiene permiso para hacer operaciones de red.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212154728.png)
-
->[!Nota]
->Nuevamente la imagen está mal, o eso diría yo, le falta en el nodo del servidor tener el stub.class también. En la presentación del tipo tiene ambos. Que el muy fenómeno tenga esta bibliografía es muy loco.
+La colocación de archivos si usamos **Stub downloading y securtity manager** sería:
+    - **Servidor:** Necesita `Interfaz.class`, `Impl.class`, `Server.class`, `Skeleton.class`, `Stub.class`, `java.policy`.
+    - **Servidor HTTP:** `Stub.class`
+    - **Cliente:** Necesita `Interfaz.class`, `Client.class`, `java.policy`.
 
 #### A. Policy del Cliente (Foco: Salir)
 El cliente necesita permiso para **ir** al servidor.
@@ -155,6 +155,11 @@ Para implementar esto, necesitamos **dos interfaces remotas** y **dos juegos de 
 - Ejemplo: `public void callMe(String msg)`.
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212154409.png)
+
+La **colocación de archivos con RMI Callback es:**
+- **Servidor:** `IntServer.class`, `ImplServer.class`, `Server.class`, `IntClient.class`, `StubClient.class`, `SkellServer.class`.
+- **Cliente:** `IntClient.class`, `ImplCliente.class`, `Client.class`, `IntServer.class`, `StubServer.class`, `SkellClient.class`.
+
 
 ## 4.3.4 Flujo de Ejecución
 - **Cliente:** crea un objeto que implementa su interfaz de callback y lo **exporta**.
@@ -296,15 +301,6 @@ public class ClienteConCallback extends UnicastRemoteObject implements Interface
     }
 }
 ``` 
-
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212154450.png)
-
->[!Nota] 
->Nuevamente la puta imagen vuelve a estar mal, en el lado del cliente faltaría un `ImplCliente_Skell.class` y en el del servidor un `ImplServidor_Skell.class`. Además de que se podrían meter los `java.policy`. 
->
->En sus presentaciones tengo entendido que también cuela imágenes a drede para que la gente que no va a clases presenciales las falle (esta pregunta no hay examen que no la ponga, y ya me dirás tu a mí que tipo de conocimiento demuestras por saber meter archivos en máquinas diferentes).
->
-> No entiendo por qué el tipo en vez de poner erratas a drede para que la gente que no va a clase falle, no le da por preguntarse por qué la gente no va a clase.
 
 
 # 4.4 Serialización y Paso de Objetos

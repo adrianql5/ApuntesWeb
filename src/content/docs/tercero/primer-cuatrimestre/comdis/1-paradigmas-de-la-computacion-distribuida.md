@@ -30,7 +30,7 @@ Aquí es donde todo empieza. Es el nivel de abstracción más bajo.
 - Si la conexión es continua (como una llamada telefónica), usamos `connect` y `disconnect` 
 - **La herramienta real:** esto se implementa habitualmente con **Sockets** a nivel de Sistema operativo.
 
-Cuando tu navegador pide una web, por debajo está abriendo un socket y pasando mensajes.
+Cuando tu navegador pide una web, por debajo está abriendo un socket y pasando mensajes. Un "problema" a tener en cuenta es que los procesos están fuertemente acoplados (ambos deben de estar activos al mismo tiempo para que se produzca la comunicación).
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250916092352.png)
 
@@ -50,9 +50,12 @@ Una vez sabemos pasar mensajes, ¿cómo organizamos a los participantes?
 - **Servidor (Camarero):** Espera pasivamente a que alguien le llame
 - **Cliente (Comensal):** Inicia la conversación pidiendo algo (request) y espera la comida (response)
 
-**Detalle Técnico:** 
-- Simplifica mucho la sincronización: el servidor es un bucle infinito esperando peticiones, el cliente es quien dispara la acción. Suele identificarse por el protocolo que usa (HTTP,FTP)
-- Se dice que es asimétrico porque uno solo pide y el otro solo sirve/espera
+La arquitectura cliente-servidor es **asimétrica**  puesto que cada nodo que interviene en la arquitectura tiene funciones, objetivos y responsabilidades diferentes. Hay una clase diferencia jerárquica y funcional:
+- **Cliente (rol activo):** inicia la comunicación y realiza peticiones al servidor
+- **Servidor (rol pasivo):** espera pasivamente a recibir peticiones de los clientes para poder procesarlas.
+
+El objetivo que se persigue es proporcionar una arquitectura de red en la que se puedan ofrecer servicios de forma eficiente y escalable, facilitando la sincronización de eventos y el mantenimiento, ya que los cambios pueden aplicarse en el servidor sin afectar directamente a los clientes, por lo que los clientes también son más ligeros al centralizar los recursos en el servidor.
+
 
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250916093514.png)
@@ -79,9 +82,7 @@ Se usa en BitTorrent, Videoconferencias, Blockchain, aplicaciones de chat, etc.
 Aquí intentamos que el programador se olvide de que existen cables de red. Queremos programar como si todo estuviera en mi ordenador".
 
 >[!Info]
-> El middleware es una capa de software que se sitúa entre el sistema operativo y las aplicaciones distribuidas. Oculta la hetereogeneidad del hardware y del software subyacente, proporcionando un modelo programación uniforme.
->
-> Definición del libro: Middleware hace referencia al software que actúa como intermediario entre procesos independientes. Los sistemas de mensajes son unos de los tipos de middleware, los ORB o broker de peticiones son otros.
+> El middleware es una capa de software que actúa como intermediario entre 2 procesos independientes (aplicaciones, hardware, SO ...). Es un mecanismo útil para el desacoplamiento y la abstracción a la hora de desarrollar aplicaciones distribuidas.
 
 ## 1.4.1 RPC (Remote Procedure Call)
 **Concepto Principal:** Abstracción que permite llamar a una función que está en otro ordenador como si fuera una función local. Imagina que en tu código escribes `calcularSuma(5, 10)`. Tú no sabes si esas suma la hace tu CPU o superordenador en Japón. RPC se encarga de enviar el 5 y el 10 a Japón esperar, y devolverte 15.
@@ -96,7 +97,7 @@ Aquí intentamos que el programador se olvide de que existen cables de red. Quer
 ## 1.4.2 RMI (Remote Method Invocation) y Objetos Distribuidos
 **Concepto Principal:** Es la evolución de RPC para la **Programación Orientada a Objetos**
 
-**Diferencia con RCP:** En RPC llamas a funciones (acciones). En RMI, invocas a métodos de un **Objeto** que vive en otra máquina. Puedes pasar objetos enteros como argumentos.
+**Diferencia con RPC:** En RPC llamas a funciones (acciones). En RMI, invocas a métodos de un **Objeto** que vive en otra máquina. Puedes pasar objetos enteros como argumentos.
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250921121400.png)
 

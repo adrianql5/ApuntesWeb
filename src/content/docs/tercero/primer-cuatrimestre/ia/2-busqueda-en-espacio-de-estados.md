@@ -79,13 +79,13 @@ Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles solu
 - **En profundidad iterativa.** Aplica búsqueda en profundidad con límites crecientes, combinando ventajas de amplitud y profundidad. Es completa y óptima (en espacios finitos).
 - **Bidireccional.** Realiza la búsqueda simultáneamente desde el estado inicial y desde el objetivo, esperando que ambas se encuentren. Reduce la complejidad temporal y espacial.
 
-| Estrategia     | Completa         | Óptima | Tiempo         | Espacio        |
-| -------------- | ---------------- | ------ | -------------- | -------------- |
-| Amplitud       | Sí               | Sí     | $O(r^p)$       | $O(r^p)$       |
-| Profundidad    | No               | No     | $O(r^m)$       | $O(r*m)$       |
-| Prof. limitada | Si cuando $l>p$* | No     | $O(r^l)$       | $O(r*l)$       |
-| Iterativa      | Sí               | Sí     | $O(r^p)$       | $O(r*p)$       |
-| Bidireccional  | Sí               | Sí     | $O(r^{(p/2)})$ | $O(r^{(p/2)})$ |
+| Estrategia     | Completa        | Óptima | Tiempo         | Espacio        |
+| -------------- | --------------- | ------ | -------------- | -------------- |
+| Amplitud       | Sí              | Sí     | $O(r^p)$       | $O(r^p)$       |
+| Profundidad    | No              | No     | $O(r^m)$       | $O(r*m)$       |
+| Prof. limitada | Si cuando $l>p$ | No     | $O(r^l)$       | $O(r*l)$       |
+| Iterativa      | Sí              | Sí     | $O(r^p)$       | $O(r*p)$       |
+| Bidireccional  | Sí              | Sí     | $O(r^{(p/2)})$ | $O(r^{(p/2)})$ |
 
 
 ## 2.2.2 Búsqueda Heurística (Informada)
@@ -116,7 +116,7 @@ Es una estrategia inteligente que intenta no gastar memoria. Avanza en profundid
 - **Utilidad**: Ideal cuando tienes muy poca memoria pero necesitas encontrar una solución, aunque no sea la más corta.
 
 >[!Nota]
-> Si $f(n)=g(n)$ es una búsqueda no informada, el backtracking no se si el profesor lo considera o no como búsqueda heurísitca.
+> Si $f(n)=g(n)$ es una búsqueda no informada, el backtracking no se si el profesor lo considera o no como búsqueda heurísitca. Yo sobreentiendo que no.
 
 ### Algoritmo de Escalada (Hill Climbing/Primeiro o mellor)
 _Tipo: **Irrevocable** (Versión estricta del algoritmo ávaro)_
@@ -211,46 +211,23 @@ Mira el pasado ($g$) y el futuro ($h$).
 
 
 # 2.4 Destellos de calidad del Senén en clase
-## 2.4.1 ¿Qué es el Problema del Viajante de Comercio (TSP)?
-Imagina que eres un repartidor de Amazon.
-- Tienes una lista de **100 ciudades** que visitar.
-- Sales de la central (digamos, la ciudad 0).
-- **Reglas:** Tienes que visitar todas las ciudades **una sola vez** y volver al punto de partida.
-- **Objetivo:** Encontrar la ruta más corta posible para ahorrar gasolina.
+## 2.4.1 Problema del Viajante de Comercio (TSP)
+- **Concepto:** Es un problema clásico de optimización combinatoria. Dado un conjunto de nodos (ciudades) y las distancias entre ellos, el objetivo es encontrar un **ciclo hamiltoniano** de coste mínimo. Esto significa hallar una ruta cerrada que visite cada nodo exactamente una vez y regrese al nodo de origen, minimizando la distancia total recorrida.    
+- **Ejemplo:** Un repartidor debe visitar **100 ciudades**. Parte de una central fija (ciudad 0). Debe trazar una ruta que pase por las 99 restantes una sola vez y vuelva a la 0, gastando la menor cantidad de combustible posible.
 
-Esto es el **TSP (Traveling Salesperson Problem)**. En informática es famoso porque es muy difícil de resolver perfectamente cuando hay muchas ciudades, ya que el número de combinaciones posibles es gigantesco.
+## 2.4.2 Tamaño del Espacio de Búsqueda
+- **Concepto:** Es la cardinalidad del conjunto de todas las **soluciones posibles** (válidas) para el problema, independientemente de si son óptimas o no. En problemas de permutación como el TSP, este tamaño crece de forma factorial con respecto al número de elementos variables.
+- Ejemplo: En el caso de 100 ciudades con un punto de partida y final fijo (la ciudad de origen no se permuta), el número total de rutas posibles son las permutaciones de las 99 ciudades restantes.
+$$Tamaño = 99! \quad \text{(Factorial de 99)}$$
 
-## 2.4.2 ¿Qué es el "Tamaño del Espacio de Búsqueda"?
-Es una forma técnica de preguntar: **"¿Cuántas rutas distintas posibles existen en total en el universo?"**. Para calcularlo en este problema (100 ciudades, empezando en la 0), usamos matemáticas de combinatoria (permutaciones):
-1. La **Ciudad 0** está fija al principio y al final. No la puedes mover.
-2. Te quedan **99** ciudades libres para barajar.
-3. El número de formas de ordenar esas 99 ciudades es:
-    $99×98×97×...×1=99!$
+## 2.4.3 Tamaño del Entorno (Contorna)
+- **Concepto:** El entorno es el subconjunto de soluciones vecinas accesibles desde la solución actual aplicando **una única vez un operador** de transformación específico. Su tamaño ($N$) depende del operador elegido y del número de elementos sobre los que se puede aplicar.
+- Ejemplo: Usando el operador de intercambio de dos elementos (swap) sobre las 99 ciudades móviles (excluyendo origen/final).
 
-Este número es inmensamente grande (mayor que el número de átomos en el universo). Por eso es imposible probarlas todas una por una.
+    Debemos calcular cuántas combinaciones de 2 elementos distintos se pueden formar con los 99 disponibles. Matemáticamente, son combinaciones sin repetición de 99 elementos tomados de 2 en 2:    
+    $$N = \binom{99}{2} = \frac{99 \times 98}{2}$$
 
-## 2.4.3 ¿Qué es el Entorno (Contorna) y su Tamaño?
-Aquí es donde entra la confusión habitual. Si el "Espacio de Búsqueda" es toda la biblioteca, el **Entorno** son solo **los libros que puedes alcanzar con la mano sin moverte**. Los algoritmos de búsqueda local (como Escalada o Tabú) no ven todo el espacio a la vez. Funcionan paso a paso modificando la ruta actual.
-- **Definición:** El entorno es el conjunto de **todas las rutas "vecinas"** que puedes generar aplicando **un solo operador** a tu ruta actual.
-- **El Operador:** Normalmente usamos el "intercambio de dos ciudades" (swap).
+## 2.4.4 Búsqueda Tabú
+- **Concepto:** Es una **metaheurística de búsqueda local** diseñada para escapar de óptimos locales. Explora el entorno de la solución actual y se mueve a la mejor vecina (aunque sea peor que la actual), pero utiliza una estructura de **memoria a corto plazo** (lista tabú) para restringir la búsqueda.    
+- **Ejemplo:** Si el algoritmo decide intercambiar la ciudad A con la B para generar una nueva ruta, este movimiento se registra en la lista tabú. Durante un número determinado de iteraciones (tenencia tabú), el algoritmo tiene **prohibido** deshacer ese cambio (volver a intercambiar B con A), forzando así la exploración de nuevas zonas del espacio de búsqueda en lugar de entrar en ciclos repetitivos
 
-**Cálculo del Tamaño del Entorno (N):** La pregunta es: _"¿Cuántas parejas de ciudades puedo elegir para intercambiar?"_.
-1. Tenemos **99 ciudades** móviles (recuerda: la ciudad 0 es fija, esa no se toca).
-2. El operador elige **2** de ellas para cambiarlas de sitio.
-3. Matemáticamente es una **combinación sin repetición**:
-    $N=\frac{99×98}{2}​$
-que
-**Diferencia Clave:**
-- **Espacio de Búsqueda (99!):** Todas las soluciones que existen.
-- **Entorno (≈4851):** Las opciones que tiene el algoritmo _en cada paso_ para decidir hacia dónde moverse.
-
-## 2.4.4 ¿Qué es la Búsqueda Tabú?
-Es una **estrategia** inteligente para moverse por ese entorno sin atascarse.
-- El algoritmo genera el entorno (las 4851 opciones vecinas).
-- Elige la mejor opción para moverse.
-- **El problema:** Podría quedarse atrapado haciendo y deshaciendo el mismo cambio (ej: cambiar Madrid-Barna y luego Barna-Madrid).
-- **La solución (Tabú):** Tiene una "memoria" de los últimos cambios.
-- **La regla:** "Si acabo de probar este cambio, está **prohibido (tabú)** volver a hacerlo o deshacerlo durante un número X de turnos".
-
-
-**Nota para el examen:** Usar Búsqueda Tabú **NO cambia el tamaño del espacio de búsqueda** (99! sigue siendo 99!). Lo que hace es guiar _qué partes_ de ese espacio exploramos para no perder tiempo en círculos, por lo que el contorno inicial es más grande que el resto.

@@ -207,7 +207,7 @@ Este comando es el puente entre la teoría (lo cargado) y la práctica (la memor
 - **Acción:** Arranca el Motor de Inferencia.
 - **Efecto:** El motor mira los hechos que `reset` acaba de poner, busca reglas que coincidan (Pattern Matching), las mete en la Agenda y las ejecuta hasta que no queden más
 
-## La Agenda y el Orden de Ejecución ( MUY IMPORTANTE)
+## La Agenda y el Orden de Ejecución (MUY IMPORTANTE)
 La Agenda es la lista de tareas pendientes del sistema.
 
 ### ¿Qué hay dentro de la Agenda?

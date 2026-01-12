@@ -10,7 +10,7 @@ A diferencia de los sistemas expertos (donde un humano programa las reglas), los
 
 - **Dualidad**: Combinan la **Bioinspiración** (imitan el cerebro) con la **Tecnoinspiración** (modelos matemáticos para el cálculo) .
 
-- **Evolución Histórica**:    
+- **Evolución Histórica**:     
     - _1943_: Modelo de McCulloch & Pitts (lógica binaria).
     - _1957_: El **Perceptrón** de Rosenblatt (primera regla de aprendizaje).
     - _1969_: Minsky y Papert demuestran las limitaciones (problema XOR), provocando un "invierno de la IA".
@@ -49,7 +49,7 @@ Determinan la salida final de la neurona:
 >|**Nombre**|**Función de Activación (f(z))**|**Salida**|**Interpretación**|
 |---|---|---|---|
 |**Regresor Lineal**|**Identidad** (Ninguna)<br><br>  <br><br>$f(z) = z$|Números Reales<br><br>  <br><br>$(-\infty, +\infty)$|**Predicción**<br><br>  <br><br>"La casa vale 250.000€"|
-|**Regresor Logística**|**Sigmoide**<br><br>  <br><br>$f(z) = \frac{1}{1+e^{-z}}$|Probabilidad<br><br>  <br><br>$(0, 1)$|**Clasificación Suave**<br><br>  <br><br>"Hay un 85% de probabilidad de que sea spam"|
+|**Regresor Logístico**|**Sigmoide**<br><br>  <br><br>$f(z) = \frac{1}{1+e^{-z}}$|Probabilidad<br><br>  <br><br>$(0, 1)$|**Clasificación Suave**<br><br>  <br><br>"Hay un 85% de probabilidad de que sea spam"|
 |**Perceptrón**|**Escalón** (Step)<br><br>  <br><br>$f(z) = 1$ si $z>0$|Binaria<br><br>  <br><br>$\{0, 1\}$|**Clasificación Dura**<br><br>  <br><br>"Es spam (1). Punto."|
 
 Se aplican **al final del procesamiento de la neurona**, justo después de calcular la suma ponderada y antes de enviar la señal a la siguiente capa.

@@ -132,9 +132,6 @@ A veces no queremos respuesta inmediata. A veces queremos "dejar un recado".
 - Un proceso (Publisher) dice: "!Ha marcado Rodrygo Ganges!" (Evento)
 - El sistema distribuye este mensaje a todos los que se hayan "suscrito" al tema "Fútbol"
 
->[!Nota]
-> 9 meses para marcar, qué jugador.
-
 Por ejemplo, notificaciones de Youtube, Feeds de Twitter, Grupos de Whatsapp.
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212152923.png)

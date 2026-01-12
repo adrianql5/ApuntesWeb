@@ -4,6 +4,8 @@ title: "Arquitecturas Orientadas a Servicios y Servicios Web"
 
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
 
+>[!Nota]
+>Yo este tema no se para que lo damos, a día de hoy tengo entendido que se usa REST con JSON en vez de SOAP con XML. Creo que estaban mirando de cambiar el contenido de la asignatura así que no tengo claro que el tipo vaya a cambiar el examen y preguntar algo de esto. Pero más vale prevenir que curar.
 
 # 6.1 El Desafío: Comunicación en la Web Abierta
 **El Escenario:** Tienes una clase `Cliente` en tu portátil y quieres invocar el método `saludar()` de un objeto que vive en un servidor en Japón.

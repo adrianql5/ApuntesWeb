@@ -19,7 +19,7 @@ Un programa aprende si mejora su rendimiento (**P**) en una tarea (**T**) basán
 No todos los problemas son iguales. Según la información que tengamos, clasificamos el aprendizaje en:
 
 ## 5.2.1 Aprendizaje Supervisado
-Tenemos los "exámenes resueltos". Entregamos a la máquina datos de entrada ($x$) junto con su respuesta correcta o etiqueta ($y$). El objetivo es aprender la relación para predecir $y$ en datos nuevos.
+Tenemos los "exámenes resueltos". Entregamos a la máquina datos de entrada ($x$) junto con su respuesta correcta o etiqueta ($y$) (por ello se les dice **datos etiquetados**). El objetivo es aprender la relación para predecir $y$ en datos nuevos.
 
 Se divide en dos subtipos clave:
 1. **Regresión**: Predice un **valor numérico continuo** (infinitas posibilidades).
@@ -30,7 +30,7 @@ Se divide en dos subtipos clave:
     - _Nota_: Esto es lo que hacía el Perceptrón (clasificar).
 
 ## 5.2.2 Aprendizaje No Supervisado
-Solo tenemos los datos ($x$), sin respuestas. La máquina debe encontrar **estructuras o patrones** por sí sola.
+Solo tenemos los datos ($x$), sin respuestas. La máquina debe encontrar **estructuras o patrones** por sí sola. trabaja con **datos no etiquetados**.
 - _Ejemplo (Clustering)_: Agrupar noticias similares en Google News o segmentar clientes por comportamiento .
 
 
@@ -179,10 +179,14 @@ $$\theta_j := \theta_j - \alpha \frac{\partial}{\partial \theta_j} J(\theta_0, \
 - _Conexión_: Este es el mismo principio matemático que usaba el Perceptrón para actualizar sus pesos ($w_{nuevo} = w_{viejo} + \Delta w$).
 
 
+>[!Nota]
+>Normalizar los datos favorece a la convergencia del método, permitiendo que la forma de la función sea más uniforme.
+
+
 En modelos simples, como el perceptrón, el regresor lineal (tambíen polinómico y multivariable) y el regresor logístico la función de coste es convexa y converge, como en la imagen. 
 
 >[!Nota]
->Tras revisar el examen del 2021 el profesor considera que la función de coste no tiene por qué ser ni convexa ni cóncava, el motivo ni puta idea supongo que usará un error distinto al MSE. Es bastante loco.
+>Tras revisar el examen del 2021 el profesor considera que la función de coste no tiene por qué ser ni convexa ni cóncava, el motivo ni puta idea supongo que usará un error distinto al MSE. Es bastante loco. Vale tras hacer el examen nos confirmó que cuando hace la pregunta de si es convexa no se refiere a un tipo de función de coste concreta, así que no la marqueis.
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260110105920.png)
 

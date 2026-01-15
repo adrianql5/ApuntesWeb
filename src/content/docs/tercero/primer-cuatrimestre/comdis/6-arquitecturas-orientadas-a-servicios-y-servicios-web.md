@@ -7,318 +7,126 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 >[!Nota]
 >Yo este tema no se para que lo damos, a día de hoy tengo entendido que se usa REST con JSON en vez de SOAP con XML. Creo que estaban mirando de cambiar el contenido de la asignatura así que no tengo claro que el tipo vaya a cambiar el examen y preguntar algo de esto. Pero más vale prevenir que curar.
 
-# 6.1 El Desafío: Comunicación en la Web Abierta
-**El Escenario:** Tienes una clase `Cliente` en tu portátil y quieres invocar el método `saludar()` de un objeto que vive en un servidor en Japón.
 
-## 6.1.1 La Era Antigua: RPC, CORBA y DCOM (El Fracaso)
-Al principio, intentamos conectar los ordenadores directamente usando protocolos binarios complejos.
-- **El Método:** Los programas intentaban conectarse por puertos aleatorios o poco comunes.
-- **Por qué fracasó en Internet:**
-    1. **El Muro del Firewall:** Los firewalls corporativos están configurados para bloquear todo lo desconocido. Al ver tráfico extraño en puertos raros (ej. puerto 3500), lo bloquean por seguridad.
-    2. **La Torre de Babel:** Requerían que ambas máquinas usaran la misma tecnología o lenguaje (ej. Java con Java).
+# 6.1 El Desafío de la Comunicación en Entornos Web Abiertos
+El problema fundamental de la computación distribuida a escala global radica en la necesidad de invocar métodos de objetos situados en máquinas remotas a través de redes no confiables como Internet. El objetivo es lograr que una aplicación cliente local pueda ejecutar lógica de negocio alojada en un servidor remoto (posiblemente ubicado en otro continente) con la misma transparencia que si fuera una llamada local.
 
-> **Analogía del Edificio:** Es como intentar entrar a un edificio de máxima seguridad por la puerta trasera o una ventana. El guardia (Firewall) te detendrá inmediatamente.
+## 6.1.1 Antecedentes y Limitaciones: La Era de RPC, CORBA y DCOM
+Inicialmente, se utilizaron protocolos binarios que establecían conexiones directas mediante puertos específicos. Este enfoque fracasó en la web abierta por dos factores críticos:
 
-## 6.1.2 El Paso Intermedio: Java Servlets (La Astucia)
-Los ingenieros se dieron cuenta de que el Firewall **siempre deja abierta la Puerta 80** (el puerto para navegar por la web, HTTP).
-- **La Idea (Tunneling):** "Disfrazar" nuestros datos como si fueran tráfico web normal para que el Firewall los deje pasar.
-- **La Herramienta:** Los **Servlets**. Pequeños programas Java en el servidor que escuchan en el puerto 80.
-- **La Ventaja:** Atraviesan cualquier firewall porque usan HTTP.
-- **El Gran Defecto (Espagueti):** Los Servlets están pensados para devolver HTML (diseño para humanos), no datos limpios.
-    - _Ejemplo:_ Si pides una suma, el Servlet te devuelve `<html><h1>El resultado es 10</h1></html>`.
-    - Tu programa cliente tiene que "escarbar" en ese texto para hallar el "10". Es una comunicación frágil y artesanal; si cambias una coma, el cliente se rompe.
+1. **Seguridad Perimetral:** Los cortafuegos corporativos bloquean por defecto cualquier tráfico en puertos no estándar, impidiendo la comunicación externa.
+    
+2. **Acoplamiento Tecnológico:** Estas arquitecturas exigían homogeneidad, requiriendo que cliente y servidor operasen bajo la misma plataforma o lenguaje, lo que limitaba la interoperabilidad.
 
-## 6.1.3 La Solución Definitiva: SOA y Servicios Web
-Para solucionar el desorden de los Servlets, nació la **Arquitectura Orientada a Servicios (SOA)**. La idea genial fue combinar dos tecnologías existentes:
+## 6.1.2 La Aproximación Basada en HTTP: El Uso de Java Servlets
+Para superar las restricciones de seguridad, la ingeniería de software evolucionó hacia el aprovechamiento de la infraestructura existente de la Web. Se identificó que el puerto 80 (HTTP), utilizado para la navegación web estándar, permanecía abierto en casi todos los cortafuegos.
 
-$$SOA = \text{Transporte HTTP} + \text{Datos XML}$$
+Esta estrategia dio lugar al concepto de **Tunneling** a través de Java Servlets. La técnica consistía en encapsular las peticiones de datos dentro de tráfico HTTP estándar, permitiendo que la información atravesara los cortafuegos sin ser bloqueada. Los Servlets actuaban como pequeños programas en el servidor que escuchaban estas peticiones en el puerto 80.
 
-1. **HTTP (El Camión de Transporte):** Usamos el protocolo web (Puerto 80) para cruzar el firewall sin problemas.    
-2. **XML (El Paquete Estandarizado):** En lugar de enviar texto desordenado o HTML, enviamos los datos en un formato estricto y universal que cualquier máquina entiende.
+Aunque resolvió el problema de conectividad, introdujo una deficiencia estructural: los Servlets devolvían contenido en HTML (diseñado para presentación visual), obligando al cliente a realizar un _parsing_ complejo para extraer los datos. Esto generaba un sistema frágil y difícil de mantener, donde cualquier cambio en la interfaz visual rompía la lógica de comunicación.
 
 
+## 6.1.3 La Evolución hacia la Arquitectura Orientada a Servicios (SOA)
+Como respuesta a la necesidad de una comunicación robusta, estandarizada y capaz de atravesar cortafuegos, surgió la **Arquitectura Orientada a Servicios (SOA)**. Esta arquitectura propuso una solución definitiva al combinar la ubicuidad del transporte web con un formato de datos estricto.
 
->[!Info]
-**El Firewall (El Portero)**
-Es el sistema de seguridad que controla las entradas y salidas de la red.
->- **Comportamiento:** Cierra las 65.000 "puertas" (puertos) del ordenador, excepto las esenciales.
->- **La excepción:** Casi siempre permite el **Puerto 80 (Web)** y el **443 (Web Segura)**. SOA se aprovecha de esto.
->
->**HTTP (El Idioma del Transporte)**
-Es el protocolo de la World Wide Web. Es **sin estado** (cada petición es nueva, no recuerda la anterior).
->- **Verbos:** Usa `GET` (dame datos) y `POST` (toma datos). En SOA, usamos mucho `POST` para enviar mensajes al servidor.
->
->**XML (El Formato de los Datos)**
-Es la gran diferencia con los Servlets. XML estructura la información separando el _contenido_ de la _presentación_.
->- **HTML (Malo para máquinas):** `<p><b>10</b></p>` $\rightarrow$ Dice _cómo se ve_ (negrita), no qué es.
->- **XML (Bueno para máquinas):** `<precio moneda="EUR">10</precio>` $\rightarrow$ Dice _qué es_ (un precio).    
->- **Ventaja:** Es independiente del lenguaje. Un programa en Python puede leer un XML generado por Java.
+La ecuación fundamental de SOA en el contexto de los Servicios Web se define por la integración de dos estándares: el **Protocolo HTTP** como medio de transporte universal para garantizar la conectividad, y el lenguaje **XML** para la representación de datos, asegurando que la información sea estructurada, legible por máquinas e independiente de la plataforma de presentación.
 
+# 6.2 Arquitectura SOA
+**SOA (Arquitectura Orientada a Servicios):** Es un estilo arquitectónico para construir sistemas distribuidos basado en la integración de servicios autónomos, débilmente acoplados e interoperables. Permite que aplicaciones desarrolladas en tecnologías heterogéneas se comuniquen mediante estándares abiertos, fundamentalmente combinando un transporte universal (**HTTP**) con un formato de datos estructurado (**XML**).
 
-# 6.2 Arquitectura Orientada a Servicios (SOA)
-La **Arquitectura Orientada a Servicios (SOA)** es un modelo en el que la funcionalidad se descompone en servicios distintos. Se basa en tres roles fundamentales:
+La arquitectura se basa en tres actores y cuatro estándares fundamentales:
 
-**Proveedor (Provider)**
-- **Función:** Ofrece un conjunto de servicios con una funcionalidad concreta.
-- **Accesibilidad:** Los servicios son accesibles vía Internet mediante **URLs**.
-- **Descripción:** Utiliza un lenguaje estándar para describir qué hace el servicio.
+| **Actor**      | **Acción**                       | **Estándar Clave** | **Función del Estándar**                                                                                  |
+| -------------- | -------------------------------- | ------------------ | --------------------------------------------------------------------------------------------------------- |
+| **Proveedor**  | Crea y expone                    | **WSDL**           | **Descripción**: Fichero XML que define _qué_ hace el servicio (interfaz) y _cómo_ llamarlo.              |
+| **Registro**   | Directorio ("Páginas Amarillas") | **UDDI**           | **Publicación**: Donde se registran los servicios para ser encontrados. _(Nota: Baja implantación real)_. |
+| **Consumidor** | Busca y usa                      | **SOAP**           | **Mensajería**: Formato del sobre XML para enviar la petición y recibir la respuesta.                     |
+| _(Todos)_      | Canal de comunicación            | **HTTP**           | **Transporte**: La carretera por la que viajan los mensajes SOAP.                                         |
 
-**Consumidor (Consumer)**
-- **Función:** Invoca o consume la funcionalidad ofrecida por el proveedor.    
-- **Mecanismo:** Utiliza un protocolo de invocación para comunicarse.
-
-**Registro (Registry)**
-- **Función:** Directorio que contiene los servicios disponibles ofrecidos por los proveedores.
+**Flujo de Funcionamiento (Publish - Find - Bind):**
+1. **Despliegue (Provider):** El proveedor crea el servicio y su contrato (**WSDL**) accesible vía URL.
+2. **Publicación (Provider $\to$ UDDI):** Registra el servicio en el directorio UDDI para que sea visible.
+3. **Descubrimiento (Consumer $\to$ UDDI):** El consumidor busca en UDDI y obtiene la URL del **WSDL**.
+4. **Generación (Consumer):** Con el WSDL, el consumidor genera automáticamente los **Stubs/Proxies** (clases locales para comunicar).
+5. **Invocación (Consumer $\to$ Provider):** Se lanza la petición encapsulada en **SOAP** a través de **HTTP**.
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212155730.png)
 
-# 6.3 Los Servicios Web (Implementación de SOA)
-Los Servicios Web son la implementación tecnológica de SOA mediante estándares abiertos.
-- **Definición:** Interfaces que describen una colección de operaciones (métodos) accesibles por la red.
-- **Base Tecnológica:** Todo se basa en **formatos XML**.
-    - **Invocación:** Protocolos web estandarizados (estructura del protocolo).
-    - **Descripción:** Propiedades del servicio representadas en XML.
-- **Organismo Estandarizador:** El **Consorcio W3C** (World Wide Web Consortium) se encarga de estandarizar estos lenguajes y protocolos (excepto UDDI).
 
-| **Estándar** | **Función**     | **Descripción / URL ref**                             |
-| ------------ | --------------- | ----------------------------------------------------- |
-| **HTTP**     | **Transporte**  | Protocolo de comunicaciones básico de la web.         |
-| **SOAP**     | **Mensaje**     | Formato del mensaje para la invocación.               |
-| **WSDL**     | **Descripción** | Describe _qué_ hace el servicio (interfaz funcional). |
-| **UDDI**     | **Registro**    | Protocolo para publicar y descubrir servicios.        |
-
-# 6.4 Funcionamiento Paso a Paso
-El ciclo de vida de una interacción en SOA sigue este flujo cronológico:
-
-## Paso 1: Despliegue (Proveedor)
-El proveedor hace accesibles sus operaciones en Internet.
-- **Identificación:** Mediante una **URL** que apunta a un recurso descrito en **WSDL**.
-- **El fichero WSDL (Web Services Description Language):**
-    - Describe las **capacidades funcionales**: Nombre de la operación, entradas y salidas.
-    - Indica el **modo de invocación**.
-    - _Condición:_ El servicio es accesible solo si el cliente conoce esta URL.
-
-## Paso 2: Publicación (Proveedor -> UDDI)
-Para que otros lo encuentren, el proveedor publica el servicio en el registro **UDDI**.
-- **Contenido del Registro:**
-    - **Características No Funcionales:** Descripción de la empresa, categoría, etc.
-    - **Enlace:** La URL al fichero WSDL.
-- **Gestión:** Se usan APIs para dar de alta/baja servicios.
-- **Analogía:** _UDDI es a los Servicios Web lo que el DNS es a las direcciones Web._
-
-## Paso 3: Descubrimiento (Consumidor -> UDDI)
-El consumidor busca en el registro UDDI servicios que cumplan sus necesidades.
-- **Búsqueda:** Por palabras clave (funcionales/no funcionales) o indicando entradas/salidas (**TModel**).
-- **Resultado:** Obtiene la **URL del fichero WSDL**.
-
-> **⚠️ Nota Importante sobre UDDI:** UDDI **no** es un estándar del W3C. Debido a esto, es el componente con **menor implantación** en el mercado real.
-
-## Paso 4: Generación de Código (Consumidor)
-Una vez obtenido el WSDL, el consumidor:
-1. **Genera automáticamente** el código necesario (proxies/stubs).
-2. Crea las clases para los tipos de datos de los parámetros.
-3. Crea la lógica para **codificar y decodificar** los mensajes.
-
-## Paso 5: Invocación (Consumidor -> Proveedor)
-El consumidor ejecuta la operación usando el protocolo **SOAP** basándose en las definiciones del WSDL.
-
-
-# 6.5 Ventajas de SOA
-**Integración Universal (Interoperabilidad)**
 Gracias al uso de **XML**, se pueden integrar aplicaciones dispares:
 - **Lenguajes diferentes:** Se traduce de XML al lenguaje local (Java, Python, C#, etc.).
 - **Modelos de datos diferentes:** Se traduce el modelo del formato XML al modelo interno de la aplicación.
 
+# 6.3 El Manual de Instrucciones: WSDL
+Para conectar tu código con un servicio remoto, necesitas un contrato: el **WSDL** (_Web Service Description Language_). Es un XML jerárquico dividido en dos bloques:
 
-# 6.6 El Manual de Instrucciones: WSDL
-Si vas a conectar tu código con un servicio remoto, necesitas un contrato que te diga cómo hablarle. Ese es el **WSDL** (_Web Service Description Language_).
+## 6.3.1 Descripción Abstracta (La Lógica - El "Qué")
+Define la interfaz funcional sin importar el lenguaje de programación.
+1. **`types` (Diccionario):** Define los datos (`int`, `Cliente`) usando **XSD** (XML Schema).
+2. **`message` (Paquetes):** Combina los datos anteriores para formar entradas y salidas.
+3. **`portType` (Interfaz):** Es el agrupador clave (como una `interface` Java). Contiene las operaciones.
+4. **`operation` (Funciones):** Define la acción (`sumar`) conectando un mensaje de entrada con uno de salida.
 
-Es un documento **XML** con estructura jerárquica (de abajo a arriba). Se divide en dos grandes bloques: lo **Abstracto** (la lógica) y lo **Concreto** (la red).
+> **Jerarquía:** `types` $\to$ componen `message` $\to$ usados en `operation` $\to$ agrupados en `portType`.
 
-## 6.6.1 Descripción Abstracta (La Lógica)
-Aquí definimos el "qué" hace el servicio, sin importarnos si está hecho en Java, Python o C#.
-1. **`types` (Tipos de Datos):**
-    - Es el diccionario de base. Define los "ingredientes" usando **XML Schema (XSD)**.
-    - _Ejemplo:_ Define qué es un entero (`xsd:int`) o un objeto complejo (`<Cliente>`).
+## 6.3.2 Descripción Concreta (La Red - El "Cómo")
+Baja la lógica a tierra definiendo la conexión física.
+1. **`binding` (Protocolo):** Asigna un protocolo concreto (ej. **SOAP** sobre HTTP) al `portType`.
+2. **`service` (Servidor):** Agrupa los puertos.
+3. **`port` (Dirección):** Une un `binding` con una **URL** física (Endpoint).
 
-2. **`message` (Mensajes):**    
-    - Son los paquetes de datos. Combina los tipos anteriores para formar una "Petición" o una "Respuesta".
-    - _Analogía:_ Es poner los ingredientes en un plato.
+## 6.3.3 Resumen Práctico (WSDL vs Java)
 
-3. **`portType` (La Interfaz):** ¡Aquí está la clave!    
-    - Es el equivalente a una `interface` en Java. Es un agrupador.
-    - **Contiene:** Un conjunto de **`operations`**.
+| **Elemento WSDL** | **Equivalente Java** | **Función**                    |
+| ----------------- | -------------------- | ------------------------------ |
+| **`types`**       | Clases / Beans       | Estructura de datos.           |
+| **`message`**     | Argumentos           | Paquete de datos de E/S.       |
+| **`portType`**    | **`interface`**      | Agrupa métodos abstractos.     |
+| **`operation`**   | **Método**           | Firma de la función (`sumar`). |
+| **`binding`**     | Implementación       | Protocolo (SOAP/HTTP).         |
+| **`service`**     | Instancia            | URL del servicio.              |
 
-4. **`operation` (Las Funciones):**    
-    - Define una acción específica que se puede realizar.
-    - Conecta un **mensaje de entrada** (input) con un **mensaje de salida** (output).
-    - _Equivalencia Java:_ Es la firma del método: `public int sumar(int a, int b)`.
+# 6.4 Protocolo SOAP (La Invocación)
+**SOAP** (_Simple Object Access Protocol_) es el estándar XML para invocar servicios. A diferencia de REST, es un protocolo estricto basado en mensajes.
+- **Filosofía:** Es **sin estado** (stateless) y, por defecto, **unidireccional** (one-way).
+- **Sincronía:** Logra el modelo Petición-Respuesta apoyándose en el transporte (HTTP).
 
+## 6.4.1 Estructura del Mensaje (El Sobre)
+Todo mensaje SOAP es un documento XML con tres partes:
+1. **Envelope (Sobre):** Raíz obligatoria que encapsula todo.
+2. **Header (Cabecera) - _Opcional_:** Metadatos (seguridad, transacciones). Puede ser procesado por nodos **intermediarios**.
+3. **Body (Cuerpo) - _Obligatorio_:** La carga útil (payload) con los datos de negocio. Solo para el **destinatario final**.
 
-> **Jerarquía:** `types` $\rightarrow$ componen `message` $\rightarrow$ usados en `operation` $\rightarrow$ agrupados en `portType`.
+### Atributos Clave de la Cabecera
+Permiten controlar el flujo a través de intermediarios:
+- **`role` (¿Quién?):** Define qué nodo debe leer la cabecera (`next`, `ultimateReceiver`).
+- **`mustUnderstand` (¿Obligatorio?):** Si es `true` y el nodo no entiende la etiqueta, **debe fallar**.    
 
-## 6.6.2 Descripción Concreta (La Red)
-Aquí bajamos a tierra y definimos el "cómo" y el "dónde" conectarse.
-1. **`binding` (El Protocolo):**
-    - Toma el `portType` abstracto y le asigna un protocolo real.
-    - Casi siempre: **SOAP** sobre **HTTP**. Define el formato de codificación (literal, encoded, etc.).
-2. **`service` (El Servidor):**
-    - Agrupa los `ports`.
-3. **`port` (La Dirección):**
-    - Une un `binding` con una dirección física (**URL**).
-    - _Ejemplo:_ `http://localhost:8080/mi-app/calculadora`.
+## 6.4.2 Estilos de Invocación (Body Styles)
+SOAP define dos formas de estructurar el XML dentro del Body:
 
-## 6.6.3 Ejemplo Práctico (Corregido)
-Vamos a exponer la función Java: `public int sumar(int A, int B)`.
+| **Estilo**   | **Filosofía**          | **Características**                                                           |
+| ------------ | ---------------------- | ----------------------------------------------------------------------------- |
+| **Document** | "Te envío datos"       | Flexible. El XML es arbitrario. No se ve el nombre del método explícitamente. |
+| **RPC**      | "Ejecuta esta función" | Rígido. Simula una llamada a código (`<metodo><arg1>...</arg1></metodo>`).    |
 
-### A. Parte Abstracta (Definiciones)
-```xml
-<types>
-  <xsd:schema>
-    <xsd:element name="SumarRequest">
-      <xsd:complexType>
-        <xsd:sequence>
-          <xsd:element name="numA" type="xsd:int"/>
-          <xsd:element name="numB" type="xsd:int"/>
-        </xsd:sequence>
-      </xsd:complexType>
-    </xsd:element>
-    <xsd:element name="SumarResponse"> ... </xsd:element>
-  </xsd:schema>
-</types>
-
-<message name="PaqueteEntrada">
-  <part name="parametros" element="tns:SumarRequest"/>
-</message>
-<message name="PaqueteSalida">
-  <part name="resultado" element="tns:SumarResponse"/>
-</message>
-
-<portType name="CalculadoraInterface">
-  <operation name="sumar">
-    <input message="tns:PaqueteEntrada"/>
-    <output message="tns:PaqueteSalida"/>
-  </operation>
-</portType>
-```
-
-### B. Parte Concreta (Implementación)
-```xml
-<binding name="CalculadoraBinding" type="tns:CalculadoraInterface">
-  <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-  <operation name="sumar">
-    <soap:operation soapAction="sumar"/> <input><soap:body use="literal"/></input>
-    <output><soap:body use="literal"/></output>
-  </operation>
-</binding>
-
-<service name="CalculadoraService">
-  <port name="CalculadoraPuerto" binding="tns:CalculadoraBinding">
-    <soap:address location="http://localhost:8080/calculadora"/>
-  </port>
-</service>
-```
+## 6.4.3 Flujo de Ejecución (Arquitectura)
+El viaje del mensaje desde tu código Java hasta el servidor remoto:
+1. **Código Cliente:** Llama al método local (`stub.sumar(5,5)`).
+2. **Stub Cliente:** Delega en el **Motor SOAP** (JAX-WS).
+3. **Motor SOAP:** Serializa a XML (SOAP) y lo pasa al **Cliente HTTP**.
+4. **Red:** El mensaje viaja por HTTP (POST).
+5. **Router SOAP (Servidor):** Recibe el XML, lo parsea y decide a qué servicio llamar.
+6. **Skeleton/Stub Servidor:** Deserializa el XML a objetos Java.
+7. **Implementación:** Se ejecuta el código real (`public int sumar...`).
 
 
-### Resumen Rápido para Examen
+# 6.5 Ejemplo Práctico: JAX-WS
+## A. El Servidor (Service Provider)
+Se compone de tres partes: Contrato, Lógica y Despliegue.
 
-| **Elemento WSDL** | **Concepto en Java** | **Función**                                           |
-| ----------------- | -------------------- | ----------------------------------------------------- |
-| **`types`**       | Clases/Beans         | Define la estructura de datos (int, String, ObjetoX). |
-| **`message`**     | Argumentos           | Agrupa los datos para enviarlos o recibirlos.         |
-| **`portType`**    | **`interface`**      | Agrupa las funciones abstractas.                      |
-| **`operation`**   | **Método**           | Define una función (`sumar`) con entrada y salida.    |
-| **`binding`**     | Implementación       | Define el protocolo (SOAP/HTTP).                      |
-| **`service`**     | Instancia            | Define dónde está el servicio (URL).                  |
-
-# 6.7 Protocolo SOAP (Invocación de Servicios Web)
-
-## 6.7.1 Contexto y Necesidad
-Para invocar servicios Web de forma consistente, no basta con usar XML para los datos; el propio **mecanismo de invocación** debe ser XML.
-- **Requisitos:** Se necesita detallar qué operación ejecutar, con qué argumentos, gestionar errores y definir quién procesa cada parte del mensaje.
-- **Herramientas Java:** Tecnologías como **JAX-WS** y **JAXB** automatizan este proceso, generando el código necesario para que cliente y servidor se entiendan sin escribir el XML a mano.
-
-## 6.7.2 Definición de SOAP
-**SOAP (Simple Object Access Protocol)** es el protocolo estándar para el intercambio de información estructurada en servicios web.
-
-1. **Basado en Mensajes:** No es una llamada directa a función, sino un intercambio de "documentos" donde se codifica lo que se quiere hacer.    
-2. **Sin Estado (Stateless):** No existe una coreografía predefinida; cada mensaje es independiente (salvo que la aplicación gestione lo contrario).
-3. **Unidireccional y Asíncrono:**
-    - Por defecto, SOAP es **one-way** (envío y olvido).
-    - Para lograr el modelo clásico **Petición-Respuesta** (síncrono), SOAP se apoya en el protocolo de transporte (generalmente **HTTP**) y en middleware específico.
-
-
-## 6.7.3 Estructura del Mensaje SOAP (El Sobre)
-Un mensaje SOAP se visualiza conceptualmente como un **Sobre (Envelope)**.
-
-1. **Envelope (Sobre):** La raíz del XML. Encapsula todo el mensaje.
-2. **Header (Cabecera) - _Opcional_:**
-    - Contiene metadatos (información "sobre" el mensaje, no "del" mensaje).
-    - **Uso:** Seguridad (certificados), IDs de transacción, enrutamiento.
-    - Puede ser procesado por **intermediarios** antes de llegar al destino final.
-
-3. **Body (Cuerpo) - _Obligatorio_:**    
-    - Contiene la carga útil (payload): los datos reales para la lógica de negocio.
-    - Solo lo procesa el **destinatario final**.
-
-## 6.7.4 Estilos del Cuerpo (Body Styles)
-Aunque SOAP obliga a tener un Body, no impone cómo escribir el XML dentro. Existen dos estilos principales:
-
-### A. Estilo Documento (Document Style)
-- **Filosofía:** "Te envío un documento, tú sabrás qué hacer".
-- **Formato:** El cuerpo contiene un documento XML arbitrario (puede ser validado por un Schema).    
-- **Flexibilidad:** Máxima. No se ve explícitamente el nombre del método a simple vista, solo datos.
-
-### B. Estilo RPC (Remote Procedure Call)
-- **Filosofía:** "Quiero que ejecutes la función X con los parámetros Y".
-- **Formato:** Simula una llamada a código. Estructura rígida:
-    - Etiqueta con el nombre de la operación (`<chargeReservation>`).
-    - Etiquetas con los parámetros (`<reservationCode>`).
-- **Respuesta:** También estructurada (`<methodReturn>`).
-
-### Reglas de Codificación (Encoding)
-¿Cómo convertimos una clase Java `Coche` o un `ArrayList` a XML?
-- Existen recomendaciones (W3C SOAP Encoding) que herramientas como **JAX-WS** siguen automáticamente.
-- **Tipos Complejos:** Se traducen a estructuras anidadas (ej. Clase `Coche` con campos `matricula` y `kms`).
-- **Arrays:** Se traducen a secuencias de elementos repetidos.
-
-
-## 6.7.5 Procesamiento de la Cabecera (Header)
-Una característica potente de SOAP es que el mensaje puede pasar por varios nodos (intermediarios) antes de llegar al servidor final.
-
-### Atributo `env:role` (¿Quién?)
-Define **qué nodo** debe leer ese bloque de la cabecera.
-- `none`: Nadie debe procesarlo (informativo).
-- `next`: El siguiente nodo que reciba el mensaje (sea intermediario o final) puede procesarlo.
-- `ultimateReceiver`: Solo el destinatario final debe procesarlo.
-
-### Atributo `env:mustUnderstand` (¿Obligatorio?)
-Define la **importancia** del bloque:
-- `true`: Si te toca procesarlo (según tu _role_) y no entiendes qué significa esa etiqueta, **debes generar un fallo** y parar.
-- `false`: Si no lo entiendes, puedes ignorarlo.
-
-## 6.7.6 Flujo de Ejecución (Arquitectura)
-¿Cómo viaja el mensaje desde tu código Java hasta el servidor?
-
-1. **Implementación del Cliente (Client Implementation):** Tu código llama al servicio como si fuera una llamada local normal.  
-2. **Stub del Cliente (Client Stub):** Recibe esa llamada local e invoca al **Motor SOAP**.
-3. **Motor SOAP (SOAP Engine):** Prepara el mensaje SOAP (crea el XML). Empaqueta ese SOAP dentro de una petición HTTP y se lo pasa al cliente HTTP.
-4. **Motor HTTP (HTTP Engine):** Es el encargado de enviar físicamente la petición a través de la red hacia el proveedor.
-5. **Servidor HTTP (HTTP Server):** Recibe la petición de red y le pasa el contenido del mensaje HTTP al Router.     
-6. **Router SOAP (SOAP Router):** Parsea (analiza) el mensaje, identifica a qué **Stub del Servidor** debe llamar y le entrega el mensaje procesado.
-7. **Stub del Servidor (Server Stub):** Actúa como intermediario final e invoca el procedimiento local de la implementación. 
-8. **Implementación del Servicio (Service Implementation):** Se ejecuta finalmente el código real del servicio (`sumar()`, `reservar()`, etc.).
-
-
-# 6.8 Ejemplo
-## El Servidor (Service Provider)
-**1. La Interfaz (Calculadora.java)**
+1. **La Interfaz (Contrato)**. Define qué operaciones están disponibles.
 ```java
-package com.ejemplo;
-
-import jakarta.jws.WebService;
-import jakarta.jws.WebMethod;
-
 @WebService
 public interface Calculadora {
     @WebMethod
@@ -326,144 +134,64 @@ public interface Calculadora {
 }
 ```
 
-2. **La Implementación (CalculadoraImpl.java)**
+2. **La Implementación (Lógica).** El código real que ejecuta la suma.
 ```java
-package com.ejemplo;
-
-import jakarta.jws.WebService;
-
 @WebService(endpointInterface = "com.ejemplo.Calculadora")
 public class CalculadoraImpl implements Calculadora {
-    
-    @Override
-    public int sumar(int a, int b) {
-        System.out.println(">> Servidor: He recibido una petición para sumar " + a + " + " + b);
-        return a + b;
-    }
+    public int sumar(int a, int b) { return a + b; }
 }
-``` 
+```
 
-3. **El Publicador (Publicador.java)**
+3. **El Publicador (Despliegue).** Arranca el servidor.
 ```java
-package com.ejemplo;
-
-import jakarta.xml.ws.Endpoint;
-
 public class Publicador {
     public static void main(String[] args) {
-        // Publicamos el servicio en localhost
-        String url = "http://localhost:8080/miCalculadora";
-        
-        System.out.println("Iniciando servidor...");
-        Endpoint.publish(url, new CalculadoraImpl());
-        
-        System.out.println("Servicio publicado exitosamente.");
-        System.out.println("WSDL disponible en: " + url + "?wsdl");
+        // Publica la implementación en una URL específica
+        Endpoint.publish("http://localhost:8080/miCalculadora", new CalculadoraImpl());
     }
 }
 ```
 
-`Endpoint.publish(url, implementor)`. Esta función es la que "enciende" el servidor.
-- **Argumentos:**
-    1. **`url` (String):** La dirección web donde quieres ofrecer el servicio.
-        - _Ejemplo:_ `"http://localhost:8080/miCalculadora"`
-        - Define tres cosas: Protocolo (http), Máquina y Puerto (localhost:8080) y el nombre del servicio (/miCalculadora).
-    2. **`implementor` (Object):** Una instancia real de la clase que hace el trabajo.        
-        - _Ejemplo:_ `new CalculadoraImpl()`
-        - Es el objeto Java que contiene el código que suma los números de verdad.
+### Método Clave: `Endpoint.publish(url, implementor)`
+Es el interruptor de encendido.
+- **Arranca:** Inicia un servidor HTTP ligero interno en el puerto 8080.
+- **Genera:** Crea el WSDL dinámicamente en memoria.
+- **Expone:** Habilita la escucha de peticiones SOAP en esa URL.
 
-- **Efectos:**    
-    - **Arranca un mini-servidor web:** Java (JDK) tiene un servidor HTTP interno ligero. Esta línea lo inicia y empieza a escuchar en el puerto 8080.
-    - **Genera el WSDL:** Analiza tu clase `CalculadoraImpl` y crea el contrato XML automáticamente en memoria.
-    - **Expone el servicio:** A partir de este momento, si alguien envía un XML SOAP a esa URL, este objeto responderá.
-
-## El Cliente (Service Consumer)
+## B. El Cliente (Service Consumer)
+El cliente no tiene la lógica de la suma, solo invoca al servidor remoto.
 ```java
-package com.ejemplo;
-
-import jakarta.xml.ws.Service;
-import javax.xml.namespace.QName; // QName sigue siendo parte del JDK estándar (javax)
-import java.net.URL;
-
 public class Cliente {
     public static void main(String[] args) {
         try {
-            // 1. URL donde está el contrato (WSDL)
+            // 1. URL del WSDL (El Manual)
             URL wsdlURL = new URL("http://localhost:8080/miCalculadora?wsdl");
 
-            // 2. Qualified Name (QName) del servicio
-            // Estos nombres (Namespace y ServiceName) están definidos dentro del XML del WSDL
+            // 2. QName (Identificador Único: Namespace + ServiceName)
             QName qname = new QName("http://ejemplo.com/", "CalculadoraImplService");
 
-            // 3. Crear la fábrica de servicios (Usando JAKARTA)
+            // 3. Crear la Fábrica (Service)
             Service service = Service.create(wsdlURL, qname);
 
-            // 4. Obtener el "Stub" (el objeto proxy que implementa nuestra interfaz)
-            Calculadora calculadoraProxy = service.getPort(Calculadora.class);
+            // 4. Obtener el Proxy (Stub)
+            Calculadora proxy = service.getPort(Calculadora.class);
 
-            // 5. Invocar el método remoto
-            System.out.println("Cliente: Enviando petición sumar(10, 20)...");
-            
-            // --- AQUÍ OCURRE EL MARSHALLING (Java -> XML SOAP) ---
-            int resultado = calculadoraProxy.sumar(10, 20); 
-            // --- AQUÍ OCURRE EL UNMARSHALLING (XML SOAP -> Java) ---
+            // 5. Invocación Remota (Marshalling -> Red -> Unmarshalling)
+            System.out.println("Resultado: " + proxy.sumar(10, 20));
 
-            System.out.println("Cliente: El resultado recibido es " + resultado);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
     }
 }
 ```
 
-`URL(string_spec)`:
-- **Argumentos:**
-    - **`spec` (String):** La dirección donde se encuentra el **WSDL** (el contrato).
-    - _Nota:_ Fíjate que al final se le añade `?wsdl`. Sin esto, accederías al servicio, pero el cliente lo que necesita primero es leer las instrucciones (el manual).
+### Métodos Clave del Cliente
 
-- **Efectos:**    
-    - Simplemente crea un objeto que apunta a ese recurso en internet. No conecta todavía, solo prepara la dirección para que la fábrica de servicios sepa dónde ir a leer las instrucciones.
-
-`QName(namespaceURI, localPart)`. Es el concepto más "raro" para quien viene de Java puro. `QName` significa **Qualified Name** (Nombre Cualificado).
-- **Argumentos:**
-    1. **`namespaceURI`:** Es el "Espacio de Nombres". En XML, para evitar que dos servicios se llamen igual, se les pone un apellido que suele ser una URL invertida.
-        - _En el código:_ `"http://ejemplo.com/"`. Esto sale del `package com.ejemplo` de tu servidor.
-    2. **`localPart`:** El nombre del servicio dentro de ese espacio.
-        - _En el código:_ `"CalculadoraImplService"`. Por defecto, JAX-WS le añade la palabra "Service" al nombre de tu clase implementadora.
-
-- **Efectos:**    
-    - Sirve para **identificar de forma única** al servicio dentro del archivo WSDL.
-    - Un WSDL podría describir 10 servicios distintos. Con el `QName`, le estás diciendo a Java: _"De todo el archivo WSDL, quiero hablar concretamente con EL servicio llamado 'CalculadoraImplService' que pertenece a la empresa 'ejemplo.com'"_.
-
-`Service.create(wsdlURL, qname)`
-- **Argumentos:**
-    1. **`wsdlURL`:** La ubicación del archivo de instrucciones (el manual WSDL).
-    2. **`qname`:** El nombre exacto de la empresa dentro de ese manual.
-
-- **¿Qué hace realmente? (La "Fábrica")** Esta función es el **Constructor Maestro**.    
-    1. **Descarga y Lee:** Va a la URL que le diste, se baja el XML del WSDL y lo lee entero.
-    2. **Valida:** Comprueba que dentro de ese XML existe realmente un servicio que se llame como el `qname` que le has pasado. Si el nombre no coincide, aquí saltará un error.
-    3. **Prepara la "Agencia":** Crea un objeto `Service` en memoria. Este objeto **NO** es la calculadora todavía. Es una "fábrica" que sabe cómo crear calculadoras (o cualquier otro puerto definido en el WSDL).
-
-- **Efecto en tu programa:** Te devuelve un objeto `Service` (de la librería `jakarta.xml.ws.Service`). Este objeto es el padre de todos los proxies. Sin él, no puedes pedir puertos (`getPort`).
-
-
- `service.getPort(serviceEndpointInterface)`
-- **Argumentos:**
-    - **`serviceEndpointInterface` (Class):** Le pasas la clase de la **Interfaz Java** (`Calculadora.class`).
-    - _Ojo:_ No le pasas la implementación (el código real), solo la interfaz (el contrato). El cliente no sabe cómo se suma, solo sabe que existe un método `sumar`.
-
-- **Efectos (La Magia del Proxy):**    
-    - **Crea el STUB (Proxy):** Esta función te devuelve un objeto que **parece** local (implementa la interfaz `Calculadora`), pero que es mentira.
-    - Este objeto (`calculadoraProxy`) es un "traductor".
-    - Cuando tú llamas a `.sumar(10, 20)` sobre este objeto, él no suma nada. Lo que hace es:
-        1. Coge el 10 y el 20.  
-        2. Construye el XML SOAP (Marshalling).
-        3. Envía el XML por la red a la URL que definiste.
-        4. Espera la respuesta.
-        5. Desempaqueta el XML de respuesta (Unmarshalling).
-        6. Te devuelve el `int` resultado.
+| **Método**             | **Función Técnica**                                                                                                                                      |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`URL(...?wsdl)`**    | Apunta a la ubicación del contrato. Sin el `?wsdl` al final, no funciona.                                                                                |
+| **`QName`**            | **Nombre Cualificado**. Identifica al servicio exacto dentro del XML del WSDL. Se forma con el `TargetNamespace` (paquete invertido) y el `ServiceName`. |
+| **`Service.create()`** | **La Fábrica**. Descarga el WSDL, lo valida y prepara la conexión.                                                                                       |
+| **`getPort()`**        | **El Proxy (Stub)**. Crea un objeto local falso. Convierte tus llamadas Java (`.sumar`) en mensajes XML SOAP (**Marshalling**) y los envía por HTTP.     |
 
 >[!Nota]
 >En este tema miraros las cosas por encima, yo le metí mucho detalle y mucha explicación pero porque no entendía un carallo. Pero con entender un poco los conceptos principales malo será.

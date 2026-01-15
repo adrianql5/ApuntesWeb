@@ -315,12 +315,36 @@ Para pasar un objeto como argumento en RMI, la clase de ese objeto **debe implem
 
 Todos los atributos dentro del objeto también deben ser serializables (primitivos, Strings, o referencias a otros objetos Serializables).
 
+Debe tener un constructor sin parámetros, necesario para que RMI pueda reconstruir el objeto destino mediante reflexión.
+
 Si hay datos que no quieres enviar (ej: una contraseña o una conexión a BD abierta), debes marcarlos con la palabra clave `transient`.
 
-## 4.4.3 Ejemplo Práctico: Integración Numérica
-**Problema:** Calcular una integral compleja requiere mucha CPU.
- 
-**Solución RMI:**
-1. El Cliente crea un objeto `Sin` (Seno) que implementa `Evaluatable` y `Serializable`
-2. El Cliente envía este objeto al Servidor a través de un método `integrate(...)`
-3. El Servidor recibe el objeto y ejecuta el cálculo intensivo localmente usando el código del objeto recibido
+
+```java
+import java.io.Serializable;
+
+// 1. Implementa la interfaz (La etiqueta)
+public class Empleado implements Serializable {
+
+    private String nombre;
+    
+    // 3. Recursividad: La clase 'Direccion' TAMBIÉN debe ser Serializable
+    // Si 'Direccion' no lo fuera, daría error al enviar 'Empleado'.
+    private Direccion domicilio; 
+
+    // 4. Transient: Este dato NO viaja. En el servidor llegará como null.
+    // Útil para seguridad o datos que solo tienen sentido localmente.
+    private transient String claveSecreta; 
+
+    // 2. Constructor vacío: Necesario para reconstruir el objeto al llegar
+    public Empleado() {
+    }
+
+    // Constructor normal para usarlo tú
+    public Empleado(String nombre, Direccion d) {
+        this.nombre = nombre;
+        this.domicilio = d;
+    }
+}
+``` 
+

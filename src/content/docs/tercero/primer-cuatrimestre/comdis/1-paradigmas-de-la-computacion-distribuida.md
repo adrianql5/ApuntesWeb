@@ -54,7 +54,7 @@ La arquitectura cliente-servidor es **asimétrica**  puesto que cada nodo que in
 - **Cliente (rol activo):** inicia la comunicación y realiza peticiones al servidor
 - **Servidor (rol pasivo):** espera pasivamente a recibir peticiones de los clientes para poder procesarlas.
 
-El objetivo que se persigue es proporcionar una arquitectura de red en la que se puedan ofrecer servicios de forma eficiente y escalable, facilitando la sincronización de eventos y el mantenimiento, ya que los cambios pueden aplicarse en el servidor sin afectar directamente a los clientes, por lo que los clientes también son más ligeros al centralizar los recursos en el servidor.
+El objetivo que se persigue es proporcionar una arquitectura de red en la que se puedan ofrecer servicios facilitando la sincronización de eventos y permite que los clientes sean **más** ligeros al centralizar los recursos en el servidor.
 
 
 
@@ -114,7 +114,7 @@ Aquí intentamos que el programador se olvide de que existen cables de red. Quer
 # 1.5 Desacoplamiento: Sistemas de Mensajes (MOM)
 A veces no queremos respuesta inmediata. A veces queremos "dejar un recado".
 
-**Concepto Principal:** Message-Oriente Middleware (MOM). Un intermediario gestiona colas de mensajes, permitiendo comunicación **asíncrona**.
+**Concepto Principal:** Message-Oriented Middleware (MOM). Un intermediario gestiona colas de mensajes, permitiendo comunicación **asíncrona**.
 
 >[!Info]
 > **El desacomplamiento** consiste en eliminar las dependencias rígidas entre dos sistemas. Podemos diferenciar 2 tipos:
@@ -124,7 +124,7 @@ A veces no queremos respuesta inmediata. A veces queremos "dejar un recado".
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250920212044.png)
 
 ## 1.5.1 Modelo Punto a Punto
-**Funcionamiento:** Un emisor deja un mensaje en una cola. El recepto lo recoge cuando puede. Pensadlo como el correo electrónico.
+**Funcionamiento:** Un emisor deja un mensaje en una cola. El receptor lo recoge cuando puede. Pensadlo como el correo electrónico.
 
 **Ventaja:** Desacomplamiento total. Si el **receptor** está apagado, el mensaje espera en la cola. No se pierde. 
 

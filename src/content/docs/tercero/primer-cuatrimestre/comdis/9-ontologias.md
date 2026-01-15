@@ -73,10 +73,10 @@ JADE traduce los objetos a una secuencia de bytes o caracteres usando un "Códec
 El `ContentManager` es el componente del agente que gestiona esta traducción:
 1. **Registro:** Al iniciar, el agente debe registrar qué Ontología y qué Lenguaje va a usar:
 
- ```java
+```java
 getContentManager().registerLanguage(new SLCodec());
 getContentManager().registerOntology(MiOntologia.getInstance());
-    ```
+```
 
 2. **Enviar (Fill):** El agente crea sus objetos Java (Beans), y el ContentManager los "inyecta" en el mensaje, traduciéndolos al lenguaje elegido (SL/LEAP).    
     - Método: `fillContent(ACLMessage msg, Element content)`.
@@ -85,9 +85,8 @@ getContentManager().registerOntology(MiOntologia.getInstance());
     - Método: `extractContent(ACLMessage msg)`.
 
 
-
 # 9.6. Herramientas de Desarrollo: Protégé
-Escribir ontologías a mano es tedioso y propenso a errores. El documento recomienda usar herramientas gráficas .
+Escribir ontologías a mano es tedioso y propenso a errores.
 - **Protégé:** Software de la Universidad de Stanford para dibujar ontologías gráficamente (clases, relaciones).
 
 - **OntologyBeanGenerator (OBG):** Un plugin para Protégé que **genera el código Java automáticamente**. Crea tanto la clase `Ontology` (esquemas) como los Beans con sus getters y setters, listos para usar en JADE .

@@ -96,7 +96,7 @@ Para construir una aplicación distribuida, Java RMI impone una metodología est
 
 ## 3.4.1 La interfaz Remota
 Es el contrato entre cliente y servidor. Define qué se puede hacer, pero no cómo.
-- Debe extender `java.rmi.REmote`
+- Debe extender `java.rmi.Remote`
 - **Regla de Oro:** todos los métodos deben declara que lanzan `java.rmi.RemoteException`
 
 > **¿Por qué RemoteException?** Porque en sistemas distribuidos, las cosas fallan. La red puede caerse, el servidor puede no existir, o el stub puede perderse. Java obliga al programador a manejar estos fallos explícitamente.

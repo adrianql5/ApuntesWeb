@@ -119,6 +119,9 @@ Cuando juntamos varios agentes, pasamos de diseñar individuos a diseñar socied
 - **Cooperación vs. Competición:** ¿Trabajan juntos para un fin común (equipo de fútbol) o compiten por recursos limitados (subasta)?
 - **Comunicación:** Necesitan un lenguaje común para negociar o delegar tareas.
 
+
+La principal diferencia entre los sistemas multiagente y las redes P2P es la **homogeneidad**, el nivel de autonomía e inteligencia. EN una red P2P los nodos que intervienen son todos homogéneos, su comportamiento es **rígido y reactivo**, todos los nodos realizan las mismas funciones y **colaboran entre sí**. Por el otro lado, los agentes son **heterogéneos** , cada uno se especializa en realizar una tarea o función y puede **competir o colaborar** con otros agentes. Además su comportamiento es **proactivo y autónomo**, no solo reactivo.
+
 ## ¿Por qué usar Agentes? (Utilidad)
 Son ideales para sistemas donde **no hay un control centralizado** o el problema es muy grande y cambiante.
 
@@ -283,7 +286,6 @@ Piensa en JADE como el **Sistema Operativo** de los agentes. En lugar de tener q
 - **Servicios que regala:** Ciclo de vida (nacer/morir), movilidad (viajar entre ordenadores), páginas amarillas (búsqueda), mensajería y seguridad.
 
 ## 8.7.2 La Arquitectura JADE (El "Mundo")
-Una aplicación JADE no es un solo blue, es una estructura distribuida P2P 
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251209183923.png)
 
@@ -295,7 +297,7 @@ Imagina una **Universidad (La Plataforma)**. Una universidad no es un solo edifi
 	- Dentro de cada "Edificio" (Contenedor) viven las personas (Agentes).
 - **Main Container:** es el primer contenedor que se arranca. Es el cerebro de la plataforma. Si este se cae, la plataforma muere. Contiene dos agentes especiales obligatorios:
 	- **AMS (Agent Management System):** la policia. Controla quién entra, quién sale, crea agentes y mata agentes. 
-	- **DF (Directory Facilitator):** las páginas amarillas. Los agentes se anuncias aquí (Vendo servicios de impresión) para que los encuentren.
+	- **DF (Directory Facilitator):** las páginas amarillas. Los agentes se anuncian aquí (Vendo servicios de impresión) para que los encuentren.
 
 **Comando para lanzar JADE:** `java jade.Boot -gui` (Arranca el Main Container y la interfaz gráfica).
 
@@ -351,7 +353,7 @@ public class MiAgente extends Agent {
 ```
 
 ## 8.7.4 Los comportamientos 
-**Un agente JADE funciona en un SOLO HILO de Java**. ¿Cómo puede hacer varias cosas a la vez (escuchar mensajes y calcular datos)? Usando **Multitareas Cooperativa (No apropiativa)**. El agente no salta de una tarea a otra cuando quiere el sistema operativo, sino cuando la tarea actual "cede el turno".
+**Un agente JADE funciona en un SOLO HILO de Java**. ¿Cómo puede hacer varias cosas a la vez (escuchar mensajes y calcular datos)? Usando **comportamientos colaborativos**, **no apropiativos.** Para realizar esto, el programador debe definir cuando el comportamiento debe **ceder CPU** de forma voluntaria a otros comportamientos (normalmente cuando se usan operaciones bloqueantes, esto se explica más abajo).
 
 Todo trabajo que hace el agente debe ir dentro de una clase que herede de `jade.core.behaviours.Behaviour`. Tiene dos métodos clave:
 - `action()`: lo que hace el agente

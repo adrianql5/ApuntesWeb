@@ -22,7 +22,7 @@ Para comprender la importancia de RabbitMQ, primero debemos entender el problema
 ## 7.1.2 La Solución: Mensajería Empresarial
 Como respuesta a este caos de conexiones directas, surge la **mensajería empresarial**.
 - **Objetivo:** Transferir información entre sistemas heterogéneos mediante el envío de mensajes, eliminando el acoplamiento directo.
-- **Evolución tecnológica:** Se pasó de las Llamadas a Procedimientos Remotos (RPC) —que actúan como middleware tipo COM o CORBA— a los **Sistemas MOM (Message-Oriented Middleware)**.
+- **Evolución tecnológica:** Se pasó de las Llamadas a Procedimientos Remotos (RPC) (que actúan como middleware tipo COM o CORBA) a los **Sistemas MOM (Message-Oriented Middleware)**.
 
 # 7.2 Fundamentos de los Sistemas de Mensajes (MOM)
 Un sistema de mensajes es un método de comunicación entre componentes de software o aplicaciones que abstrae la complejidad de la red.
@@ -254,7 +254,6 @@ String nombreCola = channel.queueDeclare().getQueue();
 
 // BINDING: "Solo envíame mensajes si la routing key es EXACTAMENTE 'error'"
 channel.queueBind(nombreCola, "exchange_logs", "error"); 
-// [cite: 153]
 
 channel.basicConsume(nombreCola, true, deliverCallback, consumerTag -> {});
 ``` 
@@ -311,3 +310,4 @@ bindingArgs.put("x-match", "all"); // Deben coincidir TODAS las reglas
 bindingArgs.put("formato", "pdf");
 
 channel.queueBind(nombreCola, "exchange_archivos", "", bindingArgs);
+```

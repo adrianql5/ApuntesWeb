@@ -6,48 +6,73 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 
 Una **gramática** es un conjunto de reglas que nos permite generar todas las palabras válidas de un lenguaje. Es como un "recetario" para crear frases correctas.
 
-# 4.1 Definición Formal: 
-Una gramática se define siempre como:
+# 4.1 Clasificación de Gramáticas 
+Una gramática se define como: $G = (NT, T, P, S)$.
 
-$$G = (V, T, P, S)$$
+- **$NT$ (o $V$):** Variables no terminales (Mayúsculas, ej: $A, B$).
+- **$T$:** Terminales (minúsculas, ej: $a, b$).
+- **$P$:** Producciones (Reglas $\text{Izquierda} \to \text{Derecha}$).
+- **$S$:** Axioma inicial.
 
-1. **$V$ (Variables/No Terminales):** Los "ingredientes intermedios". Se escriben en MAYÚSCULAS ($S, A, B$).
+Chomsky clasificó las gramáticas en 4 niveles (del 0 al 3). **La regla de oro:** A mayor número, más restricciones tiene la gramática y menos potente es.
 
-2. **$T$ (Terminales):** El "plato final". Símbolos que forman las cadenas reales ($a, b, 0, 1$). **Nunca** aparecen a la izquierda de una flecha en gramáticas estándar (Context Free).
+## 4.1.1 Tipo 0: No Restringida (Recursivamente Enumerable)
+- **Definición:** $x \to y$
+    - $x \in (NT/T)^+$ (La izquierda debe tener _algo_, no puede ser vacío).
+    - $y \in (NT/T)^*$ (La derecha puede ser cualquier cosa o vacío).
 
-3. **$P$ (Producciones):** Las reglas de sustitución. Estructura: $\text{Cabeza} \to \text{Cuerpo}$.
-
-4. **$S$ (Axioma):** El estado inicial (siempre pertenece a $V$).
-
-
-
-# 4.2 La Jerarquía de Chomsky
-Chomsky clasificó las gramáticas según **cuán estrictas son sus reglas**.
-- **Regla de oro:** Cuanto mayor es el número (0 $\to$ 3), **más restricciones** tiene y **menos potente** es.
-
-| **Ejemplo**                                                                     | **Tipo**   | **Nombre**                    | **¿Qué ves a la IZQUIERDA de la flecha?**             | **La Regla de Oro (En español)**                                                                                               |
-| ------------------------------------------------------------------------------- | ---------- | ----------------------------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `aAb -> c`<br><br>  <br><br>_(3 cosas se convierten en 1. Se puede encoger)._   | **Tipo 0** | **Sin Restricciones**         | **Cualquier cosa.**                                   | Vale todo. Puedes borrar, cambiar, mezclar... Caos total.                                                                      |
-| `xAy -> xBy`<br><br>  <br><br>_(La 'A' cambia a 'B' solo si está entre x e y)._ | **Tipo 1** | **Sensible al Contexto**      | **Un grupo de cosas.**<br><br>  <br><br>_(Contexto)_  | **"No puedes encoger".**<br><br>  <br><br>Lo que entra debe ser igual o menor a lo que sale. Necesitas "vecinos" para cambiar. |
-| `A -> aBc`<br><br>  <br><br>_(Siempre que veas una A, cámbiala)._               | **Tipo 2** | **Indep. del Contexto (GIC)** | **UNA SOLA variable.**<br><br>  <br><br>_(Mayúscula)_ | **"Sustitución simple".**<br><br>  <br><br>Cambias una variable por lo que quieras, sin importar qué tenga al lado.            |
-| `A -> aB` ó `A -> a`<br><br>  <br><br>_(La variable siempre va a un extremo)._  | **Tipo 3** | **Regular**                   | **UNA SOLA variable.**<br><br>  <br><br>_(Mayúscula)_ | **"Cola india".**<br><br>  <br><br>Muy rígido. Solo puedes poner un terminal y (opcional) una variable al final.               |
+- **Explicación Práctica:**
+    - En la izquierda puedes tener mezclas de variables y terminales (ej: $aAb \to \dots$).
+    - Puedes borrar símbolos, añadir cosas de la nada o acortar la cadena.
+    - Esta gramática genera **Lenguajes Recursivamente Enumerables** y son reconocidos por la **Máquina de Turing**
 
 
-**Nota:** Tipo 3 $\subset$ Tipo 2 $\subset$ Tipo 1 $\subset$ Tipo 0. _Toda gramática regular es independiente del contexto, pero no al revés._
+## 4.1.2 Tipo 1: Sensible al Contexto
+- **Definición:** $\alpha \to \beta$ tal que $|\alpha| \le |\beta|$
+    - Formalmente se ve así: $\alpha = z_1 \mathbf{x} z_2$ y $\beta = z_1 \mathbf{y} z_2$.
+    - Significa que la variable $\mathbf{x}$ se transforma en $\mathbf{y}$ solo si está rodeada por el contexto $z_1$ y $z_2$.
+    - $z_1, z_2 \in T^*$, $x \in NT$ e $y \in (NT/T)^+$ 
 
-# 4.3. Gramáticas Regulares (Tipo 3)
-Son las que generan los Lenguajes Regulares (los mismos que vimos en el Tema 2 y 3).
-
-**Estructura Rígida:**
-- **Lineal Derecha:** $A \to \text{terminal} \cdot \text{Variable}$ (ej: $A \to aB$) o $A \to \text{terminal}$ ($A \to a$).
-- **Lineal Izquierda:** $A \to \text{Variable} \cdot \text{terminal}$ (ej: $A \to Ba$).
+- **Explicación Práctica:**
+    - La longitud de lo de la derecha ($\beta$) siempre es **mayor o igual** que lo de la izquierda ($\alpha$). Nunca se acorta la cadena (excepto quizás para borrar el axioma inicial).
+    - Necesitas "vecinos" específicos para activar el cambio.
+    - Esta gramática genera **Lenguajes Sensibles al Contexto** y son reconocidos por el **Autómata Linealmente Acotado** (una versión de la Máquina de Turing que tiene una cinta de memoria finita/limitada)
 
 
-> **¡Ojo!** No puedes mezclar reglas lineales por derecha e izquierda en la misma gramática. Si lo haces, se convierte en Tipo 2 (GIC) y deja de ser Regular.
+## 4.1.3 Tipo 2: Independiente del Contexto (GIC / CFG)
+- **Definición:** $x \to y$
+    - $x \in NT$ (¡OJO! La izquierda **siempre** es una sola Variable/Mayúscula).
+    - $y \in (NT/T)^*$ (La derecha es cualquier combinación).
+
+- **Explicación Práctica:**    
+    - Es una **sustitución simple**. No importa qué haya al lado de la variable, si ves una $A$, puedes cambiarla por su regla.
+    - Ejemplo: $A \to aBc$.
+    - Esta gramática genera **Lenguajes Independientes del Contexto** y son reconocidos por el **Autómata con Pila (PDA)**.
 
 
-# 4.4 Lenguaje de una Gramática
+## 4.1.4 Tipo 3: Regular
+- **Definición (Imagen):** $\alpha \to \beta$
+    - $\alpha \in NT$ (Izquierda es una sola Variable).
+    - $\beta$ tiene varias formas:
+	    - $\beta \in aB$
+	    - $\beta \in Ba$
+	    - $\beta \in b$
+	- $B \in NT$
+	- $a \in T^+$
+	- $b \in T^*$
 
+- **Explicación Práctica:**    
+    - Es una "cola india". La cadena va creciendo linealmente.
+    - Se divide en dos subtipos (que **NO** se pueden mezclar en la misma gramática):
+        1. **Lineal por la Derecha:** $A \to aB$ o $A \to a$. (La variable siempre al final).
+        2. **Lineal por la Izquierda:** $A \to Ba$ o $A \to a$. (La variable siempre al principio).
+	- Esta gramática genera **Lenguajes Regulares** y son reconocidos por los **Autómatas Finitos** (DFA o NFA), que son máquinas sin memoria auxiliar, limitadas a reconocer patrones lineales.
+
+Relación de Conjuntos:
+$$T3 \subset T2 \subset T1 \subset T0$$
+
+
+# 4.4 Lenguaje de una Gramática Independiente del Contexto
 $$L(G) = \{ w ∈ T* | S ⇒* w \}$$
 
 Se lee así: _"El lenguaje $L$ generado por la gramática $G$ es el conjunto de cadenas $w$..."_
@@ -322,122 +347,3 @@ $$A \to a\alpha$$
 - $\alpha$: Una cadena de cero o más variables (el cambio que te queda por procesar).
 
 **Ejemplo:** $S \to \textbf{a}AB$ (Soltó una 'a', le queda procesar A y B).
-
-
-## Problema 1: Eliminación de Símbolos Inútiles
-**Enunciado:** Encontrar gramática equivalente a:
-
-$$S \to AB \mid CA$$
-$$A \to a$$
-$$B→BC∣AB$$
-$$C \to aB \mid b$$
-
-**Objetivo:** Limpiar la gramática. Para ello buscamos variables que sean "basura" (no generan terminales) o "fantasmas" (nadie llega a ellas).
-
-Paso 1: Detectar símbolos NO Generadores. (¿Qué variables son capaces de convertirse en una cadena de solo terminales al final?)
-
-1. **$A$ es generador:** $A \to a$ (directo).
-2. **$C$ es generador:** $C \to b$ (directo).
-3. **$S$ es generador:** $S \to CA \to ba$ (indirecto).
-4. **¿Y la B?** 
-    - Sus reglas son: $B \to BC$ y $B \to AB$.
-    - Fíjate bien: Para deshacerte de $B$, necesitas aplicar una regla. Pero **todas** sus reglas vuelven a invocar a $B$ ($BC$ o $AB$).
-    - Es un bucle infinito: $B \to AB \to aB \to aAB \dots$ Nunca desaparece.
-    - **Conclusión:** $B$ es un símbolo inútil (no generador). 
-
-Paso 2: Eliminar la B
-Borramos todas las reglas donde aparezca $B$ (tanto a la izquierda como a la derecha).
-
-- Borrar $S \to AB$ (contiene B).
-- Borrar todo el bloque de $B \to \dots$
-- Borrar $C \to aB$ (contiene B).
-
-**Gramática resultante:**
-$$S \to CA$$
-$$A \to a$$
-$$C \to b$$
-
-Paso 3: Símbolos Inaccesibles
-Desde $S$, ¿podemos llegar a todos?
-- $S \to CA$ (Llegamos a C y a A).
-- Todo es accesible.
-
-**Resultado Final (Problema 1):**
-$$S \to CA$$
-$$A \to a$$
-$$C \to b$$
-
-
-## Problema 2: Paso a Forma Normal de Chomsky (FNC)
-**Enunciado:**
-$$S \to ASB \mid \varepsilon$$
-$$A \to aAS \mid a$$
-$$B \to SbS \mid A \mid bb$$
-
-Este es un ejercicio largo. Se hace en 3 fases estrictas.
-
-### Fase 1: Eliminar producciones $\varepsilon$ (Vacías)
-
-La única regla vacía es $S \to \varepsilon$. $S$ es "anulable".
-
-Debemos reescribir las reglas imaginando "qué pasa si S desaparece".
-
-1. **En $S \to ASB$:**
-    - Si la S del centro desaparece: queda $AB$.
-    - Nueva regla: $S \to ASB \mid AB$.
-
-2. **En $A \to aAS$:**
-    - Si la S del final desaparece: queda $aA$.
-    - Nueva regla: $A \to aAS \mid aA$.
-
-3. **En $B \to SbS$:** 
-    - Si la 1ª S desaparece: $bS$.
-    - Si la 2ª S desaparece: $Sb$.
-    - Si ambas desaparecen: $b$
-    - Nueva regla: $B \to SbS \mid bS \mid Sb \mid b$.
-
-
-Gramática tras Fase 1 (sin $\varepsilon$):
-(Nota: asumimos $S \to \varepsilon$ se elimina o se mantiene aparte si el lenguaje acepta vacío, aquí lo quitamos para limpiar).
-
-$$S \to ASB \mid AB$$
-$$A \to aAS \mid aA \mid a$$
-$$B \to SbS \mid bS \mid Sb \mid b \mid A \mid bb$$
-
-### Fase 2: Eliminar producciones Unitarias ($X \to Y$)
-Buscamos reglas donde una variable lleva a una sola variable.
-Aquí detectamos: $B \to A$.
-- Como $B$ se convierte en $A$, $B$ debe heredar todo lo que hace $A$.
-- Producciones de $A$: $\{ aAS, aA, a \}$.
-- Añadimos eso a $B$ y borramos $B \to A$.
-
-
-**Gramática tras Fase 2:*
-$$S \to ASB \mid AB$$
-$$A \to aAS \mid aA \mid a$$
-$$B \to SbS \mid bS \mid Sb \mid b \mid bb \mid \mathbf{aAS \mid aA \mid a}$$
-
-### Fase 3: Convertir a FNC
-Reglas permitidas: $Var \to VarVar$ o $Var \to terminal$.
-1. Crear variables para terminales:
-
-Creamos $X_a \to a$ y $X_b \to b$.
-Sustituimos todos los terminales en reglas largas.
-
-**2. Ajustar reglas largas (Romper cadenas):**
-- $S \to ASB$ $\Rightarrow$ $S \to A Z_1$, donde $Z_1 \to SB$.
-- $A \to aAS$ $\Rightarrow$ $Sustituir 'a': A \to X_a A S \Rightarrow A \to X_a Z_2$, donde $Z_2 \to AS$.
-- $B \to SbS$ $\Rightarrow$ $B \to S Z_3$, donde $Z_3 \to X_b S$.
-- (Y así con el resto...).
-
-**Resultado Final (Esquemático):**
-Variables auxiliares: $X_a \to a, X_b \to b$.
-Transformación de **S**:
-
-$$S \to A Z_1 \mid AB \quad (Z_1 \to SB)$$
-Transformación de **A**:
-$$A \to X_a Z_2 \mid X_a A \mid a \quad (Z_2 \to AS)$$
-
-Transformación de **B**:
-$$B \to S Z_3 \mid X_b S \mid S X_b \mid b \mid X_b X_b \mid X_a Z_2 \mid X_a A \mid a \quad (Z_3 \to X_b S)$$
-

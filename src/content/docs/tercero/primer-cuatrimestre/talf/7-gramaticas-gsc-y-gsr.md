@@ -161,22 +161,35 @@ Queremos generar $0101$.
 > 
 > Clave: "No necesito contar hasta el infinito".
 
-- **Patrones:** Empieza por, termina en, contiene la subcadena "aba".
-- **Conteo:** Solo cuenta hasta un número fijo. (Ej: "Longitud par", "múltiplo de 3").
-- **NO PUEDE:** Contar cosas indefinidas y compararlas.
-- _Ejemplo:_ $L = \{ \text{cadenas de a y b que terminan en ab} \}$.
-
+- **Lo que SÍ hace:**
+    - Acabar/Empezar en algo.
+    - Contar módulo fijo (pares, impares, múltiplos de 3).
+    - $a^n b^m$ (donde $n$ y $m$ no tienen relación).
+- **Lo que NO hace:** Contar indefinidamente y comparar ($a^n b^n$).
 
 ### 2. Lenguajes Independientes del Contexto (Tipo 2)
 > Memoria: Una Pila (Stack).
 > 
 > Clave: "Puedo comparar DOS cosas (o anidar)".
 
-- **Patrones:** Equilibrio, espejos.
-- **Conteo:** $a^n b^n$ (mismo número de a's que de b's).
-- **Estructura:** Paréntesis equilibrados `(( ))`, palíndromos ($ww^R$).
-- **Límite:** Solo puedo relacionar **dos** contadores a la vez o estructuras anidadas. No puedo cruzar relaciones.
-- _Ejemplo:_ $L = \{ a^n b^n \mid n \ge 0 \}$.
+- **Lo que SÍ hace:**
+    - **Emparejar DOS grupos:** $a^n b^n$.
+    - **Desigualdades simples:** $a^n b^p$ donde $p > n$ (La pila sobra, no falta).
+    - **Espejos/Palíndromos:** $ww^R$ (Lo primero que entra es lo último que sale).
+    - **Anidamiento:** Paréntesis `(( ))` o `if { if {} }`.
+
+- **Lo que no hace:**
+    1. **NO puede emparejar TRES grupos:**
+        - Falla en: $L = \{a^n b^n c^n\}$ o $L = \{a^n b^{n+1} c^{n+2}\}$.
+        - _Por qué:_ La pila se vacía al comparar las `a` con las `b`. Cuando llegan las `c`, ya no te queda memoria de cuánto valía `n`.
+
+    2. **NO puede emparejar cruzados (Entrelazados):**        
+        - Falla en: $L = \{0^i 1^j 2^i 3^j\}$ (El famoso $a^n b^m c^n d^m$).
+        - _Por qué:_ Para comparar el 1º con el 3º, tienes que "desapilar" el 2º y lo pierdes.
+
+    3. **NO puede hacer COPIAS exactas (generalmente):**        
+        - Falla en: $ww$ (Ej: "mama").
+        - _Diferencia clave:_ $ww^R$ (espejo) es Tipo 2. $ww$ (copia) es Tipo 1.
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208171958.png)
 
@@ -186,11 +199,10 @@ Queremos generar $0101$.
 > 
 > Clave: "Puedo comparar TRES cosas o COPIAR".
 
-- **Patrones:** Relaciones triples o cruzadas.
-- **Conteo:** $a^n b^n c^n$ (Tres cantidades iguales).
-- **Copia:** $ww$ (una palabra repetida exactamente igual, ej: "papa", "mama"). _Nota: El palíndromo es Tipo 2, la copia exacta es Tipo 1._
-    
-- _Ejemplo:_ $L = \{ a^n b^n c^n \mid n \ge 1 \}$.
+**Lo que SÍ hace:** Todo lo que no podía el Tipo 2.
+- **Relaciones Triples:** $a^n b^n c^n$.
+- **Dependencias Cruzadas:** $a^n b^m c^n d^m$.
+- **Copias Exactas:** $ww$ (Repetir la misma cadena tal cual).
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208172052.png)
 

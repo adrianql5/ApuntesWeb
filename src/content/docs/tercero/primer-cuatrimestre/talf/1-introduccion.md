@@ -48,7 +48,7 @@ Es la **máquina que verifica**. Le das una cadena y te dice "Sí, pertenece al 
 # 1.3 El "Diccionario" de la Asignatura
 **Peligro de Examen:** Confundir estos términos es la causa #1 de suspensos
 
-| **Concepto** | **Símbolo** | **Definición Formal**                                    | **💡 Analogía Práctica**                       |
+| **Concepto** | **Símbolo** | **Definición Formal**                                    | **Analogía Práctica**                          |
 | ------------ | ----------- | -------------------------------------------------------- | ---------------------------------------------- |
 | **Alfabeto** | $\Sigma$    | Conjunto finito y no vacío de símbolos (ej: $\{0, 1\}$). | Las **piezas de Lego** disponibles.            |
 | **Palabra**  | $w, x, y$   | Secuencia finita de símbolos del alfabeto.               | Una **torre** construida con esas piezas.      |
@@ -154,12 +154,12 @@ Dentro del Nivel 0, existe una subdivisión vital para aprobar las preguntas de 
 | **Rec. Enumerable** (Semi-decidible) | Para y dice **SÍ**.                               | Puede parar y decir NO... **O quedarse en bucle infinito**. | ❌ No, puede colgarse.   |
 
 # 1.6 Tabla Resumen Definitiva (La "Chuleta")
-| **Nivel Chomsky** | **Lenguaje**      | **Máquina (Autómata)**  | **Determinismo vs No Det.**                 | **Ejemplo Matemático Clave**   |
-| ----------------- | ----------------- | ----------------------- | ------------------------------------------- | ------------------------------ |
-| **Tipo 3**        | Regular           | **Autómata Finito**     | Equivalentes ✅                              | $a^* b^*$ (Patrones)           |
-| **Tipo 2**        | Indep. Contexto   | **Autómata de Pila**    | **DIFERENTES** ❌ (El No-Det es más potente) | $a^n b^n$ (Pares, Palíndromos) |
-| **Tipo 1**        | Sensible Contexto | **Linealmente Acotado** | _(Complejo, se asume No-Det)_               | $a^n b^n c^n$ (Tríos)          |
-| **Tipo 0**        | Rec. Enumerable   | **Máquina de Turing**   | Equivalentes ✅                              | Cualquier algoritmo            |
+| **Nivel Chomsky** | **Lenguaje**      | **Máquina (Autómata)**  | **Determinismo vs No Det.**               | **Ejemplo Matemático Clave**   |
+| ----------------- | ----------------- | ----------------------- | ----------------------------------------- | ------------------------------ |
+| **Tipo 3**        | Regular           | **Autómata Finito**     | Equivalentes                              | $a^* b^*$ (Patrones)           |
+| **Tipo 2**        | Indep. Contexto   | **Autómata de Pila**    | **DIFERENTES** (El No-Det es más potente) | $a^n b^n$ (Pares, Palíndromos) |
+| **Tipo 1**        | Sensible Contexto | **Linealmente Acotado** | _(Complejo, se asume No-Det)_             | $a^n b^n c^n$ (Tríos)          |
+| **Tipo 0**        | Rec. Enumerable   | **Máquina de Turing**   | Equivalentes                              | Cualquier algoritmo            |
 
 
 | **Tipo de Máquina**                    | **¿Es más potente la No Determinista?**         | **Razón**                                                                                                                                                       |

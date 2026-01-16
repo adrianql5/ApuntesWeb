@@ -6,44 +6,132 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 
 Las **Expresiones Regulares (ER)** son una forma declarativa de describir lenguajes. Si el Autómata es la máquina que valida, la ER es la "fórmula" que genera las cadenas.
 
-# 3.1 Operadores de las ER
-Para leer una ER correctamente, debes conocer la jerarquía de operaciones (como el PEMDAS en matemáticas)
+Aquí tienes la versión mejorada y ampliada. He integrado los datos teóricos (construcción inductiva, propiedades distributivas y variantes de clausura) pero manteniendo el enfoque pragmático para que te sirva de "chuleta" de estudio.
 
-**Los 3 Operadores Básicos:**
-1. **Cierre de Kleene / Clausura ($*$):** Cero o más repeticiones.
-    - $L^* = \{\varepsilon, L, LL, LLL, \dots\}$
+# 3.1 Operadores de las ER (Sintaxis y Jerarquía)
+Para "leer" una Expresión Regular (ER) sin equivocarte, debes respetar la jerarquía.
+**Los 3 Operadores Fundamentales:**
+1. **Cierre de Kleene / Estrella ($*$):** Repetición de 0 a $\infty$ veces.
+    - _Definición formal:_ $$L^* = \bigcup_{i=0}^{\infty} L^i = L^0 \cup L^1 \cup L^2 \dots$$
+    - _En cristiano:_ $\{\varepsilon, L, LL, LLL, \dots\}$
 
-2. **Concatenación (implícito):** Una cosa detrás de otra.
-    - $LM$: Cadenas de $L$ seguidas de cadenas de $M$.
+2. **Concatenación ($\cdot$ o implícito):** Secuenciación.    
+    - $LM$: Una cadena de $L$ pegada a una de $M$.
 
-3. **Unión ($+$ ó $|$):** Ocurre uno u otro.
-    - $L+M$: Cadenas que son de $L$ **o** son de $M$.
+3. **Unión ($+$ ó $|$):** Selección (O lógica).    
+    - $L+M$: Cadenas que pertenecen a $L$ **o** pertenecen a $M$.
 
-
-> [!IMPORTANTE: Jerarquía de Precedencia]
+> [!WARNING]
 > 
-> En el examen, si ves $a + bc^*$, ¿qué se opera primero?
+> Jerarquía de Precedencia (¡Memoriza esto!)
 > 
-> 1. **$*$ (Lo más fuerte):** Solo afecta a lo que tiene inmediatamente a la izquierda. ($c^*$)
+> El orden de evaluación estricto es:
+> 
+> 1. **$*$ (Estrella):** Lo más fuerte. Se pega a lo que tiene inmediatamente a la izquierda.
 >     
-> 2. **Concatenación:** Luego se une. ($bc^*$)
+> 2. **$\cdot$ (Concatenación):** Lo siguiente en fuerza.
 >     
-> 3. **Unión (Lo más débil):** Al final se suma. ($a + (bc^*)$)
+> 3. **$+$ (Unión):** Lo más débil. Separa la expresión en bloques grandes.
 >     
-> Usa paréntesis si quieres cambiar esto: $(a+b)^*$
+> 
+> **Ejemplo de examen:** $a + bc^*$ 
+> - ¿Qué se repite? Solo la $c$.
+> - Luego se concatena $b$ con $c^*$.
+> - Al final, tienes dos opciones: o la cadena $a$, o la cadena formada por $bc^*$.     
 
-# 3.2 Álgebra de las ER
-Estas igualdades sirven para simplificar expresiones complejas
-- **Elemento Identidad de la Unión ($\emptyset$):** $L + \emptyset = L$ (Sumar nada no cambia nada).
-- **Elemento Identidad de la Concatenación ($\varepsilon$):** $L\varepsilon = \varepsilon L = L$ (Concatenar vacío no añade longitud).
-- **Elemento Nulo de la Concatenación ($\emptyset$):** $L\emptyset = \emptyset L = \emptyset$ (Si una parte del camino está rota/vacía, todo el camino se rompe).
+# 3.2 Construcción de ER (Definición Inductiva)
+En teoría te pueden preguntar: _"Defina formalmente una ER"_. No te inventes nada, usa esta estructura recursiva:
+1. **Base (Los ladrillos):**
+    - $\varepsilon$ es una ER (representa el lenguaje $\{\varepsilon\}$).
+    - $\emptyset$ es una ER (representa el lenguaje vacío $\{\}$).
+    - Cualquier símbolo $a$ del alfabeto es una ER (representa $\{a\}$).
 
-- **No conmutativa:** $ab \neq ba$ (El orden importa).
-- **Idempotencia:** $L + L = L$ (Decir "a ó a" es lo mismo que decir "a").
-- **Propiedad del Cierre:** $\emptyset^* = \varepsilon$ y $\varepsilon^* = \varepsilon$.
+2. **Paso Inductivo (El cemento):**    
+    - Si $E$ y $F$ son ER, entonces también lo son:
+        - $E + F$ (Unión)
+        - $EF$ (Concatenación)
+        - $E^*$ (Cierre)
+        - $(E)$ (Paréntesis para agrupar)
 
 
-# 3.3 Conversión de Autómatas Finitos a ER
+# 3.3 El "Cheat Sheet" del Álgebra de ER
+Usa estas identidades para simplificar expresiones monstruosas en los ejercicios.
+
+## A. Identidades y Elementos Nulos
+- Identidad de la Unión ($\emptyset$):
+    $L + \emptyset = L$ (Sumar nada, se queda igual).
+
+- Identidad de la Concatenación ($\varepsilon$):    
+    $L\varepsilon = \varepsilon L = L$ (Pegar "vacío" no alarga la cadena).
+
+- Elemento Nulo de la Concatenación ($\emptyset$):    
+    $L\emptyset = \emptyset L = \emptyset$ (Si un tramo del puente se cae, no cruzas el río).
+
+
+## B. Propiedades Aritméticas
+- **Conmutativa (SOLO Unión):** $L + M = M + L$.
+    - _¡OJO!:_ La concatenación **NO** es conmutativa ($LM \neq ML$). "Casa" $\neq$ "Saca".
+
+- **Asociativa:**    
+    - $(L+M)+N = L+(M+N)$
+    - $(LM)N = L(MN)$
+
+- **Distributiva (Factorización):** Vital para sacar factor común.    
+    - Por izquierda: $L(M+N) = LM + LN$
+    - Por derecha: $(M+N)L = ML + NL$
+
+- **Idempotencia:**    
+    - $L + L = L$ (No sumas cantidades, unes conjuntos. Decir "rojo o rojo" es "rojo").
+
+
+## C. Propiedades de los Cierres (Estrella y Más)
+Aquí es donde suelen pillar en los test.
+1. **Doble Estrella:** $(L^*)^* = L^*$ (Repetir repeticiones sigue siendo repetir).
+
+2. **Cierre Positivo ($^+$):** $L^+ = LL^*$.    
+    - Significa "1 o más veces" (excluye $\varepsilon$ si $L$ no lo contenía).
+
+3. **Opcionalidad ($?$):** $L? = L + \varepsilon$.    
+    - Significa "0 o 1 vez" (aparece o no aparece).
+
+4. **Descomposición:** $L^* = L^+ + \varepsilon$.
+
+5. **Casos Límite:**    
+    - $\emptyset^* = \varepsilon$ (El conjunto de 0 repeticiones de nada es la cadena vacía).
+    - $\varepsilon^* = \varepsilon$
+
+
+> [!INFO] ¿Por qué $\emptyset^* = \varepsilon$?
+> 
+> La operación estrella ($*$) se define como la unión de todas las potencias de un lenguaje, empezando obligatoriamente por el cero:
+> 
+> $$L^* = L^0 \cup L^1 \cup L^2 \dots$$
+> 
+> 1. **La Regla de Oro:** Por definición universal, **cualquier lenguaje** elevado a la potencia 0 es $\{\varepsilon\}$ (la cadena vacía).
+>     
+> 2. **El Resto:** Como no puedes sacar símbolos de un conjunto vacío, $\emptyset^1, \emptyset^2 \dots$ son todos $\emptyset$.
+>     
+> 
+> **La Suma:** $\{\varepsilon\} \cup \emptyset \cup \emptyset \dots = \mathbf{\{\varepsilon\}}$
+
+
+# 3.4 Trampas Típicas de Examen
+1. **Confundir $\emptyset$ con $\varepsilon$:**
+    - $\varepsilon$ es una cadena (longitud 0). Es como una caja vacía.
+    - $\emptyset$ es un lenguaje (tamaño 0). Es no tener ni caja.
+    - Recuerda: $\emptyset^* = \varepsilon$.
+
+2. **El error de la distribución del asterisco:**    
+    - $(a+b)^* \neq a^* + b^*$.
+    - $(a+b)^*$ mezcla as y bs libremente (ej: $abaabb$).
+    - $a^* + b^*$ te obliga a elegir: o todo as, o todo bs.
+
+3. **Olvidar el orden en la concatenación:**    
+    - Si tienes $ab + ac$, puedes sacar factor común $a(b+c)$.
+    - Pero si tienes $ba + ca$, el factor común va a la derecha: $(b+c)a$.
+
+
+# 3.5 Conversión de Autómatas Finitos a ER
 > **Método:** Eliminación de Estados.
 
 La idea es desmantelar el autómata estado por estado hasta que solo quede una "super-flecha" del inicio al final con la Expresión Regular completa.
@@ -89,13 +177,17 @@ $$L=(R*+SU*T)*SU*$$
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020172650.png)
 
+Esto es equivalente a escribir:
+$$L=(R+SU*T)*SU*$$
+Porque podemos aplicar esta propiedad para simplificar: $(L^*)^* = L^*$
+
 ## Ejemplo complejo
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251207213850.png)
 
 >[!Nota]
 > Cuando hice el ejercicio de arriba se me fue la pinza. En $ER_1$ donde pone un $+$ es una multiplicación y lo mismo en $ER_2$. $ER_1=(1+(00*10*11*0))*(00*1*)0*$. 
 
-# 3.4 Conversión de ER  a Autómatas Finitos
+# 3.6 Conversión de ER  a Autómatas Finitos
 Empleando estas reglas se puede construir un AFD con transiciones epsilon, suelen quedar autómatas gigantescos. Se puede simplificar después o también hay casos donde es obvio el autómata que reconocen
 
 $$R+S:L(R)+L(S)$$
@@ -111,7 +203,7 @@ $$R*:L(R*)$$
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251207214613.png)
 
-# 3.5 Lema del Bombeo para Lenguajes Regulares
+# 3.7 Lema del Bombeo para Lenguajes Regulares
 >[!Nota]
 >Esto en prácticas no lo dimos, y ns si cae en el final o no pero en anteriores finales lo pregunta. Y claro no se si en la teórica lo dijo porque ir a la teórica nunca fue opción.
 

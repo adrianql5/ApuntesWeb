@@ -297,6 +297,8 @@ Se hace en dos pasadas:
 1. **No Generadores:** Variables que entran en bucle y nunca llegan a terminales ($A \to aA$). Bórralas.
 2. **Inalcanzables:** Variables a las que no puedes llegar empezando desde $S$. Bórralas.
 
+Un símbolo $X$ es generador si $X ⇒*w$ . Un símbolo X es alcanzable si existe una derivación $S⇒* \alpha X \beta$ para algún $\alpha$ y $\beta$. Todo símbolo útil es generador y alcanzableeeeeeeeeee.
+
 
 **Ejemplo que usa los pasos 1 y 2:**
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208135015.png)
@@ -347,3 +349,5 @@ $$A \to a\alpha$$
 - $\alpha$: Una cadena de cero o más variables (el cambio que te queda por procesar).
 
 **Ejemplo:** $S \to \textbf{a}AB$ (Soltó una 'a', le queda procesar A y B).
+
+Una cadena de longitud $n$ tiene una derivación de $n$ pasos. Un analizador sintáctico descendente parará a profundidad $n$ y nunca habrá recursividad por la izquierda.

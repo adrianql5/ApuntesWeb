@@ -2,6 +2,8 @@
 title: "Aprendizaje no Supervisado"
 ---
 
+Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos 
+
 # 6.1 Cambio de Paradigma: De la Etiqueta a la Estructura
 En la **Regresión Lineal y Logística** (temas anteriores), siempre teníamos un conjunto de datos con la respuesta correcta: $\{(x^{(1)}, y^{(1)}), ...\}$. La máquina aprendía comparando su predicción con esa $y$.
 

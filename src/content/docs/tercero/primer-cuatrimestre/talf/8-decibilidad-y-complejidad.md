@@ -4,93 +4,90 @@ title: "Decibilidad y Complejidad"
 
 Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos 
 
-Hasta ahora hemos estudiado qué pueden hacer las máquinas. En este tema estudiamos sus **límites** (qué no pueden hacer) y su **eficiencia** (cuánto tardan).
-
-# 8.1 Computabilidad vs. Decidibilidad
-Primero, distinguimos dos tipos de preguntas que le hacemos a una Máquina de Turing (MT):
-1. Computabilidad (Calcular valores):
-    Una función es computable si existe una MT capaz de calcular el resultado para cualquier entrada del dominio.
-    - _Ejemplo:_ Calcular $f(x) = x^2$.
-
-2. Decidibilidad (Responder Sí/No): 
-    Hablamos de decidibilidad cuando el problema tiene una respuesta binaria (aceptar/rechazar).
-    - **Problema Decidible:** Existe una MT que **siempre se para** y da la respuesta correcta (Sí o No) para cualquier entrada.
-    - **Problema Indecidible:** No existe ninguna MT que pueda resolverlo siempre (se quedaría en bucle infinito para algunos casos).
+# 8.1 Conceptos Básicos: ¿Qué puede hacer una máquina?
+Antes de medir el tiempo, medimos si es _posible_ hacerlo.
+- **Función Computable:** Una función $f$ es computable si existe una Máquina de Turing (MT) que puede calcular el resultado para **todo** valor del dominio.
+- **Problema Decidible:** Es un problema cuya respuesta es binaria (**SÍ/NO**).
+    - Es decidible si existe una MT da la respuesta correcta (SÍ o NO) para cualquier entrada.
+    - _Si la máquina se queda en bucle infinito para alguna entrada, el problema NO es decidible._
 
 
+# 8.2 El Problema de la Parada (Halting Problem)
+El ejemplo clásico de problema **Indecidible**.
 
-# 8.2 El Problema de la Parada (The Halting Problem)
-Este es el ejemplo clásico de problema **indecidible**.
+**Planteamiento:** Queremos diseñar una "Super-Máquina" $H$ que analice a cualquier otra máquina $M$ con una entrada $w$ y nos diga si $M$ se va a colgar (bucle) o si terminará.
 
-> **El Problema:** ¿Existe una máquina universal $H$ que, si le damos el código de otra máquina $M$ y una entrada $w$, nos diga si $M$ se parará o se quedará en bucle infinito?.
+Definición formal de la Máquina H (si existiera): Entrada: $w_M$ (código de la máquina) y $w$ (datos).
+- $q_0 w_M w \vdash^* x_1 q_y x_2$ $\rightarrow$ Si $M$ **se para** con $w$. (Salida: SÍ)
+- $q_0 w_M w \vdash^* x_1 q_n x_2$ $\rightarrow$ Si $M$ **no se para** con $w$. (Salida: NO)
 
-**La Respuesta:** **NO**. Es imposible construir tal máquina.
+**Conclusión Teórica:**
+- **No existe ninguna MT $H$** que pueda hacer esto para todos los casos.
+- Por tanto, el Problema de la Parada es **Indecidible**.
 
-- Se demuestra por reducción al absurdo. Si existiera, podríamos crear una paradoja (una máquina que se para si la predicción dice que no se para, y viceversa).
-- **Conclusión:** El problema de la parada es **indecidible**.
-
-Implicación Teórica:
-
-Si pudiéramos resolver el problema de la parada, entonces todos los Lenguajes Recursivamente Enumerables (que aceptan, pero pueden no parar al rechazar) se convertirían automáticamente en Lenguajes Recursivos (que siempre paran).
-
-
-# 8.3 Complejidad Computacional
-Aquí no nos importa _si_ se puede resolver, sino **cuánto cuesta** resolverlo (tiempo y memoria).
-
-- Usamos la notación **O-grande ($O(...)$)** para medir el orden de magnitud. Nos interesa cómo crece el tiempo al aumentar el tamaño de la entrada ($n$).
+> **Nota importante para test:** Si el problema de la parada fuera decidible, todos los Lenguajes Recursivamente Enumerables (LRE) se convertirían automáticamente en Lenguajes Recursivos (LRC). Como no lo es, LRE $\neq$ LRC.
 
 
-### El Hardware Importa (en Complejidad)
-En el tema anterior dijimos que todas las variaciones de MT son equivalentes. **En complejidad, NO lo son.**
-- Un problema puede tardar $O(n^2)$ en una MT estándar (una cinta).
-- El mismo problema puede tardar $O(n)$ en una MT con **dos cintas**.
-    - _Moraleja:_ La estructura de la máquina afecta a la eficiencia, aunque no a la capacidad de resolver el problema.
+# 8.3 Complejidad Computacional (Medir el coste)
+Una vez sabemos que un problema se puede resolver, preguntamos: **¿Cuánto cuesta?**
+- **Medida:** Usamos el tamaño del problema ($n$) y medimos cuánto aumenta el tiempo al crecer $n$.
+- **Notación:** Usamos el orden de magnitud **O(...)** (O grande), no el tiempo exacto en segundos.
+- **Tiempo T(n):** Una MT resuelve un problema en tiempo $T(n)$ si no hace más de $T(n)$ movimientos.
+
+### Diferencia clave: El Hardware importa
+En decidibilidad (teoría pura), todas las MT son iguales. En complejidad (eficiencia), **NO**. El número de cintas cambia la velocidad.
+
+**Ejemplo: $L = \{ a^n b^n \mid n \ge 1 \}$**
+- **MT Estándar (1 cinta):** Tarda $O(n^2)$. (Tiene que ir y volver muchas veces).
+- **MT con 2 cintas:** Tarda $O(n)$. (Puede copiar y comparar en una sola pasada).
 
 
-# 8.4 Clases de Complejidad: P y NP
-Clasificamos los lenguajes según lo difícil que es para una máquina aceptarlos.
+# 8.4 Clases de Complejidad: Determinismo vs No Determinismo
+Aquí definimos qué tan difícil es un problema según el tipo de máquina.
 
-### Definiciones Formales
+### Definiciones de Tiempo
+- **TD(T(n)):** Tiempo Determinista. Lo que tarda una MT normal (sin "magia"). Es aceptado por una MT multicinta determinista.
+- **TND(T(n)):** Tiempo No Determinista. Lo que tarda una MT No Determinista (que puede "adivinar" el camino correcto). Es aceptado por una MT multicinta no determinista.
+- **Regla:** $TD(T(n)) \subseteq TND(T(n))$. (El determinismo es un caso particular del no determinismo).
 
-| **Clase** | **Definición**    | **Tipo de Máquina**    | **Tiempo**                                                     |
-| --------- | ----------------- | ---------------------- | -------------------------------------------------------------- |
-| **P**     | **Polinómico**    | MT **Determinista**    | Se resuelve en tiempo $n^k$ (polinómico).                      |
-| **NP**    | **No Polinómico** | MT **No Determinista** | Se resuelve en tiempo $n^k$ (polinómico) usando "adivinación". |
+### Ejemplo: SAT (Satisfacibilidad)
+Dada una fórmula lógica (ej: $(x_1 \lor x_2) \land \neg x_1$), ¿existe una combinación de True/False que la haga verdadera?
+- **MT Determinista:** Tiene que probar todas las combinaciones. Coste exponencial: **$O(2^n)$**. 
+- **MT No Determinista:** "Adivina" la combinación correcta al instante y solo verifica. Coste lineal: **$O(n)$**.
 
-> **Nota:** $NP$ no significa "No Polinómico" literalmente en inglés, sino "Nondeterministic Polynomial time".
 
-### Relación entre P y NP
-1. **$P \subseteq NP$:** Todo problema que una máquina determinista resuelve rápido, una no determinista también puede resolverlo rápido (simplemente no usa su capacidad de adivinar).
-2. **La gran pregunta:** ¿$P = NP$? Nadie lo sabe. Se asume que $P \neq NP$, es decir, que hay problemas en NP que son intrínsecamente difíciles.
+# 8.5 P vs NP (La jerarquía del mundo real)
+Las siglas que definen la informática teórica moderna:
 
-### Tratabilidad
-- **Problemas Tratables (Clase P):** Son viables de resolver en la práctica (ej: ordenar una lista).
-- **Problemas Intratables:** Aunque son computables, requieren tantos recursos (tiempo exponencial) que no son viables para entradas grandes. Según la tesis de Cook-Karp, todo lo que está fuera de P se considera intratable.
+### Clase P (Polinomial)
+- Lenguajes aceptados por **MT Determinista** en tiempo polinómico ($n, n^2, n^3...$).
+- Son los problemas **TRATABLES** (viables de resolver).
+- Fórmula: $\bigcup TD(n^i)$
 
-# 8.5 Reducibilidad y NP-Completo
-Para estudiar los problemas más difíciles, usamos la técnica de **reducción**.
+### Clase NP (No-Determinista Polinomial)
+- Lenguajes aceptados por **MT No Determinista** en tiempo polinómico.
+- Son problemas que quizás son difíciles de _resolver_ (como SAT), pero muy rápidos de _verificar_ si te dan la solución.
+- Fórmula: $\bigcup TND(n^i)$
 
-Reducción Polinomial:
-Un problema $L_1$ se reduce a $L_2$ si podemos transformar cualquier entrada de $L_1$ en una entrada de $L_2$ rápidamente (tiempo polinómico).
-- Significa que $L_2$ es **al menos tan difícil** como $L_1$.
-- Si $L_1$ se reduce a $L_2$ y sabemos que $L_2$ es fácil ($P$), entonces $L_1$ también es fácil ($P$).
+### Relación y Tesis
+1. **$P \subseteq NP$** (Todo problema fácil de resolver es fácil de verificar).    
+2. **¿P = NP?** La gran pregunta del millón. No se sabe.
+3. **Tesis de Cook-Karp:**
+    - Clase P = Problemas Tratables.
+    - Fuera de P = Problemas Intratables (requieren tanta memoria/tiempo que son inviables para $n$ grande).
+
+# 8.6 Reducción Polinomial y NP-Completos
+¿Cómo clasificamos los problemas más difíciles? Usamos la **Reducción**.
+
+### Reducción en tiempo polinomial ($L_1$ se reduce a $L_2$)
+Significa que podemos transformar cualquier input de $L_1$ en un input de $L_2$ rápidamente (tiempo polinómico).
+- **Lógica:** Si $L_1$ se puede transformar en $L_2$ fácilmente, entonces $L_2$ es "igual o más difícil" que $L_1$.
+- **Propiedad Clave:**
+    - Si $L_1$ se reduce a $L_2$ y $L_2 \in P$ $\Rightarrow$ entonces $L_1 \in P$. (Si el difícil resulta ser fácil, el fácil también lo es).
 
 ### NP-Completo (Los "Jefes Finales")
 Un lenguaje $L$ es **NP-Completo** si cumple dos condiciones:
-1. Pertenece a la clase **NP**.
-2. **Cualquier** otro problema de NP se puede reducir a él.
+1. Pertenece a **NP** ($L \in NP$).
+2. **Cualquier** otro problema de NP se puede reducir a $L$.
 
-
-**Ejemplo: SAT (Satisfacibilidad)**
-- Dada una fórmula lógica, ¿existe una combinación de True/False que la haga verdadera?
-- En una MT Determinista (ordenador real): Coste $O(2^n)$ (Exponencial - Intratable).
-- En una MT No Determinista (teórica): Coste $O(n)$ (Polinómico).
-
-
-> **Resumen para examen:**
-> 
-> - **Problema de la parada:** Indecidible.
-> - **Clase P:** Fácil de resolver (Determinista Polinómico).
-> - **Clase NP:** Fácil de verificar, difícil de resolver sin "magia" (No Determinista Polinómico).
-> - **NP-Completo:** Los problemas más difíciles de NP. Si resuelves uno rápido, resuelves todos.
->
+Es decir, son los problemas más difíciles de toda la clase NP. Si resuelves uno de estos en tiempo polinómico (P), has resuelto todos los problemas de NP (demostrando $P=NP$).

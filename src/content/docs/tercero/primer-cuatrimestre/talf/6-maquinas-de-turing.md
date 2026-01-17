@@ -165,3 +165,8 @@ Estas variantes añaden más cintas o pistas para facilitar el trabajo.
 Esta tesis establece una equivalencia entre "algoritmo" y "Máquina de Turing".
 - Afirma que cualquier problema que pueda ser resuelto por un algoritmo (computable) puede ser resuelto por una MT.
 - No se ha encontrado ningún modelo de computación más potente que la MT.
+
+Un algoritmo para una función $f: D \rightarrow R$  es una $MT$, la cual dada cualquier entrada $d \in D$ en su cinta, finalmente se para con la respuesta correcta $f(d) \in R$ en la cinta: 
+
+$$q_0 d \vdash^* q_f f(d), \quad q_f \in F$$
+

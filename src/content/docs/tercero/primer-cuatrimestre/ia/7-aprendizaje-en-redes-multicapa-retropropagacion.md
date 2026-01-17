@@ -2,6 +2,8 @@
 title: "Aprendizaje en Redes Multicapa, Retropropagación"
 ---
 
+Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos 
+
 # 7.1 El Problema: El Juego de la Culpa
 En un **Perceptrón Simple** (una sola neurona), si el sistema falla, sabemos que la culpa es de esa única neurona. El error es fácil de calcular: `Objetivo - Salida`.
 

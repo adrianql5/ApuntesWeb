@@ -51,7 +51,7 @@ Chomsky clasificó las gramáticas en 4 niveles (del 0 al 3). **La regla de oro:
 
 
 ## 4.1.4 Tipo 3: Regular
-- **Definición (Imagen):** $\alpha \to \beta$
+- **Definición:** $\alpha \to \beta$
     - $\alpha \in NT$ (Izquierda es una sola Variable).
     - $\beta$ tiene varias formas:
 	    - $\beta \in aB$
@@ -73,7 +73,7 @@ $$T3 \subset T2 \subset T1 \subset T0$$
 
 
 # 4.4 Lenguaje de una Gramática Independiente del Contexto
-$$L(G) = \{ w ∈ T* | S ⇒* w \}$$
+$$L(G) = \{ w ∈ T^* | S ⇒* w \}$$
 
 Se lee así: _"El lenguaje $L$ generado por la gramática $G$ es el conjunto de cadenas $w$..."_
 1. **$w \in T^*$**:

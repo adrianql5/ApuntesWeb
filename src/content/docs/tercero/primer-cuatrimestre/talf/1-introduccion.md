@@ -148,10 +148,10 @@ Aquí no hay límites. Memoria infinita. Si existe un algoritmo para calcularlo,
 
 Dentro del Nivel 0, existe una subdivisión vital para aprobar las preguntas de Verdadero/Falso.
 
-| **Tipo de Lenguaje**                 | **¿Qué hace la máquina si la palabra es VÁLIDA?** | **¿Qué hace si la palabra es INVÁLIDA?**                    | **¿Es seguro?**         |
-| ------------------------------------ | ------------------------------------------------- | ----------------------------------------------------------- | ----------------------- |
-| **Recursivo** (Decidible)            | Para y dice **SÍ**.                               | Para y dice **NO**.                                         | ✅ Sí, siempre responde. |
-| **Rec. Enumerable** (Semi-decidible) | Para y dice **SÍ**.                               | Puede parar y decir NO... **O quedarse en bucle infinito**. | ❌ No, puede colgarse.   |
+| **Tipo de Lenguaje**                 | **¿Qué hace la máquina si la palabra es VÁLIDA?** | **¿Qué hace si la palabra es INVÁLIDA?**                    | **¿Es seguro?**       |
+| ------------------------------------ | ------------------------------------------------- | ----------------------------------------------------------- | --------------------- |
+| **Recursivo** (Decidible)            | Para y dice **SÍ**.                               | Para y dice **NO**.                                         | Sí, siempre responde. |
+| **Rec. Enumerable** (Semi-decidible) | Para y dice **SÍ**.                               | Puede parar y decir NO... **O quedarse en bucle infinito**. | No, puede colgarse.   |
 
 # 1.6 Tabla Resumen Definitiva (La "Chuleta")
 | **Nivel Chomsky** | **Lenguaje**      | **Máquina (Autómata)**  | **Determinismo vs No Det.**               | **Ejemplo Matemático Clave**   |

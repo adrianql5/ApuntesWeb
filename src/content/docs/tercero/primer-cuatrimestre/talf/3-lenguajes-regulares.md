@@ -6,7 +6,6 @@ Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reut
 
 Las **Expresiones Regulares (ER)** son una forma declarativa de describir lenguajes. Si el Autómata es la máquina que valida, la ER es la "fórmula" que genera las cadenas.
 
-Aquí tienes la versión mejorada y ampliada. He integrado los datos teóricos (construcción inductiva, propiedades distributivas y variantes de clausura) pero manteniendo el enfoque pragmático para que te sirva de "chuleta" de estudio.
 
 # 3.1 Operadores de las ER (Sintaxis y Jerarquía)
 Para "leer" una Expresión Regular (ER) sin equivocarte, debes respetar la jerarquía.

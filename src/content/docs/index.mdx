@@ -7,14 +7,9 @@ hero:
   image:
     file: ../../assets/hero-avatar.png
     alt: Adrián Quiroga Linares
-  actions:
-    - text: Ver Apuntes
-      link: '#cuatrimestres'
-      icon: down-caret
-      variant: primary
 ---
 
-import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+import { LinkCard, CardGrid, Card } from '@astrojs/starlight/components';
 
 ## Bienvenido a los Apuntes de Ingeniería Informática
 
@@ -22,8 +17,6 @@ Este sitio web contiene una colección organizada de apuntes de las asignaturas 
 Los apuntes están estructurados por curso y cuatrimestre para facilitar la navegación.
 
 ---
-
-<div id="cuatrimestres"></div>
 
 ## Cuatrimestres Disponibles
 
@@ -58,17 +51,13 @@ Los apuntes están estructurados por curso y cuatrimestre para facilitar la nave
 ## Cómo Navegar
 
 <CardGrid>
-  <LinkCard
-    title="Barra Lateral"
-    description="Usa la barra lateral izquierda para navegar entre cursos."
-    href="#"
-  />
+  <Card title="Barra Lateral" icon="list-format">
+    Usa la barra lateral izquierda para navegar entre cursos, cuatrimestres y asignaturas.
+  </Card>
   
-  <LinkCard
-    title="Búsqueda (Ctrl+K)"
-    description="Encuentra contenido específico rápidamente."
-    href="#"
-  />
+  <Card title="Búsqueda (Ctrl+K)" icon="magnifier">
+    Utiliza la función de búsqueda para encontrar contenido específico rápidamente.
+  </Card>
 </CardGrid>
 
 ---

@@ -35,34 +35,34 @@ export default defineConfig({
 			],
 			sidebar: [
 				{
-					label: '🏠 Inicio',
+					label: 'Inicio',
 					link: '/',
 				},
 				{
-					label: '📚 Segundo Curso',
+					label: 'Segundo Curso',
 					items: [
 						{
-							label: '1️⃣ Primer Cuatrimestre',
+							label: 'Primer Cuatrimestre',
 							autogenerate: { directory: 'segundo/primer-cuatrimestre' },
 							collapsed: true,
 						},
 						{
-							label: '2️⃣ Segundo Cuatrimestre',
+							label: 'Segundo Cuatrimestre',
 							autogenerate: { directory: 'segundo/segundo-cuatrimestre' },
 							collapsed: true,
 						},
 					],
 				},
 				{
-					label: '📖 Tercer Curso',
+					label: 'Tercer Curso',
 					items: [
 						{
-							label: '1️⃣ Primer Cuatrimestre',
+							label: 'Primer Cuatrimestre',
 							autogenerate: { directory: 'tercero/primer-cuatrimestre' },
 							collapsed: true,
 						},
 						{
-							label: '2️⃣ Segundo Cuatrimestre',
+							label: 'Segundo Cuatrimestre',
 							autogenerate: { directory: 'tercero/segundo-cuatrimestre' },
 							collapsed: true,
 						},

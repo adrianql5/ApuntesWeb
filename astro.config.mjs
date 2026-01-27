@@ -61,6 +61,11 @@ export default defineConfig({
 							autogenerate: { directory: 'tercero/primer-cuatrimestre' },
 							collapsed: true,
 						},
+						{
+							label: '2️⃣ Segundo Cuatrimestre',
+							autogenerate: { directory: 'tercero/segundo-cuatrimestre' },
+							collapsed: true,
+						},
 					],
 				},
 			],

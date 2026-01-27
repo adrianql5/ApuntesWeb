@@ -70,6 +70,12 @@ SUBJECT_MAPPING: Dict[str, str] = {
     "COMDIS": "comdis",
     "ENSO": "enso",
     "TALF": "talf",
+    # Tercer Curso - Segundo Cuatrimestre
+    "CIBER": "ciber",
+    "COMPINT": "compint",
+    "DAW": "daw",
+    "SEGINFO": "seginfo",
+    "XPI": "xpi",
 }
 
 # Archivos a ignorar

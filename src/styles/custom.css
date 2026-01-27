@@ -26,31 +26,58 @@
     --sl-font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 }
 
-/* Modo oscuro - Tema Rojo/Negro */
+/* Modo oscuro - Tema suave */
 :root[data-theme='dark'] {
-    /* Colores principales - Rojo oscuro */
-    --sl-color-accent-low: #4a0e0e;
-    --sl-color-accent: #dc2626;
-    --sl-color-accent-high: #f87171;
+    /* Colores principales - Rojo suave */
+    --sl-color-accent-low: #5c2a2a;
+    --sl-color-accent: #e74c4c;
+    --sl-color-accent-high: #ff8080;
 
-    /* Colores de fondo - Negro profundo */
-    --sl-color-bg: #0a0a0a;
-    --sl-color-bg-nav: #1a1a1a;
-    --sl-color-bg-sidebar: #0f0f0f;
+    /* Colores de fondo - Gris oscuro suave (no negro puro) */
+    --sl-color-bg: #1e1e1e;
+    --sl-color-bg-nav: #2a2a2a;
+    --sl-color-bg-sidebar: #242424;
 
     /* Texto */
-    --sl-color-text: #e5e5e5;
-    --sl-color-text-accent: #fca5a5;
+    --sl-color-text: #f0f0f0;
+    --sl-color-text-accent: #ffb3b3;
 
-    /* Grises para modo oscuro */
+    /* Grises para modo oscuro - más suaves */
     --sl-color-white: #fafafa;
-    --sl-color-gray-1: #e5e5e5;
-    --sl-color-gray-2: #d4d4d4;
-    --sl-color-gray-3: #a3a3a3;
-    --sl-color-gray-4: #525252;
-    --sl-color-gray-5: #262626;
-    --sl-color-gray-6: #171717;
-    --sl-color-black: #0a0a0a;
+    --sl-color-gray-1: #e8e8e8;
+    --sl-color-gray-2: #d0d0d0;
+    --sl-color-gray-3: #a8a8a8;
+    --sl-color-gray-4: #606060;
+    --sl-color-gray-5: #383838;
+    --sl-color-gray-6: #2d2d2d;
+    --sl-color-black: #1e1e1e;
+}
+
+/* =============================================================================
+   TRANSICIONES SUAVES PARA TARJETAS Y BOTONES
+   ============================================================================= */
+
+/* LinkCard y Card - transiciones suaves */
+.sl-link-card,
+[data-sl-link-card],
+.card,
+a.card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.sl-link-card:hover,
+[data-sl-link-card]:hover,
+.card:hover,
+a.card:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Transiciones suaves en dark mode */
+:root[data-theme='dark'] .sl-link-card:hover,
+:root[data-theme='dark'] [data-sl-link-card]:hover,
+:root[data-theme='dark'] .card:hover {
+    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.4) !important;
 }
 
 /* =============================================================================

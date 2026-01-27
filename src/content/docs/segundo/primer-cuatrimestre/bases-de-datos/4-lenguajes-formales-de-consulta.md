@@ -2,8 +2,6 @@
 title: "Lenguajes Formales de Consulta"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
 Escrito por **Adrián Quiroga Linares**.
 
 # 4.1 Introducción

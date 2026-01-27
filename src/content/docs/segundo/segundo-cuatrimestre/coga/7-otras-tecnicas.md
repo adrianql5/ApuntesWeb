@@ -2,7 +2,7 @@
 title: "Otras Técnicas"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares. 
 
 # 7.1 Buffer de Profundidad
 El **algoritmo del pintor** consiste en dibujar **primero** los objetos más **lejanos** de la escena según su coordenada $z$ u después cubrirlos con los más cercanos.

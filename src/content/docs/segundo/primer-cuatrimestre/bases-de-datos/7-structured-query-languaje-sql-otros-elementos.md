@@ -2,8 +2,6 @@
 title: "Structured Query Languaje (SQL) Otros Elementos"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
 Escrito por **Adrián Quiroga Linares**.
 
 # 7.1 Transacciones

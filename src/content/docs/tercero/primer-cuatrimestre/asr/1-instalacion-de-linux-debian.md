@@ -2,7 +2,7 @@
 title: "Instalación de Linux Debian"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares. [adrianql5](https://github.com/adrianql5)
 
 >[!Importante]
 >Estos apuntes están bien para entender ciertos conceptos complejos. Sin embargo si quieres sacar nota en el examen (ya te aviso que complicado), yo complementaría con los del profe porque tiene más ejemplos e información más concisa. 

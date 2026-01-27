@@ -2,7 +2,7 @@
 title: "Redes P2P"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.
 
 >[!Info]
 >Muy loco que el colega te chante una presentación en inglés joseada de otra universidad

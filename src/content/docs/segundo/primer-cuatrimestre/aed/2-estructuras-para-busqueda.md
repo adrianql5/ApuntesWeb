@@ -2,8 +2,6 @@
 title: "ESTRUCTURAS PARA BÚSQUEDA"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
 Escrito por **Adrián Quiroga Linares**.
 
 Un uso importante de los árboles, especialmente de los **árboles binarios**, es en **algoritmo de búsqueda**. Para ellos, se han desarrollado **árboles binarios de búsqueda**.

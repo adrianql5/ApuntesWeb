@@ -2,6 +2,8 @@
 title: "Procesos e Hilos"
 ---
 
+Escrito por **Adrián Quiroga Linares**.
+
 # **Procesos e hilos - Perdiendo la Cordura**
 
 El concepto más importante en cualquier sistema operativo es el de **proceso**, una **abstracción** de un programa en ejecución; todo lo demás depende de este concepto. Los procesos son una de las abstracciones más antiguas e importantes que proporcionan los sistemas operativos: proporcionan la capacidad de operar (pseudo) **concurrentemente**, incluso cuando hay sólo una CPU disponible. Convierten una CPU en varias CPUs virtuales.

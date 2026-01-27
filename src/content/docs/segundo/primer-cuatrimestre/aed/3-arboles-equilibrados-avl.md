@@ -2,8 +2,6 @@
 title: "Árboles Equilibrados AVL"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
 Escrito por **Adrián Quiroga Linares**.
 
 Con **árboles desbalanceados** se pierda le eficiencia de búsqueda, acercándose a la de una lista, es decir *O(n)* para la búsqueda. SIn embargo, con árboles equilibrados se consigue una eficiencia de *O log(n)* en la búsqueda, inserción o eliminación.

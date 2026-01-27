@@ -2,7 +2,7 @@
 title: "Automatización de Tareas"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.
 
 En Linux, diferenciar el "cuándo" se ejecuta una tarea es clave. Tenemos dos herramientas principales según nuestras necesidades:
 1. **`at` / `batch`:** Para tareas que se ejecutan **una sola vez** en el futuro (ej: "Apaga el servidor a las 3 de la mañana").

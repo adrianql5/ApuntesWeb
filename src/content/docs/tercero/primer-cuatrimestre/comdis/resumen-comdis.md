@@ -2,6 +2,8 @@
 title: "Resumen COMDIS"
 ---
 
+Escrito por Adrián Quiroga Linares.
+
 # Tema 1
 Un **paradigma es un patrón o modelo**. Una **aplicación distribuida** necesita que **dos o más procesos independientes intercambien información** y necesita **sincronización, hay que coordinar cuándo se envían y reciben**. **Paradigmas**:
 - **Paso de Mensajes:** se basa en operaciones de entrada/salida similares a escribir en un archivo mediante el uso de primitivas básicas (`send` y `receive`).

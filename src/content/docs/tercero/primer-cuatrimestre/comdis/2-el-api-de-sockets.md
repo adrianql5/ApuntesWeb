@@ -2,7 +2,7 @@
 title: "El API de Sockets"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.
 
 # 2.1 Introducción
 Antes de profundizar en el código y los protocolos, es vital situar este tema en el mapa de la asignatura. En la jerarquía de abstracción de la comunicación distribuida, nos encontramos en el **Nivel 0: Paso de Mensajes**.

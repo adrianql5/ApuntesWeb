@@ -2,7 +2,7 @@
 title: "Shell y Scripts"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.  
 
 # 5.1 Introducción
 El **shell** o intérprete de comandos es la **interfaz** del usuario con el SO, se encarga de traducir **líneas de comandos** en **solicitudes de acción del SO**.

@@ -2,8 +2,6 @@
 title: "Clases y tipos de datos"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
 Escrito por **Adrián Quiroga Linares**.
 # 2.1 Tipos de Datos Primitivos
 - Tienen un tamaño **fijo**

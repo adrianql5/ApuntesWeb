@@ -2,7 +2,7 @@
 title: "Ciclos de Vida"
 ---
 
-<!-- Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos -->
+# Escrito por Adrián Quiroga Linares.
 
 # 2.1 Introducción
 Un **ciclo de vida** es una sucesión de etapas por las que pasa el software desde que se concibe hasta que se deja de utilizar. Cada **etapa del ciclo** lleva asociada una serie de tareas y de documentos de **salida** que serán la **entrada** de la fase siguiente.

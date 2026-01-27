@@ -2,7 +2,7 @@
 title: "Sistemas Multinúcleo"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares. [adrianql5](https://github.com/adrianql5)
 
 # 1.1 Introducción a la Arquitectura de Computadores y Procesadores Multinúcleo
 La arquitectura de computadores es el área de la informática que estudia el diseño y la organización de los procesadores, la memoria y los sistemas de interconexión para optimizar el rendimiento de los sistemas de cómputo. 

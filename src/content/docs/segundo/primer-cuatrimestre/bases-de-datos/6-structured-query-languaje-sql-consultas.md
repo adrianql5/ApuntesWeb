@@ -2,8 +2,6 @@
 title: "Structured Query Languaje (SQL) Consultas"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
 Escrito por **Adrián Quiroga Linares**.
 
 # 6.1 Estructura Básica de una Consulta en SQL

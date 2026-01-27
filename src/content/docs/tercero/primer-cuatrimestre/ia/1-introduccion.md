@@ -2,7 +2,7 @@
 title: "Introducción"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares. [adrianql5](https://github.com/adrianql5)
 
 # 1.1 Conceptos Principales
 ## 1.1.1 Definición de Inteligencia Artificial (IA)

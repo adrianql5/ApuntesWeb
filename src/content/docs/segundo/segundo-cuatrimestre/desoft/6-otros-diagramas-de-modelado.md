@@ -2,7 +2,7 @@
 title: "Otros Diagramas de Modelado"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.  
 
 # 5.1 Diagrama de Objetos
 ### ¿Qué es?

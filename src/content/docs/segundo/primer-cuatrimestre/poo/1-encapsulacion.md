@@ -2,9 +2,7 @@
 title: "Encapsulación"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
-Escrito por **Adrián Quiroga Linares**.
+Escrito por **Adrián Quiroga Linares**. [adrianql5](https://github.com/adrianql5)
 
 # 1.1 Tipos de datos
 Los **tipos de datos** disponibles en un lenguaje de programación limitan enormemente la posibilidades a la hora de crear programas si no es posible representar un tipo de datos concreto, no se podrá operar sobre ellos. El **problema de C** se produce cuando intentamos definir nuevos tipos de datos, su **integridad es limitada**, no podemos **restringir el valor que toman las variables en distintas funciones del programa**.

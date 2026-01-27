@@ -2,8 +2,6 @@
 title: "Estrategias Algorítmicas"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
 Escrito por **Adrián Quiroga Linares**.
 
 Los algoritmos son herramientas esenciales para resolver problemas de manera eficiente, minimizando tanto el tiempo como los recursos necesarios. Las **estrategias algorítmicas** establecen enfoques específicos que guían el diseño de algoritmos para optimizar la resolución de problemas. En este tema, exploraremos cuatro estrategias principales: **Divide y vencerás**, **Algoritmos voraces**, **Backtracking**, y **Ramificación y poda**.

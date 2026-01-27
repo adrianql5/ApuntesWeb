@@ -2,9 +2,9 @@
 title: "Información Útil"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares. 
 
-De esta asignatura me dió pereza hacer apuntes.
+De esta asignatura me dió pereza hacer apuntes. El examen de recuperación puso cosas de optimización de consultas y cosas muy raras.
 
 # Tema 1
 - Saber por qué y como accedemos a las bd desde lenguajes de programación gnerales

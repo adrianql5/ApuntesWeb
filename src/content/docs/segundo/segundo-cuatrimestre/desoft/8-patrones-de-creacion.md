@@ -2,7 +2,7 @@
 title: "Patrones de Creación"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares. 
 
 # 8.1 Patrones de creación
 Los **patrones de creación** abstraen el proceso de **creación de objetos**, acotando el **conocimiento** sobre las **clases** concretas usadas. Ocultan como se **crean y enlazan** las **instancias** de las clases, de manera que **el resto del sistema** sólo **conoce los objetos a través de sus interfaces**. Hacen posible **programar para interfaces** y no para implementaciones.

@@ -2,8 +2,6 @@
 title: "Sistemas de Bases de Datos"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
 Un **sistema gestor de bases de datos** (*SGBD*) consiste en una colección de datos interrelacionados y un conjunto de programas para acceder a dichos datos.
 
 El **objetivo**de un SGBD es proporcionar una forma de almacenar y recuperar la información y la provisión de mecanismos para su manipulación.

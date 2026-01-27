@@ -2,11 +2,7 @@
 title: "MODELO ENTIDAD RELACIÓN"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
-1
-
-Escrito por **Adrián Quiroga Linares**.
+Escrito por **Adrián Quiroga Linares**. [adrianql5](https://github.com/adrianql5)
 
 El **Modelo Entidad Relación** es una técnica de diseño de **arriba a abajo**.
 

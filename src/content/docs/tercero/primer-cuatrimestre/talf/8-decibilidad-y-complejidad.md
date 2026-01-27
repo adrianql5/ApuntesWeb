@@ -2,11 +2,11 @@
 title: "Decibilidad y Complejidad"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos 
+Escrito por Adrián Quiroga Linares.
 
 # 8.1 Conceptos Básicos: ¿Qué puede hacer una máquina?
 Antes de medir el tiempo, medimos si es _posible_ hacerlo.
-- **Función Computable:** Una función $f$ es computable si existe una Máquina de Turing (MT) que puede calcular el resultado para **todo** valor del dominio.
+- **Función Computable:** Una función $f$ es computable en un dominio si existe una MT que computa el valor de $f$ para todos los argumentos del dominio
 - **Problema Decidible:** Es un problema cuya respuesta es binaria (**SÍ/NO**).
     - Es decidible si existe una MT da la respuesta correcta (SÍ o NO) para cualquier entrada.
     - _Si la máquina se queda en bucle infinito para alguna entrada, el problema NO es decidible._
@@ -46,8 +46,8 @@ En decidibilidad (teoría pura), todas las MT son iguales. En complejidad (efici
 Aquí definimos qué tan difícil es un problema según el tipo de máquina.
 
 ### Definiciones de Tiempo
-- **TD(T(n)):** Tiempo Determinista. Lo que tarda una MT normal (sin "magia"). Es aceptado por una MT multicinta determinista.
-- **TND(T(n)):** Tiempo No Determinista. Lo que tarda una MT No Determinista (que puede "adivinar" el camino correcto). Es aceptado por una MT multicinta no determinista.
+- **TD(T(n)):** Tiempo Determinista. Lo que tarda una MT normal (sin "magia"). Es aceptado por una MT multicinta determinista en tiempo polinómico.
+- **TND(T(n)):** Tiempo No Determinista. Lo que tarda una MT No Determinista (que puede "adivinar" el camino correcto). Es aceptado por una MT multicinta no determinista en tiempo polinómico.
 - **Regla:** $TD(T(n)) \subseteq TND(T(n))$. (El determinismo es un caso particular del no determinismo).
 
 ### Ejemplo: SAT (Satisfacibilidad)
@@ -60,12 +60,12 @@ Dada una fórmula lógica (ej: $(x_1 \lor x_2) \land \neg x_1$), ¿existe una co
 Las siglas que definen la informática teórica moderna:
 
 ### Clase P (Polinomial)
-- Lenguajes aceptados por **MT Determinista** en tiempo polinómico ($n, n^2, n^3...$).
+- Lenguajes aceptados por **MT Determinista** **en tiempo polinómico** ($n, n^2, n^3...$).
 - Son los problemas **TRATABLES** (viables de resolver).
 - Fórmula: $\bigcup TD(n^i)$
 
 ### Clase NP (No-Determinista Polinomial)
-- Lenguajes aceptados por **MT No Determinista** en tiempo polinómico.
+- Lenguajes aceptados por **MT No Determinista** **en tiempo polinómico.**
 - Son problemas que quizás son difíciles de _resolver_ (como SAT), pero muy rápidos de _verificar_ si te dan la solución.
 - Fórmula: $\bigcup TND(n^i)$
 

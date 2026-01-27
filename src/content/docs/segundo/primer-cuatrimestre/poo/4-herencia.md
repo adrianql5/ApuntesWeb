@@ -2,8 +2,6 @@
 title: "Herencia"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
 Escrito por **Adrián Quiroga Linares**.
 # 4.1 Concepto de Herencia
 La **herencia** es el mecanismo por el cual una **clase derivada** reutiliza los atributos y métodos de una **clase base** o superior. Una **clase derivada** se considera una **extensión de la clase base**. Sus métodos y atributos son:

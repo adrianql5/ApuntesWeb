@@ -2,7 +2,7 @@
 title: "Patrones Estructurales"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares. 
 
 # 9.1 Patrón Composite
 Organiza objetos en **estructura de árbol** para representar jerarquías. Permite tratar de manera **uniforme** a **individuos** y **grupos**. Se usa para:

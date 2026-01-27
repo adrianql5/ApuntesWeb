@@ -7,15 +7,19 @@
 
 /* Variables de color personalizadas */
 :root {
-    /* Colores principales - Azul universitario */
-    --sl-color-accent-low: #1a365d;
-    --sl-color-accent: #2b6cb0;
-    --sl-color-accent-high: #4299e1;
+    /* Colores principales - Tonos cálidos */
+    --sl-color-accent-low: #5c4033;
+    --sl-color-accent: #8b5a2b;
+    --sl-color-accent-high: #cd853f;
 
-    /* Colores de fondo */
-    --sl-color-bg: #f7fafc;
-    --sl-color-bg-nav: #edf2f7;
-    --sl-color-bg-sidebar: #ffffff;
+    /* Colores de fondo - Crema/Beige cálido */
+    --sl-color-bg: #faf8f5;
+    --sl-color-bg-nav: #f5f0e8;
+    --sl-color-bg-sidebar: #fffcf7;
+
+    /* Texto cálido */
+    --sl-color-text: #3d3d3d;
+    --sl-color-text-accent: #6b4423;
 
     /* Tipografía */
     --sl-font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

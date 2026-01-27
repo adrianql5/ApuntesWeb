@@ -2,7 +2,7 @@
 title: "Segmentación"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.
 
 # 2.1 Introducción a la Segmentación
 ## 2.1.1 Ciclo de Instrucción

@@ -2,7 +2,7 @@
 title: "Autómatas finitos"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.
 
 
 # 2.1 Autómata Finito Determinista (AFD)
@@ -28,6 +28,22 @@ $$A = (Q, \Sigma, \delta, q_0, F)$$
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251009161639.png)
 
+## Función de Transición Extendida ($\hat{\delta}$)
+**1. Diferencia Conceptual**
+- **$\delta$ (Transición simple):** Procesa **un solo símbolo** a la vez. Es el "paso a paso" del autómata.
+- **$\hat{\delta}$ (Transición extendida):** Procesa una **cadena completa** ($w$) desde el estado actual hasta el final. Calcula la "ruta entera".
+
+2. **Definición Formal (Recursiva):** Para procesar una cadena, la máquina descompone el problema por inducción:
+	- Caso Base (Cadena vacía):  Si no leo nada, me quedo en el mismo estado.
+$$\hat{\delta}(q, \lambda) = q$$
+	- Paso Inductivo (Cadena $w = xa$):    
+$$\hat{\delta}(q, w) = \delta( \hat{\delta}(q, x), a )$$
+    
+    Significado: Primero calculo dónde acabo con el prefijo $x$ (usando $\hat{\delta}$) y, desde ese estado intermedio, doy el último paso con el símbolo final $a$ (usando $\delta$).
+    
+
+3. **Definición de Lenguaje Aceptado:** Una cadena $w$ pertenece al lenguaje del autómata $L(A)$ si, al procesarla entera desde el inicio, acabamos en un estado final:
+$$L(A) = \{ w \mid \hat{\delta}(q_0, w) \in F \}$$
 
 # 2.2 Autómata Finito No Determinista (AFN)
 > **Concepto Clave:** "Procesamiento en paralelo" o "Multiverso".
@@ -49,6 +65,16 @@ $$\delta: Q \times (\Sigma \cup \{\varepsilon\}) \to 2^Q$$
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251009161852.png)
 
 **En el AFN,** puedes estar en varios estados a la vez y elegir entre múltiples caminos.
+
+## Función de Transición Extendida en AFN ($\hat{\delta}$)
+- **Concepto clave:** A diferencia del determinista (que devuelve _un estado_), en un AFN la función devuelve un **conjunto de estados** $\{p_1, \dots, p_k\}$, representando todos los caminos posibles simultáneos.
+
+- **Definición Recursiva:**    
+    1. **Base ($\lambda$):** Si no hay entrada, el conjunto es solo el estado actual: $\hat{\delta}(q, \lambda) = \{q\}$.
+    2. **Inducción ($w = xa$):** Para procesar una cadena, primero calculas los estados a los que llegas con el prefijo $x$, aplicas la transición de la última letra $a$ a cada uno de ellos, y unes los resultados. 
+$$\hat{\delta}(q, w) = \bigcup \delta(p_i, a)$$ 
+- **Condición de Aceptación:** Una cadena se acepta si, al terminar de leerla, el conjunto de estados posibles contiene al menos un estado final.
+$$L(A) = \{ w \mid \hat{\delta}(q_0, w) \cap F \neq \emptyset \}$$
 
 
 # 2.3 Transiciones $\varepsilon$ (Epsilon) y `Clausura-ε`
@@ -82,6 +108,8 @@ Los ordenadores reales no son "adivinos" (no son no-deterministas). Para program
 
 Como el AFN puede estar en varios sitios a la vez, **cada estado del nuevo AFD será un grupo de estados del AFN original**.
 
+**Para un ANF de $n$ estados, el AFD equivalente tendrá como máximo $2^n$ estados.**
+
 **Algoritmo:**
 1. **Inicio:** Calcula la $clausura\text{-}\varepsilon(q_0)$ del AFN. Este conjunto de estados es tu estado inicial del AFD. Llámalo "A".
 2. **Iteración:** Para el nuevo estado "A" y cada símbolo del alfabeto (ej: 0 y 1):
@@ -91,6 +119,14 @@ Como el AFN puede estar en varios sitios a la vez, **cada estado del nuevo AFD s
 
 3. **Iteración:** Repite el paso 2 con "B", "C", etc., hasta que no aparezcan conjuntos nuevos.
 4. **Estados Finales:** Cualquier estado del AFD (A, B, C...) que contenga **al menos un** estado final del AFN original, se convierte en estado final.
+
+**Fórmula mateḿatica (si la pide se la saca):**
+$$\delta_D(S, a) = \bigcup_{p \in S} \delta_N(p, a)$$
+Imagina que estás en el estado combinado $S = \{q_1, q_2\}$ y llega una letra 'a'. ¿A dónde va la flecha?
+1. Preguntas: "¿A dónde va $q_1$ con la 'a'?" $\rightarrow$ Digamos que va a $\{x, y\}$.
+2. Preguntas: "¿A dónde va $q_2$ con la 'a'?" $\rightarrow$ Digamos que va a $\{z\}$.
+3. **Haces la Unión ($\bigcup$):** El resultado es el nuevo estado $\{x, y, z\}$.
+
 
 **Ejemplo práctico:**
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020130206.png)
@@ -133,3 +169,5 @@ $$\forall w \in \Sigma^* : (\hat{\delta}(p, w) \in F \iff \hat{\delta}(q, w) \in
 Para toda palabra $w$ (desde la cadena vacía hasta una palabra de un millón de letras), si partimos de $p$ y leemos $w$, el resultado final (aceptación o rechazo) debe ser exactamente el mismo que si partimos de $q$ y leemos esa misma $w$.
 
 Por lo que si nos dicen que si dos lenguajes regulares son equivalentes entre sí si los estados iniciales de sus correspondientes AFD son equivalentes
+
+La equivalencia de estados es transitiva. Es decir, si para un AFD dos estados $p$ y $q$ son equivalentes y $q$ y $r$ son equivalentes, entonces $p$ y $r$ son equivalentes.

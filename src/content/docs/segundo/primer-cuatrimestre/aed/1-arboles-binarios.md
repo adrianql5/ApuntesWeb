@@ -2,9 +2,7 @@
 title: "ÁRBOLES BINARIOS"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
-Escrito por **Adrián Quiroga Linares**.
+Escrito por **Adrián Quiroga Linares**. [adrianql5](https://github.com/adrianql5)
 
 Un árbol es una **estructura de datos no lineal** con un organización jerárquica de elementos  **homogéneos** (del mismo tipo), donde cada elemento tiene un único **padre**, pero generar varios **hijos**.
 

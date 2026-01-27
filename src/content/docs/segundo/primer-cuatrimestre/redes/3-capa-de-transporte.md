@@ -2,10 +2,6 @@
 title: "Capa de Transporte"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
-3
-
 Escrito por **Adrián Quiroga Linares**.
 # 3.1 Introducción
 La capa de transporte es un componente clave en la arquitectura de redes, cuya función es asegurar que los datos enviados desde una aplicación en el origen **lleguen de manera correcta** al proceso de destino. 

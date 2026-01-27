@@ -2,6 +2,8 @@
 title: "Memoria"
 ---
 
+Escrito por **Adrián Quiroga Linares**.
+
 # **Administración de Memoria - Métodos de Tortura Medieval**
 
 Una de las principales tareas del SO es **crear y administrar abstracciones de la memoria** del sistema.

@@ -2,8 +2,6 @@
 title: "Capa de Enlace"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
 Escrito por **Adrián Quiroga Linares**.
 # 5.1 Introducción 
 La **capa de enlace** es la segunda capa del modelo OSI y se encarga de gestionar la transmisión de datos entre nodos directamente conectados en una red. Su propósito principal es asegurar que los datos se transfieran de forma confiable a través de un enlace físico entre los extremos de una conexión.

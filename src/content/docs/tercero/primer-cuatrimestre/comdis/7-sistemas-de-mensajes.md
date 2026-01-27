@@ -2,7 +2,7 @@
 title: "Sistemas de Mensajes"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.
 
 # 7.1 Introducción y Contexto Histórico
 Para comprender la importancia de RabbitMQ, primero debemos entender el problema que resuelve: la **interconectividad en sistemas heterogéneos**.

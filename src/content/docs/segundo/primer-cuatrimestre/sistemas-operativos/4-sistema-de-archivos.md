@@ -2,6 +2,8 @@
 title: "Sistema de Archivos"
 ---
 
+Escrito por **Adrián Quiroga Linares**.
+
 # **El Sistema de Archivos – La Calma Después de la Tormenta**
 
 Una de las principales tareas del SO es crear y administrar abstracciones del disco del sistema.

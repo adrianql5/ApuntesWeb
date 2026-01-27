@@ -2,7 +2,7 @@
 title: "Introducción"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares. [adrianql5](https://github.com/adrianql5)
 
 # 1.1 Introducción
 El **ojo humano** percibe el **movimiento** de manera continua captando numerosas imágenes estáticas que el cerebro usa para dar sensación de fluidez.

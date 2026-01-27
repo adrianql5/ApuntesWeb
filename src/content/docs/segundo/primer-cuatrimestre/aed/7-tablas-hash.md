@@ -2,8 +2,6 @@
 title: "Tablas Hash"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
 Escrito por **Adrián Quiroga Linares**.
 
 El problema de búsqueda es uno de los problemas más importantes y repetidos. Se quiere buscar un elemento entre un conjunto. En función de si el conjunto está ordenado o no, se puede realizar una **búsqueda lineal** (*recorre todos los elementos del primero al último buscando el elemento buscado, por lo que el orden de complejidad es de $O(n)$*), una búsqueda binaria (*solo posible para arrays ordenados, reduciendo el orden de complejidad a $O(\log_2(n))$*), o una **búsqueda por clave** (*con la que se accede a cualquier elemento por medio de su clave, teniendo una complejidad $O(1)$*).

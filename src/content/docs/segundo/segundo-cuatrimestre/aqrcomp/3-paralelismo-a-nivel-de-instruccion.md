@@ -2,8 +2,7 @@
 title: "Paralelismo a Nivel de Instrucción"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
+Escrito por Adrián Quiroga Linares.
 # 3.1 Instruction Level Paralelism
 El paralelismo de instrucción es aplicable dentro de cada bloque básico (secuencia de instrucciones sin saltos). Sin embargo, la longitud media de un bloque básico es de 3 a 6 instrucciones lo que reduce bastante su posible aprovechamiento. Una técnica para mejorar el aprovechamiento del ILP dentro de un bucle se conoce como **desenrollamiento de bucles**. También podemos entrelazar ejecución de instrucciones no relacionadas y rellenar detenciones con instrucciones.
 

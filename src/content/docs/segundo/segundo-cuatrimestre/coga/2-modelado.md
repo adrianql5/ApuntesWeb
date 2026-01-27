@@ -2,7 +2,7 @@
 title: "Modelado"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares. [adrianql5]
 
 # 2.1 Objetos Sólidos
 Modelar un objeto es darle forma. Existen dos tipos de modelado:

@@ -2,7 +2,7 @@
 title: "Patrones de Comportamiento"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.  
 
 # 10.1 Patrón Observer
 El **cambio de estado** en un objeto (sujeto) se **notifica** a los objetos **suscritos** a él (observadores), que **sincronizan** su estado con el del sujeto. Establece una **dependencia de uno a muchos** entre objetos. Se usa cuando:

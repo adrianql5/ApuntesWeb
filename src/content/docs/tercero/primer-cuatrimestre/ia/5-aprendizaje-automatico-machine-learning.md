@@ -2,7 +2,7 @@
 title: "Aprendizaje Automático (Machine Learning)"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.
 
 # 5.1 Introducción y Cambio de Paradigma
 Hasta ahora (Sistemas Expertos), programábamos la IA diciéndole explícitamente _qué hacer_ (reglas `SI-ENTONCES`). En el Aprendizaje Automático, cambiamos el enfoque: **la máquina aprende las reglas a partir de los datos**.

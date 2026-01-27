@@ -2,7 +2,7 @@
 title: "Apuntes Prácticos"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares. [adrianql5](https://github.com/adrianql5)
 
 # 1. Seguridad
 ![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/bdii/Pasted%20image%2020250705204145.png)

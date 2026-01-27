@@ -2,6 +2,8 @@
 title: "Entrada-Salida"
 ---
 
+Escrito por **Adrián Quiroga Linares**.
+
 # **Entrada/Salida - Métodos de Tortura Medieval PT2**
 
 Una de las principales tareas del SO es **controlar todos los dispositivos de E/S de la computadora.** Para poder hacer esto, el SO debe de ser capaz de:

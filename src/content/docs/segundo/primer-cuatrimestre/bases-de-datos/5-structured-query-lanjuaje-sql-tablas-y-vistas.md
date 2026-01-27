@@ -2,8 +2,6 @@
 title: "Structured Query Lanjuaje (SQL), Tablas y Vistas"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
 Escrito por **Adrián Quiroga Linares**.
 
 SQL es el **lenguaje de consulta** de bases de datos más ampliamente utilizado. Aunque se le suele llamar lenguaje de consulta también tiene instrucciones para **crear, modificar y eliminar tablas, insertar modificar y eliminar tuplas y definir restricciones de integridad.**

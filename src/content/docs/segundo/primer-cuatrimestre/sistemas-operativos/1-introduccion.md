@@ -2,6 +2,11 @@
 title: "Introduccion"
 ---
 
+Escrito por **Adrián Quiroga Linares**.
+
+>[!Nota] 
+>Quizás hay errores de formato porque convertí el pdf original a markdown con un script, si ves algo raro consulta el pdf SOIFINAL.pdf
+
 # **Introducción - Empieza la Aventura**
 
 Una computadora moderna es un sistema complejo, y el trabajo de administrar todos sus componentes y utilizarlos de manera óptima es una tarea muy desafiante. Por esta razón, las computadoras están equipadas con una capa de software llamada **sistema operativo**, cuyo trabajo es proporcionar a los programas de usuario un modelo de computadora mejor, más simple y pulcro, así como encargarse de la administración de todos sus recursos, entre ellos, el hardware.

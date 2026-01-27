@@ -2,7 +2,7 @@
 title: "Paradigmas de la Computación Distribuida"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares. [adrianql5](https://github.com/adrianql5)
 
 # 1.1 ¿Qué es esto y por qué nos importa?
 

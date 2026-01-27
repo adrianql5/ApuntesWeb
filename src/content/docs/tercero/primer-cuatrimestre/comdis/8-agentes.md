@@ -2,7 +2,7 @@
 title: "Agentes"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.
 
 >[!Nota]
 >La cantidad de relleno que hay en este tema es histórico y mira que intenté quitar la mayor cantidad de mierda posible.

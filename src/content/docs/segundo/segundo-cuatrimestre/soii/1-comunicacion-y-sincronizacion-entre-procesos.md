@@ -2,7 +2,7 @@
 title: "Comunicación y Sincronización entre Procesos"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares. [adrianql5](https://github.com/adrianql5)
 
 # 1.1 Comunicación entre Procesos (IPC)
 En los sistemas con **multiprogramación** existe una necesidad de **comunicación entre procesos** (IPC) de forma bien estructurada sin usar **interrupciones**. Esta comunicación se usa para:

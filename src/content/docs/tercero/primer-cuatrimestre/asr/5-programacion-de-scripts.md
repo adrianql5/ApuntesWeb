@@ -2,7 +2,7 @@
 title: "Programación de Scripts"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.
 
 >[!Nota]
 > Este tema originalmente habla también del shell y programar con bash, yo no explico porque no entra en el examen. Aunque es bastante importante saber como usar cada herramienta. En SOI se suele explicar (pero de forma muy precaria), si os interesa los apuntes originales de la asignatura lo explica bastante bien. Los temas tratados son:

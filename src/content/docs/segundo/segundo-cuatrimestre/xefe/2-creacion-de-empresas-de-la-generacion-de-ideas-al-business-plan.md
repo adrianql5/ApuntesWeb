@@ -2,7 +2,8 @@
 title: "Creación de empresas, de la generación de ideas al Business Plan"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares. 
+
 
 >[!Nota]
 > Lo importante de este tema no es nada concreto, solo hace preguntas tipo test en el final

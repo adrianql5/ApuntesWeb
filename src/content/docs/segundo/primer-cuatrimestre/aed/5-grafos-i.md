@@ -2,7 +2,7 @@
 title: "Grafos I"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por **Adrián Quiroga Linares**.
 
 # 5.1 Grafos I 
 Los **grafos** son estructuras de datos que representan relaciones arbitrarias entre objetos, a diferencia de los árboles que suelen reflejar jerarquías. Un grafo está compuesto por:

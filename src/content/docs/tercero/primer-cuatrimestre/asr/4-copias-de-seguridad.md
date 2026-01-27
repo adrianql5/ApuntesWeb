@@ -2,7 +2,7 @@
 title: "Copias de Seguridad"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.
 
 El trabajo del administrador no es evitar que los desastres ocurran (eso es imposible), sino asegurar que **se puede recuperar la información** cuando ocurran.
 

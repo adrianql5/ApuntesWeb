@@ -2,7 +2,7 @@
 title: "Gramáticas GSC Y GSR"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos 
+Escrito por Adrián Quiroga Linares.
 
 # 7.1 Gramáticas Sin Restricciones (GSR) - Tipo 0
 Como su nombre indica, son las gramáticas más flexibles y potentes. No tienen límites en la forma de sus reglas, salvo que siempre debe haber algo que sustituir.
@@ -49,7 +49,7 @@ La característica más importante para identificar una GSC es la longitud.
 
 **Relación con Máquinas**
 - **Lenguaje que generan:** Lenguajes Sensibles al Contexto (LSC).
-- **Máquina Equivalente:** Son reconocidos por los **Autómatas Linealmente Acotados (ALA)**. Es una Máquina de Turing (MT) no determinista con su cinta limitada por ambos extremos, siendo el tamaño de la cinta fijo . Imagina una MT normal, que tiene papel infinito para hacer cálculos. Un ABA, en cambio, solo tiene el espacio que ocupa la palabra de entrada (y quizás unas pocas casillas más fijas a los lados). No puede pedir más papel. Para que la cabeza lectora no se "caiga" de la cinta, tiene dos símbolos especiales (marcadores) en los extremos izquierdo y derecho que le dicen "hasta aquí puedes llegar" .
+- **Máquina Equivalente:** Son reconocidos por los **Autómatas Linealmente Acotados (ALA)**. Es una Máquina de Turing (MT) determinista con su cinta limitada por ambos extremos, el tamaño de la cinta está limitado por el tamaño de la palabra (el tamaño de la cinta no es fijo por sí preguntan en un test). Para que la cabeza lectora no se "caiga" de la cinta, tiene dos símbolos especiales (marcadores) en los extremos izquierdo y derecho que le dicen "hasta aquí puedes llegar" .
 
 
 **La fórmula del Lenguaje $L(M)$**. **L(M)** significa **"El Lenguaje de la Máquina M"**. En términos sencillos: es la lista VIP de palabras que la máquina acepta.
@@ -68,6 +68,8 @@ Se traduce así:
 3. Empiezas en el estado inicial $q_0$.
 4. La máquina procesa ($\vdash^*$) moviéndose dentro de esos muros.
 5. Si la máquina llega a un estado final ($q_f \in F$) manteniendo los muros intactos ($[x_1 ... x_2]$), entonces **acepta** la palabra.
+
+Un lenguaje L es sensible al contexto (LSC) si existe una GSC tal que $L = L(G)$ o $L = L(G) \cup \{\lambda\}$.
 
 # 7.3 Protips
 ## 7.3.1 El Mensajero (Commutation)
@@ -205,6 +207,8 @@ Queremos generar $0101$.
 - **Copias Exactas:** $ww$ (Repetir la misma cadena tal cual).
 
 ![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208172052.png)
+
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020260120132740.png)
 
 
 ### 4. Lenguajes Recursivamente Enumerables (Tipo 0)

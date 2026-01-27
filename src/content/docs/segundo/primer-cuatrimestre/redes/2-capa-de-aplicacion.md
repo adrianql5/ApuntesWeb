@@ -2,10 +2,6 @@
 title: "Capa de Aplicación"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
-2
-
 Escrito por **Adrián Quiroga Linares**.
 # 2.1 Introducción
 La capa de aplicación se ocupa de la **comunicación entre procesos.** El esquema típico se muestra en la siguiente figura:

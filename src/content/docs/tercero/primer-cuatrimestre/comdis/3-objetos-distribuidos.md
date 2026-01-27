@@ -2,7 +2,7 @@
 title: "Objetos Distribuidos"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.
 
 # 3.1 Evolución del Paradigma: Del Mensaje al Objeto
 Para entender dónde estamos, primero debemos contrastar este nuevo modelo con lo que ya conoces (Sockets/Paso de Mensajes).

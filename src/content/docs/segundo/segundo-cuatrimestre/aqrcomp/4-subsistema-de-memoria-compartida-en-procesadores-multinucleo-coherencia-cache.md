@@ -2,7 +2,7 @@
 title: "Subsistema de Memoria Compartida en Procesadores Multinúcleo (Coherencia caché)"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares. 
 
 https://ocw.uc3m.es/mod/page/view.php?id=2822
 

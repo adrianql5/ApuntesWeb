@@ -2,7 +2,7 @@
 title: "Autómatas con Pila"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos 
+Escrito por Adrián Quiroga Linares.
 
 **Concepto Intuitivo:** Imagina un Autómata Finito (AFN) que lleva una mochila llena de platos.
 
@@ -117,10 +117,19 @@ Un AP puede decir "OK" de dos formas. En los ejercicios te especificarán cuál 
 - **La pila:** No importa lo que tenga dentro (puede estar llena de basura).
 - **Uso:** Es lo más parecido a los autómatas normales.
 
+El lenguaje aceptado por **estado final** se define como: 
+$$L(P)=\{w|(q_0,wZ_0) \vdash^* (q,\epsilon, \alpha)\}$$
+Dónde q pertenece al conjunto de estados finales
+
 ## Aceptación por Pila Vacía ($\emptyset$)
 - **Condición:** La entrada se ha terminado ($w = \varepsilon$) **Y** la pila está totalmente vacía (ni siquiera queda $Z_0$).
 - **El estado:** No importa en qué estado termine.
 - **Uso:** Muy común en análisis sintáctico (compiladores).
+
+
+El lenguaje aceptado por **estado final** se define como: 
+$$L(P)=\{w|(q_0,wZ_0) \vdash^* (q,\epsilon, \epsilon)\}$$
+
 
 > **Conversión:** Todo lenguaje aceptado por pila vacía puede ser aceptado por estado final y viceversa. Son equivalentes en poder.
 

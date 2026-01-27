@@ -2,11 +2,8 @@
 title: "Introducción"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por **Adrián Quiroga Linares**. [adrianql5](https://github.com/adrianql5)
 
-1
-
-Escrito por **Adrián Quiroga Linares**.
 # 1.1 Elementos de Internet
 ## IPs
 En Internet, cada dispositivo se identifica mediante una dirección *IP*.

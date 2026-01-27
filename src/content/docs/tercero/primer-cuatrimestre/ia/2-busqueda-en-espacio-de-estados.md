@@ -2,7 +2,7 @@
 title: "Búsqueda en Espacio de Estados"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.
 
 # 2.1 Conceptos Principales
 Para resolver problemas en IA, formalizamos el mundo como un conjunto de estados y transiciones.

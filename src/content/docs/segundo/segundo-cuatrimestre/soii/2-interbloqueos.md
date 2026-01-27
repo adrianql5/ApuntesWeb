@@ -2,7 +2,7 @@
 title: "Interbloqueos"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares. 
 
 # 2.1 Recursos
 Los **recursos** son objetos que pueden ser otorgados por el SO  a los procesos. Pueden ser **dispositivos hardware** o **piezas de información**. La secuencia de acciones requerida para utilizar un recurso es:

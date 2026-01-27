@@ -2,7 +2,7 @@
 title: "Máquinas de Turing"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos 
+Escrito por Adrián Quiroga Linares.
 
 # 6.1 Concepto Fundamental
 Una **Máquina de Turing (MT)** es un modelo matemático de computación que consiste en un autómata con una capacidad de memoria ilimitada en forma de una cinta infinita.
@@ -144,7 +144,7 @@ Estas variantes añaden más cintas o pistas para facilitar el trabajo.
 
 - **MT No Determinista (MTN):**
     - **Funcionamiento:** La función de transición $\delta$ devuelve un **conjunto** de posibles movimientos, no uno solo. Puede "replicarse" para seguir varios caminos .
-    - **Simulación:** Se puede simular con una MT estándar usando cintas con múltiples pistas para gestionar las réplicas (una pista para contenido, otra para el estado de cada réplica) .
+    - **Simulación:** Se crea una cinta con 2n pistas, donde n es el número de máquinas a simular. Cada nueva MT implica la inicialización de dos nuevas pistas. Una pista representa el contenido de la cinta y la otra el estado de la MT.
 
 - **Máquina de Turing Universal (MTU):**    
     - **Concepto:** Es una máquina "reprogramable" que recibe como entrada la descripción de _otra_ máquina $M$ y una cadena $w$, y simula a $M$ ejecutando $w$ .
@@ -159,7 +159,7 @@ Estas variantes añaden más cintas o pistas para facilitar el trabajo.
 | **Semi-infinita**           | Usa **2 pistas**                     | Dobla la cinta (pista superior/inferior).          |
 | **Bidimensional**           | Usa **2 pistas**                     | Una para contenido, otra para dirección/coords.    |
 | **Universal (MTU)**         | Usa **3 cintas**                     | 1. Descripción, 2. Contenido, 3. Estado.           |
-| **No Determinista**         | Equivalente a Determinista           | No es más potente, solo (teóricamente) más rápida. |
+| **No Determinista**         | Usa $2n$ pistas                      | No es más potente, solo (teóricamente) más rápida. |
 
 # 6.8 Tesis de Church-Turing
 Esta tesis establece una equivalencia entre "algoritmo" y "Máquina de Turing".

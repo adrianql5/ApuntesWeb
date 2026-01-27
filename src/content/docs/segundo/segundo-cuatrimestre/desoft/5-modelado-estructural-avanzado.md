@@ -2,7 +2,7 @@
 title: "Modelado Estructural Avanzado"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
+Escrito por Adrián Quiroga Linares.  
 
 # 5.1 Definición general
 El **modelado estructural** en UML (Unified Modeling Language) se refiere a la representación de la **estructura estática del sistema**, es decir, **cómo están organizados sus elementos (clases, objetos, relaciones, interfaces, etc.)**.

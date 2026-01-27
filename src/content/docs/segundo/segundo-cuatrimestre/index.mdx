@@ -3,27 +3,33 @@ title: Segundo Cuatrimestre
 description: Asignaturas del segundo cuatrimestre - Segundo Curso
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
 
 # Segundo Cuatrimestre
 
 <CardGrid>
-  <Card title="AQRCOMP" icon="open-book">
-    [AQRCOMP](/ApuntesWeb/segundo/segundo-cuatrimestre/aqrcomp/1-sistemas-multinucleo/)
-  </Card>
-  <Card title="BDII" icon="open-book">
-    [BDII](/ApuntesWeb/segundo/segundo-cuatrimestre/bdii/apuntes-practicos/)
-  </Card>
-  <Card title="COGA" icon="open-book">
-    [COGA](/ApuntesWeb/segundo/segundo-cuatrimestre/coga/1-introduccion/)
-  </Card>
-  <Card title="DESOFT" icon="open-book">
-    [DESOFT](/ApuntesWeb/segundo/segundo-cuatrimestre/desoft/1-introduccion-a-uml/)
-  </Card>
-  <Card title="SOII" icon="open-book">
-    [SOII](/ApuntesWeb/segundo/segundo-cuatrimestre/soii/1-comunicacion-y-sincronizacion-entre-procesos/)
-  </Card>
-  <Card title="XEFE" icon="open-book">
-    [XEFE](/ApuntesWeb/segundo/segundo-cuatrimestre/xefe/1-introduccion-a-la-actividad-economica-y-empresarial/)
-  </Card>
+  <LinkCard
+    title="AQRCOMP"
+    href="/ApuntesWeb/segundo/segundo-cuatrimestre/aqrcomp/1-sistemas-multinucleo/"
+  />
+  <LinkCard
+    title="BDII"
+    href="/ApuntesWeb/segundo/segundo-cuatrimestre/bdii/apuntes-practicos/"
+  />
+  <LinkCard
+    title="COGA"
+    href="/ApuntesWeb/segundo/segundo-cuatrimestre/coga/1-introduccion/"
+  />
+  <LinkCard
+    title="DESOFT"
+    href="/ApuntesWeb/segundo/segundo-cuatrimestre/desoft/1-introduccion-a-uml/"
+  />
+  <LinkCard
+    title="SOII"
+    href="/ApuntesWeb/segundo/segundo-cuatrimestre/soii/1-comunicacion-y-sincronizacion-entre-procesos/"
+  />
+  <LinkCard
+    title="XEFE"
+    href="/ApuntesWeb/segundo/segundo-cuatrimestre/xefe/1-introduccion-a-la-actividad-economica-y-empresarial/"
+  />
 </CardGrid>

@@ -3,24 +3,29 @@ title: Primer Cuatrimestre
 description: Asignaturas del primer cuatrimestre - Segundo Curso
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
 
 # Primer Cuatrimestre
 
 <CardGrid>
-  <Card title="AED" icon="open-book">
-    [AED](/ApuntesWeb/segundo/primer-cuatrimestre/aed/1-arboles-binarios/)
-  </Card>
-  <Card title="BASES DE DATOS" icon="open-book">
-    [BASES DE DATOS](/ApuntesWeb/segundo/primer-cuatrimestre/bases-de-datos/1-modelo-entidad-relacion/)
-  </Card>
-  <Card title="POO" icon="open-book">
-    [POO](/ApuntesWeb/segundo/primer-cuatrimestre/poo/1-encapsulacion/)
-  </Card>
-  <Card title="REDES" icon="open-book">
-    [REDES](/ApuntesWeb/segundo/primer-cuatrimestre/redes/1-introduccion/)
-  </Card>
-  <Card title="SISTEMAS OPERATIVOS" icon="open-book">
-    [SISTEMAS OPERATIVOS](/ApuntesWeb/segundo/primer-cuatrimestre/sistemas-operativos/1-introduccion/)
-  </Card>
+  <LinkCard
+    title="AED"
+    href="/ApuntesWeb/segundo/primer-cuatrimestre/aed/1-arboles-binarios/"
+  />
+  <LinkCard
+    title="BASES DE DATOS"
+    href="/ApuntesWeb/segundo/primer-cuatrimestre/bases-de-datos/1-modelo-entidad-relacion/"
+  />
+  <LinkCard
+    title="POO"
+    href="/ApuntesWeb/segundo/primer-cuatrimestre/poo/1-encapsulacion/"
+  />
+  <LinkCard
+    title="REDES"
+    href="/ApuntesWeb/segundo/primer-cuatrimestre/redes/1-introduccion/"
+  />
+  <LinkCard
+    title="SISTEMAS OPERATIVOS"
+    href="/ApuntesWeb/segundo/primer-cuatrimestre/sistemas-operativos/1-introduccion/"
+  />
 </CardGrid>

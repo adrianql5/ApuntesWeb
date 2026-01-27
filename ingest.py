@@ -656,7 +656,7 @@ title: {cuatri_title}
 description: Asignaturas del {cuatri_title.lower()} - {curso_title}
 ---
 
-import {{ Card, CardGrid }} from '@astrojs/starlight/components';
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
 
 # {cuatri_title}
 
@@ -667,9 +667,10 @@ import {{ Card, CardGrid }} from '@astrojs/starlight/components';
                 asig_original = asig_info['original']
                 first_file = asig_info['first_file']
                 # Enlazar directamente al primer tema
-                content += f"""  <Card title="{asig_original}" icon="open-book">
-    [{asig_original}](/ApuntesWeb/{curso}/{cuatrimestre}/{asig_slug}/{first_file}/)
-  </Card>
+                content += f"""  <LinkCard
+    title="{asig_original}"
+    href="/ApuntesWeb/{curso}/{cuatrimestre}/{asig_slug}/{first_file}/"
+  />
 """
             content += "</CardGrid>\n"
             

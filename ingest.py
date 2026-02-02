@@ -656,7 +656,7 @@ title: {cuatri_title}
 description: Asignaturas del {cuatri_title.lower()} - {curso_title}
 ---
 
-import { LinkCard, CardGrid } from '@astrojs/starlight/components';
+import {{ LinkCard, CardGrid }} from '@astrojs/starlight/components';
 
 # {cuatri_title}
 

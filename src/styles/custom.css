@@ -945,11 +945,15 @@ select,
 		padding-bottom: 1.1rem;
 	}
 
-	.main-frame > .lg\:sl-flex {
+	.main-frame > .lg\:sl-flex:has(.right-sidebar-container) {
 		display: grid !important;
 		grid-template-columns: minmax(0, 1fr) var(--app-sidebar-width);
 		align-items: start;
 		column-gap: 0;
+	}
+
+	.main-frame > .lg\:sl-flex:not(:has(.right-sidebar-container)) {
+		display: block !important;
 	}
 
 	.right-sidebar-container {
@@ -969,11 +973,23 @@ select,
 		order: 1;
 		width: auto !important;
 		min-width: 0;
+		display: flex;
+		justify-content: center;
+	}
+
+	.main-pane > main {
+		width: min(100%, calc(var(--sl-content-width) + 2rem));
+		margin-inline: auto;
+	}
+
+	.main-pane .content-panel {
+		width: 100%;
 	}
 
 	.main-pane .content-panel > .sl-container {
-		max-width: none;
-		width: auto;
+		width: min(100%, var(--sl-content-width));
+		max-width: var(--sl-content-width);
+		margin-inline: auto;
 	}
 }
 

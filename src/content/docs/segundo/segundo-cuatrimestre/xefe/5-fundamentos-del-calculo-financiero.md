@@ -166,7 +166,7 @@ Aquí, **los intereses NO se acumulan**. Es una regla lineal.
 
 $$i_m = \frac{j_m}{m}$$
 
-$$i_{periodo}=\frac{TIN}{\text{nº pagos por año}}$$
+$$i_{periodo}=\frac{TIN}{\text{num. pagos por año}}$$
 > TIN = Tasa Interés Nominal, que es un tipo anual **no capitalizable por sí mismo**. Solo tiene sentido si se acompaña del **número de períodos de pago**.
 2
 > Si el **interés nominal anual** es del 9 %, ¿cuál es el **interés mensual equivalente**?

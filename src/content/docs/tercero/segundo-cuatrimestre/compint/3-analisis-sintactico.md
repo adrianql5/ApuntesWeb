@@ -16,10 +16,10 @@ La idea clave es esta:
 Una gramática independiente del contexto se define como una 4-tupla::
 $$G=(NT,T,P,S)$$
 
-- $NT$ (o $V$): Variables no terminales (Mayúsculas, ej: $A, B$).
-- $T$: Terminales (minúsculas, ej: $a,b$).
-- $P$: Producciones (Reglas $Izquierda→Derecha$).
-- $S$: Axioma inicial.
+- $NT$ (o $V$): Variables no terminales (Mayúsculas, ej: $A, B$).
+- $T$: Terminales (minúsculas, ej: $a,b$).
+- $P$: Producciones (Reglas $Izquierda→Derecha$).
+- $S$: Axioma inicial.
 
 La máquina teórica adecuada para reconocer lenguajes independientes del contexto es el **autómata a pila**. Además, en este tema se introduce el símbolo **`$`** para indicar fin de cadena.
 
@@ -37,7 +37,7 @@ Construyen el árbol **de abajo hacia arriba**, desde las hojas hasta la raíz. 
 - reducirlos al no terminal correspondiente.
 
 Con la gramática:
-$$id→letra∣id letra∣id digito$$
+$$id→letra∣id letra∣id digito$$
 $$letra→a∣b∣⋯∣z$$
 $$digito→0∣1∣⋯∣9$$
 la cadena `st2` puede analizarse:
@@ -150,11 +150,11 @@ Después:
 
 Si tenemos:
 
-$$A→αβ_1​∣αβ_2​∣⋯∣αβn_​∣γ$$
+$$A→αβ_1∣αβ_2∣⋯∣αβn_∣γ$$
 
 se transforma en:
 $$A→αA′∣γ$$
-$$A′→β_1​∣β_2​∣⋯∣β_n​$$
+$$A′→β_1∣β_2∣⋯∣β_n$$
 rve para facilitar el análisis descendente predictivo y evitar indecisiones tempranas.
 
 
@@ -229,10 +229,10 @@ Por eso interesan los analizadores **predictivos**, que no retroceden.
 La recursividad por la izquierda es muy peligrosa en análisis descendente porque puede producir un bucle infinito.
 
 Si una gramática tiene:
-$$A→Aα1​∣Aα_2​∣⋯∣Aα_n​∣β_1​∣β_2​∣⋯∣β_m​$$
+$$A→Aα1∣Aα_2∣⋯∣Aα_n∣β_1∣β_2∣⋯∣β_m$$
 se transforma en:
-$$A→β_1​A′∣β_2​A′∣⋯∣βm_​A′$$
-$$A′→α_1​A′∣α_2​A′∣⋯∣α_n​A′∣ε$$
+$$A→β_1A′∣β_2A′∣⋯∣βm_A′$$
+$$A′→α_1A′∣α_2A′∣⋯∣α_nA′∣ε$$
 
 
 

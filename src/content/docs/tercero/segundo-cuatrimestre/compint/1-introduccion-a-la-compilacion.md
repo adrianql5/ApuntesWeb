@@ -159,7 +159,7 @@ id1 = id2 + temp1
 ### Generador de Código
 Traduce el código intermedio optimizado al lenguaje destino (código máquina o ensamblador). Aquí se asignan los **registros de memoria** reales de la CPU.
 - *Ejemplo*:
-```assembly
+```asm
 LDF R2, id3        ; Cargar id3 en Registro 2
 MULF R2, R2, #60.0 ; Multiplicar R2 por 60.0
 LDF R1, id2        ; Cargar id2 en Registro 1

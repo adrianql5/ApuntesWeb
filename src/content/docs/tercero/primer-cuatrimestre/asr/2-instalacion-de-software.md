@@ -1,4 +1,4 @@
-f---
+---
 title: "Instalación de Software"
 ---
 
@@ -466,4 +466,3 @@ ln -s libgdal.so.30.0.4 libgdal.so.30.0.3
 
 ### El cargador dinámico (`ld.so` )
 Es el programa "invisible" del sistema operativo que se ejecuta cada vez que abres una aplicación. Su trabajo es leer la lista de dependencias del ejecutable, buscar esos archivos `.so` en el disco duro y cargarlos en la RAM para que el programa funcione.
-

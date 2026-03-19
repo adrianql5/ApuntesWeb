@@ -1,0 +1,61 @@
+---
+const base = '/ApuntesWeb/';
+---
+
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>404 | Apuntes Ingeniería Informática</title>
+		<style>
+			:root {
+				color-scheme: light dark;
+				font-family: Georgia, "Times New Roman", serif;
+			}
+
+			body {
+				margin: 0;
+				min-height: 100vh;
+				display: grid;
+				place-items: center;
+				background:
+					radial-gradient(circle at top, rgba(33, 87, 164, 0.16), transparent 38%),
+					linear-gradient(180deg, #f6f3ec, #ece6d8);
+				color: #1f2937;
+			}
+
+			main {
+				width: min(640px, calc(100% - 3rem));
+				padding: 3rem;
+				border: 1px solid rgba(31, 41, 55, 0.12);
+				background: rgba(255, 255, 255, 0.82);
+				box-shadow: 0 20px 60px rgba(31, 41, 55, 0.12);
+				backdrop-filter: blur(10px);
+			}
+
+			h1 {
+				margin: 0 0 1rem;
+				font-size: clamp(3rem, 8vw, 5rem);
+				line-height: 0.95;
+			}
+
+			p {
+				margin: 0 0 1.25rem;
+				font-size: 1.05rem;
+				line-height: 1.6;
+			}
+
+			a {
+				color: #0f4c81;
+				font-weight: 700;
+			}
+		</style>
+	</head>
+	<body>
+		<main>
+			<h1>404</h1>
+			<p>La página que buscas no existe o ha cambiado de ruta.</p>
+			<p><a href={base}>Volver al inicio</a></p>
+		</main>
+	</body>
+</html>

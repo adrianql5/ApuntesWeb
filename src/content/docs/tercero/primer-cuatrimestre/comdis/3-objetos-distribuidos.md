@@ -165,7 +165,7 @@ public interface Calculadora extends Remote {
 ## Paso 2: El Servidor (Implementación y Publicación)
 Implementa la lógica y se registra en el `rmiregistry`.
 
-```Java
+```java
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -245,4 +245,3 @@ Para no perderte en la práctica, sigue este "algoritmo" riguroso extraído del 
 > **Java RMI** es por naturaleza multihilo. Cuando recibe una petición de un cliente, por ejemplo si un cliente $A$ invoca a un método remoto $A$, el entorno de ejecución de Java RMI creará un hilo para ejecutar ese método remoto. Si al mismo tiempo otro cliente $B$ le manda otra petición, creará otro hilo. Ambos hilos pueden ejecutar el mismo código del objeto remoto **en paralelo**. 
 >
 > Para que funcione **todo el código debe ser Thread Safe**.
-

@@ -10,14 +10,30 @@ export default defineConfig({
 	site: 'https://adrianql5.github.io/ApuntesWeb',
 	base: '/ApuntesWeb',
 	trailingSlash: 'always',
+	vite: {
+		build: {
+			rollupOptions: {
+				onwarn(warning, warn) {
+					if (
+						warning.code === 'UNUSED_EXTERNAL_IMPORT' &&
+						warning.message?.includes('@astrojs/internal-helpers/remote')
+					) {
+						return;
+					}
+					warn(warning);
+				},
+			},
+		},
+	},
 	markdown: {
 		remarkPlugins: [remarkMath],
-		rehypePlugins: [rehypeKatex],
+		rehypePlugins: [[rehypeKatex, { strict: 'ignore' }]],
 	},
 	integrations: [
 		starlight({
 			title: 'Apuntes Ingeniería Informática',
 			description: 'Apuntes de Ingeniería Informática organizados por curso y asignatura',
+			disable404Route: true,
 			tableOfContents: { minHeadingLevel: 1, maxHeadingLevel: 3 },
 			defaultLocale: 'root',
 			locales: {

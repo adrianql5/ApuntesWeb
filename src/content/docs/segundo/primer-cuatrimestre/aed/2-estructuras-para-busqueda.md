@@ -16,7 +16,7 @@ Además, al realizarle el **recorrido inorden**, los elementos se imprimen orden
 En un **ABB** la inserción no se puede realizar en el primer hueco libre que se vea, sino que hay que respetar la estructura, buscando desde la **raíz** el hueco correspondiente al nodo que queremos insertar. Por lo tanto, la **inserción es recursiva**, ya que se parte del **nodo raíz** y se va mirando si el elemento que queremos insertar es **menor o mayor**, bajando por la rama correspondiente hasta encontrar su sitio.
 Como clara desventaja de este tipo de árbol, tenemos el caso en el que la mayor parte de los elementos que se inserten sea mayores o menores que el nodo raíz, provocando un **árbol desbalanceado**, lo que además **aumenta el tiempo de búsqueda**, al tener que recorrer muchos elementos, como si se tratase de una lista.
 
-```C
+```c
 void insertar(abb *A, tipoelem E) {
 	if (es_vacio(*A)) {
 		*A = (abb) malloc(sizeof (struct celda));
@@ -40,7 +40,7 @@ La desventaja en el caso de la eliminación reside en tener que **reestructurar*
 - **Si el nodo es hoja**, se suprime del árbol sin más
 - **Si tiene un único hijo**, se intercambia de posición con su hijo y se elimina del árbol
 - **Si tiene 2 hijos**, buscamos el menos de todos los descendientes del hijo derecho, sustituimos por dicho nodo, y lo eliminamos del árbol. Otra opción es sustituir por el nodo de mayor valor de los descendientes del subárbol izquierdo
-```C
+```c
 Algoritmos y Estructuras de Datos 16
 void suprimir(abb *A, tipoelem E) {
 	abb aux;
@@ -89,7 +89,7 @@ Esta representación facilita las operaciones de búsqueda tanto en simplicidad 
 ## Inserción
 Como **árbol binario completo** que es, la inserción se hace en el hueco libre más a la izquierda del último nivel. Sin embargo, si se inserta un elemento con un valor menor que su padre, es necesario **reorganizar** el árbol intercambiando el elemento con su padre hasta llegar una posición en la que se cumpla el criterio.
 
-```C
+```c
 void insertar(cola *C, tipoelem E, int prioridad){
 	int I, padre;
 	unsigned encontrado;
@@ -115,7 +115,7 @@ void insertar(cola *C, tipoelem E, int prioridad){
 
 ## Eliminación
 En este tipo de árboles, el elemento que se quiere suprimir es siempre el de mayor prioridad, es decir, la raíz. Para llevar a cabo esta operación, el **nodo raíz se intercambia de posición con el nodo hoja más a la derecha**, y una vez allí se elimina. A continuación se procese a la reorganización del nuevo nodo raíz hasta encontrar su sitio, intercambiándolo con el hijo menor en cada caso.
-```C
+```c
 void suprimir(cola *C){
 	tipoelem elemento;
 	int I,J, prioridad;
@@ -178,4 +178,3 @@ Para eliminar si lo pide cambiamos la raíz con el ultimo nodo, eliminamos y rec
 ## Heapify
 Vamos reordenando nivel a nivel los nodos si nos los dan sin ningún tipo de orden: ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240930004535.png)
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240930003534.png)
-

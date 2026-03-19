@@ -73,7 +73,7 @@ public class Main{
 ```
 
 **Recorrerlo Usando Iterator**
-```Java
+```java
 public class Main{
 	private HashMap<Integer, String> mapa;
 	
@@ -135,7 +135,7 @@ public abstract class Vehiculo {
 }
 ```
 
-```Java
+```java
 public class Coche extends Vehiculo {
     private boolean desembrague;
 
@@ -174,7 +174,7 @@ public class Coche extends Vehiculo {
 }
 ```
 
-```Java
+```java
 public class Moto extends Vehiculo {
     private boolean anchoDeManubrio;
 
@@ -217,7 +217,7 @@ public class Moto extends Vehiculo {
 }
 ```
 
-```Java
+```java
 public class Main {
     public static void main(String[] args) {
         Vehiculo V1 = new Coche("Toyota", 20000, true);//Upcasting
@@ -235,7 +235,7 @@ public class Main {
 ```
 
 # Excepciones
-```Java
+```java
 // Clase de excepción personalizada 
 public class VehiculoException extends Exception { 
 	public VehiculoException(String mensaje) { 
@@ -250,7 +250,7 @@ public class VehiculoException extends Exception {
 ```
 
 En vehiculo: 
-```Java
+```java
 public Vehiculo(String nombre, int valor) throws VehiculoException { 
 	if (valor < 0) { 
 		throw new VehiculoException("El valor del vehículo no puede ser negativo."); 
@@ -267,7 +267,7 @@ public void setValor(int valor) throws VehiculoException {
 }
 ```
 
-```Java
+```java
 // Clase principal para demostrar manejo de excepciones 
 public class Main { public static void main(String[] args) { 
 	try { 

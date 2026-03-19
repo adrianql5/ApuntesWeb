@@ -140,7 +140,7 @@ Las **reflexiones** especulares suele ser del mismo **color** que la **fuente de
 
 Se calcula con la ecuación:
 
-$$I = I_L \times K_S \times \cos^n(𝛼) = I_L \times K_S \times (\vec R \cdot \vec V)^n$$
+$$I = I_L \times K_S \times \cos^n(\alpha) = I_L \times K_S \times (\vec R \cdot \vec V)^n$$
 
 Donde:
 - $I_L$: Intensidad de la fuente de luz.
@@ -175,5 +175,4 @@ $$
 
 # 5.4 Resumen
 ![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250426114239.png)
-
 

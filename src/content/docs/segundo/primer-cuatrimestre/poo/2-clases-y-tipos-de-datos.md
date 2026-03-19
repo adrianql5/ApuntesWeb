@@ -17,7 +17,7 @@ Los tipos de datos primitivos **no son clases**, puesto que no encapsulan ni dat
 
 Los métodos de los wrappers de los tipos primitivos permiten **obtener** el valor del dato; **convertir** el dato a una cadena de texto y viceversa; o **convertir** el dato a otros tipos de datos primitivos.
 
-```Java
+```java
 Integer a = new Integer(10);
 System.out.println("Valor de a en decimales: " + a.doubleValue());
 Integer b = new Integer("18");
@@ -88,7 +88,7 @@ Sí, en el rango de -128 a 127 los `Integer` se comportan como el "String pool":
 	- Un método que tiene como argumento un **tipo primitivo** recibe un objeto un **wrapper**.
 	- A un **tipo primitivo** se le asigna un objeto de un **wrapper**.
 
-```Java
+```java
 Integer a = 10; //autoboxing
 int a = new Integer(10)//unboxing
 ```
@@ -111,7 +111,7 @@ En Java los **nombres de los objetos son referencias** a la posición de memoria
 - **Evita la encapsulación** de datos pues permite modificar el valor de atributos desde métodos de fuera de sus clases. Por tanto, los programas son mucho más difíciles de mantener, ya que los atributos de tipo objeto se pueden modificar sin ningún tipo de control de su clase
 
 Otro ejemplo:
-```Java
+```java
 public static void main (String[] args){
 	Jugador jugador = new Jugador("Luis", Valor.EJERCITO_AZUL, mapa);
 	ArrayList <Pais> paises = jugador.getPaises(); //aliasing
@@ -131,7 +131,7 @@ El aliasing sólo se puede vitar si se introduce manualmente código que genere 
 El método `clone` genera una **copia exacta** de un objeto y la almacena en una **posición diferente** de la que ocupa el objeto original. El programador debe implementar el método para cada clase de cuyos objetos se desea realizar copias profundas. 
 - **Copia profunda:** se reserva memoria para todos los atributos del objeto, incluso todo los **elementos de un conjunto de datos**
 
-```Java
+```java
 @Override
 public Object clone(){
 	try{

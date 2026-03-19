@@ -119,7 +119,7 @@ Se pueden introducir nuevos **métodos** siempre que no alteren los valores de l
 
 El método `toString` incluye el **nombre de la clase** y el **nombre de los atributos** con sus correspondientes **valores**.
 
-```Java
+```java
 public record Continente(ArrayList<Pais> paises, 
                          String nombre, 
                          String color) {
@@ -150,13 +150,13 @@ public record Continente(ArrayList<Pais> paises,
 
 # 1. 4 Ejecución de un programa en Java
 Todo programa en Java tiene una **clase principal** en la que se encuentra el método **main**, que será el punto a partir del cual se inicia la ejecución del programa.
-```Java
+```java
 public static void main (String[] args)
 ```
 
 **La clase principal no debe tener ningún atributo**.
 
-```Java
+```java
 public class RiskETSE{
 	public static void main(String[] args){
 		new Menu();

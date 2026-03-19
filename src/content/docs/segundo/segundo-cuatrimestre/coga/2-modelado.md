@@ -37,8 +37,8 @@ Un plano se puede definir por su **vector normal**, que se puede calcular median
 
 
 >[!Nota] Calcular Vectores entre 2 puntos
->$A(x_1​,y_1​,z_1​),B(x_2​,y_2​,z_2​)$
->$AB=(x_2​−x_1​,y_2​−y_1​,z_2​−z_1​)$
+>$A(x_1,y_1,z_1),B(x_2,y_2,z_2)$
+>$AB=(x_2−x_1,y_2−y_1,z_2−z_1)$
 
 El producto vectorial $\vec{u} \times \vec{v}$ en $R^3$ se calcula como el determinante de la matriz $3 \times 3$ conformada por los vectores unitarios de los ejes, los componentes del vector $\vec{u}$ y los del $\vec{v}$:
 

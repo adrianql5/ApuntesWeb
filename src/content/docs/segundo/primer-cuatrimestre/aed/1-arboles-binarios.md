@@ -58,7 +58,7 @@ typedef struct celda *Abin
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926164812.png)
 
 **Crear:** hacemos que *abin* apunte a *null* inicialmente.
-```C
+```c
 void crear(abin *A){
 	*A=NULL;
 }
@@ -66,7 +66,7 @@ void crear(abin *A){
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926165103.png)
 
 **Der e Izq:** nos devolveran los consiguientes nodos
-```C
+```c
 abin izq(abin A){
 	return A->izq;
 }
@@ -80,7 +80,7 @@ abin der(abin A){
 * Si acabamos de crear el árbol y está vacío, creamos el nodo con un *Abin aux* reservando memoria y apuntamos *Abin* a este nuevo nodo.
 * Si no está vacío simplemente lo añadimos apuntando el de la derecha a este nuevo nodo.
 
-```C
+```c
 void insizq/insder(abin *A, tipoelem E){
 	abin aux;
 	aux=(abin)malloc(sizeof(struct celda));
@@ -99,7 +99,7 @@ void insizq/insder(abin *A, tipoelem E){
 **Suprimir:** Creamos un *Abin aux* que será igual a lo que está en el nodo que queremos eliminar.
 * En caso de no ser vacío ese aux suprimo lo que esta a la derecha y a la izquierda con la misma función de forma **recursiva**. Después hago que abin al lado que deseo eliminar apunte a *null* y libero el nodo auxiliar.
 
-```C
+```c
 void supizq/supder(abin *A){
 	abin aux;
 	aux=izq(*A); //aux=der(*A);
@@ -114,7 +114,7 @@ void supizq/supder(abin *A){
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926165402.png)
 
 **Eliminar:** sigo la lógica de la función anterior pero desde la raíz
-```C
+```c
 void destruir(abin *A){
 	abin aux;
 	aux=*A;
@@ -129,7 +129,7 @@ void destruir(abin *A){
 
 **Funciones Restantes:**
 
-```C
+```c
 unsigned es_vacio(abin A){
 	return (A==NULL);
 }
@@ -182,4 +182,3 @@ Utilizamos una **pila**:
 * EL paréntesis izquierdo se apila siempre,  y el derecho produce siempre que se desapile hasta llegar al paréntesis izquierdo. 
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926173032.png)
-

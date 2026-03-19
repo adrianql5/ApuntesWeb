@@ -5,7 +5,7 @@ title: "Programar en 3.3"
 Escrito por Adrián Quiroga Linares. 
 
 # 1 Crear una ventana
-``` C++
+```cpp
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -94,7 +94,7 @@ int main() {
 Para generar figuras en OpenGl 3.3 se usan **Vertex Array Objet**, que almacenan toda la información del objeto a dibujar.
 Los VAOs están formados por **Vertex Buffer Objects** (VBOs), que almacenan información relativa a los vértices, colores, normales, etc.
 
-```C++
+```cpp
 void medianteArray() {
 
     float vertices[] = { 0.0f, 0.0f, 0.0f, // x
@@ -136,7 +136,7 @@ void medianteArray() {
 }
 ``` 
 
-```C++
+```cpp
     glUseProgram(shaderProgram);
     //Se indica cuál es el Program Shader a emplear
 
@@ -152,7 +152,7 @@ void medianteArray() {
 ```
 
 Si se trabaja con más de un atributo (por ejemplo, se añaden colores):
-```C++
+```cpp
 void medianteArray() {
 
     // Se crea el vector de floats que recoge los vértices y los colores
@@ -305,7 +305,7 @@ La matriz se envía al VS usando una variable de tipo `uniform`
 ![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430111806.png)
 
 Para evitar andar usando el glm::nombrefunc, vamos a tirar de `C++` y le chantamos en la primera línea del programa: 
-``` C++
+```cpp
 using namespace glm;
 ```
 
@@ -363,8 +363,7 @@ $$I=I_l \times \cos(\theta) = I_l \times K_D \times (\vec N \cdot \vec L)$$
 ![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430114034.png)
 
 ## 5.4 Luz Especular
-$$I = I_L \times K_S \times \cos^n(𝛼) = I_L \times K_S \times (\vec R \cdot \vec V)^n$$
+$$I = I_L \times K_S \times \cos^n(\alpha) = I_L \times K_S \times (\vec R \cdot \vec V)^n$$
 Hay que pasarle al FS, además de lo ya dicho, la posición de la cámara.
 
 ![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430114210.png)
-

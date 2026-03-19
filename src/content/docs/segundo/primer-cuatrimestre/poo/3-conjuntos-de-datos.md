@@ -135,7 +135,7 @@ Tiene un **atributo público**, `size`. Las **operaciones de acceso** a sus elem
 
 El **constructor sin argumentos** de `ArrayList` reserva espacio para 10 elementos. `ArrayList` realiza una **redimensión dinámica** cuando el número de datos que se almacena es **mayor que la capacidad** de almacenamiento de la lista. Por defecto, se aumentará la capacidad en 10. Si la redimensión se realiza **frecuentemente** se penalizará el **rendimiento** de la lista, ya que internamente la redimensión supone incrementar el tamaño de un array normal.
 
-```Java
+```java
 ArrayList<Tipo> nombre = new ArrayList<>();
 ArrayList<Tipo> nombre = new ArrayList<Tipo>();
 ArrayList<Tipo> nombre = new ArrayList<>(capacidad);
@@ -260,7 +260,7 @@ Para **generar** el `hashCode`, es necesario **sobreescribir** el método `hashC
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250619192216.png)
 
-```Java
+```java
 HashMap<K,V> m = new HashMap<>();
 HashMap<K,V> m = new HashMap<K,V>();
 HashMap<K,V> m = new HashMap<>(capacidad);

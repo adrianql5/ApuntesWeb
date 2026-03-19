@@ -38,7 +38,7 @@ Estos comandos permiten utilizar **Expresiones Regulares Extendidas (ERE)**, lo 
 - Lee el texto línea por línea. Si encuentra el patrón en una línea, imprime la línea completa en la salida estándar (pantalla). Si no, la descarta.
 - **Diferencia clave:** `egrep` es equivalente a ejecutar `grep -E`. Interpreta los metacaracteres extendidos (`?`, `+`, `{}`, `|`, `()`) directamente.
 
-```Shell
+```bash
 egrep [opciones] 'patrón' archivo
 ```
 
@@ -196,8 +196,8 @@ Las expresiones regulares son "codiciosas" por naturaleza: intentan abarcar la *
 ### Porrazos
 **Ejemplo 1:**
 ```shell
- #concuerda con direcciones de e-mail
- \w+@\w+\.\w+((\.\w+)*)? 
+ #concuerda con direcciones de e-mail
+ \w+@\w+\.\w+((\.\w+)*)? 
 ``` 
 
 `\w` (word character) es un atajo para no tener que escribir `[a-zA-Z0-9_]`.
@@ -700,6 +700,5 @@ class Servidor:
     def encender(self):
         self.__estado = "ON"
 ```
-
 
 

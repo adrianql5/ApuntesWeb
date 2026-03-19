@@ -48,35 +48,33 @@ const quickLinks = [
 <style>
 	@layer starlight.core {
 		.app-header {
-			display: grid;
-			grid-template-columns: auto minmax(14rem, 1fr) auto auto;
+			display: flex;
 			align-items: center;
-			gap: 0.85rem;
-			height: auto;
+			gap: 0.8rem;
+			width: 100%;
 			min-width: 0;
 		}
 
 		.title-wrapper {
-			overflow: clip;
-			padding: 0.25rem;
-			margin: -0.25rem;
+			flex: 0 0 auto;
 			min-width: 0;
-			grid-area: title;
 		}
 
 		.app-header__search {
-			min-width: 0;
-			grid-area: search;
+			flex: 0 0 auto;
+			min-width: min(100%, 12rem);
 		}
 
 		.app-header__actions,
 		.social-icons {
+			display: flex;
 			gap: 1rem;
 			align-items: center;
 		}
 
 		.app-header__actions {
-			grid-area: actions;
+			flex: 0 0 auto;
+			margin-inline-start: auto;
 		}
 
 		.social-icons::after {
@@ -89,11 +87,11 @@ const quickLinks = [
 			display: flex;
 			gap: 0.55rem;
 			align-items: center;
-			min-width: 0;
+			flex: 1 1 auto;
+			min-width: 8rem;
 			overflow-x: auto;
 			scrollbar-width: none;
 			padding-bottom: 0.05rem;
-			grid-area: nav;
 		}
 
 		.app-header__nav::-webkit-scrollbar {
@@ -110,12 +108,7 @@ const quickLinks = [
 			text-decoration: none;
 		}
 
-		@media (min-width: 50rem) {
-			.app-header {
-				grid-template-columns: minmax(11.5rem, 13.5rem) minmax(0, 1fr) auto;
-				grid-template-areas: 'search nav actions';
-			}
-
+		@media (max-width: 72rem) {
 			.title-wrapper {
 				display: none;
 			}
@@ -123,18 +116,26 @@ const quickLinks = [
 
 		@media (max-width: 50rem) {
 			.app-header {
-				grid-template-columns: minmax(0, 1fr) auto;
-				grid-template-areas:
-					'title actions'
-					'search search'
-					'nav nav';
+				flex-wrap: wrap;
 				align-items: stretch;
-				column-gap: 0.55rem;
-				row-gap: 0.42rem;
+				gap: 0.42rem 0.55rem;
+			}
+
+			.title-wrapper {
+				display: flex;
+				flex: 1 1 auto;
+				align-items: center;
+				min-width: 0;
 			}
 
 			.app-header__actions {
-				justify-self: end;
+				margin-inline-start: 0;
+			}
+
+			.app-header__search,
+			.app-header__nav {
+				flex-basis: 100%;
+				min-width: 0;
 			}
 		}
 	}

@@ -4,7 +4,7 @@
 	--sl-font: 'Public Sans', sans-serif;
 	--sl-font-mono: 'JetBrains Mono', monospace;
 	--app-font-display: 'Fraunces', Georgia, serif;
-	--sl-nav-height: 7.1rem;
+	--sl-nav-height: 4.9rem;
 
 	--sl-color-accent-low: #f1dcc8;
 	--sl-color-accent: #ac5b2d;
@@ -245,7 +245,10 @@ header,
 }
 
 :root:not([data-theme='dark']) .header starlight-theme-select label,
-:root:not([data-theme='dark']) .header starlight-theme-select select {
+:root:not([data-theme='dark']) .header starlight-theme-select select,
+:root:not([data-theme='dark']) .header starlight-theme-select .label-icon,
+:root:not([data-theme='dark']) .header starlight-theme-select .caret,
+:root:not([data-theme='dark']) .header starlight-theme-select option {
 	color: #241c16 !important;
 	border-color: rgba(88, 71, 57, 0.2) !important;
 }
@@ -297,6 +300,11 @@ header,
 	min-width: calc(var(--sl-select-width) + 1rem);
 	font-size: 0.95rem;
 	text-overflow: clip;
+}
+
+.header starlight-theme-select .label-icon,
+.header starlight-theme-select .caret {
+	color: inherit !important;
 }
 
 .header site-search button {
@@ -953,6 +961,11 @@ select,
 
 	.header {
 		padding-block: 0.5rem 0.45rem !important;
+	}
+
+	.header starlight-theme-select,
+	.header starlight-theme-select label {
+		color: #241c16 !important;
 	}
 
 	.app-header__search {

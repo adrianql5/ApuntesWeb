@@ -4,6 +4,7 @@
 	--sl-font: 'Public Sans', sans-serif;
 	--sl-font-mono: 'JetBrains Mono', monospace;
 	--app-font-display: 'Fraunces', Georgia, serif;
+	--sl-nav-height: 7.1rem;
 
 	--sl-color-accent-low: #f1dcc8;
 	--sl-color-accent: #ac5b2d;
@@ -160,12 +161,28 @@ header,
 	background: var(--sl-color-bg-nav) !important;
 	border-bottom: 1px solid var(--sl-color-hairline);
 	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+	height: auto !important;
+	min-height: var(--sl-nav-height);
 }
 
 .site-title {
 	font-size: 1rem;
 	font-weight: 700;
 	color: var(--sl-color-text) !important;
+}
+
+.app-header__nav-link {
+	color: var(--sl-color-text);
+	background: var(--app-surface-strong);
+	border: 1px solid var(--sl-color-hairline);
+	box-shadow: none;
+}
+
+.app-header__nav-link:hover,
+.app-header__nav-link:focus-visible {
+	color: var(--sl-color-text-accent);
+	border-color: rgba(172, 91, 45, 0.35);
+	background: rgba(172, 91, 45, 0.08);
 }
 
 :root:not([data-theme='dark']) .site-title,
@@ -202,6 +219,35 @@ header,
 :root:not([data-theme='dark']) [data-sl-link-card] .icon,
 :root:not([data-theme='dark']) .card .icon {
 	color: #2e241c !important;
+}
+
+:root:not([data-theme='dark']) .header site-search button kbd {
+	background: #efe4d7 !important;
+	border-color: rgba(88, 71, 57, 0.18) !important;
+	color: #241c16 !important;
+	font-weight: 700;
+	opacity: 1;
+}
+
+:root:not([data-theme='dark']) .header starlight-theme-select label,
+:root:not([data-theme='dark']) .header site-search button,
+:root:not([data-theme='dark']) .app-header__nav-link {
+	background: #fffaf3 !important;
+}
+
+:root:not([data-theme='dark']) .header site-search button {
+	color: #241c16 !important;
+	border-color: rgba(88, 71, 57, 0.2) !important;
+}
+
+:root:not([data-theme='dark']) .header site-search button span {
+	color: #3d3026 !important;
+}
+
+:root:not([data-theme='dark']) .header starlight-theme-select label,
+:root:not([data-theme='dark']) .header starlight-theme-select select {
+	color: #241c16 !important;
+	border-color: rgba(88, 71, 57, 0.2) !important;
 }
 
 :root:not([data-theme='dark']) #starlight__search {
@@ -251,6 +297,17 @@ header,
 	min-width: calc(var(--sl-select-width) + 1rem);
 	font-size: 0.95rem;
 	text-overflow: clip;
+}
+
+.header site-search button {
+	color: var(--sl-color-text) !important;
+	gap: 0.7rem;
+}
+
+.header site-search button kbd {
+	color: inherit !important;
+	opacity: 1;
+	font-weight: 700;
 }
 
 #starlight__sidebar,
@@ -882,18 +939,61 @@ select,
 }
 
 @media (max-width: 50rem) {
+	:root {
+		--sl-nav-height: 7.95rem;
+	}
+
 	body::before {
 		display: none;
 	}
 
 	.site-title {
-		font-size: 0.92rem;
+		font-size: 0.84rem;
+	}
+
+	.header {
+		padding-block: 0.5rem 0.45rem !important;
+	}
+
+	.app-header__search {
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+
+	.app-header__nav {
+		gap: 0.45rem;
+		padding-inline-end: 0.2rem;
+		padding-bottom: 0.05rem;
+	}
+
+	.app-header__nav-link {
+		padding: 0.36rem 0.62rem;
+		font-size: 0.69rem;
+	}
+
+	.header site-search button {
+		min-width: 0;
+		width: 100%;
+		min-height: 2.2rem;
+		padding-inline: 0.62rem !important;
+	}
+
+	.header site-search button span {
+		max-width: none;
+		font-size: 0.84rem;
 	}
 
 	.header starlight-theme-select label {
-		--sl-select-width: 7.65rem !important;
-		min-width: 7.85rem;
-		padding-inline: 0.55rem 0.8rem !important;
+		--sl-select-width: 6.25rem !important;
+		min-width: 6.45rem;
+		min-height: 2.2rem;
+		padding-inline: 0.52rem 0.72rem !important;
+	}
+
+	.header starlight-theme-select select {
+		font-size: 0.84rem;
+		min-width: calc(var(--sl-select-width) + 0.75rem);
+		width: calc(var(--sl-select-width) + 0.75rem) !important;
 	}
 
 	[data-template='splash'] .hero {
@@ -930,29 +1030,42 @@ select,
 
 	.landing-hero {
 		gap: 1rem;
-		padding: 1.2rem;
+		padding: 1rem 0.95rem;
 		border-radius: 18px !important;
 	}
 
 	.landing-hero__title {
-		font-size: clamp(2.45rem, 11vw, 3.15rem);
-		max-width: 9ch;
+		font-size: clamp(1.95rem, 8.8vw, 2.55rem);
+		max-width: 11ch;
+		line-height: 0.98;
 	}
 
 	.landing-hero__tagline {
 		max-width: 100%;
-		font-size: 0.98rem;
+		font-size: 0.9rem;
+		line-height: 1.55;
 	}
 
 	.landing-hero__media img {
-		width: min(100%, 13.8rem);
-		outline-offset: 6px;
+		width: min(100%, 10.5rem);
+		outline-offset: 4px;
 	}
 
 	[data-page-title] {
-		font-size: clamp(2rem, 10.2vw, 2.75rem) !important;
-		line-height: 0.96;
+		max-width: 100%;
+		font-size: clamp(1.75rem, 8.1vw, 2.3rem) !important;
+		line-height: 1.02;
 		margin-bottom: 0.7rem;
+		letter-spacing: -0.03em;
+		text-wrap: pretty;
+	}
+
+	main > .content-panel:first-child h1 {
+		max-width: 100%;
+		font-size: clamp(1.75rem, 8.1vw, 2.3rem) !important;
+		line-height: 1.02;
+		letter-spacing: -0.03em;
+		overflow-wrap: anywhere;
 	}
 
 	h2 {
@@ -973,7 +1086,25 @@ select,
 	.card,
 	.sl-markdown-content blockquote,
 	.sl-markdown-content table,
-	.pagination-links a {
+	.pagination-links a,
+	.content-panel {
+		padding-inline: 0.95rem !important;
+	}
+
+	main {
+		padding-inline: 0.45rem !important;
+	}
+
+	article {
 		border-radius: 18px !important;
+	}
+
+	.main-frame {
+		padding-top: calc(var(--sl-nav-height) + var(--sl-mobile-toc-height) + 0.05rem);
+	}
+
+	.right-sidebar,
+	starlight-toc {
+		border-inline-start: 0;
 	}
 }

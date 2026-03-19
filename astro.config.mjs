@@ -46,6 +46,9 @@ export default defineConfig({
 				'./src/styles/custom.css',
 				'./node_modules/katex/dist/katex.min.css',
 			],
+			components: {
+				Header: './src/components/CustomHeader.astro',
+			},
 			social: [
 				{ icon: 'github', label: 'GitHub', href: 'https://github.com/adrianql5/adrianql5' },
 			],

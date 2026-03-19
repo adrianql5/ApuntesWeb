@@ -5,6 +5,8 @@
 	--sl-font-mono: 'JetBrains Mono', monospace;
 	--app-font-display: 'Fraunces', Georgia, serif;
 	--sl-nav-height: 4.9rem;
+	--app-sidebar-width: 18rem;
+	--sl-sidebar-width: var(--app-sidebar-width);
 
 	--sl-color-accent-low: #f1dcc8;
 	--sl-color-accent: #ac5b2d;
@@ -918,6 +920,60 @@ select,
 
 	#starlight__sidebar {
 		width: 100%;
+	}
+}
+
+@media (min-width: 72rem) {
+	.page > nav.sidebar {
+		flex: 0 0 var(--app-sidebar-width);
+		width: var(--app-sidebar-width);
+		max-width: var(--app-sidebar-width);
+		position: relative;
+	}
+
+	#starlight__sidebar {
+		position: fixed !important;
+		inset-inline-start: 0;
+		top: var(--sl-nav-height);
+		width: var(--app-sidebar-width) !important;
+		height: calc(100vh - var(--sl-nav-height));
+		overflow-y: auto;
+		scrollbar-width: thin;
+	}
+
+	.sidebar-content {
+		padding-bottom: 1.1rem;
+	}
+
+	.main-frame > .lg\:sl-flex {
+		display: grid !important;
+		grid-template-columns: minmax(0, 1fr) var(--app-sidebar-width);
+		align-items: start;
+		column-gap: 0;
+	}
+
+	.right-sidebar-container {
+		order: 2;
+		width: var(--app-sidebar-width) !important;
+		max-width: var(--app-sidebar-width);
+	}
+
+	.right-sidebar {
+		width: var(--app-sidebar-width) !important;
+		inset-inline-end: 0;
+		padding-inline: 0;
+	}
+
+	[data-has-sidebar][data-has-toc] .main-pane,
+	.main-pane {
+		order: 1;
+		width: auto !important;
+		min-width: 0;
+	}
+
+	.main-pane .content-panel > .sl-container {
+		max-width: none;
+		width: auto;
 	}
 }
 

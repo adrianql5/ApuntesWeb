@@ -177,6 +177,45 @@ header,
 	color: #2e241c;
 }
 
+:root:not([data-theme='dark']) .header site-search button,
+:root:not([data-theme='dark']) .header site-search button span,
+:root:not([data-theme='dark']) .header site-search button kbd,
+:root:not([data-theme='dark']) .header starlight-theme-select,
+:root:not([data-theme='dark']) .header starlight-theme-select label,
+:root:not([data-theme='dark']) .header starlight-theme-select select,
+:root:not([data-theme='dark']) .social-icons a,
+:root:not([data-theme='dark']) .pagination-links a,
+:root:not([data-theme='dark']) .pagination-links a span,
+:root:not([data-theme='dark']) .pagination-links .link-title,
+:root:not([data-theme='dark']) .right-sidebar-panel :is(h2, a, span),
+:root:not([data-theme='dark']) .sl-markdown-content :is(td, th, summary),
+:root:not([data-theme='dark']) .sl-markdown-content blockquote,
+:root:not([data-theme='dark']) .sl-markdown-content blockquote p,
+:root:not([data-theme='dark']) .sl-markdown-content .starlight-aside__title,
+:root:not([data-theme='dark']) .sl-markdown-content .starlight-aside__content,
+:root:not([data-theme='dark']) .sl-markdown-content .starlight-aside__content p,
+:root:not([data-theme='dark']) .sl-markdown-content .starlight-aside__content li,
+:root:not([data-theme='dark']) .sl-link-card .icon,
+:root:not([data-theme='dark']) [data-sl-link-card] .icon,
+:root:not([data-theme='dark']) .card .icon {
+	color: #2e241c !important;
+}
+
+:root:not([data-theme='dark']) #starlight__search {
+	--pagefind-ui-primary: #2e241c;
+	--pagefind-ui-text: #4b3b2e;
+	--pagefind-ui-background: #fffaf3;
+	--pagefind-ui-border: rgba(88, 71, 57, 0.18);
+	--pagefind-ui-tag: #efe4d7;
+}
+
+:root:not([data-theme='dark']) #starlight__search .pagefind-ui__result-link,
+:root:not([data-theme='dark']) #starlight__search .pagefind-ui__result-title,
+:root:not([data-theme='dark']) #starlight__search .pagefind-ui__result-excerpt,
+:root:not([data-theme='dark']) #starlight__search .pagefind-ui__message {
+	color: #2e241c !important;
+}
+
 .social-icons a,
 .header starlight-theme-select label,
 .header site-search button,
@@ -675,6 +714,10 @@ article,
 .sl-markdown-content th {
 	padding: 0.75rem 0.9rem;
 	border-color: var(--sl-color-hairline) !important;
+}
+
+:root:not([data-theme='dark']) .sl-markdown-content td {
+	color: #3a2e25;
 }
 
 .sl-markdown-content img {

@@ -1,15 +1,31 @@
 ---
 title: Apuntes Ingeniería Informática
 description: Biblioteca personal de apuntes de Ingeniería Informática, ordenada por curso, cuatrimestre y asignatura.
-template: splash
-hero:
-  tagline: "Una biblioteca del grado: apuntes útiles, resúmenes con criterio y acceso rápido a cada asignatura."
-  image:
-    file: ../../assets/hero-avatar.png
-    alt: Adrián Quiroga Linares
 ---
 
 import { LinkCard, CardGrid, Card } from '@astrojs/starlight/components';
+import heroAvatar from '../../assets/hero-avatar.png';
+
+<section className="landing-hero">
+  <div className="landing-hero__copy">
+    <p className="landing-hero__eyebrow">Biblioteca del grado</p>
+    <h1 className="landing-hero__title">Apuntes Ingeniería Informática</h1>
+    <p className="landing-hero__tagline">
+      Una biblioteca del grado: apuntes útiles, resúmenes con criterio y acceso rápido a cada asignatura.
+    </p>
+  </div>
+
+  <figure className="landing-hero__media">
+    <img
+      src={heroAvatar.src}
+      width={heroAvatar.width}
+      height={heroAvatar.height}
+      alt="Adrián Quiroga Linares"
+      loading="eager"
+      decoding="async"
+    />
+  </figure>
+</section>
 
 ## Una forma más limpia de consultar el grado
 

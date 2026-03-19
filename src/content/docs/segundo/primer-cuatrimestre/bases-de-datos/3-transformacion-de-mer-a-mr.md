@@ -7,13 +7,12 @@ Escrito por **Adrián Quiroga Linares**.
 
 ![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted%20image%2020241003132123.png)
 
-
-
->[!TIP]
->Solapada -> incluir discriminadores binarios
->Parcial-> incluir una tabla para la superclase a mayores de las subclases
->Total-> no hay tabla para la superclase
->Disjunta->no hay discriminadores binarios
+:::tip
+Solapada -> incluir discriminadores binarios  
+Parcial -> incluir una tabla para la superclase a mayores de las subclases  
+Total -> no hay tabla para la superclase  
+Disjunta -> no hay discriminadores binarios
+:::
 
 
 
@@ -25,7 +24,6 @@ Escrito por **Adrián Quiroga Linares**.
 
 
 ---
-
 
 
 

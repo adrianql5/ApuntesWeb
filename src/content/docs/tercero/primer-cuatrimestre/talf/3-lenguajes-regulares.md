@@ -20,23 +20,21 @@ Para "leer" una Expresión Regular (ER) sin equivocarte, debes respetar la jerar
 3. **Unión ($+$ ó $|$):** Selección (O lógica).    
     - $L+M$: Cadenas que pertenecen a $L$ **o** pertenecen a $M$.
 
-> [!WARNING]
-> 
-> Jerarquía de Precedencia (¡Memoriza esto!)
-> 
-> El orden de evaluación estricto es:
-> 
-> 1. **$*$ (Estrella):** Lo más fuerte. Se pega a lo que tiene inmediatamente a la izquierda.
->     
-> 2. **$\cdot$ (Concatenación):** Lo siguiente en fuerza.
->     
-> 3. **$+$ (Unión):** Lo más débil. Separa la expresión en bloques grandes.
->     
-> 
-> **Ejemplo de examen:** $a + bc^*$ 
-> - ¿Qué se repite? Solo la $c$.
-> - Luego se concatena $b$ con $c^*$.
-> - Al final, tienes dos opciones: o la cadena $a$, o la cadena formada por $bc^*$.     
+:::caution
+Jerarquía de Precedencia (¡Memoriza esto!)
+
+El orden de evaluación estricto es:
+
+1. **$*$ (Estrella):** Lo más fuerte. Se pega a lo que tiene inmediatamente a la izquierda.
+2. **$\cdot$ (Concatenación):** Lo siguiente en fuerza.
+3. **$+$ (Unión):** Lo más débil. Separa la expresión en bloques grandes.
+
+**Ejemplo de examen:** $a + bc^*$
+
+- ¿Qué se repite? Solo la $c$.
+- Luego se concatena $b$ con $c^*$.
+- Al final, tienes dos opciones: o la cadena $a$, o la cadena formada por $bc^*$.
+:::
 
 # 3.2 Construcción de ER (Definición Inductiva)
 En teoría te pueden preguntar: _"Defina formalmente una ER"_. No te inventes nada, usa esta estructura recursiva:

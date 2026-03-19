@@ -193,6 +193,52 @@ def convert_images(content: str, mapping: Dict[str, str]) -> str:
     return re.sub(r"!\[([^\]]*)\]\(([^)]+)\)", replace_markdown, content)
 
 
+def convert_obsidian_callouts(content: str) -> str:
+    variants = {
+        "NOTE": "note",
+        "INFO": "note",
+        "TIP": "tip",
+        "WARNING": "caution",
+        "CAUTION": "caution",
+        "DANGER": "danger",
+    }
+    lines = content.splitlines()
+    converted = []
+    index = 0
+
+    while index < len(lines):
+        match = re.match(r"^\s*>\s*\[!([A-Z]+)\]\s*(.*)$", lines[index], re.IGNORECASE)
+        if not match:
+            converted.append(lines[index])
+            index += 1
+            continue
+
+        variant = variants.get(match.group(1).upper())
+        if not variant:
+            converted.append(lines[index])
+            index += 1
+            continue
+
+        title = match.group(2).strip()
+        body = []
+        index += 1
+
+        while index < len(lines) and re.match(r"^\s*> ?", lines[index]):
+            body.append(re.sub(r"^\s*> ?", "", lines[index]))
+            index += 1
+
+        while body and not body[0].strip():
+            body.pop(0)
+        while body and not body[-1].strip():
+            body.pop()
+
+        converted.append(f":::{variant}[{title}]" if title else f":::{variant}")
+        converted.extend(body)
+        converted.append(":::")
+
+    return "\n".join(converted)
+
+
 def add_frontmatter(content: str, title: str) -> str:
     if content.lstrip().startswith("---"):
         return content
@@ -263,6 +309,7 @@ def copy_notes(project_root: Path, target: Target, image_map: Dict[str, Dict[str
 
             original = note.read_text(encoding="utf-8")
             rewritten = convert_images(clean_wikilinks(original), subject_images)
+            rewritten = convert_obsidian_callouts(rewritten)
             rewritten = add_frontmatter(rewritten, title_from_filename(note))
 
             if dry_run:

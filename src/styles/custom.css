@@ -192,15 +192,23 @@ header,
 	min-height: 2.35rem;
 }
 
+.header starlight-theme-select {
+	flex: 0 0 auto;
+}
+
 .header starlight-theme-select label {
-	min-width: 8.25rem;
+	--sl-select-width: 8.65rem !important;
+	min-width: 8.9rem;
 	padding-inline: 0.65rem 0.95rem !important;
 }
 
 .header starlight-theme-select select {
 	color: var(--sl-color-text);
 	font-weight: 600;
-	min-width: 4.8rem;
+	width: calc(var(--sl-select-width) + 1rem) !important;
+	min-width: calc(var(--sl-select-width) + 1rem);
+	font-size: 0.95rem;
+	text-overflow: clip;
 }
 
 #starlight__sidebar,
@@ -266,6 +274,36 @@ main:has(.landing-hero) [data-page-title] {
 	display: none;
 }
 
+body:has(.landing-hero) main > .content-panel:first-child {
+	display: none !important;
+	height: 0;
+	padding: 0 !important;
+	border: 0 !important;
+	box-shadow: none !important;
+	overflow: hidden;
+}
+
+main > .content-panel:first-child {
+	padding-block: 0.35rem 0.45rem;
+}
+
+main > .content-panel:first-child .sl-container {
+	min-height: 0;
+}
+
+main > .content-panel:first-child h1,
+main > .content-panel:first-child [data-page-title] {
+	margin-block: 0;
+}
+
+main > .content-panel:first-child + .content-panel {
+	padding-top: 0.5rem;
+}
+
+body:has(.landing-hero) main > .content-panel + .content-panel {
+	padding-top: 0.35rem !important;
+}
+
 [data-has-sidebar] .content-panel,
 [data-has-toc] .content-panel {
 	background: var(--app-surface);
@@ -303,6 +341,10 @@ article,
 	box-shadow: var(--app-shadow-strong);
 }
 
+.sl-markdown-content > .landing-hero {
+	margin-top: 0 !important;
+}
+
 [data-theme='dark'] .landing-hero {
 	background:
 		linear-gradient(135deg, rgba(18, 31, 44, 0.98), rgba(10, 18, 28, 0.94)),
@@ -326,7 +368,7 @@ article,
 
 .landing-hero__title {
 	margin: 0;
-	max-width: 8ch;
+	max-width: 9.5ch;
 	font-family: var(--app-font-display);
 	font-size: clamp(3rem, 5vw, 4.9rem);
 	line-height: 0.94;
@@ -336,6 +378,7 @@ article,
 }
 
 .landing-hero__tagline {
+	display: block;
 	max-width: 34ch;
 	margin: 0;
 	font-size: clamp(1rem, 1.2vw + 0.8rem, 1.16rem);
@@ -713,6 +756,11 @@ select,
 }
 
 @media (min-width: 50rem) {
+	.page {
+		flex-direction: row;
+		align-items: stretch;
+	}
+
 	.page > nav.sidebar {
 		flex: 0 0 var(--sl-sidebar-width);
 		width: var(--sl-sidebar-width);
@@ -764,7 +812,8 @@ select,
 	}
 
 	.header starlight-theme-select label {
-		min-width: 7.2rem;
+		--sl-select-width: 7.65rem !important;
+		min-width: 7.85rem;
 		padding-inline: 0.55rem 0.8rem !important;
 	}
 

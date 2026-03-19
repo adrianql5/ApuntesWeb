@@ -770,6 +770,7 @@ select,
 	.page > .main-frame {
 		flex: 1 1 auto;
 		min-width: 0;
+		padding-inline-start: 0 !important;
 	}
 
 	#starlight__sidebar {

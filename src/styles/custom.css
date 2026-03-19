@@ -171,6 +171,9 @@ header,
 :root:not([data-theme='dark']) .site-title,
 :root:not([data-theme='dark']) .sidebar a,
 :root:not([data-theme='dark']) .sidebar summary,
+:root:not([data-theme='dark']) .sidebar .group-label,
+:root:not([data-theme='dark']) .sidebar .large,
+:root:not([data-theme='dark']) .sidebar .caret,
 :root:not([data-theme='dark']) starlight-toc a,
 :root:not([data-theme='dark']) .sl-markdown-content p,
 :root:not([data-theme='dark']) .sl-markdown-content li {
@@ -734,12 +737,44 @@ pre,
 .expressive-code .frame {
 	border: 1px solid var(--sl-color-hairline) !important;
 	border-radius: 20px !important;
-	background: linear-gradient(180deg, rgba(27, 34, 43, 0.98), rgba(15, 20, 28, 0.98)) !important;
+	background: linear-gradient(180deg, rgba(251, 247, 241, 0.96), rgba(241, 232, 220, 0.92)) !important;
 	box-shadow: var(--app-shadow);
+}
+
+.expressive-code .frame,
+pre {
+	color: #2e241c;
+}
+
+[data-theme='dark'] pre,
+[data-theme='dark'] .expressive-code,
+[data-theme='dark'] .expressive-code .frame {
+	border-color: rgba(211, 154, 105, 0.18) !important;
+	background:
+		linear-gradient(180deg, rgba(19, 31, 44, 0.98), rgba(11, 20, 30, 0.98)),
+		var(--app-surface-strong) !important;
+	box-shadow:
+		0 20px 44px rgba(0, 0, 0, 0.32),
+		inset 0 1px 0 rgba(244, 203, 167, 0.06);
+}
+
+[data-theme='dark'] .expressive-code .frame,
+[data-theme='dark'] pre {
+	color: var(--sl-color-text);
+}
+
+[data-theme='dark'] .expressive-code .header {
+	border-bottom: 1px solid rgba(211, 154, 105, 0.14) !important;
+	background: rgba(255, 255, 255, 0.015) !important;
 }
 
 .expressive-code .copy button {
 	border-radius: 12px !important;
+}
+
+[data-theme='dark'] .expressive-code .copy button {
+	background: rgba(244, 203, 167, 0.08) !important;
+	border: 1px solid rgba(211, 154, 105, 0.18) !important;
 }
 
 code:not(pre code) {

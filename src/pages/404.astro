@@ -10,7 +10,7 @@ const base = '/ApuntesWeb/';
 		<style>
 			:root {
 				color-scheme: light dark;
-				font-family: Georgia, "Times New Roman", serif;
+				font-family: "Public Sans", system-ui, sans-serif;
 			}
 
 			body {
@@ -19,17 +19,17 @@ const base = '/ApuntesWeb/';
 				display: grid;
 				place-items: center;
 				background:
-					radial-gradient(circle at top, rgba(33, 87, 164, 0.16), transparent 38%),
-					linear-gradient(180deg, #f6f3ec, #ece6d8);
-				color: #1f2937;
+					radial-gradient(circle at top left, rgba(180, 93, 39, 0.18), transparent 32%),
+					linear-gradient(180deg, #f7f2e9, #ece3d4);
+				color: #281f18;
 			}
 
 			main {
 				width: min(640px, calc(100% - 3rem));
 				padding: 3rem;
-				border: 1px solid rgba(31, 41, 55, 0.12);
-				background: rgba(255, 255, 255, 0.82);
-				box-shadow: 0 20px 60px rgba(31, 41, 55, 0.12);
+				border: 1px solid rgba(86, 71, 55, 0.14);
+				background: rgba(255, 252, 245, 0.88);
+				box-shadow: 0 20px 60px rgba(63, 41, 24, 0.12);
 				backdrop-filter: blur(10px);
 			}
 
@@ -37,6 +37,7 @@ const base = '/ApuntesWeb/';
 				margin: 0 0 1rem;
 				font-size: clamp(3rem, 8vw, 5rem);
 				line-height: 0.95;
+				font-family: "Fraunces", Georgia, serif;
 			}
 
 			p {
@@ -46,10 +47,16 @@ const base = '/ApuntesWeb/';
 			}
 
 			a {
-				color: #0f4c81;
+				color: #6f2f11;
 				font-weight: 700;
 			}
 		</style>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Public+Sans:wght@400;600;700&display=swap"
+			rel="stylesheet"
+		/>
 	</head>
 	<body>
 		<main>

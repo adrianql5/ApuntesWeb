@@ -7,7 +7,11 @@
     "start": "astro dev",
     "build": "NODE_OPTIONS=--no-deprecation astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "ingest": "python3 ingest.py",
+    "ingest:dry": "python3 ingest.py --dry-run",
+    "assets:check": "python3 scripts/prune_unused_images.py",
+    "assets:prune": "python3 scripts/prune_unused_images.py --delete"
   },
   "dependencies": {
     "@astrojs/starlight": "^0.37.1",

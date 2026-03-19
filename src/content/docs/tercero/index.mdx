@@ -3,12 +3,21 @@ title: Tercer Curso
 description: Apuntes del tercer curso de Ingeniería Informática
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
 
 # Tercer Curso
 
+Aquí empieza la parte más especializada del grado. He mantenido la estructura por cuatrimestres para que el material siga siendo navegable incluso cuando el número de asignaturas crece.
+
 <CardGrid>
-  <Card title="Segundo Cuatrimestre" icon="document">
-    [Segundo Cuatrimestre](/ApuntesWeb/tercero/segundo-cuatrimestre/)
-  </Card>
+  <LinkCard
+    title="Primer Cuatrimestre"
+    description="ASR, COMDIS, ENSO, IA y TALF."
+    href="/ApuntesWeb/tercero/primer-cuatrimestre/"
+  />
+  <LinkCard
+    title="Segundo Cuatrimestre"
+    description="CIBER, COMPINT, DAW, ENSO, SEGINFO y XPI."
+    href="/ApuntesWeb/tercero/segundo-cuatrimestre/"
+  />
 </CardGrid>

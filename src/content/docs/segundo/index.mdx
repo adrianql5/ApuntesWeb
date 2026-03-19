@@ -3,12 +3,21 @@ title: Segundo Curso
 description: Apuntes del segundo curso de Ingeniería Informática
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { LinkCard, CardGrid } from '@astrojs/starlight/components';
 
 # Segundo Curso
 
+Aquí están agrupadas las asignaturas que suelen marcar el salto de dificultad del grado. La navegación está pensada para entrar por cuatrimestre y desde ahí bajar a cada tema.
+
 <CardGrid>
-  <Card title="Segundo Cuatrimestre" icon="document">
-    [Segundo Cuatrimestre](/ApuntesWeb/segundo/segundo-cuatrimestre/)
-  </Card>
+  <LinkCard
+    title="Primer Cuatrimestre"
+    description="AED, Bases de Datos, POO, Redes y Sistemas Operativos."
+    href="/ApuntesWeb/segundo/primer-cuatrimestre/"
+  />
+  <LinkCard
+    title="Segundo Cuatrimestre"
+    description="AQRComp, BDII, COGA, DESOFT, SOII y XEFE."
+    href="/ApuntesWeb/segundo/segundo-cuatrimestre/"
+  />
 </CardGrid>

@@ -2,8 +2,6 @@
 title: "Resumen COMDIS"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 # Tema 1
 Un **paradigma es un patrón o modelo**. Una **aplicación distribuida** necesita que **dos o más procesos independientes intercambien información** y necesita **sincronización, hay que coordinar cuándo se envían y reciben**. **Paradigmas**:
 - **Paso de Mensajes:** se basa en operaciones de entrada/salida similares a escribir en un archivo mediante el uso de primitivas básicas (`send` y `receive`).
@@ -495,7 +493,7 @@ Los agentes se comunican siguiendo los estándares **FIPA-ACL**. Un mensaje FIPA
 
 Si recibes un mensaje que no entiendes, **debes** responder con `not-understood`, si usas un acto comunicativo debes cumplir su definición oficial y no estas obligado a implementar todos los protocolos, solo el subconjunto que necesites.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251230104116.png)
+!Pasted image 20251230104116
 
 
 **Jade** es un **framework** de código abierto que facilita la creación de sistemas distribuidos multiagente, está escrito en Java y cumple con la FIPA. Tenemos los siguientes agentes disponibles para desarrollar el sistema:
@@ -506,7 +504,7 @@ Si recibes un mensaje que no entiendes, **debes** responder con `not-understood`
 - **Log Manager Agent:** gestiona los logs de la plataforma en tiempo de ejecución. Permite cambiar qué nivel de detalle se guarda sin tener que reiniciar el programa.
 - **Dummy Agent:** un agente manual para enviar mensajes de prueba y comprobar si tu sistema responde correctamente.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251209184001.png)
+!Pasted image 20251209184001
 
 **El ciclo de vida de un agente es el siguiente:**
 - **Nacimiento (`setup`):** se ejecuta una sola vez al arrancar. Aquí inicializas variables y, lo más importante, **añades los primeros comportamientos** (`addBehaviorur`)  a la "piscina" de tareas.

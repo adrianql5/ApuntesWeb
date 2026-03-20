@@ -2,8 +2,6 @@
 title: "El API de Sockets"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 # 2.1 Introducción
 Antes de profundizar en el código y los protocolos, es vital situar este tema en el mapa de la asignatura. En la jerarquía de abstracción de la comunicación distribuida, nos encontramos en el **Nivel 0: Paso de Mensajes**.
 - **Baja Abstracción (Sockets):** Trabajamos directamente con el transporte de bytes entre procesos. Tú defines _cómo_ se envían los datos, _cuándo_ se leen y _qué_ estructura tienen. Es la base de la pirámide.
@@ -16,12 +14,13 @@ Antes de profundizar en el código y los protocolos, es vital situar este tema e
 # 2.2 Conceptos Fundamentales
 El **API de Sockets** es la interfaz de programación estándar para la comunicación entre procesos (IPC - _Inter-Process Communication_).
 
->[!Info]
-> API significa Application Programming Interface. Imagina que el SO es una fortaleza cerrada que controla el hardware ( la tarjeta de red) . Tú, como programador no puedes tocar los cables ni los voltajes directamente. El API de sockets es el conjunto de funciones estandarizadas que el SO te ofrece para pedirle servicios de red.
+:::note
+API significa Application Programming Interface. Imagina que el SO es una fortaleza cerrada que controla el hardware ( la tarjeta de red) . Tú, como programador no puedes tocar los cables ni los voltajes directamente. El API de sockets es el conjunto de funciones estandarizadas que el SO te ofrece para pedirle servicios de red.
+:::
 
 Un **Socket** se define conceptualmente como un **punto final (endpoint) de comunicación**. Es una abstracción que permite a un proceso enviar y recibir mensajes hacia/desde otro proceso, ya sea en la misma máquina o a través de una red.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153151.png)
+!Pasted image 20251212153151
 
 Los sockets operan sobre la pila de protocolos **TCP/IP**, que es independiente del fabricante y soporta desde redes locales (LAN) hasta  redes globales (WAN) como internet.
 
@@ -47,7 +46,7 @@ Es un protocolo **no orientado a conexión**. Se basa en el envío de **mensajes
 
 **Uso ideal:** aplicaciones donde la velocidad prima sobre la exactitud, como videoconferencias o telefonía IP ( si se pierde un frame de video, no importa, pero no podemos esperar a retransmitirlo).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153251.png)
+!Pasted image 20251212153251
 
 ## 2.3.2 TCP (Transmission Control Protocol)
 Es un protocolo **orientado a conexión**. Antes de enviar datos, se establece un canal virtual entre emisor y receptor.
@@ -59,18 +58,19 @@ Es un protocolo **orientado a conexión**. Antes de enviar datos, se establece u
 
 **Uso ideal:** Aplicaciones que requieren integridad de datos total: Web (HTTP), Correo (SMTP), Transferencia de archivos (FTP), Telnet .
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153307.png)
+!Pasted image 20251212153307
 
 # 2.4 Implementación en Java: Sockets Orientados a Conexión (TCP)
 En el modelo **Stream** (flujo) , la comunicación es exclusiva entre dos procesos conectados. Un socket stream no sirve para hacer "broadcast" a muchos procesos a la vez.
 
->[!Info]
->**Stream (Tubo/TCP):** Es un **flujo continuo de bytes** sin fronteras internas.
->- Si tú envías "HOLA" y luego "MUNDO" por un stream, el receptor ve simplemente un chorro de bytes: `H` `O` `L` `A` `M` `U` `N` `D` `O`.
->- El receptor no sabe si lo enviaste todo junto o en dos partes.
->- **Garantía:** Es una conexión fiable, ordenada y bidireccional, similar a las tuberías (pipes) de Unix.
+:::note
+**Stream (Tubo/TCP):** Es un **flujo continuo de bytes** sin fronteras internas.
+- Si tú envías "HOLA" y luego "MUNDO" por un stream, el receptor ve simplemente un chorro de bytes: `H` `O` `L` `A` `M` `U` `N` `D` `O`.
+- El receptor no sabe si lo enviaste todo junto o en dos partes.
+- **Garantía:** Es una conexión fiable, ordenada y bidireccional, similar a las tuberías (pipes) de Unix.
+:::
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153424.png)
+!Pasted image 20251212153424
 
 
 
@@ -79,7 +79,7 @@ El servidor debe estar activo antes que el cliente. El proceso se basa en dos ti
 - **Socket de Conexión (`ServerSocket`):** solo se encarga de esperar clientes en un puerto (hacer `listen`)
 - **Socket de Datos (`Socket`):** cuando llega un cliente, el `ServerSocket` lo acepta y **crea un nuevo socket** dedicado exclusivamente a hablar con ese cliente. Esto permite al servidor seguir aceptando nuevos clientes en el socket de conexión original.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153523.png)
+!Pasted image 20251212153523
 
 ##  2.4.2 Diagrama de Flujo y Primitivas
 - **Servidor:** Crea el socket (`socket()` ), lo ata a un puerto (`bind()`), y se pone a escuchar (`listen()`)
@@ -89,8 +89,9 @@ El servidor debe estar activo antes que el cliente. El proceso se basa en dos ti
 - **Intercambio:** ambos usan flujos de entrada/salida (`InputStream/OutputStream`) para `read()` y `write()`
 - **Cierre:** se usa `close()` para terminar la conexión
 
->[!Info]
->Todas estas operaciones que aparecen entre paréntesis son proporcionadas por Unix, si haces en un terminal `man funcion`, te pone la info. Son funciones de la API de sockets.
+:::note
+Todas estas operaciones que aparecen entre paréntesis son proporcionadas por Unix, si haces en un terminal `man funcion`, te pone la info. Son funciones de la API de sockets.
+:::
 
 ## 2.4.3 Código Java Esencial (TCP)
 En Java, usamos `java.net.ServerSocket` y `java.net.Socket`.
@@ -107,11 +108,12 @@ out.writeByte(5);
 System.out.println(in.readByte());
 ```
 
->[!Info]
-> Java encapsula la complejidad de las llamadas al sistema originales de Unix. Cuando haces `ServerSocket servidor = new ServerSocket(8080);`. Por debajo ocurren 3 cosas:
-> - `socket()`: pide al SO que cree un descriptor de archivo para un nuevo socket
-> - `bind(8080)`: se vincula este socket a la dirección IP local y al puerto 8080. 
-> - `listen()`: se marca el socket como pasiva, indicando que esté preparado para encolar conexiones entrantes
+:::note
+Java encapsula la complejidad de las llamadas al sistema originales de Unix. Cuando haces `ServerSocket servidor = new ServerSocket(8080);`. Por debajo ocurren 3 cosas:
+- `socket()`: pide al SO que cree un descriptor de archivo para un nuevo socket
+- `bind(8080)`: se vincula este socket a la dirección IP local y al puerto 8080. 
+- `listen()`: se marca el socket como pasiva, indicando que esté preparado para encolar conexiones entrantes
+:::
 
 
 **Cliente:**
@@ -220,8 +222,9 @@ Al contrario que en TCP, aquí no hay `accept` ni `connect` (en el sentido estri
 - **Emisor(Cliente):** crea paquete con datos+dirección destino. Llama a `send()`
 - **Receptor:** `receive()` rellena el paquete con los datos y la dirección de quien lo envío (util para responder)
 
->[!Info]
->`receive()` usa por debajo la funcion de Unix `recvfrom`
+:::note
+`receive()` usa por debajo la funcion de Unix `recvfrom`
+:::
 
 **Peligro de Concurrencia:** En UDP, si múltiples procesos envían datos al mismo socket receptor simultáneamente, los mensajes se intercalan en la cola de recepción sin orden predecible. El receptor debe gestionar esta "mezcla".
 
@@ -235,12 +238,13 @@ ds.receive(dp); // BLOQUEANTE
 // Datos recibidos en buffer. Info del remitente en dp.getAddress()
 ``` 
 
->[!Info]
->`DatagramSocket ds = new DatagramSocket(2345);` por debajo llama a `socket()` y a `bind()`, no usa ni `listen()` ni `accept()` 
->
- >**Diagrama Mental de la Diferencia**
->- **Constructor TCP (`ServerSocket`):** "Contrato una línea telefónica (`socket`), me asignan el número (`bind`) y me siento a esperar que suene para descolgar (`listen` + `accept`)."  
->- **Constructor UDP (`DatagramSocket`):** "Instalo un buzón en la calle (`socket`) y le pinto mi número de casa (`bind`). Ya está. El cartero puede tirar cartas dentro cuando quiera."
+:::note
+`DatagramSocket ds = new DatagramSocket(2345);` por debajo llama a `socket()` y a `bind()`, no usa ni `listen()` ni `accept()` 
+
+**Diagrama Mental de la Diferencia**
+- **Constructor TCP (`ServerSocket`):** "Contrato una línea telefónica (`socket`), me asignan el número (`bind`) y me siento a esperar que suene para descolgar (`listen` + `accept`)."  
+- **Constructor UDP (`DatagramSocket`):** "Instalo un buzón en la calle (`socket`) y le pinto mi número de casa (`bind`). Ya está. El cartero puede tirar cartas dentro cuando quiera."
+:::
 
 **Emisor:**
 ```java
@@ -278,7 +282,8 @@ La multidifusión permite enviar un solo paquete y que sea recibido por un grupo
 - Los routers con capacidad multicast replican los paquetes solo hacia las redes donde hay miembros del grupo.
 - El **TTL (Time To Live)** controla cuántos saltos de router puede atravesar el paquete, limitando su alcance (local vs internet)
 
->[!Info]
+:::note
+:::
 Una IP de Clase D es una dirección lógica de 32 bits que comienza por `1110`, utilizada para identificar un **grupo de interés** compartido en lugar de una máquina física específica. Direcciones que empiezan en un rango entre [224-239].
 
 > [!Nota]
@@ -332,8 +337,9 @@ La Java Virtual Machine (JVM) gestiona los hilos a través de varios estados:
 4. **Bloqueado (Blocked):** Inactivo esperando un evento (E/S, fin de `sleep`, `notify`, etc.) .
 5. **Finalizado (Terminated):** Terminó el método `run()`.
 
-> [!Info]
-> Si haces `hilo.start()` sobre un hilo que ya esta corriendo se lanza una excepción, si quieres lanzar dos veces el mismo hilo, sus referencias han de ser diferentes.
+:::note
+Si haces `hilo.start()` sobre un hilo que ya esta corriendo se lanza una excepción, si quieres lanzar dos veces el mismo hilo, sus referencias han de ser diferentes.
+:::
 
 ## 2.7.3 Sincronización (Sección Crítica)
 Para evitar conflictos cuando varios hilos acceden a recursos compartidos, Java usa **cerrojos (locks)** mediante la palabra clave `synchronized`. Solo un hilo puede estar dentro de un bloque sincronizado a la vez.
@@ -366,4 +372,3 @@ Para problemas como el **Productor-Consumidor**, los hilos deben comunicarse. Se
 - **`sleep(long ms)`**: Pausa el hilo actual el tiempo indicado.
 - **`join()`**: Hace que el hilo actual espere hasta que el hilo al que se llama termine (ej. el `main` espera a los trabajadores).
 - **`currentThread()`**: Devuelve la referencia al hilo que está ejecutando esa línea de código.
-

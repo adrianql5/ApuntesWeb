@@ -248,4 +248,3 @@ Por lo general, e**l mapa de bits ocupa menos espacio que la lista**. Sólo si e
 # **4.5 Cosas importantes de este Tema**
 
 Saber bien lo del IS\_UID y seteuid. Saber de qué depende el tamaño de las tablas FAT y los inodos y como calcularlos.
-

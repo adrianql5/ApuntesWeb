@@ -841,4 +841,3 @@ Se pueden proyectar/mapear archivos en el mapa de memoria de procesos. Para ello
 # **3.10 Cosas importantes de este Tema**
 
 En general todo es importante, de los algoritmos sobre todo el WorkingSet. De memoria virtual todo, especialmente las tablas de páginas multinivel identificar cuantos bits se necesitan para cada campo de la dirección virtual, saber cómo funciona la TLB y en general sabérselo todo bastante bien que un 50% del final lo saca de este tema.
-

@@ -53,7 +53,7 @@ CREATE TABLE departamento (
 );
 ```
 
-**Relación Base:** Una tabla con nombre correspondiente a una relación del esquema de la Base de Datos dónde las tuplas están almacenadas físicamente en el Gestor de Bases de Datos.
+**Relación Base:** Una tabla con nombre correspondiente a una relación del esquema de la Base de Datos dónde las tuplas están almacenadas físicamente en el Gestor de Bases de Datos.
 
 1. **PRIMARY KEY $(A_j1, A_j2, …, A_jm)$**:
    - Los atributos forman la clave primaria de la relación.
@@ -125,7 +125,7 @@ CREATE VIEW v AS (expresión de consulta);
 ```
 
 
-**Vista:** El resultado dinámico de una o más operaciones relacionales sobre las relaciones base (y, opcionalmente, vistas previas) para producir otra relación. Una vista, como relación virtual, no tiene por qué existir físicamente en el Gestor de la Base de Datos, sino que puede producirse cuando se solicite por parte del usuario.
+**Vista:** El resultado dinámico de una o más operaciones relacionales sobre las relaciones base (y, opcionalmente, vistas previas) para producir otra relación. Una vista, como relación virtual, no tiene por qué existir físicamente en el Gestor de la Base de Datos, sino que puede producirse cuando se solicite por parte del usuario.
 
 **Razones para usar vistas:**
 1. **Seguridad:** Algunos datos deben permanecer ocultos para ciertos usuarios. Por ejemplo, un empleado puede necesitar ver el ID, nombre y departamento de un profesor, pero no su sueldo. Esto se logra mediante una consulta SQL que solo devuelve la información permitida.

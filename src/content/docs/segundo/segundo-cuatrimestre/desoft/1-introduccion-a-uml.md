@@ -2,8 +2,6 @@
 title: "Introducción a UML"
 ---
 
-Escrito por Adrián Quiroga Linares. [adrianql5](https://github.com/adrianql5)
-
 **UML** es un lenguaje gráfico para visualizar, especificar, construir y documentar. Proporciona una forma estándar de describir los planos de un sistema.
 
 Un **modelo** es una simplificación de la realidad, completa y consistente. Los buenos modelos resaltan elementos de influencia y oculta los no relevantes para el **nivel de abstracción** dado. Pueden ser **estructurales** o de **comportamiento**.
@@ -19,4 +17,3 @@ Principios del modelado:
 Los bloques de construcción de UML son **elementos, relaciones y diagramas**.
 
 Un **diagrama**es un grafo conexo de nodos y arcos. Un diagrama bien estructurado se centra en un único aspecto del sistema, contiene solo elementos y relaciones esenciales para el, y proporciona detalles consistentes con su nivel de abstracción.
-

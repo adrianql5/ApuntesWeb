@@ -2,8 +2,6 @@
 title: "Patrones de Creación"
 ---
 
-Escrito por Adrián Quiroga Linares. 
-
 # 8.1 Patrones de creación
 Los **patrones de creación** abstraen el proceso de **creación de objetos**, acotando el **conocimiento** sobre las **clases** concretas usadas. Ocultan como se **crean y enlazan** las **instancias** de las clases, de manera que **el resto del sistema** sólo **conoce los objetos a través de sus interfaces**. Hacen posible **programar para interfaces** y no para implementaciones.
 
@@ -12,8 +10,8 @@ La **abstract factory** aporta una **interfaz** para crear **familias de objetos
 - Configurar un sistema escogiendo una sola **familia de productos** entre varias.
 - Si cada **familia** está diseñada para el **uso conjunto de sus productos**.
 - Para proporcionar **bibliotecas de productos**de los que sólo se revelan sus interfaces.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423161150.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423161202.png)
+!Pasted image 20250423161150
+!Pasted image 20250423161202
 
 ## Participantes:
 - **FabricaAbstracta**: Declara una interfaz para operaciones que crean produtos abstractos. 
@@ -23,7 +21,7 @@ La **abstract factory** aporta una **interfaz** para crear **familias de objetos
 - **Cliente**: Usa interfaces de clases abstractas
 
 ## Estructura
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250404174537.png)
+!Pasted image 20250404174537
 ## Ventajas e Inconvenientes
 - **Consistencia** entre productos de una familia.
 - Fácil de **sustituir familias enteras**.
@@ -36,7 +34,7 @@ La **abstract factory** aporta una **interfaz** para crear **familias de objetos
 El **factory method** define una **interfaz** para **crear objetos** cediendo a las **subclases** la decisión sobre **qué clase instanciar**. Se usa cuando: 
 - Una clase no puede prever la clase de objetos que debe crear.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423161447.png)
+!Pasted image 20250423161447
 
 ## Participantes:
 - **Producto:** define la interfaz de los objetos creados
@@ -45,7 +43,7 @@ El **factory method** define una **interfaz** para **crear objetos** cediendo a 
 - **CreadorConcreto:** Redefine el método de fabricación para devolver una instancia de **ProductoConcreto.**
 
 ## Estructura
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250404173912.png)
+!Pasted image 20250404173912
 
 ## Ventajas y Desventajas
 - Código desacoplado.
@@ -53,5 +51,4 @@ El **factory method** define una **interfaz** para **crear objetos** cediendo a 
 - Fomenta el uso de interfaces.
 
 - Puede llevar a muchas subclases si tienes muchos tipos de productos.
-
 

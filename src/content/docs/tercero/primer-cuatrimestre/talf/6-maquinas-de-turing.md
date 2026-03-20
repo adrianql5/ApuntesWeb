@@ -2,14 +2,12 @@
 title: "Máquinas de Turing"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 # 6.1 Concepto Fundamental
 Una **Máquina de Turing (MT)** es un modelo matemático de computación que consiste en un autómata con una capacidad de memoria ilimitada en forma de una cinta infinita.
 
 A diferencia de los autómatas finitos o de pila, la MT puede mover su cabezal de lectura/escritura tanto a la izquierda como a la derecha, y puede modificar los símbolos de la cinta.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208153329.png)
+!Pasted image 20251208153329
 
 ## 1. La Cinta (The Tape)
 Es la **memoria** de la máquina.
@@ -87,7 +85,7 @@ Si la cadena no pertenece al lenguaje ($w \notin L(M)$), pueden pasar dos cosas:
 |**Rec. Enumerable**|Puede parar (rechazo) **O** entrar en **BUCLE INFINITO**.|
 
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208154716.png)
+!Pasted image 20251208154716
 
 
 # 6.5 Protips
@@ -169,4 +167,3 @@ Esta tesis establece una equivalencia entre "algoritmo" y "Máquina de Turing".
 Un algoritmo para una función $f: D \rightarrow R$  es una $MT$, la cual dada cualquier entrada $d \in D$ en su cinta, finalmente se para con la respuesta correcta $f(d) \in R$ en la cinta: 
 
 $$q_0 d \vdash^* q_f f(d), \quad q_f \in F$$
-

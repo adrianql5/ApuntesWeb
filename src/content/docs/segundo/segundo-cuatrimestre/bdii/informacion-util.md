@@ -2,8 +2,6 @@
 title: "Información Útil"
 ---
 
-Escrito por Adrián Quiroga Linares. 
-
 De esta asignatura me dió pereza hacer apuntes. El examen de recuperación puso cosas de optimización de consultas y cosas muy raras.
 
 # Tema 1

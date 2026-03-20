@@ -2,15 +2,13 @@
 title: "Patrones de Comportamiento"
 ---
 
-Escrito por Adrián Quiroga Linares.  
-
 # 10.1 Patrón Observer
 El **cambio de estado** en un objeto (sujeto) se **notifica** a los objetos **suscritos** a él (observadores), que **sincronizan** su estado con el del sujeto. Establece una **dependencia de uno a muchos** entre objetos. Se usa cuando:
 - Un cambio en un objeto requiera modificar otros objetos **sin que importe cuántos** son.
 - Un objeto deba ser capaz de hacer notificaciones a otros **sin hacer suposiciones sobre quiénes** son exactamente.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423163803.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423163817.png)
+!Pasted image 20250423163803
+!Pasted image 20250423163817
 
 ## Participantes
 
@@ -22,8 +20,8 @@ El **cambio de estado** en un objeto (sujeto) se **notifica** a los objetos **su
 | **ObservadorConcreto**    | Implementación del observador. Se registra al sujeto y actualiza su estado cuando recibe una notificación.                                           |
 
 ## Estructura
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423163956.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423164110.png)
+!Pasted image 20250423163956
+!Pasted image 20250423164110
 ## Ventajas e Inconvenientes
 - **Desacopla el sujeto de los observadores**: pueden evolucionar por separado.
 - Permite una **arquitectura reactiva**, donde los componentes se actualizan automáticamente.
@@ -38,8 +36,8 @@ Permite que un objeto **modifique su comportamiento** cada vez que cambia su est
 - El comportamiento de un objeto **depende de su estado** y cambiar en **tiempo de ejecución**.
 - Algunos métodos presentan estructuras **condicionales con múltiples ramas** formadas por bloques extensos de código.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423164755.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423164804.png)
+!Pasted image 20250423164755
+!Pasted image 20250423164804
 
 ## Participantes
 

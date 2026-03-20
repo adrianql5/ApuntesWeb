@@ -2,8 +2,6 @@
 title: "Aprendizaje no Supervisado"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 # 6.1 Cambio de Paradigma: De la Etiqueta a la Estructura
 En la **Regresión Lineal y Logística** (temas anteriores), siempre teníamos un conjunto de datos con la respuesta correcta: $\{(x^{(1)}, y^{(1)}), ...\}$. La máquina aprendía comparando su predicción con esa $y$.
 
@@ -29,7 +27,7 @@ $$c^{(i)} := \text{índice del centroide más cercano a } x^{(i)}$$
 $$\mu_k := \text{promedio de los puntos asignados al grupo } k$$
 El algoritmo se detiene cuando los centroides ya no se mueven (convergencia).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111104603.png)
+!Pasted image 20260111104603
 
 
 # 6.3 La Función de Coste (Distorsión)

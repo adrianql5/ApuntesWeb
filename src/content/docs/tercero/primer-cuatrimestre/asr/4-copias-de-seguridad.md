@@ -2,8 +2,6 @@
 title: "Copias de Seguridad"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 El trabajo del administrador no es evitar que los desastres ocurran (eso es imposible), sino asegurar que **se puede recuperar la información** cuando ocurran.
 
 **Causas de pérdida de datos:**
@@ -80,9 +78,9 @@ _Secuencia:_ `0, 5, 5, 5, 5` (Domingo a Jueves)
 - **Resultado:** Cada día copias más datos ("acumulativo").  
 - **Recuperación:** Si se rompe el disco el Jueves, solo necesitas la cinta del **Domingo (0)** y la del **Miércoles (5)**.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251207195954.png)
+!Pasted image 20251207195954
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251207200006.png)
+!Pasted image 20251207200006
 
 ## Ejemplo 2: Estrategia Incremental
 _Secuencia:_ `0, 3, 4, 5, 6` (Escalera de números)
@@ -95,9 +93,9 @@ _Secuencia:_ `0, 3, 4, 5, 6` (Escalera de números)
 - **Resultado:** Cada día copias poquísimo (solo lo de ese día).
 - **Recuperación:** Si se rompe el disco el Jueves, necesitas: **Domingo (0) + Lunes (3) + Martes (4) + Miércoles (5)**. ¡Si pierdes una cinta intermedia, pierdes los datos siguientes!
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251207200028.png)
+!Pasted image 20251207200028
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251207200037.png)
+!Pasted image 20251207200037
 
 # 4.4 Herramientas de Comando
 ## `dump` y `restore` (Específicos de sistemas de ficheros)

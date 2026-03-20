@@ -27,7 +27,7 @@ Las clases contienen dos tipos de código:
 
 
 Para resolver **el problema de integridad** de los datos, las **únicas funciones** que pueden acceder a los atributos, tanto para leerlos como para escribir sobre ellos, son las funciones de la clase.
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020241007110227.png)
+!Pasted image 20241007110227
 
 Tenemos **cuatro tipos de acceso**, que se pueden tanto aplicar a los **atributos como a métodos**.
 - **Público (public):** **cualquier** método de cualquier clase del programa puede acceder a los atributos y métodos.
@@ -68,7 +68,7 @@ Si se intentase usar el atributo en este estado, se generaría un error de ejecu
 
 Al declarar una instancia de una **clase**, no se reservará memoria para dicho objeto tampoco. Si no se inicializa con el operador `new`, provocará un error de compilación.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/poo/archivos/imagenes/Pasted%20image%2020250615175148.png)
+!Pasted image 20250615175148
 
 Un **constructor** es un método que **no devuelve ningún tipo de dato**. Se invoca para:
 - **Reservar memoria** para un objeto y sus atributos.
@@ -119,7 +119,7 @@ Se pueden introducir nuevos **métodos** siempre que no alteren los valores de l
 
 El método `toString` incluye el **nombre de la clase** y el **nombre de los atributos** con sus correspondientes **valores**.
 
-```java
+```Java
 public record Continente(ArrayList<Pais> paises, 
                          String nombre, 
                          String color) {
@@ -150,13 +150,13 @@ public record Continente(ArrayList<Pais> paises,
 
 # 1. 4 Ejecución de un programa en Java
 Todo programa en Java tiene una **clase principal** en la que se encuentra el método **main**, que será el punto a partir del cual se inicia la ejecución del programa.
-```java
+```Java
 public static void main (String[] args)
 ```
 
 **La clase principal no debe tener ningún atributo**.
 
-```java
+```Java
 public class RiskETSE{
 	public static void main(String[] args){
 		new Menu();

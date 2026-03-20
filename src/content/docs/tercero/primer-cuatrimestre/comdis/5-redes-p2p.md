@@ -2,10 +2,9 @@
 title: "Redes P2P"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
->[!Info]
->Muy loco que el colega te chante una presentación en inglés joseada de otra universidad
+:::note
+Muy loco que el colega te chante una presentación en inglés joseada de otra universidad
+:::
 
 # 5.1 El Problema: Arquitectura Cliente-Servidor vs P2P
 Para entender P2P, primero debemos mirar que lo que queremos sustituir: el modelo tradicional **Cliente-Servidor.**
@@ -62,7 +61,7 @@ En las generaciones anteriores (Napster, Gnutella, Kazaa), la identidad era tran
     - Es imposible saber si un nodo está **consumiendo** (leyendo) el dato o simplemente **reenviándolo**.
     - Esto crea una "negación plausible" para los usuarios de la red.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251229135101.png)
+!Pasted image 20251229135101
 
 # 5.3 Segunda Generación: Sistemas Estructurados (DHTs)
 Las redes anteriores (Napster, Gnutella) no garantizan que encuentres un archivo aunque exista, o son ineficientes. La academia (universidades/investigación) propuso una solución matemática: las **Tablas Hash Distribuidas (DHT)**.
@@ -86,7 +85,7 @@ Imagina una mesa redonda gigante o un reloj.
 - **La Regla de Oro (Sucesor):** ¿Quién guarda la llave del archivo número 54? No se la damos al nodo 54 (porque igual no existe), sino al **primer nodo que encontremos igual o mayor que 54** siguiendo las agujas del reloj.
     - _Ejemplo:_ La clave `K54` se guarda en el nodo `N56` porque es su "sucesor" inmediato en el círculo .
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251229140838.png)
+!Pasted image 20251229140838
 
 **La Tabla de Dedos (Finger Table) - El Atajo:**
 Si el nodo 1 quiere hablar con el nodo 50, podría pasar el mensaje al vecino de al lado (nodo 2), y este al 3... pero tardaría mucho ($O(N)$). Para evitar esto, Chord usa "dedos" mágicos.

@@ -118,4 +118,3 @@ Los **roles** son grupos de privilegios que se pueden asignar a usuarios. Esto e
     ```
 
 Cuando un usuario se conecta a la base de datos, tiene todos los privilegios que se le han concedido directamente, así como los que hereda de cualquier rol que se le haya asignado.
-

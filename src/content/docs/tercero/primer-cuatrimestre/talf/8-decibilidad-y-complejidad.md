@@ -2,8 +2,6 @@
 title: "Decibilidad y Complejidad"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 # 8.1 Conceptos Básicos: ¿Qué puede hacer una máquina?
 Antes de medir el tiempo, medimos si es _posible_ hacerlo.
 - **Función Computable:** Una función $f$ es computable en un dominio si existe una MT que computa el valor de $f$ para todos los argumentos del dominio

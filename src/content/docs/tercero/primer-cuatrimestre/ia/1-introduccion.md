@@ -2,8 +2,6 @@
 title: "Introducción"
 ---
 
-Escrito por Adrián Quiroga Linares. [adrianql5](https://github.com/adrianql5)
-
 # 1.1 Conceptos Principales
 ## 1.1.1 Definición de Inteligencia Artificial (IA)
 La IA no tiene una única definición, pero se puede entender desde dos perspectivas clave:
@@ -168,4 +166,3 @@ La Unión Europea propone un marco regulatorio basado en niveles de riesgo para 
 | **Riesgo Alto**        | Infraestructuras críticas, educación (admisión), justicia, dispositivos médicos. | Evaluación de conformidad obligatoria. Multas hasta 4% o 20M€.         |
 | **Riesgo Limitado**    | Deepfakes, Chatbots, sistemas que interactúan con personas.                      | Obligación de **transparencia** (avisar que es una IA).                |
 | **Riesgo Mínimo**      | Videojuegos, filtros de spam.                                                    | Sin restricciones específicas (códigos de conducta voluntarios).       |
-

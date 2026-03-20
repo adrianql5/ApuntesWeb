@@ -2,8 +2,6 @@
 title: "Sistemas Conexionistas"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 
 # 4.1 Introducción: Del Símbolo a la Neurona
 A diferencia de los sistemas expertos (donde un humano programa las reglas), los sistemas conexionistas se inspiran en la estructura física del cerebro para **aprender** esas reglas a partir de ejemplos.
@@ -43,10 +41,11 @@ Determinan la salida final de la neurona:
 2. **Lineal Rectificada (ReLU)**: Si $z < 0$ sale 0; si $z \ge 0$ sale $z$ ($y = \max(0, z)$). Actúa como un filtro de "pase". Si la señal es relevante (positiva), la deja pasar tal cual; si es irrelevante (negativa), la anula por completo.
 3. **Sigmoidal**: Transforma la salida en un valor suave entre 0 y 1 (probabilidad). Fórmula: $y = \frac{1}{1+e^{-z}}$. En lugar de decir "Es un gato" (1) o "No es un gato" (0), la neurona dice "Hay un 85% de probabilidad de que sea un gato" (0.85).
 
->[!Danger]
->Cuidado con la **terminología**, en función de la función de activación que se use, cambia el nombre de la neurona.
->
->|**Nombre**|**Función de Activación (f(z))**|**Salida**|**Interpretación**|
+:::danger
+Cuidado con la **terminología**, en función de la función de activación que se use, cambia el nombre de la neurona.
+
+|**Nombre**|**Función de Activación (f(z))**|**Salida**|**Interpretación**|
+:::
 |---|---|---|---|
 |**Regresor Lineal**|**Identidad** (Ninguna)<br><br>  <br><br>$f(z) = z$|Números Reales<br><br>  <br><br>$(-\infty, +\infty)$|**Predicción**<br><br>  <br><br>"La casa vale 250.000€"|
 |**Regresor Logístico**|**Sigmoide**<br><br>  <br><br>$f(z) = \frac{1}{1+e^{-z}}$|Probabilidad<br><br>  <br><br>$(0, 1)$|**Clasificación Suave**<br><br>  <br><br>"Hay un 85% de probabilidad de que sea spam"|
@@ -61,7 +60,7 @@ $$z = \sum x_i w_i + b$$
 3. Activación ($\varphi$): Aquí es donde se aplica la función. El valor $z$ entra en la "caja" de la función de activación y se transforma en la salida final $y$.
 $$y = \varphi(z)$$
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221180319.png)
+!Pasted image 20251221180319
 
 
 # 4.3 Análisis Geométrico: ¿Qué "ve" una neurona?
@@ -75,7 +74,7 @@ $$x_1 \cdot w_1 + x_2 \cdot w_2 + b = 0$$
 
 > **Nota de estudio**: Los pesos $w$ definen la inclinación de la recta y el bias $b$ define su desplazamiento respecto al origen.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221181612.png)
+!Pasted image 20251221181612
 
 
 En la parte superior ves escritas las "instrucciones" o la configuración de esta neurona específica:
@@ -136,7 +135,7 @@ Aquí es donde la IA se pone interesante.
 - **Superpoder: La Memoria.** Al tener bucles, la información "da vueltas" y persiste en el tiempo.
 - **Uso:** Son vitales para datos secuenciales (texto, audio, series temporales) porque la red recuerda lo que pasó en el instante anterior.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251227152922.png)
+!Pasted image 20251227152922
 
 
 # 4.5 El Aprendizaje (Algoritmo del Perceptrón)
@@ -160,7 +159,7 @@ $$w(n+1) = w(n) + \eta \cdot [d(n) - y(n)] \cdot x(n)$$
 - Si falla, los pesos se ajustan en la dirección del error para corregirlo la próxima vez.
 - $\eta$: debe ser muy pequeño para no provocar cambios significativos en cada iteración, pero no tanto como para evitar o realentizar la convergencia.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111104420.png)
+!Pasted image 20260111104420
 
 
 # 4.6 Limitaciones y Soluciones: El Problema XOR
@@ -197,7 +196,7 @@ Aquí es donde entran las **Redes Neuronales Multicapa**:
 1. **Capa Oculta**: Usas dos neuronas para dibujar **dos rectas distintas**. Una recta separa un grupo y la otra recta separa el otro.
 2. **Capa de Salida**: Combina la información de esas dos rectas para dar la respuesta final.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221185532.png)
+!Pasted image 20251221185532
 
 **Observando la imagen de arriba:**
 **La Parte Izquierda:** Aquí vemos el espacio de entrada ($x_1$ vs $x_2$) con 4 puntos:

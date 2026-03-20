@@ -2,8 +2,6 @@
 title: "Ontologías"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 # 9.1 El Problema de la Comunicación
 Para que dos agentes colaboren, no basta con que se envíen mensajes; deben **entenderse**. Tenemos 3 estrategias evolutivas para enviar datos dentro de un mensaje ACL.
 

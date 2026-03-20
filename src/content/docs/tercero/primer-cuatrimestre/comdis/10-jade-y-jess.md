@@ -2,8 +2,6 @@
 title: "Jade y Jess"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 # 10.1 Introducción y Arquitectura Conceptual
 El objetivo es comprender cómo dotar a un agente de software de capacidad de **razonamiento declarativo**. Mientras que JADE proporciona la infraestructura para la comunicación y el ciclo de vida del agente, Jess actúa como el "cerebro" lógico.
 

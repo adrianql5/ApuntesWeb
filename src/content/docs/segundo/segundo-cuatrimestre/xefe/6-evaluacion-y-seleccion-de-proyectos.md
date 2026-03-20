@@ -2,8 +2,6 @@
 title: "Evaluación y Selección de Proyectos"
 ---
 
-Escrito por Adrián Quiroga Linares.   
-
 >[!Nota]
 > Lo importante de este tema es saber teorÍa para el test
 > 
@@ -237,13 +235,13 @@ Es una **alternativa al VAN** que permite medir la **rentabilidad de una inversi
 ### **Fórmulas**
 Existen dos formas:
 #### **1. Índice de Rentabilidad Bruto (IRB):**
-$$\textbf{IRB} = \frac{VA}{A}IRB=AVA$$
+$$\textbf{IRB} = \frac{VA}{A}IRB=AVA$$​
 
 - **VA**: Valor Actual de los flujos de caja futuros
 - **A**: Importe de la inversión inicial
 
 #### **2. Índice de Rentabilidad Neto (IRN):**
-$$\textbf{IRN} = \frac{VAN}{A} = IRB - 1IRN=AVAN=IRB−1$$
+$$\textbf{IRN} = \frac{VAN}{A} = IRB - 1IRN=AVAN​=IRB−1$$
 
 
 ### **Criterio de decisión**

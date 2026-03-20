@@ -11,7 +11,7 @@ En el contexto del modelo relacional, una **relación** es el nombre técnico pa
 
 # 2.2 Estructura de las BD Relacionales
 Una base de datos relacional consiste en un conjuntos de **tablas**, a cada una de las cuales se le asigna un nombre **único**. 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted%20image%2020241223152609.png)
+!Pasted image 20241223152609
 
 Una **Relación** es una **tabla** con filas y columnas resultado del producto cartesiano de conjuntos de elementos de interés.
 
@@ -40,16 +40,16 @@ El modelo relacional incorpora **redundancia controlada** para visualizar las re
 Los valores de **clave externa** están restringidos a valores que existan previamente en la clave candidata referenciada, generando lo que se conoce como **restriccion de integridad referencial.**
 
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted%20image%2020240929191231.png)
+!Pasted image 20240929191231
 
 # 2.5 Diagramas de esquema
 No hay definido un modelo concreto de representación, cualquier forma es válida siempre que deje muy claro cuáles son las **claves externas** y a qué claves candidatas hacen referencia.
 
 La gran diferencia entre el **MER** y el **MR** es la existencia o no de **redundancia de atributos**. En el **Modelo Relacional** se representa explícitamente una cierta **redundancia controlada** mediante las claves externas y la integridad referencial. En el **Modelo Entidad-Relación**, simplemente **no puede haber redundancia**.
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted%20image%2020240929190532.png)
+!Pasted image 20240929190532
 
-![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted%20image%2020241223155153.png)
+!Pasted image 20241223155153
 
 > [!Definiciones]
 > **Relación:** tabla con filas y columnas resultado del producto cartesiano de conjuntos de elementos de interés.
@@ -81,4 +81,3 @@ La gran diferencia entre el **MER** y el **MR** es la existencia o no de **redun
 > **Integridad de Entidad:** En una relación, ningún atributo de una clave candidata puede tomar valor null.
 > 
 > **Integridad Referencial:** Si hay una clave externa en una relación, el valor de dicha clave externa debe corresponder al valor de la clave candidata relacionada en la relación de origen o tomar valor null. 
-

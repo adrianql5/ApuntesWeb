@@ -2,8 +2,6 @@
 title: "Lenguajes Regulares"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 Las **Expresiones Regulares (ER)** son una forma declarativa de describir lenguajes. Si el Autómata es la máquina que valida, la ER es la "fórmula" que genera las cadenas.
 
 
@@ -26,14 +24,16 @@ Jerarquía de Precedencia (¡Memoriza esto!)
 El orden de evaluación estricto es:
 
 1. **$*$ (Estrella):** Lo más fuerte. Se pega a lo que tiene inmediatamente a la izquierda.
+    
 2. **$\cdot$ (Concatenación):** Lo siguiente en fuerza.
+    
 3. **$+$ (Unión):** Lo más débil. Separa la expresión en bloques grandes.
+    
 
-**Ejemplo de examen:** $a + bc^*$
-
+**Ejemplo de examen:** $a + bc^*$ 
 - ¿Qué se repite? Solo la $c$.
 - Luego se concatena $b$ con $c^*$.
-- Al final, tienes dos opciones: o la cadena $a$, o la cadena formada por $bc^*$.
+- Al final, tienes dos opciones: o la cadena $a$, o la cadena formada por $bc^*$.     
 :::
 
 # 3.2 Construcción de ER (Definición Inductiva)
@@ -98,18 +98,18 @@ Aquí es donde suelen pillar en los test.
     - $\varepsilon^* = \varepsilon$
 
 
-> [!INFO] ¿Por qué $\emptyset^* = \varepsilon$?
-> 
-> La operación estrella ($*$) se define como la unión de todas las potencias de un lenguaje, empezando obligatoriamente por el cero:
-> 
-> $$L^* = L^0 \cup L^1 \cup L^2 \dots$$
-> 
-> 1. **La Regla de Oro:** Por definición universal, **cualquier lenguaje** elevado a la potencia 0 es $\{\varepsilon\}$ (la cadena vacía).
->     
-> 2. **El Resto:** Como no puedes sacar símbolos de un conjunto vacío, $\emptyset^1, \emptyset^2 \dots$ son todos $\emptyset$.
->     
-> 
-> **La Suma:** $\{\varepsilon\} \cup \emptyset \cup \emptyset \dots = \mathbf{\{\varepsilon\}}$
+:::note[¿Por qué $\emptyset^* = \varepsilon$?]
+La operación estrella ($*$) se define como la unión de todas las potencias de un lenguaje, empezando obligatoriamente por el cero:
+
+$$L^* = L^0 \cup L^1 \cup L^2 \dots$$
+
+1. **La Regla de Oro:** Por definición universal, **cualquier lenguaje** elevado a la potencia 0 es $\{\varepsilon\}$ (la cadena vacía).
+    
+2. **El Resto:** Como no puedes sacar símbolos de un conjunto vacío, $\emptyset^1, \emptyset^2 \dots$ son todos $\emptyset$.
+    
+
+**La Suma:** $\{\varepsilon\} \cup \emptyset \cup \emptyset \dots = \mathbf{\{\varepsilon\}}$
+:::
 
 
 # 3.4 Trampas Típicas de Examen
@@ -158,7 +158,7 @@ $$L=R*$$
 
 **R:** La unión de todas las expresiones de los bucles en el estado ($r_1 + r_2 + \dots$).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020172701.png)
+!Pasted image 20251020172701
 
 
 ## 2 Estados (Inicial $\neq$ Final)
@@ -172,14 +172,14 @@ $$L=(R*+SU*T)*SU*$$
 
 - **$S U^*$**: Una vez te cansas de dar vueltas en el inicio, **viajas al final ($S$)** y puedes quedarte girando allí ($U^*$) para terminar.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020172650.png)
+!Pasted image 20251020172650
 
 Esto es equivalente a escribir:
 $$L=(R+SU*T)*SU*$$
 Porque podemos aplicar esta propiedad para simplificar: $(L^*)^* = L^*$
 
 ## Ejemplo complejo
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251207213850.png)
+!Pasted image 20251207213850
 
 >[!Nota]
 > Cuando hice el ejercicio de arriba se me fue la pinza. En $ER_1$ donde pone un $+$ es una multiplicación y lo mismo en $ER_2$. $ER_1=(1+(00*10*11*0))*(00*1*)0*$. 
@@ -188,17 +188,17 @@ Porque podemos aplicar esta propiedad para simplificar: $(L^*)^* = L^*$
 Empleando estas reglas se puede construir un AFD con transiciones epsilon, suelen quedar autómatas gigantescos. Se puede simplificar después o también hay casos donde es obvio el autómata que reconocen
 
 $$R+S:L(R)+L(S)$$
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020172713.png)
+!Pasted image 20251020172713
 
 $$RS:L(R)(S)$$
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020172723.png)
+!Pasted image 20251020172723
 
 $$R*:L(R*)$$
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020172732.png)
+!Pasted image 20251020172732
 
 **Ejemplo:**
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251207214613.png)
+!Pasted image 20251207214613
 
 # 3.7 Lema del Bombeo para Lenguajes Regulares
 >[!Nota]

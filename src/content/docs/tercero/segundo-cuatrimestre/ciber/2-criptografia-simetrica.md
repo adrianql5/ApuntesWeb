@@ -34,7 +34,7 @@ Esto era fácil de descifrar sin saber la clave puesto que solo habría que mira
 - $E=\text{operación de cifrado}$
 - $D=\text{operación de descifrado}$
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260217161858.png)
+!Pasted image 20260217161858
 
 # 2.5 Objetivos del Criptoanálisis
 Los principales objetivos son:
@@ -61,7 +61,7 @@ Al cifrado por **sustitución** se le suele atacar mediante la **búsqueda exhau
 # 2.7 Sustitución Monoalfabética Genérica
 Consiste en construir el alfabeto cifrado colocando al azar las letras del alfabeto llano. De esta forma existen $27!=10^{28}$ posibles alfabetos cifrados.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260217172210.png)
+!Pasted image 20260217172210
 
 Sin embargo presenta una gran debilidad, la frecuencia de aparición de las distintas letras en un idioma, por lo que **se deben evitar patrones en el mensaje cifrado**.
 
@@ -71,10 +71,10 @@ Las frecuencias estadísticas no están bien disfrazadas, se parecen demasiado a
 # 2.8 Cifrado de Vigenère (polialfabético /sustitución polialfabética)
 Se realizan varios cifrados como el de Ceśar, pero con más letras en la clave. Ejemplo:
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260217172314.png)
+!Pasted image 20260217172314
 
 Usando cifrado de César para cada letra:
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260217172340.png)
+!Pasted image 20260217172340
 
 En el siglo XIX, Charles Babbage consiguió romper el cifrado polialfabético de Vigenère:
 - Primer paso: estadísticas sobre la frecuencia de distribución de series de letras repetidas y la separación entre repeticiones para **descubrir la longitud de la clave**.
@@ -83,7 +83,7 @@ En el siglo XIX, Charles Babbage consiguió romper el cifrado polialfabético de
 # 2.8 Máquina Enigma
 Es una máquina criptográfica construida en 1920 por Arthir Scherbius. Inicialmente no era más que una versión mecanizada del cifrado monoalfabético. Tras codificar cada letra el modificador giraba a una posición $\rightarrow$ cifrado polialfabético.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260217172840.png)
+!Pasted image 20260217172840
 
 Cifrado alfabético más transposición:
 - Con tres modificadores encadenados el número de alfabetos posibles era $26*26*26=17576$ 

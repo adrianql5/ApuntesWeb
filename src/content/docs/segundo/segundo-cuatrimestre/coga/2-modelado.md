@@ -2,8 +2,6 @@
 title: "Modelado"
 ---
 
-Escrito por Adrián Quiroga Linares. [adrianql5]
-
 # 2.1 Objetos Sólidos
 Modelar un objeto es darle forma. Existen dos tipos de modelado:
 - **Modelado de interior:** se suelen emplear representaciones basadas en Spatial-Partitioning que consiste en describir el interior de un objeto diviendolo en regiones pequeñas sólidas que no se solapan entre sí. Por lo general se usan cubos (marching cubes)
@@ -21,24 +19,24 @@ Tanto los puntos, como los vectores y los objetos, se representarán sobre los t
 - $z$, profundidad
 
 Por defecto, el rango de valores de las coordenadas va desde (-1,-1,-1) a (1,1,1).
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425192508.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425192521.png)
+!Pasted image 20250425192508
+!Pasted image 20250425192521
 
 # 2.3 Triangulación
 Para modelar cualquier objeto se emplea la técnica de **teselación**, que consiste en su representación mediante polígonos. Por lo general, se suele usar el triángulo,  por lo que se llama **triangulación**.
 
 $$\text{Número de triángulos} = \text{Número de lados del polígono} -2$$
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425192642.png)
+!Pasted image 20250425192642
 
 # 2.4 Identificación de Caras
 Un plano se puede definir por su **vector normal**, que se puede calcular mediante el producto vectorial de dos de sus vectores. 
 	Si simplemente se desea conocer la **dirección** del vector normal, basta aplicar la **regla de la mano derecha** según el recorrido de los vértices. Si se recorren en sentido antihorario la normal será positiva, en caso contrario, será negativa
-	![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425193007.png)
+	!Pasted image 20250425193007
 
 
 >[!Nota] Calcular Vectores entre 2 puntos
->$A(x_1,y_1,z_1),B(x_2,y_2,z_2)$
->$AB=(x_2−x_1,y_2−y_1,z_2−z_1)$
+>$A(x_1​,y_1​,z_1​),B(x_2​,y_2​,z_2​)$
+>$AB=(x_2​−x_1​,y_2​−y_1​,z_2​−z_1​)$
 
 El producto vectorial $\vec{u} \times \vec{v}$ en $R^3$ se calcula como el determinante de la matriz $3 \times 3$ conformada por los vectores unitarios de los ejes, los componentes del vector $\vec{u}$ y los del $\vec{v}$:
 
@@ -78,6 +76,6 @@ Para la representación de un objeto en base a polígonos necesitamos conocer, r
 Tipos de tablas según sus índices:
 - **Sin indexar**
 - **Indexada:** hay una tabla para los vértices (con 3 coordenadas para cada uno) y otro para los polígonos (con los vértices que definen cada uno). Si un vértice se usa varias veces, se escribe una  única vez en la tabla de vértices y se puede referenciarse varias veces en la de polígonos.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425195342.png)
+!Pasted image 20250425195342
 - **Doblemente indexada:** hay una tabla para los vértices (con 3 coordenadas para cada uno), otra para las aristas (con dos vértices para cada una y si se desea los dos polígonos que la comparte) y otra para los polígonos (con las aristas de cada uno).
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425195358.png)
+!Pasted image 20250425195358

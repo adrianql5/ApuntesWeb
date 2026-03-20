@@ -2,8 +2,6 @@
 title: "Actividades Administrativas Básicas"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 # 6.1 Gestión de procesos
 Un **proceso** no es más que una instancia de un programa en ejecución. Imagina que el programa (en el disco duro) es una receta de cocina, y el proceso es "estar cocinando esa receta" en este momento.
 
@@ -33,7 +31,7 @@ Los procesos no solo están "ejecutándose" o "parados". Tienen un ciclo de vida
 
 Sin opciones, `ps` sólo muestra los procesos lanzados desde el terminal actual y con el mismo `EUID` que el usuario que lo lanzó
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251213120909.png)
+!Pasted image 20251213120909
 
 **Sintaxis Clave (Trucos):**
 - **Estilo UNIX (con guion):** `ps -ef` $\rightarrow$ Muestra **todo** con detalles (formato estándar).
@@ -45,24 +43,24 @@ Algunas opciones:
 - `-u usuario`: muestra los procesos de un usuario
 - `-o formato`: permite definir el formato de salida, por ejemplo
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251213121521.png)
+!Pasted image 20251213121521
 
 
 **`pstree`**: Muestra la jerarquía. Fundamental para ver quién es el padre de quién (y entender por qué si matas al padre, mueren los hijos).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251213121741.png)
+!Pasted image 20251213121741
 
 ### Herramientas Dinámicas (`top`)
 `top` es un monitor en tiempo real. En la **cabecera** podemos ver la hora actual, tiempo que el sistema lleva encendido, el número de usuarios conectados y la carga media del sistema para los últimos 1, 5, y 15 minutos. El número total de tareas y resumen por estado y el estado de ocupación de la CPU y la memoria. En un sistema de n núcleos el máximo de uso de CPU es n × 100 %.
 
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251213121811.png)
+!Pasted image 20251213121811
 
-> [!Tip] Debug avanzado: strace
-> 
-> Si un proceso falla y no sabes por qué, strace -p PID te muestra las "tripas": todas las llamadas que el proceso le hace al Kernel (abrir archivos, leer memoria, etc.).
+:::tip[Debug avanzado: strace]
+Si un proceso falla y no sabes por qué, strace -p PID te muestra las "tripas": todas las llamadas que el proceso le hace al Kernel (abrir archivos, leer memoria, etc.).
+:::
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251213121938.png)
+!Pasted image 20251213121938
 
 ## 6.1.4 Control y Señales: "Mandar órdenes"
 No "matamos" procesos, les enviamos **señales**. El proceso recibe la señal y decide qué hacer (salvo con SIGKILL).
@@ -82,18 +80,18 @@ No "matamos" procesos, les enviamos **señales**. El proceso recibe la señal y 
 - **`pkill nombre`**: Mata procesos buscando por nombre (ej: `pkill firefox`).
 - **`killall nombre`**: Mata _todos_ los procesos con ese nombre exacto.
 
->[!Info]
-> Con `pgrep` buscamos en la lista de procesos para localizar el PID a partir del nombre (similar a `ps | grep`)
-> `pgrep sshd # devuelve el PID del proceso sshd de root`
->
-> `exec` ejecuta un comando reemplazado al shell desde el que se lanza. Por ejemplo si te tiras en la terminal un `exec ls` tu terminal va a morir, porque se va a convertir en un `ls`.
-> - **Situación inicial:** Estás sentado. El **Camarero** (tu Shell, digamos `bash`) está esperando una orden.
->- **La Orden:** Tú le dices: `exec ls`.  
->	- Traducido: _"Camarero, quiero que dejes de ser camarero y te transformes en el comando 'Listar Archivos'"_.
->
->- **La Transformación:** El Camarero **desaparece**. En su lugar, aparece el programa `ls` (que es muy simple y rápido).  
-  >  - **OJO:** Ya no hay Camarero. Solo está `ls`.
- >
+:::note
+Con `pgrep` buscamos en la lista de procesos para localizar el PID a partir del nombre (similar a `ps | grep`)
+`pgrep sshd # devuelve el PID del proceso sshd de root`
+
+`exec` ejecuta un comando reemplazado al shell desde el que se lanza. Por ejemplo si te tiras en la terminal un `exec ls` tu terminal va a morir, porque se va a convertir en un `ls`.
+- **Situación inicial:** Estás sentado. El **Camarero** (tu Shell, digamos `bash`) está esperando una orden.
+- **La Orden:** Tú le dices: `exec ls`.  
+	- Traducido: _"Camarero, quiero que dejes de ser camarero y te transformes en el comando 'Listar Archivos'"_.
+
+- **La Transformación:** El Camarero **desaparece**. En su lugar, aparece el programa `ls` (que es muy simple y rápido).  
+ - **OJO:** Ya no hay Camarero. Solo está `ls`.
+:::
  **1. Ejecución normal (sin `exec`):** Tú le pides un café al Camarero.
 >- El Camarero (Shell) llama a un Ayudante (Proceso hijo).
 >- El Ayudante va a por el café.
@@ -114,11 +112,11 @@ Ideal para scripts largos o tareas que no quieres esperar.
 3. Recuperas al frente con `fg`.
 4. **`nohup`**: Vital si vas a cerrar la terminal y no quieres que el proceso muera (inmune a SIGHUP).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251213122036.png)
+!Pasted image 20251213122036
 
 El comando `jobs` permite ver la lista de comandos en background lanzados desde el shell, así como su estado (`fg` y `bg` pueden actuar sobre uno de los jobs identificándolo por su número).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251213123212.png)
+!Pasted image 20251213123212
 
 ## 6.1.5 Prioridades: `nice` y `renice`
 Linux es "democrático" pero permite favoritismos.
@@ -131,8 +129,9 @@ Linux es "democrático" pero permite favoritismos.
 | **`nice`**   | Al arrancar: `nice -n -5 comando`   | Solo Root puede poner valores negativos (prioridad alta).             |
 | **`renice`** | Ya ejecutándose: `renice 10 -p PID` | Usuarios normales solo pueden _bajar_ prioridad (hacerse más _nice_). |
 
->[!Info]
->`ulimit` El comando interno de bash ulimit permite controlar los recursos de los que dispone un proceso arrancado por el shell. `ulimit [opciones] [limite]`
+:::note
+`ulimit` El comando interno de bash ulimit permite controlar los recursos de los que dispone un proceso arrancado por el shell. `ulimit [opciones] [limite]`
+:::
 
 ## 6.1.6 Recursos y el Sistema `/proc`
 ### `/proc` y `/sys` (Sistemas de Archivos Virtuales)
@@ -192,7 +191,7 @@ Los enlaces permiten acceder a un mismo contenido con diferentes nombres. Se ges
 
 - **Comando:** `ln -s destino nombre_enlace`
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251214192819.png)
+!Pasted image 20251214192819
 
 
 ## 6.2.3 Atributos de un Fichero
@@ -209,7 +208,7 @@ Ejemplo: `-rw--r--r-- 2 luis luis 12 Sep 22 20:19 fichero`
 7. **Fecha:** Última modificación (`mtime`).
 8. **Nombre:** Hasta 255 caracteres (evitar espacios y especiales).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251214192924.png)
+!Pasted image 20251214192924
 
 
 ### Tipos de Fechas (Timestamps)
@@ -242,7 +241,7 @@ El efecto de los permisos cambia si se aplica a un fichero o a un directorio:
     - Cualquier usuario que **no** seas tú (el dueño) y que **no** pertenezca al grupo del archivo.
     - _Analogía:_ Gente que pasa por la calle frente a la oficina. Quizás puedan mirar por la ventana (leer), pero no entrar (ejecutar) ni reordenar los muebles (escribir).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251031172301.png)
+!Pasted image 20251031172301
 
 ### Modificación de Permisos: `chmod`
 Solo el propietario o `root` pueden cambiarlos.
@@ -281,23 +280,24 @@ Afectan a la ejecución y seguridad del sistema. Funcionan mediante **UID** (Use
 
 - **Fijar:** `chmod u+s file`, `chmod g+s file`, `chmod +t dir`.
 
->[!Info]
->**Identificadores Reales vs. Efectivos (RUID vs. EUID)**
->Aquí es donde entra la "magia" de los permisos en procesos. Cuando ejecutas un programa, este tiene una "identidad".
->- **UID Real (RUID):** Es **quién eres realmente**. Es el ID del usuario que lanzó el proceso (tú logueado en la terminal).
->- **UID Efectivo (EUID):** Es **con qué permisos estás actuando** en ese momento preciso. Determina qué puedes hacer.
->
->**La Analogía del Actor**
->- **Real:** Eres el actor (Juan).
->- **Efectivo:** Te pones un uniforme de Policía para una escena. Mientras llevas el uniforme (Efectivo), la gente te trata como policía y tienes "permisos" de policía, aunque en realidad sigues siendo Juan.
->
->**El caso práctico: Cambiar tu contraseña**
->El fichero donde se guardan las contraseñas (`/etc/shadow`) solo puede ser modificado por **root**. Tú (usuario normal) no tienes permiso. ¿Cómo cambias tu contraseña entonces usando el comando `passwd`?
->1. Lanzas el comando `passwd`.
->2. **RUID:** Eres tú (usuario normal).
->3. **Efectivo (EUID):** El comando tiene un permiso especial (**SetUID**) que hace que, momentáneamente, tu "uniforme" sea el de **root**.
->4. Como tu ID _efectivo_ es root, el sistema te deja escribir en el fichero protegido.
->5. Al terminar, el proceso muere y tú sigues siendo un usuario normal.
+:::note
+**Identificadores Reales vs. Efectivos (RUID vs. EUID)**
+Aquí es donde entra la "magia" de los permisos en procesos. Cuando ejecutas un programa, este tiene una "identidad".
+- **UID Real (RUID):** Es **quién eres realmente**. Es el ID del usuario que lanzó el proceso (tú logueado en la terminal).
+- **UID Efectivo (EUID):** Es **con qué permisos estás actuando** en ese momento preciso. Determina qué puedes hacer.
+
+**La Analogía del Actor**
+- **Real:** Eres el actor (Juan).
+- **Efectivo:** Te pones un uniforme de Policía para una escena. Mientras llevas el uniforme (Efectivo), la gente te trata como policía y tienes "permisos" de policía, aunque en realidad sigues siendo Juan.
+
+**El caso práctico: Cambiar tu contraseña**
+El fichero donde se guardan las contraseñas (`/etc/shadow`) solo puede ser modificado por **root**. Tú (usuario normal) no tienes permiso. ¿Cómo cambias tu contraseña entonces usando el comando `passwd`?
+1. Lanzas el comando `passwd`.
+2. **RUID:** Eres tú (usuario normal).
+3. **Efectivo (EUID):** El comando tiene un permiso especial (**SetUID**) que hace que, momentáneamente, tu "uniforme" sea el de **root**.
+4. Como tu ID _efectivo_ es root, el sistema te deja escribir en el fichero protegido.
+5. Al terminar, el proceso muere y tú sigues siendo un usuario normal.
+:::
 
 ### Cambio de Propiedad
 - `chown usuario fichero`: Cambia el propietario.
@@ -523,7 +523,7 @@ LVM se organiza en capas, desde lo físico (abajo) hasta lo lógico (arriba).
 4. **LV (Logical Volume - Volumen Lógico):** Son las particiones virtuales que creamos sacando espacio de la "bolsa" (VG). Es el equivalente a `/dev/sda1` en el mundo clásico.
 5. **Sistema de Ficheros:** Formateo final (`mkfs`) sobre el LV.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251215122456.png)
+!Pasted image 20251215122456
 
 **Unidades de Medida:** LVM no trabaja bit a bit, sino en bloques:
 - **PE (Physical Extent):** Unidad básica en la que se divide el Volumen Físico.
@@ -534,7 +534,7 @@ LVM se organiza en capas, desde lo físico (abajo) hasta lo lógico (arriba).
     - _Stripping:_ Datos distribuidos (mayor rendimiento).
     - _Mirroring:_ Espejo (redundancia).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/asr/imagenes/Pasted%20image%2020251215122534.png)
+!Pasted image 20251215122534
 
 ### Comandos de Gestión LVM
 Los comandos siguen una lógica de nombres muy clara según la capa que gestionen: `pv...`, `vg...`, `lv...`.
@@ -722,25 +722,26 @@ Sistema para evitar que un usuario llene el disco duro.
 ## 6.5.1 Fundamentos y Nomenclatura de Interfaces
 Linux abstrae el hardware de red en "interfaces". No importa si es cobre, fibra o aire, el sistema lo ve como un dispositivo lógico.
 
->[!Info]
->En informática, una **interfaz** es el punto de conexión entre dos cosas distintas. En redes, es el **intermediario** entre tu sistema operativo (Linux) y el mundo exterior (el cable o el Wi-Fi).
->
->**La analogía de la casa:** Imagina que tu ordenador es una **casa**.
->
->- Los datos son **personas** dentro de la casa que quieren salir.
-  >  
->- La red (Internet/LAN) es la **calle**.
-  >  
->
->Para salir a la calle, necesitas **puertas**. Las interfaces son esas puertas.
->
->- **`eth0` (Ethernet):** Es la puerta principal.
-  >  
->- **`wlan0` (Wi-Fi):** Es la puerta trasera.
-    >
->- **`lo` (Loopback):** Es como un espejo dentro de la casa. Si le hablas, te respondes a ti mismo (se usa para pruebas internas).  
->
->Linux no "habla" directamente con el cable de cobre; le da los datos a la interfaz `eth0`, y ella se encarga de traducirlos a electricidad.
+:::note
+En informática, una **interfaz** es el punto de conexión entre dos cosas distintas. En redes, es el **intermediario** entre tu sistema operativo (Linux) y el mundo exterior (el cable o el Wi-Fi).
+
+**La analogía de la casa:** Imagina que tu ordenador es una **casa**.
+
+- Los datos son **personas** dentro de la casa que quieren salir.
+ 
+- La red (Internet/LAN) es la **calle**.
+ 
+
+Para salir a la calle, necesitas **puertas**. Las interfaces son esas puertas.
+
+- **`eth0` (Ethernet):** Es la puerta principal.
+ 
+- **`wlan0` (Wi-Fi):** Es la puerta trasera.
+
+- **`lo` (Loopback):** Es como un espejo dentro de la casa. Si le hablas, te respondes a ti mismo (se usa para pruebas internas).  
+
+Linux no "habla" directamente con el cable de cobre; le da los datos a la interfaz `eth0`, y ella se encarga de traducirlos a electricidad.
+:::
 
 ### Nombres de las Interfaces (NICs)
 La forma de llamar a las tarjetas de red ha evolucionado:
@@ -864,18 +865,19 @@ Muestra qué puertos están abiertos y quién está conectado.
 | **`host` / `dig`**    | Pregunta al DNS la IP de un nombre.              | DNS           | Útil para saber si falla la red o falla el nombre.            |
 | **`arp`**             | Muestra la tabla IP <-> MAC.                     | ARP           | Útil para ver conflictos de IP o problemas de hardware local. |
 
->[!Info]
-> Un firewall es un sistema (puede ser un programa o un aparato físico) que **monitoriza y controla** el tráfico de red entrante y saliente. Se coloca entre tu red interna (de confianza) y una red externa (Internet, no confiable).
->
->**La Analogía del Portero de Discoteca:** Imagina que tu ordenador es una discoteca exclusiva.
->
->- **La Interfaz:** Es la puerta de entrada.
-  >  
->- **El Firewall:** Es el portero.
-  >  
->- **Las Reglas:** El portero tiene una lista.  
- >   - _"Si viene Luis, déjalo pasar."_ (Allow)        
-  > 	 - _"Si viene alguien con zapatillas, no lo dejes pasar."_ (Deny/Drop)
+:::note
+Un firewall es un sistema (puede ser un programa o un aparato físico) que **monitoriza y controla** el tráfico de red entrante y saliente. Se coloca entre tu red interna (de confianza) y una red externa (Internet, no confiable).
+
+**La Analogía del Portero de Discoteca:** Imagina que tu ordenador es una discoteca exclusiva.
+
+- **La Interfaz:** Es la puerta de entrada.
+ 
+- **El Firewall:** Es el portero.
+ 
+- **Las Reglas:** El portero tiene una lista.  
+  - _"Si viene Luis, déjalo pasar."_ (Allow)        
+	 - _"Si viene alguien con zapatillas, no lo dejes pasar."_ (Deny/Drop)
+:::
 
 
 ## 6.5.5 Conceptos Avanzados

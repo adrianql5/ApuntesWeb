@@ -2,8 +2,6 @@
 title: "Autómatas con Pila"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 **Concepto Intuitivo:** Imagina un Autómata Finito (AFN) que lleva una mochila llena de platos.
 
 - Puede leer la entrada.

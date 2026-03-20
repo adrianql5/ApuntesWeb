@@ -2,8 +2,6 @@
 title: "Introducción"
 ---
 
-Escrito por Adrián Quiroga Linares. [adrianql5](https://github.com/adrianql5)
-
 # 1.1 Introducción
 El **ojo humano** percibe el **movimiento** de manera continua captando numerosas imágenes estáticas que el cerebro usa para dar sensación de fluidez.
 - **Persistencia:** fenómeno por el cual una imagen permanece durante un breve periodo después de que la fuente de luz haya desaparecido. Permite ver secuencias de imágenes como un movimiento continuo
@@ -15,22 +13,22 @@ Las imágenes en movimiento que vemos se forman con una serie de **imágenes fij
 # 1.2 Hardware Gŕafico (TRC)
 El **tubo de rayos catódicos (TRC)** consiste en un haz de $e^-$ (haz catódico) emitido por un cañón de $e^-$ q pasa a través de sistemas de enfoque y reflexión que lo redirigen hacia posiciones específicas de una pantalla revestida de fósforo. El fósforo emite luz en la posición alcanzada por los $e^-$.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425173502.png)
+!Pasted image 20250425173502
 
 
 ## 1.2.1 Terminales Vectoriales
 **Terminales vectoriales:** TRC en el que el haz de $e^-$ recorre aletoriamente la pantalla de acuerdo con unas órdenes de dibujo.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425173733.png)
+!Pasted image 20250425173733
 - **Unidad de Procesamiento de la Terminal Gŕafica:** procesa las órdenes de dibujo y las traduce en comandos para la pantalla. Accede y actualiza la memoria de refresco para mantener la imagen visible
 - **Memoria de refresco:** almacena las instrucciones necesarias para redibujar la imagen en la pantalla constantemente para que no desaparezca.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425173951.png)
+!Pasted image 20250425173951
 
 
 ## 1.2.2 Terminales Raster
 **Terminales raster:** TRC en el que el haz de $e^-$ recorre la pantalla por líneas (625 lineas), desde la parte superior izquierda a la inferior derecha. Los datos mostrados por pantalla se extrapolan a una **matriz bidimensional** en la que cada entrada es un **Píxel**, intersección entre fila y columna.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425174533.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425174611.png)
+!Pasted image 20250425174533
+!Pasted image 20250425174611
 
 El conjunto de valores de los píxeles se almacena en una zona de memoria denominada **Frame-Buffer**. El dispositivo o aplicación varía sus valores y estos se vuelcan (**swap**) a la pantalla en un momento dado.
 
@@ -40,9 +38,9 @@ La **profundidad de color** ($bpp$) es el número de **bits por pixel**, y deter
 - Para obtener el **color real** se necesitan 8 bits para cada color (RGB) y otros 8 (A)de transparencia, en total 32 (RGBA).
 - Para **ahorrar memoria**, se puede usar una pelta **LUT** con una entrada para cada posible valor de un píxel en una imagen, permitiendo indexa los colores usando el mínimo número de bits posible.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425175455.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425175508.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425175516.png)![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425175525.png)
+!Pasted image 20250425175455
+!Pasted image 20250425175508
+!Pasted image 20250425175516!Pasted image 20250425175525
 
 Otros tipos de terminales ráster con distintas **bpp, frecuencia de refresco y resolución** son pantallas de plasma, LC, LED, OLED, etc.
 
@@ -60,9 +58,9 @@ Se usan dos **frame buffer:**
 - Un **buffer secundario** o trasero en el que se realiza el renderizado de las imágenes. 
 Cuando se termina de renderizar en el buffer secundario, se copia su contenido al principal. Así se evita que el espectador pueda ver el **cambio entre frames** si no se renderiza lo suficientemente rápido.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425184246.png)
+!Pasted image 20250425184246
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425184302.png)
+!Pasted image 20250425184302
 - Se dibuja en el buffer secundario
 - Una vez lista la imagen, se realiza un **swap**, mostrando instantáneamente el nuevo frame en el buffer primario.
 - Se limpio el buffer secundario y se repite.
@@ -73,11 +71,11 @@ El **Z-Buffer** o buffer de profundidad se usa para gestionar la **profundidad**
 Cada píxel tiene un valor de profundidad (Z) que **indica su distancia con respecto a la cámara**, de manera que cuando se renderiza un nuevo pixel se comprar su valor con el del anterior. En función del resultado, lo reemplazará o será descartado.
 
 **El algoritmo del pintor** consiste en dibujar los objetos de **atrás hacia adelante**, ordenándolos según su coordenada Z (de mayor a menor). Si dos objetos intersecan, no sabe determina cuál debe dibujarse primero.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425185009.png)
+!Pasted image 20250425185009
 
 # 1.4 Modelo de Cámara Sintética
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425185045.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425185059.png)
+!Pasted image 20250425185045
+!Pasted image 20250425185059
 Elementos de una escena 3d:
 - Geometría
 - Texturizado
@@ -98,6 +96,5 @@ Elementos de una escena 3d:
 	- **Alpha Test:** determina si un objeto debe renderizarse en función de su transparencia
 	- **Blending Test**
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425190920.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425191241.png)
-
+!Pasted image 20250425190920
+!Pasted image 20250425191241

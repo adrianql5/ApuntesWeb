@@ -2,15 +2,13 @@
 title: "Modelado de Casos de Uso"
 ---
 
-Escrito por Adrián Quiroga Linares. 
-
 (*diagrama de casos de uso*)
 
 Los **casos de uso** capturan el comportamiento deseado del sistema sin especificar como implementarlo. Son conjuntos de **secuencias** de acciones que ejecuta un sistema para producir un **resultado observable** de valor para un actor.
 
 Una **secuencia** es una interacción del sistema con **elementos externos**. Un **actor** es un **rol que juega un usuario** o un sistema al interaccionar con el sistema. El mismo actor puede desenvolver varios roles. Un **escenario** es una instancia del caso de uso.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250212094804.png)
+!Pasted image 20250212094804
 
 Los **casos de uso** se especifican textualmente como un flujo de eventos, incluyendo un **escenario** **principal** y sus **alternativas**. Capturan comportamientos sin especificar la implementación, y se realizan creando **colaboraciones** de clases y otros elementos. Un caso de uso bien estructurado denota un comportamiento **simple** e **identificable**, identifica **actores** que interactúan con él. Incorpora comportamiento común incluyendo otros casos de uso y coloca variantes en casos de uso que lo extienden, describe el flujo de eventos con los usuarios por medio de escenarios, y especifica **pre** y **post** **condiciones**.
 
@@ -26,11 +24,10 @@ En la **inclusión**, un caso de uso incorpora el comportamiento de otro, para e
 
 En la **extensión**, un caso de uso modifica el comportamiento de otro en **puntos de extensión**, para describir variaciones.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250212094921.png)
+!Pasted image 20250212094921
 
 
 >[!Examen Parcial]
->![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250218121619.png)
+>!Pasted image 20250218121619
 >
->![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250218121632.png)
-
+>!Pasted image 20250218121632

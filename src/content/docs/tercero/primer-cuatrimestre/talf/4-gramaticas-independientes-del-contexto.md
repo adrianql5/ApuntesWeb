@@ -2,8 +2,6 @@
 title: "Gramáticas Independientes del Contexto"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 Una **gramática** es un conjunto de reglas que nos permite generar todas las palabras válidas de un lenguaje. Es como un "recetario" para crear frases correctas.
 
 # 4.1 Clasificación de Gramáticas 
@@ -301,7 +299,7 @@ Un símbolo $X$ es generador si $X ⇒*w$ . Un símbolo X es alcanzable si exist
 
 
 **Ejemplo que usa los pasos 1 y 2:**
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208135015.png)
+!Pasted image 20251208135015
 
 
 # 4.8 Formas Normales (FNC-Chomsky)

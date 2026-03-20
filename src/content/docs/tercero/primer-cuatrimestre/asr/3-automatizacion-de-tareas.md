@@ -2,8 +2,6 @@
 title: "Automatización de Tareas"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 En Linux, diferenciar el "cuándo" se ejecuta una tarea es clave. Tenemos dos herramientas principales según nuestras necesidades:
 1. **`at` / `batch`:** Para tareas que se ejecutan **una sola vez** en el futuro (ej: "Apaga el servidor a las 3 de la mañana").
 2. **`cron`:** Para tareas **repetitivas** (ej: "Haz una copia de seguridad todos los viernes").

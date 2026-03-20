@@ -2,8 +2,6 @@
 title: "Transformaciones"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 # 3.1 Transformaciones
 En la **pipeline gráfica** se describen varios espacios de trabajo:
 - El **Local Space** es el sistema de **coordenadas locales** de los objetos con relación a su origen local.
@@ -11,13 +9,13 @@ En la **pipeline gráfica** se describen varios espacios de trabajo:
 - La **Model Matrix** transforma las coordenadas locales de la escena, trasladando, rotando y escalando los objetos hasta colocarlos en su posición final.
 
 Las **transformaciones geométricas** se usan para trasladar, escalar y rotar los **objetos** y la **cámara de la escena**.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425200629.png)
+!Pasted image 20250425200629
 
 En la **pipeline fija (Opengl 1.2)** el paso de coordenadas locales a coordenadas de la escena se corresponde con el paso **transformación geométrica.**
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425200741.png)
+!Pasted image 20250425200741
 
 En el **retained mode (Opengl 3.3)** el paso de coordenadas locales a coordenadas de escena se realiza mediante el **Vertex Shader**.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425200841.png)
+!Pasted image 20250425200841
 
 ## 3.1.1 Traslación
 Llamamos **traslación** a mover un objeto (todos sus vértices) de un lugar a otro. Si queremos trasladar un punto $P(x, y)$ a una nueva posición $P'(x', y')$, usamos la ecuación:
@@ -46,7 +44,7 @@ $$
 $$P' = T+P$$
 
 En Opengl 1.2 `glTranslatef(Tx, Ty, Tz)` 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425202303.png)
+!Pasted image 20250425202303
 ## 3.1.2 Rotación respecto al Origen
 Llamemos **rotación respecto al origen** a desplazar un ángulo $\theta$ un objeto (todos sus vértices) respecto al origen. Para rotar un punto $P(x,y)$ usamos relaciones trigonométricas:
 
@@ -69,7 +67,7 @@ $$
 $$P'=R*P$$
 
 En Opengl 1.2 `glRotatef(θ, x, y,z)` donde $\theta$ está en grados y el giro se realiza alrededor del eje que pasa por (0,0,0) y (x,y,z) en sentido contrario a las agujas del reloj.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425202315.png)
+!Pasted image 20250425202315
 ## 3.1.3 Rotación General
 Para desplazar un ángulo $\theta$  un objeto (todos sus vertices) respecto un punto cualquiera $(x_c, y_c)$:
 - Traslación al origen.
@@ -77,7 +75,7 @@ Para desplazar un ángulo $\theta$  un objeto (todos sus vertices) respecto un p
 - Traslación a $(x_c,y_c)$
  $$P'=T(x_c,y_c)*R(\alpha)*T(-x_c,-y_c)*P$$
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250425202337.png)
+!Pasted image 20250425202337
 
 ## 3.1.4 Ángulos de Euler
 Dados dos sistemas de coordenadas $xyz$ e $XYZ$ con un mismo origen, es posible determinar la posición de uno en términos del otro usando tres ángulos $\alpha$ $\beta$ $\gamma$.

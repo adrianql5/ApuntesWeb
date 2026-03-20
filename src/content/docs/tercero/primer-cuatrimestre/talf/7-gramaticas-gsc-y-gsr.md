@@ -2,8 +2,6 @@
 title: "Gramáticas GSC Y GSR"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 # 7.1 Gramáticas Sin Restricciones (GSR) - Tipo 0
 Como su nombre indica, son las gramáticas más flexibles y potentes. No tienen límites en la forma de sus reglas, salvo que siempre debe haber algo que sustituir.
 
@@ -23,7 +21,7 @@ Donde:
 - **Máquina Equivalente:** Son reconocidos por la **Máquina de Turing** estándar.
 
 **Ejemplo:**
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208155849.png)
+!Pasted image 20251208155849
 
 # 7.2 Gramáticas Sensibles al Contexto (GSC) - Tipo 1
 Estas gramáticas imponen restricciones sobre las GSR. La idea principal es que las sustituciones dependen de lo que rodea a la variable ("el contexto") y la cadena nunca se hace más pequeña.
@@ -45,7 +43,7 @@ La característica más importante para identificar una GSC es la longitud.
 - Esto significa que la gramática **nunca "encoge"** la cadena (excepto posiblemente para generar la cadena vacía $\lambda$ si el lenguaje lo permite).
 
 **Ejemplo:**
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208155833.png)
+!Pasted image 20251208155833
 
 **Relación con Máquinas**
 - **Lenguaje que generan:** Lenguajes Sensibles al Contexto (LSC).
@@ -193,7 +191,7 @@ Queremos generar $0101$.
         - Falla en: $ww$ (Ej: "mama").
         - _Diferencia clave:_ $ww^R$ (espejo) es Tipo 2. $ww$ (copia) es Tipo 1.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208171958.png)
+!Pasted image 20251208171958
 
 ### 3. Lenguajes Sensibles al Contexto (Tipo 1)
 
@@ -206,9 +204,9 @@ Queremos generar $0101$.
 - **Dependencias Cruzadas:** $a^n b^m c^n d^m$.
 - **Copias Exactas:** $ww$ (Repetir la misma cadena tal cual).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208172052.png)
+!Pasted image 20251208172052
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020260120132740.png)
+!Pasted image 20260120132740
 
 
 ### 4. Lenguajes Recursivamente Enumerables (Tipo 0)
@@ -219,6 +217,5 @@ Queremos generar $0101$.
 
 - Si te dan un problema lógico complejo que no tiene restricciones de estructura simple. Generalmente, en los exámenes, se centran en los tres anteriores, salvo que pregunten por problemas de parada o indecidibilidad.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208172118.png)
-
+!Pasted image 20251208172118
 

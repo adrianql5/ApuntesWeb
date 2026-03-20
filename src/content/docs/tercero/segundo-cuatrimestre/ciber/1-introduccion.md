@@ -2,8 +2,6 @@
 title: "Introducción"
 ---
 
-Escrito por Adrián Quiroga Linares. [adrianql5](https://github.com/adrianql5)
-
 
 La ciberseguridad busca la protección de los activos de un sistema informático. Estos activos incluyen los datos, el software, el hardware y las comunicaciones.
 
@@ -64,5 +62,4 @@ La mayoría de las empresas tienen la tendencia a suponer que los ataques vienen
 - **No repudio:** impedir que alguien niegue haber realizado una acción cuando efectivamente lo ha hecho
 - **Control de acceso:** garantizar acceso únicamente a partes autorizadas a los recursos.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/Pasted%20image%2020260217140244.png%7C697%7C700x427)
-
+!700x427

@@ -2,8 +2,6 @@
 title: "Introducción"
 ---
 
-Escrito por Adrián Quiroga Linares. [adrianql5](https://github.com/adrianql5)
-
 >[!NOTA]
 > Esta asignatura es una locura la puta mierda apuntes que tiene, menos mal que en prácticas nos salvan. Me molaría reestructurar todo para que tuviese un orden un poco más lógico, pero me da pereza. 
 
@@ -169,4 +167,4 @@ Dentro del Nivel 0, existe una subdivisión vital para aprobar las preguntas de 
 | **Autómata Linealmente Acotado (ALA)** | **¿?** (Problema Abierto / Se asume que **SÍ**) | En teoría es una incógnita matemática no resuelta. Pero en la asignatura, el **No Determinista** es el que define los Lenguajes Sensibles al Contexto (Tipo 1). |
 | **Máquina de Turing**                  | **NO** (Son equivalentes)                       | Cualquier cálculo de una MT no determinista puede ser simulado por una determinista (aunque tarde más tiempo).                                                  |
 | **Complejidad (P vs NP)**              | **SÍ** (En tiempo)                              | Aunque resuelven lo mismo, la No Determinista lo hace en tiempo polinómico (rápido), mientras que la determinista podría tardar siglos.                         |
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020260120204036.png)
+!Pasted image 20260120204036

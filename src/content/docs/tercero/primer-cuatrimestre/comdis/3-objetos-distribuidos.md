@@ -2,8 +2,6 @@
 title: "Objetos Distribuidos"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 # 3.1 Evolución del Paradigma: Del Mensaje al Objeto
 Para entender dónde estamos, primero debemos contrastar este nuevo modelo con lo que ya conoces (Sockets/Paso de Mensajes).
 
@@ -13,20 +11,22 @@ Para entender dónde estamos, primero debemos contrastar este nuevo modelo con l
 - **Acoplamiento:** Alto. Los procesos deben estar activos y sincronizados; si el enlace cae, la colaboración falla.
 - **Limitación:** En aplicaciones complejas con miles de interacciones, interpretar mensajes y mantener protocolos se vuelve una tarea "inabordable".
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153753.png)
+!Pasted image 20251212153753
 
->[!Info]
-> **Orientado a datos** es como mandar una carta o formulario. El énfasis está en el **contenido** del mensaje. Los procesos intercambian paquetes de datos con un formato acordado y el receptor debe abrir el paquete, leer los datos y decidir qué hacer con ellos. Es menos intuitivo porque te obliga a pensar en protocolos de comunicación en lugar de en la lógica del programa.
+:::note
+**Orientado a datos** es como mandar una carta o formulario. El énfasis está en el **contenido** del mensaje. Los procesos intercambian paquetes de datos con un formato acordado y el receptor debe abrir el paquete, leer los datos y decidir qué hacer con ellos. Es menos intuitivo porque te obliga a pensar en protocolos de comunicación en lugar de en la lógica del programa.
+:::
 
 ## 3.1.2 Objetos Distribuidos (Nivel Alto)
 - **Enfoque:** Orientado a **acciones**.
 - **Abstracción:** Trata los recursos de la red como objetos encapsulados. Los datos pasan a un segundo plano (son meros parámetros).
 - **Ventaja:** Es más natural para el desarrollo de software moderno (POO), aunque conceptualmente sea menos intuitivo para los humanos que "enviar un mensaje".
 
->[!Info]
-> **Orientado a acciones** es como dar una orden directa. El énfasis está en **invocar una operación** (un verbo, una acción). No piensas en "enviar datos", sino en ejecutar una función específica (método) sobre un objeto, pasando los datos simplemente como argumentos. Aunque ocurre red por debajo, para ti como programador es "pedir que se haga algo".
+:::note
+**Orientado a acciones** es como dar una orden directa. El énfasis está en **invocar una operación** (un verbo, una acción). No piensas en "enviar datos", sino en ejecutar una función específica (método) sobre un objeto, pasando los datos simplemente como argumentos. Aunque ocurre red por debajo, para ti como programador es "pedir que se haga algo".
+:::
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153710.png)
+!Pasted image 20251212153710
 
 # 3.2 Conceptos Fundamentales
 Antes de escribir código, debemos definir rigurosamente la terminología arquitectónica.
@@ -44,7 +44,8 @@ Dado que el cliente no puede acceder físicamente a la memoria del servidor, nec
 - **Referencia Remota:** Un identificador único que permite localizar al objeto específico dentro de un servidor específico en la red.    
 - **RMI Registry (Registro):** Un servicio de nombres (similar a una guía telefónica o DNS) donde el servidor registra (publica) sus objetos remotos asociados a un nombre, y el cliente los busca para obtener su referencia.
 
-> [!Info] **Exportar un objeto** significa indicar a la JVM que ese objeto estará disponible para recibir llamadas externas. Esto implica abrir un puerto TCP y dejar un hilo de ejecución a la escucha de peticiones para ese objeto.
+:::note[**Exportar un objeto** significa indicar a la JVM que ese objeto estará disponible para recibir llamadas externas. Esto implica abrir un puerto TCP y dejar un hilo de ejecución a la escucha de peticiones para ese objeto.]
+:::
 
 ### El Mecanismo de Stub y Skeleton
 La comunicación sigue el patrón _Proxy_. El flujo **real** de una invocación remota es:
@@ -60,20 +61,21 @@ La comunicación sigue el patrón _Proxy_. El flujo **real** de una invocación 
 5. **Invocación Real:** El Skeleton llama al método en el **Objeto Servidor** real.  
 6. **Retorno:** El Objeto Servidor devuelve el resultado al Skeleton, quien lo empaqueta (**Marshalling**) y lo envía de vuelta al Stub (que hará el **Unmarshalling** final para el cliente).
 
-> [!Note] Nota Técnica En versiones modernas de Java (post-1.2), los _Skeletons_ explícitos ya no se generan manualmente. La JVM utiliza **Reflexión (Reflection)** y Proxies dinámicos para manejar este proceso, pero el concepto teórico de "Skeleton" como la pieza que desempaqueta en el lado servidor sigue siendo válido para entender la arquitectura.
+:::note[Nota Técnica En versiones modernas de Java (post-1.2), los _Skeletons_ explícitos ya no se generan manualmente. La JVM utiliza **Reflexión (Reflection)** y Proxies dinámicos para manejar este proceso, pero el concepto teórico de "Skeleton" como la pieza que desempaqueta en el lado servidor sigue siendo válido para entender la arquitectura.]
+:::
 
-> [!Info] Analogía: El Empresario y el Intérprete Imagina que quieres hablar con un empresario japonés (el **Objeto Servidor**) pero tú solo hablas español.
-> 
-> - **El Stub (Tu intérprete):** Está contigo. Tú le hablas en español. Él "empaqueta" (traduce) tu mensaje y lo envía por teléfono. Para ti, hablar con el intérprete es como hablar con el empresario.
->     
-> - **La Red:** La línea telefónica.
->     
-> - **El Skeleton (El secretario del empresario):** Está en Japón. Recibe el mensaje, lo "desempaqueta" (traduce al japonés) y se lo dice al empresario. Luego toma la respuesta del empresario, la traduce y te la envía de vuelta.
->     
-> 
-> El **Soporte de Ejecución (Runtime)** sería la compañía telefónica que garantiza que la señal llegue de un lado a otro
+:::note[Analogía: El Empresario y el Intérprete Imagina que quieres hablar con un empresario japonés (el **Objeto Servidor**) pero tú solo hablas español.]
+- **El Stub (Tu intérprete):** Está contigo. Tú le hablas en español. Él "empaqueta" (traduce) tu mensaje y lo envía por teléfono. Para ti, hablar con el intérprete es como hablar con el empresario.
+    
+- **La Red:** La línea telefónica.
+    
+- **El Skeleton (El secretario del empresario):** Está en Japón. Recibe el mensaje, lo "desempaqueta" (traduce al japonés) y se lo dice al empresario. Luego toma la respuesta del empresario, la traduce y te la envía de vuelta.
+    
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153832.png)
+El **Soporte de Ejecución (Runtime)** sería la compañía telefónica que garantiza que la señal llegue de un lado a otro
+:::
+
+!Pasted image 20251212153832
 
 # 3.3 De RPC a RMI: El salto Tecnológico
 ## 3.1 Remote Procedure Call (RPC)
@@ -81,9 +83,9 @@ RMI no nació de la nada. Su ancestro es **RPC**, popularizado en los años 80.
 - En RPC, un proceso llama a un **procedimiento** (función C) en otro proceso
 - Utiliza herramientas como `rpcgen` para crear los stubs automáticamente.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153852.png)
+!Pasted image 20251212153852
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212153934.png)
+!Pasted image 20251212153934
 
 ## 3.2 Java RMI (Remote Method Invocation)
 RMI es la evolución **Orientada a Objetos de RPC**, exclusiva para el ecosistema Java
@@ -119,11 +121,12 @@ Una vez compiladas las clases, se usa el compilador RMI para generar los proxies
 - Resultado: Generado dos archivos: `_Stub.class` y `_Skel.class` 
 	- **Importante:** El archivo `_Stub.class` debe copiarse manualmente a la máquina del cliente (o descargarse dinámicamente) para que este sepa cómo comunicarse.
 
->[!Info]
->A día de hoy se generan de forma automática a no ser que uses una versión inferior a java 5 (que debe ser la puta mierda que usa el profesor, el pavo no actualiza su asignatura desde 2008).
+:::note
+A día de hoy se generan de forma automática a no ser que uses una versión inferior a java 5 (que debe ser la puta mierda que usa el profesor, el pavo no actualiza su asignatura desde 2008).
+:::
 
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212154109.png)
+!Pasted image 20251212154109
 
 
 # 3.5 El Registro y la Puesta en Marcha
@@ -165,7 +168,7 @@ public interface Calculadora extends Remote {
 ## Paso 2: El Servidor (Implementación y Publicación)
 Implementa la lógica y se registra en el `rmiregistry`.
 
-```java
+```Java
 import java.rmi.server.UnicastRemoteObject;
 import java.rmi.Naming;
 import java.rmi.RemoteException;

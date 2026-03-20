@@ -2,8 +2,6 @@
 title: "Aprendizaje Automático (Machine Learning)"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 # 5.1 Introducción y Cambio de Paradigma
 Hasta ahora (Sistemas Expertos), programábamos la IA diciéndole explícitamente _qué hacer_ (reglas `SI-ENTONCES`). En el Aprendizaje Automático, cambiamos el enfoque: **la máquina aprende las reglas a partir de los datos**.
 
@@ -188,10 +186,10 @@ En modelos simples, como el perceptrón, el regresor lineal (tambíen polinómic
 >[!Nota]
 >Tras revisar el examen del 2021 el profesor considera que la función de coste no tiene por qué ser ni convexa ni cóncava, el motivo ni puta idea supongo que usará un error distinto al MSE. Es bastante loco. Vale tras hacer el examen nos confirmó que cuando hace la pregunta de si es convexa no se refiere a un tipo de función de coste concreta, así que no la marqueis.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260110105920.png)
+!Pasted image 20260110105920
 
 En el descenso por gradiente en modelos no lineales, como las redes neuronales, no asegura alcanzar el mínimo global ya que puede quedares en un mínimo local. Por lo tanto la inicialización de los parámetros (los pesos) es importante ya que determina el punto inicial del descenso por gradiente. Tal y como se ve en esta imagen.
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251222094417.png)
+!Pasted image 20251222094417
 
 
 
@@ -229,7 +227,7 @@ Ocurre cuando el modelo es **demasiado complejo** y sensible. Presta tanta atenc
 
 
 La primera línea representa la regresión lineal y la segunda la logística.
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260110115630.png)
+!Pasted image 20260110115630
 
 # 5.7 Solución: Regularización
 ¿Cómo evitamos el Overfitting si queremos usar modelos complejos (muchas variables)?
@@ -259,4 +257,4 @@ El papel de Lambda ($\lambda$): El tamaño de la multa. El parámetro $\lambda$ 
 La regularización busca el equilibrio perfecto (un $\lambda$ intermedio) donde el modelo acierte lo suficiente (bajo error) pero manteniendo una curva suave (pesos bajos) para poder generalizar bien con datos nuevos. Reducir varianza, atenua el efecto de la correlación entre predictores y minimiza la influencia en el modelo de los predictores menos relevantes. Por lo general, aplicando regularización se consiguen modelos con mayor poder predictivo (generalización).
 
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260110115720.png)
+!Pasted image 20260110115720

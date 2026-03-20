@@ -2,8 +2,6 @@
 title: "Instalación de Software"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 # 2.1 Formas de instalación
 
 Podemos clasificar la instalación en dos grandes familias según cómo nos llega el software:

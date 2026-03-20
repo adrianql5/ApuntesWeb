@@ -47,14 +47,14 @@ Antes de ver una ronda por dentro, es importante entender que DES manipula los b
 
 - **Permutación de Elección (Permuted Choice):** Toma un grupo de bits, cambia su orden y elimina algunos (compresión). Se usa fundamentalmente en la generación de las subclaves.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260223102826.png)
+!Pasted image 20260223102826
 
 #### Un ciclo en DES
 En cada una de las 16 rondas, la mitad derecha de los datos sufre una serie de transformaciones y se mezcla con una "subclave" específica generada para esa ronda.
 
 Conceptualmente, el flujo de una ronda es este:
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260223102919.png)
+!Pasted image 20260223102919
 
 **El ciclo detallado paso a paso:**
 
@@ -70,7 +70,7 @@ Conceptualmente, el flujo de una ronda es este:
 
 6. **Intercambio:** La antigua mitad derecha pasa a ser la nueva mitad izquierda intacta, y el resultado del paso 5 se convierte en la nueva mitad derecha.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260223102942.png)
+!Pasted image 20260223102942
 
 #### Cajas de Sustitución (S-boxes)
 Las S-boxes son el único componente "no lineal" de DES; sin ellas, el algoritmo sería fácilmente rompible con álgebra básica.
@@ -78,7 +78,7 @@ Las S-boxes son el único componente "no lineal" de DES; sin ellas, el algoritmo
 Después de mezclar los datos con la clave, tenemos un bloque de 48 bits. Este bloque se divide en **8 fragmentos de 6 bits**. Cada fragmento entra en una S-box diferente (de la S1 a la S8).
 
 La S-box busca en una tabla interna y devuelve un valor de **4 bits**. Al juntar las salidas de las 8 cajas (8 cajas $\times$ 4 bits), volvemos a tener el tamaño estándar de **32 bits** necesario para continuar.
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260223103002.png)
+!Pasted image 20260223103002
 
 #### Variantes de DES
 Debido a la vulnerabilidad de la clave original de 56 bits, la industria tuvo que buscar soluciones para alargar la vida útil de DES antes de que AES estuviera listo, aplicando el algoritmo varias veces seguidas:
@@ -100,7 +100,7 @@ La seguridad y la complejidad de AES dependen del tamaño de la clave elegida, l
 
 A excepción de la última ronda (que omite un paso) y de una fase inicial de preparación, cada ronda de AES repite exactamente el mismo flujo de cuatro operaciones secuenciales.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260223103353.png)
+!Pasted image 20260223103353
 
 Es el estándar para información sensible "no clasificada".
 
@@ -110,7 +110,7 @@ A continuación se detalla qué ocurre dentro de esa matriz de estado de $4 \tim
 1. **SubBytes (Sustitución de Bytes)**
 Aporta la **confusión** al algoritmo. Es una sustitución no lineal donde cada byte individual de la matriz de estado se reemplaza por otro diferente. Para saber qué byte poner, se hace una búsqueda en una tabla predefinida llamada **S-Box** (Caja de Sustitución).
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260223103526.png)
+!Pasted image 20260223103526
 _En la imagen:_ El byte $a_{2,2}$ entra en la función $S$ y se transforma en un byte completamente distinto, $b_{2,2}$.
 
 2. **ShiftRows (Desplazamiento de Filas)**
@@ -121,21 +121,21 @@ Aporta la primera capa de **difusión**. Es una transposición simple que mezcla
 - **Fila 3:** Se desplaza 3 posiciones a la izquierda.
 - _En la imagen:_ Observa cómo el último byte de la segunda fila ($a_{1,3}$) "da la vuelta" y pasa a ser el primero tras el desplazamiento.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260223103538.png)
+!Pasted image 20260223103538
 
 3. **MixColumns (Mezcla de Columnas)**
 Aporta la difusión principal y más pesada. Transforma cada columna de la matriz de estado de forma independiente. Matemáticamente, multiplica cada columna por una matriz fija operando en un Cuerpo de Galois ($GF(2^8)$). El resultado es que cada nuevo byte de una columna depende de **todos** los bytes de esa misma columna anterior.
 - _Nota importante:_ Este paso **no se ejecuta** en la última ronda del algoritmo.    
 - _En la imagen:_ La columna entera pasa por la función polinómica $c(x)$ para generar una columna completamente nueva y mezclada.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260223103548.png)
+!Pasted image 20260223103548
 
 4. **AddRoundKey (Suma de la Clave de Ronda)**
 Es el único paso que involucra directamente la clave de seguridad. Se toma la "subclave" específica generada para esta ronda actual y se aplica una operación lógica **XOR** ($\oplus$) bit a bit contra la matriz de estado.
 
 - _En la imagen:_ Cada byte de los datos ($a_{2,2}$) se suma mediante XOR con su byte correspondiente en la matriz de la subclave ($k_{2,2}$) para dar el resultado final del ciclo ($b_{2,2}$).
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260223103609.png)
+!Pasted image 20260223103609
 
 #### Modos de uso de un Cifrado de Bloque
 Cuando utilizamos cifrado de clave simétrica por bloques (como AES), el algoritmo cifra los datos en fragmentos de tamaño fijo (por ejemplo, 64 o 128 bits). El "Modo de Operación" define cómo se procesan estos bloques, especialmente cuando el mensaje es más largo que un solo bloque.
@@ -146,7 +146,7 @@ En el modo ECB, **cada bloque se cifra de modo totalmente independiente** del re
 - **Debilidad Principal:** Las repeticiones en el texto plano originan **exactamente el mismo texto cifrado** (si se usa la misma clave). Esto no oculta los patrones de los datos subyacentes.
 
 Al no ocultar los patrones, mensajes con inicios, finales o campos comunes proporcionan mucha información visual a un atacante, incluso sin descifrar el mensaje.
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260223105403.png)
+!Pasted image 20260223105403
 
 Como ECB no vincula un bloque con el anterior, un atacante puede realizar un ataque de **manipulación de bloques (Copy & Paste)**.
 
@@ -155,7 +155,7 @@ Imagina que "Zelda" es la atacante. Analizando el tráfico anterior, ella sabe q
 2. Intercepta la transferencia 2. El bloque de destino (Drew) es `gyl615`.
 3. **El cambiazo:** Zelda simplemente borra los bloques de Brian y Drew, y **pega su propio bloque cifrado** (`cd4wx7`) en la columna "To acct". El sistema lo descifrará correctamente como "Zelda" sin dar error.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260223105458.png)
+!Pasted image 20260223105458
 
 
 2. **Cipher Block Chaining Mode (CBC): La solución mediante encadenamiento**
@@ -167,10 +167,10 @@ Para evitar que se vean patrones y que se puedan intercambiar bloques, surge el 
 **Cifrado en modo CBC:**
 Observa cómo ahora, aunque la fecha sea "1 Aug" en ambas transacciones (mismo texto plano), el resultado cifrado es completamente distinto gracias al uso de diferentes Vectores de Inicialización (Init. Vect. 1 y 2) y al encadenamiento en cascada.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260223110205.png)
+!Pasted image 20260223110205
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260223110215.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260223110224.png)
+!Pasted image 20260223110215
+!Pasted image 20260223110224
 
 **Descrifrado en modo CBC:**
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/Pasted%20image%2020260223110306.png)
+!Pasted image 20260223110306

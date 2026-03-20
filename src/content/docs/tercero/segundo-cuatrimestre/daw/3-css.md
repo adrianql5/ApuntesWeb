@@ -255,7 +255,7 @@ Cada etiqueta HTML se comporta como una **caja**. Las partes que aparecen en el 
 
 Las etiquetas en línea pierden propiedades relacionadas con dimensiones.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/image-1.png%7C697)
+!697
 
 
 ### Qué significa cada parte
@@ -278,7 +278,7 @@ Las diapositivas muestran que ciertos márgenes verticales pueden colapsar y el 
 
 **Qué efecto produce:** dos bloques apilados verticalmente no siempre suman ambos márgenes; a veces queda solo el más grande.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-2.png)
+!image-2
 
 ## 3.5.2 Propiedades del modelo de caja
 Las propiedades modificables indicadas son:
@@ -540,7 +540,7 @@ Es el valor por defecto. El elemento se coloca donde le corresponde según el fl
 **Efecto visual:** no hay desplazamiento especial.
 
 
-### `position: r4elative`
+### `position: relative`
 
 El elemento se coloca relativo a la posición que tendría en el flujo natural y **permanece en el flujo**.
 
@@ -599,7 +599,7 @@ Controla qué elemento queda por delante o por detrás cuando se superponen.
 **`clear`**  
 Sirve para evitar que un elemento quede al lado de flotantes anteriores.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-3.png)
+!image-3
 
 ## 3.7.2 Layout fijo, líquido y responsivo
 

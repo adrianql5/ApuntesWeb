@@ -558,4 +558,3 @@ En los hilos a nivel de núcleo, el **kernel planifica hilos,** en principio sin
 # **2.8 Cosas importantes de este Tema**
 
 Saber sobre señales y sobre cómo usar los procesos tanto como hilos tema teoría le suele dar más igual. Lo del sigaction y todas esas funciones raras lo suele preguntar. Sobre los algoritmos saber cómo funcionan y las fórmulas porque, aunque no suele, las puede preguntar. Las diferentes implementaciones de hilos son muy importantes al igual que los estados de los procesos.
-

@@ -4,7 +4,7 @@ title: "Análisis Léxico"
 
 El **Analizador Léxico (Scanner)** es el primer paso de la fase de análisis. Su trabajo es leer el archivo de texto (caracteres sueltos) y agruparlos en unidades con significado llamadas **tokens** o **componentes léxicos**.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205151234.png)
+!Pasted image 20260205151234
 
 
 # 2.1 Estructura
@@ -12,7 +12,7 @@ Los analizadores sintáctico (recibe los tokens y crea una estructura jerárquic
 - **Consumidor (Sintáctico):** le pide al léxico el siguiente token.
 - **Productor (Léxico):** lee los caracteres necesarios, forma el token y se lo entrega.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205151405.png)
+!Pasted image 20260205151405
 
 
 ## 2.1.1 Tareas
@@ -50,7 +50,7 @@ Este modelo proporciona **simplicidad** porque el analizador sintáctico no tien
 - **Lexema:** cadena de caracteres presente en el código fuente y que coincide con el patrón de un componente léxico. Por ejemplo, `453` coincide con el patrón de NÚMERO_ENTERO.
 - **Atributos:** acompañan a cada componente léxico encontrado y permiten su identificación y análisis posterior. En la práctica un único atributo apunta a una entrada de la tabla de símbolos
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205154003.png)
+!Pasted image 20260205154003
 
 Si por ejemplo tenemos la sentencia FORTRAN `E = C ** 2`  se traduce como:
 - <IDENTIFICADOR, apuntador en la tabla de símbolos a la entrada de E>
@@ -108,64 +108,64 @@ Lo mismo que vimos en **Teoría de Autómatas y Lenguajes formales:**
 
 ## 2.3.1 AFN
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205165617.png)
+!Pasted image 20260205165617
 
 
 Para construir un AFN de un modo sistemático empleamos la **Construcción de Thompson**, que utiliza tres reglas básicas:
 - Para el símbolo $\epsilon$, se construye el AFN siguiente:
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205165755.png)
+!Pasted image 20260205165755
 
 - Para el símbolo $a \in \sum$, se construye el AFN siguiente: 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205165823.png)
+!Pasted image 20260205165823
 
 - Supongamos que $N(s)$ y $N(t)$ son AFN para las expresiones regulares $s$ y $t$: 
 	- Para la expresión regular $s|t$ se construye el AFN $N(s|t)$
 	- Para la expresión regular $st$ se construye el AFN $N(st)$.
 	- Para la expresión regular $s*$ se construye el AFN $N(s*)$ siguiente:
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205170128.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205170138.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205170152.png)
+!Pasted image 20260205170128
+!Pasted image 20260205170138
+!Pasted image 20260205170152
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205170152.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205170223.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205170247.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205170306.png)
+!Pasted image 20260205170152
+!Pasted image 20260205170223
+!Pasted image 20260205170247
+!Pasted image 20260205170306
 
 
 ## 2.3.2 Autómata Finito Determinista
 Necesitamos convertir el **AFN** a un **AFD** para ello empleamos el método de **construcción de subconjuntos** para obtener el AFD equivalente a un AFN dado. Este AFD será más sencillo de programar. Este algoritmo lo vimos en **TALF**.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205170551.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205170606.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205170615.png)
+!Pasted image 20260205170551
+!Pasted image 20260205170606
+!Pasted image 20260205170615
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205170827.png)
+!Pasted image 20260205170827
 
 
 ## 2.3.3 AFD Mínimo Equivalente
 Un analizador léxico será más eficiente cuanto menor sea el número de estados del AFD correspondiente. Para cualquier AFD existe un AFD mínimo equivalente.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205170731.png)
+!Pasted image 20260205170731
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205170847.png)
+!Pasted image 20260205170847
 
 
 ## 2.3.4 Construcción del Analizador
 El analizador léxico se construirá a partir de la agregación de AFD organizados según un orden conveniente. Siempre se debe reconocer la cadena más larga. El último carácter leído será devuelto al flujo para ser leído en la siguiente iteración.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205171121.png)
+!Pasted image 20260205171121
 
 Podemos integrar los tres autómatas anteriores en el siguiente autómata:
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260205171136.png)
+!Pasted image 20260205171136
 
 # 2.4 Sistema de Entrada
 
 El **sistema de entrada** es un conjunto de rutinas que interactúan con el sistema operativo para la lectura de datos del programa fuente. El sistema de entrada y el analizador léxico funcionan según el patrón productor-consumidor.
 
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260218171009.png)
+!Pasted image 20260218171009
 
 La separación del sistema de entrada supone una **mejora** en:
 1. **Eficiencia:** supongamos un analizador léxico en C que tiene que acceder a un carácter de un fichero. Este carácter pasa del disco a la memoria gestionada por el sistema operativo, a una estructura `FILE`, a una variable `string` del analizador. Urge soluciones.
@@ -188,7 +188,7 @@ Cualquier sistema de entrada debe satisfacer:
 ### Método del Par de Memorias Intermedias
 El **método del par de memorias intermedias** divide la memoria intermedia en dos mitades de $n$ bytes cada una ($n$ debe ser múltiplo de la longitud de la unidad de asignación).
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260218172357.png)
+!Pasted image 20260218172357
 
 Al principio, los punteros `inicio` y `delantero` apuntan al primer caracter de un lexema. A medida que el analizador pide caracteres, delantero se mueve hacia delante. Tras detectar un patrón,  inicio avanza hasta la posición de delantero y se inicia el análisis del siguiente lexema. Cada vez que se mueve delantero:
 1. Se comprueba si se ha alcanzado el final de fichero
@@ -203,7 +203,7 @@ Al principio, los punteros `inicio` y `delantero` apuntan al primer caracter de 
 ### Método del Centinela
 En el método del **centinela** se añade un byte más a cada bloque, en el que se guardará un carácter centinela (EOF). De este modo, se hace una sola comprobación lógica cada vez que avanza delantero. Si la comprobación es positiva, se analiza cuán de los tres casos es.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260218173848.png)
+!Pasted image 20260218173848
 
 
 # 2.5 Tabla de Símbolos
@@ -238,10 +238,10 @@ De este modo se **reduce el tamaño del AFD y se aumenta la eficiencia del anál
 La **tabla de símbolos** se estructura en un conjunto de registros, cuya longitud suele ser fija, conteniendo el lexema encontrado y un conjunto de atributos para su componente léxico. Hay dos formas de almacenamiento:
 
 - **Estructura Interna:** Si reservas 32 caracteres para cada nombre y el programador usa variables cortas como `i` o `x`, **desperdicias mucho espacio**. Si el programador usa un nombre de 33 caracteres, **lo cortas** y causas errores.
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260218175030.png)
+!Pasted image 20260218175030
 
 - **Estructura Externa:** Esta estructura no exige una longitud fija para los identificadores, por lo que se aprovecha mejor el espacio de almacenamiento.
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260218175134.png)
+!Pasted image 20260218175134
 
 
 ## 2.5.3 Estructura de la Tabla de Símbolos.
@@ -265,7 +265,7 @@ Analizaremos el uso de algunas de estas estructuras para organizar una tabla de 
 ### Tablas de Símbolos no Ordenadas
 Las **tablas de símbolos no ordenadas** usan un vector o una lista. Se añade una pila auxiliar de apuntadores de índice de bloque, para marcar el comienzo de los símbolos que corresponden a un bloque. Al terminar un bloque, se eliminan todos los símbolos desde el siguiente al apuntado hasta el final de la tabla de símbolos.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260218180316.png)
+!Pasted image 20260218180316
 
 Admite las siguientes **operaciones**:
 - **Inserción.** Cuando se encuentra la declaración de un nuevo símbolo, se verifica que no se encuentra en el último bloque. Si no está, se inserta en la última posición de la tabla, si está, se devuelve un error.
@@ -274,7 +274,7 @@ Admite las siguientes **operaciones**:
 - **Fin de bloque.** Cuando termina un bloque, se eliminan todos los símbolos del mismo desde el siguiente al de inicio, apuntado desde la pila. Luego se elimina el índice de la pila.
 
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260218180427.png)
+!Pasted image 20260218180427
 
 La pila de índices apunta al bloque de esa parte del código. Por ejemplo, en el caso (1), como `uno` y `dos` pertenecen al mismo bloque inicial, usan un único índice en la pila. Al entrar en el procedimiento `tres` y añadir la variable `cuatro`, se inserta el índice **3** en la pila.
 
@@ -294,7 +294,7 @@ Admite las siguientes **operaciones:**
 	b. Se borran. 
 	c. Se decrementa en 1 la variable con el número de nivel.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260211093349.png)
+!Pasted image 20260211093349
 
 El proceso de construcción comienza con el lexema **uno**. Al ser un árbol binario de búsqueda basado en el orden alfabético de los lexemas, el siguiente elemento, **dos**, se inserta a su izquierda (ya que la "d" precede a la "u"). Posteriormente, al insertar **tres**, el sistema determina que es menor que **uno** pero mayor que **dos**, por lo que se posiciona como el hijo derecho del bloque **2**.
 
@@ -305,7 +305,7 @@ Al finalizar un bloque, como ocurre al cerrar el `procedure cinco`, el compilado
 ### Tabla de Símbolos con Estructura de Bosque
 La **tabla de símbolos con estructura** **de bosque** utiliza un árbol para cada bloque del programa, y una pila de índices de nivel que apuntan a la raíz del árbol de nivel. Esto reduce el problema de las eliminaciones.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260218182302.png)
+!Pasted image 20260218182302
 
 Admite las siguientes **operaciones** 
 - **Inserción.** Consiste en hacer una inserción normal en el árbol del bloque activo. 
@@ -318,7 +318,7 @@ Una **tabla hash** aplica una función matemática al lexema para determinar la 
 - **Tablas hash cerradas.** Cuando se produce una colisión, se usa una técnica que permita acceder a una posición vacía.
 - **Tablas hash abiertas.** Se utiliza una lista encadenada para resolver las colisiones.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260218182538.png)
+!Pasted image 20260218182538
 
 Admite las siguientes **operaciones**: 1. 
 - **Inserción.** Como en una tabla hash normal. Se suelen usar listas de desbordamiento, colocando los símbolos más recientes al principio.
@@ -327,7 +327,7 @@ Admite las siguientes **operaciones**: 1.
 - **Fin de bloque**. Se borran todos los registros correspondientes a ese bloque. Implica recorrer prácticamente toda la tabla. Después se cambia el bloque activo. El truco es hacer una hash para cada cada nivel y tenes una pila que apunte a cada tabla hash.
 
 ### Análisis de Complejidad
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260218182834.png)
+!Pasted image 20260218182834
 
 # 2.6 Tratamiento de Errores
 Cuando en un momento del proceso de compilación se detecta un error: 
@@ -336,7 +336,7 @@ Cuando en un momento del proceso de compilación se detecta un error:
 - **No debe retrasar** excesivamente el procesamiento de programas correctos.
 
 **Errores más característicos** de la fase de análisis léxico son:
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260218183015.png)
+!Pasted image 20260218183015
 
 El proceso de recuperación de un error puede suponer la adopción de diferentes medidas: 
 - **Ignorar** los caracteres inválidos hasta formar un componente léxico correcto. 

@@ -2,8 +2,6 @@
 title: "Programación de Scripts"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 >[!Nota]
 > Este tema originalmente habla también del shell y programar con bash, yo no explico porque no entra en el examen. Aunque es bastante importante saber como usar cada herramienta. En SOI se suele explicar (pero de forma muy precaria), si os interesa los apuntes originales de la asignatura lo explica bastante bien. Los temas tratados son:
 > - Línea de comandos: El interprete de comandos (shell), variables de shell, expansiones del shell, redirección de la entrada/salida, orden de evaluación y ficheros de inicialización de bash
@@ -21,15 +19,15 @@ No hay que confundir las expresiones regulares con los comodines, que son utiliz
 
 Se distinguen las expresiones regulares básicas y las extendidas, más completas.
 
->[!Info] 
->
->- **Los comodines (Wildcards/Globbing):** Son caracteres especiales (como `*` o `?`) interpretados por la **Shell** (antes de ejecutar el comando) para coincidir con **nombres de ficheros y directorios**.
-  >  
->- **Las expresiones regulares (Regex):** Son patrones interpretados por el **comando o programa** (como `grep`) para buscar coincidencias dentro del **contenido del texto**.
-  >  
->- **La entrada estándar (stdin):** Es el flujo de datos de entrada predeterminado de un programa (Descriptor de fichero 0). Si no se especifica un archivo, comandos como `grep` leerán lo que escribas en el teclado o lo que le llegue desde otro comando.
-  >  
->- **Los pipes (tuberías `|`):** Son el mecanismo que conecta la salida estándar (stdout) de un comando con la entrada estándar (stdin) del siguiente, permitiendo filtrar con expresiones regulares datos generados "al vuelo".
+:::note
+- **Los comodines (Wildcards/Globbing):** Son caracteres especiales (como `*` o `?`) interpretados por la **Shell** (antes de ejecutar el comando) para coincidir con **nombres de ficheros y directorios**.
+ 
+- **Las expresiones regulares (Regex):** Son patrones interpretados por el **comando o programa** (como `grep`) para buscar coincidencias dentro del **contenido del texto**.
+ 
+- **La entrada estándar (stdin):** Es el flujo de datos de entrada predeterminado de un programa (Descriptor de fichero 0). Si no se especifica un archivo, comandos como `grep` leerán lo que escribas en el teclado o lo que le llegue desde otro comando.
+ 
+- **Los pipes (tuberías `|`):** Son el mecanismo que conecta la salida estándar (stdout) de un comando con la entrada estándar (stdin) del siguiente, permitiendo filtrar con expresiones regulares datos generados "al vuelo".
+:::
 
 ## 5.1.1 Comandos `egrep` y `sed -r`
 Estos comandos permiten utilizar **Expresiones Regulares Extendidas (ERE)**, lo que simplifica la escritura de patrones complejos (como grupos `()` o alternancias `|`) sin necesidad de "escapar" tantos caracteres con la barra invertida `\`.
@@ -38,7 +36,7 @@ Estos comandos permiten utilizar **Expresiones Regulares Extendidas (ERE)**, lo 
 - Lee el texto línea por línea. Si encuentra el patrón en una línea, imprime la línea completa en la salida estándar (pantalla). Si no, la descarta.
 - **Diferencia clave:** `egrep` es equivalente a ejecutar `grep -E`. Interpreta los metacaracteres extendidos (`?`, `+`, `{}`, `|`, `()`) directamente.
 
-```bash
+```Shell
 egrep [opciones] 'patrón' archivo
 ```
 
@@ -196,8 +194,8 @@ Las expresiones regulares son "codiciosas" por naturaleza: intentan abarcar la *
 ### Porrazos
 **Ejemplo 1:**
 ```shell
- #concuerda con direcciones de e-mail
- \w+@\w+\.\w+((\.\w+)*)? 
+ #concuerda con direcciones de e-mail
+ \w+@\w+\.\w+((\.\w+)*)? 
 ``` 
 
 `\w` (word character) es un atajo para no tener que escribir `[a-zA-Z0-9_]`.
@@ -257,11 +255,11 @@ En UNIX/Linux, estos comandos se conocen como **filtros**. Su filosofía es reci
 
 **Flujo típico:** `entrada` $\rightarrow$ `filtro` $\rightarrow$ `salida`
 
-> [!Tip] La potencia de las tuberías
-> 
-> Estos comandos brillan cuando se combinan.
-> 
-> Ejemplo: sort < fichero.txt | head -3 > top3.txt (Ordena el fichero y guarda las 3 primeras líneas en uno nuevo).
+:::tip[La potencia de las tuberías]
+Estos comandos brillan cuando se combinan.
+
+Ejemplo: sort < fichero.txt | head -3 > top3.txt (Ordena el fichero y guarda las 3 primeras líneas en uno nuevo).
+:::
 
 | **Comando**     | **Función Principal**                                    |
 | --------------- | -------------------------------------------------------- |
@@ -356,11 +354,11 @@ Adriana Gómez
 ### `uniq`
 Filtra líneas repetidas.
 
-> [!Warning] ¡Cuidado!
-> 
-> uniq solo detecta duplicados si son adyacentes (están juntos). Por eso SIEMPRE se suele usar sort antes que uniq.
-> 
-> Uso típico: sort fichero | uniq
+:::caution[¡Cuidado!]
+uniq solo detecta duplicados si son adyacentes (están juntos). Por eso SIEMPRE se suele usar sort antes que uniq.
+
+Uso típico: sort fichero | uniq
+:::
 
 - **Opciones:** `-c` (cuenta las repeticiones), `-u` (muestra solo las únicas), `-d` (muestra solo las repetidas).    
 
@@ -421,9 +419,9 @@ Adriana Gómez
 #### `join` (Cruce relacional)
 Combina dos ficheros basándose en un **campo común** (como una ID o clave).
 
-> [!Warning] Requisito Obligatorio
-> 
-> Para que join funcione, ambos ficheros deben estar ordenados previamente por el campo que se va a usar para unir.
+:::caution[Requisito Obligatorio]
+Para que join funcione, ambos ficheros deben estar ordenados previamente por el campo que se va a usar para unir.
+:::
 
 ```bash
 # Unir fichero1 y fichero2 usando el campo 2 (-j 2) como clave
@@ -479,14 +477,13 @@ Cuando `awk` lee una línea, la trocea automáticamente basándose en los espaci
 - **`$N`**: El enésimo campo.
 
 
-> [!Tip] **Visualización** Imagina la frase: `Hola mundo linux`
-> 
-> - `$0` = "Hola mundo linux"
->     
-> - `$1` = "Hola"
->     
-> - `$2` = "mundo"
->     
+:::tip[**Visualización** Imagina la frase: `Hola mundo linux`]
+- `$0` = "Hola mundo linux"
+    
+- `$1` = "Hola"
+    
+- `$2` = "mundo"
+:::
 
 **Ejemplo básico:**
 ```shell

@@ -2,8 +2,6 @@
 title: "Autómatas finitos"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 
 # 2.1 Autómata Finito Determinista (AFD)
 > **Concepto Clave:** "Una máquina sin dudas".
@@ -26,7 +24,7 @@ $$A = (Q, \Sigma, \delta, q_0, F)$$
 - $F$: Donde ganamos (doble círculo).
 
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251009161639.png)
+!Pasted image 20251009161639
 
 ## Función de Transición Extendida ($\hat{\delta}$)
 **1. Diferencia Conceptual**
@@ -62,7 +60,7 @@ $$\delta: Q \times (\Sigma \cup \{\varepsilon\}) \to 2^Q$$
 - **Traducción:** La función devuelve un **conjunto de estados** (potencia de $Q$), no un estado único. Puede devolver un conjunto vacío $\emptyset$ (callejón sin salida).
 
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251009161852.png)
+!Pasted image 20251009161852
 
 **En el AFN,** puedes estar en varios estados a la vez y elegir entre múltiples caminos.
 
@@ -85,10 +83,10 @@ Para resolver ejercicios de conversión, necesitas dominar la **Clausura-ε**.
 - **Pregunta:** "¿A dónde puedo llegar desde aquí sin gastar ni una moneda (símbolo)?"
 - **Regla:** La `clausura-ε(q)` siempre incluye al propio estado $q$ más cualquier estado alcanzable solo con flechas $\varepsilon$.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251207211118.png)
+!Pasted image 20251207211118
 
 La clausura de la imagen anterior sería: 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251207211142.png)
+!Pasted image 20251207211142
 
 **Algoritmo para sacar la clausura:**
 1. Sitúate en un estado (ej: $q_0$).
@@ -129,7 +127,7 @@ Imagina que estás en el estado combinado $S = \{q_1, q_2\}$ y llega una letra '
 
 
 **Ejemplo práctico:**
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020130206.png)
+!Pasted image 20251020130206
 
 # 2.5 Minimización de AFD
 **Objetivo:** Encontrar el autómata más pequeño posible que haga exactamente lo mismo. Elimina redundancia.
@@ -151,7 +149,7 @@ Imagina que estás en el estado combinado $S = \{q_1, q_2\}$ y llega una letra '
 
 5. Reconstrucción: Cada grupo final es un único estado en el autómata minimizado.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020130827.png)
+!Pasted image 20251020130827
 
 # 2.6 Equivalencia entre Estados
 Dos estados $p$ y $q$ son equivalentes si son **indistinguibles** para un observador externo.

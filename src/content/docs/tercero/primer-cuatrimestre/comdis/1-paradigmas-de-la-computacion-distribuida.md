@@ -2,8 +2,6 @@
 title: "Paradigmas de la Computación Distribuida"
 ---
 
-Escrito por Adrián Quiroga Linares. [adrianql5](https://github.com/adrianql5)
-
 # 1.1 ¿Qué es esto y por qué nos importa?
 
 ## 1.1.1 El Concepto de Paradigma
@@ -32,15 +30,16 @@ Aquí es donde todo empieza. Es el nivel de abstracción más bajo.
 
 Cuando tu navegador pide una web, por debajo está abriendo un socket y pasando mensajes. Un "problema" a tener en cuenta es que los procesos están fuertemente acoplados (ambos deben de estar activos al mismo tiempo para que se produzca la comunicación).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250916092352.png)
+!Pasted image 20250916092352
 
 
->[!Info]
-> Una **primitiva** es la operación más básica y elemental que te ofrece un sistema o lenguaje, es un ladrillo indivisibles con el construyes cosas más grandes
->
-> Un **socket** es un **enchufe** de software. Es el punto final (endpoint) de una comunicación bidireccional entre dos programas a través de la red. Imagina que tu ordenador es un bloque de pisos. El **Socket** es la puerta de un apartamento específico (identificado por una IP y un Puerto). Si quieres enviar una carta a otro edificio, necesitas saber la dirección del edificio (IP) y el número de puerta (Puerto) del destinatario. 
-> 
-> Usamos `connect`/`disconnect`  cuando necesito fiabilidad absoluta y un canal estable. Antes de enviar datos, debes descolgar el teléfono (`connect`) y al terminal colgar (`disconnect`). Garantiza que los datos llegan y en orden (**Servicio orientado a conexión**). No se usa (**servicio no orientado a conexión**) cuando la velocidad es más importante que la fiabilidad, o cuando envías mensajes sueltos. Solo se hace `send` y `receive` sin llamar antes. `Connect` tarda tiempo.
+:::note
+Una **primitiva** es la operación más básica y elemental que te ofrece un sistema o lenguaje, es un ladrillo indivisibles con el construyes cosas más grandes
+
+Un **socket** es un **enchufe** de software. Es el punto final (endpoint) de una comunicación bidireccional entre dos programas a través de la red. Imagina que tu ordenador es un bloque de pisos. El **Socket** es la puerta de un apartamento específico (identificado por una IP y un Puerto). Si quieres enviar una carta a otro edificio, necesitas saber la dirección del edificio (IP) y el número de puerta (Puerto) del destinatario. 
+
+Usamos `connect`/`disconnect`  cuando necesito fiabilidad absoluta y un canal estable. Antes de enviar datos, debes descolgar el teléfono (`connect`) y al terminal colgar (`disconnect`). Garantiza que los datos llegan y en orden (**Servicio orientado a conexión**). No se usa (**servicio no orientado a conexión**) cuando la velocidad es más importante que la fiabilidad, o cuando envías mensajes sueltos. Solo se hace `send` y `receive` sin llamar antes. `Connect` tarda tiempo.
+:::
 
 # 1.3 Arquitecturas Básicas
 Una vez sabemos pasar mensajes, ¿cómo organizamos a los participantes?
@@ -58,7 +57,7 @@ El objetivo que se persigue es proporcionar una arquitectura de red en la que se
 
 
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250916093514.png)
+!Pasted image 20250916093514
 
 
 ## 1.3.2 Peer-to-Peer (P2P)
@@ -70,19 +69,21 @@ El objetivo que se persigue es proporcionar una arquitectura de red en la que se
 
 Se usa en BitTorrent, Videoconferencias, Blockchain, aplicaciones de chat, etc.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250916095357.png)
+!Pasted image 20250916095357
 
->[!Info]
-> **Descentralizado** significa que **no existe un punto único de fallo ni una autoridad suprema**. En un sistema centralizado, si tiras el servidor central, nadie puede operar.
->
-> En P2P la red es una malla, si desconectas a 100 usuarios, los otros 1000 siguen comunicándose entre ellos. 
+:::note
+**Descentralizado** significa que **no existe un punto único de fallo ni una autoridad suprema**. En un sistema centralizado, si tiras el servidor central, nadie puede operar.
+
+En P2P la red es una malla, si desconectas a 100 usuarios, los otros 1000 siguen comunicándose entre ellos. 
+:::
 
 
 # 1.4 Subiendo de Nivel: Ocultando la Red (Middleware)
 Aquí intentamos que el programador se olvide de que existen cables de red. Queremos programar como si todo estuviera en mi ordenador".
 
->[!Info]
-> El middleware es una capa de software que actúa como intermediario entre 2 procesos independientes (aplicaciones, hardware, SO ...). Es un mecanismo útil para el desacoplamiento y la abstracción a la hora de desarrollar aplicaciones distribuidas.
+:::note
+El middleware es una capa de software que actúa como intermediario entre 2 procesos independientes (aplicaciones, hardware, SO ...). Es un mecanismo útil para el desacoplamiento y la abstracción a la hora de desarrollar aplicaciones distribuidas.
+:::
 
 ## 1.4.1 RPC (Remote Procedure Call)
 **Concepto Principal:** Abstracción que permite llamar a una función que está en otro ordenador como si fuera una función local. Imagina que en tu código escribes `calcularSuma(5, 10)`. Tú no sabes si esas suma la hace tu CPU o superordenador en Japón. RPC se encarga de enviar el 5 y el 10 a Japón esperar, y devolverte 15.
@@ -90,7 +91,7 @@ Aquí intentamos que el programador se olvide de que existen cables de red. Quer
 **Detalle Técnico:** 
 - Usa unos componentes llamados **Stubs**. El stub es una pieza de código falsa en tu ordenador que finge ser la función remota, su único trabajo es empaquetas los datos y enviarlos (ya lo veremos más adelante)
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250920212328.png)
+!Pasted image 20250920212328
 
 
 
@@ -99,7 +100,7 @@ Aquí intentamos que el programador se olvide de que existen cables de red. Quer
 
 **Diferencia con RPC:** En RPC llamas a funciones (acciones). En RMI, invocas a métodos de un **Objeto** que vive en otra máquina. Puedes pasar objetos enteros como argumentos.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250921121400.png)
+!Pasted image 20250921121400
 
 
 ## 1.4.3 ORB (Object Request Broker)
@@ -108,7 +109,7 @@ Aquí intentamos que el programador se olvide de que existen cables de red. Quer
 ¿Qué pasa si quiero que un objeto escrito en C++ en Windows hable con un objeto escrito en Java en Linux? RMI (de Java) no basta. La solución es **ORB**, que es un middleware (intermediario) que redirige peticiones entre objetos heterogéneas (distintos lenguajes/plataformas). El estándar famoso el **CORBA**.
 
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250921121817.png)
+!Pasted image 20250921121817
 
 
 # 1.5 Desacoplamiento: Sistemas de Mensajes (MOM)
@@ -116,12 +117,13 @@ A veces no queremos respuesta inmediata. A veces queremos "dejar un recado".
 
 **Concepto Principal:** Message-Oriented Middleware (MOM). Un intermediario gestiona colas de mensajes, permitiendo comunicación **asíncrona**.
 
->[!Info]
-> **El desacomplamiento** consiste en eliminar las dependencias rígidas entre dos sistemas. Podemos diferenciar 2 tipos:
-> - **Temporal:** el emisor y el receptor **no necesitan estar conectados a la vez**. Yo envío el mensaje a las 10:00, me desconecto, y tú lo recibes a las 14:00.
-> - **Espacial:** el emisor no necesita saber la dirección IP o identidad exacta del receptor, solo envía el mensaje a un buzón.
+:::note
+**El desacomplamiento** consiste en eliminar las dependencias rígidas entre dos sistemas. Podemos diferenciar 2 tipos:
+- **Temporal:** el emisor y el receptor **no necesitan estar conectados a la vez**. Yo envío el mensaje a las 10:00, me desconecto, y tú lo recibes a las 14:00.
+- **Espacial:** el emisor no necesita saber la dirección IP o identidad exacta del receptor, solo envía el mensaje a un buzón.
+:::
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250920212044.png)
+!Pasted image 20250920212044
 
 ## 1.5.1 Modelo Punto a Punto
 **Funcionamiento:** Un emisor deja un mensaje en una cola. El receptor lo recoge cuando puede. Pensadlo como el correo electrónico.
@@ -135,7 +137,7 @@ A veces no queremos respuesta inmediata. A veces queremos "dejar un recado".
 
 Por ejemplo, notificaciones de Youtube, Feeds de Twitter, Grupos de Whatsapp.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212152923.png)
+!Pasted image 20251212152923
 
 # 1.6 Paradigmas Avanzados (Conceptos Futuristas)
 Estos modelos son más específicos, pero interesantes.
@@ -144,13 +146,13 @@ Estos modelos son más específicos, pero interesantes.
 Los servicios se "registran" en un directorio. El cliente busca en el directorio "necesito imprimir", y el directorio le da la dirección de la impresora disponible. Es autoconfigurable.
 
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250921121700.png)
+!Pasted image 20250921121700
 
 
 ## 1.6.2 Espacio de Objetos
 Imagina una **pizarra compartida** en la nube. Los productores escriben datos en la pizarra. Los consumidores leen o toman datos de la pizarra. Es la abstracción más alta: no sabes quien consume tu dato, solo lo dejas ahí. Ejemplo: JavaSpaces
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250921122117.png)
+!Pasted image 20250921122117
 
 
 ## 1.6.3 Agentes Móviles
@@ -163,7 +165,7 @@ Imagina que quieres buscar una foto específica en una base de datos de la NASA 
  
 **El Agente:** Es un programa autónomo. Decide cuándo irse al siguiente nodo del itinerario. Lleva consigo su "equipaje" (el estado actual de su ejecución).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250921122236.png)
+!Pasted image 20250921122236
 
 
 ## 1.6.4 Paradigma de aplicaciones colaborativas
@@ -177,7 +179,7 @@ Si dos personas escriben en la misma línea a la vez, ¿quién gana? Las aplicac
 
 **Ejemplo Real:** Google Docs, Trello, Slack, Pizarras de Zoom.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250921122510.png)
+!Pasted image 20250921122510
 
 
 # 1.7 Resumen y Comparativa

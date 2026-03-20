@@ -2,8 +2,6 @@
 title: "Fuentes de Financiación de la Empresa"
 ---
 
-Escrito por Adrián Quiroga Linares.  
-
 
 >[!Nota]
 > Lo importante de este tema es saber teoría, el tema 8 ya me dió mucha pereza mirarlo
@@ -194,5 +192,4 @@ Pero hay **comisiones** incluso por el dinero no utilizado (comisión de disponi
     - Intereses aplicados
     - Comisiones (apertura, disponibilidad, gestión, etc.)
     - Penalizaciones por impagos
-
 

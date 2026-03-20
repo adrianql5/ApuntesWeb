@@ -2,8 +2,6 @@
 title: "Introducción a la actividad económica y empresarial"
 ---
 
-Escrito por Adrián Quiroga Linares. [adrianql5](https://github.com/adrianql5)
-
 >[!Nota]
 > Lo importante de este tema no es nada concreto, solo hace preguntas tipo test en el final
 
@@ -18,15 +16,15 @@ Escrito por Adrián Quiroga Linares. [adrianql5](https://github.com/adrianql5)
 
 **Ley de la Oferta:** un aumento en el precio tiende a aumentar la oferta (*ya que cuento mayor sea el precio de un producto más comerciantes lo querrán vender debido al beneficio que les supone*) y un descenso del precio tiene a disminuirla. La gráfica suele ser una curva.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/archivos/imagenes/Pasted%20image%2020250210193715.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/archivos/imagenes/Pasted%20image%2020250210193823.png)
+!Pasted image 20250210193715
+!Pasted image 20250210193823
 
 **Ley de la Demanda:** un aumento en el precio tiende a disminuir la demanda (*ya que menos consumidores estarán dispuesto a comprar el producto por un valor alto*), mientras que un descenso en el precio la aumenta.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/archivos/imagenes/Pasted%20image%2020250210193957.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/archivos/imagenes/Pasted%20image%2020250210194019.png)
+!Pasted image 20250210193957
+!Pasted image 20250210194019
 
 El precio tiene al nivel en el que la oferta es igual que la demanda. Este punto de equilibrio no es estático, se mueve conforme a desplazamientos como los anteriormente mencionados.
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/xefe/archivos/imagenes/Pasted%20image%2020250210194456.png)
+!Pasted image 20250210194456
 
 **Empresa:** entidad que ofrece algún servicio o produce algún bien. Una empresa está compuesta por distintos factores, ya sean humanos, materiales, tecnológicos o financieros, que se combinan para alcanzar determinados objetivos. Por lo general cumplen una serie de funciones en la economía:
 - **Coordinan los factores productivos:** buscan formas de producción más eficientes, la especialización, aumentar la productividad y la necesidad de coordinar diferentes participantes, con el fin de crear valor.
@@ -104,6 +102,5 @@ Grupos de actividades y personas dedicadas a funciones específicas que depende 
 
 # 1.4 El papel de las Finanzas
 **Objetivo:** buscar la combinación óptima de elementos de la estructura económica y financiera de la empresa (*Patriminio*), para alcanzar el máximo beneficio (*Resultado*), a partir de los datos facilitados por la contabilidad. 
-
 
 

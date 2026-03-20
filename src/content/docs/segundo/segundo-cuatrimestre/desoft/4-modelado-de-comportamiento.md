@@ -2,8 +2,6 @@
 title: "Modelado de Comportamiento"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 (*diagramas de interacción*)
 
 Una **interacción** es un comportamiento que incluye **mensajes** intercambiados por un conjunto de objetos dentro de un **contexto** para lograr un propósito. 
@@ -17,7 +15,7 @@ Un **mensaje** es una trasmisión de información entre objetos para desencadena
 - **Creación**
 - **Destrucción**
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250323161253.png)
+!Pasted image 20250323161253
 
 Las interacciones sirven para modelar **flujo de control** en un sistema o subsistema. La implementación de una operación, o una clase o componente. Los objetos pueden ser **concretos** o **prototípicos**.
 
@@ -31,9 +29,8 @@ Los **diagramas de secuencia** tienen una **linea de vida** que representa la ex
 
 Una **iteración** indica la repetición de un mensaje, y una **bifurcación** representa un mensaje cuya ejecución depende de la evaluación de una condición.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250323162659.png)
+!Pasted image 20250323162659
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250323162914.png)
+!Pasted image 20250323162914
 
 Los diagramas de interacción pueden modelar **colaboraciones** y **escenarios** dentro de una caso de uso. Los **diagramas de secuencia** modelan escenarios o visualizan iteraciones y bifurcaciones sencillas; los de **colaboración** son preferibles para iteraciones y bifurcaciones complejas.
-

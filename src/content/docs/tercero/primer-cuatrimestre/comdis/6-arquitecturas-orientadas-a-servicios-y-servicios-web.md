@@ -2,8 +2,6 @@
 title: "Arquitecturas Orientadas a Servicios y Servicios Web"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 >[!Nota]
 >Yo este tema no se para que lo damos, a día de hoy tengo entendido que se usa REST con JSON en vez de SOAP con XML. Creo que estaban mirando de cambiar el contenido de la asignatura así que no tengo claro que el tipo vaya a cambiar el examen y preguntar algo de esto. Pero más vale prevenir que curar.
 
@@ -50,7 +48,7 @@ La arquitectura se basa en tres actores y cuatro estándares fundamentales:
 4. **Generación (Consumer):** Con el WSDL, el consumidor genera automáticamente los **Stubs/Proxies** (clases locales para comunicar).
 5. **Invocación (Consumer $\to$ Provider):** Se lanza la petición encapsulada en **SOAP** a través de **HTTP**.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212155730.png)
+!Pasted image 20251212155730
 
 
 Gracias al uso de **XML**, se pueden integrar aplicaciones dispares:

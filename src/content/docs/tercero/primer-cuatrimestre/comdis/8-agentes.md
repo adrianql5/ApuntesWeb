@@ -2,8 +2,6 @@
 title: "Agentes"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 >[!Nota]
 >La cantidad de relleno que hay en este tema es histórico y mira que intenté quitar la mayor cantidad de mierda posible.
 
@@ -164,18 +162,21 @@ Es la sintaxis. Define la estructura del mensaje para que sea comprensible.
 - **Estándares:** **FIPA-ACL** (el más usado) o KQML.
 - **Requisito clave:** Debe ser formal y tener una semántica bien definida.
 
-> [!Info]
-> Un **estándar** es simplemente un **conjunto de reglas acordadas** que todo el mundo decide seguir para que cosas diferentes puedan funcionar juntas. 
-> 
-> Por ejemplo los enchufes de las paredes, en Europa todos acordaron usar dos clavijas redondas. Eso es un estándar. Si cada fabricante de neveras hiciese un enchufe diferente sería un puto caos.
-> En agentes necesitas estándares para que un agente programado en Java por una empresa en España pueda hablar con un agente programado en Python por una empresa en Japón.
+:::note
+Un **estándar** es simplemente un **conjunto de reglas acordadas** que todo el mundo decide seguir para que cosas diferentes puedan funcionar juntas. 
 
->[!Info]
->**FIPA (Foundation for Intelligent Physical Agents)** es la organización que **escribe** esos estándares.
->Es como la **FIFA** en fútbol, no juega los partidos, pero escribe el reglamento. La **FIPA** dice: "así es como debe hablar una gente para que el resto del mundo lo entienda".
+Por ejemplo los enchufes de las paredes, en Europa todos acordaron usar dos clavijas redondas. Eso es un estándar. Si cada fabricante de neveras hiciese un enchufe diferente sería un puto caos.
+En agentes necesitas estándares para que un agente programado en Java por una empresa en España pueda hablar con un agente programado en Python por una empresa en Japón.
+:::
 
-> [!Info]
-> **ACL (Agent Communication Language)** es el lenguaje estándar que inventó FIPA. Pero no se refiere al idioma, sino a la **estructura del mensaje**. Piensa en un **formulario oficial** o en el **sobre de una carta**. ACL define los campos obligatorios para que el mensaje sea válido, independientemente de lo que quieras decir.
+:::note
+**FIPA (Foundation for Intelligent Physical Agents)** es la organización que **escribe** esos estándares.
+Es como la **FIFA** en fútbol, no juega los partidos, pero escribe el reglamento. La **FIPA** dice: "así es como debe hablar una gente para que el resto del mundo lo entienda".
+:::
+
+:::note
+**ACL (Agent Communication Language)** es el lenguaje estándar que inventó FIPA. Pero no se refiere al idioma, sino a la **estructura del mensaje**. Piensa en un **formulario oficial** o en el **sobre de una carta**. ACL define los campos obligatorios para que el mensaje sea válido, independientemente de lo que quieras decir.
+:::
 
 ### Nivel 3: Ontologías (El Vocabulario)
 Los agentes no tienen "sentido común". Si el Agente A le pide al Agente B: _"Tráeme un gato"_, hay un problema grave de ambigüedad.
@@ -239,7 +240,7 @@ Los protocolos definen el "baile" de mensajes entre agentes. Un protocolo es el 
 - **FIPA-English-Auction:** Subasta clásica (hacia arriba). El subastador sube el precio hasta que nadie más puje.
 - **FIPA-Dutch-Auction:** Subasta holandesa (hacia abajo). Empieza muy alto y baja hasta que alguien dice "mío".
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251230104116.png)
+!Pasted image 20251230104116
 
 **INFORM:** Es el acto más básico.
 - **Qué significa:** "Te cuento esto que sé y asumo que es verdad".
@@ -262,9 +263,9 @@ Los protocolos definen el "baile" de mensajes entre agentes. Un protocolo es el 
 - **Qué significa:** Has recibido la oferta, pero no te interesa (porque es cara, porque ya elegiste a otro, etc.).
 - **Ejemplo:** _"30 euros es muy caro, paso de ti"_.
 
->[!Danger]
-> Se dice que el profesor tiene este protocolo tatuado en la espalda y que incluso ha llamado a sus hijos FIPA e English Auction. Si no lo usas en sus prácticas se calienta una burrada, a pesar de que haya sido creado por un medico holandés en el 1836 y sea la mierda más ineficiente nunca jamás creada.
->
+:::danger
+Se dice que el profesor tiene este protocolo tatuado en la espalda y que incluso ha llamado a sus hijos FIPA e English Auction. Si no lo usas en sus prácticas se calienta una burrada, a pesar de que haya sido creado por un medico holandés en el 1836 y sea la mierda más ineficiente nunca jamás creada.
+:::
 
 ### C. Protocolos de Intermediación
 Cuando no sabes quién puede hacer el trabajo, usas un intermediario.
@@ -276,8 +277,9 @@ Cuando no sabes quién puede hacer el trabajo, usas un intermediario.
 ## 8.7.1 ¿Qué es y para que sirve?
 JADE es un **framework** de código abierto que facilita la creación de sistemas distribuidos multiagente.
 
->[!Info]
-> Es un **esqueleto de software** o estructura base que proporciona el código necesario para las tareas comunes y repetitivas (como la comunicación, seguridad o gestión de errores). A diferencia de una simple librería (donde tú llamas al código), el framework **te impone unas reglas** y una forma de trabajar, encargándose él de "llamar" a tu código cuando es necesario. Su objetivo es que el programador no empiece desde cero y se centre solo en la lógica específica de su problema. JADE te da la "casa" (el sistema de mensajería, el ciclo de vida, la conexión entre ordenadores). Tú solo pones los "muebles" (la inteligencia del agente y sus decisiones).
+:::note
+Es un **esqueleto de software** o estructura base que proporciona el código necesario para las tareas comunes y repetitivas (como la comunicación, seguridad o gestión de errores). A diferencia de una simple librería (donde tú llamas al código), el framework **te impone unas reglas** y una forma de trabajar, encargándose él de "llamar" a tu código cuando es necesario. Su objetivo es que el programador no empiece desde cero y se centre solo en la lógica específica de su problema. JADE te da la "casa" (el sistema de mensajería, el ciclo de vida, la conexión entre ordenadores). Tú solo pones los "muebles" (la inteligencia del agente y sus decisiones).
+:::
 
 Piensa en JADE como el **Sistema Operativo** de los agentes. En lugar de tener que programar desde cero cómo se envían los bytes por la red o cómo se encuentra dos programas, JADE te da esa infraestructura hecha para que tú solo te preocupes de la inteligencia del agente.
 
@@ -287,7 +289,7 @@ Piensa en JADE como el **Sistema Operativo** de los agentes. En lugar de tener q
 
 ## 8.7.2 La Arquitectura JADE (El "Mundo")
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251209183923.png)
+!Pasted image 20251209183923
 
 Imagina una **Universidad (La Plataforma)**. Una universidad no es un solo edificio. Es una institución formada por varios edificios repartidos por la ciudad (Campus Norte, Campus Sur, Rectorado).
 
@@ -301,12 +303,13 @@ Imagina una **Universidad (La Plataforma)**. Una universidad no es un solo edifi
 
 **Comando para lanzar JADE:** `java jade.Boot -gui` (Arranca el Main Container y la interfaz gráfica).
 
->[!Info]
-> Java inventó una "máquina virtual". Es un programa que instalas en tu ordenador y actúa como un **traductor en tiempo real**.
->- Tú escribes código Java (JADE).
->- La JVM lee ese código y se lo traduce a TU ordenador específico.
->
-> Cuando decimos "Un contenedor JADE corre sobre una JVM", significa que para arrancar JADE, necesitas tener instalado Java y ejecutar el proceso. **1 Contenedor = 1 Proceso de Java abierto en tu ordenador.**
+:::note
+Java inventó una "máquina virtual". Es un programa que instalas en tu ordenador y actúa como un **traductor en tiempo real**.
+- Tú escribes código Java (JADE).
+- La JVM lee ese código y se lo traduce a TU ordenador específico.
+
+Cuando decimos "Un contenedor JADE corre sobre una JVM", significa que para arrancar JADE, necesitas tener instalado Java y ejecutar el proceso. **1 Contenedor = 1 Proceso de Java abierto en tu ordenador.**
+:::
 
 Además tenemos otros agentes disponibles:
 - **RMA (Remote Management Agent):** Es la consola principal (la ventana que se abre al inicio). Controla la plataforma, mata agentes, lanza otros agentes y monitoriza contenedores remotos.
@@ -321,7 +324,7 @@ Además tenemos otros agentes disponibles:
 ## 8.7.3 Programación de un Agente
 Un agente es un componente activo con un nombre único y un **AID** (Agent ID)
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251209184001.png)
+!Pasted image 20251209184001
 
 **El ciclo de vida de un agente es el siguiente:**
 - **Nacimiento (`setup`):** se ejecuta una sola vez al arrancar. Aquí inicializas variables y, lo más importante, **añades los primeros comportamientos** (`addBehaviorur`)  a la "piscina" de tareas.
@@ -402,17 +405,16 @@ if (msg != null) {
 - **Peligro:** Como congela el único hilo del agente, **nunca lo uses dentro de un Behaviour**. Úsalo solo en `setup()` o en hilos separados.
 
 
->[!Info] JADE: Diferencia entre `block()` y `blockingReceive()`
->
->**1. `myBehaviour.block()` (Enfoque Colaborativo)**
->- **Mecanismo:** Es un bloqueo **lógico**. Marca el comportamiento como "en espera" y devuelve el control al planificador del agente.  
->- **El Hilo (Thread):** **No se detiene.** El agente aprovecha para ejecutar otros comportamientos concurrentes.  
->- **Despertador:** El comportamiento se reactiva automáticamente cuando llega un **nuevo mensaje** a la cola del agente.
->- **Uso:** Es la forma correcta de esperar mensajes dentro del método `action()`.
-  >
->**2. `myAgent.blockingReceive()` (Enfoque Bloqueante)**
->- **Mecanismo:** Es una llamada **síncrona**.  
->- **El Hilo (Thread):** **Se bloquea físicamente.** Detiene por completo el flujo de ejecución del hilo Java del agente.  
->- **Consecuencia:** El agente se "congela" totalmente. Ningún otro comportamiento puede ejecutarse hasta que llegue el mensaje esperado.  
->- **Uso:** Evitar en comportamientos cíclicos. Útil solo en la inicialización (`setup()`) o fases lineales estrictas.
+:::note[JADE: Diferencia entre `block()` y `blockingReceive()`]
+**1. `myBehaviour.block()` (Enfoque Colaborativo)**
+- **Mecanismo:** Es un bloqueo **lógico**. Marca el comportamiento como "en espera" y devuelve el control al planificador del agente.  
+- **El Hilo (Thread):** **No se detiene.** El agente aprovecha para ejecutar otros comportamientos concurrentes.  
+- **Despertador:** El comportamiento se reactiva automáticamente cuando llega un **nuevo mensaje** a la cola del agente.
+- **Uso:** Es la forma correcta de esperar mensajes dentro del método `action()`.
 
+**2. `myAgent.blockingReceive()` (Enfoque Bloqueante)**
+- **Mecanismo:** Es una llamada **síncrona**.  
+- **El Hilo (Thread):** **Se bloquea físicamente.** Detiene por completo el flujo de ejecución del hilo Java del agente.  
+- **Consecuencia:** El agente se "congela" totalmente. Ningún otro comportamiento puede ejecutarse hasta que llegue el mensaje esperado.  
+- **Uso:** Evitar en comportamientos cíclicos. Útil solo en la inicialización (`setup()`) o fases lineales estrictas.
+:::

@@ -2,8 +2,6 @@
 title: "Protips para el Final"
 ---
 
-Copyright (c) 2025 Adrián Quiroga Linares Lectura y referencia permitidas; reutilización y plagio prohibidos
-
 # Conceptos Clave de Teoría
 
 ## Encapsulación
@@ -73,7 +71,7 @@ public class Main{
 ```
 
 **Recorrerlo Usando Iterator**
-```java
+```Java
 public class Main{
 	private HashMap<Integer, String> mapa;
 	
@@ -135,7 +133,7 @@ public abstract class Vehiculo {
 }
 ```
 
-```java
+```Java
 public class Coche extends Vehiculo {
     private boolean desembrague;
 
@@ -174,7 +172,7 @@ public class Coche extends Vehiculo {
 }
 ```
 
-```java
+```Java
 public class Moto extends Vehiculo {
     private boolean anchoDeManubrio;
 
@@ -217,7 +215,7 @@ public class Moto extends Vehiculo {
 }
 ```
 
-```java
+```Java
 public class Main {
     public static void main(String[] args) {
         Vehiculo V1 = new Coche("Toyota", 20000, true);//Upcasting
@@ -235,7 +233,7 @@ public class Main {
 ```
 
 # Excepciones
-```java
+```Java
 // Clase de excepción personalizada 
 public class VehiculoException extends Exception { 
 	public VehiculoException(String mensaje) { 
@@ -250,7 +248,7 @@ public class VehiculoException extends Exception {
 ```
 
 En vehiculo: 
-```java
+```Java
 public Vehiculo(String nombre, int valor) throws VehiculoException { 
 	if (valor < 0) { 
 		throw new VehiculoException("El valor del vehículo no puede ser negativo."); 
@@ -267,7 +265,7 @@ public void setValor(int valor) throws VehiculoException {
 }
 ```
 
-```java
+```Java
 // Clase principal para demostrar manejo de excepciones 
 public class Main { public static void main(String[] args) { 
 	try { 

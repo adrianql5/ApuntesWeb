@@ -6,7 +6,7 @@ title: "Análisis Sintáctico"
 El **análisis sintáctico** es la segunda fase del proceso de compilación. Su función es comprobar que la secuencia de componentes léxicos producida por el analizador léxico tiene una **estructura válida** según la gramática del lenguaje. El analizador sintáctico construye además una representación interna en forma de **árbol sintáctico**.
 
 El flujo general es:
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260219111312.png)
+!Pasted image 20260219111312
 
 La idea clave es esta:
 - el **léxico** reconoce palabras o tokens;    
@@ -16,10 +16,10 @@ La idea clave es esta:
 Una gramática independiente del contexto se define como una 4-tupla::
 $$G=(NT,T,P,S)$$
 
-- $NT$ (o $V$): Variables no terminales (Mayúsculas, ej: $A, B$).
-- $T$: Terminales (minúsculas, ej: $a,b$).
-- $P$: Producciones (Reglas $Izquierda→Derecha$).
-- $S$: Axioma inicial.
+- $NT$ (o $V$): Variables no terminales (Mayúsculas, ej: $A, B$).
+- $T$: Terminales (minúsculas, ej: $a,b$).
+- $P$: Producciones (Reglas $Izquierda→Derecha$).
+- $S$: Axioma inicial.
 
 La máquina teórica adecuada para reconocer lenguajes independientes del contexto es el **autómata a pila**. Además, en este tema se introduce el símbolo **`$`** para indicar fin de cadena.
 
@@ -37,7 +37,7 @@ Construyen el árbol **de abajo hacia arriba**, desde las hojas hasta la raíz. 
 - reducirlos al no terminal correspondiente.
 
 Con la gramática:
-$$id→letra∣id letra∣id digito$$
+$$id→letra∣id letra∣id digito$$
 $$letra→a∣b∣⋯∣z$$
 $$digito→0∣1∣⋯∣9$$
 la cadena `st2` puede analizarse:
@@ -53,7 +53,7 @@ id
 ⇒ s t 2
 ``` 
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/Pasted%20image%2020260219112200.png%7C310)
+!310
 
 
 Descendente:
@@ -66,7 +66,7 @@ st2
 ⇐ id
 ```
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/Pasted%20image%2020260219112656.png%7C313)
+!313
 
 
 ## 3.1.3 Notación BNF y BNF extendida
@@ -104,7 +104,7 @@ La recursividad permite describir un número infinito de construcciones con un n
 $$A⇒^+αAβ$$
 Los lenguajes de programación permiten crear programas arbitrariamente largos. Sin recursividad habría que escribir infinitas reglas.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260219114725.png)
+!Pasted image 20260219114725
 
 Esto permite bloques con una o varias sentencias.
 
@@ -125,10 +125,10 @@ Una gramática es **ambigua** si existe al menos una cadena que puede obtenerse 
 Con esta gramática, `id+id*id` puede derivarse de dos maneras distintas. Una interpretación agrupa antes la suma y otra antes la multiplicación.
 
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/Pasted%20image%2020260219115009.png%7C673x402)
+!673x402
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260219115040.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260219115055.png)
+!Pasted image 20260219115040
+!Pasted image 20260219115055
 
 
 ## 3.2.3 Factorización por la izquierda
@@ -150,11 +150,11 @@ Después:
 
 Si tenemos:
 
-$$A→αβ_1∣αβ_2∣⋯∣αβn_∣γ$$
+$$A→αβ_1​∣αβ_2​∣⋯∣αβn_​∣γ$$
 
 se transforma en:
 $$A→αA′∣γ$$
-$$A′→β_1∣β_2∣⋯∣β_n$$
+$$A′→β_1​∣β_2​∣⋯∣β_n​$$
 rve para facilitar el análisis descendente predictivo y evitar indecisiones tempranas.
 
 
@@ -173,7 +173,7 @@ Se evalúa de izquierda a derecha.
 a + b + c ≡ (a + b) + c
 ```
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260222171115.png)
+!Pasted image 20260222171115
 
 Un operador asociativo por la **derecha** se modela con **recursividad por la derecha**:
 ```
@@ -196,7 +196,7 @@ Además, un operador tiene **menor precedencia** cuanto más cerca esté su regl
 
 **Ejemplo:** Deseamos una gramática asociativa por la izquierda, con la suma y la resta con precedencia 1, la multiplicación y la división con precedencia 2, la potenciación con precedencia 3 asociativa por la derecha, y el paréntesis con precedencia máxima.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260222171255.png)
+!Pasted image 20260222171255
 
 
 # 3.3 Análisis sintáctico descendente
@@ -213,7 +213,7 @@ En su versión más simple puede haber:
 
 
 Para gestionar este proceso utilizamos una pila, donde almacenamos los símbolos de cada sustitución. Intentaremos emparejar el símbolo que hay en la cima de la pila con la entrada actual.
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260222173839.png)
+!Pasted image 20260222173839
 
 **Problemas del retroceso:**
 Los métodos con backtracking no suelen ser recomendables porque:
@@ -229,23 +229,23 @@ Por eso interesan los analizadores **predictivos**, que no retroceden.
 La recursividad por la izquierda es muy peligrosa en análisis descendente porque puede producir un bucle infinito.
 
 Si una gramática tiene:
-$$A→Aα1∣Aα_2∣⋯∣Aα_n∣β_1∣β_2∣⋯∣β_m$$
+$$A→Aα1​∣Aα_2​∣⋯∣Aα_n​∣β_1​∣β_2​∣⋯∣β_m​$$
 se transforma en:
-$$A→β_1A′∣β_2A′∣⋯∣βm_A′$$
-$$A′→α_1A′∣α_2A′∣⋯∣α_nA′∣ε$$
+$$A→β_1​A′∣β_2​A′∣⋯∣βm_​A′$$
+$$A′→α_1​A′∣α_2​A′∣⋯∣α_n​A′∣ε$$
 
 
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260222174038.png)
+!Pasted image 20260222174038
 
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260222174248.png)
+!Pasted image 20260222174248
 
 El método anterior elimina la recursividad inmediata, esto es, en la misma derivación. Si la recursividad aparece en derivaciones posteriores debemos encontrar el elemento conflictivo y sustituirlo por su definición.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/image.png%7C651%7C676x111)
+!676x111
 Existe recursividad por la izquierda en la aplicación de las reglas de sustitución$S → Aa$ y $A → Sd$. Sustituimos $Sd → Aad | bd$. Y aplicamos el método anterior:
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/image-1.png%7C676x82)
+!676x82
 
 
 
@@ -270,8 +270,8 @@ Las gramáticas LL(1) son muy útiles porque permiten analizadores:
 - fáciles de implementar a mano.
 
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-2.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-3.png)
+!image-2
+!image-3
 
 ## 3.3.3 Conjuntos de predicción
 Estos conjuntos permiten decidir qué producción usar en un analizador predictivo.
@@ -330,7 +330,7 @@ se tiene:
 - Si `β` puede derivar a `ε`, entonces se añade `SIGUIENTES(B)` a `SIGUIENTES(A)`.
 - Si `A` aparece al final en `B → αA`, se añade `SIGUIENTES(B)` a `SIGUIENTES(A)`.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-6.png)
+!image-6
 Para la gramática anterior:
 - `SIGUIENTES(<expresion>) = {), $}`
 - `SIGUIENTES(<expresion’>) = {), $}`
@@ -349,6 +349,6 @@ Para cada producción `A → α`:
 - si `ε ∈ PRIMEROS(α)`, entonces para cada `b ∈ SIGUIENTES(A)` se mete `A → α` en `T[A,b]`.
 
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-7.png)
+!image-7
 
 - si `a ∈ PRIMEROS(α)`, se mete `A → α` en `T[A,a]`;

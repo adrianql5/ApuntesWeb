@@ -2,8 +2,6 @@
 title: "Búsqueda en Espacio de Estados"
 ---
 
-Escrito por Adrián Quiroga Linares.
-
 # 2.1 Conceptos Principales
 Para resolver problemas en IA, formalizamos el mundo como un conjunto de estados y transiciones.
 
@@ -21,10 +19,11 @@ $$f(n) = g(n) + h(n)$$
 - $g(n)$: Lo que ya has recorrido (costo real desde el inicio hasta $n$)
 - $h(n)$: Lo que te falta (estimación heurística desde $n$ hasta la meta)
 
->[!Info]
->**Tipos de grafos generados en los procesos de búsqueda:**
->- **Implícito:** Es la **representación teórica** o virtual del espacio de estados completo. Se define únicamente mediante el **estado inicial** y los **operadores** (reglas de transición), ya que sus nodos se generan dinámicamente bajo demanda y no se almacenan en memoria debido a su tamaño potencialmente infinito.
->- **Explícito:** Es el **subgrafo real** que el algoritmo de búsqueda ha generado y **almacenado en la memoria** del ordenador durante su ejecución. Está formado por los nodos que han sido visitados o expandidos (listas ABIERTA y CERRADA) en el intento de encontrar la solución.
+:::note
+**Tipos de grafos generados en los procesos de búsqueda:**
+- **Implícito:** Es la **representación teórica** o virtual del espacio de estados completo. Se define únicamente mediante el **estado inicial** y los **operadores** (reglas de transición), ya que sus nodos se generan dinámicamente bajo demanda y no se almacenan en memoria debido a su tamaño potencialmente infinito.
+- **Explícito:** Es el **subgrafo real** que el algoritmo de búsqueda ha generado y **almacenado en la memoria** del ordenador durante su ejecución. Está formado por los nodos que han sido visitados o expandidos (listas ABIERTA y CERRADA) en el intento de encontrar la solución.
+:::
 
 # 2.2 Estrategias de Búsqueda:  Paso a Paso
 Las estrategias se dividen en **Ciegas** (sin información del dominio) y **Heurísticas** (con información/estimaciones).
@@ -48,7 +47,7 @@ Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles solu
 - **m:** profundidad máxima
 - **l:** límite de profundidad
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111102954.png)
+!Pasted image 20260111102954
 
 ### Búsqueda en Amplitud (Breadth-First Search - BFS)
 **Funcionamiento**: Explora nivel por nivel. Primero visita el nodo raíz, luego todos sus hijos, luego los nietos, etc.
@@ -60,7 +59,7 @@ Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles solu
 - **Óptima**: Sí, pero solo si el costo de los operadores es uniforme
 - **Problema**: Consume muchísima memoria ($O(r^p)$) porque guarda todos los nodos del nivel actual
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111113547.png)
+!Pasted image 20260111113547
 
 ### Búsqueda en Profundidad (Depth-First Search - DFS)
 **Funcionamiento**: Explora una rama hasta el final antes de retroceder.  Si llega a un punto muerto, vuelve atrás. 
@@ -72,7 +71,7 @@ Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles solu
 - **Óptima**: No (puede encontrar una solución muy profunda antes que una corta)
 - **Ventaja**: Muy eficiente en memoria ($O(r \cdot m)$), solo guarda la rama actual
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111113603.png)
+!Pasted image 20260111113603
 
 ### Otras Búsquedas
 - **En profundidad limitada.** Se establece un límite máximo de profundidad para la exploración. Evita ciclos infinitos, pero puede perder soluciones si el límite es bajo.
@@ -129,7 +128,7 @@ Es el ejemplo clásico de estrategia irrevocable. Busca la cima de la montaña d
 
 - **Riesgo**: Como no guarda la historia ni alternativas, puede quedarse atrapado en **máximos locales** (una pequeña colina que parece la cima pero no lo es) o **mesetas** (donde todos los pasos son iguales y no sabe a dónde ir).
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111103721.png)
+!Pasted image 20260111103721
 
 
 ### Algoritmo A* (A-Estrella)
@@ -143,17 +142,18 @@ La más completa es la estrategia estrella porque equilibra la precaución con l
 
 - **Propiedad Clave**: Si la heurística es **admisible** (nunca es pesimista, es decir, $h(n) \leq$ coste real), A* garantiza encontrar la solución **óptima** (la más barata/corta) y es **completa** (siempre encuentra solución, sea admisible o no la heurística).
 
-> [!Info]
-> Una heurística admisible u optimista: siempre suponer casos en los que la realidad será peor que la estimación.
-> 
-> **Si eres Pesimista (h > coste real):** Imagina que hay un atajo secreto que tarda 15 minutos. Pero tu heurística es pesimista y le dice al algoritmo: "Por ese callejón vas a tardar 1 hora".
->- **Consecuencia:** El algoritmo se asusta, ve un coste altísimo y **no explora ese camino**.
->- **Resultado:** Pierdes la oportunidad de encontrar el mejor camino (la solución óptima) porque tu estimación te engañó diciendo que era malo.
->
->**Si eres Optimista (h <= coste real):** Tu heurística le dice al algoritmo: "Por ese callejón parece que tardas solo 5 minutos".
->- **Consecuencia:** Como parece un camino barato, el algoritmo **lo explora**.  
->- **Resultado:** Al entrar, se da cuenta de que en realidad son 15 minutos (la realidad es peor que la estimación, como dice tu nota), pero **al menos lo exploró**.  
-   > - A* prefiere equivocarse pensando que un camino es "demasiado bueno" (porque así lo comprueba) que equivocarse pensando que es "demasiado malo" (porque entonces lo ignora y podría ser la solución).
+:::note
+Una heurística admisible u optimista: siempre suponer casos en los que la realidad será peor que la estimación.
+
+**Si eres Pesimista (h > coste real):** Imagina que hay un atajo secreto que tarda 15 minutos. Pero tu heurística es pesimista y le dice al algoritmo: "Por ese callejón vas a tardar 1 hora".
+- **Consecuencia:** El algoritmo se asusta, ve un coste altísimo y **no explora ese camino**.
+- **Resultado:** Pierdes la oportunidad de encontrar el mejor camino (la solución óptima) porque tu estimación te engañó diciendo que era malo.
+
+**Si eres Optimista (h <= coste real):** Tu heurística le dice al algoritmo: "Por ese callejón parece que tardas solo 5 minutos".
+- **Consecuencia:** Como parece un camino barato, el algoritmo **lo explora**.  
+- **Resultado:** Al entrar, se da cuenta de que en realidad son 15 minutos (la realidad es peor que la estimación, como dice tu nota), pero **al menos lo exploró**.  
+- A* prefiere equivocarse pensando que un camino es "demasiado bueno" (porque así lo comprueba) que equivocarse pensando que es "demasiado malo" (porque entonces lo ignora y podría ser la solución).
+:::
 
 
 En el caso del 8-puzzle se acostumbra a usar estas **heurísticas:**
@@ -173,7 +173,7 @@ En el caso del 8-puzzle se acostumbra a usar estas **heurísticas:**
 - **Cálculo:** Cuenta el número de intercambios necesarios para resolver el puzle si pudieras intercambiar el hueco con **cualquier** ficha del tablero para ponerla en su sitio de un solo movimiento.
 - Suele dar un valor entre la de Hamming y la real.
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111103757.png)
+!Pasted image 20260111103757
 
 # 2.3 Caso de Estudio Práctico: Ruta en Ciudades Gallegas
 Este caso ilustra la diferencia entre ser "miope" (Voraz) y ser "inteligente" (A*).
@@ -182,7 +182,7 @@ Este caso ilustra la diferencia entre ser "miope" (Voraz) y ser "inteligente" (A
 - $g(n)$: Distancia real por carretera (tramos negros en el mapa)
 - $h(n)$: Distancia en línea recta a Ourense (números rojos en paréntesis)
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251220193002.png)
+!Pasted image 20251220193002
 
 ### A. Ejecución Búsqueda Voraz ($f=h$)
 Solo mira la distancia recta a la meta. 
@@ -203,11 +203,11 @@ Mira el pasado ($g$) y el futuro ($h$).
 4. **Resultado**:  Encuentra la ruta óptima de 230 km pasando por Santiago y Silleda. 
 
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221164938.png)
+!Pasted image 20251221164938
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221164952.png)
+!Pasted image 20251221164952
 
-![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221165007.png)
+!Pasted image 20251221165007
 
 
 # 2.4 Destellos de calidad del Senén en clase
@@ -230,4 +230,3 @@ $$Tamaño = 99! \quad \text{(Factorial de 99)}$$
 ## 2.4.4 Búsqueda Tabú
 - **Concepto:** Es una **metaheurística de búsqueda local** diseñada para escapar de óptimos locales. Explora el entorno de la solución actual y se mueve a la mejor vecina (aunque sea peor que la actual), pero utiliza una estructura de **memoria a corto plazo** (lista tabú) para restringir la búsqueda.    
 - **Ejemplo:** Si el algoritmo decide intercambiar la ciudad A con la B para generar una nueva ruta, este movimiento se registra en la lista tabú. Durante un número determinado de iteraciones (tenencia tabú), el algoritmo tiene **prohibido** deshacer ese cambio (volver a intercambiar B con A), forzando así la exploración de nuevas zonas del espacio de búsqueda en lugar de entrar en ciclos repetitivos
-

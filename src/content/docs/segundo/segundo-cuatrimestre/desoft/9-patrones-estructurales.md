@@ -2,16 +2,14 @@
 title: "Patrones Estructurales"
 ---
 
-Escrito por Adrián Quiroga Linares. 
-
 # 9.1 Patrón Composite
 Organiza objetos en **estructura de árbol** para representar jerarquías. Permite tratar de manera **uniforme** a **individuos** y **grupos**. Se usa para:
 -  Representar jerarquías de objetos **parte-todo**.
 - Obviar diferencias entre los **individuos** y sus **composiciones**.
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423162658.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423162707.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423162718.png)
+!Pasted image 20250423162658
+!Pasted image 20250423162707
+!Pasted image 20250423162718
 
 ## Participantes
 
@@ -23,7 +21,7 @@ Organiza objetos en **estructura de árbol** para representar jerarquías. Permi
 | **Cliente**    | Usa objetos a través de la interfaz del componente, sin preocuparse si es hoja o compuesto.                          |
 
 ## Estructura
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423144129.png)
+!Pasted image 20250423144129
 ## Ventajas e Inconvenientes
 - Permite **composición recursiva**, es decir, compuestos dentro de compuestos.
 - Simplifica el código del cliente al unificar el tratamiento de todos los elementos.
@@ -37,8 +35,8 @@ Asigna/retira **responsabilidades adicionales** a un objeto particular **dinámi
 - Otorgar o revocar responsabilidades a objetos individuales de manera dinámica y transparente.
 - Cuando no es viable la extensión mediante herencia
 
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423163052.png)
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423163104.png)
+!Pasted image 20250423163052
+!Pasted image 20250423163104
 
 ## Participantes
 
@@ -49,7 +47,7 @@ Asigna/retira **responsabilidades adicionales** a un objeto particular **dinámi
 | **Decorador**          | Clase abstracta que implementa la interfaz y contiene una referencia a un componente. |
 | **DecoradorConcreto**  | Añade funcionalidades específicas al componente envolviendo su comportamiento.        |
 ## Estructura
-![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423144302.png)
+!Pasted image 20250423144302
 
 ## Ventajas e Inconvenientes
 - Mucho más **flexible que la herencia**: puedes combinar decoradores fácilmente.

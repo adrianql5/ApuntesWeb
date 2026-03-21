@@ -960,11 +960,17 @@ select,
 		order: 2;
 		width: var(--app-sidebar-width) !important;
 		max-width: var(--app-sidebar-width);
+		position: relative;
 	}
 
 	.right-sidebar {
 		width: var(--app-sidebar-width) !important;
+		position: fixed !important;
+		top: var(--sl-nav-height);
 		inset-inline-end: 0;
+		height: calc(100vh - var(--sl-nav-height));
+		overflow-y: auto;
+		scrollbar-width: thin;
 		padding-inline: 0;
 	}
 

@@ -27,7 +27,7 @@ $$c^{(i)} := \text{índice del centroide más cercano a } x^{(i)}$$
 $$\mu_k := \text{promedio de los puntos asignados al grupo } k$$
 El algoritmo se detiene cuando los centroides ya no se mueven (convergencia).
 
-!Pasted image 20260111104603
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111104603.png)
 
 
 # 6.3 La Función de Coste (Distorsión)

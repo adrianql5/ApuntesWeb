@@ -87,7 +87,7 @@ int main() {
 - Z-BUFFER: controla la profundidad de los pixeles para manejar la superposición de objetos en la escena.
 - Alpha Test: determina si un objeto debe renderizarse en función de su transparencia
 - Blending Test.
-!Pasted image 20250430104625
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430104625.png)
 ## 2.2 Envío de Vértices
 Para generar figuras en OpenGl 3.3 se usan **Vertex Array Objet**, que almacenan toda la información del objeto a dibujar.
 Los VAOs están formados por **Vertex Buffer Objects** (VBOs), que almacenan información relativa a los vértices, colores, normales, etc.
@@ -286,8 +286,8 @@ void main() {
 ```
 
 Para utilizar los shaders en el programa: 
-!Pasted image 20250430110504
-!Pasted image 20250430110514
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430110504.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430110514.png)
 # 3 Transformaciones
 En opengl las transformaciones geométricas se aplican en el VS, multiplicando la matriz de transformación por el vértice y devolviendo la nueva posición. La matriz de transformación se calcula en el `main` usando la biblioteca **GLM** (OpenGl Mathematics).
 
@@ -298,9 +298,9 @@ En opengl las transformaciones geométricas se aplican en el VS, multiplicando l
 - `glm::scale(transofrm, glm::vec4(S_x,S_y,S_z)`: escalado
 
 La matriz se envía al VS usando una variable de tipo `uniform`
-!Pasted image 20250430111741
-!Pasted image 20250430111754
-!Pasted image 20250430111806
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430111741.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430111754.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430111806.png)
 
 Para evitar andar usando el glm::nombrefunc, vamos a tirar de `C++` y le chantamos en la primera línea del programa: 
 ``` C++
@@ -331,21 +331,21 @@ $$\begin{bmatrix} \frac{1}{\text{Aspect} \cdot \tan(fovy/2)} & 0 & 0 & 0 \\ 0 & 
 
 
 Las matices se envían al VS usando una variable de tipo **uniform**.
-!Pasted image 20250430112924
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430112924.png)
 
 Para que al **reescalar la ventana** se mantengan las **proporciones** de la imagen hay que actualizar el aspecto de la perspectiva al nuevo tamaño de la ventana: 
-!Pasted image 20250430113018
-!Pasted image 20250430113034
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430113018.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430113034.png)
 
 
 # 5 Luces
 ## 5.1 Modelo de Iluminación Básico
 El color de un objeto es fruto de **su color original multiplicado** por el **color de la luz** con la que se ilumina. 
-!Pasted image 20250430113551
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430113551.png)
 
 ## 5.2 Luz Ambiente
 $$I= I_A*K_A$$
-!Pasted image 20250430113630
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430113630.png)
 
 ## 5.3 Luz Difusa
 Necesitamos pasarle el shader:
@@ -355,13 +355,13 @@ Necesitamos pasarle el shader:
 - El punto de cálculo para ver la dirección de la luz $\vec{L}$
 
 $$I=I_l \times \cos(\theta) = I_l \times K_D \times (\vec N \cdot \vec L)$$
-!Pasted image 20250430113928
-!Pasted image 20250430114025
-!Pasted image 20250430113957
-!Pasted image 20250430114034
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430113928.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430114025.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430113957.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430114034.png)
 
 ## 5.4 Luz Especular
 $$I = I_L \times K_S \times \cos^n(𝛼) = I_L \times K_S \times (\vec R \cdot \vec V)^n$$
 Hay que pasarle al FS, además de lo ya dicho, la posición de la cámara.
 
-!Pasted image 20250430114210
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250430114210.png)

@@ -62,4 +62,4 @@ La mayoría de las empresas tienen la tendencia a suponer que los ataques vienen
 - **No repudio:** impedir que alguien niegue haber realizado una acción cuando efectivamente lo ha hecho
 - **Control de acceso:** garantizar acceso únicamente a partes autorizadas a los recursos.
 
-!700x427
+![](Pasted image 20260217140244.png|697|700x427)

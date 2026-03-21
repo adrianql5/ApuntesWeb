@@ -59,7 +59,7 @@ Para que esto funcione, el servidor RMI debe decirle al cliente "donde buscar" l
 - **Detección de falta:** Si el cliente comprueba que **no tiene** la clase del Stub en su disco duro local....
 - **Descarga automática:** ...automáticamente usa la URL que proporcionó el servidor (el `codebase`) para descargar el archivo `.class` a través de HTTP, cargarlo en memoria y usarlo.
 
-!Pasted image 20251212154537
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212154537.png)
 
 # 4.2 El Gestor de Seguridad (Security Manager)
 Al permitir `Stub Downloading`, tu programa cliente está descargando y ejecutando código de una red externa. Esto es un riesgo de seguridad enorme.
@@ -137,7 +137,7 @@ Hasta ahora, el modelo era **Pull** (Cliente pide $\rightarrow$ Servidor Respond
 ## 4.3.1 El Problema del Polling
 Sin callbacks, el cliente tendría que preguntar constantemente: "¿Ya terminó? ¿Ya terminó?". Esto se llama **Polling** y es ineficiente y satura la red.
 
-!Pasted image 20251212154348
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212154348.png)
 
 ## 4.3.2 La Solución: Callback (Llamada inversa)
 El cliente se "registra" en el servidor y espera a que el servidor le llame.
@@ -153,7 +153,7 @@ Para implementar esto, necesitamos **dos interfaces remotas** y **dos juegos de 
 **Interfaz del Cliente (CallbackInterface):** Define el método que el servidor invocará.
 - Ejemplo: `public void callMe(String msg)`.
 
-!Pasted image 20251212154409
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212154409.png)
 
 La **colocación de archivos con RMI Callback es:**
 - **Servidor:** `IntServer.class`, `ImplServer.class`, `Server.class`, `IntClient.class`, `StubClient.class`, `SkellServer.class`.

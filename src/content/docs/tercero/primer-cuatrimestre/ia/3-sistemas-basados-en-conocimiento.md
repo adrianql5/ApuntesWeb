@@ -36,7 +36,7 @@ Para que una máquina "razone", necesita separar lo que _sabe_ (conocimiento) de
 2. **Base de Hechos (BH)**: Es dinámica y específica del caso actual. Contiene los datos del problema y lo que se va descubriendo.
 3. **Motor de Inferencia**: Es el "cerebro". Aplica el conocimiento a los hechos para deducir nuevas verdades. Realiza tareas de **equiparación** (matching) y **resolución de conflictos**.
 
-!Pasted image 20251221170854
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221170854.png)
 
 | **Hechos**                                                                           | **Conocimiento**                                                                         |
 | ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
@@ -57,7 +57,7 @@ Es la forma más rigurosa de representar relaciones.
 	- **Modus Ponens:** Si la regla es cierta ($P \to Q$) y la condición ($P$) se cumple, entonces la consecuencia ($Q$) **también es cierta**.
 	- **Modus Tollens**. Si la regla es cierta ($P \to Q$), pero vemos que la consecuencia ($Q$) **NO** ha ocurrido, entonces la causa ($P$) **tampoco pudo ocurrir**.
 
-!Pasted image 20251226214639
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251226214639.png)
 
 - **Lógica de Predicados**: 
 	1. **Objetos (Constantes):** Las cosas del mundo real (ej: `Juan`, `Ana`, `Coche`).

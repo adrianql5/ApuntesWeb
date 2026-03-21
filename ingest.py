@@ -308,7 +308,7 @@ def copy_notes(project_root: Path, target: Target, image_map: Dict[str, Dict[str
             destination = docs_root / target.course / target.term / slug / relative.parent / f"{slugify(note.stem)}.md"
 
             original = note.read_text(encoding="utf-8")
-            rewritten = convert_images(clean_wikilinks(original), subject_images)
+            rewritten = clean_wikilinks(convert_images(original, subject_images))
             rewritten = convert_obsidian_callouts(rewritten)
             rewritten = add_frontmatter(rewritten, title_from_filename(note))
 

@@ -47,7 +47,7 @@ Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles solu
 - **m:** profundidad máxima
 - **l:** límite de profundidad
 
-!Pasted image 20260111102954
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111102954.png)
 
 ### Búsqueda en Amplitud (Breadth-First Search - BFS)
 **Funcionamiento**: Explora nivel por nivel. Primero visita el nodo raíz, luego todos sus hijos, luego los nietos, etc.
@@ -59,7 +59,7 @@ Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles solu
 - **Óptima**: Sí, pero solo si el costo de los operadores es uniforme
 - **Problema**: Consume muchísima memoria ($O(r^p)$) porque guarda todos los nodos del nivel actual
 
-!Pasted image 20260111113547
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111113547.png)
 
 ### Búsqueda en Profundidad (Depth-First Search - DFS)
 **Funcionamiento**: Explora una rama hasta el final antes de retroceder.  Si llega a un punto muerto, vuelve atrás. 
@@ -71,7 +71,7 @@ Las **estrategias de búsqueda a ciegas** (no informadas) exploran posibles solu
 - **Óptima**: No (puede encontrar una solución muy profunda antes que una corta)
 - **Ventaja**: Muy eficiente en memoria ($O(r \cdot m)$), solo guarda la rama actual
 
-!Pasted image 20260111113603
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111113603.png)
 
 ### Otras Búsquedas
 - **En profundidad limitada.** Se establece un límite máximo de profundidad para la exploración. Evita ciclos infinitos, pero puede perder soluciones si el límite es bajo.
@@ -128,7 +128,7 @@ Es el ejemplo clásico de estrategia irrevocable. Busca la cima de la montaña d
 
 - **Riesgo**: Como no guarda la historia ni alternativas, puede quedarse atrapado en **máximos locales** (una pequeña colina que parece la cima pero no lo es) o **mesetas** (donde todos los pasos son iguales y no sabe a dónde ir).
 
-!Pasted image 20260111103721
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111103721.png)
 
 
 ### Algoritmo A* (A-Estrella)
@@ -173,7 +173,7 @@ En el caso del 8-puzzle se acostumbra a usar estas **heurísticas:**
 - **Cálculo:** Cuenta el número de intercambios necesarios para resolver el puzle si pudieras intercambiar el hueco con **cualquier** ficha del tablero para ponerla en su sitio de un solo movimiento.
 - Suele dar un valor entre la de Hamming y la real.
 
-!Pasted image 20260111103757
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111103757.png)
 
 # 2.3 Caso de Estudio Práctico: Ruta en Ciudades Gallegas
 Este caso ilustra la diferencia entre ser "miope" (Voraz) y ser "inteligente" (A*).
@@ -182,7 +182,7 @@ Este caso ilustra la diferencia entre ser "miope" (Voraz) y ser "inteligente" (A
 - $g(n)$: Distancia real por carretera (tramos negros en el mapa)
 - $h(n)$: Distancia en línea recta a Ourense (números rojos en paréntesis)
 
-!Pasted image 20251220193002
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251220193002.png)
 
 ### A. Ejecución Búsqueda Voraz ($f=h$)
 Solo mira la distancia recta a la meta. 
@@ -203,11 +203,11 @@ Mira el pasado ($g$) y el futuro ($h$).
 4. **Resultado**:  Encuentra la ruta óptima de 230 km pasando por Santiago y Silleda. 
 
 
-!Pasted image 20251221164938
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221164938.png)
 
-!Pasted image 20251221164952
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221164952.png)
 
-!Pasted image 20251221165007
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221165007.png)
 
 
 # 2.4 Destellos de calidad del Senén en clase

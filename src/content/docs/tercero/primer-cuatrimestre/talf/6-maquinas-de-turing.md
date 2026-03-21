@@ -7,7 +7,7 @@ Una **Máquina de Turing (MT)** es un modelo matemático de computación que con
 
 A diferencia de los autómatas finitos o de pila, la MT puede mover su cabezal de lectura/escritura tanto a la izquierda como a la derecha, y puede modificar los símbolos de la cinta.
 
-!Pasted image 20251208153329
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208153329.png)
 
 ## 1. La Cinta (The Tape)
 Es la **memoria** de la máquina.
@@ -85,7 +85,7 @@ Si la cadena no pertenece al lenguaje ($w \notin L(M)$), pueden pasar dos cosas:
 |**Rec. Enumerable**|Puede parar (rechazo) **O** entrar en **BUCLE INFINITO**.|
 
 
-!Pasted image 20251208154716
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208154716.png)
 
 
 # 6.5 Protips

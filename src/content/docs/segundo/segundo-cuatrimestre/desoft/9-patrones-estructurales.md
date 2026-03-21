@@ -7,9 +7,9 @@ Organiza objetos en **estructura de árbol** para representar jerarquías. Permi
 -  Representar jerarquías de objetos **parte-todo**.
 - Obviar diferencias entre los **individuos** y sus **composiciones**.
 
-!Pasted image 20250423162658
-!Pasted image 20250423162707
-!Pasted image 20250423162718
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423162658.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423162707.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423162718.png)
 
 ## Participantes
 
@@ -21,7 +21,7 @@ Organiza objetos en **estructura de árbol** para representar jerarquías. Permi
 | **Cliente**    | Usa objetos a través de la interfaz del componente, sin preocuparse si es hoja o compuesto.                          |
 
 ## Estructura
-!Pasted image 20250423144129
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423144129.png)
 ## Ventajas e Inconvenientes
 - Permite **composición recursiva**, es decir, compuestos dentro de compuestos.
 - Simplifica el código del cliente al unificar el tratamiento de todos los elementos.
@@ -35,8 +35,8 @@ Asigna/retira **responsabilidades adicionales** a un objeto particular **dinámi
 - Otorgar o revocar responsabilidades a objetos individuales de manera dinámica y transparente.
 - Cuando no es viable la extensión mediante herencia
 
-!Pasted image 20250423163052
-!Pasted image 20250423163104
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423163052.png)
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423163104.png)
 
 ## Participantes
 
@@ -47,7 +47,7 @@ Asigna/retira **responsabilidades adicionales** a un objeto particular **dinámi
 | **Decorador**          | Clase abstracta que implementa la interfaz y contiene una referencia a un componente. |
 | **DecoradorConcreto**  | Añade funcionalidades específicas al componente envolviendo su comportamiento.        |
 ## Estructura
-!Pasted image 20250423144302
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/desoft/archivos/imagenes/Pasted%20image%2020250423144302.png)
 
 ## Ventajas e Inconvenientes
 - Mucho más **flexible que la herencia**: puedes combinar decoradores fácilmente.

@@ -299,7 +299,7 @@ Un símbolo $X$ es generador si $X ⇒*w$ . Un símbolo X es alcanzable si exist
 
 
 **Ejemplo que usa los pasos 1 y 2:**
-!Pasted image 20251208135015
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251208135015.png)
 
 
 # 4.8 Formas Normales (FNC-Chomsky)

@@ -18,7 +18,7 @@ El shell es un proceso **iterativo** que ejecuta comandos de 2 tipos:
 
 `type comando`: averigua el tipo de un comando
 
-!Pasted image 20250524125653
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/soii/archivos/imagenes/Pasted%20image%2020250524125653.png)
 
 # 5.2 Línea de comandos
 Los comandos suelen tener 3 componentes: `comando [opciones] [paŕametros]`.
@@ -73,7 +73,7 @@ Se pueden **combinar** texto y variables: ` '... $nombre ... '` (no usar "")
 - `nombre=` vaciar una variable
 - `printenv` lista las variables
 
-!Pasted image 20250524170107
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/soii/archivos/imagenes/Pasted%20image%2020250524170107.png)
 
 ## 5.2.4 Caracteres Especiales
 Son caracteres que el shell trata de forma especial:
@@ -84,7 +84,7 @@ Son caracteres que el shell trata de forma especial:
 
 ## 5.2.5 Redirección de Entrada y Salida
 Toda la E/S se realiza a través de ficheros. Cada proceso tiene asociado 3 **ficheros de E/S**:
-!Pasted image 20250524170716
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/soii/archivos/imagenes/Pasted%20image%2020250524170716.png)
 
 Podemos **redireccionar** la E/S usando:
 - `>` cambia el fichero stdout

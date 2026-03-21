@@ -5,7 +5,7 @@ title: "Transformación de MER  a MR"
 Escrito por **Adrián Quiroga Linares**.
 
 
-!Pasted image 20241003132123
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted%20image%2020241003132123.png)
 
 
 
@@ -18,11 +18,11 @@ Disjunta->no hay discriminadores binarios
 
 
 
-!Pasted image 20241003140849
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted%20image%2020241003140849.png)
 
 # Ejemplo
-!Pasted image 20241010125608
-!Pasted image 20241010125636
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted%20image%2020241010125608.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/bases-de-datos/Archivos/imagenes/Pasted%20image%2020241010125636.png)
 
 
 ---

@@ -60,7 +60,7 @@ $$z = \sum x_i w_i + b$$
 3. Activación ($\varphi$): Aquí es donde se aplica la función. El valor $z$ entra en la "caja" de la función de activación y se transforma en la salida final $y$.
 $$y = \varphi(z)$$
 
-!Pasted image 20251221180319
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221180319.png)
 
 
 # 4.3 Análisis Geométrico: ¿Qué "ve" una neurona?
@@ -74,7 +74,7 @@ $$x_1 \cdot w_1 + x_2 \cdot w_2 + b = 0$$
 
 > **Nota de estudio**: Los pesos $w$ definen la inclinación de la recta y el bias $b$ define su desplazamiento respecto al origen.
 
-!Pasted image 20251221181612
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221181612.png)
 
 
 En la parte superior ves escritas las "instrucciones" o la configuración de esta neurona específica:
@@ -135,7 +135,7 @@ Aquí es donde la IA se pone interesante.
 - **Superpoder: La Memoria.** Al tener bucles, la información "da vueltas" y persiste en el tiempo.
 - **Uso:** Son vitales para datos secuenciales (texto, audio, series temporales) porque la red recuerda lo que pasó en el instante anterior.
 
-!Pasted image 20251227152922
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251227152922.png)
 
 
 # 4.5 El Aprendizaje (Algoritmo del Perceptrón)
@@ -159,7 +159,7 @@ $$w(n+1) = w(n) + \eta \cdot [d(n) - y(n)] \cdot x(n)$$
 - Si falla, los pesos se ajustan en la dirección del error para corregirlo la próxima vez.
 - $\eta$: debe ser muy pequeño para no provocar cambios significativos en cada iteración, pero no tanto como para evitar o realentizar la convergencia.
 
-!Pasted image 20260111104420
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020260111104420.png)
 
 
 # 4.6 Limitaciones y Soluciones: El Problema XOR
@@ -196,7 +196,7 @@ Aquí es donde entran las **Redes Neuronales Multicapa**:
 1. **Capa Oculta**: Usas dos neuronas para dibujar **dos rectas distintas**. Una recta separa un grupo y la otra recta separa el otro.
 2. **Capa de Salida**: Combina la información de esas dos rectas para dar la respuesta final.
 
-!Pasted image 20251221185532
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/ia/imagenes/Pasted%20image%2020251221185532.png)
 
 **Observando la imagen de arriba:**
 **La Parte Izquierda:** Aquí vemos el espacio de entrada ($x_1$ vs $x_2$) con 4 puntos:

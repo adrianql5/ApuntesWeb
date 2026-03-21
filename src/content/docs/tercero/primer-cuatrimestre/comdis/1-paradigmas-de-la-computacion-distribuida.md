@@ -30,7 +30,7 @@ Aquí es donde todo empieza. Es el nivel de abstracción más bajo.
 
 Cuando tu navegador pide una web, por debajo está abriendo un socket y pasando mensajes. Un "problema" a tener en cuenta es que los procesos están fuertemente acoplados (ambos deben de estar activos al mismo tiempo para que se produzca la comunicación).
 
-!Pasted image 20250916092352
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250916092352.png)
 
 
 :::note
@@ -57,7 +57,7 @@ El objetivo que se persigue es proporcionar una arquitectura de red en la que se
 
 
 
-!Pasted image 20250916093514
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250916093514.png)
 
 
 ## 1.3.2 Peer-to-Peer (P2P)
@@ -69,7 +69,7 @@ El objetivo que se persigue es proporcionar una arquitectura de red en la que se
 
 Se usa en BitTorrent, Videoconferencias, Blockchain, aplicaciones de chat, etc.
 
-!Pasted image 20250916095357
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250916095357.png)
 
 :::note
 **Descentralizado** significa que **no existe un punto único de fallo ni una autoridad suprema**. En un sistema centralizado, si tiras el servidor central, nadie puede operar.
@@ -91,7 +91,7 @@ El middleware es una capa de software que actúa como intermediario entre 2 proc
 **Detalle Técnico:** 
 - Usa unos componentes llamados **Stubs**. El stub es una pieza de código falsa en tu ordenador que finge ser la función remota, su único trabajo es empaquetas los datos y enviarlos (ya lo veremos más adelante)
 
-!Pasted image 20250920212328
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250920212328.png)
 
 
 
@@ -100,7 +100,7 @@ El middleware es una capa de software que actúa como intermediario entre 2 proc
 
 **Diferencia con RPC:** En RPC llamas a funciones (acciones). En RMI, invocas a métodos de un **Objeto** que vive en otra máquina. Puedes pasar objetos enteros como argumentos.
 
-!Pasted image 20250921121400
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250921121400.png)
 
 
 ## 1.4.3 ORB (Object Request Broker)
@@ -109,7 +109,7 @@ El middleware es una capa de software que actúa como intermediario entre 2 proc
 ¿Qué pasa si quiero que un objeto escrito en C++ en Windows hable con un objeto escrito en Java en Linux? RMI (de Java) no basta. La solución es **ORB**, que es un middleware (intermediario) que redirige peticiones entre objetos heterogéneas (distintos lenguajes/plataformas). El estándar famoso el **CORBA**.
 
 
-!Pasted image 20250921121817
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250921121817.png)
 
 
 # 1.5 Desacoplamiento: Sistemas de Mensajes (MOM)
@@ -123,7 +123,7 @@ A veces no queremos respuesta inmediata. A veces queremos "dejar un recado".
 - **Espacial:** el emisor no necesita saber la dirección IP o identidad exacta del receptor, solo envía el mensaje a un buzón.
 :::
 
-!Pasted image 20250920212044
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250920212044.png)
 
 ## 1.5.1 Modelo Punto a Punto
 **Funcionamiento:** Un emisor deja un mensaje en una cola. El receptor lo recoge cuando puede. Pensadlo como el correo electrónico.
@@ -137,7 +137,7 @@ A veces no queremos respuesta inmediata. A veces queremos "dejar un recado".
 
 Por ejemplo, notificaciones de Youtube, Feeds de Twitter, Grupos de Whatsapp.
 
-!Pasted image 20251212152923
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212152923.png)
 
 # 1.6 Paradigmas Avanzados (Conceptos Futuristas)
 Estos modelos son más específicos, pero interesantes.
@@ -146,13 +146,13 @@ Estos modelos son más específicos, pero interesantes.
 Los servicios se "registran" en un directorio. El cliente busca en el directorio "necesito imprimir", y el directorio le da la dirección de la impresora disponible. Es autoconfigurable.
 
 
-!Pasted image 20250921121700
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250921121700.png)
 
 
 ## 1.6.2 Espacio de Objetos
 Imagina una **pizarra compartida** en la nube. Los productores escriben datos en la pizarra. Los consumidores leen o toman datos de la pizarra. Es la abstracción más alta: no sabes quien consume tu dato, solo lo dejas ahí. Ejemplo: JavaSpaces
 
-!Pasted image 20250921122117
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250921122117.png)
 
 
 ## 1.6.3 Agentes Móviles
@@ -165,7 +165,7 @@ Imagina que quieres buscar una foto específica en una base de datos de la NASA 
  
 **El Agente:** Es un programa autónomo. Decide cuándo irse al siguiente nodo del itinerario. Lleva consigo su "equipaje" (el estado actual de su ejecución).
 
-!Pasted image 20250921122236
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250921122236.png)
 
 
 ## 1.6.4 Paradigma de aplicaciones colaborativas
@@ -179,7 +179,7 @@ Si dos personas escriben en la misma línea a la vez, ¿quién gana? Las aplicac
 
 **Ejemplo Real:** Google Docs, Trello, Slack, Pizarras de Zoom.
 
-!Pasted image 20250921122510
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020250921122510.png)
 
 
 # 1.7 Resumen y Comparativa

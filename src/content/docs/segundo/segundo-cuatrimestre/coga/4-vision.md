@@ -17,19 +17,19 @@ El **Frustrum** es el volumen de visión de la cámara, es decir, el área del e
 
 La **Projection Matrix** permite cambiar las dimensiones del frustrum. Después de aplicar la matriz de proyección se realiza una **división perspectiva** que convierte las **coordenadas del clip space a NCD (normalized device coordinates)**, diviendo cada componente $x,y,z$ por el componente homogéneo $w$.
 
-!Pasted image 20250426100241
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250426100241.png)
 
-!Pasted image 20250301155409
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250301155409.png)
 
 En la **pipeline fija (Opengl 1.2)** el paso de coordenadas de escena a coordenadas del clip space se corresponde con el paso **transformación geométrica**.
-!Pasted image 20250426100441
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250426100441.png)
 
 En el **retained mode (Opengl 3.3)** el paso de coordenadas de escena a coordenadas del clip space se realiza mediante el **vertex shader**.
 
-!Pasted image 20250426100531
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250426100531.png)
 
 
-!Pasted image 20250301160144
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250301160144.png)
 
 
 # 4.2 Proyección
@@ -41,17 +41,17 @@ Una **proyección** es una transformación que reduce la dimensionalidad de una 
 - **Punto de vista o centro de proyección:** posición desde donde se observa la escena. En la práctica se corresponde a la ubicación de la cámara
 - **Proyectores:** rayos imaginarios que se trazan desde los puntos del objeto hasta el CP. Los puntos en los que intersecan con el PP determinan dónde de dibujará cada punto del objeto en la imagen final.
 
-!Pasted image 20250426101243
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250426101243.png)
 
 ## 4.2.2 Tipos de Proyecciones
 ### **Proyección ortográfica** o paralela
 El CP está situado en el infinito, por lo que los proyectores son paralelos entre sí.
 Se define una **dirección de proyeción** en vez de un CP
-!Pasted image 20250426101551
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250426101551.png)
 
 ### **Proyección perspectiva**
 El CP está situado en el espacio, por lo que los proyectores forman un cono cuyo vértice es el CP.
-!Pasted image 20250426101649
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250426101649.png)
 Proporciona **realismo visual**, da **sensación tridimensional**, no mantiene la forma ni la escala. 
 
 ### Proyección ortográfica multivista.
@@ -61,7 +61,7 @@ El PP es perpendicular a algún eje, por lo que se necesitan **varias vistas** p
 - - **Perfil:** el PP es perpendicular al eje X
 Es posible realizar **medidas precisas**. Todas las vistas tienen la **misma escala**. No se obtiene una **visión 3D** del objeto. 
 
-!Pasted image 20250426102134
+![](/ApuntesWeb/images/segundo/segundo-cuatrimestre/coga/archivos/imagenes/Pasted%20image%2020250426102134.png)
 
 
 

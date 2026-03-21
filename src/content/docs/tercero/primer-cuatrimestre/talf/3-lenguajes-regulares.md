@@ -158,7 +158,7 @@ $$L=R*$$
 
 **R:** La unión de todas las expresiones de los bucles en el estado ($r_1 + r_2 + \dots$).
 
-!Pasted image 20251020172701
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020172701.png)
 
 
 ## 2 Estados (Inicial $\neq$ Final)
@@ -172,14 +172,14 @@ $$L=(R*+SU*T)*SU*$$
 
 - **$S U^*$**: Una vez te cansas de dar vueltas en el inicio, **viajas al final ($S$)** y puedes quedarte girando allí ($U^*$) para terminar.
 
-!Pasted image 20251020172650
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020172650.png)
 
 Esto es equivalente a escribir:
 $$L=(R+SU*T)*SU*$$
 Porque podemos aplicar esta propiedad para simplificar: $(L^*)^* = L^*$
 
 ## Ejemplo complejo
-!Pasted image 20251207213850
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251207213850.png)
 
 >[!Nota]
 > Cuando hice el ejercicio de arriba se me fue la pinza. En $ER_1$ donde pone un $+$ es una multiplicación y lo mismo en $ER_2$. $ER_1=(1+(00*10*11*0))*(00*1*)0*$. 
@@ -188,17 +188,17 @@ Porque podemos aplicar esta propiedad para simplificar: $(L^*)^* = L^*$
 Empleando estas reglas se puede construir un AFD con transiciones epsilon, suelen quedar autómatas gigantescos. Se puede simplificar después o también hay casos donde es obvio el autómata que reconocen
 
 $$R+S:L(R)+L(S)$$
-!Pasted image 20251020172713
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020172713.png)
 
 $$RS:L(R)(S)$$
-!Pasted image 20251020172723
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020172723.png)
 
 $$R*:L(R*)$$
-!Pasted image 20251020172732
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020172732.png)
 
 **Ejemplo:**
 
-!Pasted image 20251207214613
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251207214613.png)
 
 # 3.7 Lema del Bombeo para Lenguajes Regulares
 >[!Nota]

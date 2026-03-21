@@ -31,20 +31,20 @@ Es un programa que traduce un programa escrito en un **lenguaje fuente** a un pr
 - **Genera** un **programa objeto** (generalmente ejecutable en lenguaje máquina). El lenguaje objeto es un lenguaje máquina.
 - **Informa de la presencia de errores en todo el código fuente**.
 
-!Pasted image 20260129162658
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129162658.png)
 
 El **proceso se divide en dos tiempos:**
 - **Tiempo de compilación:** Entrada (código fuente) $\rightarrow$ Compilador $\rightarrow$ Salida (código objeto).
 - **Tiempo de ejecución:** El código objeto se ejecuta en la plataforma, recibe datos de entrada y produce resultados.
 
-!Pasted image 20260129163002
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129163002.png)
 
 - *Ejemplos:* FORTRAN, C, PASCAL ...
 
 ## 1.3.2 El Intérprete
 A diferencia del compilador, el intérprete **no produce un programa objeto**. Aparenta ejecutar directamente cada instrucción del programa fuente utilizando las entradas proporcionadas por el usuario. **Traduce y ejecuta instrucción por instrucción**.
 
-!Pasted image 20260129163632
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129163632.png)
 
 - *Ejemplos:* BASIC, LISP, PROLOG ...
 
@@ -66,7 +66,7 @@ El proceso se divide en dos fases:
 - **Compilación a Lenguaje Intermedio:** El código fuente se compila a un formato intermedio, no a código máquina real.
 - **Interpretación (Máquina Virtual):** Una máquina virtual interpreta ese código intermedio en el ordenador destino.
 
-!Pasted image 20260129164149
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129164149.png)
 
 - *Ejemplo clásico:* **Java**. El compilador genera **bytecode**, que luego es interpretado por la JVM (Java Virtual Machine).
 
@@ -77,7 +77,7 @@ Para mejorar la eficiencia de los sistemas basados en máquinas virtuales o int�
 - **Funcionamiento:** compilan en **tiempo de ejecución** fragmentos del código intermedio directamente a código objeto.
 - **Ventaja:** mejora drásticamente la velocidad de ejecución.
 
-!Pasted image 20260129164730
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129164730.png)
 
 - *Ejemplos:* JAVA, PHP, PYTHON ...
 
@@ -93,7 +93,7 @@ La secuencia completa es la siguiente:
 
 - **Enlazador / Cargador (Linked/Loader):** Añade bibliotecas externas, permitiendo la reutilización de código. Une todas las piezas y produce el código máquina destino (el ejecutable final).
 
-!Pasted image 20260129170618
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129170618.png)
 
 
 # 1.5 Estructura Interna de un Compilador
@@ -101,14 +101,14 @@ El compilador se divide en dos grandes fases que actúan como un puente entre el
 - **Fase de Análisis (Front-end):** entiende qué dice el programa. Descompone el código fuente y crea una representación intermedia.
 - **Fase de Síntesis (Back-end):** construye el programa objeto. Genera el código destino a partir de la representación intermedia.
 
-!Pasted image 20260129171224
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129171224.png)
 
 Si tenemos $M$ lenguajes fuente y $N$ plataformas, crear un compilador para cada combinación requeriría $M \times N$ compiladores.  La solución es usar un **Código Intermedio:**
 - Se crea una única fase de análisis para cada lenguaje
 - Se crea una única fase de síntesis para cada plataforma
 - El código intermedio sirve de puente universal. Esto reduce drásticamente el esfuerzo de desarrollo. 
 
-!Pasted image 20260129171621
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129171621.png)
 
 # 1.5.1 Fases del Compilador
 A continuación se detallan las etapas por las que pasa el código, usando el ejemplo de la operación: `posición = inicial + velocidad * 60` 
@@ -118,21 +118,21 @@ Lee el flujo de caracteres del programa fuente y los agrupa en secuencias con si
 - _Ejemplo:_ Identifica `posicion`, el símbolo `=`, el identificador `inicial`, etc.
 - _Salida:_ Un flujo de tokens.
 
-!Pasted image 20260129172854
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129172854.png)
 
 ### Analizador Sintáctico (Parser)
 Recibe los tokens y crea una estructura jerárquica (generalmente un árbol) que describe la **estructura gramatical** del código.
 - **Árbol sintáctico:** cada nodo interior es una operación y los hijos son los argumentos. 
 - _Ejemplo:_ Crea un árbol donde `*` (multiplicación) es hijo de `+` (suma), respetando la precedencia matemática.
 
-!Pasted image 20260129172915
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129172915.png)
 
 ### Analizador Semántico
 Revisa el árbol sintáctico para comprobar la **consistencia semántica** (el significado). Su tarea principal es la **verificación de tipos.** 
 - **Coerción:** si el lenguaje lo permite, el analizador puede convertir tipos automáticamente.
 - _Ejemplo:_ En `velocidad * 60`, si `velocidad` es un número real y `60` es entero, el analizador convierte el `60` a real (`entareal(60)`) para que la operación sea válida.
 
-!Pasted image 20260129173103
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129173103.png)
 
 ### Generador de Código Intermedio
 Traduce el árbol a un código para una máquina abstracta. Debe ser fácil de producir y traducir.
@@ -190,20 +190,20 @@ Son una herramienta visual de alto nivel que facilita el diseño y la comprensi�
 
 ### Compiladores (Forma de T)
 Representan la traducción de un lenguaje a otro.
-!Pasted image 20260129174619
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129174619.png)
 
 ### Programas
 Representan un programa $P$ escrito en un lenguaje $L$. 
-!Pasted image 20260129174718
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129174718.png)
 
 ### Máquinas
 Representan el hardware o sistema operativo base.
-!Pasted image 20260129174757
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129174757.png)
 
 
 ### Intérpretes
 Representa el intérprete del lenguaje $L$ escrito en $M$. 
-!Pasted image 20260129174850
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129174850.png)
 
 ## 1.6.2 Reglas de Unión de Diagramas
 La regla de oro para conectar estas piezas es: **Dos diagramas se pueden unir si en la unión los lenguajes son iguales**. Se pueden dar tres situaciones básicas:
@@ -211,10 +211,10 @@ La regla de oro para conectar estas piezas es: **Dos diagramas se pueden unir si
 2. **Interpretación:** Un programa ($P$ en $L$) se coloca sobre un intérprete ($L$ en $M$), y este sobre la máquina ($M$).
 3. **Compilación:** Un programa fuente entra en un compilador, y este genera un programa objeto.
 
-!Pasted image 20260129175512
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129175512.png)
 
 
-!Pasted image 20260129175806
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129175806.png)
 
 
 ## 1.6.3 Estrategias Avanzadas de Construcción
@@ -223,7 +223,7 @@ Divide la traducción en dos fases para permitir desarrollar múltiples compilad
 - **Fase 1 (Compilador):** Traduce Fuente $\rightarrow$ Código Intermedio (OBJ)
 - **Fase 2 (Enlazador):** Traduce Código Intermedio (OBJ) $\rightarrow$ Máquina ($M$).
 
-!Pasted image 20260129180056
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129180056.png)
 
 
 ### Compilación Cruzada
@@ -237,8 +237,8 @@ Es la técnica que permite crear ejecutables para una máquina diferente a la qu
 2. **Fase 2:** Usamos el compilador cruzado ($C3$) para re-compilar el código fuente del nuevo compilador.    
     - _Resultado ($C4$):_ Un compilador que **corre en M2** y **genera código para M2**.
 
-!Pasted image 20260129180331
-!Pasted image 20260129180401
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129180331.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129180401.png)
 
 ### Bootstrapping
 Es una técnica de "autosuficiencia" o "auto-arranque".
@@ -255,8 +255,8 @@ Si tienes un compilador que funciona pero genera código ineficiente ($M-$), y e
     - _Resultado ($C4$):_ Ahora tienes un compilador que genera código eficiente **y** se ejecuta eficientemente.
 
 
-!Pasted image 20260129180503
-!Pasted image 20260129180513
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129180503.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129180513.png)
 
 
 ### Compilador-Intérprete
@@ -267,8 +267,8 @@ Es la colaboración para lograr portabilidad (como en Java).
 - **Concepto Clave:** La unión del intérprete + la plataforma de ejecución se denomina **Máquina Virtual**.
 $$\text{Intérprete } (L \text{ en } M) + \text{Máquina } (M) \equiv \text{Máquina Virtual para } L$$
 
-!Pasted image 20260129180609
-!Pasted image 20260129180628
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129180609.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129180628.png)
 
 # 1.7 Aplicaciones
 

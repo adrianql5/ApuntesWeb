@@ -24,7 +24,7 @@ $$A = (Q, \Sigma, \delta, q_0, F)$$
 - $F$: Donde ganamos (doble círculo).
 
 
-!Pasted image 20251009161639
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251009161639.png)
 
 ## Función de Transición Extendida ($\hat{\delta}$)
 **1. Diferencia Conceptual**
@@ -60,7 +60,7 @@ $$\delta: Q \times (\Sigma \cup \{\varepsilon\}) \to 2^Q$$
 - **Traducción:** La función devuelve un **conjunto de estados** (potencia de $Q$), no un estado único. Puede devolver un conjunto vacío $\emptyset$ (callejón sin salida).
 
 
-!Pasted image 20251009161852
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251009161852.png)
 
 **En el AFN,** puedes estar en varios estados a la vez y elegir entre múltiples caminos.
 
@@ -83,10 +83,10 @@ Para resolver ejercicios de conversión, necesitas dominar la **Clausura-ε**.
 - **Pregunta:** "¿A dónde puedo llegar desde aquí sin gastar ni una moneda (símbolo)?"
 - **Regla:** La `clausura-ε(q)` siempre incluye al propio estado $q$ más cualquier estado alcanzable solo con flechas $\varepsilon$.
 
-!Pasted image 20251207211118
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251207211118.png)
 
 La clausura de la imagen anterior sería: 
-!Pasted image 20251207211142
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251207211142.png)
 
 **Algoritmo para sacar la clausura:**
 1. Sitúate en un estado (ej: $q_0$).
@@ -127,7 +127,7 @@ Imagina que estás en el estado combinado $S = \{q_1, q_2\}$ y llega una letra '
 
 
 **Ejemplo práctico:**
-!Pasted image 20251020130206
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020130206.png)
 
 # 2.5 Minimización de AFD
 **Objetivo:** Encontrar el autómata más pequeño posible que haga exactamente lo mismo. Elimina redundancia.
@@ -149,7 +149,7 @@ Imagina que estás en el estado combinado $S = \{q_1, q_2\}$ y llega una letra '
 
 5. Reconstrucción: Cada grupo final es un único estado en el autómata minimizado.
 
-!Pasted image 20251020130827
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/talf/imagenes/Pasted%20image%2020251020130827.png)
 
 # 2.6 Equivalencia entre Estados
 Dos estados $p$ y $q$ son equivalentes si son **indistinguibles** para un observador externo.

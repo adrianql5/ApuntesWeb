@@ -48,7 +48,7 @@ La arquitectura se basa en tres actores y cuatro estándares fundamentales:
 4. **Generación (Consumer):** Con el WSDL, el consumidor genera automáticamente los **Stubs/Proxies** (clases locales para comunicar).
 5. **Invocación (Consumer $\to$ Provider):** Se lanza la petición encapsulada en **SOAP** a través de **HTTP**.
 
-!Pasted image 20251212155730
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251212155730.png)
 
 
 Gracias al uso de **XML**, se pueden integrar aplicaciones dispares:

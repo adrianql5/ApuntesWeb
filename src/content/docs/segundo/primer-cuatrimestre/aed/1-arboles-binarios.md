@@ -24,7 +24,7 @@ Un árbol es una **estructura de datos no lineal** con un organización jerárqu
 * **Altura:** nivel más alto de un árbol, número de nodos de la rama más larga
 * **Grado de un árbol:** máximo grado de sus nodos
 
-!Pasted image 20240926162942
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926162942.png)
 
 # 1.2 Tipos de Árbol
 ## Árbol Binario:
@@ -32,19 +32,19 @@ Un árbol es una **estructura de datos no lineal** con un organización jerárqu
 
 ## Árbol Binario Equilibrado:
 árbol binario donde la diferencia de altura entre los subárboles de cada nodo es como máximo una unidad. Esto quiere decir que si por ejemplo tengo una hoja en el nivel 3 y otra en el 4 estará equilibrado. Si tiene una en el 2 y otra en el 4 no estará equilibrado.
-!Pasted image 20240926163341
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926163341.png)
 
 ## Árbol Binario Totalmente equilibrado:
 Árbol binario donde la atura de los subárboles de cada nodo es igual. Todo los nodos hoja de cada uno de los subárboles de un nodo dado están en el mismo nivel.
 
 ## Árbol Binario Lleno:
 Árbol donde todos los nodos hoja se encuentran en el mismo nivel y sus padres tienen todos 2 hijos.
-!Pasted image 20240926163611
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926163611.png)
 **Un árbol binario lleno también es totalmente equilibrado**
 
 ## Árbol binario completo:
 Árbol binario donde en el último nivel todos los nodos hoja se distribuyen de izquierda a derecha sin dejar huecos
-!Pasted image 20240926163341
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926163341.png)
 **Un árbol binario completo es equilibrado**
 
 # 1.3 TAD ABIN EXPLICADO
@@ -55,7 +55,7 @@ typedef struct celda *Abin
 
 *der* e *izq* serán puntero que apunta a otra celda del mismo tipo.
 
-!Pasted image 20240926164812
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926164812.png)
 
 **Crear:** hacemos que *abin* apunte a *null* inicialmente.
 ```C
@@ -63,7 +63,7 @@ void crear(abin *A){
 	*A=NULL;
 }
 ```
-!Pasted image 20240926165103
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926165103.png)
 
 **Der e Izq:** nos devolveran los consiguientes nodos
 ```C
@@ -74,7 +74,7 @@ abin der(abin A){
 	return A->der;
 }
 ```
-!Pasted image 20240926165153
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926165153.png)
 
 **Insizq e Insder:** insertan las celdas
 * Si acabamos de crear el árbol y está vacío, creamos el nodo con un *Abin aux* reservando memoria y apuntamos *Abin* a este nuevo nodo.
@@ -94,7 +94,7 @@ void insizq/insder(abin *A, tipoelem E){
 	//(*A)->der=aux;
 }
 ```
-!Pasted image 20240926165251
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926165251.png)
 
 **Suprimir:** Creamos un *Abin aux* que será igual a lo que está en el nodo que queremos eliminar.
 * En caso de no ser vacío ese aux suprimo lo que esta a la derecha y a la izquierda con la misma función de forma **recursiva**. Después hago que abin al lado que deseo eliminar apunte a *null* y libero el nodo auxiliar.
@@ -111,7 +111,7 @@ void supizq/supder(abin *A){
 	}
 }
 ```
-!Pasted image 20240926165402
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926165402.png)
 
 **Eliminar:** sigo la lógica de la función anterior pero desde la raíz
 ```C
@@ -152,12 +152,12 @@ Consiste en recorrer los distintos niveles de forma ordenada, del menos al mayor
 * Miramos si tiene descendiente, de tenerlo se encola
 * Repetimos los pasos hasta que esté vacía
 
-!Pasted image 20240926171552
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926171552.png)
 
 ## Recorridos en Profundidad:
 Tiene 2 tipos de implementaciones, recursivas y no recursivas:
 ### Recursivas:
-!Pasted image 20240926171935
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926171935.png)
 En cada nodo, en función del recorrido seleccionado, se imprime el elemento actual o se sigue descendiendo por el subárbol hasta llegar a un nodo hoja y empieza a subir hasta los demás.
 #### Inorden
 Izquierda-Raíz-Derecha
@@ -171,9 +171,9 @@ Utilizamos una **pila**:
 * Se guardan los elementos izquierdos en la pila hasta llegar a un *nodo hoja* 
 * Se desapila el tope, se imprime y se inserta en la pila el hijo derecho.
 * Repetimos estos pasos sucesivamente hasta que se vacíe
-!Pasted image 20240926172332
-!Pasted image 20240926172441
-!Pasted image 20240926172458
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926172332.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926172441.png)
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926172458.png)
 
 # 1.5 Árboles de Expresión
 * **A+B**: *+* es el nodo padre, *A* el hijo izquierdo y *B* el hijo derecho
@@ -181,4 +181,4 @@ Utilizamos una **pila**:
 * Usamos 2 pilas, una de *operadores* y otra de *operandos* . Se van apilando hasta llegar a un operador cuya prioridad es menor o igual que la del tope de la pila. Esto provoca que se desapile en dicha pila  y se vaya formando la expresión en la pila de *operandos* con los operadores desapilados.
 * EL paréntesis izquierdo se apila siempre,  y el derecho produce siempre que se desapile hasta llegar al paréntesis izquierdo. 
 
-!Pasted image 20240926173032
+![](/ApuntesWeb/images/segundo/primer-cuatrimestre/aed/archivos/imagenes/Pasted%20image%2020240926173032.png)

@@ -240,7 +240,7 @@ Los protocolos definen el "baile" de mensajes entre agentes. Un protocolo es el 
 - **FIPA-English-Auction:** Subasta clásica (hacia arriba). El subastador sube el precio hasta que nadie más puje.
 - **FIPA-Dutch-Auction:** Subasta holandesa (hacia abajo). Empieza muy alto y baja hasta que alguien dice "mío".
 
-!Pasted image 20251230104116
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251230104116.png)
 
 **INFORM:** Es el acto más básico.
 - **Qué significa:** "Te cuento esto que sé y asumo que es verdad".
@@ -289,7 +289,7 @@ Piensa en JADE como el **Sistema Operativo** de los agentes. En lugar de tener q
 
 ## 8.7.2 La Arquitectura JADE (El "Mundo")
 
-!Pasted image 20251209183923
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251209183923.png)
 
 Imagina una **Universidad (La Plataforma)**. Una universidad no es un solo edificio. Es una institución formada por varios edificios repartidos por la ciudad (Campus Norte, Campus Sur, Rectorado).
 
@@ -324,7 +324,7 @@ Además tenemos otros agentes disponibles:
 ## 8.7.3 Programación de un Agente
 Un agente es un componente activo con un nombre único y un **AID** (Agent ID)
 
-!Pasted image 20251209184001
+![](/ApuntesWeb/images/tercero/primer-cuatrimestre/comdis/imagenes/Pasted%20image%2020251209184001.png)
 
 **El ciclo de vida de un agente es el siguiente:**
 - **Nacimiento (`setup`):** se ejecuta una sola vez al arrancar. Aquí inicializas variables y, lo más importante, **añades los primeros comportamientos** (`addBehaviorur`)  a la "piscina" de tareas.

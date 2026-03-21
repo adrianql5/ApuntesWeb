@@ -74,6 +74,8 @@ html {
 		radial-gradient(circle at 85% 15%, rgba(34, 112, 149, 0.09), transparent 26%),
 		var(--sl-color-bg);
 	scroll-behavior: smooth;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
 }
 
 body {
@@ -82,6 +84,19 @@ body {
 	background: transparent;
 	line-height: 1.7;
 	text-rendering: optimizeLegibility;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+
+* {
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+
+*::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+	display: none;
 }
 
 body::before {
@@ -931,14 +946,19 @@ select,
 		position: relative;
 	}
 
-	#starlight__sidebar {
+	#starlight__sidebar,
+	.right-sidebar {
 		position: fixed !important;
-		inset-inline-start: 0;
 		top: var(--sl-nav-height);
-		width: var(--app-sidebar-width) !important;
-		height: calc(100vh - var(--sl-nav-height));
+		height: calc(100dvh - var(--sl-nav-height));
 		overflow-y: auto;
-		scrollbar-width: thin;
+		padding-inline: 0;
+	}
+
+	#starlight__sidebar {
+		inset-inline-start: 0;
+		width: var(--app-sidebar-width) !important;
+		max-width: var(--app-sidebar-width);
 	}
 
 	.sidebar-content {
@@ -965,13 +985,9 @@ select,
 
 	.right-sidebar {
 		width: var(--app-sidebar-width) !important;
-		position: fixed !important;
 		top: var(--sl-nav-height);
 		inset-inline-end: 0;
-		height: calc(100vh - var(--sl-nav-height));
-		overflow-y: auto;
-		scrollbar-width: thin;
-		padding-inline: 0;
+		max-width: var(--app-sidebar-width);
 	}
 
 	[data-has-sidebar][data-has-toc] .main-pane,

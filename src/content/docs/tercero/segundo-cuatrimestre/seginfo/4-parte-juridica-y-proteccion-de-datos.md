@@ -263,6 +263,9 @@ Se aplica cuando:
 - Responsable y encargado pueden ser personas físicas o jurídicas, públicas o privadas.
 - El uso doméstico queda fuera, salvo que alcance destinatarios amplios o indeterminados.
 
+capacidad jurídica capacidad de un sujeto para ser titulas de derechos y obligaciones
+capacidad de obrar capacidad para ejercer dichos derechos.
+
 ### 4.10.3 Ámbito material
 
 - Se aplica al tratamiento automatizado.

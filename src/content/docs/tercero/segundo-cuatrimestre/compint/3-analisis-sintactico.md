@@ -1690,9 +1690,3 @@ La recuperación intenta modificar la pila y/o la entrada hasta reenganchar el a
 
 2. **Método de análisis de transiciones**
    Se baja por la pila hasta encontrar un estado `d` tal que exista `Ir_a(d,A)` para algún no terminal `A`. Después se descartan símbolos de entrada hasta hallar uno que pueda seguir a `A` según la gramática. Entonces se apila `Ir_a(d,A)` y se continúa.
-
-
-# 3.5 Bibliografía
-
-1. A. V. Aho, R. Sethi, J. D. Ullman. *Compiladores. Principios, técnicas y herramientas*. Addison Wesley, 1990.
-2. M. Alfonseca, M. de la Cruz, A. Ortega, E. Pulido. *Compiladores e intérpretes: teoría y práctica*. Pearson Educación, 2006.

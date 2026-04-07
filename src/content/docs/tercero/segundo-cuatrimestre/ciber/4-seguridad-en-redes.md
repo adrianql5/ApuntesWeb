@@ -184,3 +184,280 @@ Tenemos estas poisbles contramedidas en dos niveles.
 Es una red de máquinas comprometidas controladas mediante infraestructura de **Command and Control (C&C)**. Estas máquinas, o bots, pueden ser utilizadas coordinadamente para lanzar ataques DDoS contra una víctima.  atacante → C&C → bots → víctima.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-91.png)
+
+
+# 4.2 Cortafuegos
+Un **cortafuegos** es un sistema que implanta una **política de control de accesos entre dos redes**.
+
+Consiste en hardware, software o combinación de ambos que monitoriza y filtra paquetes de red que intentan entrar o salir de una red privada protegida. Separa por ejemplo una red protegida (eduroam) de una no protegida (internet) de menos confianza.
+
+Normalmente son dispositivos dedicados puesto que son más fáciles de diseñar e inspeccionar posibles fallos o bugs. Además facilita optimizar su rendimiento.
+
+Los cortafuegos **implementan políticas de seguridad:** conjuntos de reglas que determinan qué tráfico puede o no pasar a través de ellos.
+
+Los cortafuegos son:
+- Siempre invocados (no se pueden evitar o burlar)
+- Resistentes a manipulaciones no autorizadas
+- Pequeños y simples, para análisis rigurosos.
+
+
+## 4.2.1 Contra qué protege un cortafuegos
+- Contra **accesos no autorizados**
+- Tráfico **no autorizado**
+- **Permite/restringe la salida desde el interior**
+- Proporciona un único punto para implantar una política de seguridad y auditoría
+- Ha de protegerse a sí mismo
+
+El cortafuegos debe ser parte de una política global: no debería la única línea de defensa.
+
+## 4.2.2 Limitaciones
+- Ineficaces ante **bugs** en aplicaciones o servicios permitidos
+- No protege contra ataques mediante **conexiones autorizadas**.
+- No proporciona seguridad desde la **red interna**.
+- Solo protegen frente a **conexiones que pasan por él:**
+	- Accesos alternativos (redes móviles)
+	- Accesos desde dentro (wifi mal protegida, malware en memorias USB)
+- Puede llegar a ser **molestos para los usuarios**
+- Deben configurarse y administrarse cuidadosamente
+
+## 4.2.3 Ejemplo de política se seguridad en un cortafuegos
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-93.png)
+
+
+## 4.2.4 Tipos de Cortafuegos por tecnología
+### Nivel de Red - Filtrado de Paquetes
+Se trata de routers que inspeccionan el contenido de la cabecera de los paquetes TCP, UDP, ICMP, enviados entre redes. Aceptan o rechazan los paquetes de red establecida dentro de la política de seguridad de la organización.
+
+Las políticas para paquetes de red más utilizadas en estos cortafuegos son:
+- **Rechazar todo lo no permitido explícitamente:** configurar el cortafuegos de manera que deniega el acceso a todo el tráfico y servicios, **excepto aquellos explícitamente añadidos**.
+- **Permitir todo lo no denegado explícitamente:** permite todo el tráfico y los servicios **excepto aquellos en la lista de prohibidos**, que se va implementando según los requisitos de la organización.
+
+Las características que se analizan para filtrar en base a características de la cabecera del paquete IP son:
+- Dirección IP de **origen**
+- Dirección IP de **destino**
+- **Tipo de tráfico** (TCP, UDP, ICMP)
+- Puertos origen y destino
+- Interfaz de red por la que llega o se envía el paquete
+
+Se analiza cada paquete independientemente, **no se guarda información del contexto**.
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-94.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-95.png)
+
+Para filtrar paquetes nos basamos en la definición de un conjunto de **reglas secuenciales:**
+- Una parte de equiparación, con la que debe coincidir el paquete:
+	- Sentido del paquete: entrada/salida
+	- Dirección de origen/destino, tipo de tráfico, puerto, ...
+- Acción a realizar:
+	- **Aceptar:** el paquete pasa el cortafuegos
+	- **Denegar:** e paquete se descarta y se notifica al origen
+	- **Descartar:** el paquete se descarta sin notificar al origen
+	- Acciones adicionales (por ejemplo, registro de actividad)
+
+Las ventajas que ofrecen son la **independencia de las aplicaciones** y que son **muy rápidos y escalables**. Las limitaciones son:
+- Definición del filtrado de paquetes **compleja**
+- Difícil monitorización y comprobación de routers
+- No analizan globalmente el tráfico, ni entienden el contexto.
+- Muchas implementaciones se fían de la dirección IP, que puede ser **falsificada** con relativa facilidad.
+
+
+### Inspección de estados - Filtrado dinámico
+Es una técnica de cortafuegos en la que **no se analiza cada paquete de forma aislada**, sino **teniendo en cuenta el estado de la comunicación**.
+- El cortafuegos **intercepta los paquetes en la capa de red** y revisa sus cabeceras
+- Además, puede **extraer información de los datos** para saber **qué aplicación o tipo de comunicación** hay detrás.
+- Así puede **distinguir peticiones y respuestas**. Por ejemplo, en **TCP** reconoce fases de conexión somo SYN, SYN-ACK y ACK
+
+A diferencia del filtrado simple, las decisiones se toman **relacionando varios paquetes entre sí**. Para hacerlo, el cortafuegos **mantiene una tabla dinámica de estados**, donde guarda información de las conexiones activas, por ejemplo:
+- quién inició la conexión
+- en qué estado está
+- qué paquetes son válidos como respuesta
+
+Con esa tabla decide **si permite o bloquea** los paquetes. Además estos sistemas, suelen estar **preconfigurados para detectar ciertas firmas o patrones de ataque**
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-96.png)
+
+
+### Cortafuegos de Capa de Aplicación
+Es un **proxy o pasarela de aplicación** que se coloca entre la red externa y la interna. **Da servicio a los usuarios internos** y, al mismo tiempo, **protege a los servidores internos** frente a usuarios externos maliciosos.
+
+- **No deja pasar tráfico directamente entre ambas redes**.
+- Toda comunicación debe hacerse **a través de un proxy de aplicación**.
+- Por eso hay **dos conexiones distintas**:
+    - una entre el **cliente externo y el cortafuegos**;
+    - otra entre el **cortafuegos y el servidor interno**.
+
+El filtrado se hace **a nivel de aplicación** y **basado en servicios conocidos**:
+- el cortafuegos actúa como un servidor intermedio entre una aplicación cliente y una aplicación servidor;
+- **se comporta como servidor frente al cliente**;
+- y **como cliente frente al servidor**.
+
+Eso permite tener **control completo sobre cada servicio**.
+
+Además:
+- se debe mantener **información detallada y auditada** de los registros de tráfico de cada conexión;
+- normalmente se admite **un conjunto limitado de comandos**;
+- suelen incorporar **autenticación**, obligando al usuario a identificarse;
+- **cada proxy es independiente** de los demás dentro del sistema de defensa;
+- y sus **reglas de filtrado son más fáciles de definir** que en un router con filtrado de paquetes.
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-97.png)
+
+Ejemplo: chequeo de virus en correo electrónico:
+- El correo entrante llega al **proxy**
+- El proxy lo escanea, y si no tiene virus lo redirige al destinatario y si tiene virus lo rechaza o lo desinfecta
+
+Ejemplo: servidor FTP
+- Se permiten todas las acciones de descarga de ficheros
+- NO se permite el comando put
+
+Las ventajas es que ofrecen un **alto nivel de seguridad**, examinan información a **nivel de aplicación** y toman decisiones basadas en **datos de cada aplicación**.
+
+El problema que tienen es **menor rendimiento y escalabilidad**, rompe el modelo **cliente/servidor** (requiere dos conexiones) y requiere implantar un proxy por cada aplicación: software especializado en cada sistema/servicio que se quiera proteger.
+
+
+### Cortafuegos Híbridos
+La mayoría de los cortafuegos comerciales actuales **combinan varias tecnologías** en lugar de usar solo una. Esto permite aplicar **distintos mecanismos según el tipo de tráfico:**
+- **Filtrado de paquetes** cuando se necesita **alta velocidad**
+- **Proxy** cuando se necesita **mayor seguridad**
+
+Además muchos son **adaptativos**, es decir:
+- durante el **establecimiento de la conexión** actúan como **proxy**, porque así inspeccionan y controlan mejor la comunicación
+- durante la **transferencia de datos** usan **filtrado de paquetes**, para que el tráfico vaya más rápido.
+
+En resumen, un cortafuegos híbrido **busca equilibrar seguridad y rendimiento** combinando varias técnicas.
+
+En una red, cada host tiene una **dirección IP**. Si en una red fija esas direcciones son **estáticas**, a un atacante le resulta más fácil identificar un host, tomar su control y usarlo para atacar a otros equipos, tanto **dentro** como **fuera** de la red.
+
+Para reducir este riesgo se usa un **filtro NAT**, que:
+- **oculta la información TCP/IP** de los hosts internos
+- hace que, desde el exterior, no se vea directamente cada equipo interno
+
+Por eso, un cortafuegos NAT funciona de forma parecida a un **proxy:**
+- **esconde la identidad** de los hosts internos
+- hacia el exterior, **todos los hosts internos parecen tener una sola IP pública**, que es la del dispositivo NAT
+
+El NAT añade protección porque **los equipos internos no son visibles directamente desde fuera.**
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-98.png)
+
+## 4.2.5 Arquitecturas de Cortafuegos
+### Routers de Filtrado de Paquetes
+Implementación formada únicamente por un router de filtrado entre la red privada y la red externa.
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-99.png)
+
+### Host de base dual
+Cortafuegos implementado situando un host (bastion host) entre las redes interna y externa que bloquea el tráfico directo entre las dos redes. Opciones de funcionamiento:
+- Instalar en ese host proxies a nivel de aplicación
+- Permitir login remoto en dicho host para, desde allí acceder al resto de hosts
+
+
+### Proxy con Router de Filtrado
+Una de las configuraciones más utilizadas: se implementa utilizando un host de base dual (bastion host, donde se instalan los proxies) y un router de filtrado.
+
+El bastion host está en la **red privada** siendo el único equipo alcanzable desde el exterior. El router de selección permite que sólo los servicios que tienen instalado un proxy en el bastion host se comuniquen con él.
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-100.png)
+
+## 4.2.6 Zona desmilitarizada - DMZ
+La **DMZ** es una **subred intermedia** entre **Internet** y la **intranet**. Sirve para colocar ahí los servicios que deben ser accesibles desde fuera, sin exponer directamente la red interna. En la DMZ se suelen instalar servidores de acceso público como:
+- **web**
+- **correo electrónico**
+- **FTP**
+- **DNS**
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-101.png)
+
+La idea es que **los accesos desde Internet no lleguen directamente a la intranet**, sino que **pasen antes por la DMZ**. Así, desde la red externa solo se permite llegar a lo **estrictamente necesario**. Además, en la DMZ se pueden instalar:
+- sistemas de **filtrado**,
+- sistemas de **detección antivirus**,
+- y **zonas de cuarentena** para aislar contenido sospechoso antes de enviarlo a la red interna.
+
+Como los servidores de la DMZ están expuestos a Internet, **deben tener una protección reforzada**.
+
+Como la DMZ es una red distinta de la red interna, se puede usar un **NAT** en el **bastion host** que actúa como cortafuegos.
+
+### DMZ en el correo electronico
+El servidor de correo en la DMZ:
+- **revisa direcciones y contenido** de todo el correo;
+- busca **ocultar información interna al exterior**;
+- pero debe ser **transparente hacia el interior**.
+
+Funcionamiento:
+- el correo que llega desde **Internet** se redirige hacia la **red interna**;
+- el correo que sale desde la **red interna** se redirige hacia **Internet**
+
+Cuando entra un correo desde internet, el sistema:
+1. **reensambla el mensaje** completo: cabecera, cuerpo y adjuntos;
+2. **escanea** cabecera, cuerpo y adjuntos en busca de **contenido malicioso conocido**;
+3. si no encuentra nada, analiza el mensaje original en busca de **violaciones del protocolo SMTP**;
+4. comprueba las **direcciones del destinatario**;
+5. **reescribe la dirección** con la correspondiente al servidor de correo interno;
+6. y **reenvía** el mensaje.
+
+Y cuando sale hacia internet se hace algo parecido, pero además:
+- se analiza también si hay **datos sensibles** o confidenciales;
+- se **reescriben las cabeceras** que contengan:
+    - nombres de host,
+    - direcciones de correo,
+    - direcciones IP internas.
+
+Esa información se sustituye por el **dominio del servidor proxy** o por la **IP del cortafuegos externo**, para no revelar datos internos.
+
+
+### DMZ en servicios Web
+Para **HTTP y HTTPS**, el cortafuegos analiza las peticiones buscando elementos sospechosos, por ejemplo:
+- líneas excesivamente largas,
+- componentes anómalos o maliciosos.
+- Si detecta algo sospechoso, **descarta la petición**.
+- Si no, la **redirige al servidor web de la DMZ**.
+
+## 4.2.7 Tipos de cortafuegos por ubicación
+### Cortafuegos personales
+- Permiten filtros de entrada y salida
+- Alertan sobre posibles intentos de conexión desde el exterior
+- Ocultan el sistema frente a escaneo de puertos, no respondiendo al tráfico de red no solicitado
+- Previenen el tráfico no deseado procedente de aplicaciones locales
+- Recomendable combinarlos con antivirus
+
+### Cortafuegos para pequeñas oficinas (SOHO)
+- Protegen a varios usuarios en pequeñas oficinas (2-50)
+- Suelen ser pequeños equipos instalador antes del router, o incluso integrados
+
+### Equipos hardware
+- Utilizados en oficinas medias y sucursales 
+- Fáciles de configurar, con funcionalidades básicas y gestionados centralizadamente 
+- Utilizan sistemas operativos propios del hardware en el que están implantados
+- Ejemplos: Cisco y Fortinet
+
+### Cortafuegos corporativos
+- El punto central de accesos a Internet de una empresa 
+- En este punto se implanta la política de seguridad de la empresa 
+- Pueden conectar múltiples redes 
+- Software que se instala en grandes servidores con configuraciones tolerantes a fallos
+
+## 4.2.8 Configuración e implementación de un cortafuegos
+Hay **dos formas principales** de configurar un cortafuegos según las necesidades de una organización:
+- **Diseñarlo desde cero**, recopilando toda la información necesaria para definir requisitos y necesidades. Es una opción más ajustada, pero **lleva mucho tiempo y puede ser costosa**.
+- **Usar un cortafuegos comercial**, que ya incorpora muchas opciones y configuraciones predefinidas. Es la opción que adoptan muchas organizaciones.
+
+Como apoyo, se mencionan las **guías del CCN-CERT**, en particular la **Serie 1000 de Guías de Procedimiento de Empleo Seguro**, buscando por “cortafuegos”.
+
+Errores habituales:
+- **Implantarlo sin una política de seguridad** previa.
+- **Añadir reglas y servicios** sin distinguir entre **necesidades reales** y **deseos**.
+- **Centrarse solo en el cortafuegos** e ignorar otras medidas de seguridad.
+- **Ignorar alarmas y logs** del cortafuegos.
+- **Desactivar alarmas repetitivas o de bajo nivel**, porque pueden ocultar problemas reales.
+- **Permitir a demasiadas personas** acceder o administrar su configuración.
+- **Permitir accesos independientes**, es decir, vías de acceso que se saltan el control del cortafuegos.
+
+
+Un cortafuegos suele apoyarse en otros mecanismos de seguridad:
+- **Autenticación de usuarios externos**, por ejemplo con usuario y contraseña, certificados digitales o tarjetas.
+- **Antivirus**, normalmente instalados en la **DMZ**.
+- **Filtros de contenido**:
+    - filtrado de **URL y navegación hacia el exterior**;
+    - filtrado para controlar la **información que sale**.
+- **IDS (sistemas de detección de intrusiones)**; muchos cortafuegos ya incorporan también **prevención de intrusiones**.
+- **VPN (redes privadas virtuales)**, que crean **túneles cifrados** para permitir acceso remoto seguro a través de redes públicas.

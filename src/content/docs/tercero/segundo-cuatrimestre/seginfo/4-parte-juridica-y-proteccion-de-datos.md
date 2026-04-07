@@ -270,7 +270,9 @@ capacidad de obrar capacidad para ejercer dichos derechos.
 
 - Se aplica al tratamiento automatizado.
 - También al tratamiento manual si forma parte de un fichero organizado.
-- Quedan fuera ciertos ámbitos como seguridad nacional.
+- Quedan fuera ciertos ámbitos como seguridad nacional, con las PESC, actividades de prevención, detección y enjuizamiento. Acitivades personales o domesticas realizadas por las personas físicas, si por ejemplo los datos son idexables en motores de busqueda o bulnerar derechos de terceros en particular con datos sensibles 
+
+
 
 ## 4.11 Conceptos clave en protección de datos
 

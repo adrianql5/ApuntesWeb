@@ -61,8 +61,8 @@ const quickLinks = [
 		}
 
 		.app-header__search {
-			flex: 0 0 auto;
-			min-width: min(100%, 12rem);
+			flex: 0 1 13rem;
+			min-width: min(100%, 11rem);
 		}
 
 		.app-header__actions,
@@ -88,7 +88,7 @@ const quickLinks = [
 			gap: 0.55rem;
 			align-items: center;
 			flex: 1 1 auto;
-			min-width: 8rem;
+			min-width: 0;
 			overflow-x: auto;
 			scrollbar-width: none;
 			padding-bottom: 0.05rem;
@@ -116,27 +116,123 @@ const quickLinks = [
 
 		@media (max-width: 50rem) {
 			.app-header {
-				flex-wrap: wrap;
-				align-items: stretch;
-				gap: 0.42rem 0.55rem;
+				display: grid;
+				grid-template-columns: minmax(0, 1fr) auto;
+				grid-template-areas:
+					'title actions'
+					'search search'
+					'nav nav';
+				align-items: center;
+				gap: 0.55rem 0.65rem;
 			}
 
 			.title-wrapper {
 				display: flex;
-				flex: 1 1 auto;
+				grid-area: title;
 				align-items: center;
 				min-width: 0;
 			}
 
-			.app-header__actions {
-				margin-inline-start: 0;
+			.app-header__search {
+				grid-area: search;
+				min-width: 0;
 			}
 
-			.app-header__search,
+			.app-header__search :global(button[data-open-modal]) {
+				width: 100%;
+				max-width: none;
+				justify-content: flex-start;
+			}
+
+			.app-header__actions {
+				grid-area: actions;
+				justify-self: end;
+				margin-inline-start: 0;
+				gap: 0.55rem;
+			}
+
 			.app-header__nav {
-				flex-basis: 100%;
 				min-width: 0;
+			}
+
+			.app-header__nav {
+				grid-area: nav;
+				flex-wrap: wrap;
+				overflow: visible;
+				padding-bottom: 0;
+			}
+		}
+
+		@media (max-width: 37rem) {
+			.app-header {
+				grid-template-columns: minmax(0, 1fr);
+				grid-template-areas:
+					'title'
+					'search'
+					'nav'
+					'actions';
+				align-items: stretch;
+			}
+
+			.app-header__actions {
+				justify-self: start;
 			}
 		}
 	}
 </style>
+
+<script is:inline>
+	(() => {
+		if (typeof window === 'undefined') return;
+
+		if (window.__appHeaderHeightSyncSetup) {
+			window.__appHeaderHeightSyncSetup();
+			return;
+		}
+
+		let observedHeader = null;
+		let resizeObserver = null;
+		let frameId = 0;
+		let lastHeight = 0;
+
+		const getHeader = () => document.querySelector('.page > header.header');
+
+		const syncHeaderHeight = () => {
+			const header = getHeader();
+			if (!header) return;
+			const nextHeight = Math.ceil(header.getBoundingClientRect().height);
+			if (!nextHeight || nextHeight === lastHeight) return;
+			lastHeight = nextHeight;
+			document.documentElement.style.setProperty('--sl-nav-height', `${nextHeight}px`);
+		};
+
+		const scheduleSync = () => {
+			cancelAnimationFrame(frameId);
+			frameId = requestAnimationFrame(syncHeaderHeight);
+		};
+
+		const attachObserver = () => {
+			const header = getHeader();
+			if (!header || header === observedHeader) {
+				scheduleSync();
+				return;
+			}
+
+			resizeObserver?.disconnect();
+			resizeObserver = new ResizeObserver(scheduleSync);
+			resizeObserver.observe(header);
+			observedHeader = header;
+			scheduleSync();
+		};
+
+		window.__appHeaderHeightSyncSetup = attachObserver;
+
+		window.addEventListener('resize', scheduleSync, { passive: true });
+		window.addEventListener('orientationchange', scheduleSync, { passive: true });
+		window.addEventListener('load', scheduleSync, { once: true });
+		document.addEventListener('astro:page-load', attachObserver);
+		document.fonts?.ready?.then(scheduleSync);
+
+		attachObserver();
+	})();
+</script>

@@ -378,8 +378,12 @@ starlight-toc a[aria-current='true'] {
 }
 
 .sidebar-content {
-	padding: 0.45rem 0.9rem 1.1rem;
-	gap: 0.85rem;
+	padding: 0 0.9rem 1rem;
+	gap: 0.75rem;
+}
+
+.sidebar-content :where(ul, ol) {
+	margin-block: 0;
 }
 
 .sidebar-content a,
@@ -1050,19 +1054,21 @@ select,
 
 @media (max-width: 50rem) {
 	:root {
-		--sl-nav-height: 8.15rem;
+		--sl-nav-height: 3.8rem;
+		--sl-mobile-toc-height: 0rem;
 	}
 
 	body::before {
 		display: none;
 	}
 
-	.site-title {
-		font-size: 0.84rem;
+	html,
+	body {
+		overflow-x: clip;
 	}
 
 	.header {
-		padding-block: 0.5rem 0.45rem !important;
+		padding-block: 0.65rem !important;
 	}
 
 	.header starlight-theme-select,
@@ -1070,46 +1076,34 @@ select,
 		color: #241c16 !important;
 	}
 
-	.app-header__search {
-		flex: 1 1 auto;
-		min-width: 0;
+	.sidebar-pane {
+		top: var(--sl-nav-height);
 	}
 
-	.app-header__nav {
-		gap: 0.45rem;
-		padding-inline-end: 0;
-		padding-bottom: 0;
+	.sidebar-content {
+		padding-top: 0.35rem;
 	}
 
-	.app-header__nav-link {
-		padding: 0.36rem 0.62rem;
-		font-size: 0.69rem;
+	starlight-menu-button button {
+		top: 0.55rem;
+		inset-inline-end: 0.75rem;
+		width: 2.7rem;
+		height: 2.7rem;
+		padding: 0.65rem;
+		border: 1px solid var(--sl-color-hairline) !important;
+		background: var(--app-surface-strong) !important;
+		color: var(--sl-color-text) !important;
+		box-shadow: var(--app-shadow) !important;
 	}
 
-	.header site-search button {
-		min-width: 0;
-		width: 100%;
-		min-height: 2.2rem;
-		padding-inline: 0.62rem !important;
+	starlight-menu-button button svg {
+		width: 1.2rem;
+		height: 1.2rem;
 	}
 
-	.header site-search button span {
-		display: block !important;
-		max-width: none;
-		font-size: 0.84rem;
-	}
-
-	.header starlight-theme-select label {
-		--sl-select-width: 6.25rem !important;
-		min-width: 6.45rem;
-		min-height: 2.2rem;
-		padding-inline: 0.52rem 0.72rem !important;
-	}
-
-	.header starlight-theme-select select {
-		font-size: 0.84rem;
-		min-width: calc(var(--sl-select-width) + 0.75rem);
-		width: calc(var(--sl-select-width) + 0.75rem) !important;
+	mobile-starlight-toc,
+	mobile-starlight-toc nav {
+		display: none !important;
 	}
 
 	[data-template='splash'] .hero {
@@ -1216,7 +1210,7 @@ select,
 	}
 
 	.main-frame {
-		padding-top: calc(var(--sl-nav-height) + var(--sl-mobile-toc-height) + 0.05rem);
+		padding-top: calc(var(--sl-nav-height) + 0.2rem) !important;
 	}
 
 	.right-sidebar,
@@ -1227,20 +1221,10 @@ select,
 
 @media (max-width: 37rem) {
 	:root {
-		--sl-nav-height: 10rem;
+		--sl-nav-height: 3.65rem;
 	}
 
 	.header {
 		padding-block: 0.55rem !important;
-	}
-
-	.header starlight-theme-select label {
-		--sl-select-width: 5.2rem !important;
-		min-width: 5.45rem;
-	}
-
-	.header starlight-theme-select select {
-		min-width: calc(var(--sl-select-width) + 0.7rem);
-		width: calc(var(--sl-select-width) + 0.7rem) !important;
 	}
 }

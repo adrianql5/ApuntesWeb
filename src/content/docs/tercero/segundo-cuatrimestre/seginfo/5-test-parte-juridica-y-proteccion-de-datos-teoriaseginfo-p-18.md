@@ -3,8 +3,7 @@ title: "Test parte jurídica y protección de datos (TeoríaSegInfo p. 18+)"
 ---
 
 
-##5.1 Cómo usar este test
-
+## 5.1 Cómo usar este test
 - Las preguntas están agrupadas por bloques.
 - Mantengo la formulación del PDF o una redacción muy próxima.
 - Incluyo la respuesta correcta y una pista breve para fijar el criterio.

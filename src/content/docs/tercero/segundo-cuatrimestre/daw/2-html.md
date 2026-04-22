@@ -38,39 +38,20 @@ El navegador es la herramienta que interpreta el código HTML escrito en la pág
 
 El **motor de renderizado** de un navegador web es la parte encargada de tomar el contenido (HTML, XML, imágenes, etc.) y la información de formato (CSS, etc.) para crear una representación visual de la página.
 
-### Hechos históricos destacados
 - Antes de 1993 los navegadores incluían poca funcionalidad.
 - En 1993 Marc Andreessen desarrolla Mosaic en la NCSA.
 - En 1994 surge Netscape, con extensiones HTML propias.
 - Microsoft responde con Internet Explorer.
 - En 1994 se crea el consorcio **W3C** con Tim Berners-Lee para poner orden y establecer estándares.
 
-### Navegadores y motores de renderizado
-- Google Chrome → Blink
-- Mozilla Firefox → Gecko
-- Apple Safari → WebKit
-- Microsoft Edge actual → Blink
-- Microsoft Edge Legacy → EdgeHTML
-- Opera → Blink
-- Brave → Blink
-- Vivaldi → Blink
-- Arc Browser → Blink
-- Samsung Internet → Blink
-- Opera Mini / Mobile clásico → Presto antiguo, hoy Blink
-- Navegadores en iOS → WebKit obligatoriamente
-- TOR Browser → Gecko (Firefox ESR modificado)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-9.png)
 
 ### El servidor web
 El servidor web es el programa encargado de recibir las peticiones desde el lado cliente y servir contenido estático correspondiente a ficheros HTML, CSS, JavaScript y/o imágenes.
 
 El **motor HTTP** es la parte del servidor encargada de recibir solicitudes HTTP/HTTPS, interpretarlas, determinar rutas, gestionar cabeceras, métodos y estados, y enviar la respuesta.
 
-### Ejemplos de servidores web
-- Apache HTTP Server
-- Microsoft IIS
-- Nginx
-- Lighttpd
-- Caddy
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-10.png)
 
 
 ## 2.1.4 URL y publicación de una página web
@@ -112,43 +93,42 @@ se descompone en:
 - **Julio 2014**: el W3C comienza a discutir los Web Components, que permiten crear etiquetas personalizadas.
 
 ## 2.2.2 Proceso de estandarización y versiones
-### HTML 1.0 y 2.0
+**HTML 1.0 y 2.0**
 - No hay lugar para adornos.
 - Texto plano con hiperenlaces.
 
-### HTML 3.0
+**HTML 3.0**
 - aparecen nuevas etiquetas propietarias,
 - posibilidad de contenidos enriquecidos mediante colores e imágenes,
 - guerra de navegadores.
 
-### HTML 3.2
+**HTML 3.2**
 - se estandarizan extensiones propietarias, incluyendo algunas y eliminando otras,
 - se anima a los creadores de navegadores a seguir dichos estándares.
 
-### HTML 4.0
+**HTML 4.0**
 - separación entre contenido, estructura y formato mediante CSS.
 
-### HTML 4.01
+**HTML 4.01**
 - todo elemento de línea tiene que estar dentro de un elemento de bloque.
 
-### XHTML 1.0
+**XHTML 1.0**
 - busca mantener la estructura XML,
 - las etiquetas que abren necesariamente han de cerrarse.
 
-### HTML 5.0
+**HTML 5.0**
 - menor compatibilidad con versiones obsoletas,
 - facilita el desarrollo de nuevos navegadores,
 - incorpora nuevas etiquetas.
 
 ## 2.2.3 Tipos de versiones: estricta, transitoria y marcos
-
-### Estricta
+**Estricta**
 Solo se permite el uso de las etiquetas actualmente aprobadas.
 
-### Transitoria
+**Transitoria**
 Permite el uso de etiquetas no aprobadas.
 
-### Conjunto de marcos
+**Conjunto** **de** **marcos**
 - permite el uso de etiquetas no aprobadas,
 - permite el uso de marcos, desaconsejados por el W3C en la actualidad.
 
@@ -277,17 +257,7 @@ Dado que existen más de 2 billones de páginas web y se siguen creando miles ca
 
 ## 2.5.2 Directivas para robots de búsqueda
 Se pueden indicar directivas mediante metaetiquetas para controlar cómo indexan los buscadores. La tabla presentada incluye:
-- `all`
-- `noindex`
-- `nofollow`
-- `none`
-- `noarchive`
-- `nosnippet`
-- `noodp`
-- `notranslate`
-- `noimageindex`
-- `unavailable_after: [RFC-850 date/time]`
-
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-12.png)
 
 ### Ejemplo
 ```html
@@ -298,21 +268,12 @@ Se pueden indicar directivas mediante metaetiquetas para controlar cómo indexan
 - Googlebot → Google
 - MSNBot → Microsoft
 
-Y la diapositiva compara qué directivas soporta cada uno.
-
-- **`title`**: conviene usarlo siempre con un texto claro porque identifica la página y ayuda al SEO.
-- **`h1`**: marca el encabezado principal visible; normalmente se usa una vez por página.
-- **`alt`** en `img`: describe la imagen, mejora accesibilidad y también aporta contexto a buscadores; debe estar en las imágenes informativas.
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-13.png)
 
 
 # 2.6 Elementos HTML, sintaxis y jerarquía
 ## 2.6.1 Herramientas de análisis
-La presentación menciona estas herramientas:
-- Safari’s Web Inspector
-- Chrome Developer Tools (`CTRL+Shift+J`)
-- Internet Explorer’s Developer Tools
-- Firebug / Firefox Web Developer
-- Opera Dragonfly
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-14.png)
 
 ## 2.6.2 Elementos HTML: marcas, contenidos y jerarquía
 Las páginas web están organizadas en **elementos**, y un elemento se entiende como:
@@ -444,6 +405,8 @@ Etiquetas mostradas:
 - **`a`**: crea enlaces a páginas, archivos o zonas internas.
 - **`blockquote`**: marca citas extensas separadas del texto normal.
 
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-23.png)
+
 ## 2.8.2 Etiquetas de línea: formato inline y texto literal
 Etiquetas mostradas:
 - `strong`
@@ -485,6 +448,7 @@ de forma literal
 - **`br`**: inserta un salto de línea dentro del mismo bloque; no sustituye a un párrafo.
 - **`pre`**: conserva espacios y saltos, útil para texto literal o ejemplos.
 
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-22.png)
 
 # 2.9 Enlaces, listas, imágenes y tablas
 
@@ -519,6 +483,7 @@ En el material práctico también se diferencia entre:
 - **`href`**: indica el destino del enlace, ya sea una página, archivo, correo o ancla interna.
 - **`id`**: identifica un elemento de forma única; se usa mucho en anclajes, CSS, JavaScript y asociación con `label`.
 
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-21.png)
 
 ## 2.9.2 Listas
 ### Tipos de listas
@@ -540,6 +505,8 @@ Ejemplo:
 </ol>
 ```
 
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-20.png)
+
 ### Lista no ordenada
 Etiquetas:
 - `ul`
@@ -554,6 +521,8 @@ Ejemplo:
   <li>etc.</li>
 </ul>
 ```
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-19.png)
 
 ### Lista de definición
 Etiquetas:
@@ -572,6 +541,7 @@ Ejemplo:
 </dl>
 ```
 
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-18.png)
 ### Uso de cada etiqueta
 - **`ol`**: lista ordenada; úsala cuando el orden importe.
 - **`ul`**: lista no ordenada; úsala cuando solo quieras enumerar elementos.
@@ -590,6 +560,8 @@ La etiqueta `img` permite insertar imágenes. En un ejemplo se usan formatos GIF
 <p>GIF <img src="imagen.gif"></p>
 <p>JPEG <img src="imagen.jpg"></p>
 ```
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-17.png)
 
 ### Formatos citados
 - JPEG / JPG → Lossy → ideal para fotografías
@@ -690,6 +662,8 @@ Etiquetas:
   </tr>
 </table>
 ```
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-16.png)
 
 ### Uso de cada etiqueta
 - **`table`**: crea una tabla de datos reales; no debe usarse para maquetar.
@@ -812,6 +786,8 @@ La diapositiva muestra que `details` permite ocultar contenido desplegable y `su
 - **`time`**: añade significado semántico a fechas y horas.
 - **`progress`**: muestra el progreso de una tarea.
 
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-15.png)
+
 
 # 2.12 Formularios
 ## 2.12.1 Idea general
@@ -865,9 +841,7 @@ Estructura general:
 ### `type="button"`
 Botón estándar que realiza una acción al hacer clic.
 
-```html
-<input type="Button" name="btn_1" value="Pulsar">
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-24.png)
 
 Eventos asociados:
 - `onBlur`
@@ -882,9 +856,7 @@ Eventos asociados:
 
 Caja de texto simple en una línea, sin retornos de carro.
 
-```html
-<input type="text" size="20" name="txt_1" placeholder="Este es el texto por defecto">
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-25.png)
 
 Eventos:
 - `onBlur`
@@ -900,9 +872,7 @@ Eventos:
 ### `type="password"`
 Texto no visible al usuario.
 
-```html
-<input type="password" size="20" name="pwd_1">
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-26.png)
 
 Eventos:
 - `onBlur`
@@ -919,9 +889,7 @@ Eventos:
 
 Campo oculto útil para enviar información al servidor sin mostrarla al usuario.
 
-```html
-<input type="hidden" name="oculto_1" value="Información enviada">
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-27.png)
 
 **Uso:** enviar datos invisibles.  
 **Cuándo usarlo:** identificadores, tokens o datos auxiliares que no deben editarse directamente en la interfaz.
@@ -931,9 +899,7 @@ Campo oculto útil para enviar información al servidor sin mostrarla al usuario
 
 Botón de envío del formulario.
 
-```html
-<input type="submit" name="sub_1" value="Pulsar para enviar">
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-28.png)
 
 Eventos:
 - `onBlur`
@@ -948,9 +914,7 @@ Eventos:
 
 Restaura los valores iniciales del formulario.
 
-```html
-<input type="reset" name="rst_1" value="Pulsa para restablecer">
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-29.png)
 
 Eventos:
 - `onBlur`
@@ -965,9 +929,7 @@ Eventos:
 
 Permite seleccionar archivos locales para subir al servidor.
 
-```html
-<input type="file" name="arch_1" size="30">
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-30.png)
 
 Eventos:
 - `onBlur`
@@ -982,10 +944,7 @@ Eventos:
 ### `type="checkbox"`
 Permite seleccionar varias opciones mediante recuadros.
 
-```html
-<input type="checkbox"> Opción 1
-<input type="checkbox" checked> Opción 2
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-31.png)
 
 Eventos:
 - `onBlur`
@@ -999,10 +958,7 @@ Eventos:
 ### `type="radio"`
 Permite seleccionar entre opciones de forma excluyente.
 
-```html
-<input type="radio" name="nm_1"> Opción 1 <br/>
-<input type="radio" checked name="nm_1"> Opción 2
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-32.png)
 
 Eventos:
 - `onBlur`
@@ -1016,9 +972,7 @@ Eventos:
 ### `type="image"`
 Permite enviar al servidor las coordenadas sobre la imagen en las que se ha pulsado.
 
-```html
-<input type="image" src="imagen.gif" name="coord">
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-33.png)
 
 Nota importante:
 - al servidor llegan los valores `coord.x` y `coord.y`.
@@ -1033,13 +987,7 @@ Permite enviar al servidor cadenas de caracteres en formato multilínea.
 
 Ejemplo:
 
-```html
-<textarea name="texto_1" rows="5" cols="30">
-Introduzca
-el texto
-deseado
-</textarea>
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-34.png)
 
 Eventos:
 - `onKeyDown`
@@ -1057,13 +1005,7 @@ Eventos:
 
 Ejemplo:
 
-```html
-<select name="lista_1" size="1">
-  <option selected value="valor_1">Opción 1</option>
-  <option value="valor_2">Opción 2</option>
-  <option value="valor_3">Opción 3</option>
-</select>
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-36.png)
 
 Nota:
 ```html
@@ -1087,18 +1029,7 @@ permite seleccionar múltiples elementos.
 
 `label` permite asociar un texto indicativo a una etiqueta `input`.
 
-Ejemplo considerado más correcto:
-
-```html
-<label for="txt">Texto:</label>
-<input type="text" size="20" name="txt_1" id="txt">
-```
-
-Otro ejemplo:
-
-```html
-<label>Texto:<input type="text" size="20" name="txt_1"></label>
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-37.png)
 
 **`label`**  
 **Sirve para:** asociar un texto descriptivo a un control de formulario.  
@@ -1108,10 +1039,7 @@ Otro ejemplo:
 ### `range`
 Permite crear un control gráfico tipo scroll para seleccionar un rango de valores.
 
-```html
-<label for="age">Edad:</label>
-<input type="range" min="18" max="70" value="35" id="age">
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-38.png)
 
 **`type="range"`**  
 **Sirve para:** elegir un valor dentro de un intervalo.  
@@ -1122,16 +1050,7 @@ Permite crear un control gráfico tipo scroll para seleccionar un rango de valor
 
 Permite crear listas de valores por defecto que ayudan al usuario.
 
-```html
-<input type="text" list="nombres" name="txt_1">
-<datalist id="nombres">
-  <option value="Pedro">
-  <option value="Antonio">
-  <option value="Manuel">
-  <option value="Pablo">
-</datalist>
-<input type="submit">
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-39.png)
 
 **`datalist`**  
 **Sirve para:** ofrecer sugerencias asociadas a un `input`.  
@@ -1144,21 +1063,7 @@ Permiten crear secciones diferenciadas dentro de un formulario.
 
 Ejemplo:
 
-```html
-<fieldset>
-  <legend>Campo 1:</legend>
-  <label>Nombre 1: <input type="text" name="name1"></label><br/>
-  <label>Nombre 2: <input type="text" name="name2"></label>
-</fieldset>
-
-<fieldset>
-  <legend>Campo 2:</legend>
-  <input type="checkbox"> Opción 1<br/>
-  <input type="checkbox" checked> Opción 2
-</fieldset>
-
-<input type="submit" value="Submit">
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-40.png)
 
 **`fieldset`**  
 **Sirve para:** agrupar controles relacionados dentro de un formulario.  
@@ -1174,15 +1079,10 @@ Permiten seleccionar fechas por días, semanas o años en un elemento gráfico.
 
 Ejemplos:
 
-```html
-<label>Fecha: <input type="date" name="day"></label>
-<input type="submit">
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-41.png)
 
-```html
-<label>Fecha: <input type="week" name="day"></label>
-<input type="submit">
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-42.png)
+
 
 **`type="date"`**  
 **Sirve para:** seleccionar una fecha concreta.  
@@ -1201,10 +1101,7 @@ Ejemplos:
 
 Permite seleccionar un color a partir de una paleta.
 
-```html
-<label>Color: <input type="color" name="miColor"></label>
-<input type="submit">
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-43.png)
 
 **`type="color"`**  
 **Sirve para:** elegir un color visualmente.  

@@ -2,55 +2,23 @@
 title: "JavaScript"
 ---
 
-# 4.1 Qué es JavaScript
+# 1. Introducción
 
-JavaScript es un **lenguaje de programación interpretado** creado originalmente en **1995 por Brendan Eich en Netscape** para añadir interactividad a páginas web abiertas con Netscape Navigator 2.0. Su nombre original fue **Mocha**, luego pasó a llamarse **JavaScript** mediante acuerdo con Sun Microsystems, y **no es Java**. En **1997** comenzó su estandarización en **ECMA** con el nombre **ECMAScript**, y posteriormente también pasó a estándar ISO. Con su aparición se introduce el concepto de **HTML dinámico (DHTML)**.
+JavaScript es un **lenguaje de programación interpretado** creado en **1995 por Brendan Eich en Netscape** para añadir interactividad a páginas web abiertas con Netscape Navigator 2.0. Su nombre original fue **Mocha**, después pasó a llamarse **JavaScript** mediante acuerdo con Sun Microsystems, y **no es Java**. En **1997** comenzó su estandarización en **ECMA** con el nombre **ECMAScript**; más adelante también se convirtió en estándar ISO. Con su aparición se populariza el **HTML dinámico (DHTML)**.
 
-## 4.1.1 Dónde se ejecuta
+## 1.1 Entorno de ejecución e integración con HTML
 
-JavaScript aparece embebido en el HTML o enlazado desde un fichero externo y el navegador lo interpreta en el **lado cliente** al descargar la página. Hoy existe la posibilidad de ejecutar JavaScript en servidor mediante **Node.js**, pero que eso no se trata en este tema.
+JavaScript puede ir embebido en el HTML o enlazado desde un fichero externo `.js`. El navegador lo interpreta normalmente en el **lado cliente** al descargar la página. Hoy también puede ejecutarse en servidor con **Node.js**, pero ese uso no forma parte de este tema.
 
-Idea práctica: sin JavaScript la página muestra contenido; con JavaScript puede reaccionar, validar y cambiar el DOM.
+Idea práctica: sin JavaScript la página muestra contenido; con JavaScript puede reaccionar, validar y modificar el DOM.
 
-Ejemplo:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-74.png)
 
-```html
-<button id="btn">Cambiar texto</button>
-<p id="mensaje">Texto inicial</p>
+Los navegadores usan motores JavaScript propios.
 
-<script>
-  document.getElementById("btn").addEventListener("click", function () {
-    document.getElementById("mensaje").textContent = "Texto cambiado";
-  });
-</script>
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-73.png)
 
-## 4.1.2 Motores JavaScript de navegadores
-
-Las diapositivas enumeran varios motores JavaScript:
-
-- Apple Safari → **Nitro**
-    
-- Google Chrome → **V8**
-    
-- Microsoft IE → **Chakra**
-    
-- Mozilla Firefox → **JägerMonkey**
-    
-- Opera → **Carakan**
-    
-
-# 4.2 Integración con HTML
-
-JavaScript se ejecuta en el punto donde aparece escrito dentro del código HTML y debe ir dentro de etiquetas `script`. Puede incluirse como código interno o como fichero externo `.js`, invocado a lo largo de la página HTML. En el caso de páginas externas, se incluye con:
-
-```html
-<script src="codigo.js"></script>
-```
-
-Además, para mejorar la carga de la página, las diapositivas recomiendan colocarlo al final, antes de `</body>`.
-
-Formas habituales:
+La integración con HTML se hace mediante la etiqueta `script`:
 
 ```html
 <!-- Interno -->
@@ -62,11 +30,7 @@ Formas habituales:
 <script src="codigo.js"></script>
 ```
 
-## 4.2.1 Qué efecto produce ponerlo al final
-
-Si el navegador carga antes el HTML y después el JavaScript, el contenido principal aparece antes al usuario y el script suele encontrar ya creados los elementos sobre los que quiere actuar.
-
-Ejemplo típico:
+También es habitual colocarlo al final del `body` para que el HTML principal cargue antes y el script encuentre ya creados los elementos sobre los que va a actuar:
 
 ```html
 <body>
@@ -75,105 +39,38 @@ Ejemplo típico:
 </body>
 ```
 
-# 4.3 Otros lenguajes de script e incompatibilidades históricas
+## 1.2 Incompatibilidades históricas y nacimiento del DOM estándar
 
-Microsoft desarrolló para Internet Explorer dos versiones propias:
+Microsoft desarrolló para Internet Explorer dos variantes propias:
 
 - **JScript**, similar a ECMAScript pero con diferencias en el modelo de objetos.
-    
 - **VBScript**, incompatible con navegadores distintos de IE y con sintaxis basada en Visual Basic.
-    
 
-La diferencia entre el modelo de objetos de JScript y JavaScript produjo incompatibilidades, y por ello el **W3C definió el HTML DOM** para unificar criterios.
+Estas incompatibilidades llevaron al **W3C** a definir el **HTML DOM** para unificar criterios.
 
-# 4.4 DOM: Document Object Model
+El **DOM (Document Object Model)** es el mecanismo estándar para acceder a documentos HTML, XML y SVG, permitiendo que programas y scripts modifiquen su contenido, estructura y estilo. El W3C distingue tres partes:
 
-El **DOM** es el mecanismo estándar definido por el W3C para acceder a documentos HTML, XML y SVG, permitiendo que programas y scripts modifiquen su contenido, estructura y estilo. El W3C define tres partes separadas:
+- **Core DOM**: modelo estándar para cualquier documento estructurado.
+- **XML DOM**: modelo estándar para documentos XML.
+- **HTML DOM**: modelo estándar para documentos HTML.
 
-- **Core DOM** → modelo estándar para cualquier documento estructurado
-    
-- **XML DOM** → modelo estándar para cualquier documento XML
-    
-- **HTML DOM** → modelo estándar para cualquier documento HTML
-    
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-75.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-76.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-78.png)
 
-## 4.4.1 Idea clave del DOM
+## 1.3 Objetos principales del navegador y del HTML DOM
 
-El navegador transforma automáticamente las etiquetas de un documento HTML en una **estructura arborescente de nodos** accesibles mediante JavaScript.
+Aunque no todos forman parte del árbol de nodos, se usan continuamente junto al DOM:
 
-Resumen:
-- HTML fuente = texto con etiquetas.
-- DOM = objetos que representan esas etiquetas en memoria.
-
-Ejemplo:
-
-```html
-<p id="texto">Hola</p>
-```
-
-```js
-const parrafo = document.getElementById("texto");
-parrafo.textContent = "Hola DAW";
-```
-
-## 4.4.2 Reglas de transformación del árbol
-
-La transformación automática de la página en árbol sigue estas reglas:
-
-- las etiquetas HTML se transforman en nodos,
-    
-- el texto que contienen aparece como hijo del nodo de esa etiqueta,
-    
-- si una etiqueta está dentro de otra, sus nodos pasan a ser hijos de la que la contiene.
-
-Ejemplo visual:
-
-```html
-<div>
-  <p>Hola</p>
-</div>
-```
-
-Se interpreta así:
-- `div` es padre,
-- `p` es hijo de `div`,
-- `"Hola"` es hijo de `p`.
-    
-
-## 4.4.3 Etiqueta vs elemento
-
-Las diapositivas distinguen:
-
-- **Etiqueta** → texto literal en el HTML que lee el navegador, por ejemplo `<p>`
-    
-- **Elemento** → objeto del DOM creado a partir de esa etiqueta, por ejemplo `HTMLParagraphElement`
-    
-
-**Resumen muy importante:**  
-La etiqueta está en el código fuente. El elemento es el objeto con el que trabaja JavaScript.
-
-# 4.5 Objetos principales del HTML DOM
-
-Mediante JavaScript es posible acceder a diferentes objetos relacionados con un documento HTML. `window`, `document`, `location`, `history`, `navigator`, `screen` y `frames`, y `document` es una propiedad del objeto `window`, que representa al navegador.
-
-## 4.5.1 Objetos del navegador más usados
-Aunque no todos forman parte del árbol de nodos, se usan constantemente junto al DOM:
-
-- `window` → es el objeto global del navegador. Representa la ventana o pestaña actual y contiene a `document`.
-    
-- `document` → representa el documento HTML cargado. Se usa para buscar, crear, modificar o borrar nodos.
-    
-- `location` → contiene la URL actual. Se usa para leerla o redirigir a otra página.
-    
-- `history` → permite moverse por el historial del navegador.
-    
-- `navigator` → da información sobre el navegador y el dispositivo.
-    
-- `screen` → ofrece datos de la pantalla del usuario.
-    
-- `frames` → permite acceder a marcos o iframes si existen.
-    
-Ejemplos:
+| Objeto | Para qué sirve |
+| --- | --- |
+| `window` | Objeto global del navegador; representa la ventana o pestaña actual y contiene a `document`. |
+| `document` | Representa el documento HTML cargado; permite buscar, crear, modificar o borrar nodos. |
+| `location` | Contiene la URL actual; permite leerla o redirigir. |
+| `history` | Permite moverse por el historial del navegador. |
+| `navigator` | Da información sobre navegador y dispositivo. |
+| `screen` | Ofrece datos de la pantalla. |
+| `frames` | Permite acceder a marcos o `iframe` si existen. |
 
 ```js
 console.log(window.innerWidth);
@@ -184,189 +81,40 @@ console.log(navigator.userAgent);
 console.log(screen.width);
 ```
 
-## 4.5.2 Para qué sirve cada objeto principal del DOM
+`document` es una instancia de la clase `HTMLDocument`.
 
-### `Document`
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-80.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-81.png)
 
-Representa toda la página HTML cargada.  
-Sirve para localizar elementos, crear nuevos nodos y acceder a la estructura general del documento.
+## 1.4 Árbol HTML DOM y efectos que permite
 
-```js
-const titulo = document.getElementById("titulo");
-const nuevoParrafo = document.createElement("p");
-```
+`document` representa el propio documento que se muestra en la ventana del navegador. La transformación automática del HTML a árbol DOM sigue estas reglas:
 
-### `Element`
+- Cada **etiqueta HTML** genera un nodo de elemento.
+- El **texto** contenido en la etiqueta genera un nodo hijo de texto.
+- Si una etiqueta está dentro de otra, sus nodos quedan como hijos del nodo contenedor.
 
-Representa una etiqueta HTML concreta, como un `div`, `p`, `a` o `img`.  
-Sirve para cambiar texto, atributos, clases, estilos o contenido interno.
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-82.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-83.png)
 
-```js
-const caja = document.querySelector(".caja");
-caja.textContent = "Contenido nuevo";
-caja.setAttribute("data-activo", "si");
-```
+Gracias al DOM, JavaScript puede:
 
-### `Attr`
+- cambiar etiquetas HTML;
+- cambiar atributos HTML;
+- cambiar estilos CSS;
+- eliminar etiquetas y atributos;
+- añadir etiquetas y atributos;
+- reaccionar a eventos HTML;
+- crear nuevos eventos.
 
-Representa un atributo de un elemento, como `id`, `class`, `src` o `href`.  
-En la práctica suele manejarse con `getAttribute`, `setAttribute` y `removeAttribute`.
+## 1.5 Selección de elementos y acceso al contenido
 
-```js
-const imagen = document.querySelector("img");
-console.log(imagen.getAttribute("src"));
-imagen.setAttribute("alt", "Foto de ejemplo");
-```
+Para acceder a elementos individuales, los métodos más usados son:
 
-### `Text`
-
-Representa un nodo de texto dentro de un elemento.  
-Sirve para trabajar con el texto sin añadir etiquetas HTML.
-
-```js
-const texto = document.createTextNode("Hola DAW");
-document.body.appendChild(texto);
-```
-
-### `Comment`
-
-Representa un comentario HTML.  
-No se usa mucho en ejercicios básicos, pero existe como nodo del árbol DOM.
-
-```js
-const comentario = document.createComment("Comentario interno");
-document.body.appendChild(comentario);
-```
-
-### `HTMLDocument`
-
-Es la versión específica de `Document` para documentos HTML.  
-En la práctica, cuando usamos `document` en una página web estamos trabajando con un `HTMLDocument`.
-
-```js
-console.log(document.body);
-console.log(document.head);
-```
-
-### `HTMLElement`
-
-Es la clase base de los elementos HTML habituales.  
-Sirve para entender que etiquetas como `div`, `p` o `button` comparten propiedades comunes como `id`, `className`, `innerHTML` o `style`.
-
-```js
-const boton = document.querySelector("button");
-boton.id = "enviar";
-boton.className = "btn-principal";
-```
-
-### `Style`
-
-Permite acceder a los estilos en línea de un elemento mediante la propiedad `style`.  
-Sirve para cambiar la apariencia desde JavaScript.
-
-```js
-const aviso = document.getElementById("aviso");
-aviso.style.color = "red";
-aviso.style.fontSize = "20px";
-```
-
-### `Event`
-
-Representa una acción ocurrida en la página, como un clic, una pulsación de tecla o el envío de un formulario.  
-Sirve para responder a la interacción del usuario.
-
-```js
-const boton = document.getElementById("btn");
-
-boton.addEventListener("click", function (evento) {
-  console.log(evento.type);
-});
-```
-
-## 4.5.3 Colecciones auxiliares y cómo usarlas
-
-### `HTMLCollection`
-
-Colección de elementos HTML devuelta por métodos como `getElementsByTagName` o `getElementsByClassName`.  
-Suele ser una colección "viva": si cambia el DOM, su contenido puede actualizarse automáticamente.
-
-```js
-const parrafos = document.getElementsByTagName("p");
-console.log(parrafos[0]);
-```
-
-### `NodeList`
-
-Lista de nodos devuelta, por ejemplo, por `querySelectorAll`.  
-Se usa mucho para recorrer varios elementos a la vez.
-
-```js
-const items = document.querySelectorAll(".item");
-items.forEach(function (item) {
-  item.classList.add("activo");
-});
-```
-
-### `NamedNodeMap`
-
-Colección de atributos de un elemento, accesible mediante la propiedad `attributes`.  
-Sirve para inspeccionar todos los atributos de una etiqueta.
-
-```js
-const enlace = document.querySelector("a");
-console.log(enlace.attributes);
-```
-
-### `DOMTokenList`
-
-Es la colección que maneja clases CSS a través de `classList`.  
-Sirve para añadir, quitar, alternar o comprobar clases.
-
-```js
-const caja = document.querySelector(".caja");
-caja.classList.add("visible");
-caja.classList.remove("oculto");
-caja.classList.toggle("destacado");
-```
-
-
-# 4.6 Qué puede hacer JavaScript mediante DOM
-
-Las diapositivas resumen que con DOM JavaScript puede:
-
-- cambiar todas las etiquetas HTML de la página,
-    
-- cambiar todos los atributos HTML,
-    
-- cambiar todos los estilos CSS,
-    
-- eliminar etiquetas y atributos,
-    
-- añadir nuevas etiquetas y atributos,
-    
-- reaccionar a todos los eventos HTML,
-    
-- crear nuevos eventos HTML.
-
-**Qué efecto produce en la web:**  
-Permite construir páginas dinámicas: contenido que cambia, formularios que validan, elementos que aparecen o desaparecen, estilos que se actualizan y comportamiento interactivo.
-
-# 4.7 Acceso a elementos del DOM
-
-## 4.7.1 Acceso a elementos individuales
-
-Las diapositivas citan dos métodos principales:
-
-- `getElementById(nombre)` → devuelve el elemento HTML cuyo atributo `id` coincide con el parámetro.
-    
-- `querySelector(CSS_Selector)` → devuelve el primer elemento que coincide con el selector CSS pasado.
-    
-
-**Diferencia práctica:**  
-`getElementById` busca por id.  
-`querySelector` permite usar selectores CSS más generales.
-
-Ejemplos:
+| Método | Devuelve |
+| --- | --- |
+| `getElementById(nombre)` | El elemento cuyo `id` coincide con el parámetro. |
+| `querySelector(selectorCSS)` | El primer elemento que coincide con el selector CSS indicado. |
 
 ```js
 const cabecera = document.getElementById("cabecera");
@@ -374,125 +122,85 @@ const primerDestacado = document.querySelector(".daw");
 const primerEnlaceDelMenu = document.querySelector("nav a");
 ```
 
-## 4.7.2 Propiedades para acceder al contenido
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-86.png)
 
-Las diapositivas incluyen estas propiedades:
+Las propiedades más usadas para acceder al contenido son:
 
-- `nodeValue` → contenido del nodo actual
-    
-- `innerHTML` → contenido de los hijos del nodo actual
-    
-- `textContent` → contenido de texto de los hijos del nodo actual
-    
-
-### Diferencia entre `innerHTML` y `textContent`
-
-`innerHTML` interpreta HTML.  
-`textContent` solo trata texto.
-
-Ejemplo:
+| Propiedad | Uso |
+| --- | --- |
+| `nodeValue` | Contenido del nodo actual. |
+| `innerHTML` | Contenido HTML de los hijos del nodo actual. |
+| `textContent` | Contenido de texto de los hijos del nodo actual. |
 
 ```js
 const caja = document.getElementById("caja");
 
 caja.innerHTML = "<strong>Hola</strong>";
-// renderiza una negrita real
+// renderiza HTML real
 
 caja.textContent = "<strong>Hola</strong>";
 // muestra literalmente <strong>Hola</strong>
 ```
 
-## 4.7.3 Propiedades de identificación del nodo
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-87.png)
 
-También se citan:
+Para identificar nodos también se usan:
 
-- `nodeName` → nombre del nodo
-    
-- `nodeType` → tipo del nodo actual
-    
-- `nodeValue` → valor del nodo actual
-    
+- `nodeName`: nombre del nodo.
+- `nodeType`: tipo del nodo.
+- `nodeValue`: valor del nodo.
 
-La tabla resumida de la diapositiva incluye:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-88.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-89.png)
 
-- `1` → nodo elemento
-    
-- `2` → nodo atributo
-    
-- `3` → nodo texto
-    
-- `8` → nodo comentario
-    
+## 1.6 Acceso a colecciones: `NodeList` y `HTMLCollection`
 
-# 4.8 Acceso a conjuntos de elementos
+Para acceder a conjuntos de elementos se usan, entre otros, estos métodos:
 
-Las diapositivas recogen:
+| Método | Devuelve |
+| --- | --- |
+| `getElementsByClassName(nombre)` | `HTMLCollection` con todos los elementos cuya clase coincide. |
+| `getElementsByName(nombre)` | `HTMLCollection` con los elementos cuyo atributo `name` coincide. |
+| `getElementsByTagName(etiqueta)` | `HTMLCollection` con los elementos de esa etiqueta. |
+| `querySelectorAll(selectorCSS)` | `NodeList` con todos los nodos que coinciden con el selector CSS. |
 
-- `getElementsByClassName(nombre)` → devuelve una `HTMLCollection`
-    
-- `getElementsByName(nombre)` → devuelve una `HTMLCollection`
-    
-- `getElementsByTagName(HTML_tag)` → devuelve una `HTMLCollection`
-    
-- `querySelectorAll(CSS_Selector)` → devuelve una `NodeList`
-    
+`NodeList` representa una colección de **nodos** y `HTMLCollection` una colección de **elementos HTML**.
 
-## 4.8.1 NodeList vs HTMLCollection
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-90.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-91.png)
 
-Se define:
+Puntos comunes:
 
-- `NodeList` → colección de nodos sobre la que se puede iterar
-    
-- `HTMLCollection` → colección de elementos HTML
-    
-
-### Similitudes
-
-- son listas tipo array,
-    
-- tienen propiedad `length`,
-    
+- se parecen a arrays;
+- tienen `length`;
 - permiten acceso por índice.
-    
 
-### Diferencias
+Diferencias importantes:
 
-- en `HTMLCollection` se puede acceder por nombre, id o índice,
-    
-- en `NodeList` solo por índice,
-    
-- `NodeList` puede contener nodos de atributos y texto, no solo elementos,
-    
-- uno puede ser “vivo” y otro estático: si el DOM cambia, un objeto vivo reconoce los nuevos elementos y uno estático no.
-    
+- `HTMLCollection` puede acceder por nombre, `id` o índice;
+- `NodeList` accede solo por índice;
+- `NodeList` puede contener nodos de texto o atributos, no solo elementos;
+- una colección puede ser **viva** y otra **estática**.
 
-**Resumen útil de examen:**  
-`querySelectorAll` suele devolver colección estática.  
-`getElementsBy...` suele devolver colección viva.
-
-Ejemplo corto:
+Resumen útil: `querySelectorAll()` suele devolver colección estática y `getElementsBy...()` suele devolver colección viva.
 
 ```js
 const estaticos = document.querySelectorAll(".item");
 const vivos = document.getElementsByClassName("item");
 ```
 
-Si luego añades un nuevo `.item`, normalmente `vivos` lo detecta y `estaticos` no.
+Si después se añade un nuevo `.item`, normalmente `vivos` lo detecta y `estaticos` no.
 
-# 4.9 Crear y eliminar nodos
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-92.png)
 
-El DOM define métodos para crear y borrar contenido:
+## 1.7 Crear, eliminar y recorrer nodos
 
-- `createElement()` → inserta un nuevo nodo
-    
-- `createTextNode()` → inserta un nodo de texto
-    
-- `appendChild()` / `removeChild()` → inserta o elimina un nodo hijo
-    
+El DOM ofrece métodos para crear y borrar contenido:
 
-Permite construir contenido nuevo desde JavaScript sin que estuviera escrito previamente en el HTML.
-
-Ejemplo completo:
+- `createElement()`: crea un nuevo nodo de elemento.
+- `createTextNode()`: crea un nodo de texto.
+- `appendChild()`: inserta un nodo hijo.
+- `removeChild()`: elimina un nodo hijo.
 
 ```js
 const p = document.createElement("p");
@@ -505,37 +213,20 @@ document.body.appendChild(p);
 document.body.removeChild(p);
 ```
 
-# 4.10 Referencias entre nodos
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-93.png)
 
-Las diapositivas citan las siguientes propiedades:
+Para moverse por el árbol se usan estas referencias:
 
-- `parentNode`
-    
-- `previousSibling`
-    
-- `nextSibling`
-    
-- `firstChild`
-    
-- `lastChild`
-    
-- `firstElementChild`
-    
-- `childNodes`
-    
-- `children`
-    
+| Propiedad | Uso |
+| --- | --- |
+| `parentNode` | Nodo padre del nodo actual. |
+| `previousSibling` / `nextSibling` | Nodo hermano anterior o siguiente. |
+| `firstChild` / `lastChild` | Primer o último nodo hijo. |
+| `firstElementChild` | Primer hijo que es elemento HTML. |
+| `childNodes` | Todos los nodos hijos. |
+| `children` | Solo los elementos hijos. |
 
-## 4.10.1 Diferencia entre `childNodes` y `children`
-
-Las páginas 30 y 31 muestran visualmente que:
-
-- `childNodes` devuelve todos los nodos hijos, incluyendo texto, comentarios y script,
-    
-- `children` devuelve solo elementos HTML.
-    
-
-Ejemplo:
+`childNodes` incluye texto, comentarios o `script`; `children` solo incluye elementos HTML.
 
 ```js
 const caja = document.getElementById("caja");
@@ -544,226 +235,113 @@ console.log(caja.childNodes); // incluye textos y saltos de línea
 console.log(caja.children);   // solo elementos HTML
 ```
 
-# 4.11 Acceso y manipulación de atributos
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-94.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-95.png)
 
-Para atributos, las diapositivas incluyen:
+## 1.8 Atributos y estilos desde JavaScript
 
-- `element.attributes` → devuelve atributos como `NamedNodeMap`
-    
-- `element.getAttribute()`
-    
-- `element.getAttributeNames()`
-    
-- `element.getAttributeNode()`
-    
+Para consultar atributos:
 
-También se citan métodos para modificarlos:
+| Acceso | Qué devuelve |
+| --- | --- |
+| `element.attributes` | Colección de atributos tipo `NamedNodeMap`. |
+| `element.getAttribute(nombre)` | Valor del atributo como `string`. |
+| `element.getAttributeNames()` | Array con los nombres de los atributos. |
+| `element.getAttributeNode(nombre)` | El nodo atributo correspondiente. |
 
-- `element.hasAttribute()`
-    
-- `element.setAttribute()`  
-    En la diapositiva aparece como `Attribute()` por errata, pero el ejemplo mostrado usa `setAttribute("href", "...")`.
-    
-- `element.removeAttribute()`
-    
+Para modificarlos:
 
-Permite leer, crear, cambiar o borrar atributos HTML como `href`, `src`, `alt`, `id`, etc.
+- `element.hasAttribute(nombre)`: comprueba si existe;
+- `element.setAttribute(nombre, valor)`: modifica o crea el atributo;
+- `element.removeAttribute(nombre)`: elimina el atributo.
 
-Ejemplo:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-96.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-97.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-98.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-99.png)
 
-```js
-const enlace = document.querySelector("a");
+En estilos:
 
-console.log(enlace.getAttribute("href"));
-enlace.setAttribute("href", "https://www.usc.es");
-enlace.removeAttribute("target");
-```
+- `element.style` accede a los estilos en línea del elemento;
+- `window.getComputedStyle(element)` accede al conjunto completo de estilos calculados.
 
-# 4.12 Acceso a estilos desde JavaScript
+Ambos devuelven objetos `CSSStyleDeclaration`.
 
-Las diapositivas explican que:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-100.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-101.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-103.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-104.png)
 
-- `style` permite acceder al estilo del elemento seleccionado,
-    
-- `.style` solo retorna estilos introducidos en línea,
-    
-- `window.getComputedStyle(element)` permite acceder a todos los estilos aplicados al elemento,
-    
-- ambos devuelven objetos del tipo `CSSStyleDeclaration`.
-    
+## 1.9 Eventos en el DOM y APIs del navegador
 
-## 4.12.1 Diferencia importante
+Un evento ocurre cuando el usuario interactúa con teclado o ratón, cambia el tamaño de la ventana, se carga la página, etc. Cuando sucede, se lanza una función programable. La información del evento se guarda en un objeto de la clase `Event`.
 
-`element.style` solo ve estilos inline.  
-`getComputedStyle(element)` ve el estilo final resultante.
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-105.png)
 
-Ejemplo:
+Las tres formas clásicas de asociar eventos son:
 
-```js
-const caja = document.getElementById("caja");
+| Forma | Idea clave |
+| --- | --- |
+| Atributos HTML | Ejemplo: `onclick="funcion()"`; es la forma antigua y no se recomienda. |
+| Manejadores DOM | Ejemplo: `element.onclick = funcion;`; solo permite una función por evento. |
+| `addEventListener` | Forma actual y recomendada; permite varias funciones para el mismo evento. |
 
-console.log(caja.style.color); // solo inline
-console.log(getComputedStyle(caja).getPropertyValue("color")); // estilo final
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-106.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-107.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-108.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-109.png)
 
-# 4.13 Eventos en el DOM
+Cuando el evento ocurre en un elemento anidado, se propaga:
 
-Los eventos ocurren cuando el usuario realiza acciones con teclado o ratón, cuando cambia el tamaño de la ventana, al cargar la página, etc. Cuando un evento ocurre, se lanza una función programable. El evento se almacena en un objeto de la clase `Event`. Las diapositivas destacan:
+- hacia fuera si se trabaja en **bubble mode**;
+- de fuera hacia dentro si se usa **capturing mode**.
 
-- `.type` → tipo de evento
-    
-- `.target` → objeto que lo dispara
-    
-- `.preventDefault()` → detiene la acción por defecto
-    
-- `.stopPropagation()` → detiene la propagación en burbuja
-    
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-112.png)
 
-## 4.13.1 Formas de asociar eventos
+El objeto evento se recibe como parámetro en la función manejadora y permite acceder, por ejemplo, a `e.type` y `e.target`.
 
-Las diapositivas muestran tres formas:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-113.png)
 
-- mediante atributos HTML de eventos,
-    
-- mediante manejadores DOM,
-    
-- mediante `addEventListener` de DOM level 2.
-    
+JavaScript también dispone de muchas APIs sobre su núcleo:
 
-### Atributos HTML de eventos
+- **APIs de navegador**: integradas en el navegador;
+- **APIs de terceros**: obtenidas desde la web, por ejemplo Facebook, Twitter, Google Maps o YouTube.
 
-Es la forma antigua, por ejemplo `onclick="funcion()"`, y no se recomienda porque no separa JavaScript del HTML.
+Entre las APIs HTML5 mostradas en el tema:
 
-### Manejadores DOM
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-115.png)
 
-Ejemplo conceptual: `element.onclick = funcion;`  
-Solo permite asociar una función por evento.
-
-### `addEventListener`
-
-Es la forma actual. Permite asociar varias funciones al mismo evento.
-
-**Resumen importante:**  
-La forma recomendada es `addEventListener`.
-
-Ejemplo recomendado:
+- **Geolocation**: obtiene latitud y longitud del usuario si este da permiso; se usa mediante `navigator.geolocation`.
+- **localStorage** y **sessionStorage**: almacenamiento local alternativo a cookies.
+- **console**: API de depuración; el método más usado es `console.log()`.
 
 ```js
-const boton = document.getElementById("btn");
+localStorage.setItem("nombreDato", "valorDato");
+console.log(localStorage.getItem("nombreDato"));
 
-boton.addEventListener("click", function () {
-  console.log("Primer manejador");
-});
-
-boton.addEventListener("click", function () {
-  console.log("Segundo manejador");
-});
+sessionStorage.clave = "valor";
+console.log(sessionStorage.clave);
 ```
-
-## 4.13.2 Flujo de eventos
-
-Cuando un evento ocurre en una etiqueta interior a otras, el evento se propaga:
-
-- hacia las etiquetas contenedoras si es `false` → **bubble mode**
-    
-- o viceversa si es `true` → **capturing mode**
-    
-
-Ejemplo típico: si haces clic en un botón dentro de un `div`, puede ejecutarse el evento del botón y también el del `div`.
-
-## 4.13.3 Acceso al objeto evento
-
-La página 48 muestra que el acceso a los eventos se realiza a través del parámetro introducido en la función invocada por el listener. Allí se ve un ejemplo donde se muestran `e.type` y `e.target`.
-
-Ejemplo:
 
 ```js
-document.getElementById("btn").addEventListener("click", function (e) {
-  console.log(e.type);   // click
-  console.log(e.target); // elemento pulsado
-});
+console.log("Mensaje de depuración");
 ```
 
-# 4.14 APIs de JavaScript en navegador
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-116.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-117.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-118.png)
 
-Una **API** es un mecanismo que permite a un programa interactuar con otros programas o scripts accediendo a sus datos para crear funcionalidades complejas de forma simple. JavaScript tiene muchas APIs construidas sobre su núcleo. Las diapositivas distinguen:
+# 2. Sintaxis Básica
 
-- **APIs de navegador** → integradas en el navegador
-    
-- **APIs de terceros** → no incluidas por defecto y obtenidas desde la web, como Facebook, Twitter, Google Maps o YouTube.
-    
+## 2.1 Reglas generales
 
-## 4.14.1 APIs HTML5 citadas
+JavaScript:
 
-Se mencionan:
+- es **sensible a mayúsculas y minúsculas**;
+- admite comentarios con `//` y `/* ... */`;
+- suele escribirse terminando cada línea con `;`.
 
-- `geolocation`
-    
-- `localStorage`
-    
-- `sessionStorage`
-    
-- `history`
-    
-- `console`
-    
-
-## 4.14.2 Geolocation
-
-Permite averiguar la posición del usuario en coordenadas geográficas de latitud y longitud, siempre que el usuario conceda permiso. Se implementa con el objeto `geolocation`, propiedad de `navigator`.
-
-## 4.14.3 localStorage y sessionStorage
-
-Permiten almacenamiento local de datos en el navegador y son un mecanismo alternativo a las cookies.
-
-- `localStorage` → sin fecha de expiración
-    
-- `sessionStorage` → se pierde al cerrar la ventana del navegador
-    
-
-Hay dos formas de almacenar:
-
-- `setItem(nombreDato, valorDato)`
-    
-- usando el dato como atributo, por ejemplo `localStorage.nombreDato = valorDato`
-    
-
-Y dos formas de recuperar:
-
-- `getItem(nombreDato)`
-    
-- acceso como atributo, por ejemplo `localStorage.nombreDato`
-    
-
-**Qué efecto produce:**  
-Permite recordar datos entre páginas o entre sesiones, como un contador, una preferencia o un nombre de usuario.
-
-Ejemplo:
-
-```js
-localStorage.setItem("usuario", "Ana");
-console.log(localStorage.getItem("usuario"));
-```
-
-## 4.14.4 Console
-
-La API `console` permite tareas de depuración, como registrar mensajes, valores de variables o cronometrar operaciones. El método más utilizado es `console.log()`.
-
-# 4.15 Sintaxis básica de JavaScript
-
-Las diapositivas indican que JavaScript:
-
-- es **sensible a mayúsculas/minúsculas**,
-    
-- es conveniente que todas las líneas terminen en `;`,
-    
-- admite comentarios con `//` y con `/* ... */`.
-    
-
-**Resumen útil:**  
-`miVariable` y `mivariable` no son lo mismo.
-
-Ejemplo:
+Resumen útil: `miVariable` y `mivariable` no son lo mismo.
 
 ```js
 let nombre = "Ana";
@@ -776,13 +354,9 @@ let nombre = "Ana";
 */
 ```
 
-# 4.16 Declaración y ámbito de variables
+## 2.2 Variables y ámbito
 
-## 4.16.1 Con `var`
-
-Se presenta la declaración clásica con `var`, donde el tipo lo toma al inicializarse. Las diapositivas indican que con la llegada de ES6, `var` ha sido sustituido por `let` y/o `const`.
-
-Ejemplo comparativo:
+La declaración clásica se hace con `var`; con ES6 aparecen `let` y `const`, que hoy se prefieren. El tipo se determina al inicializar la variable.
 
 ```js
 var edad = 20;
@@ -790,17 +364,10 @@ let curso = 2;
 const centro = "DAW";
 ```
 
-## 4.16.2 Ámbito global y local
+Respecto al ámbito:
 
-- **Global** → accesible desde cualquier punto de la página
-    
-- **Local** → accesible solo dentro de la función donde se define
-    
-
-**Qué efecto produce:**  
-Una variable local no puede usarse fuera de su función, mientras que una global sí.
-
-Ejemplo:
+- una variable **global** es accesible desde cualquier punto del script;
+- una variable **local** solo es accesible dentro de la función donde se define.
 
 ```js
 let global = "visible en todo el script";
@@ -815,32 +382,22 @@ prueba();
 // console.log(local); // error
 ```
 
-# 4.17 Tipos de datos y conversión
+## 2.3 Tipos de datos, conversión y operadores
 
-Las diapositivas indican cinco tipos:
+Tipos citados en el tema:
 
 - `string`
-    
 - `number`
-    
 - `boolean`
-    
 - `Object`
-    
 - `Null`
-    
 
-También aparece `typeof(mivariable)` para obtener el tipo.
+Para saber el tipo se usa `typeof(variable)`.
 
-## 4.17.1 Conversión entre tipos
+La conversión puede ser:
 
-Puede ser:
-
-- **implícita** → la coerción es automática hacia cadenas
-    
-- **explícita** → con funciones como `parseFloat()`, `parseInt()` y `toString()`
-
-Ejemplos:
+- **implícita**, por coerción automática;
+- **explícita**, con funciones como `parseInt()`, `parseFloat()` o `toString()`.
 
 ```js
 console.log("5" + 2);            // "52"
@@ -848,68 +405,44 @@ console.log(parseInt("25", 10)); // 25
 console.log(parseFloat("3.14")); // 3.14
 console.log((123).toString());   // "123"
 ```
-    
 
-# 4.18 Operadores
+Operadores principales:
 
-Las diapositivas enumeran:
+- aritméticos: `+`, `-`, `*`, `/`, `++`, `--`, `%`;
+- lógicos: AND, OR, NOT;
+- relacionales: `==`, `!=`, `>`, `>=`, `<`, `<=`, `===`, `!==`;
+- bit a bit: `&`, `|`, `^`, `~`, `<<`, `>>`, `>>>`;
+- asignación: `=`, `+=`, `-=`, `*=`, `/=` y similares;
+- otros: concatenación con `+`, ternario `?:` y acceso con `.`.
 
-- aritméticos → `+`, `-`, `*`, `/`, `++`, `--`, `%`
-    
-- lógicos → AND, OR, NOT
-    
-- relacionales → `==`, `!=`, `>`, `>=`, `<`, `<=`, `===`, `!==`
-    
-- bit a bit → `&`, `|`, `^`, `~`, `<<`, `>>`, `>>>`
-    
-- asignación → `=`, `+=`, `-=`, `*=`, `/=`, etc.
-    
-- otros → concatenación con `+`, operador ternario `?:`, operador `.`
-    
+Diferencia importante:
 
-## 4.18.1 Diferencia importante entre `==` y `===`
-
-La diapositiva los enumera por separado, lo que indica que no significan exactamente lo mismo.  
-Para estudiar mejor:
-
-- `==` compara con conversión de tipo
-    
-- `===` compara valor y tipo
-
-Ejemplo:
+- `==` compara con conversión de tipo;
+- `===` compara valor y tipo.
 
 ```js
 console.log(5 == "5");   // true
 console.log(5 === "5");  // false
 ```
-    
 
-# 4.19 Operaciones matemáticas y constantes
+## 2.4 `Math` y estructuras de control
 
-Las operaciones matemáticas forman parte, en general, del objeto `Math`. Se cita el uso de métodos como:
+Las operaciones matemáticas suelen hacerse con el objeto `Math`. En el tema aparecen métodos como:
 
-- `log`, `exp`, `sqrt`, `pow`, `abs`, `floor`, `ceil`, `round`, `random`, `sin`, `cos`, `tan`, `asin`, `acos`, `atan`, `max`, `min`
-    
+- `log`, `exp`, `sqrt`, `pow`, `abs`, `floor`, `ceil`, `round`, `random`;
+- `sin`, `cos`, `tan`, `asin`, `acos`, `atan`;
+- `max`, `min`.
 
-También se mencionan constantes predefinidas:
+Constantes destacadas:
 
 - `E`
-    
 - `LN2`
-    
 - `LN10`
-    
-- `LOG2`
-    
-- `LOG10`
-    
+- `LOG2E`
+- `LOG10E`
 - `PI`
-    
 - `SQRT2`
-    
 - `SQRT1_2`
-
-Ejemplos rápidos:
 
 ```js
 console.log(Math.sqrt(25));   // 5
@@ -917,48 +450,8 @@ console.log(Math.floor(4.8)); // 4
 console.log(Math.random());   // número entre 0 y 1
 console.log(Math.PI);         // 3.14159...
 ```
-    
 
-# 4.20 Estructuras de control
-
-Las diapositivas incluyen:
-
-- `if - else`
-    
-- `for`
-    
-- `for-in`
-    
-- `while`
-    
-- `do while`
-    
-- `switch-case`
-    
-- `break`
-    
-- `continue`
-    
-
-## 4.20.1 Para qué sirve cada una
-
-- `if - else` → tomar decisiones
-    
-- `for` → repetir con contador
-    
-- `for-in` → recorrer propiedades
-    
-- `while` → repetir mientras se cumpla una condición
-    
-- `do while` → ejecutar al menos una vez y luego comprobar
-    
-- `switch` → elegir entre varios casos
-    
-- `break` → salir del bucle o del switch
-    
-- `continue` → saltar a la siguiente iteración
-
-Ejemplos básicos:
+Estructuras de control básicas:
 
 ```js
 if (nota >= 5) {
@@ -971,9 +464,17 @@ for (let i = 0; i < 3; i++) {
   console.log(i);
 }
 
+for (const dato in objeto.valor) {
+  console.log(dato);
+}
+
 while (contador < 5) {
   contador++;
 }
+
+do {
+  contador++;
+} while (contador < 5);
 
 switch (dia) {
   case 1:
@@ -983,15 +484,12 @@ switch (dia) {
     console.log("Otro día");
 }
 ```
-    
 
-# 4.21 Funciones en JavaScript
+## 2.5 Funciones
 
-Las diapositivas muestran varias formas de definir funciones.
+Las funciones pueden definirse de varias formas:
 
-## 4.21.1 Función declarada
-
-Se define con la palabra `function` y se puede llamar posteriormente.
+- **declaradas**:
 
 ```js
 function sumar(a, b) {
@@ -999,9 +497,9 @@ function sumar(a, b) {
 }
 ```
 
-## 4.21.2 Función como expresión
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-119.png)
 
-Se puede definir una función y almacenarla en una variable; en ese caso la función es anónima.
+- **como expresión**:
 
 ```js
 const restar = function (a, b) {
@@ -1009,9 +507,9 @@ const restar = function (a, b) {
 };
 ```
 
-## 4.21.3 Función autoinvocada
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-120.png)
 
-Las funciones pueden autoinvocarse. Las diapositivas indican que en este caso no llevan `return`.
+- **autoinvocadas**:
 
 ```js
 (function () {
@@ -1019,13 +517,9 @@ Las funciones pueden autoinvocarse. Las diapositivas indican que en este caso no
 })();
 ```
 
-## 4.21.4 Callback
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-121.png)
 
-Un **callback** es una función pasada como argumento de otra función y ejecutada por esta última. Las páginas 19 y 20 muestran visualmente la diferencia entre cálculo normal y cálculo con callback.
-
-Permite delegar qué hacer con el resultado de una función.
-
-Ejemplo:
+- **callbacks**, es decir, funciones pasadas como argumento a otra función:
 
 ```js
 function calcular(a, b, callback) {
@@ -1038,22 +532,17 @@ calcular(2, 3, function (dato) {
 });
 ```
 
-## 4.21.5 Variables locales y globales dentro de funciones
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-122.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-123.png)
 
-La página 21 muestra visualmente cómo una función puede trabajar con variables locales y globales a la vez.
+Dentro de funciones siguen existiendo variables locales y globales:
 
-## 4.21.6 Paso por valor y por referencia
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-124.png)
 
-Las diapositivas indican:
+Además, el paso de parámetros puede comportarse así:
 
-- tipos primitivos, como números y cadenas → **por valor**
-    
-- objetos, incluyendo arrays → **por referencia**
-    
-
-Si una función modifica un objeto recibido, ese cambio puede permanecer fuera de la función.
-
-Ejemplo:
+- tipos primitivos, como números o cadenas: **por valor**;
+- objetos, incluidos los arrays: **por referencia**.
 
 ```js
 function cambiar(obj) {
@@ -1065,11 +554,11 @@ cambiar(alumno);
 console.log(alumno.nombre); // Pepe
 ```
 
-# 4.22 Objetos en JavaScript
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-125.png)
 
-## 4.22.1 Forma tradicional con `new`
+## 2.6 Objetos, arrays y cadenas
 
-Tradicionalmente la instanciación se hacía con `new`, llamando a una función que actúa como constructor. Las propiedades del objeto pueden accederse con `.` o con `[]`.
+Los objetos pueden crearse de forma tradicional con `new`:
 
 ```js
 function Alumno(nombre) {
@@ -1079,9 +568,7 @@ function Alumno(nombre) {
 const a1 = new Alumno("Lucía");
 ```
 
-## 4.22.2 Forma actual con `{ }`
-
-La tendencia actual indicada en las diapositivas es usar llaves para instanciar directamente el objeto. Las propiedades son públicas, pueden modificarse directamente y también eliminarse con `delete()`.
+O con la forma actual recomendada, usando literales con `{}`:
 
 ```js
 const alumno = {
@@ -1093,9 +580,7 @@ alumno.curso = 3;
 delete alumno.curso;
 ```
 
-## 4.22.3 Métodos en objetos
-
-Al instanciar con `{ }`, se pueden añadir métodos dentro del propio objeto o después. La llamada se hace con `.`.
+También pueden incluir métodos:
 
 ```js
 const alumno = {
@@ -1106,36 +591,24 @@ const alumno = {
 };
 ```
 
-## 4.22.4 Las funciones son objetos
-
-Las funciones en JavaScript son objetos y tienen propiedades y métodos. Las diapositivas destacan:
+Las funciones son objetos y disponen, entre otros, de:
 
 - `arguments`
-    
 - `arguments.length`
-    
 - `toString()`
-    
 
-# 4.23 Arrays
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-126.png)
 
-Los arrays son objetos con métodos y propiedades propios. Tradicionalmente podían crearse con `new Array()`, pero la forma recomendada actual es con corchetes `[]`, incluso directamente con valores.
+Los arrays son objetos con métodos y propiedades propios. Aunque pueden crearse con `new Array()`, la forma recomendada es `[]`.
 
 Métodos y propiedades citados:
 
 - `length`
-    
 - `join`
-    
 - `reverse`
-    
 - `sort`
-    
 - `concat`
-    
 - `slice`
-
-Ejemplos:
 
 ```js
 const notas = [7, 5, 9];
@@ -1144,31 +617,20 @@ console.log(notas.length);    // 3
 console.log(notas.join("-")); // "7-5-9"
 console.log(notas.slice(1));  // [5, 9]
 ```
-    
 
-# 4.24 Manejo de cadenas
+Las cadenas se gestionan mediante el objeto `String` y se recomienda instanciarlas directamente, no con `new`.
 
-Se realiza mediante el objeto string. La forma recomendada de instanciarlas es directamente, no con `new`. Se citan métodos como:
+Métodos citados:
 
 - `fromCharCode`
-    
 - `charCodeAt`
-    
 - `indexOf`
-    
 - `lastIndexOf`
-    
 - `substr`
-    
 - `slice`
-    
 - `substring`
-    
 - `toLowerCase`
-    
 - `toUpperCase`
-
-Ejemplos:
 
 ```js
 const texto = "JavaScript";
@@ -1177,54 +639,35 @@ console.log(texto.indexOf("Script")); // 4
 console.log(texto.slice(0, 4));       // "Java"
 console.log(texto.toUpperCase());     // "JAVASCRIPT"
 ```
-    
 
-# 4.25 Programación orientada a eventos
+## 2.7 Programación orientada a eventos y fechas
 
-Las diapositivas de sintaxis básica enumeran eventos como:
+Entre los eventos básicos citados en el tema aparecen:
 
 - `click`
-    
 - `mouseover`
-    
 - `mouseout`
-    
 - `load`
-    
 - `unload`
-    
 - `focus`
-    
 - `blur`
-    
 - `keypress`
-    
 - `select`
-    
 - `change`
-    
 - `submit`
-    
 - `reset`
-    
 - `error`
-    
 - `abort`
-
-Ejemplo típico:
 
 ```js
 input.addEventListener("focus", function () {
   console.log("El campo ha recibido el foco");
 });
 ```
-    
 
-# 4.26 Fechas y horas
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-127.png)
 
-Se gestionan con el objeto `Date`. Las diapositivas muestran dos constructores y una lista amplia de métodos `get...` y `set...`, así como sus equivalentes UTC, además de conversiones como `toUTCString` y `toGMTString`.
-
-Ejemplo:
+Las fechas y horas se gestionan con el objeto `Date`. El tema muestra constructores, métodos `get...` y `set...`, sus equivalentes UTC y conversiones como `toUTCString()` y `toGMTString()`.
 
 ```js
 const hoy = new Date();
@@ -1234,25 +677,23 @@ console.log(hoy.getMonth()); // enero = 0
 console.log(hoy.getDate());
 ```
 
-# 4.27 ES6 o ECMAScript 6
+# 3. JavaScript ES6
 
-En **2015**, ECMAScript hizo una revisión importante de JavaScript, creándose la versión denominada **ES6** o **ECMAScript 6**. Las diapositivas indican que los navegadores actualizados la soportan y que las revisiones han continuado cada año, aunque con menor intensidad.
+## 3.1 Qué cambia con ES6
 
-# 4.28 `let`, `const` y diferencias con `var`
+En **2015**, ECMAScript recibió una revisión importante llamada **ES6** o **ECMAScript 6**. Los navegadores modernos la soportan y, desde entonces, el estándar ha seguido evolucionando con revisiones anuales más pequeñas.
 
-Las diapositivas comparan:
+## 3.2 `let`, `const` y operador spread
 
-- `var` → no tiene ámbito de bloque, permite redeclaración y reasignación
-    
-- `let` → tiene ámbito de bloque, no permite redeclaración en el mismo bloque y sí reasignación
-    
-- `const` → tiene ámbito de bloque, no permite redeclaración ni reasignación
-    
+Comparación rápida:
 
-**Resumen clave:**  
-Hoy se prefiere `let` para variables y `const` para valores que no van a reasignarse.
+| Declaración | Ámbito de bloque | Redeclaración en el mismo bloque | Reasignación |
+| --- | --- | --- | --- |
+| `var` | No | Sí | Sí |
+| `let` | Sí | No | Sí |
+| `const` | Sí | No | No |
 
-Ejemplo:
+Hoy se suele usar `let` para variables y `const` para valores que no van a reasignarse.
 
 ```js
 if (true) {
@@ -1264,13 +705,7 @@ console.log(a); // 1
 // console.log(b); // error
 ```
 
-# 4.29 Operador spread `...`
-
-Permite expandir los elementos de un objeto iterable. La diapositiva lo ilustra con `Math.max(...x)`, señalando que `Math.max(x)` daría `NaN`.
-
-Convierte un array en una lista de argumentos separados.
-
-Ejemplos:
+El operador **spread** `...` permite expandir un iterable, por ejemplo un array, en una lista de argumentos.
 
 ```js
 const numeros = [4, 9, 2];
@@ -1280,20 +715,9 @@ console.log(Math.max(...numeros)); // 9
 const copia = [...numeros];
 ```
 
-# 4.30 `for...of`
+## 3.3 Iteración y funciones en ES6
 
-Las diapositivas destacan que `for...of` permite iterar sobre estructuras iterables como arrays, strings o mapas. Lo comparan con `for...in`, mostrando que en una cadena:
-
-- `for...of` recorre los caracteres
-    
-- `for...in` recorre los índices
-    
-
-**Resumen importante:**  
-`for...of` recorre valores.  
-`for...in` recorre claves o índices.
-
-Ejemplo:
+`for...of` recorre **valores** de estructuras iterables como arrays, strings o mapas; `for...in` recorre **claves o índices**.
 
 ```js
 const texto = "hola";
@@ -1307,11 +731,9 @@ for (const indice in texto) {
 }
 ```
 
-# 4.31 Funciones en ES6
+En funciones, ES6 incorpora:
 
-## 4.31.1 Parámetros por defecto
-
-Se permiten valores por defecto en parámetros.
+- **parámetros por defecto**:
 
 ```js
 function saludar(nombre = "invitado") {
@@ -1319,9 +741,7 @@ function saludar(nombre = "invitado") {
 }
 ```
 
-## 4.31.2 Número indefinido de parámetros
-
-Puede usarse `...` en la definición para recibir número indefinido de parámetros.
+- **número indefinido de parámetros** mediante `...`:
 
 ```js
 function sumarTodo(...valores) {
@@ -1329,25 +749,20 @@ function sumarTodo(...valores) {
 }
 ```
 
-## 4.31.3 Funciones arrow
-
-Las funciones arrow son funciones pequeñas que no necesitan ni llaves ni `return` cuando su cuerpo es una sola expresión. Si tienen varios argumentos o ninguno, deben llevar paréntesis; si tienen dos o más líneas, se mantienen llaves y `return`.
-
-Escriben funciones pequeñas de forma más compacta.
-
-Ejemplos:
+- **funciones arrow** para expresiones compactas:
 
 ```js
 const doble = x => x * 2;
 const sumar = (a, b) => a + b;
-const saludar = () => "Hola";
+const saludarRapido = () => "Hola";
 ```
 
-# 4.32 Clases en ES6
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-128.png)
 
-ES6 introduce una nueva forma de definir el constructor de clase mediante `class`. El acceso sigue haciéndose con `.`. Se pueden añadir métodos normales o getters. La herencia se hace con `extends` y `super()` dentro del constructor de la clase hija. Las diapositivas aclaran además que los atributos no son privados por defecto, sino públicos.
 
-Ejemplo:
+## 3.4 Clases, `Map`, `Set` y `Symbol`
+
+ES6 introduce `class` como forma moderna de definir clases. El acceso sigue haciéndose con `.`; la herencia se realiza con `extends` y `super()`. Los atributos no son privados por defecto, sino públicos.
 
 ```js
 class Persona {
@@ -1368,61 +783,48 @@ class Alumno extends Persona {
 }
 ```
 
-# 4.33 Mapas, conjuntos y símbolos
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-129.png)
 
-## 4.33.1 Map
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-130.png)
 
-`Map` es un tipo de dato formado por pares clave-valor y permite usar objetos como claves. Se citan métodos como `set`, `get`, `clear`, `keys` y `values`.
+Nuevos tipos y estructuras:
+
+- **`Map`**: pares clave-valor; admite objetos como claves
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-131.png)
+
+- **`Set`**: conjunto de valores únicos
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-132.png)
+
+- **`Symbol`**: tipo de dato con valor único, útil para propiedades especiales.
 
 ```js
 const mapa = new Map();
 mapa.set("nombre", "Ana");
 console.log(mapa.get("nombre"));
-```
 
-## 4.33.2 Set
-
-`Set` permite crear conjuntos con valores únicos. Se citan métodos como `add`, `delete`, `clear` y `values`.
-
-```js
 const conjunto = new Set([1, 2, 2, 3]);
-console.log(conjunto); // {1, 2, 3}
-```
+console.log(conjunto); // Set(3) {1, 2, 3}
 
-## 4.33.3 Symbol
-
-`Symbol` es un nuevo tipo de dato con valor único que permanece oculto. La diapositiva ilustra que `miClase[id]` es accesible, pero `miClase.id` no.
-
-```js
 const id = Symbol("id");
 const usuario = { [id]: 10 };
 ```
 
-# 4.34 Nuevos métodos ES6 para strings y arrays
+## 3.5 Nuevos métodos y módulos
 
-En strings se citan:
-
-- `includes()`
-    
-- `startsWith()`
-    
-- `endWith()`
-    
+En strings:
+- `includes()`: devuelve true si la string contiene una cadena dada
+- `startsWith()`: devuelve true si la string comienza con una cadena dada
+- `endsWith()`: devuelve true si la string finaliza con una cadena dada
 
 En arrays:
+- `from()`: devuelve un array desde un objeto iterable
+- `keys()`: devuelve un iterador con los índices del array
+- `find()`: devuelve el primer elemento del array que verifica una función
+- `findIndex()`: devuelve el índice del array que verifica una función de testeo
 
-- `from()`
-    
-- `keys()`
-    
-- `find()`
-    
-- `findIndex()`
-    
-
-También se mencionan nuevas funcionalidades para `Math`, `Number` y métodos globales como `isFinite()` e `isNaN()`.
-
-Ejemplos:
+También se mencionan nuevas utilidades para `Math`, `Number` y métodos globales como `isFinite()` e `isNaN()`.
 
 ```js
 console.log("JavaScript".includes("Script")); // true
@@ -1431,28 +833,14 @@ console.log(Array.from("hola"));              // ["h", "o", "l", "a"]
 console.log([4, 7, 9].find(n => n > 5));     // 7
 ```
 
-# 4.35 Módulos en ES6
+Los **módulos** son ficheros con funciones y/o clases relacionadas. En las importaciones se distingue:
 
-Los módulos son ficheros que incluyen colecciones de funciones y/o clases con un propósito común. Se agrupan en carpetas y, aunque se ha planteado el uso de `.mjs`, no está generalizado.
+- importación de nombres exportados;
+- importación por defecto;
+- renombrado con `as`;
+- combinación de un `default` con varios exportados no `default`.
 
-## 4.35.1 Importaciones
-
-Las diapositivas distinguen:
-
-- importación de nombres exportados
-    
-- importación por defecto
-    
-- posibilidad de renombrar con `as`
-    
-- posibilidad de tener un `default` y varios no default en el mismo módulo
-    
-
-## 4.35.2 Uso en HTML
-
-Para invocar módulos en HTML hay que incluir `type="module"` en la etiqueta `script`, y además la diapositiva subraya que para poder invocarlos hay que hacerlo **a través de servidores**. Las páginas 22 y 23 lo muestran visualmente con un módulo que exporta `suma` y un script que la importa.
-
-Ejemplo mínimo:
+Para usarlos en HTML hay que indicar `type="module"` y servir la página desde un servidor.
 
 ```js
 // utilidades.js
@@ -1471,122 +859,85 @@ console.log(suma(2, 3));
 <script type="module" src="app.js"></script>
 ```
 
-# 4.36 Expresiones regulares
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-133.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-134.png)
 
-Las expresiones regulares permiten definir el patrón de una cadena y usarlo como mecanismo de comprobación de información. Se justifican especialmente para comprobar que los datos enviados al servidor sean consistentes, por ejemplo validando campos obligatorios o formatos correctos.
 
-## 4.36.1 Formas de definición
+# 4. Expresiones Regulares
 
-- con barras inclinadas → `/patron/opciones`
-    
-- con constructor `RegExp("patron", "opciones")`
-    
+## 4.1 Concepto, definición y `RegExp`
 
-Opciones citadas:
+Las expresiones regulares permiten definir el patrón de una cadena y usarlo como mecanismo de comprobación. Son especialmente útiles para validar datos antes de enviarlos al servidor.
 
-- `i` → ignora mayúsculas/minúsculas
-    
-- `g` → búsqueda global
-    
-- `m` → búsqueda multilínea
-    
+Pueden definirse de dos maneras:
 
-## 4.36.2 Clase RegExp
+- con barras: `/patron/opciones`;
+`let miER=/[A-Z/i` 
 
-Métodos citados:
+- con el constructor `RegExp("patron", "opciones")`.
+`let miER = new RegExp("[A-Z]", "i"])` 
 
-- `exec()`
-    
-- `test()`
-    
-- `toString()`
-    
+Opciones:
+- `i`: ignora mayúsculas y minúsculas;
+- `g`: búsqueda global;
+- `m`: búsqueda multilínea.
 
-Propiedades citadas:
+La clase `RegExp` aporta, entre otros:
+- métodos 
+	- `exec()`: testea coincidencias con una cadena de texto y devuelve la primera coincidencia
+	- `test()`: testea coincidencias con una cadena de texto, devuelve true o false
+	- `toString()`: devuelve el valor de la ER en formato de cadena
 
-- `global`
-    
-- `ignoreCase`
-    
-- `lastIndex`
-    
-- `multiline`
-    
-- `source`
-    
+- propiedades 
+	- `global`: testea si el modificador g está activado
+	- `ignoreCase`: teste si el modificador i está activado
+	- `lastIndex`: especifica la posición en que comienza la siguiente coincidencia
+	- `multiline`: testea si el modificador m está activado
+	- `source`: devuelve el valor de la ER en formato cadena.
 
-## 4.36.3 Tipos de patrones
 
-Las diapositivas citan:
+## 4.2 Patrones, operadores y precedencia
+Tipos de patrones:
 
-- cuantificadores
-    
-- caracteres de escape
-    
-- clases o conjuntos de caracteres
-    
-- caracteres de marcado o posición
-    
-- alternancias
-    
-- agrupaciones
-    
-- referencias inversas
-    
-- patrones misceláneos
-    
+- cuantificadores;
+- caracteres de escape;
+- clases o conjuntos de caracteres;
+- caracteres de posición o marcado;
+- alternancias;
+- agrupaciones;
+- referencias inversas;
+- patrones misceláneos.
 
-## 4.36.4 Patrones concretos vistos
+Patrones concretos:
 
-- `*` → cero o más veces
-    
-- `+` → una o más veces
-    
-- `?` → cero o una vez
-    
-- `\` → carácter de escape
-    
-- `[conjunto]` → cualquiera de los caracteres del conjunto
-    
-- `\b` → final de palabra
-    
-- `\B` → no final de palabra
-    
-- `^` → comienzo de cadena o línea
-    
-- `$` → final de cadena o línea
-    
-- `|` → alternancia
-    
-- `(patron)` → agrupación
-    
-- `(?:...)`, `(?=...)`, `(?!...)` → subpatrones y búsquedas condicionadas
-    
-- `{n}`, `{n,}`, `{n,m}` → repeticiones controladas
-    
-- `\d`, `\w`, `\W`, `\n`, `\r`, `\t`, `\f`, `\v`, `\s`
-    
+| Patrón | Significado |
+| --- | --- |
+| `*` | Cero o más veces. |
+| `+` | Una o más veces. |
+| `?` | Cero o una vez. |
+| `\` | Carácter de escape. |
+| `[conjunto]` | Cualquiera de los caracteres del conjunto. |
+| `\b` | Final de palabra. |
+| `\B` | No final de palabra. |
+| `^` | Comienzo de cadena o línea. |
+| `$` | Final de cadena o línea. |
+| `|` | Alternancia. |
+| `(patron)` | Agrupación. |
+| `(?:...)`, `(?=...)`, `(?!...)` | Subpatrones y búsquedas condicionadas. |
+| `{n}`, `{n,}`, `{n,m}` | Repeticiones controladas. |
+| `\d`, `\w`, `\W`, `\n`, `\r`, `\t`, `\f`, `\v`, `\s` | Abreviaturas frecuentes. |
 
-## 4.36.5 Precedencia
+Precedencia:
 
-Se da esta precedencia entre operadores:
+1. `\`
+2. `( )`, `[ ]`
+3. `*`, `+`, `{n}`, `{n,}`, `{n,m}`
+4. `^`, `$`
+5. `|`
 
-- `\`
-    
-- `( )`, `[ ]`
-    
-- `*`, `+`, `{n}`, `{n,}`, `{n,m}`
-    
-- `^`, `$`
-    
-- `|`
-    
+## 4.3 Ejemplos y métodos de `String` que usan regex
 
-## 4.36.6 Ejemplos de email
-
-La diapositiva incluye un ejemplo de validación de email con `test()` y otro de extracción de usuario y dominio con `exec()`. También se muestra el uso de `match()` para obtener esas partes.
-
-Ejemplos:
+Ejemplo simple de validación de email con `test()`:
 
 ```js
 const email = "ana@correo.com";
@@ -1594,6 +945,8 @@ const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 console.log(regexEmail.test(email)); // true
 ```
+
+Ejemplo de extracción de usuario y dominio con `exec()`:
 
 ```js
 const regexPartes = /^([^@]+)@(.+)$/;
@@ -1603,40 +956,22 @@ console.log(resultado[1]); // ana
 console.log(resultado[2]); // correo.com
 ```
 
-## 4.36.7 Métodos del objeto String que usan regex
-
-Se citan:
-
-- `match`
-    
-- `matchAll`
-    
-- `search`
-    
-- `replace`
-    
-- `replaceAll`
-    
-- `split`
-    
-
-La página 22 muestra visualmente un ejemplo con `matchAll()` que extrae tokens del texto “Escuela Técnica Superior de Ingeniería”.
-
-Ejemplos rápidos:
+Métodos del objeto `String` que trabajan con expresiones regulares:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-136.png)
 
 ```js
 const texto = "DAW 2026";
 
-console.log(texto.match(/\d+/));          // ["2026"]
-console.log(texto.replace(/\d+/, "2027")); // "DAW 2027"
-console.log("a,b,c".split(/,/));          // ["a", "b", "c"]
+console.log(texto.match(/\d+/));            // ["2026"]
+console.log(texto.replace(/\d+/, "2027"));  // "DAW 2027"
+console.log("a,b,c".split(/,/));            // ["a", "b", "c"]
 ```
 
-# 4.37 Validación con JavaScript y con HTML5
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-137.png)
 
-La página 23 muestra un ejemplo visual de validación mediante JavaScript de un formulario, usando `preventDefault()`, expresiones regulares, `alert`, `focus` y `select` para detener el envío y obligar a corregir campos.
+## 4.4 Validación con JavaScript y con HTML5
 
-Ejemplo simple:
+La validación con JavaScript puede interceptar el envío del formulario y obligar a corregir datos usando `preventDefault()`, expresiones regulares, `alert()`, `focus()` y `select()`.
 
 ```js
 formulario.addEventListener("submit", function (e) {
@@ -1648,78 +983,56 @@ formulario.addEventListener("submit", function (e) {
 });
 ```
 
-## 4.37.1 Validación HTML5
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-138.png)
 
-Las diapositivas de HTML5 indican que `input` puede validar ciertos tipos conocidos:
+HTML5 incorpora validación básica sin programarla toda en JavaScript. En el tema aparecen:
 
-- `type="email"`
-    
-- comportamiento análogo para `url` y `number`
-    
-
-También:
-
-- atributo `pattern` para insertar una expresión regular en `input`
-    
-- atributo `required` para obligar a rellenar un campo
-    
-
-**Resumen útil:**  
-HTML5 ya incorpora validación básica sin necesidad de programarla toda en JavaScript.
-
-Ejemplo:
+- `type="email"`;
+- comportamiento similar para `url` y `number`;
+- atributo `pattern` para introducir una expresión regular;
+- atributo `required` para obligar a rellenar un campo.
 
 ```html
 <input type="email" required>
 <input type="text" pattern="[A-Za-z]{3,}">
 ```
 
-# 4.38 jQuery
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-139.png)
 
-jQuery es una **librería de funciones escrita en JavaScript**, creada por **John Resig** y presentada en enero de 2006 en el BarCamp NYC. Es software libre y de código abierto. Permite:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-140.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-141.png)
 
-- simplificación de interacción con documentos HTML,
-    
-- manipulación del DOM,
-    
-- manejo de eventos,
-    
-- desarrollo de animaciones,
-    
-- interacción mediante AJAX.
-    
 
-## 4.38.1 Integración con HTML
+# 5. jQuery
 
-Puede añadirse:
+## 5.1 Qué es, por qué usarlo e integración con HTML
 
-- descargando `jquery.js`
-    
-- o referenciándolo desde un CDN, como muestra la diapositiva con Google Ajax APIs.
+jQuery es una **librería escrita en JavaScript**, creada por **John Resig** y presentada en enero de 2006 en BarCamp NYC. Es software libre y de código abierto. Permite:
 
-Ejemplo:
+- simplificar la interacción con documentos HTML;
+- manipular el DOM;
+- manejar eventos;
+- desarrollar animaciones;
+- trabajar con AJAX.
+
+Puede integrarse:
+
+- descargando `jquery.js`;
+- o enlazándolo desde un CDN.
 
 ```html
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 ```
-    
 
-## 4.38.2 Por qué usar jQuery
+Sus ventajas frente al DOM nativo, según el tema, son:
 
-Ventajas respecto al DOM nativo:
-
-- selecciones más simples,
-    
-- una selección permite aplicar distintos métodos,
-    
-- robustez entre navegadores,
-    
-- manejo de eventos más sencillo,
-    
+- selecciones más simples;
+- posibilidad de aplicar varios métodos sobre la misma selección;
+- mejor comportamiento entre navegadores;
+- manejo de eventos más sencillo;
 - animaciones adicionales.
-    
 
-# 4.39 Sintaxis básica de jQuery
+## 5.2 Sintaxis y selectores
 
 La sintaxis general es:
 
@@ -1727,22 +1040,19 @@ La sintaxis general es:
 
 Aquí:
 
-- `$` es la forma abreviada de llamar al constructor `jQuery()`,
-    
-- el parámetro sirve para seleccionar con estilo CSS qué etiquetas HTML van a verse afectadas,
-    
+- `$` es la forma abreviada de `jQuery()`;
+- el selector funciona con sintaxis CSS;
 - el resultado es un objeto jQuery sobre el que se aplican métodos.
-
-Ejemplo:
 
 ```js
 $("#mensaje").text("Hola desde jQuery");
 ```
-    
 
-## 4.39.1 `ready()`
+Para esperar a que el DOM esté listo se usa `ready()` o su versión abreviada:
 
-El método `ready()` informa de cuándo el DOM está listo y entonces ejecuta la función que lleva como argumento. También existe el atajo abreviado con `$(function(){ ... })`. Las páginas 8 y 9 muestran visualmente ese comportamiento.
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-142.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-143.png)
+
 
 ```js
 $(function () {
@@ -1750,327 +1060,200 @@ $(function () {
 });
 ```
 
-## 4.39.2 Selectores específicos jQuery
+Selectores específicos citados en el tema:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-144.png)
 
-La diapositiva cita:
 
-- `$(this)`
-    
-- `$("p:first")`
-    
-- `$("ul li:first-child")`
-    
-- `$(":button")`
-    
-- `$("tr:even")`
-    
-- `$("tr:odd")`
-    
+## 5.3 Métodos jQuery más usados
 
-# 4.40 Métodos jQuery
+Acceso y modificación de contenido:
 
-## 4.40.1 Acceso y modificación de contenido
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-145.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-146.png)
 
-Se citan:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-147.png)
 
-- `.html()`
-    
-- `.text()`
-    
-- `.replaceWith()`
-    
-- `.remove()`
-    
 
-**Diferencia importante:**  
-`.html()` interpreta HTML.  
-`.text()` solo maneja texto.
+Manipulación de nodos:
 
-Ejemplo:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-148.png)
 
-```js
-$("#caja").html("<strong>Hola</strong>");
-$("#caja").text("<strong>Hola</strong>");
-```
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-149.png)
 
-## 4.40.2 Relativos a nodos
+Atributos y estilos:
 
-Se citan:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-150.png)
 
-- `.before()`
-    
-- `.after()`
-    
-- `.prepend()`
-    
-- `.append()`
-    
-- `.remove()`
-    
-- `.clone()`
-    
-- `.unwrap()`
-    
-- `.detach()`
-    
-- `.empty()`
-    
-- `.add()`
-    
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-151.png)
 
-## 4.40.3 Atributos y estilos
 
-Se citan:
+Formularios:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-152.png)
 
-- `.attr()`
-    
-- `.removeAttr()`
-    
-- `.addClass()`
-    
-- `.removeClass()`
-    
-- `.css()`
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-153.png)
 
-Ejemplo:
 
-```js
-$("a").attr("target", "_blank");
-$(".aviso").addClass("activo");
-$(".aviso").css("color", "red");
-```
-    
+Recorrido del árbol DOM:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-154.png)
 
-## 4.40.4 Formularios
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-155.png)
 
-Se citan:
+Iteración y filtrado:
 
-- `.val()`
-    
-- `.isNumeric()`
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-156.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-157.png)
 
-Ejemplo:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-158.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-159.png)
 
-```js
-const valor = $("#edad").val();
-```
-    
+Orden y posición en la selección:
 
-## 4.40.5 Selección de elementos del árbol DOM
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-160.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-161.png)
 
-Se citan:
+Dimensiones:
 
-- `.find()`
-    
-- `.closest()`
-    
-- `.parent()`
-    
-- `.parents()`
-    
-- `.children()`
-    
-- `.siblings()`
-    
-- `.next()`
-    
-- `.nextAll()`
-    
-- `.prev()`
-    
-- `.prevAll()`
-    
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-162.png)
 
-## 4.40.6 Lazos
+Posición:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-163.png)
 
-La diapositiva destaca `.each()` y añade que los ítems seleccionados son accesibles mediante `this`.
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-164.png)
 
-```js
-$("li").each(function () {
-  console.log($(this).text());
-});
-```
 
-## 4.40.7 Testeo y filtrado
+Animación:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-165.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-166.png)
 
-Se citan:
 
-- `.filter()`
-    
-- `.not()`
-    
-- `.has()`
-    
-- `.is()`
-    
-- `.contains()`
-    
+## 5.4 Eventos en jQuery
 
-## 4.40.8 Orden en selección
+jQuery puede responder a eventos tanto con llamadas directas como `$("p").click(...)` como con la forma moderna `.on()`, incorporada en la versión 1.7.
 
-Se citan:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-167.png)
 
-- `.eq()`
-    
-- `.lt()`
-    
-- `.gt()`  
-    y se indica expresamente que `eq()` comienza a contar en 0.
-    
+`on()` se usa con dos parámetros:
 
-## 4.40.9 Dimensiones
-
-Se citan:
-
-- `.height()`
-    
-- `.width()`
-    
-- `.innerHeight()`
-    
-- `.innerWidth()`
-    
-- `.outerHeight()`
-    
-- `.outerWidth()`
-    
-- `$(document).height()`
-    
-- `$(document).width()`
-    
-- `$(window).height()`
-    
-- `$(window).width()`
-    
-
-## 4.40.10 Posición
-
-Se citan:
-
-- `.offset()`
-    
-- `.position()`
-    
-- `.scrollLeft()`
-    
-- `.scrollTop()`
-    
-
-## 4.40.11 Animación
-
-Se citan:
-
-- `.show()`
-    
-- `.hide()`
-    
-- `.toggle()`
-    
-- `.fadeIn()`
-    
-- `.fadeOut()`
-    
-- `.fadeTo()`
-    
-- `.fadeToggle()`
-    
-- `.slideDown()`
-    
-- `.slideUp()`
-    
-- `.slideToggle()`
-    
-- `.delay()`
-    
-- `.stop()`
-    
-- `.animate()`
-    
-
-# 4.41 Eventos en jQuery
-
-jQuery puede responder a eventos mediante funciones manejadoras. La diapositiva muestra tanto la forma directa `$("p").click(...)` como la forma moderna con `.on()`, introducida en la versión 1.7.
-
-## 4.41.1 Método `.on()`
-
-Se usa con dos parámetros:
-
-- el evento,
-    
-- la función que responde al evento.
-
-Ejemplo:
+- el evento;
+- la función que responde.
 
 ```js
 $("#btn").on("click", function () {
   $("#mensaje").text("Has pulsado");
 });
 ```
-    
 
-## 4.41.2 Objeto evento en jQuery
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-168.png)
 
 Las funciones manejadoras reciben un objeto evento con propiedades como:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-169.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-170.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-171.png)
+Y métodos como:
 
-- `.type`
-    
-- `.which`
-    
-- `.target.nodeName`
-    
-- `.pageX`
-    
-- `.pageY`
-    
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-172.png)
 
-Las páginas 37 y 38 lo ilustran visualmente mostrando el tipo de evento y otros datos en pantalla.
+Tipos de eventos agrupados en el tema:
 
-## 4.41.3 Métodos del objeto evento
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-173.png)
 
-Se citan:
 
-- `.preventDefault()`
-    
-- `.stopPropagation()`
-    
+# 6. Ficheros de Datos
 
-## 4.41.4 Tipos de eventos jQuery
+## 6.1 XML
+Su nombre deriva de **eXtensible Markup Languaje**. Es un lenguaje de marcas, mantenido por W3C. Es útil para describir información estructurada. Facilitan el intercambio de información entre usuarios no humanos.
 
-Las diapositivas agrupan eventos en:
+**Archivos de propiedades:**
+- Tienen jerarquía plana
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-174.png)
 
-- UI → `focus`, `blur`, `change`
-    
-- teclado → `input`, `keydown`, `keyup`, `keypress`
-    
-- ratón → `click`, `dblclick`, `mouseup`, `mousedown`, `mouseover`, `mousemove`, `mouseout`, `hover`
-    
-- formulario → `submit`, `select`, `change`
-    
-- documento → `ready`, `load`, `unload`
-    
-- navegador → `error`, `resize`, `scroll`
-    
+- No admiten repetición de valores
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-176.png)
 
-# 4.42 Resumen fuerte para examen
+Un archivo XML, permite expresar estructuras jerárquicas, mediante el uso de etiquetas.
 
-- JavaScript es un lenguaje interpretado creado en 1995 por Brendan Eich; no es Java.
-    
-- Se ejecuta en cliente dentro del navegador y puede integrarse dentro de HTML o mediante fichero externo.
-    
-- El DOM transforma el HTML en un árbol de nodos accesible con JavaScript.
-    
-- `getElementById` y `querySelector` acceden a elementos individuales; `querySelectorAll` y `getElementsBy...` a colecciones.
-    
-- `NodeList` y `HTMLCollection` no son exactamente lo mismo; una diferencia importante es estático frente a vivo.
-    
-- Se pueden crear, borrar y recorrer nodos, atributos y estilos desde JavaScript.
-    
-- Los eventos se manejan mejor con `addEventListener`.
-    
-- ES6 introduce `let`, `const`, arrow functions, clases, módulos, map, set y symbol.
-    
-- Las expresiones regulares sirven para validar y comprobar cadenas.
-    
-- HTML5 también valida con `email`, `pattern` y `required`.
-    
-- jQuery simplifica selección, manipulación del DOM, eventos y animaciones.
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-177.png)
+
+**XML vs HTML:**
+- XML distingue entre mayúsculas y minúsculas
+- En XML, siempre ha de incluirse el marcador final
+- En XML, los elementos con un único marcados han de acabar con "/>"
+- En XML, los valores de los atributos pueden ir encerrados entre comillas dobles o simples, pero ha de abrirse y cerrarse en el mismo tipo de comillas
+- En XML, todos los atributos tienen que tener un valor
+
+**Estructura de un XML**
+- Encabezado (opcional, recomendado) `<?xml version="1.0" enconding="UTF-8"?>` 
+- Definición del tipo de documento (opcional) `<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN" http://java.sun.com/j2ee/dtds/web-app_2_2.dtd>` 
+- Cuerpo (incluye elementos hijos, texto o ambas cosas)
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-181.png)
+
+**Consejos:**
+- Evitar el contenido mixto (texto y elementos, al mismo nivel).
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-182.png)
+
+- Utilizar atributos únicamente para modificar la interpretación de un valor, no para especificar valores.
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-183.png)
+
+
+## 6.2 XML DOM
+Existe también un modelo de documento para XML, que facilita su acceso. En Javascript se pueden instanciar objetos de la clase XML DOM con métodos y propiedades que permiten el acceso a las diferentes partes de un documento XML.
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-184.png)
+
+Existe también un modelo de documento para XML, que facilita su acceso. Los navegadores tienen clases accesibles mediante Javascript que devuelven objetos de la clase XMLDocument con métodos y propiedades que permiten el acceso a las diferentes partes de un documento XML.
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-185.png)
+
+Los objetos de la clase XMLDocument heredan métodos y propiedades de otras clases DOM. Entre los métodos y propiedades más interesantes a este nivel, estarían:
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-186.png)
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-187.png)
+
+Existe también un modelo de documento para XML, que facilita su acceso. En Javascript existen objetos de la clase XML DOM con métodos y propiedades que permiten el acceso a las diferentes partes de un documento XML.
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-188.png)
+
+Existe también un modelo de documento para XML, que facilita su acceso. En Javascript existen objetos de la clase XML DOM con métodos y propiedades que permiten el acceso a las diferentes partes de un documento XML.
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-189.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-190.png)
+
+
+## 6.3 JSON
+Su nombre deriva de **JavaScript Objet Notation**. Formato para almacenamiento/intercambio de datos, creado inicialmente en el ámbito de JavaScript, pero extendido al múltiples lenguajes en la actualidad.
+
+Es sencillo de manejar por máquinas y humanos. A efectos de JavaScript es un objeto convertible en cadena de texto para intercambio entre servidores.
+
+**Formato básico:** se construye a partir de dos estructuras básicas
+- Una **colección de pares nombre/valor:** dependiendo del lenguaje se implementa como: objeto, registro, estructura, diccionario, tabla hash, ...
+- Una **lista ordenada de valores:** en la mayor parte de los lenguajes se implementa como array, vector o lista.
+
+En JavaScript las dos estructuras son:
+- Objetos {cadena:valor, cadena:valor, ....}
+- Arrays [valor, valor ....]
+
+Siendo los valores cadenas, números, objetos, arrays, booleanos o null
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-191.png)
+
+**Transformar objetos JS  en cadenas JSON:**
+`var miCadenaJSON = JSON. stringify(miObj)`
+
+**Transformas cadenas JSON en objetos JS:**
+`var miObjeto= JSON.parse(miCadenaJSON)`
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-192.png)
+
+
+## 6.4 XML vs JSON
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-193.png)
+
+**Similitudes:**
+- Autodescriptivos
+- Jerárquicos
+- Analizables (parseables)
+- Tratables por el método XMLHttpRequest de JavaScript
+
+**Diferencias:**
+- XML tiene que ser analizado por un analizador (parser) XML. JSON puede utilizar funciones JavaScript estándar
+- JSON no usa etiquetas
+- JSON es más rápido, tanto en lectura como en escritura
+- JSON puede utilizar arrays

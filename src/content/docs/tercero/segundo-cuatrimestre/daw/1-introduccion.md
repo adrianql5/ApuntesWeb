@@ -2,6 +2,12 @@
 title: "Introducción"
 ---
 
+
+>[!Nota]
+>Quiero dejar esto de recuerdo para que quede constancia de lo que se sufría esta asignatura de puta mierda.
+>![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-4.png)
+
+
 # 1.1 Introducción a la evolución de la computación y la web
 ## Evolución resumida
 - **Años 40:** computación centralizada en grandes máquinas.
@@ -69,54 +75,28 @@ Hasta los primeros años 2000, la interacción del usuario era reducida y se tra
 - abrir localmente los ficheros en un navegador para comprobar su funcionamiento,
 - desplegar los ficheros en un servidor web.
   
----
 
 **MPA (Multi-Page Application).**  
 La **MPA** es el modelo tradicional de aplicación web en el que, cada vez que el usuario navega a una nueva ruta, el navegador carga una página HTML distinta desde el servidor.
 
 **Ejemplo:** entrar en una tienda online y que cada sección cargue una página nueva completa.
 
----
 
 **Catalizador de 2004: más interacción y aparición de SPA.**  
 En 2004, con el auge de las redes sociales y el nacimiento de Facebook, aumenta la interacción del usuario. Esto trae dos consecuencias principales:
 - uso de tecnologías que no requieren recargar la página completa, como **AJAX**,
 - necesidad de reducir ancho de banda y surgimiento de aplicaciones **SPA**.
- 
-
----
 
 **SPA (Single Page Application).**  
 Una **SPA** es una aplicación web que carga una sola página HTML y luego actualiza dinámicamente el contenido mediante JavaScript, sin volver a pedir páginas completas al servidor.
 
 **Ejemplo:** Gmail o Trello, donde la interfaz cambia sin recargar toda la página.
 
----
 
 **Comparación entre MPA y SPA.**
-**MPA**
-- Navegación: se recarga la página completa.
-- SEO: muy bueno.
-- Velocidad inicial: alta.
-- Experiencia de usuario: más tradicional.
-- Complejidad: baja.
-- Carga del servidor: alta.
-- Comunicación: peticiones HTTP tradicionales.
-- Ventajas: mejor SEO, fácil escalabilidad en contenido.
-- Desventajas: experiencia menos fluida, más ancho de banda.
-- Casos de uso: blogs, e-commerce, periódicos, sitios corporativos.
 
-**SPA**
-- Navegación: sin recarga, solo cambia el contenido.
-- SEO: requiere SSR o trucos.
-- Velocidad inicial: a veces lenta por mucho JavaScript.
-- Experiencia de usuario: más fluida, tipo app.
-- Complejidad: mayor.
-- Carga del servidor: más baja.
-- Comunicación: AJAX y APIs REST o GraphQL.
-- Ventajas: experiencia tipo app, menos ancho de banda tras la carga inicial.
-- Desventajas: SEO más difícil, carga inicial lenta, más dependencia de JavaScript.
-- Casos de uso: dashboards, Gmail, Trello, apps móviles/web.
+>[!Importante]
+>![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-5.png)
 
 **Conceptos asociados:**
 - **SEO (Search Engine Optimization):** conjunto de técnicas para que una página aparezca más arriba en los buscadores de forma orgánica, sin pagar publicidad.
@@ -146,42 +126,9 @@ Una **PWA** es una aplicación web que usa tecnologías que permiten ofrecer una
 
 **Comparación: web normal vs PWA vs app nativa.**
 
-**Web normal**
-- Instalación: no.
-- Funciona offline: no.
-- Velocidad: media.
-- Acceso al hardware: muy limitado.
-- Distribución: navegador.
-- Coste de desarrollo: bajo.
-- Actualizaciones: automáticas.
-- SEO: excelente.
-- Rendimiento: bueno.
-- Experiencia de usuario: correcta.
+>[!Importante]
+>![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-6.png)
 
-
-**PWA**
-- Instalación: sí, pero mínima.
-- Funciona offline: sí, parcial o total.
-- Velocidad: alta por caché.
-- Acceso al hardware: medio.
-- Distribución: navegador + instalable.
-- Coste de desarrollo: medio.
-- Actualizaciones: automáticas.
-- SEO: excelente.
-- Rendimiento: muy bueno.
-- Experiencia de usuario: casi nativa.
-
-**App nativa**
-- Instalación: sí.
-- Funciona offline: sí.
-- Velocidad: muy alta.
-- Acceso al hardware: completo.
-- Distribución: tienda oficial.
-- Coste de desarrollo: alto.
-- Actualizaciones: requieren pasar por la tienda.
-- SEO: no aplica.
-- Rendimiento: excelente.
-- Experiencia de usuario: la mejor posible.
 
 **Nota importante sobre PWA.**  
 Al instalar una PWA en el PC, se instalan algunos archivos relacionados con el **Service Worker**, la **cache** y otros elementos, pero **nunca ficheros HTML o JS**. Esos archivos se almacenan en carpetas del usuario relativas al navegador.
@@ -196,34 +143,9 @@ En 2018 Google cambia su algoritmo de posicionamiento hacia una política **Mobi
 
 **Mobile-First Indexing (MFI)** significa usar la versión móvil de una web como referencia principal para indexar y posicionar, en lugar de la versión de escritorio. Además, el mismo código HTML vale para móvil y para escritorio.
 
----
+>[!Importante]
+>![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-7.png)
 
-**Antes de 2018 (Desktop-First):**
-- Google indexaba sobre todo la versión de escritorio.
-- Se diseñaba primero para escritorio y luego se adaptaba al móvil.
-- Diseño responsivo recomendado.
-- El contenido móvil podía ser más corto o reducido.
-- Imágenes y recursos pesados.
-- SEO centrado en escritorio.
-- La velocidad móvil era importante, pero no crítica.
-- Arquitectura dependiente de escritorio.
-- Experiencia móvil a menudo deficiente.
-- Los sitios móviles malos podían sobrevivir si la versión de escritorio era fuerte.
-
-**Después de 2018 (Mobile-First Indexing):**
-- Google usa la versión móvil como base para indexar y rankear.
-- Se diseña primero para pantallas pequeñas y luego se escala a escritorio.
-- Diseño responsivo obligatorio.
-- El contenido móvil debe ser idéntico al de escritorio.
-- Imágenes adaptativas, formatos modernos como WebP y AVIF, y lazy-loading controlado.
-- SEO enfocado en móvil.
-- La velocidad móvil se convierte en factor clave para indexación y ranking.
-- Aumenta el uso de PWAs, SPAs rápidas y optimización agresiva del rendimiento móvil.
-- La experiencia móvil debe ser fluida, táctil, clara y accesible.    
-- Los sitios con mala versión móvil pierden visibilidad aunque su versión de escritorio sea buena.
-
-
----
 
 **Consecuencia general de la evolución web.**  
 La consecuencia de toda esta evolución es que la codificación de una página web se vuelve **extremadamente compleja**. La solución que se destaca es el uso masivo de **JavaScript**, que pasa a ser protagonista del desarrollo de aplicaciones, junto con nuevos frameworks y librerías.
@@ -232,16 +154,7 @@ La consecuencia de toda esta evolución es que la codificación de una página w
 # 1.5 Frameworks, librerías y tecnologías de la asignatura
 
 **Frameworks y librerías destacados:**
-- **jQuery** (2006) — John Resig — Library — JavaScript
-- **Backbone** (2010) — Jeremy Ashkenas — Library — JavaScript
-- **AngularJS** (2010) — Misko Hevery (Google) — Framework — JavaScript
-- **BootStrap** (2011) — Mark Otto, Jacob Thornton — Library — CSS/JavaScript
-- **Ember** (2011) — Yehuda Katz — Framework — JavaScript
-- **React** (2013) — Jordan Walke (Facebook) — Library — JavaScript
-- **Vue** (2014) — Evan You (Google) — Framework — JavaScript
-- **Angular** (2016) — Google — Framework — TypeScript
-- **Svelte** (2016) — Rich Harris — Framework — TypeScript
-
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-8.png)
 
 
 **Tecnologías de la asignatura DAW.**

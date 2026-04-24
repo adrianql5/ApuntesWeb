@@ -1257,3 +1257,145 @@ Siendo los valores cadenas, números, objetos, arrays, booleanos o null
 - JSON no usa etiquetas
 - JSON es más rápido, tanto en lectura como en escritura
 - JSON puede utilizar arrays
+
+
+
+# 7. Ajax
+
+## 7.1 MPA vs SPA
+- **Multi-Page Application (MPA):** es el sitio web tradicional. Cada página es una petición específica a un servidor que devuelve tanto en imágenes como en contenido, un fichero HTML completo que se corresponde con la página que hemos pedido.
+- **Single Page Application (SPA):** es una única página HTML que de manera dinámica, sobreescribe el contenido de la misma en lugar de cargar una nueva.
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-194.png)
+
+
+# 7.2 JavaScript vs AJAX
+Procesamiento **síncrono** vs **asíncrono**. 
+
+Cuando un navegador encuentra una etiqueta `<script>` en una página la procesa de inmediato, deteniendo la carga del resto de la página: **Procesamiento síncrono**.
+
+**Problema:** si en el `<script>`  hay una parte que requiere la carga de datos externos, el proceso de carga se detiene a la espera de esos datos externos.
+
+AJAX permite realizar cargas de forma **asíncrona**. Si la información solicitada para recargar no está presente no la procesa de inmediato y continúa con la carga del resto de la página: **Procesamiento asíncrono**
+
+
+**AJAX:** Asyncronous JavaScript +XML. Nace en febrero de 2005 de la mano de Jesse James Garret. AJAX permite:
+- Actualizar una página web, sin recargarla
+- Hacer peticiones de datos a un servidor, después de que la página esté cargada
+- Recibir datos de un servidor, después de que la página esté cargada
+- Enviar datos a un servidor, en background
+- Desarrollos SPA.
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-195.png)
+
+
+AJAX utiliza una combinación de:
+- Un objeto `XMLHttpRequest` construido dentro de un navegador
+- JavaScript y HTML DOM para mostrar los datos en el navegador
+
+`XMLHttpRequest`: objeto javaScript diseñado por Microsoft y actualmente estándar de W3C. Es utilizado para insertar datos en la página sin recarga de la misma. Creación
+ ```js
+ let miXML = new XMLHttpRequest()
+ ```
+
+
+# 7.3 XMLHttpRequest
+El objeto `XMLHttpRequest`
+
+**Métodos:**
+- `abort()`: cancela solicitud
+- `getAllResponseHeaders()`: devuelve información de cabecera
+- `getResponseHeader()`: devuelve información de cabecera específica
+- `open(methos, url, async, user, psw)`: especifica el tipo de solicitud
+- `send()`: envía solicitud al servidor, en modo `GET`
+- `send(string)`: envía solicitud al servidor en modo `POST`
+- `setRequestHeader()`: añade un par etiqueta/valor a la cabecera para envío
+
+**Atributos:**
+- `onreadystatechange`: define una función para ser llamada cuando el readyState cambie
+- `onload`: define una función **callback** para ser llamada cuando la petición es recibida
+- `readyState`: almacena el estado de `XMLHttpRequest`
+- `responseText`: retorna respuesta en formato de texto
+- `responseXML`: retorna respuesta en formato de XML
+- `status`: retorna respuesta en formato de la solicitud
+- `statusText`: retorna el estado de la solicitud
+- `onreadystatechange`: define una función **callback** para ser llamada cuando el **readyState** cambie
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-196.png)
+
+
+``` js
+let miHttp = new XMLHttpRequest(); //Crear el objeto
+miHttp.onreadystatechange = mifunction(){...}; //Definir la función
+miHttp.onload = mifunction(){...};
+miHttp.open("GET", "miFile"); //Abrir el objeto
+miHttp.send(); //Enviar una petición al servidor
+```
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-197.png)
+
+
+**AJAX mediante objeto XMLHttpRequest**
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-198.png)
+
+**AJAX mediante el objeto XMLHttpRequest + CallBack**
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-199.png)
+
+
+# 7.4 Promesas
+Una **promesa** es un objeto utilizado para representar la terminación o el fracaso en la ejecución de una operación asíncrona. En la práctica, una promesa es un objeto devuelto al cual se adjuntan funciones callback, cuya ejecución depende del éxito o fracaso de la operación asícrona.
+
+Método `then()`: método que recibe 2 argumentos consistentes en funciones callback relativas al éxito o fracaso de una promesa
+
+`p.then(siExito[, siFracaso])`
+
+En la práctica la llamada a la función que realiza la acción asícrona, quedaría:
+`FuncionTareAsincrona(parámetros).then(siExito, siFracaso)` 
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-200.png)
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-201.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-202.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-203.png)
+
+
+# 7.5 JQuery
+Utiliza el método `load()` para bajar  datos desde el servidor e insertarlos en el objetos jQuery seleccionado
+
+`.load(url, [data, function(response, status, xhr)])`
+- `url`: URL de los datos a cargar
+- `data`: datos enviados al servidor junto a la petición
+- `function(response, status, xhr)`: 
+	- `response`: contiene los datos, resultado de la petición
+	- `status`: contiene el estado, resultado de la petición
+	- `xhr`: contiene el objeto XMLHttpRequest
+
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-204.png)
+
+
+
+# 7.6 API Fech
+Tradicionalmente AJAX se implementaba mediante el objeto `XMLHttpRequest`. Esta opción tenía un par de desventajas:
+- Diferencias en la implantación entre fabricantes de navegadores distintos o versiones del mismo navegador
+- Trabaja con, Callbacks lo que tiene a crear un código más desorganizado
+
+La solución tradicional pasaba por utilizar herramientas de terceros, como la librería jQuery
+
+**Fech** es una nueva interfaz estándar que permite el desarrollo del frontend basado en AJAX. Utiliza promesas en lugar de callback, lo que facilita la organización del código asícrono.
+
+El método `fecht()` es un método dependiente del objeto `window` del navegador `window.fetch(url)` o `fetch(url)` 
+
+`fetch(url)`: traer al cliente contenido de la url, devolviendo una **promesa** que resuelve en un objeto de la clase **Response** la petición, sea esta o no correcta.
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-205.png)
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-206.png)
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-207.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-208.png)
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-210.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-211.png)
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-212.png)

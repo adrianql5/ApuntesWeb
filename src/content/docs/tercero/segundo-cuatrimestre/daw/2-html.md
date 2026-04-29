@@ -29,7 +29,7 @@ Además:
 - el concepto de **lenguaje de marcas** se asocia a **Tunnicliffe (1967)**,
 - el concepto de **hipertexto** se asocia a **Ted Nelson (1965)**.
 
-La **página** es el documento que incluye el contenido a m12caostrar.
+La **página** es el documento que incluye el contenido a mostrar.
 
 
 ## 2.1.3 Navegador, renderizado y servidor web
@@ -313,6 +313,20 @@ La diapositiva indica:
 - `<tag>` es estilo HTML5,
 - el lenguaje **no es sensible a mayúsculas/minúsculas**.
 
+### Atributos frecuentes: `id`, `class` y `name`
+Los **atributos** añaden información a una etiqueta y modifican su comportamiento o su significado. Se escriben dentro de la etiqueta de apertura:
+
+```html
+<etiqueta atributo="valor">
+```
+
+Tres de los más importantes son `id`, `class` y `name`, pero no sirven para lo mismo:
+
+| Atributo | Para qué sirve | Características principales |
+| --- | --- | --- |
+| `id` | Identificar un elemento concreto. | Debe ser **único** dentro de la página. Cada elemento solo debe tener un `id`. Se usa mucho en anclajes, CSS, JavaScript y asociación con `label`. |
+| `class` | Agrupar elementos con una misma categoría o estilo. | **Puede repetirse** en muchos elementos. Un mismo elemento puede tener **varias clases** separadas por espacios. Se usa sobre todo en CSS y JavaScript. |
+| `name` | Dar nombre a un dato que se enviará o gestionará, sobre todo en formularios. | **No tiene que ser único**. En formularios es la clave con la que el dato se envía al servidor. En controles como los `radio`, varios elementos comparten el mismo `name` para formar un grupo. |
 
 ### Bloque vs línea
 - **Etiquetas de bloque**: rompen línea antes y después; tienen ancho y alto.

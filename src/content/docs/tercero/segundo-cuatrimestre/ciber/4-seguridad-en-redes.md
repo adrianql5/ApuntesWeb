@@ -461,3 +461,316 @@ Un cortafuegos suele apoyarse en otros mecanismos de seguridad:
     - filtrado para controlar la **información que sale**.
 - **IDS (sistemas de detección de intrusiones)**; muchos cortafuegos ya incorporan también **prevención de intrusiones**.
 - **VPN (redes privadas virtuales)**, que crean **túneles cifrados** para permitir acceso remoto seguro a través de redes públicas.
+
+
+# 4.3 IDS/IPS
+## 4.3.1 Intrusiones
+Una **intrusión** en un sistema es un intento, por parte de alguien externo, de obtener acceso ilegal a un sistema.
+- **Detección de intrusiones:** técnica para detectar accesos o actividades no autorizados a un ordenador o a una red
+- **Prevención/protección ante intrusiones:** técnica para prevenir daños y protegerse ante accesos no autorizados a los recursos del sistema.
+
+## 4.3.2 IDS
+Un **IDS** es una herramienta de seguridad que recolecta información de diversas fuentes de un sistema. Analiza esta información de acuerdo a patrones establecidos de uso indebido o actividades inusuales.
+
+En algunos casos, responde automáticamente antes la actividad detectada. Informa del resultado al administrados del sistema para que éste actúe en consecuencia.
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-102.png)
+
+El **IDS:**
+- Monitoriza las actividades de los usuarios y de los sistemas.
+- Audita de forma continua la configuración del sistema y sus vulnerabilidades
+- Evalua la integridad de los sistemas críticos y los archivos de datos
+- Identifica actividad anormal a partir del análisis estadísticos
+- Audita la administración del S.0. con reconocimiento de actividades relativas a la violación de políticas
+- Instala y gestiona trampas para recolectar información sobre los intrusos.
+
+
+## 4.3.3 Sistema IDS/IPS
+Este sistema proporciona **protección y detección en tiempo real** de ataques: DoS, troyanos, escaneo de puertos, inyección, etc. Existen productos software y dispositivos hardware. Se deben integrar con:
+- **Sistemas operativos:** con aplicaciones de registro y auditorías, para monitorizar recursos críticos para la seguridad
+- **Servidores:** todas las aplicaicones en servidores web, de correo o de bases de datos deberían incluir capacidades de registro/auditoría también.
+- **Cortafuegos:** un buen cortafuegos debería incluir alguna capacidad de detección de instrusiones en red.
+
+### IDS
+**Sistema de Detección de Instrusiones**
+- Sólo detecta intrusiones, genera alarmas, pero no actúa.
+- Se conecta como una sonda en la red o en un equipo, sin interferir el tráfico
+- Utiliza solamente una interfaz Ethernet, no corta la red
+
+### IPS
+**Sistema de Prevención de Intrusiones:**
+- Además de detectar, previene contra intrusiones, protege al sistema actuando de forma proactva.
+- Se conecta en medio de la red, cortando la conexión
+- Utiliza dos interfaces Ethernet
+- Puede actuar conjuntamente con el cortafuegos
+
+### Posibles respuestas
+- Reconfiguración de accesos del cortafuegos y de las listas de control de acceso de los routers
+- Emisión de alarmas y registro de las mismas.
+- Almacenamiento de evidencias
+- Ejecución de algún programa para manipular el evento detectado
+- Terminar sesión TCP
+
+## 4.3.4 Tipos de IDS/IPS por ubicación
+- **Software para servidores:** software que se instala en los servidores y detecta instrusiones al equipo
+- **Sondas de red:** existen sistemas software o equipos hardware. Se conectan en una subred y analizan todo el tráfico que pasa
+- **Software para puesto de trabajo:** software que se instala en el PC y detecta intrusiones al equipo. Se combina con el software antivirus y cortafuegos del PC.
+
+
+### Sondas de Red (NIDS)
+Sensores o agentes que recolectan información de la propia red, generalmente basados en **sniffers**. Dispositivos externos, no afectan al rendimiento de los servidores que monitorizan.
+
+**Ventajas:**
+- La inserción de los agentes a nivel de red no afecta a datos existentes
+- Detecta ataques a nivel de red (SYN Flood)
+- Capaz de monitorizar grandes redes
+- Detección en tiempo real
+
+**Inconvenientes:**
+- Pueden no funcionar adecuadamente en redes de alta velocidad
+- Los agentes de esta estrategia no pueden buscar en los protocolos o revisar el contenido de la red si se encuentra cifrado
+- No confirman si un ataque ha tenido éxito, sólo detectan el inicio.
+
+### Software para Servidores (HIDS)
+- Monitorizan eventos locales en un host (pueden detectar atauqes invisibles a un NIDS). Logs del SO, logs de procesos, contenidos de objetos particulares del sistema que no generan logs.
+
+- Se pueden usar en entornos de tráfico cifrado, para analizar la información antes de que se cifre o después de que se descifre.
+
+- Monitorización del SO: búsqueda de anomalías y de firmas de ataques conocidos.
+
+**Ventajas:**
+- Monitorización de quién accede a qué
+- Identificación directa del usuario
+- Capacidad para operar en ambientes cifrados
+- Monitorizar redes amplias
+
+**Inconvenientes:**
+- Actividad de la red no visible a los agentes.
+- Vulnerabilidades del SO comprometen la integridad de los agentes
+- Uso de recursos locales: coste en rendimiento.
+
+## 4.3.5 Cómo modelar una Intrusión
+### Reconocimiento de firmas o patrones conocidos
+- Se asume que toda actividad intrusiva es representable mediante un patrón único o firma
+- Los datos obtenidos de la monitorización se comparan con bases de datos de firmas conocidas de ataques o usos indebidos, en tiempo real.
+- Los proveedores incluyen frecuentemente actualizaciones de las bases de datos de firmas como parte de los acuerdos de mantenimiento
+- Número reducido de falsas alarmas.
+
+**Inconvenientes:** 
+- Los patrones de intrusión deben codificarse a mano
+- Las firmas deben estar bien definidas: dificultad para detectar variantes
+- Es posible falsificar el patrón para confundir al sistema
+- Es imposible detectar intrusiones futuras
+
+### Ejemplo de Reconomiento de patrones (NIDS)
+**Dirección origen y destino:**
+- Tráfico proveniente de nuestra DMZ que tenga como destino nuestra red protegida: es muy posible que estos paquetes constituyan un intento de violación de nuestra política de seguridad
+- Peticiones originadas desde Internet y que tienen como destino máquinas de nuestra organización que no está ofreciendo servicios directos al exterior, como un servidor de bases de datos cuyo acceso está restringido a sistemas de nuestra red.
+
+**Puerto origen y destino:**
+- Los puertos origen y destino son un excelente indicativo de actividades sospechosas en una red.
+- Aparte de los intentos de acceso no autorizado a servicios de nuestros sistemas, se pueden detectar actividades que también supondrán a priori violaciones de las políticas de seguridad, como la existencia de troyanos, ciertos tipos de barridos de puertos, o la presencia de servidores no autorizados dentro de nuestra red.
+
+**Flags TCP:**
+- UNo de los campos de una cabecera TCP contiene seis bits, cada uno de ellos con una finalidad diferente
+- El valor de cada uno de estos bits será 0 o 1, lo cual de forma aislada no suele decir mucho de su emisor, no obstante ciertas combinaciones de valores suelen ser bastante sospechosas. Por ejemplo, unatrama con los bits SYN y FIN activados simultáneamente sería indicativa de una conexión que trata de abrirse y cerrarse al mismo tiempo
+
+**Campo de datos:**
+- En el campo de datos de un paquete que circula por la red es donde más probabilidades tenemos de localizar un ataque contra nuestros sistemas
+- Con toda probabilidad un cortafuegos corporativo detendrá tramas cuya cabecera sea sospechosa
+- Pero un cortaguegos puede no pararse a analizar el contenido de los datos transportados en la trama. Por ejemplo, una petición como `'GET ../../../etc/passwd HTTP/1.0'`  contra el puerto 80 del servidor web de nuestra empresa no se detendría en el cortafuegos, pero muy probablemente se trata de un intento de intrusión contra nuestros sistemas.
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-103.png)
+
+### Detección de Anomalías
+**Análisis estadístico:**
+- Establecer desviaciones con respecto a patrones normales de comportamiento: generar perfiles de actividades sobre los objetos
+- Señalar los eventos que difieren de los patrones de uso normal
+
+**Son sistemas que requieren aprendizaje (técnicas de IA como redes neuronales, minería de datos: reglas de asociación, episodias frecuentes):**
+- Se compara la actividad observada con los perfiles de uso normal esperados. Los perfiles pueden desarrollarse para usuarios, grupos de usuarios, aplicaciones, o uso de los recursos del sistema
+- Son necesarios conjuntos de entrenamiento bastante extensos.
+
+**Ventajas:**
+- Puede llegar a identificar atauqes desconocidos. Obtención de información para firmas de ataques
+- Puede identificar ataques sofisticados en el tiempo
+
+**Inconvenientes:**
+- Alta posibilidad de falsas alarmas
+- Problemas cuando hay cambios en los hábitos del usuario
+
+## 4.3.6 Como implantar un IDS
+Modo oculto:
+- Una interfaz de red externa que sólo recibe, no envía nada (no tiene que tener dirección pública). Podría llegar a identificar ataques desconocidos.
+- Una interfaz de control, para enviar alerta u otra información al servidor de control
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-104.png)
+
+## 4.3.7 SIEM
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-105.png)
+
+Son sistemas softeware que recogen todos los datos relevantes a nivel de seguridad a nivel de seguridad de una gran variedad de productos hardware y/o software para proporcionar una consola de seguridad unificada.
+
+Utilizado por los SOC (Security Operations Center): equipo de personal de seguridad dedicado a monitorizar la red para detectar incidentes de seguridad e investigar y remediar dichos incidentes.
+
+Requisitos:
+- Portabilidad de los datos
+- Compatibilidad de las fuentes de logs
+- Personalización
+- Almacenamiento de datos
+- Control de acceso y segregación
+- Mantenimiento a tiempo completo
+
+**Ventajas:**
+- Centralización de la información y eventos
+- Automatización de tareas
+- Seguimiento de los eventos para detectar anomalías de seguridad
+- Visualización de datos históricos a lo largo del tiempo
+- Muestran al admistrador la existencia de vulnerabilidades, así como si están siendo aprovechadas en los ataques
+
+**Desventajas:**
+- Altos costes de implantación
+- Curva de aprendizaje larga
+- Pérdida de control de la información generada o acceso limitado a la misma
+
+# 4.4 Redes Privadas Virtuales
+## 4.4.1 Introducción
+Una **vpn** es una red que se extiende, mediante un proceso de encapsulación, y habitualmente de cifrado de los paquetes de datos, a diferentes puntos remotos, mediante el uso de **infraestructuras públicas** de transport.
+
+Los paquetes de datos de la red privada viajan por un túnel definido en la red pública.
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-106.png)
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-107.png)
+
+Una VPN pemite al usuario, por ejemplo, acceder a su red coporativa, asignado a su ordenador remoto las direcciones y privilegios de ésta, aunque la conexión la haya realizado mediante un acceso público a Internet.
+
+**Componentes de una VPN:**
+- **Dos terminales**, que pueden ser software o hardware. Estos terminales realizan el cifrado y descifrado y autenticación. También encapsulan la información.
+
+- **Un túnel** conectando los terminales. El túnel es un enlace de comunicación seguro entre los terminales a través de rede como Internet. De hecho, el túnel se crea de forma virtual entre los terminales.
+
+**Ventajas:**
+- Permite disfrutar de una conexión a red con todas las características de la red privada a la que queremos acceder
+- El cliente VPN adquiere totalmente la condición de miembro de esa red, con lo que se le aplican todas las directrices de seguridad y los permisos de un equipo en esa red privada:
+	- Acceso a información publicada para la red privada: bases de datos, documentos internos, etc. a través de un acceso público
+	- Todas las conexiones de acceso a Internet desde el ordenador cliente VPN se llevarán a  a cabo con los recursos y las conexiones que tenga la red privada.
+	- Se reducen los costes económicos en las comunicaciones
+
+**Inconvenientes:**
+- **Cargar en el cliente VPN:** debe realizar la tarea adicional de encapsular los paquetes de datos.
+- Carga aún mayor si se cifran los datos, lo que puede producir una realentización de las conexiones:
+	- La conexión cifrada VPN requiere recursos, tanto al servidor de túnel como al ordenador cliente de VPN, aparte de requerir la instalación de programas especiales al cliente
+- Mayor complejidad en el tráfico de datos, que puede requerir cambios en las configuraciones de aplicaciones o programas.
+- Muchas aplicaciones y muchos programas ya implementan cifrado, y en ese caso, el túnel VPN no aporta seguridad adicional
+- En estos casos el cifrado de los datos se produce en todo su recorrido. En una conexión VPN segura el cifrado únicamente tiene lugar entre el servidor de túnel y el cliente VPN; la conexión entre el servidor de túnel y el servidor de la aplicación se realiza sin cifrado.
+
+## 4.4.2 Ejemplos de Uso
+- **Accesos remotos**, para explotación remota de sistemas o acceso a información corporativa desde internet.
+- **Comunicaciones seguras entre oficinas,** utilización de redes públicas IP para comunicaciones seguras internas
+- **Teletrabajo:** sistemas de teletrabajo seguro
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-108.png)
+
+## 4.4.3 Tecnología VPN
+**Deben contemplarse las siguientes tareas:**
+- **Encapsulamiento IP:** envolver los paquetes de datos TPC/IP dentro de otro paquete con la dirección IP de un cortafuegos u otro servidor que actúe como terminal VPN
+- **Cifrado:** para proteger el contenido de los datos de los paquetes
+- **Autenticación:** creación de un dominio de autenticación mediante servidores de autenticación o mecanismos de clave pública.
+
+## 4.4.4 IPsec
+**Proporciona los siguientes servicios en la capa de red:**
+- **Control de acceso:** para prevenir accesos no autorizados a los recursos
+- **Integridad:** asegurar que el tráfico recibido no ha sufrido ningún tipo de alteración
+- **Confidencialidad:** asegura que el tráfico en Internet no es examinado por partes no autorizadas. Esto requiere que todos los datagramas IP tengan sus campos de datos
+- **Autenticación:** en particular, autenticación de la fuente de forma que cuando el servidor o destinatario recibe un datagrama IP, con una dirección IP de origen dada, pueda estar seguro de que el datagrama IP fue realmente generado por la máquina con dirección IP la de origen. Esto previene el IP spoofinf
+- **Protección frente a ataques de repetición:** garantizar que cada paquete intercambiado entre dos partes el diferente.
+
+**Protocolos de seguridad en la capa de red:**
+- **ESP** (Encapsulating Security Payload): integridad + autenticación + confidencialidad
+- **IKE** (Internet Key Exchange): permite a dos nodos negociar las clave y todos los parámetros necesarios para establecer una conexión ESP
+
+
+### Modos de Funcionamiento
+IPsec emplea el protocolo ESP para asegurar la autenticación, integridad y confidencialidad de la comunicación. Puede proteger el datagrama IP completo sólo los protocolos de capas superiores:
+- **Modo túnel:** el datagrama IP se encapsula completamente dentro de un nuevo datagrama IP que emplea el protocolo IPsec
+- **Modo transporte:** sólo se maneja la carga del datagrama IP, insertándose la cabecera IPsec entre la cabecera IP y la cabecera del protocolo de capas superiores
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-109.png)
+
+#### Modo Transporte
+- El contenido transportado dentro del datagrama ESP son datos de la capa de transporte. 
+- La cabecera IPSEC se inserta inmediatamente a continuación de la cabecera IP Y antes de los datos de los niveles superiores que se desean proteger
+- El modo transporte tiene la ventaja de que asegura la comunicación extremo a extremo, pero requiere que ambos extremos entiendan el protocolo IPsec
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-110.png)
+
+#### Modo Túnel
+- El contenido del datagrama ESP es un datagrama IP completo, incluida la cabecera IP original.
+- Al datagrama IP se le añade inicialmente una cabecera ESP, y posteriormente se añade una nueva cabecera IP que es la que se utiliza para encaminar los paquetes a través de la red
+- El modo túnel se usa normalmente cuando el destino final de los datos no coincide con el dispositivo que realiza las funciones IPsec.
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-111.png)
+
+### Encapsulación de los Datos (ESP)
+- **Autenticación, integridad y confidencialidad** de los datos en los paquetes IP
+- Cifrado de la carga útil (AES-GCM)
+- La cabecera ESP se genera y añade al paquete tras cifrarlo y calcular su HMAC
+- No protege el paquete de cabecera
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-112.png)
+
+- **SPI**: Identificación de la conexión en este protocolo 
+- **Sequence** Number: Identificador que se incrementa con cada paquete 
+- **Payload** **Data**: Datos cifrados del protocolo IP. 
+- **Padding**: Se usan algoritmos de cifrado bloque, de modo que la longitud de los datos a cifrar tiene que ser un múltiplo del tamaño de bloque. 
+- **Next** **Header** : Tipo de protocolo de datos en el payload data.  
+- **Authentication** **Data**: Contiene el ICV (Integrity Check Value)
+
+**Formación del datagrama IPSEC:**
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-113.png)
+
+### IKE (ISAKMP / Oakley)
+- **Internet Key Exchange:** establece un contexto de seguridad entre dos partes
+	- Internet Security Association and Key Management Protocol
+	- Oakley Key Determination Protocolo
+
+- Se realizan tres tareas:
+	- Negociar la política de seguridad: algoritmos y protocolo
+	- Autenticar el intercambio Diffie-Hellman
+	- Intercambio Diffie-Hellman de claves
+
+**Esquema de obtención de clave de sesión:** 
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-114.png)
+
+La clave de sesión es imprescindible para el funcionamiento del protocolo ESP.
+
+### Integración con una PKI
+El uso de una PKI aparece en IPsec como respuesta a la necesidad de un procedimiento para **autenticar de forma fiable** a un conjunto de nodos que desean comunicarse mediante IPsec, siendo dicho conjunto de nodos muy numeroso.
+
+La existencia de una PKI centraliza el alta y baja de los usuarios, además de posibilitar la introducción de tarjetas criptográficas para soportar los certificados, lo cual es muy interesante para la aplicación de IPsec en entornos de teletrabajadores o usuarios móviles.
+
+## 4.4.5 Alternativas a IPsec
+**SSL VPNs:** vpns en la capa de transporte
+- Lo que habitualmente se entiende cuando se habla de VPN
+- Actualmente usan TLS
+- La más utilizada es OpenVPN
+
+**Secure Shell (SSH):**
+- Se pueden crear túneles entre puertos específicos mediante conexiones SSH para permitir tanto a una conexión local acceder a un recurso remoto, como a una conexión remota acceder a un recurso local.
+
+
+## 4.4.6 OpenVPN
+- Usa TLS sobre cualquier puerto preconfigurado, y puede usar TCP o UDP
+- Los algoritmos soportados son los típicos de TLS. Para autenticación, soporta certificados, PSKs, y usuario/contraseña.
+- Puede funcionar como VPN en capa de red o capa de transporte.
+- El servidor puede enviar al cliente commandos a ejecutar, lo que implica que un servidor comprometido puede comprometer a todos sus clientes.
+- Tiene una superficie de ataque mayor debido a que el protocolo completo corre como proceso de usuario, y ha presentado vulnerabilidades en el passado.
+
+## 4.4.7 VPNs mediante túneles SSH
+- A menudo se usa en hosts intermedios (bastion hosts) para saltar a otros equipos.
+- OpenSSH, por ejemplo, permite emplear el protocolo SSH para crear interfaces para túneles en los equipos. Un túnel SSH crea una interfaz entre los hosts local y remoto, a la que se le puede asociar otras direcciones IP.
+- Son VPNs complejas de implementar:
+	- Requieren de la instalación y configuración del cliente SSH en cada máquina de usuario, así como la reconfiguración de las aplicaciones del cliente que vayan a usar el túnel.
+	- Cada usuario debe tener privilegios de login en un servidor dentro de la organización. Debido a que este servidor típicamente necesita ser accesible desde internet, es susceptible de ataque.
+	- Generalmente, los usuarios necesitan tener conocimientos técnicos sólidos para configurar las aplicaciones por sí mismos, y solucionar los problemas que puedan ocurrir.
+	- Los usuarios habituales de las VPNs basadas en túneles SSH son los admistradores sistemas TI.

@@ -270,7 +270,7 @@ Ambos devuelven objetos `CSSStyleDeclaration`.
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-100.png)
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-101.png)
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-103.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-104.png)
+![](image-104.png|623)
 
 ## 1.9 Eventos en el DOM y APIs del navegador
 
@@ -1375,27 +1375,169 @@ Utiliza el método `load()` para bajar  datos desde el servidor e insertarlos en
 
 
 
-# 7.6 API Fech
+# 7.6 API Fetch
 Tradicionalmente AJAX se implementaba mediante el objeto `XMLHttpRequest`. Esta opción tenía un par de desventajas:
-- Diferencias en la implantación entre fabricantes de navegadores distintos o versiones del mismo navegador
-- Trabaja con, Callbacks lo que tiene a crear un código más desorganizado
+- Diferencias en la implementación entre distintos fabricantes de navegadores o entre versiones del mismo navegador
+- Trabaja con callbacks, lo que tiende a generar un código más desorganizado
 
-La solución tradicional pasaba por utilizar herramientas de terceros, como la librería jQuery
+La solución tradicional pasaba por utilizar herramientas de terceros, como la librería jQuery.
 
-**Fech** es una nueva interfaz estándar que permite el desarrollo del frontend basado en AJAX. Utiliza promesas en lugar de callback, lo que facilita la organización del código asícrono.
+**Fetch** es una interfaz estándar que permite el desarrollo del frontend basado en AJAX. Utiliza promesas en lugar de callbacks, lo que facilita la organización del código asíncrono.
 
-El método `fecht()` es un método dependiente del objeto `window` del navegador `window.fetch(url)` o `fetch(url)` 
+El método `fetch()` es un método global del navegador, accesible como `window.fetch(url)` o simplemente `fetch(url)`.
 
-`fetch(url)`: traer al cliente contenido de la url, devolviendo una **promesa** que resuelve en un objeto de la clase **Response** la petición, sea esta o no correcta.
+`fetch(url)` trae al cliente el contenido de la URL y devuelve una **promesa** que resuelve en un objeto de la clase **Response**, tanto si la respuesta HTTP es correcta como si no lo es.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-205.png)
+**Métodos habituales de `Response`:**
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-206.png)
+| Método | Acción |
+| --- | --- |
+| `.text()` | Devuelve una promesa que resuelve con una representación en texto de los datos recibidos |
+| `.json()` | Devuelve una promesa que resuelve con una representación en JSON de los datos recibidos |
+| `.formData()` | Devuelve una promesa que resuelve con una representación en pares clave/valor de los datos recibidos |
+| `.bytes()` | Devuelve una promesa que resuelve con los datos recibidos en bytes |
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-207.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-208.png)
+**Propiedades habituales de `Response`:**
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-210.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-211.png)
+| Propiedad | Valor |
+| --- | --- |
+| `.status` | Código de estado de la respuesta |
+| `.ok` | Booleano que indica si la respuesta fue exitosa (`200` a `299`) |
+| `.headers` | Objeto de cabeceras asociado a la respuesta |
+| `.url` | URL de la respuesta |
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/daw/imagenes/image-212.png)
+**Esquema básico con callbacks nombrados:**
+
+```js
+const p = fetch("miUrl");
+p.then(responseCallBack);
+
+function responseCallBack(response) {
+  const p1 = response.text();
+  p1.then(muestraTextoCallBack);
+}
+
+function muestraTextoCallBack(txt) {
+  // Código para mostrar el texto almacenado en txt
+}
+```
+
+**Versión encadenada equivalente:**
+
+```js
+fetch("miUrl")
+  .then((response) => response.text())
+  .then((txt) => muestraTexto(txt));
+```
+
+**Ejemplo: cargar texto**
+
+Versión convencional:
+
+```js
+function cargaTexto() {
+  const miP = fetch("fileTXT.txt");
+  miP.then(ajaxOK);
+}
+
+function ajaxOK(response) {
+  const miP1 = response.text();
+  miP1.then(muestraTexto);
+}
+
+function muestraTexto(txt) {
+  document.getElementById("demo").innerHTML = txt;
+}
+
+cargaTexto();
+```
+
+Versión con funciones flecha:
+
+```js
+function cargaTexto() {
+  fetch("fileTXT.txt")
+    .then((response) => response.text())
+    .then((txt) => muestraTexto(txt));
+}
+
+function muestraTexto(txt) {
+  document.getElementById("demo").innerHTML = txt;
+}
+
+cargaTexto();
+```
+
+**Ejemplo: cargar JSON**
+
+Archivo `fileJSON.json`:
+
+```json
+{
+  "Registros": [
+    { "Nombre": "Pedro", "Ciudad": "Santiago", "Pais": "España" },
+    { "Nombre": "Pablo", "Ciudad": "León", "Pais": "España" }
+  ]
+}
+```
+
+Código:
+
+```js
+function cargaJSON() {
+  fetch("fileJSON.json")
+    .then((response) => response.json())
+    .then((jsonObj) => muestraJSON(jsonObj));
+}
+
+function muestraJSON(jsonObj) {
+  let txt = "<ul>";
+
+  for (const registro of jsonObj.Registros) {
+    txt += `<li>${registro.Nombre} -> ${registro.Ciudad}</li>`;
+  }
+
+  txt += "</ul>";
+  muestraTexto(txt);
+}
+
+function muestraTexto(txt) {
+  document.getElementById("demo").innerHTML = txt;
+}
+
+cargaJSON();
+```
+
+**Ejemplo: cargar XML**
+
+```js
+function cargaXML() {
+  fetch("fileXML.xml")
+    .then((response) => response.text())
+    .then((data) => {
+      const parser = new DOMParser();
+      const xmlObj = parser.parseFromString(data, "application/xml");
+      muestraXML(xmlObj);
+    });
+}
+
+function muestraXML(xmlObj) {
+  const tags = xmlObj.getElementsByTagName("RECTOR");
+  let txt = "<ul>";
+
+  for (const tag of tags) {
+    txt += `<li>${tag.textContent}</li>`;
+  }
+
+  txt += "</ul>";
+  muestraTexto(txt);
+}
+
+function muestraTexto(txt) {
+  document.getElementById("demo").innerHTML = txt;
+}
+
+cargaXML();
+```
+
+> `fetch()` no rechaza la promesa por un `404` o un `500`; para tratar esos casos como error conviene comprobar `response.ok`.

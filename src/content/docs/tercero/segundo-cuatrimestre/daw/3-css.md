@@ -2,7 +2,7 @@
 title: "CSS"
 ---
 
-# 3.1 Introducción
+F# 3.1 Introducción
 **CSS** significa **Cascading Style Sheets** y es el lenguaje que controla la presentación visual de una página web:
 - colores,
 - tipografía,

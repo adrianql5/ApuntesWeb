@@ -2,9 +2,7 @@
 title: "SGSI Análisis y gestión de riesgos Ficheiro"
 ---
 
-# 2. SGSI: Análisis y Gestión de Riesgos
-
-## 2.1 Información y seguridad de la información
+# 2.1 Información y seguridad de la información
 
 
 ### 2.1.1 Qué es la información

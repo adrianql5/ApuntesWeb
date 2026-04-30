@@ -2,586 +2,363 @@
 title: "Criptografía"
 ---
 
-# 2.1 Criptografía Simétrica
+# 2.1 Criptografía simétrica
 
-## 2.1.1 Conceptos Básicos
-El objetivo de la **criptografía** es **ocultar el significado** del mensaje que se quiere transmitir para que sólo su **destinatario** pueda interpretarlo correctamente.
+## 2.1.1 Idea general y conceptos básicos
+La **criptografía** busca ocultar el significado de un mensaje para que solo su **destinatario** pueda interpretarlo. En un criptosistema intervienen el **mensaje en claro** $m$, el **mensaje cifrado** $c$, una **clave** $k$ y dos operaciones: **cifrado** $E$ y **descifrado** $D$.
 
-En criptografía clásica las técnicas más utilizadas son:
-- **Transposición:** basada en reordenar las letras de un mensaje. Por ejemplo, la **escítala espartana**, que era una vara de madera sobre la que se enrollaba una tira de pergamino de manera que si alguien intercepta el mensaje no podrá descifrarlo si no dispone de una vara adecuada
-- **Sustitución:** basada en recodificar el alfabeto de manera que cada letra se le asigne otra, creando así un nuevo alfabeto. Por ejemplo, el **cifrado ceśar**, que consistía en sustituir cada letra del alfabeto por la situada $n$ posiciones más adelante.
+En un **cifrado simétrico** la misma clave sirve para cifrar y descifrar:
 
-- **Criptología:** criptografía y criptoanálisis
-- **Criptografía:** arte y ciencia de mantener mensajes seguros
-- **Criptoanálisis:** arte y ciencia de romper mensajes seguros
-- **Criptosistema:** conjunto de dispositivos de cifrado y descifrado, acompañado de un protocolo de transmisión de claves
-- **Algoritmos criptográficos:** función que realiza el proceso de cifrado y descifrado, junto con la interrelación con las claves.
-- **Claves:** parámetros que inicializan y personalizan los algoritmos
-
-### Esquema de cifrado y descifrado
-- $m$: mensaje en claro
-- $c$: mensaje cifrado
-- $k$: clave
-- $E$: operación de cifrado
-- $D$: operación de descifrado
+1. $c = E_k(m)$
+2. $m = D_k(c)$
+3. $D_k(E_k(m)) = m$
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-1.png)
 
-1. $c=E_k(m)$
-2. $m=D_k(c)$
-3. $D_k(E_k(m))=m$
-- Esta es la definición de un **cifrado simétrico**.
+En la criptografía clásica dominaron dos ideas. La **transposición** reordena las letras de un mensaje; un ejemplo histórico es la **escítala espartana**. La **sustitución** cambia cada letra por otra; el ejemplo más conocido es el **cifrado César**, que desplaza cada letra $n$ posiciones en el alfabeto.
 
-Por ejemplo, **Cifrado César:**
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-2.png)
+Conviene separar algunos términos:
+
+- **Criptología**: criptografía + criptoanálisis.
+- **Criptografía**: arte y ciencia de mantener mensajes seguros.
+- **Criptoanálisis**: arte y ciencia de romper esos mensajes.
+- **Criptosistema**: conjunto de algoritmos, claves y protocolo de uso.
+- **Clave**: parámetro que inicializa y personaliza el algoritmo.
 
 ## 2.1.2 Criptoanálisis
-### Objetivos del criptoanálisis
-- **Romper** (descifrar) un único mensaje
-- Reconocer **patrones** en mensajes cifrados
-- **Inferir** algún significado sin llegar a romper el cifrado, por el **tamaño** o la **frecuencia** de los mensajes.
-- **Deducir la clave** para romper un mensaje y quizás mensajes sucesivos.
-- Encontrar **debilidades** en la **implementación** o en el **entorno** de uso del cifrado por parte del emisor.
-- Encontrar **debilidades generales** en un algoritmo de cifrado.
+El **criptoanálisis** intenta romper un cifrado o, al menos, extraer información útil. Sus objetivos típicos son descifrar un mensaje concreto, reconocer **patrones**, inferir significado por el **tamaño** o la **frecuencia** de los mensajes, deducir la **clave** o encontrar debilidades en el **algoritmo**, la **implementación** o el **entorno** de uso.
 
-### Ataques
-Se asume que el criptoanalista conoce el algoritmo empleado, pero no la clave. Existen 3 tipos de ataques:
-- **Solo texto cifrado:** el analista sólo dispone de texto cifrado y su meta es descubrir el texto plano (y posiblemente la clave).
-- **Texto plano conocido:** el analista dispone del texto cifrado y su texto plano correspondiente, la meta es averiguar la clave.
-- **Texto plano elegido:** el analista puede suministrar textos planos y obtener el correspondiente texto cifrado, la meta es descubrir la clave.
+Se suele asumir que el atacante conoce el **algoritmo**, pero no la **clave**. Los modelos clásicos de ataque son:
 
-Hay 2 bases para los ataques:
-- Ataques **matemáticos:** basados en el análisis de las matemáticas o de los algoritmos subyacentes
-- Ataques **estadísticos:** basados en hacer suposiciones sobre las letras, pares de letras, tripletas, etc.
-	- Examinan el texto cifrado correlacionando **propiedades** con las **suposiciones**
-	- Buscan **patrones**, similitudes y discontinuidades entre múltiples **mensajes cifrados de la misma forma**.
+- **Solo texto cifrado**: el atacante solo ve textos cifrados.
+- **Texto plano conocido**: conoce pares de texto claro y texto cifrado.
+- **Texto plano elegido**: puede elegir mensajes y obtener su cifrado.
 
-El **cifrado de sustitución** puede ser atacado por **fuerza bruta** si el espacio de claves es lo suficientemente pequeño. El cifrado César solo tiene 27 posibles claves.
+Los ataques pueden ser **matemáticos**, si explotan propiedades del algoritmo, o **estadísticos**, si buscan correlaciones en letras, pares de letras, tripletas o mensajes cifrados de forma similar. Cuando el espacio de claves es pequeño, también es viable la **fuerza bruta**. El cifrado César, por ejemplo, solo tiene 27 claves posibles.
 
-## 2.1.3 Cifrados Básicos
-### Sustitución Monoalfabética Genérica
-La **sustitución monoalfabética genérica** consiste en construir el alfabeto cifrado colocando **al azar** las letras del alfabeto llano. Así existen $27!=10^{28}$ posibles alfabetos cifrados.
+## 2.1.3 Cifrados clásicos
+La **sustitución monoalfabética genérica** construye un alfabeto cifrado colocando al azar las letras del alfabeto llano. Eso da lugar a $27! \approx 10^{28}$ alfabetos posibles. Aun así, la **frecuencia de aparición** de las letras en un idioma permite atacar el sistema: si el mensaje conserva demasiados patrones, el cifrado acaba cediendo ante el análisis estadístico.
 
-La **frecuencia de aparición de las distintas letras** en un idioma permite descubrir la letra más frecuente en el texto cifrado sucesivamente. Por tanto, se deben **evitar patrones** en el mensaje cifrado y **hacer la clave más compleja**.
+El **cifrado de Vigenère** mejora a César usando una clave de varias letras, es decir, varias sustituciones de César encadenadas. Históricamente se rompió en dos fases:
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-3.png)
+1. Se estudian las repeticiones de secuencias para estimar la **longitud de la clave**.
+2. Se divide el texto en bloques y cada bloque se ataca como una **sustitución monoalfabética**.
 
-### Cifrado de Vigènere (polialfabético)
-El **cifrado de Vigenère** consiste en realizar varios cifrados de **César**, pero con **más de una letra** en la clave. Aunque ahora mismo está roto en dos pasos (Babbage):
-1. **Estadísitcas** sobre la **frecuencia** de distribución de **series de letras repetidas** y la **separación entre repeticiones** para descubrir la **longitud de la clave**, $n$.
-2. División del texto en $n$ bloques, correspondiendo cada uno a una cifra **monoalfabética clásica.**
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-4.png)
-
-### Enigma
-**Enigma** fue una máquina criptográfica costruida en 1920 por Arthur Scherbius. Inicialmente era una versión mecanizada del cifrado **monoalfabético**, pero al girar una posición tras codificar cada letra se consigue el **polialfabético**.
-
-
-Hay varas modificaciones de esta máquina:
-- Con 3 modificadores encadenados:$26^3=17576$ alfabetos posibles
-- Con un reflector y un clavijero y modificadores intercambiables: $10000$ billones
+**Enigma**, diseñada por **Arthur Scherbius** en 1920, mecanizó este planteamiento. Empezó como una sustitución monoalfabética, pero al girar tras cada letra pasó a comportarse como un cifrado **polialfabético**. Con 3 rotores encadenados se obtenían $26^3 = 17576$ alfabetos posibles; al añadir **reflector**, **clavijero** y rotores intercambiables, el espacio crecía hasta unos **10000 billones** de configuraciones.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-5.png)
 
-### Cuaderno de uso único
-El **cuaderno de uso único** es un cifrado de Vigenère con **clave aleatoria** al menos **tan larga como el mensaje**.
+El **cuaderno de uso único** (*one-time pad*) lleva la idea al límite: es un Vigenère con una clave **aleatoria**, **tan larga como el mensaje** y **no reutilizada**. En esas condiciones se considera **probablemente irrompible**. Su debilidad práctica no está en el algoritmo, sino en la **generación** y **distribución** de la clave. Si la clave se genera con un pseudoaleatorio débil, el sistema deja de ser seguro.
 
-Es **probablemente irrompible**, ya que un texto de longitud $n$ se puede corresponder con cualquier cadena de longitud $n$, por lo que probarlas todas es inviable.
+## 2.1.4 Primitivas y criterios de diseño
+Los cifrados modernos combinan unas pocas **primitivas** básicas:
 
-La **clave debe ser aleatoria** para evitar que el cifrado se rompa generándola. El uso de **generadores de números pseudo-aleatorios** supone una debilidad, ya que si no se implementan bien se puede deducir la clave generada.
+- **Sustitución**: reemplazar un conjunto de bits por otro.
+- **Transposición**: cambiar el orden de los bits.
+- **Confusión**: hacer compleja la relación entre texto claro, clave y texto cifrado.
+- **Difusión**: repartir la información del texto claro por todo el texto cifrado.
 
+Estas técnicas se emplean para proteger la **confidencialidad**, es decir, para que solo quien conoce la clave pueda acceder al contenido.
 
-## 2.1.4 Primitivas Criptográficas
-- **Sustitución:** reemplazar un conjunto de bits por otro
-- **Transposición:** modificar el orden de los bits al crear el texto cifrado para romper cualquier patrón repetido subyacente en el texto plano.
-- **Confusión:** relación funcional compleja entre el par texto plano/clave y el texto cifrado, de manera que el cambio de un único carácter (bit) en el texto plano cause cambios no predecibles en el texto cifrado resultante
-- **Difusión:** se debe distribuir la información de los elementos individuales en el texto plano sobre el texto cifrado completo, de  manera que incluso pequeños cambios en el texto plano resulten en cambios grandes en el texto cifrado
-- Las **técnicas criptográficas** se usan como medida para asegurar la **confidencialidad** dándole acceso a las claves solo a las partes autorizadas
+Un criptosistema solo merece confianza si cumple tres condiciones: está basado en **matemáticas sólidas**, ha sido **analizado públicamente** por expertos y ha resistido la **prueba del tiempo**.
 
+## 2.1.5 Cifradores de bloque
+Un **cifrador de bloque** divide el mensaje en bloques de $n$ bits y cifra cada uno para producir otro bloque de $n$ bits. Si se usa sin un modo adecuado, dos bloques iguales de texto claro producen dos bloques iguales de texto cifrado. A cambio, un buen cifrador de bloque hace que muchos bits del resultado dependan de muchos bits de la entrada, y un error de transmisión suele afectar solo al bloque donde aparece.
 
-Para que un criptosistema sea de **confianza** debe:
-- Estar basado en **elementos funcionales** y **matemáticas sólidas**
-- Haber sido analizado por **expertos competentes** y demostrado su **robustez**
-- Haber superado la **prueba del tiempo**.
+### DES y su evolución
+**DES** trabaja con bloques de **64 bits** y una clave total de **64 bits**, de los que **56 bits** son efectivos y **8 bits** se usan para paridad. El cifrado se realiza en **16 iteraciones** y combina **sustitución** y **permutación**; en términos de Shannon, la sustitución aporta sobre todo **confusión** y la permutación aporta **difusión**.
 
+Con $2^{56}$ claves posibles, DES parecía suficiente en su momento. A **1000 claves por segundo**, romperlo por fuerza bruta llevaría más de **dos millones de años**. Ese margen desapareció con el tiempo: en **1998**, la **Electronic Frontier Foundation** construyó una máquina capaz de descifrar DES en **menos de tres días**.
 
-## 2.1.5 Cifradores de Bloque
-**Cifradores de bloque:** el mensaje se separa en bloques de $n$ bits de texto claro que el algoritmo filtra por separado para devolver $n$ bits de texto cifrado.
-- En principio, cada **bloque es independiente** y no hay influencia entre ellos, así que bloques de texto claro **idénticos** producen bloques de texto cifrado **idénticos**.
-- Cada **bit** del bloque de **texto** claro tiene **efecto** en **cada bit** del bloque de **texto cifrado**.
-- Un **error** en el texto cifrado influye **sólo en su bloque**.
+Las variantes más citadas fueron:
 
-### Algoritmo DES
-El algoritmo de cifrado **DES** consiste en un cifrado de bloque usando una clave de $64\text{ bits}$ y cuya salida son $64 \text{ bits}$ de texto cifrado. 
+| Variante | Idea | Observación |
+| --- | --- | --- |
+| DES | Una clave de 56 bits | Hoy es insuficiente. |
+| Doble DES | Cifrar dos veces con dos claves | No ofrece la mejora que intuitivamente se esperaría. |
+| Triple DES de dos claves | Esquema EDE con dos claves de 56 bits | Fuerza aproximada de unos 80 bits. |
+| Triple DES de tres claves | Esquema EDE con tres claves de 56 bits | Fuerza aproximada de unos 112 bits. |
 
-Realiza **substitución** (confiere propiedades de difusión) y **transposición**/permutación (confiere propiedades de confusión) sobre los bits.
+La sustitución de DES fue gradual. El **NIST** abrió en **enero de 1997** el proceso para elegir un reemplazo, preseleccionó **15 algoritmos** en **agosto de 1998**, dejó **5 finalistas** en **abril de 1999** (**MARS, RC6, Rijndael, Serpent y Twofish**) y eligió **Rijndael** como **AES** en **octubre de 2000**.
 
-Usa una **clave** efectiva de $56 \text{ bits} + 8 \text{ de paridad}$ , $64 \text{ bits}$ en total.
-- Por tanto. hay $2^{56}=7200 \text{ billones}$  de calves posibles, por lo que romperlo por fuerza bruta llevaría más de 2 millones de años $1000 \text{claves/segundo}$
-- En 1998 la Electronic Frontier Foundation fabricó una máquina que descifraba **DES** en menos de 3 días.
+### AES y modos de uso
+**AES** es el estándar actual de cifrado simétrico por bloques. Trabaja con bloques de **128 bits** y admite claves de **128, 192 o 256 bits**, con **10, 12 o 14 rondas** respectivamente. Cada ronda combina operaciones como **SubBytes**, **ShiftRows**, **MixColumns** y **AddRoundKey**.
 
-El proceso de cifrado consta de **16 iteraciones**, cada una con una clave de iteración generada a partir de la suministrada por el usuario.
+El algoritmo por sí solo no basta: importa mucho el **modo de uso**.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-6.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-7.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-8.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-9.png)
+**ECB** (*Electronic Code Book*) cifra cada bloque de forma **independiente**. Es sencillo, pero tiene dos problemas graves: las **repeticiones** del texto claro se reflejan en el texto cifrado y, si un atacante reconoce bloques, puede intentar **recombinarlos** para fabricar mensajes válidos.
 
-**Variantes de DES**
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-10.png)
-
-
-**Evolución de los Algoritmos:**
-- Varios desafíos para descifrar mensajes cifrados con DES resueltos mediante computación distribuida.
-- En enero de 1997 el NIST solicitó algoritmos para sustituir al DES. Diseñados para resistir los ataques que habían tenido éxito contra DES.
-- En agosto de 1998 se pre-seleccionarion 15 algoritmos.
-- En abril de 1999 se preseleccionaron 5 finalistas: MARS, RC6, Rigndael, Serpente y Twofish.
-- En octubre de 2000 se seleccionó Rijndael como AES. Diseñado en Bélgica por Joan Daemen y Vicent Rijmen.
-
-### AES (Advanced Encryption Standard)
-El **AES** actual es un algoritmo de cifrado de bloque de $128 \text{ bits}$. Puede utilizar **3 tamaños diferentes de clave**, cada uno con un **número de rondas diferente**.
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-16.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-17.png)
-
-
-- En **ECB** (Electronic Code Book Mode, mode de uso de un cifrado en bloque) **se cifra cada bloque de manera independiente**.
-- **Repeticiones** en el texto plano cifradas con la misma clave generan el mismo texto cifrado.
-- La solución es el **encadenamiento**.
-
-#### CBC
-El **CBC** (CIpher Block Chaning Mode) usa encadenamiento, de manera que el cifrado de cada bloque depende del contenido del bloque previo además del suyo. Realiza un **XOR** de cada bloque con el bloque cifrado previo. Requiere un **vector de inicialización** para el primer bloque.
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-18.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-19.png)![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-20.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-21.png)
+**CBC** (*Cipher Block Chaining*) evita eso encadenando los bloques. Antes de cifrar cada bloque, se hace un **XOR** con el bloque cifrado anterior. El primer bloque necesita un **vector de inicialización** (**IV**).
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-22.png)
 
-## 2.1.6 Cifradores de Flujo
-**Cifradores de flujo:** en cada paso entra un bit (o byte) del mensaje en el cifrador y sale un bit (o byte) de texto cifrado. Funcionamiento:
-1. A partir de una semilla se genera una **secuencia** (pseudoaleatoria) del **mismo tamaño** que el mensaje.
-2. La secuencia cifrante se **combina** con el mensaje (por ejemplo, con una XOR)
-3. **Ambos** extremos **comparten la semilla,** de manera que el receptor pueda usarla para generar otra vez la clave y descifrar el mensaje
+**CTR** usa un **contador** y un valor inicial aleatorio para convertir un cifrador de bloque en un esquema de tipo **flujo**. Su ventaja principal es la **paralelización**.
+
+**GCM** añade además **autenticación**. El **NIST** lo recomienda para cifrado autenticado y, combinado con **AES**, aparece en protocolos como **TLS**. En esencia, AES se aplica sobre el **IV/contador** y el resultado se combina con el texto claro; además se calcula una etiqueta de autenticación. Aun así, un mal uso del **IV/nonce** puede introducir vulnerabilidades graves.
+
+## 2.1.6 Cifradores de flujo
+Un **cifrador de flujo** procesa el mensaje bit a bit o byte a byte. Su funcionamiento básico es:
+
+1. A partir de una **semilla** se genera una secuencia pseudoaleatoria del mismo tamaño que el mensaje.
+2. Esa secuencia se combina con el texto claro, normalmente mediante **XOR**.
+3. Emisor y receptor comparten la semilla para poder reproducir la misma secuencia.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-23.png)
 
-Condiciones para una **clave segura:**
-- **Período:** la clave deberá ser tanto o más larga como el mensaje. En la práctica, con una semilla de 120-250 bits se generan periodos superiores a 1035.
-- **Distribución de bits:**
-	- Distribución **uniforme** de unos y ceros que represente una secuencia pseudoaleatoria.
-	- Distribución **estadística** de **rachas** de dígitos (bits iguales entre 2 bits distintos).
+Para que la secuencia cifrante sea segura debe tener un **período** al menos tan largo como el mensaje y una **distribución** de bits y de **rachas** compatible con una secuencia pseudoaleatoria. En la práctica, semillas de entre **120 y 250 bits** permiten obtener períodos enormes.
 
-### Propuesta de Cifrador de Vernam (1917)
-Esta propuesta se basa en una secuencia cifrante **binaria y aleatoria** $S$ que se obtiene de una clave secreta $K$ compartida por emisor y receptor. Se usa la función **XOR** para cifrar y descifrar el mensaje.
+La propuesta clásica es el **cifrador de Vernam** (1917): se parte de una secuencia binaria aleatoria $S$, derivada de una clave secreta compartida $K$, y se cifra con **XOR**. Si la secuencia es realmente aleatoria y no se reutiliza, el esquema se acerca al cuaderno de uso único.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-25.png)
+Un generador pseudoaleatorio sencillo puede implementarse con un **registro de desplazamiento**: el registro empieza cargado con la clave, se desplaza un bit en cada iteración, se toma un bit como salida y se calcula el nuevo bit con una función $f(B_n, B_{n-1}, \dots, B_1)$. Esa función debe evitar repeticiones cortas, no ser predecible y ser fácil de implementar.
 
-### Ejemplo de Generador Pseudoaletorio
-0. Inicialmente el registro contiene el valor de la clave.
-1. En cada iteración:
-	1. Se desplaza el registro $1 \text{ bit}$ a la derecha
-	2. El bit $B_1$ se toma como salida
-	3. El nuevo bit $B_n$ se obtiene con la función $f(B_n, B_{n-1},..., B_1)$
+Dos algoritmos históricos ilustran bien los problemas prácticos:
 
-Hay que escoger la **función** $f$ de manera que:
-- **No** se **repitan** las secuencias cortas en la salida
-- **No** sea **previsible** la salida
-- Sea **fácilmente** implementable
+- **RC4** usa claves de longitud variable. Fue **propietario** hasta que se filtró en **septiembre de 1994**, llegó a emplearse en **SSL, WEP y WPA** y era unas **diez veces más rápido** que DES. Sus debilidades de implementación acabaron permitiendo ataques reales.
+- **A5**, propuesto en **1994** y no publicado en su diseño original, se usó en el cifrado del enlace **GSM**. Sus debilidades mostraron una lección clásica: en criptografía, ocultar el algoritmo en lugar de someterlo a revisión pública suele acabar mal.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-26.png)
+## 2.1.7 Limitaciones de la criptografía simétrica
+El gran problema es la **distribución de claves**. Si hay $n$ usuarios y cada pareja necesita una clave distinta, hacen falta
 
+$$\frac{n(n-1)}{2}$$
 
+claves compartidas, además de un **canal seguro** para repartirlas. A eso se suma el riesgo de **fuerza bruta**, que obliga a usar claves suficientemente largas y a **renovarlas** con cierta frecuencia.
 
-### Algoritmo RC4 (Ron Rivest 1987)
-- Este algoritmo se basa en usar **claves de longitud variable.** 
-- Software **propietario** (privado)(pero en septiembre del 94 se filtró a internet).
-- Empleado en su momento en SSL, WEP y WPA. 
-- Diez veces más **rápido** que **DES**.
-- **Debilidades** en la **implementación** que llevaron a ataques en WEP y cifrado de ficheros MSOffice.
+# 2.2 Criptografía de clave pública
 
-### Algoritmo A5 (no publicado, propuesto en 1994)
-- Este algoritmo se solía usar para el cifrado del enlace entre el abonado y la central de un teléfono móvil tipo GSM.
-- Varias debilidades originaron distintos tipos de ataques. Consecuencia típica en el mundo de la criptografía cuando los desarrolladores de algoritmos no hacen público el código fuente.
+## 2.2.1 Intercambio de claves: Diffie-Hellman
+La criptografía de clave pública nace, en buena parte, para aliviar el problema de distribución de claves. **Diffie-Hellman** (1976) permite que dos partes acuerden una **clave simétrica común** sobre un canal inseguro. Se apoya en la dificultad del **logaritmo discreto**: dado un primo grande $p$, una base $a$ y un valor $n = a^k \bmod p$, recuperar $k$ es computacionalmente inviable cuando $p$ es suficientemente grande.
 
+El intercambio clásico funciona así:
 
-### CTR
-- **CTR** es una alternativa al encadenamiento en cifrado de bloque que usa **contadores** y **un vector aleatorio**.
-- Es una **combinación** de cifrado de **bloque** y de **flujo**.
-- Mejora la **eficiencia** ya que se puede **paralelizar el proceso**.
+1. Alice y Bob acuerdan públicamente $p$ y $a$. Ejemplo: $p = 11$ y $a = 7$.
+2. Alice elige un secreto $x = 3$ y envía $A = a^x \bmod p = 2$.
+3. Bob elige un secreto $y = 6$ y envía $B = a^y \bmod p = 4$.
+4. Alice calcula $K = B^x \bmod p = 9$.
+5. Bob calcula $K = A^y \bmod p = 9$.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-27.png)
+Ambos obtienen la misma clave $K$ sin haberla transmitido directamente.
 
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-29.png)
 
-### GCM
-- **Recomendado** por el **NIST** para cifrado y autenticación
-- En combinación con AES, se utiliza, por ejemplo en el protocolo TLS. Se usa AES para cifrar un IV y un contador usando la clave simétrica AES y a continuación se usa el resultado como XOR con texto plano.
-- Existen **vulnerabilidades** si no se implementa correctamente.
+Por sí solo, Diffie-Hellman **no autentica** a las partes, así que es vulnerable a ataques **man-in-the-middle**. Por eso necesita mecanismos adicionales de autenticación. Se ha usado en **SSL/TLS**, **SSH**, **Secure FTP** e **IPsec**.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-28.png)
+## 2.2.2 Idea de la clave pública
+En criptografía de clave pública cada usuario tiene dos claves:
 
-## 2.1.7 Problemas de la Criptografía Simétrica
-**Distribución de claves:**
-- Debe haber **una para cada par de usuarios,** por lo que para $n$ usuarios se necesitarían $\frac{n \times(n-1)}{2}$ claves.
-- Se necesita un **canal seguro** para distribuirlas
+- una **clave privada** $k_S$, que solo conoce su propietario;
+- una **clave pública** $k_P$, que puede conocer cualquiera.
 
-Riesgo de **ataques de fuerza bruta:** conlleva la necesidad de cambias las claves frecuentemente.
-
-
-# 2.2 Criptografía de Clave Pública
-## 2.2.1 Conceptos Básicos
-### Algoritmo de Diffie-Hellman
-- El algoritmo de **protocolo de intercambio de clave simétrica** fue desarrollado en 1976 para acordar una clave común entre 2 iterlocutores. Está basado en las propiedades de los **logaritmos discretos**.
-
-- Se calcula usando dos enteros $n$ y $a$ y un número primo $p$ tal que $n=a^k mod (p)$. Soluciones conocidas para $p$ pequeños, pero **computacionalmente inviables** con $p$ **grande**.
-
-- Necesita de **autenticación adicional** ya que es vulnerable a ataques **man-in-the-middle** 
-
-- Se usa en SSL, SSH, SecureFPT, IPSec, etc.
-
-**Algortimo:**
-1. Alice y Bobo acuerdan un número primo $p$ y un número $a$ **públicamente:** $1 < a < p-1$ ($p=11$ y $a=7$)
-2. Alice escoge un número aleatorio $x$ ($3$) y envía a Bob $A=a^x mod (p)$ ($2$)
-3. Bob escoge un número aleatorio $y$ ($6$) y envía a Alice $B=a^y mod(p)$ ($4$)
-4. Alice calcula $K=B^x mod(p)$ ($9$)
-5. Bob calcula $K=A^y mod(p)$ ($9$)
-6. A partir de ese momento pueden emplear la misma clave $K$.
-
-![](image-29.png|298)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-30.png)
-
-
-### Fundamentos de los Algoritmos de Clave Pública
-La idea básica de la **criptografía de clave pública** es usar 2 claves por usuario:
-- Una **clave privada** o secreta ($kS$) conocida únicamente por el individuo.
-- Una **clave pública** ($kS$) disponible para todo el mundo.
-- Ambas claves son **inversas** en cierta forma.
+Ambas son inversas en cierto sentido: lo que una hace, la otra lo deshace.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-31.png)
 
+Su funcionamiento básico para **confidencialidad** es:
 
-1. $c=E_{kP}(m)$
-2. $m=D_{kS}(c)$
-3. $D_{kS}(E_kP(m))=m$
+1. $c = E_{k_P}(m)$
+2. $m = D_{k_S}(c)$
+3. $D_{k_S}(E_{k_P}(m)) = m$
 
-**Requisitos:**
-- Debe ser **computacionalmente sencillo cifrar** o **descifrar** un mensaje dada la clave adecuada básica
-- Debe ser **computacionalmete imposible determinar** la $kS$ a partir de la $kP$
-- Debe ser **computacionalmente imposible determinal** la $kS$ mediante **ataques de texto claro** elegido
+Un sistema de clave pública debe permitir cifrar y descifrar con facilidad usando la clave correcta, pero hacer **computacionalmente inviable** recuperar la **clave privada** a partir de la **pública** o romper el sistema mediante ataques de **texto claro elegido**.
 
+En cuanto a servicios de seguridad, la idea general es simple: la **clave pública** sirve para proteger la **confidencialidad** y la **clave privada** sirve para demostrar **autoría**. En la práctica, esto último se implementa con **firmas digitales** sobre un **resumen**, no cifrando el mensaje completo con la clave privada.
 
-**Servicios de Seguridad:**
-- **Confidencialidad:** cifrar usando la $kP$, descifrar usando la $kS$
-- **Integirdad/autenticación/no repudio:** cifrar usando la $kS$, descifrar usando la $kP$
+## 2.2.3 RSA
+**RSA** se basa en la dificultad de **factorizar** números grandes y de calcular ciertas **raíces discretas** módulo un número grande. Dos números son **primos relativos** si no comparten factores. La función $\phi(n)$ cuenta cuántos enteros positivos menores que $n$ son primos relativos con $n$; por ejemplo, $\phi(10) = 4$ porque $1, 3, 7$ y $9$ son coprimos con $10$.
 
-## 2.2.2 Algoritmo RSA
-El **algoritmo RSA** usa un cifrado por exponenciación basado en la **dificultad** de **factorizar primos grandes** y de **calcular raíces i-ésimos** discretas con **módulo grande**.
+La generación de claves se resume así:
 
-Dos números son **primos relativos** si **no comparten factores** entre sí.
+1. Se eligen dos primos grandes $p$ y $q$.
+2. Se calcula $n = p \cdot q$ y $\phi(n) = (p - 1)(q - 1)$.
+3. Se elige $e < n$ tal que $\gcd(e, \phi(n)) = 1$.
+4. Se calcula $d$ de forma que $e \cdot d \equiv 1 \pmod{\phi(n)}$.
 
-La función $\phi(n)$ devuelve el **número de enteros positivos menores** que $n$ y que son **primos relativos** con $n$. Ejemplo:
-$$\phi(10)=4$$
-Porque $1, 3,7,9$ son primos relativos con $10$
+La **clave pública** es $k_P = (e, n)$ y la **clave privada** es $k_S = d$.
 
+$$c = m^e \bmod n$$
+$$m = c^d \bmod n$$
 
-0. Se eligen dos números primos muy grandes $p$ y $q$
-1. Se calcula $n=p*q$, entonces $\phi(n)=(p-1)*(q-1)$ 
-2. Se elige $e<n$ tal que $e$ y $\phi(n)$ son primos entre sí, entonces $mcd(e, \phi(n))=1$ 
-3. Se calcula $d$ tal que $e*d \space mod(\phi(n))=1$ 
+RSA tiene varias ventajas frente al cifrado simétrico puro: no necesita un **canal seguro** para repartir claves y basta con un **par de claves por usuario**. Sus pegas también son claras: necesita **claves grandes** (al menos **2048 bits**), es **más lento** que el cifrado simétrico, tiene límites prácticos sobre el tamaño del mensaje y depende de una **infraestructura de confianza** para asociar identidades y claves públicas.
 
-$kP=(e,n)$ y $kS=d$
- $$c=m^emod(n)$$
- $$m=c^dmod(n)$$
- $$(m^emod(n))^d mod(n) = m$$
+Desde el punto de vista de seguridad, RSA puede soportar **confidencialidad**, **autenticación**, **integridad** y **no repudio**. Para evitar ataques estadísticos o manipulaciones obvias, el mensaje no debe tratarse como texto crudo: se trabaja en **bloques grandes** y con **padding** adecuado. Aun así, no se usa para cifrar grandes volúmenes de datos: en la práctica se emplea sobre todo en esquemas **híbridos** y para **encapsular claves**.
 
-- **No** se necesita un **canal seguro** para intercambiar las claves
-- Bastan un **par de claves por usuario**
-- Se necesitan **claves muy grandes** (con RSA, se recomienda al menos 2048 bits)
-- **Proceso** de cifrado/descifrado **lento** (en comparación con los algoritmos de cifrado simétrico). **Límites** en el **tamaño** de la información a cifrar.
-- Se requiere de un tercero de confianza.
+## 2.2.4 Criptografía híbrida
+La **criptografía híbrida** combina lo mejor de ambos mundos: la criptografía de **clave pública** se usa para **autenticar** y para **intercambiar** una **clave de sesión simétrica**, y la criptografía **simétrica** se usa después para cifrar los datos, mucho más rápido.
 
-### Servicios de Seguridad
-- **Autenticación:** sólo el propietario de la $kS$ la conoce, de modo que un texto cifrado con esa clave debe haber sido generado por el propietario
-- **Confidencialidad:** sólo el propietario de la $kS$ la conoce, de modo que un texto cifrado con la $kP$ correspondiente sólo puede leerlo el propietario de la $kS$.
-- **Integridad:** el mensaje cifrado no puede modificarse de forma indetectable sin conocer la $kS$.
-- **No repudio:** un mensaje cifrado con una $kS$ necesariamente viene de quien la conoce.
+En **TLS**, por ejemplo, pueden aparecer certificados **RSA** para autenticación, mecanismos **Diffie-Hellman** o **ECDHE** para acordar la clave de sesión y algoritmos simétricos como **AES-GCM** para proteger el tráfico.
 
+La comparación práctica entre opciones habituales es:
 
-### Advertencias
-Las **claves** deben ser lo suficientemente **grandes** para que los cálculos de descifrado sin conocer la $kS$ sean irrealizables en tiempo finito. Estos cálculos son **factorizar** $n$ en primos para obtener $kS$ a partr de $kP$ o **calcular raíces i-ésimas** en módulo grande para descifrar sin conocer la $kS$
+| Opción | Tamaño de clave equivalente | Impacto en rendimiento | *Forward secrecy* | Uso típico |
+| --- | --- | --- | --- | --- |
+| RSA | 2048 bits | Alto | No | Sistemas heredados |
+| DHE | 2048 bits | Moderado | Sí | Algunas aplicaciones |
+| ECDHE | 256 bits ECC | Bajo | Sí | Opción habitual en TLS 1.3 |
 
-Los mensajes deben cifrarse en **bloques grandes** para evitar el  descifrado con **técnicas estadísticas** o la **alteración del mensaje**.
+## 2.2.5 Evolución: curvas elípticas y presión poscuántica
+El crecimiento de la capacidad de cálculo y la posibilidad teórica de que una computación cuántica escalable ejecute el **algoritmo de Shor** presionan a sistemas como **RSA** o **Diffie-Hellman**. Una respuesta inmediata fue **aumentar el tamaño de las claves RSA**, pero eso empeora la **eficiencia**.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-32.png)
+Las **curvas elípticas** ofrecen la misma seguridad con claves mucho más pequeñas: una clave de **256 bits ECC** suele compararse con una clave **RSA de 3072 bits**. Eso reduce coste computacional y ancho de banda.
 
+## 2.2.6 Intercambio de claves con curva elíptica
+En **ECDH** dos partes acuerdan una clave compartida sobre una **curva elíptica pública** y un **punto generador** $G$.
 
-## 2.2.3 Criptografía Híbrida
-La **criptografía híbrida** se basa en usar la criptografía de **clave pública** para **intercambiar** una **clave de sesión simétrica**. Se suele usar en el protocolo **TLS:**
-- Clave pública RSA para autenticación
-- Diffie-Hellman para intercambio de clave simétrica
-- Cifrado simétrico para intercambio de infoRmación
+Si Alice tiene clave privada $a$ y Bob clave privada $b$:
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-33.png)
+1. Alice calcula su clave pública $A = aG$.
+2. Bob calcula su clave pública $B = bG$.
+3. Alice obtiene el secreto compartido como $S = aB$.
+4. Bob obtiene el mismo secreto como $S = bA$.
 
-## 2.2.4 Evolución de la criptografía de Clave Pública
-- Debido a la aparición de la **computación cuántica**, se hizo posible implementar el algoritmo de Shor para **descomponer en factores primos números grandes**. 
-- Como solución, se trató de **incrementar** el tamaño de **clave RSA**, los cual **disminuyó** su **eficiencia**
-- EL tamaño de **clave** de **curva elíptica** es mucho **menor** que el de RSA (256 bits en una curva elíptica equivalen a una clave RSA de 3072) por lo que se obtienen **operaciones más eficientes** para un **mismo nivel de seguridad**.
+Como $a(bG) = b(aG)$, ambos llegan al mismo punto secreto. A partir de él se **deriva** una clave simétrica, por ejemplo para **AES**.
 
-## 2.2.5 Intercambio de Claves de Curva Elíptica
-El **intercambio de claves de curva elíptica** permite que dos partes acuerden una $kS$ sobre un **canal inseguro** usando una **curva elíptica conocida públicamente y un punto generador** $G$.
+La seguridad depende de la dificultad del **logaritmo discreto en curvas elípticas**. Aun así, ECDH **no cifra ni autentica** por sí solo: necesita integrarse con otros mecanismos y conviene usar **curvas estandarizadas y auditadas**.
 
-Las claves públicas de cada extremo son $A$ y $B$ y las privadas $a$ y $b$.
-0. Ambos extremos calculas sus **claves públicas** $A=a*G$ y $B=b*G$
-1. Ambos extremos calculan el **mismo secreto** $(a*(b*G)=b*(a*G))$
-	1. Alice: $S=a*B$
-	2. Bob: $S=b*A$
-2. El secreto obtenido se usa para **derivar la clave simétrica** (AES) que se usará para cifrar los mensajes.
+# 2.3 Funciones hash y firma digital
 
+Las **funciones hash** o de **resumen** se usan para comprobar si un bloque de datos ha sido **modificado**. No ocultan el contenido como un cifrado: lo transforman en una huella corta y de longitud fija.
 
-- Un atacante no sería capaz de obtener $a$ o $b$ a partir de $A$ y $B$ ya que para ello debería **resolver** el **logaritmo discreto en curvas elípticas** (computacionalmente intratable)
-- Es importante elegir **curvas elípticas estadarizadas** y de las que se haya **verificado su robustez**.
-- Por sí solo, este algoritmo **no cifra ni autentica** por lo que se usan mecanismos adicionales.
+## 2.3.1 Funciones hash criptográficas
+Una función hash criptográfica $h: A \rightarrow B$ debe cumplir varias propiedades:
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-35.png)
+- ser **fácil** de calcular para cualquier entrada;
+- ser **muy difícil de invertir**;
+- hacer **muy difícil** encontrar dos entradas distintas con el mismo resumen;
+- producir un resumen **corto** y de **longitud fija**;
+- comportarse como una función de **una sola vía**.
 
+Sus usos más habituales son el **chequeo de integridad**, la **autenticación**, los protocolos de **comunicación**, la **firma digital**, algunos mecanismos de **cifrado** y el **almacenamiento de contraseñas**. En este último caso conviene añadir una **sal**: si dos usuarios tienen la misma contraseña y no se usa sal, acabarán teniendo el mismo hash.
 
-# 2.3 Funciones Hash y Firma Digital.
-Las **Funciones de Resumen** se usan para **comprobar** si un bloque ha sido **modificado**.
+### Colisiones
+Si $x \neq x'$ y $h(x) = h(x')$, existe una **colisión**. Que las colisiones existan es inevitable por el **principio del casillero**: si hay más entradas posibles que salidas posibles, alguna salida corresponderá a varias entradas. Lo importante no es eliminarlas, sino hacer **computacionalmente inviable encontrarlas**.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-36.png)
+### Con clave y sin clave
+Los resúmenes pueden ser:
 
-## 2.3.1 Funciones Hash Criptográficas
-La función de **resumen criptográfico** (o hash) se define como una funcion $h:A\rightarrow B$ que:
+- **Con clave**: incorporan una clave compartida. El ejemplo clásico es un **MAC**; en estos apuntes se cita **DES en modo de encadenamiento** como aproximación histórica.
+- **Sin clave**: no usan clave criptográfica. Aquí entran **MD5**, **SHA-1**, **SHA-2** y **SHA-3**.
 
-- Para cualquier $x \in A, h(x)$ es **fácil** de calcular.
-- Para cualquier $y \in B$, es **computacionalmente intratable** encotnrar $x \in A$ tal que $h(x)=y$
-- Es **computacionalmente intratable** encontrar dos entradas $x, x' \in A$ tales que $x \neq x'$ y $h(x)=h(x')$
-- El resumen debe ser **corto** y siempre de la **misma longitud**
-- El algoritmo debe ser **irreversible** (una sola vía)
+Las familias más importantes son:
 
-Usos:
-- Chequeo de **integridad**
-- **Autenticación**
-- **Cifrado** y **firma digital** en sistemas de **clave pública**
-- Protocolos de **comunicación**
-- Almacenamiento de **contraseñas**
+| Familia | Bloques de entrada | Tamaño del resumen | Situación |
+| --- | --- | --- | --- |
+| MD5 | 512 bits | 128 bits | En desuso por debilidades. |
+| SHA-1 | 512 bits | 160 bits | Ya no se considera seguro para varios usos desde 2017. |
+| SHA-2 | 512 o 1024 bits | 224, 256, 384 o 512 bits | Familia más usada actualmente. |
+| SHA-3 | Construcción distinta a SHA-2 | 224, 256, 384 o 512 bits | Alternativa moderna. |
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-37.png)
+En términos prácticos, los tamaños más recomendables dentro de estas familias suelen ser **SHA-256**, **SHA-384**, **SHA-512**, **SHA3-256** y **SHA3-512**.
 
+## 2.3.2 Firma digital
+La **firma digital** no busca dar **confidencialidad**; su función real es garantizar **autenticidad**, **integridad** y **no repudio**. Se basa en criptografía de **clave pública**:
 
-### Colisiones 
-Si $x \neq x'$ y $h(x)=h(x')$,  $x$ y $x'$ presentan una **colisión**.
-- **Principio del casillero:** si tenemos $n$ contenedores para $n+1$ objetos, al menos un contenedor tendrá 2 objetos dentro. Si existen 32 ficheros y 8 valores de resumen posibles, cada valor corresponde al menos a 4 ficheros.
-- Las funciones de resumen criptográfico deben ser **resistentes frente a la búsqueda de colisiones**.
+1. El firmante calcula un **resumen** del documento.
+2. Firma ese resumen con su **clave privada**.
+3. Cualquier tercero usa la **clave pública** correspondiente para verificar la firma y comparar el resumen.
 
-### Algoritmos de Resumen
-Resúmenes criptográficos **con clave:** se usa una clave criptográfica para obtenerlos (MAC, Message Autthentication Code). 
-	DES en modo de encadenamiento
+Una firma digital debe ser:
 
-Resúmenes criptográficos **sin clave:** no requieres de una clave criptográfica.
-	MD5 Y SHA-1 son los más conocidos pero ya no se consideras seguros
+- **infalsificable**: nadie debería poder firmar sin la clave privada;
+- **auténtica**: el receptor debe poder atribuirla al firmante correcto;
+- **no alterable**: cualquier manipulación debe resultar evidente;
+- **no reutilizable**: no debe poder trasplantarse a otro documento sin que se note.
 
+Cuando la verificación es correcta, el receptor obtiene tres garantías: el remitente es quien dice ser (**autenticación**), el mensaje no cambió (**integridad**) y el remitente no puede negar razonablemente su intervención (**no repudio**).
 
-**MD5 (Message Digest 5)**
-- Procesa los mensajes de **entrada** en bloques de **512** bits y produce un **resumen** de 128.
-- Algoritmo den **desuso** por presentar **debilidades**
+# 2.4 Infraestructura de clave pública (PKI)
 
-**SHA-1 (Secure Hashing Algorithm 1)**
-- Procesa los mensajes de **entrada** en bloques de **512** bits y produce un **resumen** de **160** bits
-- Desde 2017 ya **no** se considera **seguro** para determinados usos.
+## 2.4.1 El problema de la confianza
+En el mundo físico confiamos en documentos como el **DNI** o el **pasaporte** porque los emite una **autoridad** reconocida. En el mundo digital ocurre algo parecido: una firma con clave privada demuestra intervención técnica, pero sigue haciendo falta un mecanismo que diga **de quién es** realmente la clave pública asociada.
 
-**Familia SHA-2**
-- Procesa los mensajes de entrada en bloques de 512 o 1024 bits y produce resúmenes de 224, 256, 384 o 512 bits
-- Es la familia **más utilizada** en la actualidad
-
-**Familia SHA-3**
-- Utiliza una **aproximación diferente** a la familia SHA-2
-- Variantes → SHA3-224, SHA3-256, SHA3-384, SHA3-512
-
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-38.png)
-
-
-## 2.3.2 Firma Digital
-La **firma digital** pretende garantizar la **confidencialidad** del mensaje de la misma manera que una firma manuscrita lo hace en el mundo real. La forma general de obtener firmas digitales es usando **criptografía de clave pública**.
-1. El **firmante** calcula una firma usando la **clave privada**
-2. **Otros** pueden usar la correspondiente **clave pública** para verificar que la firma procede de la clave privada asociada.
-
-La firma digital **debe ser:**
-- **Infalsibicable:** nadie puede producir la firma sin la clave privada del firmante, solo el firmante puede firmar
-- **Auténtica:** el receptor puede determinar que la firma realmente procede del firmante
-- **No alterable:** ni el firmante, ni el receptor, ni ningún tercero puede modificar la firma sin que la manipulación sea evidente
-- **No reutilizable:** cualquier intento d reutilización de una forma previa será detectado por el receptor.
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-39.png)
-
-La firma digital **garantiza:**
-- **Autentificación:** el remitente empleó su calve privada, es decir, es quien dice ser
-- **Integridad:** el mensaje no cambió durante la transmisión
-- **No repudio:** el remitente no puede negar que fue él quien envió el mensaje.
-
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-40.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-41.png)
-
-# 2.4 Infraestrucutra de Clave Pública: KPI
-## 2.4.1 El Problema de la Confianza
-En el **mundo real** para identificar a las personas se usa un DNI o pasaporte, que son **documentos**, emitidos por **una autoridad de confianza** que hace tanto al documento como a la persona que lo por ta creibles.
-
-En el **mundo digital** se usa la $kS$ para firmar datos, de manera que como sólo su dueño puede acceder a ella y usarla se **demuestra su intervención** en el proceso. Para **comprobar** que se usó la $kS$ de un usuario, otros **usan** su $kP$. Para distribuir una $kP$ de manera segura se puede usar un **certificado** emitido por una autoridad certificadora, en la que se confía para este fin.
+Ahí entran los **certificados** y las **autoridades certificadoras**.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-42.png)
 
-## 2.4.2 Certificados Digitales
-Un **certificado digital** son los **datos publicos** del usuario **firmados por la correspondiente CA**. Contiene:
-- **Identidad** del usuario
-- $kP$ del usuario
-- Fecha de **emisión** del certificado
-- Información adicional
+## 2.4.2 Certificados digitales
+Un **certificado digital** contiene los **datos públicos** de un usuario firmados por una **CA** (*Certification Authority*). Como mínimo incluye:
 
-Ejemplo de uso:
-1. Bill obtiene de Carlos (CA) el certificado de Amy
-2. Si conoce la $kP$ de Carlos, puede descifrar el certificado (verificar su firma)
-3. Ahora Bill tiene la $kP$ de Amy
+- la **identidad** del titular;
+- su **clave pública**;
+- la **fecha de emisión** y el período de validez;
+- información adicional relevante.
 
-Bill ha necesitado la $kP$ de Carlos para validar el certificado, por tanto el problema se ha desplazado un nivel hacia arriba.
+Ejemplo clásico: Bill obtiene de Carlos el certificado de Amy. Si Bill ya conoce la **clave pública de Carlos**, puede verificar la firma de Carlos y, por tanto, confiar en que la clave pública incluida realmente pertenece a Amy. El problema no desaparece: simplemente se desplaza un nivel arriba, hasta la **CA**.
 
-## 2.4.3 Infraestructura PKI
-La **infraestrucutra de clave pública** se usa para **organizar** las $kP$, $kS$, **certificados** y **CA** de manera gestionable, flexible y segura. Se usa **criptografía de clave pública** para asociar una **identidad** a una $kP$ (la de clave simétrica no sirve para esto ya que todas las claves son compartidas). Una **asociación errónea** implica que **no** habrá **privacidad** entre sujetos.
+### X.509 v3
+Los certificados más habituales siguen el estándar **X.509**. En las versiones antiguas se usaban nombres de estilo **X.500**, con campos como **C** (*Country*), **O** (*Organization*), **OU** (*Organizational Unit*) y **CN** (*Common Name*). Un ejemplo sería:
 
-Los **componente** de un sistema PKI son:
-- **Usuario:** puede ser una persona, máquina, programa ...
-- **Autoridad Certificadora(CA):** entidad que se encargar de emitir los certificados
-- **Autoridad de Registro(RA):** entidad que facilita el registro de usuarios (opcional).
-	- Puede generar el par de claves privada/pública
-	- Permite realizar una prueba de posesión, que consiste en comprobar que el solicitante posee la clave privada correspondiente.
-- **Repositorio de certificados**
-- **Autoridad de Validación (VA):** entidad que se encarga de validar los certificados online (opcional)
-- **Autoridad de Sellado de Tiempos (TSA):** entidad que se encarga de sellar fecha y hora de transacciones (opcional)
-- **Hardware criptográfico**
-- **Tarjetas criptográficas**
+`C=ES, O=USC, OU=ETSE, OU=DEC, CN=Puri Cariñena`
+
+La **versión 3** amplía esto y permite identificar al sujeto mediante nombre X.500, **correo electrónico**, **dominio**, **URL**, **dirección IP** u otros nombres registrados, incluso varios a la vez.
+
+Entre los campos más importantes de X.509v3 están la **versión**, el **número de serie**, el **algoritmo de firma/hash**, el **emisor**, el **período de validez**, el **sujeto**, la **clave pública** y la **firma** de la CA.
+
+## 2.4.3 Componentes y operaciones de una PKI
+La **PKI** organiza claves públicas, claves privadas, certificados y autoridades certificadoras de forma **gestionable**, **flexible** y **segura**. Su objetivo es asociar correctamente una **identidad** con una **clave pública**. La criptografía simétrica no sirve para esto porque la clave es **compartida** por las partes. Si la asociación identidad-clave es errónea, desaparece la privacidad entre ellas.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-43.png)
 
-Las **acciones** más habituales de un sistema PKI son:
-- **Registro:**
-	- Distintos niveles de autentificación del usuario
-	- Distintas posibilidades para generar y almacenar el par de claves
-- **Servicio de recuperación de claves (opcional)**
-	- Empleado que deja la empresa y destruye su clave privada
-	- Mandato judicial
-- **Revocación de certificados:** gestión de las CRLs (listas de certificados revocados)
-- **Certificación cruzada**
+Los componentes más habituales son:
 
+- **Usuario**: puede ser una persona, una máquina o un programa.
+- **Autoridad certificadora (CA)**: emite certificados.
+- **Autoridad de registro (RA)**: registra usuarios y, opcionalmente, genera claves o verifica la **prueba de posesión** de la clave privada.
+- **Repositorio de certificados**: publica certificados y CRLs.
+- **Autoridad de validación (VA)**: valida certificados en línea.
+- **Autoridad de sellado de tiempo (TSA)**: aporta fecha y hora confiables.
+- **Hardware y tarjetas criptográficas**: protegen claves y operaciones sensibles.
 
-## 2.4.4 Certificados Digitales
-### CERTIFICADOS DIGITALES X-509 V3
-• **Versiones 1 y 2** (X.500) → C (Country), O (Organization), OU (Organization Unit) (pueden aparecer varios niveles), CN (Common Name). Por ejemplo C=es, O=USC, OU=ETSE, OU=DEC, CN=Puri Cariñena
+Las acciones más habituales en una PKI son el **registro** de usuarios, con distintos niveles de autenticación; la generación y almacenamiento del **par de claves**; la posible **recuperación de claves**; la **revocación** de certificados y la **certificación cruzada** entre autoridades. La recuperación de claves puede ser necesaria, por ejemplo, si un empleado abandona la organización y destruye su clave privada o si existe un **mandato judicial**.
 
-- **Versión 3:** permite varias posibilidades
-	- Nombre X.500.
-	- Dirección de correo. 
-	- Nombre de dominio. 
-	- Identificador URL. 
-	- Dirección IP. 
-	- Otros nombres definidos y registrados. 
-	- Varias opciones a la vez
-	- Algunos elementos del estándar **X.509v3**: 
-		- Versión. 
-		- Número de serie. 
-		- Identificador del algoritmo de firma, algoritmo de “hash”. 
-		- Nombre del emisor: identifica unívocamente al emisor. 
-		- Periodo de validez.  
-		- Nombre del sujeto → identifica unívocamente al sujeto (obligatoria). 
-		- Clave pública del proceso (obligatoria). 
-		- Firma → hash cifrado.
+## 2.4.4 Emisión, validación y revocación
+### Emisión de un certificado
+Un proceso típico de emisión es:
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-44.png)
+1. El usuario genera un par $k_P$ / $k_S$ en una **tarjeta** o en su equipo.
+2. La **clave privada** se protege con un **PIN** y no debería salir nunca del soporte seguro.
+3. La **clave pública** se envía a la CA en una solicitud, por ejemplo **PKCS#10**.
+4. La **RA**, si existe, verifica la identidad y aprueba la solicitud.
+5. La **CA** firma los datos y devuelve el certificado, por ejemplo en formato **PKCS#7**.
 
-### Generación de Certificados
-1. En la **tarjeta** de usuario (o en su PC) se genera **un par de claves** $kP$ y $kS$. La $kS$ se protege con un **PIN** y **nunca sale** de la tarjeta (o almacén de software seguro del equipo)
-2. Se envía la $kP$ a la **CA** (formato PKCS#10) **solicitando un certificado**.
-3. La **RA** (opcional) **verifica la idetidad** del usuario y **proprociona a la CA dichos datos** junto con su aprobación
-4. La **CA** junta la $kP$, los **datos** del usuario y sus **políticas** y los **firma** con su $kS$ para formar el certificado digital
-5. La **CA** envía el certificado al usuario (PKCS#7) y éste se carga en la **tarjeta** (o almacén software).
+### Validación de un certificado X.509
+Validar un certificado implica, como mínimo:
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-45.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-46.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-47.png)
+1. Comprobar que el **nombre** del certificado corresponde al uso esperado.
+2. Obtener la **clave pública del emisor** correcta.
+3. Verificar la **firma** del certificado.
+4. Recalcular y comparar el **resumen**.
+5. Revisar el **período de validez**.
+6. Comprobar que el certificado **no ha sido revocado**.
 
-### Validación de Certificados X.509
-1. **Comprobar** que el **nombre** en el certificado es de quién creemos → si no lo es, el certificado no es válido para ese uso. 
-2. Obtener la 𝒌𝑷 del emisor del certificado → la correspondiente al algoritmo de firma correcto. 
-3. **Descifrar** la firma del certificado → se obtiene el resumen del certificado. 
-4. **Recalcular** el resumen a partir del certificado y **comparar** → si difieren, hay un problema. 
-5. **Comprobar** el periodo de **validez** → esto confirma que el certificado está vigente. 
-6. **Comprobar** que no ha sido **revocado** → aunque no haya caducado, es posible que se haya retirado la confianza.
+### Revocación
+Un certificado puede revocarse porque el usuario pierde el **PIN**, la **tarjeta**, sospecha compromiso de su clave privada o porque la propia **CA** decide retirar la confianza.
 
-### Revocación de Certificados
-La revocación puede ser por varios motivos, entre los que destacan: 
-- Si el **usuario pierde el PIN, la tarjeta** o cree que el certificado ha sido comprometido, debe solicitar a la CA que revoque su certificado. 
-- La propia **CA** por algún otro motivo puede **querer revocar** el uso de la $𝑘𝑆$ como método de autenticación de un usuario. 
+Para gestionar esto, las CAs publican periódicamente **CRLs** (*Certificate Revocation Lists*), que indican qué certificados ya no son válidos. Una CRL identifica la lista, su período de validez, la CA emisora y los **números de serie** de los certificados revocados. Los navegadores suelen consultar el estado mediante **OCSP** (*Online Certificate Status Protocol*).
 
-- Las CAs emiten cada cierto tiempo (minutos, horas, días) una **LISTA DE CERTIFICADOS REVOCADOS**, de manera que **cualquier aplicación** que quiera usar el certificado deberá **consultar la CRL** de la CA correspondiente para **verificar que no está revocad**. 
-- Los navegadores usan el **protocolo OCSP** (Online Certificate Status Protocol) para **verificar** la validez de un certificado una **consulta al servidor OCSP** indicado
+### Formatos habituales
+Los formatos más comunes son **BER**, **DER**, **CER**, **PER**, **PEM** y **PKCS#12**. **DER** y **PEM** son especialmente habituales en herramientas como **OpenSSL**. **PKCS#12** es importante porque puede incluir la **clave privada** y la **cadena de certificados** hasta la raíz de la CA; suele usarse para certificados personales en navegadores y acostumbra a llevar extensión **`.p12`**.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-48.png)
+## 2.4.5 Certificación cruzada y cadenas de confianza
+Cuando existen muchas CAs aparece un nuevo problema: una parte puede no confiar directamente en la CA de la otra. La **certificación cruzada** resuelve esto haciendo que dos CAs se firmen mutuamente.
 
+En el ejemplo clásico:
 
-### Formatos de Codificación
-Formatos de codificación de certificados más utilizados: 
-- BER → basic encoding rules. 
-- DER → distinguished encoding rules [OpenSSL]. 
-- CER → canonical encoding rules. 
-- PER → packet encoding rules. 
-- PEM → privacy enhanced mail [OpenSSL, default]. 
-- PKCS#12 → personal information exchange syntax standard. 
-	- Incluye la 𝒌𝑺 y la cadena de certificados hasta la raíz de la CA.  
-	- Usado por la mayoría de los navegadores para certificados personales. 
-	- Extensión . p12.
+- Amy tiene un certificado firmado por **Carlos**.
+- Bill tiene un certificado firmado por **Dolores**.
+- Carlos emite un certificado para Dolores.
+- Dolores emite un certificado para Carlos.
 
+Así, si Amy confía en Carlos, puede validar el certificado de Dolores y, a través de él, el de Bill.
 
+A veces no se dispone del certificado de la CA exacta que firmó un certificado. Por eso existen las **cadenas de certificación**: una CA intermedia puede estar firmada por otra CA, y así sucesivamente hasta llegar a una **raíz** ya conocida por el sistema o el navegador.
 
-## 2.4.5 Autoridades Certificadoras
-La autoridad certificadora (CA) es la entidad que emite certificados
+Un ejemplo práctico es este: el navegador ya confía en la CA de **Telefónica**; recibimos un documento firmado por un empleado de **Banesto**; si además conseguimos un certificado de la **CA de Banesto** firmado por la **CA de Telefónica**, podemos verificar primero la CA de Banesto y después el certificado del empleado.
 
-### Certificación Cruzada
-Al existir múltiples CAs, puede ocurrir un problema de validación:  La CA que usa Amy es Carlos, si Bill usa como CA a Dolores, ¿cómo puede Amy validar el certificado de Bill? 
+## 2.4.6 Tipos de CA y transición a ECC
+Las CAs pueden adoptar distintas formas:
 
-Como solución, Carlos y Dolores hacen certificación cruzada → cada uno emite un certificado para la otra parte:
+- **Organizaciones** que emiten certificados para sus propios miembros.
+- **Empresas comerciales** de prestigio cuyos certificados raíz suelen venir preinstalados en navegadores.
+- **Organizaciones sin ánimo de lucro** que ofrecen certificados gratuitos, por ejemplo para **SSL/TLS**.
+- **Entidades públicas** que emiten certificados para la ciudadanía. En España destacan **CERES** (FNMT-RCM) y los certificados del **DNI electrónico** emitidos por la Dirección General de la Policía.
 
-**Certificados:**
-- \<Amy> (firmado por Carlos) 
-- \<Bill> (firmado por Dolores). 
-- \<Dolores> (firmado por Carlos). 
-- \<Carlos> (firmado por Dolores)
-
-Amy valida el certificado de Bill. 
-Amy obtiene \<Dolores> (Carlos).
-Amy usa la clave pública (conocida por ella) de Carlos para validar \<Dolores> (Carlos). 
-Amy usa \<Dolores> (Carlos) para validar \<Bill> (Dolores).
-
-
-### Cadena de autenticación de las CA
-
-Algunas veces, **el certificado de una CA no está disponible** en el sistema, de forma que, si llega un certificado firmado por ella, no se podría validar. Como solución, hay CA que generan certificados para **autenticar los certificados de otras CA.**
-
-La cadena de certificación puede tener varios niveles.
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-49.png)![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-50.png)
-
-
-### Tipos de Autoridad Certificadora
-- **Organizaciones** que actúan como **CA** para los **miembros de la organización**. 
-	- Necesitan i**nstalarse en los navegadores** como CA.
-	
-- **Empresas** de reconocido prestigio que actúan como **CA** para **cualquier cliente** (con coste económico).
-	- Los **navegadores** ya **suelen incluir** de serie sus certificados. 
-	
-- **Organizaciones sin ánimo** de lucro que ofrecen certificados gratuitos. 
-	- De servidor SSL/TLS. 
-	
-- **Entidades públicas** que actúan como **CA** para los **ciudadanos** (sin coste económico). 
-	- En España existe el proyecto CERES de la Fábrica nacional de la Moneda y Timbre. Además, tenemos los certificados disponibles en el DNI electrónico, emitidos por la Dirección General de la Policía.
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-51.png)
+Como tendencia reciente, muchas infraestructuras están migrando de **RSA** a **curvas elípticas**. En la imagen original de estos apuntes se cita, por ejemplo, el plan anunciado por la **FNMT-RCM** el **9 de diciembre de 2025** para transicionar a certificados **ECC**, manteniendo el uso de claves **RSA de 2048 bits** hasta el **31 de diciembre de 2026** y limitando la validez de certificados emitidos con ese algoritmo hasta el **31 de diciembre de 2028**.

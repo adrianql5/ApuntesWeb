@@ -3,774 +3,503 @@ title: "Seguridad en Redes"
 ---
 
 # 4.1 Introducción
-La seguridad en redes consiste en **proteger las redes y sus servicios** frente a accesos no autorizados, modificaciones, destrucción de información o filtración de datos confidenciales. Además, no solo importa proteger la información, sino también garantizar que la red siga funcionando correctamente, es decir, preservar su **disponibilidad**.
+
+La **seguridad en redes** busca proteger tanto la **información** como los **servicios de red** frente a accesos no autorizados, modificaciones, destrucción de datos, filtraciones de información confidencial y pérdida de **disponibilidad**.
 
 ## 4.1.1 Por qué las redes son vulnerables
-La transmisión puede realizarse por distintos medios: **cable, fibra óptica, microondas, WiFi o satélite**, y cada uno presenta debilidades propias. La idea general es que el canal de comunicación puede ser interceptado, monitorizado o manipulado. Puede haber escuchas en enlaces cableados, receptores no autorizados en redes LAN o interceptación en comunicaciones por satélite y microondas.
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-80.png)
+Las comunicaciones pueden viajar por **cable**, **fibra óptica**, **microondas**, **WiFi** o **satélite**, y cada medio introduce debilidades propias. La idea de fondo es siempre la misma: el canal puede ser **interceptado**, **monitorizado** o **manipulado**. Por eso puede haber escuchas en enlaces cableados, receptores no autorizados en LANs inalámbricas o interceptación en enlaces por satélite y microondas.
 
-## 4.1.2 Factores que hacen vulnerable a un red
-- **Anonimato**: un atacante puede actuar a distancia, incluso desde miles de kilómetros, y realizar ataques sin ser identificado fácilmente.
-- **Múltiples puntos de ataque**: una red grande tiene muchos posibles puntos de entrada.
-- **Compartición**: al estar los recursos conectados, más usuarios pueden acceder potencialmente a ellos.
-- **Complejidad**: una red integra muchos sistemas, sistemas operativos y servicios distintos, lo que hace más difícil protegerla.
-- **Perímetro desconocido**: en redes grandes y cambiantes es difícil saber con precisión qué dispositivos forman parte de la red.
-- **Ruta desconocida**: entre dos hosts puede haber múltiples caminos, algunos de ellos no confiables.
+## 4.1.2 Factores que aumentan la vulnerabilidad
+Hay varios rasgos estructurales que hacen más difícil proteger una red:
+
+- **Anonimato**: un atacante puede operar a distancia y dificultar su identificación.
+- **Múltiples puntos de ataque**: cuantos más nodos y servicios existan, más superficies expuestas hay.
+- **Compartición**: al conectar recursos, aumenta el número de posibles usuarios con acceso.
+- **Complejidad**: conviven sistemas operativos, aplicaciones y dispositivos muy distintos.
+- **Perímetro desconocido**: en redes grandes y cambiantes no siempre está claro qué forma parte de la red.
+- **Ruta desconocida**: entre dos hosts puede haber varios caminos, algunos no confiables.
 
 ## 4.1.3 Debilidades de TCP/IP y ataques básicos de red
-**TCP/IP no fue diseñado originalmente con la seguridad como prioridad**. Por eso, de forma nativa no incorpora mecanismos sólidos de **cifrado, autenticación ni integridad**. Como consecuencia, las comunicaciones basadas en TCP/IP son vulnerables a escuchas, interceptación y manipulación.
+**TCP/IP** no se diseñó inicialmente con la seguridad como objetivo principal. Por eso, en su forma original, no incorpora mecanismos sólidos de **cifrado**, **autenticación** ni **integridad**. El resultado es que las comunicaciones pueden ser escuchadas, interceptadas o alteradas.
 
-### Modificación y Fabricación de Datos
-Cuando no hay protección suficiente, los datos pueden ser alterados o incluso inventados durante la comunicación.
-- **Corrupción de datos**: alteración intencionada o accidental de la información.
-- **Secuenciación**: cambiar el orden de llegada de los datos o paquetes.
-- **Sustitución**: reemplazar una parte de la secuencia por otra distinta.
-- **Inserción**: añadir valores nuevos a la secuencia de datos.
-- **Repetición**: reutilizar datos legítimos que ya habían sido transmitidos.
+### Modificación y fabricación de datos
+Si la comunicación no está protegida, un atacante puede modificar o fabricar información. Las formas más habituales son:
 
-### Ataque simple de repetición
-En un ataque de repetición, el atacante **intercepta una comunicación legítima y la vuelve a enviar** para provocar que el receptor la acepte como válida. Como medida básica para evitar este problema, se propone **numerar las secuencias**, de forma que el sistema pueda detectar reenvíos indebidos.ç
+- **corrupción** de datos;
+- **secuenciación** indebida, cambiando el orden de llegada;
+- **sustitución** de fragmentos por otros;
+- **inserción** de nuevos valores;
+- **repetición** de datos legítimos ya transmitidos.
+
+### Ataque de repetición
+Un ataque de **repetición** o **replay** consiste en interceptar una comunicación válida y reenviarla después para que el receptor la acepte como legítima. La defensa básica es asociar a cada intercambio un identificador único, normalmente mediante **números de secuencia** o valores equivalentes, para que un mensaje viejo no pueda aceptarse otra vez.
+
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-81.png)
 
 ### Sniffing
-El **sniffing** consiste en la **interceptación o monitorización no autorizada del tráfico de red**, aprovechando normalmente la falta de cifrado. El objetivo es escuchar las comunicaciones y capturar información sensible o confidencial. Puede haber técnicas:
-- **Pasivas**, si solo se observa el tráfico.
-- **Activas**, si además se insertan datos.
+El **sniffing** es la monitorización o interceptación no autorizada del tráfico de red. Puede ser:
 
-Como medidas de prevención, el **cifrado**, la **segmentación de red**, sistemas **IDS** para detectar sniffing activo y la **monitorización de dispositivos no autorizados**.
+- **pasivo**, si el atacante solo observa;
+- **activo**, si además inyecta o modifica datos.
 
+Las contramedidas más directas son el **cifrado**, la **segmentación de red**, los **IDS** para detectar sniffing activo y la monitorización de dispositivos no autorizados.
 
 ## 4.1.4 Reconocimiento y suplantación en red
 ### Escaneo de puertos
-El escaneo de puertos es una técnica que permite analizar los equipos y servicios conectados a una red. Puede usarse legítimamente por administradores para comprobar conexiones abiertas, servicios activos o versiones de software, pero también puede ser usada por un atacante para obtener exactamente esa misma información. La herramienta más destacada es **Nmap**.
+El **escaneo de puertos** permite averiguar qué equipos están activos, qué servicios ofrecen y, a veces, qué sistema operativo o versión de software utilizan. Es una técnica útil para administración y auditoría, pero también para un atacante que busca objetivos fáciles. La herramienta más conocida es **Nmap**.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-82.png)
+Con esta información un atacante puede identificar máquinas con un sistema operativo concreto, localizar servicios vulnerables o automatizar barridos de rangos completos de direcciones IP.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-83.png)
-
-Con esta información, un atacante puede:
-- identificar máquinas con un sistema operativo concreto,
-- detectar servicios que ejecutan versiones vulnerables,
-- automatizar la búsqueda de objetivos en rangos de direcciones IP.
-
-
-Para reducir el riesgo conviene:
-- no abrir más puertos de los necesarios,
-- no mostrar más información de la imprescindible en los servicios,
-- mantener actualizados sistema operativo y software
-
+Reducir el riesgo pasa por tres medidas básicas: **no abrir más puertos de los necesarios**, **no exponer más información de la imprescindible** en los servicios y **mantener actualizado** el software.
 
 ### Spoofing
-El **spoofing** consiste en **hacerse pasar por algo o alguien** dentro de una red, explotando la ausencia o debilidad de mecanismos de autenticación. El objetivo puede ser robar o manipular información, o saltarse controles de acceso aparentando ser un dispositivo o usuario de confianza. Puede darse en varias capas, por ejemplo como **IP spoofing**, **MAC spoofing** o **DNS spoofing**.
+El **spoofing** consiste en **hacerse pasar por otro elemento** dentro de la red. Puede darse en varias capas, por ejemplo como **IP spoofing**, **MAC spoofing** o **DNS spoofing**. El objetivo suele ser robar información, alterar comunicaciones o saltarse controles de acceso.
 
-Como medidas de prevención, la presentación menciona la **autenticación basada en criptografía**, políticas de control de acceso, IDS, monitorización de red y filtrado de tráfico.
+Las medidas mencionadas en los apuntes son la **autenticación basada en criptografía**, el **filtrado de tráfico**, las políticas de control de acceso, la monitorización y los **IDS**.
 
 ### DNS spoofing
-En el **DNS spoofing**, el atacante suplanta la respuesta del servidor DNS y hace que el usuario asocie un dominio legítimo con una dirección IP falsa. En las diapositivas se muestra cómo, ante una consulta DNS, el atacante responde antes que el servidor legítimo y redirige a la víctima hacia una IP maliciosa.
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-84.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-85.png)
-
+En el **DNS spoofing**, el atacante responde antes que el servidor legítimo y logra que la víctima asocie un dominio correcto con una IP falsa. En consecuencia, el usuario cree estar accediendo al sitio legítimo cuando en realidad se le redirige a un sistema controlado por el atacante.
 
 ### ARP spoofing y Man in the Middle
-El protocolo **ARP** se usa para averiguar qué dirección MAC corresponde a una dirección IP dentro de una red local. El problema es que ARP tiene varias debilidades:
-- no autentica correctamente las respuestas ARP,
-- puede aceptarse una respuesta ARP sin haber hecho una petición previa,
-- cualquier dispositivo de la red puede enviar una respuesta ARP.
+**ARP** sirve para averiguar qué dirección **MAC** corresponde a una dirección **IP** dentro de una red local. Su debilidad es conocida: no autentica bien las respuestas, puede aceptar respuestas no solicitadas y cualquier equipo puede emitirlas.
 
-
-Esto permite el **ARP spoofing**, donde un atacante envía respuestas ARP falsas y envenena la caché ARP de los dispositivos. Así consigue que las máquinas crean que deben comunicarse con él. De este modo se coloca entre ambos extremos de la comunicación, realizando un ataque **Man in the Middle (MitM)**: recoge los datos y los reenvía para mantener la conexión mientras intercepta el tráfico.
+Eso permite el **ARP spoofing** o **ARP poisoning**: el atacante envía respuestas ARP falsas, envenena la caché de las víctimas y consigue que el tráfico pase por él. De esta forma se sitúa entre dos extremos y ejecuta un **Man in the Middle (MitM)**, capturando, observando o modificando la comunicación mientras la reenvía para no levantar sospechas.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-86.png)
 
-
 ## 4.1.5 Protocolos inseguros y protocolos seguros
-### Protocolos de comunicación no seguros
-- **Telnet**: permite acceso remoto, pero transmite comandos, respuestas y credenciales sin cifrar.
-- **POP**: en sus primeras versiones, el correo también viajaba sin cifrado.
-- **HTTP**: no proporciona cifrado ni autenticación; si la información no es pública, esto supone un problema serio de confidencialidad y autenticación.
+### Protocolos inseguros
+Algunos protocolos clásicos no incorporaban protección suficiente:
 
-### Protocolos de comunicación seguros
-Los protocolos seguros buscan resolver precisamente esos problemas. Aportan **confidencialidad, integridad y autenticación** mediante técnicas criptográficas, y pueden implementarse en distintas capas de la pila de protocolos.
+- **Telnet**: acceso remoto sin cifrado.
+- **POP** en sus primeras versiones: credenciales y correo sin cifrar.
+- **HTTP**: ni cifra ni autentica; si la información no es pública, la confidencialidad y la autenticación quedan expuestas.
 
-**IPsec** opera en la **capa de red (capa 3)** y sirve para asegurar comunicaciones IP de forma transparente a las aplicaciones. Proporciona autenticación de paquetes y cifrado. Entre sus elementos, la presentación menciona:
-- **ESP (Encapsulating Security Payload)**, que añade cifrado con algoritmos simétricos.
-- **IKE (Internet Key Exchange)**, que permite el intercambio de claves mediante criptografía asimétrica, Diffie-Hellman y certificados digitales.
+### Protocolos seguros
+Los protocolos seguros añaden **confidencialidad**, **integridad** y **autenticación** usando técnicas criptográficas en distintas capas.
 
-Un caso típico de uso es el acceso remoto a través de **VPN**.
+**IPsec** trabaja en la **capa de red**. Su objetivo es proteger paquetes IP de forma transparente a las aplicaciones. Entre sus piezas principales están:
 
-**SSL/TLS** opera en la **capa de transporte (capa 4)**. Fue diseñado originalmente para proteger la comunicación entre navegador y servidor, y posteriormente evolucionó a TLS. Aporta:
-- autenticación del servidor mediante certificados X509v3,
-- autenticación opcional del cliente,
-- confidencialidad,
-- integridad.
+- **ESP** (*Encapsulating Security Payload*), que protege la carga útil con autenticación, integridad y, normalmente, cifrado simétrico.
+- **IKE** (*Internet Key Exchange*), que negocia claves y parámetros de seguridad usando criptografía asimétrica, Diffie-Hellman y, en muchos despliegues, certificados.
 
-Al comenzar una sesión TLS, cliente y servidor negocian una **suite de cifrado**, que incluye:
-- un algoritmo de firma digital para autenticación,
-- un algoritmo de cifrado para confidencialidad,
-- una función hash criptográfica para integridad.
+Su caso de uso típico es la **VPN**.
 
-TLS se apoya en dos subprotocolos principales:
-- **Handshake**, que autentica extremos, establece la conexión segura y negocia parámetros.
-- **Record**, que cifra y autentica los datos transferidos.
+**SSL/TLS** opera en la **capa de transporte**. Aporta autenticación del servidor mediante certificados **X.509v3**, autenticación opcional del cliente, confidencialidad e integridad. Al iniciar una sesión, cliente y servidor negocian una **suite criptográfica** que incluye, en esencia, mecanismo de autenticación, algoritmo de cifrado y función hash.
+
+TLS se apoya en dos subprotocolos:
+
+- **Handshake**, que autentica, negocia parámetros y establece la sesión segura.
+- **Record**, que protege los datos ya intercambiados.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-87.png)
 
+Históricamente, el *handshake* pudo usar **RSA**, **Diffie-Hellman fijo**, **Diffie-Hellman efímero** y mecanismos basados en **curvas elípticas**. El **Diffie-Hellman anónimo** no es recomendable porque queda expuesto a **MitM**. **TLS 1.3** simplifica y moderniza ese proceso.
 
-Hay varios métodos de intercambio de claves en el handshake, como **RSA**, **Diffie-Hellman fijo**, **Ephemeral Diffie-Hellman** y métodos basados en **curvas elípticas**. Aunque **Diffie-Hellman anónimo** es vulnerable a ataques MitM y no es recomendable.
+**SSH** trabaja en la **capa de aplicación** y proporciona un canal cifrado y autenticado para administración remota. Sustituye a herramientas como **Telnet**, `rlogin` o `rsh`, y soporta autenticación por contraseña y por claves públicas.
 
-**TLS 1.3** es la evolución del protocolo, con un proceso de establecimiento de sesión más moderno y eficiente.
+Otros protocolos y tecnologías seguras citados en los apuntes son:
 
-
-**SSH (Secure Shell)** opera en la **capa de aplicación (capa 7)** y proporciona un canal cifrado y autenticado para acceso remoto por línea de comandos. Sustituye a herramientas inseguras como Telnet, rlogin o rsh, y protege frente a spoofing y modificación de datos. Además, soporta autenticación por contraseña y por claves públicas.
-
-
-**Otros protocolos seguros:**
 - **SFTP**, transferencia segura de ficheros sobre SSH.
-- **DNSSEC**, que añade protección criptográfica al DNS y ayuda frente al DNS spoofing.
-- **FTPS**, que añade TLS/SSL al FTP tradicional.
-- **OpenVPN**, una VPN de código abierto que usa TLS/SSL.
-
+- **DNSSEC**, que añade protección criptográfica a DNS y ayuda frente al DNS spoofing.
+- **FTPS**, FTP protegido con TLS/SSL.
+- **OpenVPN**, una VPN basada en TLS/SSL.
 
 ## 4.1.6 Ataques a la disponibilidad
-Uno de los principales problemas de seguridad en redes es la pérdida de disponibilidad, es decir, la **interrupción del servicio**. Esto puede suceder por varias razones:
-- problemas en el enrutado,
-- demanda excesiva que agota la capacidad de la red,
-- fallos en componentes hardware o software.
+En redes, la seguridad no trata solo de confidencialidad. También importa la **disponibilidad**: que el servicio siga funcionando. Puede perderse por problemas de enrutado, demanda excesiva o fallos de hardware y software.
 
-### Denegación de servicio (DoS y DDoS)
-Los ataques **DoS** buscan precisamente impedir que un sistema preste servicio con normalidad. Pueden adoptar varias formas:
-- **ataques volumétricos**,
-- **ataques basados en aplicaciones**,
-- **deshabilitación de comunicaciones**.
+### DoS y DDoS
+Los ataques de **denegación de servicio** (**DoS**) intentan impedir que un sistema siga prestando servicio. Los apuntes distinguen tres grandes familias:
 
-Cuando el ataque se realiza desde múltiples máquinas coordinadas, hablamos de **DDoS**. En ese caso se combinan varias fuentes de tráfico malicioso, a menudo mediante una **botnet**, es decir, una red de equipos comprometidos controlados mediante una infraestructura de **Command and Control (C&C)**.
+- ataques **volumétricos**;
+- ataques **basados en aplicación**;
+- ataques de **deshabilitación de comunicaciones**.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-90.png)
-
+Cuando intervienen muchas máquinas coordinadas, el ataque pasa a ser un **DDoS**. Suele apoyarse en una **botnet**, es decir, una red de equipos comprometidos controlados a través de una infraestructura de **Command and Control (C&C)**.
 
 ### Ping of Death
-El **Ping of Death** es un ataque DoS clásico basado en el envío de paquetes ICMP malformados o excesivamente grandes, con el objetivo de provocar errores en el sistema destino.
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-88.png)
+El **Ping of Death** es un DoS clásico basado en el envío de paquetes **ICMP** malformados o demasiado grandes con el objetivo de provocar fallos en el sistema destino.
 
-
-### Ataque Smurf
-El ataque **Smurf** consiste en enviar peticiones **ICMP Echo** a una dirección de broadcast, falsificando como dirección origen la de la víctima. Como resultado, muchos hosts responden simultáneamente a la víctima y la saturan con respuestas. El esquema de la diapositiva muestra precisamente ese efecto de amplificación.
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-89.png)
+### Smurf
+El ataque **Smurf** falsifica como origen la IP de la víctima y envía peticiones **ICMP Echo** a una dirección de **broadcast**. El efecto es una amplificación: numerosos equipos responden a la víctima y la saturan.
 
 ### SYN flooding
-El **SYN flooding** es un caso concreto de DoS que aprovecha el funcionamiento del **TCP handshake**. TCP necesita establecer previamente una conexión, y el servidor reserva recursos mientras espera la confirmación final del cliente. La presentación explica que existe un número máximo de conexiones en estado **SYN_RECVD**, que se mantienen durante un tiempo hasta recibir el ACK o agotar el timeout.
+El **SYN flooding** explota el establecimiento de conexión en **TCP**. Cuando el servidor recibe un **SYN**, reserva recursos y queda a la espera del **ACK** final del cliente. Durante ese tiempo mantiene la conexión en estado **SYN_RECVD**.
 
-En este ataque, el atacante envía muchas peticiones **SYN** con direcciones IP falsificadas. El servidor responde con **SYN+ACK**, pero el ACK final nunca llega. Si la cola de conexiones pendientes se llena, el servidor rechaza nuevas conexiones legítimas hasta que vayan expirando las anteriores.
+Si el atacante envía muchas peticiones SYN con IPs falsificadas, el servidor responde con **SYN+ACK**, pero el ACK final nunca llega. Al llenarse la cola de conexiones pendientes, las peticiones legítimas empiezan a rechazarse.
 
-La base del ataque está en dos debilidades:
-- no hay autenticación fuerte del origen de los paquetes,
-- es posible falsificar direcciones IP mediante **IP spoofing**.
+El ataque se apoya en dos debilidades:
 
+- la falta de autenticación fuerte del origen de los paquetes;
+- la posibilidad de hacer **IP spoofing**.
 
-Tenemos estas poisbles contramedidas en dos niveles.
+Las contramedidas citadas se aplican en dos niveles:
 
-**En el sistema:**
-- reducir el timeout,
-- aumentar el tamaño de la cola de peticiones,
-- deshabilitar servicios no esenciales.
-
-**En el router:**
-- bloquear paquetes externos con direcciones de origen internas,
-- bloquear paquetes salientes con direcciones de origen que no pertenezcan a la red interna.
-
+| Nivel | Medidas |
+| --- | --- |
+| Sistema | Reducir el `timeout`, aumentar la cola de peticiones pendientes y deshabilitar servicios no esenciales |
+| Router | Bloquear paquetes externos con direcciones internas como origen y bloquear paquetes salientes con direcciones de origen que no pertenezcan a la red interna |
 
 ### Botnets
-Es una red de máquinas comprometidas controladas mediante infraestructura de **Command and Control (C&C)**. Estas máquinas, o bots, pueden ser utilizadas coordinadamente para lanzar ataques DDoS contra una víctima.  atacante → C&C → bots → víctima.
+Una **botnet** es una red de equipos comprometidos controlados desde uno o varios nodos de **C&C**. Su valor está en la escala: permiten lanzar DDoS, distribuir malware, enviar correo masivo o apoyar otros ataques coordinados.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-91.png)
 
-
 # 4.2 Cortafuegos
-Un **cortafuegos** es un sistema que implanta una **política de control de accesos entre dos redes**.
 
-Consiste en hardware, software o combinación de ambos que monitoriza y filtra paquetes de red que intentan entrar o salir de una red privada protegida. Separa por ejemplo una red protegida (eduroam) de una no protegida (internet) de menos confianza.
+Un **cortafuegos** es el mecanismo que aplica una **política de control de accesos entre redes**. Puede ser hardware, software o una combinación de ambos, y su función es monitorizar y filtrar el tráfico que entra o sale de una red protegida.
 
-Normalmente son dispositivos dedicados puesto que son más fáciles de diseñar e inspeccionar posibles fallos o bugs. Además facilita optimizar su rendimiento.
+En la práctica suele ser un dispositivo dedicado, porque así resulta más sencillo de analizar, mantener y optimizar. Su valor no está solo en bloquear paquetes, sino en convertir la política de seguridad en un conjunto claro de reglas.
 
-Los cortafuegos **implementan políticas de seguridad:** conjuntos de reglas que determinan qué tráfico puede o no pasar a través de ellos.
+Un cortafuegos bien diseñado debe cumplir tres propiedades: estar **siempre en el camino** del tráfico que pretende controlar, ser **resistente a manipulaciones no autorizadas** y mantenerse **lo bastante simple** como para poder ser analizado con rigor.
 
-Los cortafuegos son:
-- Siempre invocados (no se pueden evitar o burlar)
-- Resistentes a manipulaciones no autorizadas
-- Pequeños y simples, para análisis rigurosos.
+## 4.2.1 Qué puede y qué no puede hacer
+### Contra qué protege
+Un cortafuegos protege frente a **accesos no autorizados** y **tráfico no permitido**, puede restringir también el tráfico **saliente** desde el interior y actúa como punto central para aplicar política de seguridad y auditoría. Naturalmente, también debe **protegerse a sí mismo**.
 
+### Limitaciones
+No es una defensa total. Sus límites principales son:
 
-## 4.2.1 Contra qué protege un cortafuegos
-- Contra **accesos no autorizados**
-- Tráfico **no autorizado**
-- **Permite/restringe la salida desde el interior**
-- Proporciona un único punto para implantar una política de seguridad y auditoría
-- Ha de protegerse a sí mismo
+- no evita **bugs** en aplicaciones o servicios ya permitidos;
+- no protege frente a ataques que usan **conexiones autorizadas**;
+- no resuelve por sí mismo la seguridad de la **red interna**;
+- solo controla el tráfico que **realmente pasa por él**;
+- puede resultar molesto para los usuarios si está mal diseñado;
+- requiere una configuración y una administración cuidadosas.
 
-El cortafuegos debe ser parte de una política global: no debería la única línea de defensa.
+Esto implica que el cortafuegos debe formar parte de una **política global**, no ser la única defensa.
 
-## 4.2.2 Limitaciones
-- Ineficaces ante **bugs** en aplicaciones o servicios permitidos
-- No protege contra ataques mediante **conexiones autorizadas**.
-- No proporciona seguridad desde la **red interna**.
-- Solo protegen frente a **conexiones que pasan por él:**
-	- Accesos alternativos (redes móviles)
-	- Accesos desde dentro (wifi mal protegida, malware en memorias USB)
-- Puede llegar a ser **molestos para los usuarios**
-- Deben configurarse y administrarse cuidadosamente
+## 4.2.2 Ejemplo de política
+Una política típica puede expresarse como una secuencia de reglas. El ejemplo de los apuntes, pasado a tabla, permite correo SMTP y TFTP hacia la red interna, HTTP saliente desde la red interna y HTTP entrante hacia un servidor web concreto; el resto se bloquea:
 
-## 4.2.3 Ejemplo de política se seguridad en un cortafuegos
+| Regla | Tipo | Origen | Destino | Puerto destino | Acción |
+| --- | --- | --- | --- | --- | --- |
+| 1 | TCP | `*` | `192.168.1.*` | `25` | Permitir |
+| 2 | UDP | `*` | `192.168.1.*` | `69` | Permitir |
+| 3 | TCP | `192.168.1.*` | `*` | `80` | Permitir |
+| 4 | TCP | `*` | `192.168.1.18` | `80` | Permitir |
+| 5 | TCP | `*` | `192.168.1.*` | `*` | Denegar |
+| 6 | UDP | `*` | `192.168.1.*` | `*` | Denegar |
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-93.png)
+## 4.2.3 Tipos de cortafuegos por tecnología
+### Filtrado de paquetes
+Es la forma más básica: un router o dispositivo analiza cabeceras **IP**, **TCP**, **UDP** o **ICMP** y toma decisiones en función de una lista de reglas. Suele fijarse en:
 
+- IP de **origen**;
+- IP de **destino**;
+- **protocolo**;
+- **puertos**;
+- **interfaz** por la que entra o sale el paquete.
 
-## 4.2.4 Tipos de Cortafuegos por tecnología
-### Nivel de Red - Filtrado de Paquetes
-Se trata de routers que inspeccionan el contenido de la cabecera de los paquetes TCP, UDP, ICMP, enviados entre redes. Aceptan o rechazan los paquetes de red establecida dentro de la política de seguridad de la organización.
+Su comportamiento habitual sigue una de dos políticas:
 
-Las políticas para paquetes de red más utilizadas en estos cortafuegos son:
-- **Rechazar todo lo no permitido explícitamente:** configurar el cortafuegos de manera que deniega el acceso a todo el tráfico y servicios, **excepto aquellos explícitamente añadidos**.
-- **Permitir todo lo no denegado explícitamente:** permite todo el tráfico y los servicios **excepto aquellos en la lista de prohibidos**, que se va implementando según los requisitos de la organización.
+- **denegar todo lo no permitido explícitamente**;
+- **permitir todo lo no denegado explícitamente**.
 
-Las características que se analizan para filtrar en base a características de la cabecera del paquete IP son:
-- Dirección IP de **origen**
-- Dirección IP de **destino**
-- **Tipo de tráfico** (TCP, UDP, ICMP)
-- Puertos origen y destino
-- Interfaz de red por la que llega o se envía el paquete
+Cada regla tiene una parte de **emparejamiento** y una **acción**. Las acciones típicas son:
 
-Se analiza cada paquete independientemente, **no se guarda información del contexto**.
+- **aceptar**;
+- **denegar** notificando al origen;
+- **descartar** sin notificar;
+- **registrar** o disparar acciones adicionales.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-94.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-95.png)
+La gran ventaja del filtrado de paquetes es que es **rápido**, **escalable** e independiente de las aplicaciones. Sus límites son que la definición de reglas puede volverse compleja, que no entiende bien el **contexto** del tráfico y que muchas implementaciones confían demasiado en la dirección IP, que puede falsificarse.
 
-Para filtrar paquetes nos basamos en la definición de un conjunto de **reglas secuenciales:**
-- Una parte de equiparación, con la que debe coincidir el paquete:
-	- Sentido del paquete: entrada/salida
-	- Dirección de origen/destino, tipo de tráfico, puerto, ...
-- Acción a realizar:
-	- **Aceptar:** el paquete pasa el cortafuegos
-	- **Denegar:** e paquete se descarta y se notifica al origen
-	- **Descartar:** el paquete se descarta sin notificar al origen
-	- Acciones adicionales (por ejemplo, registro de actividad)
+### Inspección con estado
+El **filtrado dinámico** o **stateful inspection** no trata cada paquete como si estuviera aislado. Mantiene una **tabla de estados** con las conexiones activas, quién las inició y qué respuestas son coherentes. Así puede distinguir mejor entre petición y respuesta, reconocer el avance de una conexión TCP y permitir solo paquetes que encajan en una comunicación válida.
 
-Las ventajas que ofrecen son la **independencia de las aplicaciones** y que son **muy rápidos y escalables**. Las limitaciones son:
-- Definición del filtrado de paquetes **compleja**
-- Difícil monitorización y comprobación de routers
-- No analizan globalmente el tráfico, ni entienden el contexto.
-- Muchas implementaciones se fían de la dirección IP, que puede ser **falsificada** con relativa facilidad.
+Además, muchos productos combinan esta idea con firmas o patrones sospechosos ya conocidos.
 
+### Cortafuegos de aplicación o proxy
+En un cortafuegos de **capa de aplicación** no hay paso directo entre red externa e interna. Toda comunicación debe pasar por un **proxy**, de modo que existen dos conexiones separadas:
 
-### Inspección de estados - Filtrado dinámico
-Es una técnica de cortafuegos en la que **no se analiza cada paquete de forma aislada**, sino **teniendo en cuenta el estado de la comunicación**.
-- El cortafuegos **intercepta los paquetes en la capa de red** y revisa sus cabeceras
-- Además, puede **extraer información de los datos** para saber **qué aplicación o tipo de comunicación** hay detrás.
-- Así puede **distinguir peticiones y respuestas**. Por ejemplo, en **TCP** reconoce fases de conexión somo SYN, SYN-ACK y ACK
+- una entre cliente y cortafuegos;
+- otra entre cortafuegos y servidor.
 
-A diferencia del filtrado simple, las decisiones se toman **relacionando varios paquetes entre sí**. Para hacerlo, el cortafuegos **mantiene una tabla dinámica de estados**, donde guarda información de las conexiones activas, por ejemplo:
-- quién inició la conexión
-- en qué estado está
-- qué paquetes son válidos como respuesta
+El cortafuegos actúa como **servidor** frente al cliente y como **cliente** frente al servidor. Esto permite un control muy fino del protocolo y del contenido de cada servicio. Por eso suelen incorporar autenticación, auditoría detallada y restricciones más específicas que un filtro de paquetes.
 
-Con esa tabla decide **si permite o bloquea** los paquetes. Además estos sistemas, suelen estar **preconfigurados para detectar ciertas firmas o patrones de ataque**
+Además, las reglas suelen ser **más fáciles de definir** que en un router con puro filtrado de paquetes, y cada proxy puede tratarse como un componente relativamente **independiente** dentro del sistema de defensa.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-96.png)
+Ejemplos mencionados en los apuntes:
 
+- un **proxy de correo** que escanea mensajes en busca de virus antes de reenviarlos;
+- un **proxy FTP** que permite descargas pero bloquea el comando `put`.
 
-### Cortafuegos de Capa de Aplicación
-Es un **proxy o pasarela de aplicación** que se coloca entre la red externa y la interna. **Da servicio a los usuarios internos** y, al mismo tiempo, **protege a los servidores internos** frente a usuarios externos maliciosos.
+A cambio, tienen peor **rendimiento**, rompen el modelo cliente-servidor directo y obligan a desplegar software específico por servicio.
 
-- **No deja pasar tráfico directamente entre ambas redes**.
-- Toda comunicación debe hacerse **a través de un proxy de aplicación**.
-- Por eso hay **dos conexiones distintas**:
-    - una entre el **cliente externo y el cortafuegos**;
-    - otra entre el **cortafuegos y el servidor interno**.
+### Cortafuegos híbridos y NAT
+La mayoría de los productos comerciales son **híbridos**: combinan filtrado de paquetes, inspección con estado y, cuando interesa, funciones de proxy. Algunos incluso se comportan como proxy en el establecimiento de la conexión y pasan a un tratamiento más ligero durante la transferencia de datos.
 
-El filtrado se hace **a nivel de aplicación** y **basado en servicios conocidos**:
-- el cortafuegos actúa como un servidor intermedio entre una aplicación cliente y una aplicación servidor;
-- **se comporta como servidor frente al cliente**;
-- y **como cliente frente al servidor**.
+En este contexto suele aparecer **NAT**. No es un cortafuegos completo por sí mismo, pero añade opacidad: oculta la información TCP/IP de los hosts internos y hace que, desde fuera, toda la red parezca salir por una única IP pública. Eso dificulta que los equipos internos sean visibles directamente.
 
-Eso permite tener **control completo sobre cada servicio**.
+## 4.2.4 Arquitecturas de cortafuegos
+Las configuraciones clásicas que aparecen en los apuntes son:
 
-Además:
-- se debe mantener **información detallada y auditada** de los registros de tráfico de cada conexión;
-- normalmente se admite **un conjunto limitado de comandos**;
-- suelen incorporar **autenticación**, obligando al usuario a identificarse;
-- **cada proxy es independiente** de los demás dentro del sistema de defensa;
-- y sus **reglas de filtrado son más fáciles de definir** que en un router con filtrado de paquetes.
+- **router de filtrado de paquetes**: un único router entre red interna y externa;
+- **host de base dual** (*dual-homed bastion host*): un equipo intermedio que corta el tráfico directo entre ambas redes y sirve como bastión; en él se pueden instalar **proxies de aplicación** o permitir **login remoto** para acceder desde ahí al resto de hosts;
+- **proxy con router de filtrado**: combina un bastion host con proxies y un router que solo permite el tráfico necesario hacia ese host.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-97.png)
-
-Ejemplo: chequeo de virus en correo electrónico:
-- El correo entrante llega al **proxy**
-- El proxy lo escanea, y si no tiene virus lo redirige al destinatario y si tiene virus lo rechaza o lo desinfecta
-
-Ejemplo: servidor FTP
-- Se permiten todas las acciones de descarga de ficheros
-- NO se permite el comando put
-
-Las ventajas es que ofrecen un **alto nivel de seguridad**, examinan información a **nivel de aplicación** y toman decisiones basadas en **datos de cada aplicación**.
-
-El problema que tienen es **menor rendimiento y escalabilidad**, rompe el modelo **cliente/servidor** (requiere dos conexiones) y requiere implantar un proxy por cada aplicación: software especializado en cada sistema/servicio que se quiera proteger.
-
-
-### Cortafuegos Híbridos
-La mayoría de los cortafuegos comerciales actuales **combinan varias tecnologías** en lugar de usar solo una. Esto permite aplicar **distintos mecanismos según el tipo de tráfico:**
-- **Filtrado de paquetes** cuando se necesita **alta velocidad**
-- **Proxy** cuando se necesita **mayor seguridad**
-
-Además muchos son **adaptativos**, es decir:
-- durante el **establecimiento de la conexión** actúan como **proxy**, porque así inspeccionan y controlan mejor la comunicación
-- durante la **transferencia de datos** usan **filtrado de paquetes**, para que el tráfico vaya más rápido.
-
-En resumen, un cortafuegos híbrido **busca equilibrar seguridad y rendimiento** combinando varias técnicas.
-
-En una red, cada host tiene una **dirección IP**. Si en una red fija esas direcciones son **estáticas**, a un atacante le resulta más fácil identificar un host, tomar su control y usarlo para atacar a otros equipos, tanto **dentro** como **fuera** de la red.
-
-Para reducir este riesgo se usa un **filtro NAT**, que:
-- **oculta la información TCP/IP** de los hosts internos
-- hace que, desde el exterior, no se vea directamente cada equipo interno
-
-Por eso, un cortafuegos NAT funciona de forma parecida a un **proxy:**
-- **esconde la identidad** de los hosts internos
-- hacia el exterior, **todos los hosts internos parecen tener una sola IP pública**, que es la del dispositivo NAT
-
-El NAT añade protección porque **los equipos internos no son visibles directamente desde fuera.**
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-98.png)
-
-## 4.2.5 Arquitecturas de Cortafuegos
-### Routers de Filtrado de Paquetes
-Implementación formada únicamente por un router de filtrado entre la red privada y la red externa.
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-99.png)
-
-### Host de base dual
-Cortafuegos implementado situando un host (bastion host) entre las redes interna y externa que bloquea el tráfico directo entre las dos redes. Opciones de funcionamiento:
-- Instalar en ese host proxies a nivel de aplicación
-- Permitir login remoto en dicho host para, desde allí acceder al resto de hosts
-
-
-### Proxy con Router de Filtrado
-Una de las configuraciones más utilizadas: se implementa utilizando un host de base dual (bastion host, donde se instalan los proxies) y un router de filtrado.
-
-El bastion host está en la **red privada** siendo el único equipo alcanzable desde el exterior. El router de selección permite que sólo los servicios que tienen instalado un proxy en el bastion host se comuniquen con él.
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-100.png)
-
-## 4.2.6 Zona desmilitarizada - DMZ
-La **DMZ** es una **subred intermedia** entre **Internet** y la **intranet**. Sirve para colocar ahí los servicios que deben ser accesibles desde fuera, sin exponer directamente la red interna. En la DMZ se suelen instalar servidores de acceso público como:
-- **web**
-- **correo electrónico**
-- **FTP**
-- **DNS**
+## 4.2.5 DMZ
+La **DMZ** es una subred intermedia entre **Internet** y la **intranet**. Su objetivo es alojar los servicios que deben ser visibles desde fuera sin exponer directamente la red interna. Allí suelen ubicarse servidores **web**, **correo**, **FTP** y **DNS**.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-101.png)
 
-La idea es que **los accesos desde Internet no lleguen directamente a la intranet**, sino que **pasen antes por la DMZ**. Así, desde la red externa solo se permite llegar a lo **estrictamente necesario**. Además, en la DMZ se pueden instalar:
-- sistemas de **filtrado**,
-- sistemas de **detección antivirus**,
-- y **zonas de cuarentena** para aislar contenido sospechoso antes de enviarlo a la red interna.
+La idea es simple: desde Internet solo se debe poder alcanzar lo **estrictamente necesario**, y ese tráfico debe terminar primero en la DMZ. Como esos servidores están más expuestos, requieren protección reforzada. En la DMZ también pueden convivir filtros, antivirus y zonas de cuarentena.
 
-Como los servidores de la DMZ están expuestos a Internet, **deben tener una protección reforzada**.
+Como la DMZ está separada de la red interna, puede apoyarse también en funciones de **NAT** en el bastion host o en el cortafuegos para ocultar mejor la estructura interna.
 
-Como la DMZ es una red distinta de la red interna, se puede usar un **NAT** en el **bastion host** que actúa como cortafuegos.
+### DMZ para correo electrónico
+En correo, el servidor de la DMZ actúa como filtro y ocultador de información interna, pero debe seguir siendo **transparente hacia el interior**. Cuando llega un mensaje desde Internet:
 
-### DMZ en el correo electronico
-El servidor de correo en la DMZ:
-- **revisa direcciones y contenido** de todo el correo;
-- busca **ocultar información interna al exterior**;
-- pero debe ser **transparente hacia el interior**.
+1. reensambla cabecera, cuerpo y adjuntos;
+2. analiza contenido malicioso conocido;
+3. revisa violaciones del protocolo SMTP;
+4. comprueba las direcciones del destinatario;
+5. reescribe la dirección hacia el servidor interno;
+6. reenvía el mensaje.
 
-Funcionamiento:
-- el correo que llega desde **Internet** se redirige hacia la **red interna**;
-- el correo que sale desde la **red interna** se redirige hacia **Internet**
+En sentido saliente, además de lo anterior, analiza si hay **datos sensibles** y reescribe cabeceras que revelen nombres de host, correos o IPs internas, sustituyéndolos por el dominio del proxy o la IP externa del cortafuegos.
 
-Cuando entra un correo desde internet, el sistema:
-1. **reensambla el mensaje** completo: cabecera, cuerpo y adjuntos;
-2. **escanea** cabecera, cuerpo y adjuntos en busca de **contenido malicioso conocido**;
-3. si no encuentra nada, analiza el mensaje original en busca de **violaciones del protocolo SMTP**;
-4. comprueba las **direcciones del destinatario**;
-5. **reescribe la dirección** con la correspondiente al servidor de correo interno;
-6. y **reenvía** el mensaje.
+### DMZ para servicios web
+En tráfico **HTTP/HTTPS**, el cortafuegos o proxy puede inspeccionar las peticiones en busca de elementos sospechosos, por ejemplo líneas anormalmente largas o componentes maliciosos. Si detecta algo extraño, descarta la petición; si no, la reenvía al servidor de la DMZ.
 
-Y cuando sale hacia internet se hace algo parecido, pero además:
-- se analiza también si hay **datos sensibles** o confidenciales;
-- se **reescriben las cabeceras** que contengan:
-    - nombres de host,
-    - direcciones de correo,
-    - direcciones IP internas.
+## 4.2.6 Tipos de cortafuegos por ubicación
+Los apuntes distinguen cuatro despliegues habituales:
 
-Esa información se sustituye por el **dominio del servidor proxy** o por la **IP del cortafuegos externo**, para no revelar datos internos.
+| Tipo | Uso típico | Rasgos |
+| --- | --- | --- |
+| **Personal** | Un único equipo | Filtra entrada y salida, oculta el sistema frente a escaneos y conviene combinarlo con antivirus |
+| **SOHO** | Pequeñas oficinas, típicamente de unos 2 a 50 usuarios | Suele ir integrado en equipos pequeños, delante del router o incluso dentro de él |
+| **Hardware** | Oficinas medianas y sucursales | Gestión centralizada, funciones básicas y sistema propio del fabricante; ejemplos típicos: **Cisco** y **Fortinet** |
+| **Corporativo** | Punto central de acceso a Internet en una empresa | Conecta varias redes, implanta la política global y suele ejecutarse sobre grandes servidores con configuraciones tolerantes a fallos |
 
+## 4.2.7 Configuración e implantación
+Hay dos enfoques básicos:
 
-### DMZ en servicios Web
-Para **HTTP y HTTPS**, el cortafuegos analiza las peticiones buscando elementos sospechosos, por ejemplo:
-- líneas excesivamente largas,
-- componentes anómalos o maliciosos.
-- Si detecta algo sospechoso, **descarta la petición**.
-- Si no, la **redirige al servidor web de la DMZ**.
+- **diseño desde cero**, ajustado a necesidades concretas, pero más lento y costoso;
+- **producto comercial**, con funcionalidades y plantillas ya disponibles.
 
-## 4.2.7 Tipos de cortafuegos por ubicación
-### Cortafuegos personales
-- Permiten filtros de entrada y salida
-- Alertan sobre posibles intentos de conexión desde el exterior
-- Ocultan el sistema frente a escaneo de puertos, no respondiendo al tráfico de red no solicitado
-- Previenen el tráfico no deseado procedente de aplicaciones locales
-- Recomendable combinarlos con antivirus
+Como referencia de trabajo, los apuntes citan las **guías del CCN-CERT**, en particular la **Serie 1000 de Guías de Procedimiento de Empleo Seguro**, buscando por “cortafuegos”.
 
-### Cortafuegos para pequeñas oficinas (SOHO)
-- Protegen a varios usuarios en pequeñas oficinas (2-50)
-- Suelen ser pequeños equipos instalador antes del router, o incluso integrados
+Los errores más comunes al implantar un cortafuegos son:
 
-### Equipos hardware
-- Utilizados en oficinas medias y sucursales 
-- Fáciles de configurar, con funcionalidades básicas y gestionados centralizadamente 
-- Utilizan sistemas operativos propios del hardware en el que están implantados
-- Ejemplos: Cisco y Fortinet
+- instalarlo sin una **política de seguridad** previa;
+- añadir reglas por inercia, sin distinguir necesidades reales de deseos;
+- pensar solo en el cortafuegos e ignorar otras medidas;
+- no revisar **logs** ni **alarmas**;
+- desactivar alarmas repetitivas que podrían ocultar ataques reales;
+- permitir que demasiadas personas administren su configuración;
+- dejar vías de acceso que **se salten** el cortafuegos.
 
-### Cortafuegos corporativos
-- El punto central de accesos a Internet de una empresa 
-- En este punto se implanta la política de seguridad de la empresa 
-- Pueden conectar múltiples redes 
-- Software que se instala en grandes servidores con configuraciones tolerantes a fallos
+Además, un cortafuegos suele apoyarse en otros controles:
 
-## 4.2.8 Configuración e implementación de un cortafuegos
-Hay **dos formas principales** de configurar un cortafuegos según las necesidades de una organización:
-- **Diseñarlo desde cero**, recopilando toda la información necesaria para definir requisitos y necesidades. Es una opción más ajustada, pero **lleva mucho tiempo y puede ser costosa**.
-- **Usar un cortafuegos comercial**, que ya incorpora muchas opciones y configuraciones predefinidas. Es la opción que adoptan muchas organizaciones.
-
-Como apoyo, se mencionan las **guías del CCN-CERT**, en particular la **Serie 1000 de Guías de Procedimiento de Empleo Seguro**, buscando por “cortafuegos”.
-
-Errores habituales:
-- **Implantarlo sin una política de seguridad** previa.
-- **Añadir reglas y servicios** sin distinguir entre **necesidades reales** y **deseos**.
-- **Centrarse solo en el cortafuegos** e ignorar otras medidas de seguridad.
-- **Ignorar alarmas y logs** del cortafuegos.
-- **Desactivar alarmas repetitivas o de bajo nivel**, porque pueden ocultar problemas reales.
-- **Permitir a demasiadas personas** acceder o administrar su configuración.
-- **Permitir accesos independientes**, es decir, vías de acceso que se saltan el control del cortafuegos.
-
-
-Un cortafuegos suele apoyarse en otros mecanismos de seguridad:
-- **Autenticación de usuarios externos**, por ejemplo con usuario y contraseña, certificados digitales o tarjetas.
-- **Antivirus**, normalmente instalados en la **DMZ**.
-- **Filtros de contenido**:
-    - filtrado de **URL y navegación hacia el exterior**;
-    - filtrado para controlar la **información que sale**.
-- **IDS (sistemas de detección de intrusiones)**; muchos cortafuegos ya incorporan también **prevención de intrusiones**.
-- **VPN (redes privadas virtuales)**, que crean **túneles cifrados** para permitir acceso remoto seguro a través de redes públicas.
-
+- autenticación de usuarios externos mediante contraseña, certificados o tarjetas;
+- antivirus, normalmente en la **DMZ**;
+- filtros de contenido para **URL** y para controlar la **información saliente**;
+- **IDS/IPS**;
+- **VPNs** para acceso remoto seguro.
 
 # 4.3 IDS/IPS
+
 ## 4.3.1 Intrusiones
-Una **intrusión** en un sistema es un intento, por parte de alguien externo, de obtener acceso ilegal a un sistema.
-- **Detección de intrusiones:** técnica para detectar accesos o actividades no autorizados a un ordenador o a una red
-- **Prevención/protección ante intrusiones:** técnica para prevenir daños y protegerse ante accesos no autorizados a los recursos del sistema.
+Una **intrusión** es un intento de obtener acceso ilegal a un sistema o de realizar actividades no autorizadas sobre él. A partir de ahí conviene diferenciar:
 
-## 4.3.2 IDS
-Un **IDS** es una herramienta de seguridad que recolecta información de diversas fuentes de un sistema. Analiza esta información de acuerdo a patrones establecidos de uso indebido o actividades inusuales.
+- **detección de intrusiones**: descubrir accesos o actividades no autorizados;
+- **prevención/protección**: actuar para evitar o limitar el daño.
 
-En algunos casos, responde automáticamente antes la actividad detectada. Informa del resultado al administrados del sistema para que éste actúe en consecuencia.
+## 4.3.2 Qué es un IDS
+Un **IDS** (*Intrusion Detection System*) recoge información desde varias fuentes del sistema o de la red y la analiza según patrones de uso indebido o comportamientos anómalos. En algunos entornos puede integrarse con respuestas automáticas, pero su función básica es **detectar** y **avisar**.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-102.png)
+Las tareas que aparecen en los apuntes incluyen monitorizar actividad de usuarios y sistemas, auditar configuración y vulnerabilidades, evaluar la integridad de sistemas críticos y ficheros de datos, identificar actividad anormal mediante análisis estadístico, revisar acciones administrativas que violen políticas y desplegar trampas o mecanismos equivalentes para observar al intruso.
 
-El **IDS:**
-- Monitoriza las actividades de los usuarios y de los sistemas.
-- Audita de forma continua la configuración del sistema y sus vulnerabilidades
-- Evalua la integridad de los sistemas críticos y los archivos de datos
-- Identifica actividad anormal a partir del análisis estadísticos
-- Audita la administración del S.0. con reconocimiento de actividades relativas a la violación de políticas
-- Instala y gestiona trampas para recolectar información sobre los intrusos.
-
-
-## 4.3.3 Sistema IDS/IPS
-Este sistema proporciona **protección y detección en tiempo real** de ataques: DoS, troyanos, escaneo de puertos, inyección, etc. Existen productos software y dispositivos hardware. Se deben integrar con:
-- **Sistemas operativos:** con aplicaciones de registro y auditorías, para monitorizar recursos críticos para la seguridad
-- **Servidores:** todas las aplicaicones en servidores web, de correo o de bases de datos deberían incluir capacidades de registro/auditoría también.
-- **Cortafuegos:** un buen cortafuegos debería incluir alguna capacidad de detección de instrusiones en red.
-
-### IDS
-**Sistema de Detección de Instrusiones**
-- Sólo detecta intrusiones, genera alarmas, pero no actúa.
-- Se conecta como una sonda en la red o en un equipo, sin interferir el tráfico
-- Utiliza solamente una interfaz Ethernet, no corta la red
-
-### IPS
-**Sistema de Prevención de Intrusiones:**
-- Además de detectar, previene contra intrusiones, protege al sistema actuando de forma proactva.
-- Se conecta en medio de la red, cortando la conexión
-- Utiliza dos interfaces Ethernet
-- Puede actuar conjuntamente con el cortafuegos
-
-### Posibles respuestas
-- Reconfiguración de accesos del cortafuegos y de las listas de control de acceso de los routers
-- Emisión de alarmas y registro de las mismas.
-- Almacenamiento de evidencias
-- Ejecución de algún programa para manipular el evento detectado
-- Terminar sesión TCP
-
-## 4.3.4 Tipos de IDS/IPS por ubicación
-- **Software para servidores:** software que se instala en los servidores y detecta instrusiones al equipo
-- **Sondas de red:** existen sistemas software o equipos hardware. Se conectan en una subred y analizan todo el tráfico que pasa
-- **Software para puesto de trabajo:** software que se instala en el PC y detecta intrusiones al equipo. Se combina con el software antivirus y cortafuegos del PC.
-
-
-### Sondas de Red (NIDS)
-Sensores o agentes que recolectan información de la propia red, generalmente basados en **sniffers**. Dispositivos externos, no afectan al rendimiento de los servidores que monitorizan.
-
-**Ventajas:**
-- La inserción de los agentes a nivel de red no afecta a datos existentes
-- Detecta ataques a nivel de red (SYN Flood)
-- Capaz de monitorizar grandes redes
-- Detección en tiempo real
-
-**Inconvenientes:**
-- Pueden no funcionar adecuadamente en redes de alta velocidad
-- Los agentes de esta estrategia no pueden buscar en los protocolos o revisar el contenido de la red si se encuentra cifrado
-- No confirman si un ataque ha tenido éxito, sólo detectan el inicio.
-
-### Software para Servidores (HIDS)
-- Monitorizan eventos locales en un host (pueden detectar atauqes invisibles a un NIDS). Logs del SO, logs de procesos, contenidos de objetos particulares del sistema que no generan logs.
-
-- Se pueden usar en entornos de tráfico cifrado, para analizar la información antes de que se cifre o después de que se descifre.
-
-- Monitorización del SO: búsqueda de anomalías y de firmas de ataques conocidos.
-
-**Ventajas:**
-- Monitorización de quién accede a qué
-- Identificación directa del usuario
-- Capacidad para operar en ambientes cifrados
-- Monitorizar redes amplias
-
-**Inconvenientes:**
-- Actividad de la red no visible a los agentes.
-- Vulnerabilidades del SO comprometen la integridad de los agentes
-- Uso de recursos locales: coste en rendimiento.
-
-## 4.3.5 Cómo modelar una Intrusión
-### Reconocimiento de firmas o patrones conocidos
-- Se asume que toda actividad intrusiva es representable mediante un patrón único o firma
-- Los datos obtenidos de la monitorización se comparan con bases de datos de firmas conocidas de ataques o usos indebidos, en tiempo real.
-- Los proveedores incluyen frecuentemente actualizaciones de las bases de datos de firmas como parte de los acuerdos de mantenimiento
-- Número reducido de falsas alarmas.
-
-**Inconvenientes:** 
-- Los patrones de intrusión deben codificarse a mano
-- Las firmas deben estar bien definidas: dificultad para detectar variantes
-- Es posible falsificar el patrón para confundir al sistema
-- Es imposible detectar intrusiones futuras
-
-### Ejemplo de Reconomiento de patrones (NIDS)
-**Dirección origen y destino:**
-- Tráfico proveniente de nuestra DMZ que tenga como destino nuestra red protegida: es muy posible que estos paquetes constituyan un intento de violación de nuestra política de seguridad
-- Peticiones originadas desde Internet y que tienen como destino máquinas de nuestra organización que no está ofreciendo servicios directos al exterior, como un servidor de bases de datos cuyo acceso está restringido a sistemas de nuestra red.
-
-**Puerto origen y destino:**
-- Los puertos origen y destino son un excelente indicativo de actividades sospechosas en una red.
-- Aparte de los intentos de acceso no autorizado a servicios de nuestros sistemas, se pueden detectar actividades que también supondrán a priori violaciones de las políticas de seguridad, como la existencia de troyanos, ciertos tipos de barridos de puertos, o la presencia de servidores no autorizados dentro de nuestra red.
-
-**Flags TCP:**
-- UNo de los campos de una cabecera TCP contiene seis bits, cada uno de ellos con una finalidad diferente
-- El valor de cada uno de estos bits será 0 o 1, lo cual de forma aislada no suele decir mucho de su emisor, no obstante ciertas combinaciones de valores suelen ser bastante sospechosas. Por ejemplo, unatrama con los bits SYN y FIN activados simultáneamente sería indicativa de una conexión que trata de abrirse y cerrarse al mismo tiempo
-
-**Campo de datos:**
-- En el campo de datos de un paquete que circula por la red es donde más probabilidades tenemos de localizar un ataque contra nuestros sistemas
-- Con toda probabilidad un cortafuegos corporativo detendrá tramas cuya cabecera sea sospechosa
-- Pero un cortaguegos puede no pararse a analizar el contenido de los datos transportados en la trama. Por ejemplo, una petición como `'GET ../../../etc/passwd HTTP/1.0'`  contra el puerto 80 del servidor web de nuestra empresa no se detendría en el cortafuegos, pero muy probablemente se trata de un intento de intrusión contra nuestros sistemas.
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-103.png)
-
-### Detección de Anomalías
-**Análisis estadístico:**
-- Establecer desviaciones con respecto a patrones normales de comportamiento: generar perfiles de actividades sobre los objetos
-- Señalar los eventos que difieren de los patrones de uso normal
-
-**Son sistemas que requieren aprendizaje (técnicas de IA como redes neuronales, minería de datos: reglas de asociación, episodias frecuentes):**
-- Se compara la actividad observada con los perfiles de uso normal esperados. Los perfiles pueden desarrollarse para usuarios, grupos de usuarios, aplicaciones, o uso de los recursos del sistema
-- Son necesarios conjuntos de entrenamiento bastante extensos.
-
-**Ventajas:**
-- Puede llegar a identificar atauqes desconocidos. Obtención de información para firmas de ataques
-- Puede identificar ataques sofisticados en el tiempo
-
-**Inconvenientes:**
-- Alta posibilidad de falsas alarmas
-- Problemas cuando hay cambios en los hábitos del usuario
-
-## 4.3.6 Como implantar un IDS
-Modo oculto:
-- Una interfaz de red externa que sólo recibe, no envía nada (no tiene que tener dirección pública). Podría llegar a identificar ataques desconocidos.
-- Una interfaz de control, para enviar alerta u otra información al servidor de control
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-104.png)
-
-## 4.3.7 SIEM
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-105.png)
 
-Son sistemas softeware que recogen todos los datos relevantes a nivel de seguridad a nivel de seguridad de una gran variedad de productos hardware y/o software para proporcionar una consola de seguridad unificada.
+## 4.3.3 IDS frente a IPS
+Un sistema **IDS/IPS** busca detección y protección en tiempo real frente a ataques como **DoS**, **troyanos**, **escaneos de puertos** o **inyecciones**. Suele integrarse con:
 
-Utilizado por los SOC (Security Operations Center): equipo de personal de seguridad dedicado a monitorizar la red para detectar incidentes de seguridad e investigar y remediar dichos incidentes.
+- el **sistema operativo**, usando registros y auditorías;
+- las **aplicaciones servidor**, que también deben generar logs útiles;
+- el **cortafuegos**, que a menudo incorpora capacidades de detección o prevención.
 
-Requisitos:
-- Portabilidad de los datos
-- Compatibilidad de las fuentes de logs
-- Personalización
-- Almacenamiento de datos
-- Control de acceso y segregación
-- Mantenimiento a tiempo completo
+La diferencia central es esta:
 
-**Ventajas:**
-- Centralización de la información y eventos
-- Automatización de tareas
-- Seguimiento de los eventos para detectar anomalías de seguridad
-- Visualización de datos históricos a lo largo del tiempo
-- Muestran al admistrador la existencia de vulnerabilidades, así como si están siendo aprovechadas en los ataques
+| Sistema | Qué hace | Ubicación típica |
+| --- | --- | --- |
+| **IDS** | Detecta, registra y genera alarmas, pero no corta el tráfico por sí mismo | Sonda fuera de línea, normalmente con una sola interfaz |
+| **IPS** | Además de detectar, actúa para prevenir o bloquear | En línea, entre redes, normalmente con dos interfaces |
 
-**Desventajas:**
-- Altos costes de implantación
-- Curva de aprendizaje larga
-- Pérdida de control de la información generada o acceso limitado a la misma
+Las respuestas posibles que citan los apuntes son reconfigurar el cortafuegos o ACLs de routers, emitir alarmas, guardar evidencias, lanzar programas de respuesta o terminar una sesión TCP.
 
-# 4.4 Redes Privadas Virtuales
+## 4.3.4 Tipos de IDS/IPS por ubicación
+Los tres despliegues básicos son:
+
+- **software para servidores**, centrado en el host;
+- **sondas de red**, que observan tráfico en una subred;
+- **software para puestos de trabajo**, combinado a menudo con antivirus y cortafuegos personal.
+
+### NIDS
+Un **NIDS** (*Network IDS*) usa sensores o agentes de red, normalmente basados en técnicas de sniffing.
+
+Sus ventajas son que no altera datos existentes, puede detectar ataques a nivel de red como **SYN Flood**, permite vigilar redes grandes y trabaja en tiempo real.
+
+Sus límites también son claros: puede sufrir en redes de muy alta velocidad, no puede inspeccionar bien contenido **cifrado** y no confirma si el ataque llegó a tener éxito; solo ve su rastro en el tráfico.
+
+### HIDS
+Un **HIDS** (*Host IDS*) monitoriza eventos locales del sistema: logs del SO, logs de procesos y otros objetos que pueden no ser visibles para un NIDS. También puede vigilar el sistema operativo buscando **anomalías** y **firmas de ataques conocidos**. Tiene la ventaja de que puede observar el dato **antes de cifrarse** o **después de descifrarse**, así que funciona mejor en entornos con mucho tráfico cifrado.
+
+Sus ventajas principales son:
+
+- ver quién accede a qué;
+- identificar mejor al usuario implicado;
+- operar en entornos cifrados.
+
+Sus inconvenientes son que no ve tan bien la actividad global de red, depende de la integridad del sistema operativo donde corre y consume recursos locales.
+
+## 4.3.5 Cómo modelar una intrusión
+### Reconocimiento de firmas
+El enfoque por **firmas** asume que una intrusión puede describirse mediante un patrón reconocible. El sistema compara los datos observados con una base de firmas conocidas, normalmente actualizada por el proveedor.
+
+Su principal ventaja es el **bajo número de falsas alarmas**. Sus problemas son que las firmas deben codificarse a mano, que cuesta detectar variantes o ataques nuevos y que un atacante puede intentar imitar o confundir el patrón.
+
+Los apuntes ponen varios ejemplos de señales útiles para un NIDS:
+
+- **origen y destino** de los paquetes; por ejemplo, tráfico desde la **DMZ** hacia la red protegida o desde Internet hacia servidores que no ofrecen servicios directos al exterior, como una base de datos interna;
+- **puertos** origen y destino;
+- combinaciones sospechosas de **flags TCP**, por ejemplo `SYN` y `FIN` a la vez;
+- el **campo de datos**, donde puede aparecer una petición sospechosa como `GET ../../../etc/passwd HTTP/1.0`.
+
+### Detección de anomalías
+La detección por **anomalías** compara la actividad observada con perfiles de comportamiento normal. Esos perfiles pueden construirse para **usuarios**, **grupos**, **aplicaciones** o **recursos** del sistema. Suele apoyarse en análisis estadístico y, en diseños más avanzados, en técnicas de IA como redes neuronales o minería de datos. Requiere fases de **aprendizaje** y conjuntos de entrenamiento amplios.
+
+Su mayor fortaleza es que puede descubrir ataques **desconocidos** o patrones lentos y sofisticados. Su mayor debilidad es el riesgo elevado de **falsas alarmas**, sobre todo cuando cambian los hábitos normales de los usuarios o del sistema.
+
+## 4.3.6 Cómo implantar un IDS
+Los apuntes mencionan el **modo oculto**: una interfaz de red solo para recibir, sin dirección pública visible, y una segunda interfaz de control para enviar alertas o datos al servidor de gestión. La idea es que el IDS observe sin exponerse innecesariamente.
+
+## 4.3.7 SIEM
+Un **SIEM** (*Security Information and Event Management*) reúne información relevante de seguridad procedente de muchos productos hardware y software y la presenta en una consola unificada. Es una pieza habitual en un **SOC** (*Security Operations Center*), es decir, el equipo dedicado a monitorizar la red, detectar incidentes y coordinar su investigación y respuesta.
+
+Los requisitos que aparecen en los apuntes son:
+
+- portabilidad de datos;
+- compatibilidad con distintas fuentes de logs;
+- capacidad de personalización;
+- almacenamiento;
+- control de acceso y segregación;
+- mantenimiento a tiempo completo.
+
+Sus ventajas son la **centralización**, la **automatización**, el seguimiento de eventos para detectar anomalías, la consulta de históricos y la posibilidad de ver vulnerabilidades y explotación asociada. Sus desventajas son el **coste alto**, la **curva de aprendizaje larga** y la posible pérdida o limitación de control sobre la información generada.
+
+# 4.4 Redes privadas virtuales
+
 ## 4.4.1 Introducción
-Una **vpn** es una red que se extiende, mediante un proceso de encapsulación, y habitualmente de cifrado de los paquetes de datos, a diferentes puntos remotos, mediante el uso de **infraestructuras públicas** de transport.
+Una **VPN** es una red que se extiende sobre una infraestructura pública mediante **encapsulación** y, habitualmente, **cifrado**. Los paquetes de la red privada viajan por un **túnel** a través de Internet u otra red pública.
 
-Los paquetes de datos de la red privada viajan por un túnel definido en la red pública.
+Una VPN permite, por ejemplo, que un usuario remoto acceda a la red corporativa como si estuviera dentro de ella, con direcciones, privilegios y políticas equivalentes a los de esa red.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-106.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-107.png)
+Los dos componentes básicos son:
 
-Una VPN pemite al usuario, por ejemplo, acceder a su red coporativa, asignado a su ordenador remoto las direcciones y privilegios de ésta, aunque la conexión la haya realizado mediante un acceso público a Internet.
-
-**Componentes de una VPN:**
-- **Dos terminales**, que pueden ser software o hardware. Estos terminales realizan el cifrado y descifrado y autenticación. También encapsulan la información.
-
-- **Un túnel** conectando los terminales. El túnel es un enlace de comunicación seguro entre los terminales a través de rede como Internet. De hecho, el túnel se crea de forma virtual entre los terminales.
-
-**Ventajas:**
-- Permite disfrutar de una conexión a red con todas las características de la red privada a la que queremos acceder
-- El cliente VPN adquiere totalmente la condición de miembro de esa red, con lo que se le aplican todas las directrices de seguridad y los permisos de un equipo en esa red privada:
-	- Acceso a información publicada para la red privada: bases de datos, documentos internos, etc. a través de un acceso público
-	- Todas las conexiones de acceso a Internet desde el ordenador cliente VPN se llevarán a  a cabo con los recursos y las conexiones que tenga la red privada.
-	- Se reducen los costes económicos en las comunicaciones
-
-**Inconvenientes:**
-- **Cargar en el cliente VPN:** debe realizar la tarea adicional de encapsular los paquetes de datos.
-- Carga aún mayor si se cifran los datos, lo que puede producir una realentización de las conexiones:
-	- La conexión cifrada VPN requiere recursos, tanto al servidor de túnel como al ordenador cliente de VPN, aparte de requerir la instalación de programas especiales al cliente
-- Mayor complejidad en el tráfico de datos, que puede requerir cambios en las configuraciones de aplicaciones o programas.
-- Muchas aplicaciones y muchos programas ya implementan cifrado, y en ese caso, el túnel VPN no aporta seguridad adicional
-- En estos casos el cifrado de los datos se produce en todo su recorrido. En una conexión VPN segura el cifrado únicamente tiene lugar entre el servidor de túnel y el cliente VPN; la conexión entre el servidor de túnel y el servidor de la aplicación se realiza sin cifrado.
-
-## 4.4.2 Ejemplos de Uso
-- **Accesos remotos**, para explotación remota de sistemas o acceso a información corporativa desde internet.
-- **Comunicaciones seguras entre oficinas,** utilización de redes públicas IP para comunicaciones seguras internas
-- **Teletrabajo:** sistemas de teletrabajo seguro
+- **dos terminales** de VPN, software o hardware, que encapsulan, autentican, cifran y descifran;
+- **un túnel** entre ambos a través de la red pública.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-108.png)
 
-## 4.4.3 Tecnología VPN
-**Deben contemplarse las siguientes tareas:**
-- **Encapsulamiento IP:** envolver los paquetes de datos TPC/IP dentro de otro paquete con la dirección IP de un cortafuegos u otro servidor que actúe como terminal VPN
-- **Cifrado:** para proteger el contenido de los datos de los paquetes
-- **Autenticación:** creación de un dominio de autenticación mediante servidores de autenticación o mecanismos de clave pública.
+### Ventajas
+La principal ventaja es que el cliente VPN se comporta como miembro de la red privada. Eso permite acceder a bases de datos, documentos internos y otros recursos corporativos, y además hace que las conexiones del cliente hacia Internet puedan salir usando los recursos y políticas de la red privada. También puede reducir costes de comunicación.
+
+### Inconvenientes
+Las pegas principales son la **carga adicional** sobre el cliente y el servidor, especialmente si se cifra; la mayor complejidad en el tráfico y en la configuración; y el hecho de que muchas aplicaciones ya cifran por sí mismas, así que una VPN no siempre añade seguridad real de extremo a extremo.
+
+En ese último caso, conviene recordar una diferencia importante: si la aplicación cifra extremo a extremo, el cifrado protege todo el recorrido; en una VPN, el cifrado protege sobre todo el tramo entre el **cliente VPN** y el **servidor de túnel**.
+
+## 4.4.2 Ejemplos de uso
+Los escenarios más habituales son:
+
+- **acceso remoto** a sistemas o información corporativa;
+- **comunicaciones seguras entre oficinas** usando redes IP públicas;
+- **teletrabajo**.
+
+## 4.4.3 Tareas tecnológicas básicas
+Toda VPN debe resolver tres tareas:
+
+- **encapsulamiento IP**, envolviendo el tráfico original dentro de otro paquete;
+- **cifrado**, para proteger la información transportada;
+- **autenticación**, mediante servidores de autenticación o mecanismos de clave pública.
 
 ## 4.4.4 IPsec
-**Proporciona los siguientes servicios en la capa de red:**
-- **Control de acceso:** para prevenir accesos no autorizados a los recursos
-- **Integridad:** asegurar que el tráfico recibido no ha sufrido ningún tipo de alteración
-- **Confidencialidad:** asegura que el tráfico en Internet no es examinado por partes no autorizadas. Esto requiere que todos los datagramas IP tengan sus campos de datos
-- **Autenticación:** en particular, autenticación de la fuente de forma que cuando el servidor o destinatario recibe un datagrama IP, con una dirección IP de origen dada, pueda estar seguro de que el datagrama IP fue realmente generado por la máquina con dirección IP la de origen. Esto previene el IP spoofinf
-- **Protección frente a ataques de repetición:** garantizar que cada paquete intercambiado entre dos partes el diferente.
+**IPsec** trabaja en la **capa de red** y proporciona:
 
-**Protocolos de seguridad en la capa de red:**
-- **ESP** (Encapsulating Security Payload): integridad + autenticación + confidencialidad
-- **IKE** (Internet Key Exchange): permite a dos nodos negociar las clave y todos los parámetros necesarios para establecer una conexión ESP
+- **control de acceso**;
+- **integridad**;
+- **confidencialidad**;
+- **autenticación del origen**, evitando suplantación de IP;
+- **protección frente a repetición**, asegurando que cada paquete sea único en la sesión.
 
+Los protocolos mencionados en los apuntes son:
 
-### Modos de Funcionamiento
-IPsec emplea el protocolo ESP para asegurar la autenticación, integridad y confidencialidad de la comunicación. Puede proteger el datagrama IP completo sólo los protocolos de capas superiores:
-- **Modo túnel:** el datagrama IP se encapsula completamente dentro de un nuevo datagrama IP que emplea el protocolo IPsec
-- **Modo transporte:** sólo se maneja la carga del datagrama IP, insertándose la cabecera IPsec entre la cabecera IP y la cabecera del protocolo de capas superiores
+- **ESP**, que protege la carga útil con autenticación, integridad y confidencialidad;
+- **IKE**, que negocia claves y parámetros para que ESP pueda funcionar.
+
+### Modos de funcionamiento
+IPsec puede operar de dos formas:
+
+- **modo transporte**: protege solo la carga útil del datagrama IP, insertando la cabecera de IPsec entre la cabecera IP y los protocolos de capas superiores;
+- **modo túnel**: encapsula el datagrama IP completo dentro de un nuevo paquete IP.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-109.png)
 
-#### Modo Transporte
-- El contenido transportado dentro del datagrama ESP son datos de la capa de transporte. 
-- La cabecera IPSEC se inserta inmediatamente a continuación de la cabecera IP Y antes de los datos de los niveles superiores que se desean proteger
-- El modo transporte tiene la ventaja de que asegura la comunicación extremo a extremo, pero requiere que ambos extremos entiendan el protocolo IPsec
+El **modo transporte** favorece la comunicación extremo a extremo, pero exige que ambos extremos entiendan IPsec. El **modo túnel** se usa mucho cuando el destino final no coincide con el dispositivo que realiza las funciones IPsec, como ocurre en muchas VPN de pasarela.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-110.png)
-
-#### Modo Túnel
-- El contenido del datagrama ESP es un datagrama IP completo, incluida la cabecera IP original.
-- Al datagrama IP se le añade inicialmente una cabecera ESP, y posteriormente se añade una nueva cabecera IP que es la que se utiliza para encaminar los paquetes a través de la red
-- El modo túnel se usa normalmente cuando el destino final de los datos no coincide con el dispositivo que realiza las funciones IPsec.
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-111.png)
-
-### Encapsulación de los Datos (ESP)
-- **Autenticación, integridad y confidencialidad** de los datos en los paquetes IP
-- Cifrado de la carga útil (AES-GCM)
-- La cabecera ESP se genera y añade al paquete tras cifrarlo y calcular su HMAC
-- No protege el paquete de cabecera
+### Encapsulación ESP
+ESP añade autenticación, integridad y confidencialidad a los datos del paquete IP. En los apuntes se resume como cifrado de la carga útil, por ejemplo con **AES-GCM**, junto con un valor de autenticación/integridad. La cabecera IP exterior no queda protegida del mismo modo que la carga útil.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-112.png)
 
-- **SPI**: Identificación de la conexión en este protocolo 
-- **Sequence** Number: Identificador que se incrementa con cada paquete 
-- **Payload** **Data**: Datos cifrados del protocolo IP. 
-- **Padding**: Se usan algoritmos de cifrado bloque, de modo que la longitud de los datos a cifrar tiene que ser un múltiplo del tamaño de bloque. 
-- **Next** **Header** : Tipo de protocolo de datos en el payload data.  
-- **Authentication** **Data**: Contiene el ICV (Integrity Check Value)
+Los campos destacados en la estructura ESP son:
 
-**Formación del datagrama IPSEC:**
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-113.png)
+- **SPI** (*Security Parameter Index*): identifica la conexión o asociación de seguridad;
+- **Sequence Number**: contador que aumenta con cada paquete y ayuda frente a repetición;
+- **Payload Data**: datos protegidos;
+- **Padding**: relleno para ajustarse al tamaño de bloque cuando hace falta;
+- **Next Header**: indica el tipo de protocolo transportado;
+- **Authentication Data**: contiene el valor de verificación de integridad.
 
-### IKE (ISAKMP / Oakley)
-- **Internet Key Exchange:** establece un contexto de seguridad entre dos partes
-	- Internet Security Association and Key Management Protocol
-	- Oakley Key Determination Protocolo
+### IKE
+**IKE** (*Internet Key Exchange*), apoyado históricamente en **ISAKMP** y **Oakley**, establece el contexto de seguridad entre dos nodos. En esencia realiza tres tareas:
 
-- Se realizan tres tareas:
-	- Negociar la política de seguridad: algoritmos y protocolo
-	- Autenticar el intercambio Diffie-Hellman
-	- Intercambio Diffie-Hellman de claves
+1. negociar la política de seguridad, algoritmos y protocolos;
+2. autenticar el intercambio **Diffie-Hellman**;
+3. intercambiar y derivar las claves necesarias.
 
-**Esquema de obtención de clave de sesión:** 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-114.png)
 
-La clave de sesión es imprescindible para el funcionamiento del protocolo ESP.
+La **clave de sesión** resultante es esencial para que **ESP** pueda funcionar.
 
 ### Integración con una PKI
-El uso de una PKI aparece en IPsec como respuesta a la necesidad de un procedimiento para **autenticar de forma fiable** a un conjunto de nodos que desean comunicarse mediante IPsec, siendo dicho conjunto de nodos muy numeroso.
-
-La existencia de una PKI centraliza el alta y baja de los usuarios, además de posibilitar la introducción de tarjetas criptográficas para soportar los certificados, lo cual es muy interesante para la aplicación de IPsec en entornos de teletrabajadores o usuarios móviles.
+Cuando hay muchos nodos que deben autenticarse entre sí, IPsec se beneficia de una **PKI**. Esta centraliza el alta y la baja de usuarios, simplifica la gestión de certificados y permite integrar tarjetas criptográficas, algo especialmente útil en escenarios de teletrabajo o movilidad.
 
 ## 4.4.5 Alternativas a IPsec
-**SSL VPNs:** vpns en la capa de transporte
-- Lo que habitualmente se entiende cuando se habla de VPN
-- Actualmente usan TLS
-- La más utilizada es OpenVPN
+Las alternativas citadas en los apuntes son:
 
-**Secure Shell (SSH):**
-- Se pueden crear túneles entre puertos específicos mediante conexiones SSH para permitir tanto a una conexión local acceder a un recurso remoto, como a una conexión remota acceder a un recurso local.
-
+- **SSL VPNs**: VPNs en la capa de transporte; hoy se apoyan en **TLS**, y el ejemplo más usado es **OpenVPN**.
+- **Túneles SSH**: permiten crear túneles entre puertos específicos para que una conexión local acceda a un recurso remoto o una conexión remota a uno local.
 
 ## 4.4.6 OpenVPN
-- Usa TLS sobre cualquier puerto preconfigurado, y puede usar TCP o UDP
-- Los algoritmos soportados son los típicos de TLS. Para autenticación, soporta certificados, PSKs, y usuario/contraseña.
-- Puede funcionar como VPN en capa de red o capa de transporte.
-- El servidor puede enviar al cliente commandos a ejecutar, lo que implica que un servidor comprometido puede comprometer a todos sus clientes.
-- Tiene una superficie de ataque mayor debido a que el protocolo completo corre como proceso de usuario, y ha presentado vulnerabilidades en el passado.
+**OpenVPN** usa **TLS** sobre un puerto configurable y puede trabajar sobre **TCP** o **UDP**. Soporta certificados, **PSKs** y usuario/contraseña para autenticación, y puede operar tanto a nivel de red como de transporte.
+
+Los apuntes subrayan dos riesgos prácticos:
+
+- el servidor puede enviar al cliente comandos a ejecutar, así que un servidor comprometido puede comprometer también a sus clientes;
+- al ejecutarse como proceso de usuario, su **superficie de ataque** es mayor y ha sufrido vulnerabilidades en el pasado.
 
 ## 4.4.7 VPNs mediante túneles SSH
-- A menudo se usa en hosts intermedios (bastion hosts) para saltar a otros equipos.
-- OpenSSH, por ejemplo, permite emplear el protocolo SSH para crear interfaces para túneles en los equipos. Un túnel SSH crea una interfaz entre los hosts local y remoto, a la que se le puede asociar otras direcciones IP.
-- Son VPNs complejas de implementar:
-	- Requieren de la instalación y configuración del cliente SSH en cada máquina de usuario, así como la reconfiguración de las aplicaciones del cliente que vayan a usar el túnel.
-	- Cada usuario debe tener privilegios de login en un servidor dentro de la organización. Debido a que este servidor típicamente necesita ser accesible desde internet, es susceptible de ataque.
-	- Generalmente, los usuarios necesitan tener conocimientos técnicos sólidos para configurar las aplicaciones por sí mismos, y solucionar los problemas que puedan ocurrir.
-	- Los usuarios habituales de las VPNs basadas en túneles SSH son los admistradores sistemas TI.
+Los túneles **SSH** se usan a menudo en **bastion hosts** o equipos intermedios para saltar a otros sistemas. Herramientas como **OpenSSH** permiten crear interfaces de túnel entre host local y remoto y asociarles direcciones IP.
+
+Sus ventajas prácticas existen, pero también sus costes:
+
+- requieren instalar y configurar el cliente SSH en cada máquina;
+- obligan a reconfigurar las aplicaciones que usarán el túnel;
+- cada usuario necesita permisos de login en un servidor interno accesible desde Internet;
+- suelen exigir conocimientos técnicos relativamente altos.
+
+Por eso, el perfil de usuario más habitual de este tipo de VPN no es el usuario general, sino el **administrador de sistemas TI**.

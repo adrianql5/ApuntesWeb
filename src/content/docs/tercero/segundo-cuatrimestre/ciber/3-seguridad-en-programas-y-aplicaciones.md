@@ -2,288 +2,230 @@
 title: "Seguridad en programas y aplicaciones"
 ---
 
-# 3.1 Programación Segura
-El **CERT** (Computer Emergency Response Team) es el **centro de coordinación de avisos de seguridad a nivel global**.
+# 3.1 Programación segura
 
+El **CERT** (*Computer Emergency Response Team*) actúa como centro de coordinación de avisos de seguridad a nivel global. En la práctica, junto con otros **CSIRT**, pone de relieve una idea importante: buena parte de los riesgos actuales vienen de **aplicaciones** y **servicios en Internet**, y muchos de esos problemas **no se arreglan con criptografía**.
+
+La seguridad no es algo que se añada al final del desarrollo. Depende del **entorno real** donde se ejecutará el software, de la **política de seguridad** definida y de las decisiones tomadas desde el diseño. Los atacantes no “crean” por arte de magia los agujeros: normalmente **explotan fallos que ya existen**.
 
 ## 3.1.1 Introducción
-- La mayor parte de los **riesgos** de seguridad hoy en día vienen de **aplicaciones** y servicios en **Internet**. 
-- Muchos de los **avisos de seguridad** de los CERT/CSIRT **no se pueden arreglar** con **criptografía**. 
-- Los **atacantes** **no crean los agujeros de seguridad, simplemente los explotan.** 
-- La **seguridad** de un programa o aplicación **no es una característica que se añade** en algún momento del ciclo de desarrollo. 
-- La **seguridad no es independiente del entorno** concreto en el que se ejecutará el programa. 
-- Es importante definir correctamente la **política de seguridad**
+Es habitual que las aplicaciones salgan al mercado con errores que se corrigen después, a medida que los atacantes los van encontrando. Eso tiene varias consecuencias: los **parches** solo solucionan los fallos ya detectados, muchos administradores **tardan meses en aplicarlos** o no los aplican nunca, y económicamente suele ser más rentable **detectar y eliminar** esos problemas **antes** del lanzamiento.
 
-
-Es común que las **aplicaciones** se lancen con **fallos** que luego deben ser **corregidos** a medida que los **atacantes los van detectando**. 
-- Los parches **sólo solucionan** los problemas que **encuentran los atacantes**. 
-- Muchos parches **no son aplicados** por los administradores de los equipos **hasta pasados varios meses**, o no llegan a ser aplicados nunca. 
-- Económicamente sería **más rentable detectarlos y eliminarlos antes** del lanzamiento comercial del programa. 
-
-1. Una vez que se **descubre y publica un problema** de seguridad en un sistema los **ataques aumentan** hasta la publicación del parche correspondiente. 
-2. **Después del lanzamiento del parche** los ataques continúan **aumentando** porque los administradores y usuarios **tardan en actualizar los programas.** 
-3. El **decrecimiento** en los ataques se puede retrasar incluso **más de un año** desde el **lanzamiento del parche**.
+El patrón típico es conocido: cuando una vulnerabilidad se **descubre** y se **publica**, los ataques aumentan; cuando sale el **parche**, los ataques pueden seguir creciendo porque muchos sistemas siguen sin actualizarse; y el descenso real puede retrasarse incluso **más de un año**.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-52.png)
 
-### Metas de un Proyecto Software
-- **Funcionalidad** → objetivo principal. 
-- **Usabilidad** → facilidad de uso. 
-	- Puede afectar a la **fiabilidad**, pues es habitual que **fallos humanos** conduzcan a fallos software. 
-	- En competencia con el aumento de la **seguridad**. 
-- **Eficiencia** → también puede estar en **competencia** con la **seguridad** por la sobrecarga de los sistemas. 
-- **Time-to-market** → tiempo de diseño y prueba para poner el producto en el mercado. 
-	- Influye negativamente en la **seguridad**, por las prisas.
+### Metas de un proyecto software
+Todo proyecto software intenta equilibrar varios objetivos, y la seguridad compite con algunos de ellos:
 
-- Un **test de funcionalidad** trata de verificar que la aplicación funcione correctamente en situaciones normales o esperadas. 
-- Un **test de seguridad** trata de verificar que la aplicación funcione según lo esperado en situaciones anormales (entradas de texto demasiado largas, entradas numéricas erróneas, intentos de conexión con parámetros incorrectos, etc.)
+| Meta | Idea principal | Relación con la seguridad |
+| --- | --- | --- |
+| Funcionalidad | Que el programa haga lo que debe hacer | Suele verse como el objetivo principal |
+| Usabilidad | Que sea fácil de usar | Una mala interacción favorece errores humanos; además, puede chocar con medidas de seguridad |
+| Eficiencia | Que consuma poco tiempo y pocos recursos | Algunas defensas añaden sobrecarga |
+| *Time-to-market* | Llegar rápido al mercado | Las prisas suelen perjudicar a la seguridad |
 
-## 3.1.2 10 Reglas Básicas
-### 1. Asegurar los puntos más débiles
-La seguridad es como una **cadena**, es **tan fuerte como su eslabón más débil**, por tanto, al atacar un sistema se trata de hacerlo por el **punto más débil.** 
-- Ataque a la información enviada de A a B en modo cifrado → mejor atacar A o B. 
-- Ataque a un cortafuegos → mejor atacar las aplicaciones visibles desde fuera. 
+También conviene separar dos tipos de prueba. Un **test de funcionalidad** verifica el comportamiento esperado en situaciones normales. Un **test de seguridad** comprueba que la aplicación siga comportándose correctamente en situaciones anómalas: entradas demasiado largas, parámetros erróneos, intentos de conexión inválidos o uso malicioso deliberado.
 
-A veces el punto más débil no está en el software si no en el **entorno** (ataques de ingeniería social). 
+## 3.1.2 Principios básicos
+La programación segura suele resumirse en diez reglas prácticas:
 
+1. **Asegurar los puntos más débiles.** Un sistema es tan fuerte como su eslabón más débil. Si una comunicación va cifrada entre A y B, puede ser más eficaz atacar A o B; si existe un cortafuegos, quizá sea mejor atacar la aplicación expuesta. A veces el punto más débil ni siquiera está en el software, sino en el entorno o en la **ingeniería social**.
+2. **Practicar la defensa en profundidad.** Hay que superponer capas para que el fallo de una no suponga la caída total del sistema. En una base de datos, por ejemplo, pueden coexistir cortafuegos corporativo, cifrado de comunicaciones internas, cortafuegos local, protección física y cifrado de los propios datos.
+3. **Fallar de forma segura.** Los fallos son inevitables; lo importante es que, si una acción falla, el sistema quede **tan seguro como antes** de iniciarla. De hecho, forzar fallos es una técnica clásica de ataque.
+4. **Aplicar privilegios mínimos.** Cada componente debería tener solo los permisos imprescindibles y durante el menor tiempo posible. El caso típico es un servicio que necesita privilegios elevados para una operación inicial y que después debería **soltarlos**. Muchos productos comerciales no lo hacen por comodidad. El ejemplo clásico es un servidor de correo en UNIX: puede necesitar privilegios para abrir el puerto 25, pero no para conservarlos durante toda su ejecución; sin embargo, programas como `sendmail` los mantuvieron históricamente más tiempo del necesario.
+5. **Compartimentalizar.** Conviene separar subsistemas según sus privilegios y según la parte del sistema con la que necesitan interactuar. Cuanto más aisladas estén las piezas críticas, más difícil será una escalada lateral.
+6. **Apostar por lo simple.** El software complejo se entiende peor y, por tanto, falla más. Esto favorece la reutilización de componentes de calidad, el uso de puntos de control claros para operaciones peligrosas, opciones seguras por defecto y un diseño que no dependa de diálogos que el usuario nunca leerá.
+7. **Favorecer la privacidad.** La aplicación debe proteger los datos que le entrega el usuario. Además, exponer información innecesaria del propio programa, como su versión exacta, puede facilitar ataques.
+8. **Recordar que mantener secretos es difícil.** Ocultar el diseño o la implementación rara vez funciona, sobre todo si el atacante puede estudiar el binario o la comunicación interna. La seguridad no debería depender de esa oscuridad, salvo en secretos reales como contraseñas o claves.
+9. **Ser cauto con la confianza.** Un servidor no debe confiar ciegamente en el cliente ni el cliente en el servidor. Tampoco conviene asumir que terceros siguen buenas prácticas o que cualquier “producto de seguridad” es benigno. La confianza es transitiva y hay que tratarla como tal.
+10. **Aprovechar los recursos de la comunidad.** Los componentes ampliamente usados, revisados durante años y analizados públicamente suelen ofrecer más confianza que las soluciones ad hoc poco examinadas.
 
-### 2. Practicar la defensa en profundidad. 
-Tener **varias capas de defensa** de modo que **si falla una**, **otra pueda detener** aún al atacante. Protección de los datos de una bd: 
-- Cortafuegos corporativo. 
-- Cifrado de las comunicaciones internas. 
-- Cortafuegos en el servidor de bd. 
-- Protección física en el servidor de bd. 
-- Cifrado de los datos en la propia bd. 
+# 3.2 Vulnerabilidades en el desarrollo de aplicaciones
 
-### 3. Fallar de forma segura. 
-Los **fallos** son **inevitables** así que hay que procurar **gestionarlos de un modo seguro**. 
-
-Una de las formas de **atacar** un sistema es **provocar un fallo en el mismo** para ver si no es gestionado de modo seguro. 
-
-Si una acción **falla**, el sistema debería s**er tan seguro como cuando se inició la acción**. 
-
-### 4. Privilegios mínimos. 
-Proporcionar solamente el **nivel de privilegios necesarios** y para el **menor intervalo de tiempo** posible. 
-
-Este principio no se cumple en muchos productos distribuidos comercialmente pues demandan un nivel de privilegios excesivos para evitar problemas futuros. 
-
-Un servidor de correo en Unix necesita permisos de administrador para abrir el puerto 25. Después no hay razones técnicas para seguir manteniendo este privilegio así que se le podría quitar. Sin embargo, muchos programas (como sendmail) no lo hacían y continuaban todo el tiempo en modo administrador.
-
-### 5. Compartimentalizar.
-**Separar** distintos **subsistemas según los privilegios** necesarios y la **parte del sistema** con la que deben/pueden interaccionar.
-
-
-### 6. Apostar por lo simple. 
-El s**oftware complejo se entiende peor** y por lo tanto es **más propenso a errores**. 
-- **Reutilización de componentes de buena calidad** (p. e. las librerías criptográficas).
-- Importancia de los **puntos de control** a través de los cuales g**estionar todas las operaciones peligrosas** → no debe haber caminos ocultos (backdoor) alternativos. 
-- **Opciones seguras por defecto**. 
-- **Diálogo** con los **usuarios** potenciales para **determinar** sus **necesidades**. 
-- Los usuarios no son expertos así que **cuidado con las ventanas de diálogo** (seguramente no leerán el texto). 
-
-### 7. Favorecer la privacidad. 
-- El programa debe **proteger** en la medida de lo posible los **datos facilitados por el usuario**. 
-- Mantener la **privacidad del propio programa** también favorece la **seguridad**. No proporcionar públicamente si no es necesario información como la versión del software. 
-
-### 8. Recordar que mantener secretos es difícil. 
-Mantener **secretos** en el **código binario** no es fácil, sobre todo si los **atacantes** pueden **disponer de ese código en su máquina** para jugar con él. Las **comunicaciones** internas tampoco son completamente fiables (empleados corruptos, descontentos, etc.). 
-
-La **seguridad no debería depender de ocultar el diseño o la implementación** (seguridad por oscuridad). No se aplica a información como contraseñas o claves criptográficas. 
-
-### 9. Ser cauto con la confianza. 
-- Los **servidores** no deben **confiar ciegamente** en los clientes y **viceversa** pues ambos pueden estar comprometidos. 
-- No fiarse de las **prácticas de los demás** pues pueden no ser correctas. 
-- No fiarse totalmente de los **productos específicos de seguridad**, pues pueden ser programas para violar la seguridad. 
-- La seguridad es transitiva, **no comunicar libremente programas** fiables con programas de dudosa fiabilidad. 
-
-### 10. Emplear los recursos de la comunidad. 
-Los programas y componentes que llevan siendo **utilizados mucho tiempo sin noticias** **de fallos de seguridad** ofrecen un nivel de confianza alto. 
-
-Las aplicaciones **revisadas** por mucha gente o de modo **público** también tienen un valor de seguridad y fiabilidad añadido (es el caso de las librerías de cifrado).
-
-
-# 3.2 Vulnerabilidades en el Desarrollo de Apps
-**Vulnerabilidad Software:** **fallo** en las **políticas** de seguridad, **procedimientos y controles** de un software que permiten a un sujeto **violar dichas políticas**.
-- Al **sujeto** se le denomina **atacante**
-- Al **uso del fallo** para violar la política de seguridad se le denomina **explotación de vulnerabilidad**
+Una **vulnerabilidad software** es un fallo en las **políticas**, **procedimientos** o **controles** de un programa que permite a alguien violar su política de seguridad. A quien aprovecha ese fallo se le llama **atacante**, y al proceso de aprovecharlo se le llama **explotación**. Un **exploit** es el programa o técnica concreta que materializa ese aprovechamiento.
 
 ## 3.2.1 TOCTOU
-- **TOCTOU** (Time Of Check, Time Of Use): vulnerabilidad relacionada con la sincronización en el control de acceso, cuando hay operaciones secuenciales en el proceso
+**TOCTOU** (*Time Of Check, Time Of Use*) es una vulnerabilidad de sincronización en la que una decisión de acceso se toma en un instante y el uso real del recurso ocurre un poco después. Ese hueco es la **ventana de vulnerabilidad**: durante ese tiempo, un atacante puede cambiar la situación y provocar un acceso incorrecto.
 
-- **Ventana de vulnerabilidad:** tiempo **entre** la **comprobación** y el **acceso**, durante el cual se podría modificar la condición y realizar un acceso incorrecto
+En accesos a ficheros suelen darse tres condiciones para que el ataque sea viable: el atacante tiene acceso a la **máquina local**, el programa vulnerable se ejecuta con **privilegios elevados** como `setuid` o `setgid`, y esos privilegios se mantienen durante la ventana de vulnerabilidad.
 
+Las medidas típicas son conocidas. Si es posible, conviene trabajar con **descriptores o punteros de fichero** en lugar de con **nombres**, porque así el objeto abierto ya no cambia por el camino. Si no es posible, el fichero debería residir en un directorio accesible solo para el **UID del programa**. Y, en general, **no** debería usarse `setuid` o `setgid` salvo que sea estrictamente necesario.
 
-En los casos de acceso a ficheros, deben darse varias **circuntancias** para poder explotar la vulnerabilidad:
-- El **atacante** debe tener **acceso** a la **máquina local**
-- El **programa explotado** necesita estar ejecutándose con **privilegios de root** (bit seuid o setgid activo).
-- Estos **privilegios** deben **mantenerse** durante la ventana de vulnerabilidad
+### Ejemplo: `xterm`
+`xterm` actuaba como emulador de terminal para X11 y, en ciertos sistemas UNIX, necesitaba ejecutarse con privilegios elevados. Su mecanismo de registro permitía al usuario guardar entradas y salidas en un fichero: si el fichero no existía, `xterm` lo creaba; si ya existía, comprobaba que el usuario pudiera escribir en él y luego añadía el registro.
 
-Las posibles **soluciones son:**
-- Si es posible, es mejor usar **identificadores de fichero o punteros a fichero** en lugar de los nombres de los ficheros **como argumentos** en las funciones para asegurarnos de que el **fichero** sobre el que trabajamos **no cambia** después de que empecemos a manejarlo.
-- Cuando no es posible, mantener los ficheros en un **directorio** que **sólo** sea **accesible** por e **UID del programa** que ejecuta las operaciones sobre el fichero
-- Es muy importante **no usar setuid o setgid** a no ser que sea estrictamente necesario.
-
-### Ejemplo: xterm
-`xterm` emula un terminal en un sistema de ventanas X11, debía ccrer como usaurio root en **UNIX**, con setuid y setgid activos. Su utilidad de registro permitía al usuario **registrar** las **entras y salidas** en un **fichero**, de manera que si este no existe, `xterm` lo crea y hace propietario al usuario, y si sí existe, `xterm`comprueba que el usuario puede escribir en él y añade el registro.
-- Dado que **root** puede añadir datos a cualquier archivo, la **comprobación siempre tiene éxito**
+El problema es que **root puede escribir en cualquier fichero**, así que la comprobación tendía a salir bien. Entre `access` y `open` quedaba una ventana en la que un atacante podía sustituir el nombre por un **enlace simbólico** hacia un fichero sensible y lograr que el programa lo abriera con privilegios.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-53.png)
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-54.png)
 
-Hay una **ventana de vulnerabilidad** entre la llamada a `access` y a `open`, que un atacante puede aprovechar para **reemplazar** un **fichero** en el que tiene permisos de escritura por uno que sea **propiedad de root, sobreescribiendo este último**. 
-- Esto se haría haciendo que el programa abriese un enlace simbólico a un fichero y reemplazándolo durante la ventana de vulnerabilidad por un enlace con el **mismo nombre** a un archivo de **root**. 
+Para elevar la probabilidad de éxito, el atacante puede automatizar el reemplazo del enlace hasta acertar con la ventana vulnerable.
 
-Para aumentar las posibilidades de éxito puede crear un programa que **repita** el proceso **automáticamente** hasta que coincida con la ventana de vulnerabilidad
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-55.png)
+## 3.2.2 Desbordamiento de memoria
+Un **buffer** es una zona de memoria de tamaño prefijado destinada a almacenar datos del mismo tipo. Hay **desbordamiento** cuando un programa intenta escribir más datos de los que caben. Lo que sobra pisa memoria adyacente, corrompe datos válidos y puede incluso alterar el **flujo de ejecución**.
 
-## 3.2.2 Desbordamiento de Memoria
-- **Buffer:** zona de memoria de **tamaño predefinido** reservada para alojar un conjunto de datos del mismo tipo
-- **Desbordamiento de memoria:** se produce cuando un programa intenta **almacenar más** datos en el buffer de los que **permite su tamaño**. Los datos extra **sobrescriben** la **zona de memoria adyacente** al buffer, **corrompiendo datos** válidos y posiblemente **modificando el flujo de ejecución** del programa.
+Hay ataques **remotos**, cuando la entrada llega desde la red, y ataques **locales**, cuando un usuario con acceso al equipo intenta escalar privilegios explotando una aplicación que corre con otro usuario, por ejemplo **root**.
 
-Tipos de ataques:
-- **Remotos:** toda aplicación que espere datos de una conexión red o que lea datos que provienen de la red es susceptible de ser atacada si tiene esta vulnerabilidad.
-- **Locales:** se produce cuando un usuario tiene acceso a una máquina, pero quiere obtener más mismos atacando una aplicación que corre bajo otro usuario, por ejemplo **root**
-
-Los **efectos del desbordamiento** de memoria dependen de 4 factores:
-- La **cantidad de información** escrita fuera de los límites.
-- **Que datos son sobrescritos**
-- Si el programa intenta **leer** alguno de los **datos sobrescritos**
-- Qué datos **reemplazan** a los datos **sobrescritos**.
-
+El impacto real depende de cuatro factores: cuánta información se escribe fuera de límites, **qué datos** se sobrescriben, si el programa vuelve a **leer** esos datos y **con qué valores** han sido sustituidos.
 
 ### Por qué es un problema de seguridad
-- **Stack-smashing:** el atacante coloca su código en una zona de memoria cualquiera de la pila y provoca desbordamiento de esta con instrucciones de salto hacia esa zona.
-	- Conseguir un **desbordamiento** de **heap** es más **difícil**, por lo que muchos programadores **evitan** los **buffers estáticos** y recurren a las funciones de **reserva dinámica**. Esto **no es infalible**, por lo que no se debe confiar únicamente en esta solución.
-- Los **programas** que tiene el **setuid activado** que son ejecutados por un **usuario normal** asumiendo los **permisos de superusuario** pueden ser **necesarios** para acceder a determinados dispositivos o archivos restringidos, pero también son una **brecha de seguridad**.
-- Los **servicios de red** pueden ser atacados por un **usuario remoto** para **acceder a la máquina** local como usuario normal o incluso como **root**. 
+La variante clásica es el **stack-smashing**: el atacante introduce código propio en la pila y fuerza un salto a esa zona modificando la **dirección de retorno**. Desbordar el **heap** suele ser más difícil, por eso muchos desarrolladores se sienten más cómodos con reserva dinámica, pero eso no elimina el problema.
 
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-56.png)
-
-
-### Contramedidas
-Por el **desarrollador:**
-- Se deben **verificar** los **límites** de los buffers, usando **funciones** como `strncpy` y tratando con **cuidado** los **bucles** con `getc` y similares.
-- Se pueden usar lenguajes de programación con comprobación de límites (Java, C#, etc. )
-
-Por el **compilador:**
-- Existen **compiladores** de C que implementan la **comprobación de límites**. Aunque pueden consumir **mucho timepo** en programas con uso de **punteros grandes**.
-- Usar utilidades como **stackguard**, que implementan un método de comprobación de límites más eficientes.
-- Las últimas versiones de **gcc comprueban modificaciones** de la **pila** y avisan de ataques de stack-smashing. Aunque existen ataques por desbordamiento de buffer en el **montón que no pueden detectarse** de esta manera.
-
-Por el **sistema operativo:**
-- La solución sencilla es **prohibir la ejecución de código en la pila**. Pero puede perderse algo en **eficiencia** y se pueden seguir produciendo **desbordamientos en el montón**
-- **Aleatorización de la distribución del espacio de memoria** (Addres Space Layout Randomization, ASLR), que aleatoriza las direcciones de memoria de forma que la dirección de la pila de ejecución no sea siempre la misma , dificultando el ataque. Esto no evita **ataques por prueba y error**, que pueden encontrar valores razonables que funcionan en bastantes casos.
-
-Por un **analizador de red:**
-- **Inspección profunda de paquetes** (Deep Packet Inspection, DPI), que examina los paquetes de la red para identificar un posible ataque buscando shellcode, una lista larga de NOPs, etc. Aunque existen **shellcodes** que se **automodifican y transforman**, ignorando esta protección.
-
-
-### Resumen
-- La **base de datos de vulnerabilidades del CERT** contiene numerosas entradas relativas a aplicaciones con esta vunerabilidad.
-- Constantemente se detectan **nuevas aplicaciones** con este problema.
-- Es una vulnerabilidad **muy fácilmente explotable**.
-- **No** existe una **solución** que proteja a **todos** los programas.
-
-
-### Descripción Ténica
-El código más habitual para ser ejecutado es el que abre una shell, ya que desde ella se puede ejecutar lo que se desee. Es posible ejecutar otro tipo de código, pero en general se le **shellcode** a **cualquier código** pensado para ser ejecutado en un **programa vulnerable** y **tomar control** de este.
-
-Un **exploit** es un programa que permite **aprovechar** una o más **vulnerabilidades** de otro programa para **obtener determinados privilegios**.
+Si el programa vulnerable corre con `setuid`, el fallo puede convertirse en una vía de **escalada de privilegios**. Y si el servicio está expuesto a la red, el ataque puede llegar a ser **remoto**.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-57.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-59.png)![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-60.png)
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-61.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-62.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-63.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-64.png)
+En este contexto aparecen dos términos frecuentes:
 
+- **Shellcode**: código pensado para ejecutarse dentro del programa vulnerable y tomar su control. El ejemplo clásico abre una **shell** mediante `execve("/bin/sh", ...)`.
+- **Exploit**: programa o secuencia de entrada que aprovecha una o varias vulnerabilidades para ejecutar ese código o alterar el flujo del programa.
 
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-65.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-66.png)
-
-
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-67.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-68.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-69.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-70.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-71.png)
-
-
+Un exploit de pila suele combinar varias piezas: relleno para alcanzar la zona sensible, a veces una **NOP sled** para no tener que acertar una dirección exacta, el **shellcode** y una o varias **direcciones de retorno** que redirigen la ejecución.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-72.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-73.png)
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-74.png)
 
+### Contramedidas
+No existe una defensa única. Lo razonable es acumular barreras en varias capas:
 
+| Capa | Medidas habituales | Limitaciones |
+| --- | --- | --- |
+| Desarrollador | Comprobar límites, usar funciones como `strncpy`, revisar con cuidado bucles con `getc` y similares, o usar lenguajes con comprobación de límites como Java o C# | Requiere disciplina y no corrige errores ya escritos |
+| Compilador | Compiladores con comprobación de límites, `StackGuard`, protecciones de pila y avisos de **gcc** frente a modificaciones sospechosas | Puede penalizar rendimiento y no cubre todos los desbordamientos, especialmente en heap |
+| Sistema operativo | Pila no ejecutable, ASLR | Se puede intentar rodear mediante prueba y error u otras técnicas |
+| Red | DPI para detectar *shellcodes*, secuencias largas de NOPs u otros patrones | El malware puede ofuscarse o automodificarse |
 
-# 3.3 Vulnerabilidades Web
-## 3.1.1 Ataques centrados en la Web y la Sesión de Usuario
-### Man in the Browser
-Un malware se mete en el navegador y **intercepta o modifica** lo que el usuario escribe o envía, incluso aunque luego viaje cifrado.
+La experiencia práctica es clara: la base del **CERT** contiene muchas vulnerabilidades de este tipo, siguen apareciendo constantemente, suelen ser **fáciles de explotar** cuando existen y **no** hay una solución universal que proteja cualquier programa vulnerable.
+
+# 3.3 Vulnerabilidades web
+
+## 3.3.1 Ataques centrados en la web y en la sesión del usuario
+**Man in the Browser** introduce malware en el navegador para **interceptar o modificar** lo que el usuario escribe o envía, incluso si luego la comunicación viaja cifrada.
+
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-75.png)
 
+**Registro de pulsaciones** o **keylogging** consiste en capturar todo lo que el usuario teclea para robar credenciales u otra información. Puede hacerse con malware o incluso con hardware, y no se limita al navegador.
 
-### Registro de Pulsaciones de Teclado
-Hardware o malware que **graba todas las teclas** que pulsa el usuario para robar credenciales u otra información. No está limitado a los navegadores.
+**Page in the Middle** redirige al usuario a una página distinta de la que cree visitar para capturar o manipular su entrada.
 
+**Browser in the Browser** simula dentro de la propia web una ventana de inicio de sesión aparentemente legítima para engañar al usuario.
 
-### Page in the Middle
-El usuario es redirigido a una **página distinta de la que cree visitar**, y ahí el atacante puede capturar o alterar su entrada.
-
-### Browser in the Browser
-Se simula una **ventana de inicio de sesión aparentemente real** dentro de la propia página para engañar al usuario y robar sus datos.
-
-### Clickjackin
-se engaña al usuario para que haga clic en algo que **parece inofensivo**, pero en realidad activa otra acción oculta. Ejemplo real: secuestro del “click” para activar la cámara y el micrófono del usuario.
+**Clickjacking** oculta la acción real asociada a un clic. El usuario cree pulsar algo inocente, pero en realidad activa otra operación, como conceder acceso a cámara o micrófono.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-76.png)
 
-## 3.3.2 Engaño al Usuario
-### Phising
-Mensaje o comunicación que **engaña a la víctima** para que entregue datos privados o realice una acción insegura.
+## 3.3.2 Engaño al usuario
+**Phishing** es cualquier mensaje o comunicación que engaña a la víctima para que entregue datos privados o haga algo inseguro.
 
-### Sitio web falso
-Página que **imita a una legítima** para que el usuario confíe en ella y entregue credenciales o información sensible.
+Un **sitio web falso** imita a uno legítimo para ganarse la confianza del usuario y robar credenciales o datos sensibles.
 
-### Sustitución en la descarga de programas
-El atacante ofrece un programa aparentemente normal, pero al descargarlo o instalarlo el usuario **acaba metiendo malware o spyware**.
+La **sustitución en la descarga de programas** ofrece software aparentemente normal que, al descargarse o instalarse, introduce malware o spyware.
 
-### Herramientas falsas
-Software que se presenta como útil o de seguridad, pero en realidad **engaña al usuario** y puede instalar malware, mostrar falsos avisos o forzar acciones.
+Las **herramientas falsas** se presentan como utilidades útiles o incluso como soluciones de seguridad, pero en realidad manipulan al usuario, muestran alertas falsas o instalan malware.
+
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-77.png)
 
-### User in the middle
-Se usa al propio usuario como intermediario, por ejemplo **haciéndole resolver un CAPTCHA** o realizar una acción que en realidad beneficia al atacante (por ejemplo, para solicitar la creación de nuevas cuentas de correo).
-
+**User in the Middle** convierte al propio usuario en intermediario involuntario. Un ejemplo típico es hacerle resolver un **CAPTCHA** o completar una acción que en realidad beneficia al atacante, como la creación masiva de cuentas.
 
 ## 3.3.3 Mediación incompleta
-Ocurre cuando el servidor **confía demasiado en datos que vienen del cliente** y no los vuelve a comprobar correctamente. El atacante cambia valores de la URL o del formulario, por ejemplo **precio, cantidad o identificadores**, para alterar el resultado.
+La **mediación incompleta** aparece cuando el servidor confía demasiado en datos que llegan del cliente y no los vuelve a validar. Entonces basta alterar parámetros de la URL o del formulario, como **precio**, **cantidad** o **identificadores**, para cambiar el resultado.
 
-**No se debe confiar en el navegador ni en la entrada del usuario**, porque puede ser modificada antes de llegar al servidor.
+La regla aquí es simple: **no se debe confiar en el navegador ni en la entrada del usuario**, porque ambos pueden ser manipulados antes de llegar al servidor.
 
+## 3.3.4 Ataques de inyección
+Un ataque de **inyección** introduce datos maliciosos para que la aplicación ejecute o interprete algo distinto de lo esperado.
 
-## 3.3.4 Ataques de Inyección
-Consiste en introducir datos maliciosos para que la aplicación **ejecute algo distinto de lo esperado**.
+Los casos más conocidos son:
 
-### Cross-site scripting (XSS)
-Se inyecta código de script o HTML para que **el navegador ejecute contenido malicioso** dentro de una web.
+- **XSS** (*Cross-Site Scripting*): se inyecta script o HTML para que el navegador ejecute contenido malicioso dentro de una web.
+- **Path traversal**: se manipulan rutas como `../` para acceder a ficheros del servidor que no deberían exponerse.
+- **Inyección SQL**: se introducen fragmentos SQL para alterar las consultas a la base de datos.
 
-### Path traversal
-Se manipulan rutas como `../` para **acceder a archivos del servidor** que no deberían estar expuestos. Habitualmente se introducen las direcciones en la barra de URLs, pero puede combinarse con otros ataques, como el XSS.
-
-### Inyección SQL
-Se introducen fragmentos SQL en entradas de usuario para **alterar consultas a la base de datos**.
-
-### Contramedidas
-- Filtrar y sanear todas las entradas del usuario: Necesario tener en cuenta toda posible codificación potencialmente válida
-- No hacer suposiciones sobre el rango de entradas de usuario posibles: no confiar en nada, comprobarlo todo.
-- Utilizar mecanismos de control en los servidores de datos, como por ejemplo “procedimientos almacenados”
+Las contramedidas básicas son siempre las mismas: **filtrar y sanear** toda la entrada, teniendo en cuenta cualquier codificación válida; **no hacer suposiciones** sobre lo que enviará el usuario; y apoyarse en controles del lado servidor, como **procedimientos almacenados** o mecanismos equivalentes.
 
 ## 3.3.5 OWASP
-Es una comunidad y proyecto abierto centrado en **mejorar la seguridad de las aplicaciones web** y ayudar a desarrollar, comprar y mantener aplicaciones de confianza.
+**OWASP** es una comunidad y proyecto abierto orientado a mejorar la seguridad de las aplicaciones web y a ayudar a desarrollar, comprar y mantener aplicaciones de confianza.
 
-![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-78.png)
+Uno de sus recursos más conocidos es el **OWASP Top 10**, una lista de riesgos que se actualiza con el tiempo. Ya en la transición de **2013** a **2017** cambiaron varias categorías, por ejemplo con la aparición de **XXE** y de **Insecure Deserialization** y con el peso creciente del **Broken Access Control**. La imagen usada en los apuntes muestra además la transición de **2017** a **2021**, donde aparecen categorías como **Broken Access Control**, **Cryptographic Failures**, **Injection**, **Insecure Design**, **Security Misconfiguration**, **Vulnerable and Outdated Components**, **Identification and Authentication Failures**, **Software and Data Integrity Failures**, **Security Logging and Monitoring Failures** y **SSRF**.
+
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-79.png)
+
+# 3.4 Código malicioso
+
+El **código malicioso** o **malware** es software que se ejecuta sin el conocimiento o autorización del propietario del equipo y realiza acciones perjudiciales para el usuario o para el sistema. A menudo se apoya en **operaciones legales**: un usuario autorizado podría realizarlas sin violar la política de seguridad, y el malware simplemente **imita** a ese usuario.
+
+## 3.4.1 Tipos de malware
+Los tipos más habituales son:
+
+| Tipo | Qué hace | Rasgo característico |
+| --- | --- | --- |
+| Virus | Se replica asociado a un programa huésped e infecta otras copias | Suele activarse al ejecutar el código infectado y busca pasar desapercibido |
+| Troyano | Parece inofensivo, pero ejecuta acciones maliciosas | Combina una función visible con otra encubierta |
+| Rootkit | Intercepta funciones del sistema para ocultarse a sí mismo o a otro malware | Puede ocultar procesos, ficheros, claves del registro o tráfico |
+| Gusano | Se replica por una red sin requerir ayuda directa del usuario | Puede degradar el rendimiento y propagarse por correo o protocolos estándar |
+| Spyware | Recopila información del equipo y del usuario | Puede esconderse, cambiar el navegador o instalar barras de herramientas |
+| Rogueware | Finge ser un antivirus o una herramienta útil | Muestra falsas infecciones e intenta cobrar o forzar instalaciones |
+| Ransomware | Bloquea el equipo o cifra archivos para exigir un rescate | Su objetivo es el secuestro o la extorsión |
+| Keylogger | Registra las pulsaciones del teclado | Puede ser software oculto o incluso hardware conectado al equipo |
+
+Conviene matizar algunos casos. En un **troyano** hay una acción visible y otra encubierta; en un **rootkit** son frecuentes las **puertas traseras**, que abren conexiones externas y escuchan en puertos concretos, y un ejemplo clásico es un `ps` troyanizado que oculta un proceso; un **gusano** suele componerse de un localizador de objetivos, un propagador, un mecanismo de control remoto, una interfaz de actualización, una rutina de *payload* y algún sistema de autorastreo. Los **gusanos de correo** son especialmente comunes.
+
+Además de los tipos anteriores, también se citan:
+
+- **Adware**: realiza acciones publicitarias ocultas, como falsos clics, para dar beneficio al atacante.
+- **Hoaxes**: mensajes falsos sobre virus, amenazas o causas solidarias que buscan difusión masiva.
+- **Exploits**: código diseñado para ejecutar acciones en otros sistemas, locales o remotos, aprovechando vulnerabilidades.
+
+## 3.4.2 Objetivos del malware
+Hoy en día, en un porcentaje muy alto de casos, la infección está ligada directa o indirectamente a un **móvil económico**.
+
+El primer objetivo clásico es el **robo de información**: usuarios y contraseñas, historial de navegación, cookies, libretas de direcciones y también propiedad intelectual o industrial.
+
+El segundo es el **secuestro**. Aquí entran el ransomware que bloquea el equipo y el que cifra sus ficheros; en ambos casos la condición para recuperar el uso del dispositivo o de los datos es **pagar**.
+
+El tercero es el **reclutamiento para botnets**. Una **red de bots** o **zombies** es un conjunto de equipos infectados por un malware concreto y controlados desde un centro de **Comando y Control**. Un zombie aislado aporta poco; miles de ellos sirven para atacar otros equipos, enviar correo masivo, romper contraseñas, minar criptomonedas o robarlas. Cuantos más equipos infectados, mayor valor económico tiene la red, incluso como servicio alquilado a terceros.
+
+## 3.4.3 Transmisión, propagación y activación
+El malware puede llegar al sistema por muchas vías: programas de instalación, adjuntos, enlaces de descarga, fallos del navegador u otro software instalado, cracks o generadores de claves, dispositivos **USB** infectados, programas “gratuitos” descargados de sitios poco fiables y aplicaciones falsas que hacen más de lo que prometen.
+
+Un truco de ingeniería social muy común es la **doble extensión** y la manipulación del icono del fichero, especialmente en Windows, para hacer pasar un ejecutable por un documento inocente.
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/ciber/imagenes/image-125.png)
+
+Una vez presente en el sistema, el malware puede activarse de distintas formas: **ejecución única**, infección del **sector de arranque**, residencia en **memoria**, infección de **ficheros de aplicación**, infección de **librerías** o activación apoyada en **ingeniería social**.
+
+## 3.4.4 Prevención y detección
+Las medidas básicas siguen siendo muy pragmáticas: usar software de **fuentes fiables**, probarlo en **entornos aislados**, abrir solo adjuntos de los que se conoce su seguridad, tratar cualquier sitio web como potencialmente dañino y mantener **copias de seguridad**.
+
+Los escáneres de malware buscan signos de infección usando **firmas** en disco y en memoria. Sus mecanismos de detección suelen basarse en **patrones de cadenas**, **patrones de ejecución** y **patrones de almacenamiento**.
+
+El problema es que el malware evoluciona rápido y los antivirus tradicionales no siempre consiguen mantenerse al día. Por eso muchos códigos maliciosos incorporan mecanismos de **autodefensa** para evitar ser detectados, dificultar el análisis, ocultarse en el sistema o entorpecer a antivirus y cortafuegos. El uso de **rootkits** forma parte de esa lógica.
+
+## 3.4.5 Técnicas de evasión del malware
+### Tunneling
+El **tunneling** crea un “túnel” entre el sistema operativo y el antivirus para proteger al malware de los módulos residentes que vigilan comportamientos típicos. Es especialmente frecuente en malware **residente en memoria**.
+
+En sistemas donde el usuario trabaja con privilegios altos, el malware puede intentar **deshabilitar o matar** el antivirus o el cortafuegos, esquivar los mecanismos de detección por comportamiento, borrar campos de integridad de la base del antivirus, ejecutar su código “a través” del antivirus, troyanizar la base de firmas o impedir que el producto se conecte para **actualizarse**.
+
+### Armouring
+**Armouring** agrupa técnicas destinadas a impedir que el malware sea analizado. El objetivo es dificultar el acceso a los ficheros abiertos, evitar el desensamblado o bloquear el *tracing* con depuradores.
+
+Las técnicas citadas en los apuntes son: **antidesensamblador**, **cifrado de datos**, **ofuscación**, **compresión del código**, **antidepuración**, **antiheurísticas**, **antiemulación** y **anticebo**.
+
+### Virus polimórficos
+Un **virus polimórfico** cambia su forma cada vez que infecta otro programa. La idea es eludir la detección por firma modificando instrucciones o incluso el algoritmo concreto que realiza la misma tarea. Un ejemplo típico es incluir varias rutinas de cifrado y descifrado y elegir una al azar en cada infección.
+
+## 3.4.6 APT y MITRE ATT&CK
+Una **APT** (*Amenaza Persistente Avanzada*) combina varias vulnerabilidades y técnicas de ataque para alcanzar objetivos a largo plazo. Puede afectar tanto a usuarios individuales como a entornos corporativos. En un escenario personal puede apoyarse en **perfiles falsos**, **ingeniería social**, aplicaciones de mensajería falsas o permisos abusivos, y terminar en extorsión o en venta de datos a terceros. En una organización puede continuar tras la primera infección mediante **escalada de privilegios** y **movimientos laterales**, con fines como robo de información, acceso no autorizado a recursos o secuestro de ficheros.
+
+No todas las APT siguen exactamente las mismas fases, pero suelen cubrir desde el reconocimiento inicial hasta la explotación y la permanencia.
+
+Para estudiar ese comportamiento se usa mucho **MITRE ATT&CK**, una base de conocimiento y taxonomía del comportamiento del adversario a lo largo del ciclo de vida del ataque. ATT&CK se divide en tres grandes entornos:
+
+- **ATT&CK for Enterprise**: cubre redes y nube corporativas. Incluye Windows, macOS, Linux, PRE, Azure AD, Office 365, Google Workspace, SaaS, IaaS, redes y contenedores.
+- **ATT&CK for Mobile**: se centra en **Android** e **iOS**.
+- **ATT&CK for ICS**: se orienta a sistemas de control industrial.
+
+En ATT&CK, las **tácticas** representan los objetivos del atacante en cada fase, y las **técnicas** o **subtécnicas** son las formas observadas de conseguirlos. De ahí que se hable a menudo de matrices de **TTPs** (*tactics, techniques and procedures*). Para implementar esas técnicas, el marco distingue entre **herramientas** de uso dual y **malware** específicamente malicioso. Dependiendo del objetivo del atacante y del sistema a comprometer, se usarán unas fases y unas técnicas u otras.
+
+El valor práctico del marco es doble: permite estudiar campañas y grupos conocidos, y también consultar qué **mitigaciones** resultan útiles frente a determinadas **tácticas** o **técnicas**.

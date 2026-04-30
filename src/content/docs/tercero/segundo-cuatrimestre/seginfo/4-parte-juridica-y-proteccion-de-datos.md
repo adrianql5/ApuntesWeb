@@ -2,7 +2,7 @@
 title: "Parte jurídica y protección de datos"
 ---
 
-## 4.1 Qué abarca esta parte
+# 4.1 Qué abarca esta parte
 
 Esta parte de la asignatura se divide en dos bloques:
 

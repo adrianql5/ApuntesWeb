@@ -8,7 +8,7 @@ title: "Protección de la Privacidad en el Mundo Digital"
 
 La privacidad es el derecho a controlar qué aspectos de nosotros mismos, de nuestras comunicaciones y de nuestras actividades conocen otras personas o entidades.
 
-Datos que pueden ser privados:
+### Datos que pueden ser privados
 
 - Identidad.
 - Finanzas.
@@ -28,40 +28,50 @@ Datos que pueden ser privados:
 
 ## 1.3 Buenas prácticas en la recogida de datos
 
-- Los datos deben obtenerse de forma legal y clara.
-- Deben ser relevantes para la finalidad perseguida, precisos, completos y actualizados.
-- Deben indicarse los motivos de la recogida y el plazo o criterio de conservación.
+Los datos deben:
+
+- Obtenerse de forma legal y clara.
+- Ser relevantes para la finalidad perseguida, precisos, completos y actualizados.
+- Ir acompañados de información sobre los motivos de la recogida y el plazo o criterio de conservación.
+
+Además:
+
 - El uso para finalidades distintas requiere consentimiento del sujeto o habilitación legal.
 - Deben existir medidas contra pérdida, corrupción, destrucción o uso indebido.
 - Debe poder conocerse cómo se recogen, almacenan y usan los datos personales.
 - El sujeto suele tener derecho de acceso, rectificación y reclamación.
 - Debe existir un responsable o controlador de los datos.
-- Referencias destacadas: AEPD y sus guías para ciudadanía y cookies.
+
+Referencias destacadas:
+
+- AEPD y sus guías para ciudadanía y cookies.
 
 ## 1.4 Formularios e información personal en la red
 
-- Los formularios suelen pedir más datos de los necesarios.
+### Formularios
+
+- Suelen pedir más datos de los necesarios.
 - Antes de rellenarlos conviene valorar si el servicio compensa el seguimiento, la publicidad o el spam asociado.
 - Es fundamental leer las políticas de privacidad.
 
-Fuentes habituales de información personal en Internet:
+### Fuentes habituales de información personal en Internet
 
 - DNI en listas públicas, boletines o resoluciones.
 - Páginas y blogs personales.
 - Firmas en manifiestos, asociaciones, sindicatos o peticiones.
 - Redes sociales.
 
-### 1.4.1 Egosurfing
+### Egosurfing
 
 - Consiste en buscar información propia en Internet.
 - Es una práctica recomendable para controlar la identidad digital de forma preventiva.
 - También conviene revisar periódicamente los perfiles en redes sociales.
 
-## 1.5 Comportamiento digital
+## 1.5 Comportamiento digital y huella digital
 
 El comportamiento digital es el conjunto de actividades realizadas con dispositivos digitales. Toda actividad deja rastro y ese rastro puede almacenarse, analizarse y usarse con distintos fines.
 
-### 1.5.1 Uso de dispositivos
+### Uso de dispositivos
 
 - En ordenadores y móviles quedan registros como archivos abiertos, descargas, llamadas o tiempo de uso.
 - Cada vez más esos datos se asocian a cuentas de usuario de grandes proveedores.
@@ -69,13 +79,13 @@ El comportamiento digital es el conjunto de actividades realizadas con dispositi
 - Problemas clave: cómo se transmiten los datos, dónde y cómo se almacenan, quién accede a ellos y si se comparten con terceros.
 - De nuevo, es importante revisar la política de privacidad del proveedor.
 
-### 1.5.2 Actividad en la red
+### Actividad en la red
 
 - Los navegadores recopilan información de navegación.
 - Esa información puede servir para crear perfiles de usuario.
 - Conviene revisar las cookies almacenadas y distinguir entre las necesarias y las orientadas al seguimiento.
 
-Técnicas habituales de seguimiento:
+### Técnicas habituales de seguimiento
 
 - Cookies.
 - Web bugs o web beacons.
@@ -84,14 +94,14 @@ Técnicas habituales de seguimiento:
 
 ## 1.6 Cookies
 
-### 1.6.1 Qué son las cookies
+### Qué son
 
 - Son mecanismos que permiten a un sitio web almacenar datos localmente en el equipo del usuario.
 - Permiten recuperar esa información cuando el usuario vuelve a visitar el sitio.
 - Según su tipo, pueden ser más o menos invasivas y llegar a incluir información sensible.
 - Por eso su uso está regulado y requiere información y, en muchos casos, consentimiento.
 
-### 1.6.2 Clasificación de las cookies
+### Clasificación
 
 Según quién las gestione:
 
@@ -110,7 +120,7 @@ Según su finalidad:
 - **De publicidad comportamental**: observan hábitos de navegación para mostrar publicidad personalizada.
 - **De análisis**: miden uso y comportamiento para mejorar el servicio.
 
-### 1.6.3 Cookies menos invasivas
+### Cookies menos invasivas
 
 Suelen quedar fuera del régimen estricto de consentimiento las cookies necesarias para:
 
@@ -122,7 +132,9 @@ Suelen quedar fuera del régimen estricto de consentimiento las cookies necesari
 - Personalización de interfaz.
 - Algunos complementos sociales si el usuario mantiene la sesión abierta.
 
-Idea clave: las cookies de terceros y las de publicidad comportamental son las más problemáticas para la privacidad.
+Idea clave:
+
+- Las cookies de terceros y las de publicidad comportamental son las más problemáticas para la privacidad.
 
 ## 1.7 Web bugs o web beacons
 
@@ -131,7 +143,7 @@ Idea clave: las cookies de terceros y las de publicidad comportamental son las m
 - Funcionan normalmente mediante la carga automática de una URL que ejecuta un script de seguimiento.
 - Son más activos que las cookies porque pueden enviar información inmediatamente.
 
-Cómo bloquearlos:
+### Cómo bloquearlos
 
 - Ajustes del navegador, incluida la opción `Do Not Track`.
 - Desactivar la carga automática de imágenes en correo cuando sea posible.
@@ -139,13 +151,13 @@ Cómo bloquearlos:
 
 ## 1.8 Spyware y logs
 
-### 1.8.1 Spyware
+### Spyware
 
 - Código diseñado para espiar al usuario y recopilar datos.
 - Puede usarse para publicidad invasiva, robo de identidad u otros fines maliciosos.
 - Los secuestradores o `hijackers` alteran programas ya instalados para redirigir o exfiltrar información.
 
-### 1.8.2 Logs
+### Logs
 
 - Son registros de actividad generados por sistemas y servidores.
 - Un servidor web puede registrar IP, fecha, recurso accedido, navegador y enlace de procedencia.
@@ -170,11 +182,13 @@ Cómo bloquearlos:
 - Creación de cuentas "anónimas" cuando un sitio exige registro.
 - Uso de redes de anonimato como **Tor** (onion routing), **I2P** e **Hyphanet/Freenet**.
 
-Importante: anonimato local o frente al sitio web no equivale necesariamente a anonimato total.
+Importante:
+
+- Anonimato local o frente al sitio web no equivale necesariamente a anonimato total.
 
 ## 1.11 Redes sociales y privacidad
 
-Problemas principales:
+### Problemas principales
 
 - Cada vez son más invasivas con la privacidad.
 - Las publicaciones afectan a la reputación real del usuario.
@@ -183,7 +197,7 @@ Problemas principales:
 - No siempre está claro qué ocurre con los datos de perfiles eliminados.
 - Las etiquetas en imágenes y vídeos pueden revelar información adicional.
 
-Buenas prácticas:
+### Buenas prácticas
 
 - Si hay duda, perfil privado.
 - No aceptar solicitudes de desconocidos sin verificar autenticidad.
@@ -193,20 +207,20 @@ Buenas prácticas:
 
 ## 1.12 Otras tecnologías con impacto en la privacidad
 
-### 1.12.1 RFID
+### RFID
 
 - Las etiquetas RFID son transmisores de baja potencia que responden con un identificador único.
 - Si se generalizan lectores y etiquetas, pueden facilitar seguimiento de personas u objetos.
 - También pueden permitir inferir información personal a partir de los objetos que porta alguien.
 
-### 1.12.2 Privacidad en la nube
+### Privacidad en la nube
 
 - La ubicación física y jurídica de los datos en la nube afecta a privacidad y confidencialidad.
 - Un mismo dato puede estar sometido a varias jurisdicciones.
 - Las leyes pueden obligar al proveedor a examinar datos por sospechas de actividad delictiva.
 - La incertidumbre legal dificulta saber el verdadero estado de protección de la información.
 
-### 1.12.3 Voto electrónico
+### Voto electrónico
 
 - Uno de sus problemas es mantener la privacidad del voto.
 - Debe evitarse conocer si una persona ha votado y, sobre todo, a quién ha votado.

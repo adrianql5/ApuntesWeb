@@ -2,9 +2,7 @@
 title: "Políticas de seguridad y estándares Ficheiro"
 ---
 
-# 3. Políticas de Seguridad y Estándares
-
-## 3.1 Cómo abordar la seguridad de la información
+# 3.1 Cómo abordar la seguridad de la información
 
 - La seguridad es un **proceso**, no un producto.
 - Exige adoptar políticas y procedimientos.

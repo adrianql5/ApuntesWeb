@@ -110,7 +110,7 @@ Si tenemos $M$ lenguajes fuente y $N$ plataformas, crear un compilador para cada
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/Pasted%20image%2020260129171621.png)
 
-# 1.5.1 Fases del Compilador
+## 1.5.1 Fases del Compilador
 A continuación se detallan las etapas por las que pasa el código, usando el ejemplo de la operación: `posición = inicial + velocidad * 60` 
 
 ### Analizador Léxico (Scanner)

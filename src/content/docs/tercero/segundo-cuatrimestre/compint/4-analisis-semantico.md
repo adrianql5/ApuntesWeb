@@ -14,7 +14,7 @@ El **análisis semántico** puede hacerse:
 Su salida es una representación automática en forma de **código intermedio**, independiente de la máquina de ejecución, que pasa a las fases de síntesis de la compilación.
 
 
-# 4.2 Objetivos del tema
+## 4.1.1 Objetivos del tema
 
 1. Entender cómo funcionan las tareas del analizador semántico.
 2. Saber asociar atributos y reglas semánticas a un árbol sintáctico.
@@ -23,7 +23,7 @@ Su salida es una representación automática en forma de **código intermedio**,
 5. Ser capaces de traducir un árbol sintáctico sencillo a código intermedio.
 
 
-# 4.3 Lugar del análisis semántico en el compilador
+## 4.1.2 Lugar del análisis semántico en el compilador
 
 La estructura global mostrada en el tema es:
 
@@ -37,7 +37,7 @@ La compilación queda dividida en dos grandes partes:
 La **tabla de símbolos** da soporte al análisis semántico y sigue siendo útil en fases posteriores.
 
 
-# 4.4 Preliminares
+## 4.1.3 Preliminares
 Cada símbolo de la gramática adquiere un significado concreto según el **contexto** en el que aparece en el código fuente.
 
 Para poder expresar ese significado es necesario:
@@ -52,7 +52,9 @@ La semántica puede especificarse mediante:
 Un **atributo** es cualquier ítem de información añadido al árbol de derivación durante el análisis semántico.
 
 
-## 4.5 Gramáticas de atributos
+# 4.2 Gramáticas de atributos y evaluación
+
+## 4.2.1 Gramáticas de atributos
 Una **gramática de atributos** es una gramática independiente del contexto a la que se le añade un sistema de atributos. Ese sistema está formado por:
 
 1. Un conjunto de **atributos semánticos** asociados a cada símbolo de la gramática.
@@ -67,7 +69,7 @@ $$
 Una **acción semántica** es un algoritmo asociado a una regla de la gramática cuyo objetivo es calcular el valor de alguno de los atributos de los símbolos que intervienen en esa regla.
 
 
-## 4.6 Ejemplo de gramática de atributos
+## 4.2.2 Ejemplo de gramática de atributos
 
 Sea la gramática:
 
@@ -103,7 +105,7 @@ Idea del ejemplo:
 - cada identificador se inserta en la **tabla de símbolos** con el tipo correspondiente.
 
 
-# 4.7 Propagación de atributos
+## 4.2.3 Propagación de atributos
 
 La **propagación** es el cálculo del valor de un atributo en función del valor de otros atributos. Eso define una **relación de dependencia** entre los atributos que aparecen en el árbol de análisis.
 
@@ -127,13 +129,13 @@ La figura del PDF representa esta idea con flechas que muestran cómo el tipo va
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-12.png)
 
 
-# 4.8 Traducción dirigida por la sintaxis
+## 4.2.4 Traducción dirigida por la sintaxis
 
 La propagación se realiza siguiendo el **árbol de derivación** devuelto por el análisis sintáctico, e incluso puede desarrollarse al mismo tiempo.
 
 Según los símbolos que intervienen en una acción semántica, hay dos tipos de atributos:
 
-## Atributos sintetizados
+### Atributos sintetizados
 
 Son atributos asociados a **no terminales de la parte izquierda** de una regla de sustitución. Se calculan a partir de los nodos hijos del subárbol en que aparecen. La información recorre el árbol **verticalmente**, desde abajo hacia arriba.
 
@@ -145,7 +147,7 @@ $$
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-13.png)
 
 
-## Atributos heredados
+### Atributos heredados
 
 Son atributos asociados a **símbolos de la parte derecha** de una sustitución. Se calculan a partir de los atributos del nodo padre y de los nodos hermanos dentro del mismo subárbol. La información recorre el árbol **horizontalmente** o desde el padre hacia los hijos.
 
@@ -156,7 +158,7 @@ a_2.at = f(A.at, a_1.at, \ldots, a_n.at)
 $$
 
 
-# 4.9 Grafo de dependencias
+## 4.2.5 Grafo de dependencias
 
 La propagación debe hacerse respetando el orden implícito de dependencia entre atributos: no se puede evaluar una regla semántica antes de conocer todos los atributos de los que depende.
 
@@ -183,7 +185,9 @@ La evaluación se hace así:
 En la práctica, esto equivale a una evaluación guiada por dependencias.
 
 
-# 4.10 Verificación de tipos
+# 4.3 Verificación de tipos
+
+## 4.3.1 Verificación de tipos
 
 La **verificación de tipos** asegura que el tipo de cada construcción del código fuente coincide con lo previsto en el diseño de la gramática.
 
@@ -194,7 +198,7 @@ Un **sistema de tipos** es un conjunto de reglas que asigna tipos a las distinta
 
 Estas reglas se incorporan al árbol de análisis sintáctico de forma parecida a como se incorporan las reglas de asignación y propagación de atributos.
 
-## Clasificaciones importantes
+## 4.3.2 Clasificaciones importantes
 
 ### Tipificación fuerte y débil
 
@@ -213,7 +217,7 @@ Estas reglas se incorporan al árbol de análisis sintáctico de forma parecida 
 Estas dos clasificaciones no son lo mismo: una habla de la **fortaleza** del sistema de tipos y la otra del **momento** en que se verifica.
 
 
-# 4.11 Ejemplo completo de verificación de tipos
+## 4.3.3 Ejemplo completo de verificación de tipos
 
 Sea la gramática:
 
@@ -230,7 +234,7 @@ El tema construye una gramática de atributos para realizar **sumas y restas de 
 velocidad = 3 + 2.5
 ```
 
-## Acciones semánticas
+### Acciones semánticas
 
 ```text
 <asignacion> ::= <variable> = <expresion>
@@ -262,7 +266,7 @@ velocidad = 3 + 2.5
 <operador> ::= - { operador.clase = '-'; }
 ```
 
-## Funciones auxiliares
+### Funciones auxiliares
 
 - `MayorTipo(tipo1, tipo2)` devuelve `real` si alguno de los operandos es real; en caso contrario devuelve `entero`.
 - `OpEntera(op, v1, v2)` ejecuta `+` o `-` sobre enteros.
@@ -270,7 +274,7 @@ velocidad = 3 + 2.5
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-14.png)
 
-## Qué ocurre en `velocidad = 3 + 2.5`
+### Qué ocurre en `velocidad = 3 + 2.5`
 
 1. El número `3` sintetiza:
    `valor = 3`, `tipo = E`.
@@ -288,7 +292,7 @@ velocidad = 3 + 2.5
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-15.png)
 
-## 4.12 Ejercicio 11
+## 4.3.4 Ejercicio 11
 
 El tema propone el siguiente ejercicio:
 
@@ -310,7 +314,9 @@ Ejemplo indicado:
 ```
 
 
-# 4.13 Generación de código intermedio
+# 4.4 Código intermedio
+
+## 4.4.1 Generación de código intermedio
 
 Una **representación intermedia** es una estructura de datos que representa el código fuente durante su traducción a código objeto.
 
@@ -324,7 +330,7 @@ Observaciones importantes del tema:
 Existen muchos tipos de códigos de tres direcciones, todos pensados para algún tipo de **máquina virtual**.
 
 
-# 4.14 Código de tres direcciones
+## 4.4.2 Código de tres direcciones
 
 El código de tres direcciones se define como una secuencia de instrucciones de la forma:
 
@@ -348,12 +354,12 @@ Las instrucciones de tres direcciones se generan mediante reglas semánticas y e
 
 La traducción de código de tres direcciones a código máquina suele ser bastante sencilla.
 
-## Ejemplos de traducción de expresiones
+### Ejemplos de traducción de expresiones
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-16.png)
 
 
-## 4.15 Formas básicas de instrucción en código de tres direcciones
+## 4.4.3 Formas básicas de instrucción en código de tres direcciones
 
 Para representar construcciones de alto nivel hacen falta varias clases de instrucciones:
 
@@ -417,7 +423,7 @@ x := *y
 Observación importante: un conjunto de operadores pequeño facilita la implementación sobre la máquina objeto, pero si ese conjunto es demasiado limitado puede obligar a generar secuencias muy largas para ciertas construcciones del lenguaje fuente.
 
 
-# 4.16 Ejemplo de traducción de control a código de tres direcciones
+## 4.4.4 Ejemplo de traducción de control a código de tres direcciones
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-17.png)
 
@@ -429,7 +435,7 @@ La idea es:
 - se usan temporales como `t2` y `t3` para descomponer operaciones.
 
 
-## 4.17 Implementaciones del código intermedio
+## 4.4.5 Implementaciones del código intermedio
 
 El código intermedio suele almacenarse como una **lista enlazada de registros**, donde cada registro representa una instrucción.
 
@@ -468,14 +474,14 @@ x = y + z
 ```
 
 
-## 4.18 Ejemplo del tema con cuádruples y triples
+## 4.4.6 Ejemplo del tema con cuádruples y triples
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-18.png)
 
 En los **triples**, las referencias a resultados intermedios se hacen por **posición**.
 
 
-## 4.19 Triples indirectos
+## 4.4.7 Triples indirectos
 
 Los **cuádruples** tienen una ventaja sobre los triples cuando la optimización reorganiza código: si cambian las posiciones de los triples, hay que actualizar todas sus referencias.
 
@@ -499,7 +505,7 @@ La figura del PDF ilustra esta idea con una lista del estilo:
 apuntando a los triples almacenados por separado.
 
 
-## 4.20 Ideas clave para estudiar
+## 4.4.8 Ideas clave para estudiar
 
 - El análisis semántico añade **significado** a estructuras ya reconocidas sintácticamente.
 - La herramienta central del tema son las **gramáticas de atributos**.

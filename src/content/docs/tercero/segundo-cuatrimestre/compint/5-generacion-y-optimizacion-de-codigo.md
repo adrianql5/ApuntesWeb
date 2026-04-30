@@ -2,7 +2,9 @@
 title: "Generación y Optimización de Código"
 ---
 
-# 5.1 Introducción
+# 5.1 Fundamentos de la generación de código
+
+## 5.1.1 Introducción
 
 La fase de **generación y optimización de código** toma como entrada:
 
@@ -23,7 +25,7 @@ Idea importante del tema:
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-19.png)
 
 
-# 5.2 Tareas principales del generador de código
+## 5.1.2 Tareas principales del generador de código
 
 Las tres tareas principales son:
 
@@ -37,7 +39,7 @@ El tema distingue dos criterios:
 - **criterio secundario**: generar **código de calidad**.
 
 
-# 5.3 Entrada del generador de código
+## 5.1.3 Entrada del generador de código
 
 La entrada al generador de código debe cumplir estas condiciones:
 
@@ -49,7 +51,7 @@ La entrada al generador de código debe cumplir estas condiciones:
 Es decir: el generador de código no debería encargarse de arreglar errores semánticos, sino de traducir una representación ya validada.
 
 
-# 5.4 El programa destino
+## 5.1.4 El programa destino
 
 El PDF menciona tres tipos de sistemas, y por tanto de lenguajes máquina:
 
@@ -58,7 +60,7 @@ El PDF menciona tres tipos de sistemas, y por tanto de lenguajes máquina:
 - **basados en pilas**.
 
 
-# 5.5 Selección de instrucciones
+## 5.1.5 Selección de instrucciones
 
 La complejidad de la selección de instrucciones depende de:
 
@@ -73,7 +75,7 @@ La técnica mencionada en el tema es el uso de:
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-20.png)
 
 
-# 5.6 Asignación de registros
+## 5.1.6 Asignación de registros
 
 La **asignación óptima de registros** es un problema **NP-completo**.
 
@@ -82,7 +84,7 @@ Además, el hardware influye en la decisión. El PDF cita como ejemplo:
 - la existencia de **dobles registros de propósito específico** para multiplicar o dividir.
 
 
-# 5.7 Orden de evaluación
+## 5.1.7 Orden de evaluación
 
 El orden en que se evalúan expresiones e instrucciones importa por tres razones:
 
@@ -91,7 +93,7 @@ El orden en que se evalúan expresiones e instrucciones importa por tres razones
 - para **explotar el paralelismo** a nivel de instrucciones, hilos o núcleos.
 
 
-# 5.8 El lenguaje destino usado en el tema
+## 5.1.8 El lenguaje destino usado en el tema
 
 El tema fija una máquina destino sencilla con estas características:
 
@@ -99,7 +101,7 @@ El tema fija una máquina destino sencilla con estas características:
 - direccionamiento por **bytes**;
 - operandos **enteros**.
 
-## Tipos de instrucciones
+### Tipos de instrucciones
 
 ```text
 LD r, x
@@ -110,7 +112,7 @@ BR L
 Bcond r, L
 ```
 
-## Modos de direccionamiento
+### Modos de direccionamiento
 
 Se recogen estos modos:
 
@@ -129,7 +131,7 @@ Además, los comentarios se escriben como:
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-21.png)
 
-# 5.9 Mejora de la calidad del código
+## 5.1.9 Mejora de la calidad del código
 
 El tema recuerda que la calidad del código puede medirse con distintos costes:
 
@@ -143,7 +145,7 @@ La idea de un código realmente **óptimo** es difícil porque:
 - implica combinar varios subproblemas **NP-completos**;
 - en la práctica se vuelve a usar **heurísticas**.
 
-## Coste de una instrucción
+### Coste de una instrucción
 
 El PDF menciona dos maneras de medirlo:
 
@@ -151,7 +153,7 @@ El PDF menciona dos maneras de medirlo:
 - como alternativa: **número de accesos a memoria**.
 
 
-# 5.10 Direcciones en el código destino
+## 5.1.10 Direcciones en el código destino
 
 El tema distingue **direcciones lógicas o virtuales** para:
 
@@ -168,7 +170,9 @@ También menciona dos formas de asignación de llamadas a rutinas:
 En estas diapositivas el PDF sólo señala la clasificación y remite al Aho para el desarrollo.
 
 
-# 5.11 Bloques básicos y grafos de flujo
+# 5.2 Optimización local y grafos de flujo
+
+## 5.2.1 Bloques básicos y grafos de flujo
 
 Los **grafos de flujo** son una representación gráfica del código intermedio:
 
@@ -181,7 +185,7 @@ Son útiles para:
 - aplicar técnicas de mejora de calidad **dentro** de un bloque;
 - aplicar técnicas de optimización **entre** bloques.
 
-## Definición de bloque básico
+### Definición de bloque básico
 
 Un **bloque básico** es una secuencia de instrucciones tal que:
 
@@ -190,7 +194,7 @@ Un **bloque básico** es una secuencia de instrucciones tal que:
 - el control sale del bloque sin detenerse ni bifurcarse, salvo quizá en la **última** instrucción.
 
 
-# 5.12 Algoritmo para obtener bloques básicos
+## 5.2.2 Algoritmo para obtener bloques básicos
 
 La diapositiva del **algoritmo 8.5** ilustra este código:
 
@@ -221,7 +225,7 @@ B6 = [13..17]
 ```
 
 
-# 5.13 Información de siguiente uso
+## 5.2.3 Información de siguiente uso
 
 Una variable está **viva** en una instrucción si se utiliza posteriormente por otra instrucción.
 
@@ -230,7 +234,7 @@ El tema menciona el **algoritmo 8.7** para determinar:
 - si una variable está viva o no;
 - cuál es su **siguiente uso**.
 
-## Ejemplo del PDF
+### Ejemplo del PDF
 
 Bloque básico:
 
@@ -254,7 +258,7 @@ La idea importante es que esta información se calcula **hacia atrás** y es fun
 - si habrá que almacenarlo otra vez en memoria.
 
 
-# 5.14 Grafos de flujo
+## 5.2.4 Grafos de flujo
 
 Un **grafo de flujo** tiene:
 
@@ -278,7 +282,7 @@ Idea clave:
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-24.png)
 
 
-# 5.15 Ciclos
+## 5.2.5 Ciclos
 
 Es especialmente importante identificar los **ciclos** porque:
 
@@ -290,7 +294,7 @@ Según el criterio dado en la diapositiva, un conjunto de nodos forma un ciclo s
 2. cada nodo tiene una **ruta no vacía** y completamente dentro del ciclo que va a la entrada.
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-25.png)
 
-# 5.16 Optimización de bloques básicos con DAG
+## 5.2.6 Optimización de bloques básicos con DAG
 
 Para optimizar un bloque básico, el tema propone su representación mediante un **DAG** (`directed acyclic graph`).
 
@@ -302,11 +306,11 @@ La construcción se resume así:
 4. Algunos nodos se marcan como **nodos salida**, es decir, sus variables están vivas al salir del bloque.
 
 
-# 5.17 Búsqueda de subexpresiones locales comunes
+## 5.2.7 Búsqueda de subexpresiones locales comunes
 
 Una **subexpresión local común** es una expresión que calcula un valor ya calculado antes en el mismo bloque básico.
 
-## Ejemplo 1
+### Ejemplo 1
 
 Código original:
 
@@ -327,7 +331,7 @@ La representación DAG permite detectar esa repetición.
 
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-26.png)
 
-## Ejemplo 2
+### Ejemplo 2
 
 Código:
 
@@ -348,7 +352,7 @@ Como `b` y `c` cambian, la última `b + c` no es necesariamente la misma subexpr
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-27.png)
 
 
-# 5.18 Eliminación de código muerto
+## 5.2.8 Eliminación de código muerto
 
 La **eliminación de código muerto** consiste en quitar:
 
@@ -357,7 +361,7 @@ La **eliminación de código muerto** consiste en quitar:
 Si un valor se calcula pero no contribuye a ninguna variable viva a la salida del bloque, ese cálculo puede eliminarse.
 
 
-# 5.19 Uso de identidades algebraicas
+## 5.2.9 Uso de identidades algebraicas
 
 El tema recoge cuatro familias de simplificaciones:
 
@@ -373,7 +377,7 @@ La advertencia de “cuidado” recuerda que estas transformaciones no siempre s
 - hay problemas de precisión o semántica del lenguaje.
 
 
-# 5.20 Representación de referencias a arrays
+## 5.2.10 Representación de referencias a arrays
 
 ### Ejemplo 1
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-28.png)
@@ -409,7 +413,7 @@ Aquí aparece además la cuestión de **aliasing**:
 - una escritura a través de `b[j]` puede afectar a valores previamente leídos desde esa misma región.
 
 
-# 5.21 Asignaciones de punteros y llamadas a procedimientos
+## 5.2.11 Asignaciones de punteros y llamadas a procedimientos
 
 El PDF destaca dos reglas importantes:
 
@@ -429,7 +433,7 @@ p = &x
 ```
 
 
-# 5.22 Reensamblado de bloques básicos a partir del DAG
+## 5.2.12 Reensamblado de bloques básicos a partir del DAG
 
 Una vez optimizado el DAG, hay que reconstruir código lineal.
 
@@ -471,7 +475,9 @@ c = b + c
 La diferencia está en que un mismo nodo del DAG representa el valor asociado a `b` y `d`, pero si ambas variables deben sobrevivir, hace falta una copia explícita.
 
 
-# 5.23 Un generador de código simple
+# 5.3 Un generador de código simple
+
+## 5.3.1 Enfoque básico
 
 El enfoque básico del tema es:
 
@@ -491,7 +497,7 @@ Se utilizan dos tipos de descriptores:
    para cada variable, almacena las posiciones en las que puede encontrarse, normalmente en la tabla de símbolos.
 
 
-# 5.24 Algoritmo de generación de código
+## 5.3.2 Algoritmo de generación de código
 
 El algoritmo de generación de código:
 
@@ -506,7 +512,7 @@ La diapositiva siguiente sólo añade que `obtenReg` se basa en:
 No desarrolla más detalle en el propio PDF.
 
 
-## 5.25 Ejemplo de generación de código con descriptores
+## 5.3.3 Ejemplo de generación de código con descriptores
 ![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/compint/imagenes/image-31.png)
 
 
@@ -553,13 +559,15 @@ Qué ilustra el ejemplo:
 - al final se almacenan en memoria las variables vivas de salida, aquí `a` y `d`.
 
 
-# 5.26 Generación de código óptimo para expresiones
+# 5.4 Generación eficiente de expresiones
+
+## 5.4.1 Generación de código óptimo para expresiones
 
 El PDF trata el caso de la **asignación de registros cuando hay un número fijo de ellos**.
 
 La idea central son los **números de Ershov**.
 
-## Significado de los números de Ershov
+### Significado de los números de Ershov
 
 Indican cuántos registros se necesitan para evaluar un nodo del árbol de expresión:
 
@@ -599,13 +607,13 @@ Interpretación:
 - la expresión completa puede evaluarse sin temporales en memoria usando **3 registros**.
 
 
-# 5.27 Generación desde árboles etiquetados
+## 5.4.2 Generación desde árboles etiquetados
 
 Para generar código sin almacenar temporales:
 
 - se usa el número de registros indicado por la **etiqueta de la raíz**;
 
-## Ejemplo
+### Ejemplo
 
 Para la misma expresión etiquetada, la diapositiva muestra este código:
 
@@ -629,14 +637,14 @@ La idea es:
 - combinar ambas al final sin necesidad de guardar temporales en memoria.
 
 
-# 5.28 Evaluación con registros insuficientes
+## 5.4.3 Evaluación con registros insuficientes
 
 Si no hay suficientes registros, entonces:
 
 - es necesario introducir **instrucciones de almacenamiento**;
 - el PDF remite al **algoritmo 8.26**.
 
-## Ejemplo del PDF
+### Ejemplo del PDF
 
 Sobre la misma expresión, la diapositiva muestra un código donde aparece un temporal almacenado:
 
@@ -662,7 +670,7 @@ Lo importante del ejemplo es que:
 - esto permite continuar la evaluación aunque el número de registros disponibles no baste para mantener todos los intermedios a la vez.
 
 
-# 5.29 Ideas clave para estudiar
+## 5.4.4 Ideas clave para estudiar
 
 - La generación de código parte de una representación intermedia ya **correcta**.
 - Los objetivos prácticos son: **corrección**, **calidad** y **coste razonable** de compilación.

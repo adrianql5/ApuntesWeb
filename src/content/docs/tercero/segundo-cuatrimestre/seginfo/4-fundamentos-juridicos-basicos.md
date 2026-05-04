@@ -11,7 +11,7 @@ Hay que distinguir claramente entre:
 - Las **Leyes Fundamentales del franquismo**, que sostenían la dictadura.
 - La **Constitución Española de 1978**, que rompe con ese marco y crea un sistema democrático.
 
-La norma decisiva para iniciar el cambio fue la **Ley para la Reforma Política de 1976**, porque permitió desmantelar legalmente el sistema franquista, convocar elecciones y abrir el camino a la Constitución. En el PDF también se citan como figuras importantes de esta etapa **Adolfo Suárez** y **Fernando Ónega**.
+La norma decisiva para iniciar el cambio fue la **Ley para la Reforma Política de 1976**, porque permitió desmantelar legalmente el sistema franquista, convocar elecciones y abrir el camino a la Constitución. Figuras importantes de esta etapa: **Adolfo Suárez** y **Fernando Ónega**.
 
 # 4.1 Estado, Constitución y poder
 
@@ -21,11 +21,14 @@ El **art. 1.1 CE** define a España como un **Estado social y democrático de De
 - **Estado democrático**: la legitimidad política viene del pueblo. Implica soberanía popular, elecciones libres y periódicas, pluralismo político y participación ciudadana.
 - **Estado de Derecho**: ciudadanos y poderes públicos están sometidos a la Constitución y al resto del ordenamiento jurídico.
 
-## Estado social: arts. 9.2 y 53.3 CE
-
+## 4.1.1 Estado social: arts. 9.2 y 53.3 CE
 El **art. 9.2 CE** obliga a los poderes públicos a promover condiciones para que la libertad y la igualdad sean **reales y efectivas**, removiendo obstáculos y facilitando la participación en la vida política, económica, cultural y social.
 
 El **art. 53.3 CE** se refiere a los **principios rectores de la política social y económica**. Entre ellos están, por ejemplo, la protección de la salud, la vivienda digna, la protección de la familia, la Seguridad Social o el medio ambiente.
+
+Ubicación útil para examen:
+- Los **derechos fundamentales y libertades públicas** se sitúan, en lo esencial, en la **Sección 1.ª del Capítulo II del Título I** de la CE.
+- Los **principios rectores de la política social y económica** se sitúan en el **Capítulo III del Título I** de la CE.
 
 Lo importante para examen es esto:
 
@@ -34,7 +37,17 @@ Lo importante para examen es esto:
 - Tienen una especie de **vinculación negativa**: los poderes públicos no pueden actuar contra ellos.
 - Pueden adquirir mayor fuerza práctica cuando una **ley los desarrolla** y concreta.
 
-## Estado de Derecho: arts. 9.1 y 9.3 CE
+> [!Nota]
+> **Conceptos básicos**:
+> - **Directamente exigible** = puede reclamarse su cumplimiento ante jueces y tribunales de forma inmediata, basándose directamente en esa norma o derecho.
+> - **Norma** = categoría general de regla jurídica obligatoria.
+> - **Ley** = tipo de norma, normalmente aprobada por el poder legislativo.
+> - **Artículo** = cada división interna de una norma.
+> - **Principio rector** = mandato constitucional que orienta la actuación de los poderes públicos, especialmente en materia social y económica.
+> - Los **principios rectores** no suelen ser tan directamente exigibles como los **derechos fundamentales**: normalmente necesitan desarrollo legal para concretar qué puede reclamarse.
+> - Tipos básicos de norma: **Constitución**, **normas con rango de ley** (ley orgánica, ley ordinaria, decreto-ley, decreto legislativo) y **reglamentos**.
+
+## 4.1.2 Estado de Derecho: arts. 9.1 y 9.3 CE
 
 El **art. 9.1 CE** dice que ciudadanos y poderes públicos están sujetos a la Constitución y al resto del ordenamiento jurídico. Nadie está por encima de la ley.
 
@@ -45,8 +58,10 @@ El **art. 9.3 CE** recoge garantías esenciales:
 - **Publicidad de las normas**: las normas deben publicarse, normalmente en el **BOE**, para poder ser conocidas y obligatorias.
 - **Irretroactividad de las disposiciones sancionadoras no favorables o restrictivas de derechos**: una norma perjudicial no puede aplicarse a hechos pasados.
 - **Seguridad jurídica**: el Derecho debe ser previsible, claro y relativamente estable.
-- **Responsabilidad de los poderes públicos**: el ejercicio del poder genera responsabilidad. En el PDF se recuerdan especialmente los **arts. 106 y 121 CE**.
+- **Responsabilidad de los poderes públicos**: el ejercicio del poder genera responsabilidad. Especialmente los **arts. 106 y 121 CE**.
 - **Interdicción de la arbitrariedad**: los poderes públicos no pueden actuar caprichosamente.
+
+Estos principios deben entenderse y examinarse de forma interconectada.
 
 Aquí conviene diferenciar tres ideas:
 
@@ -54,7 +69,7 @@ Aquí conviene diferenciar tres ideas:
 - **Discrecionalidad**: margen de decisión permitido por el Derecho.
 - **Arbitrariedad**: actuación inmotivada o al margen del Derecho. Está prohibida.
 
-## División del poder
+## 4.1.3 División del poder
 
 La organización del poder se estudia en dos planos:
 
@@ -72,21 +87,18 @@ También hay que distinguir entre:
 - **Poder constituyente**: poder originario del pueblo para crear o reformar la Constitución.
 - **Poder constituido**: poderes creados por la propia Constitución y sometidos a ella.
 
-# 4.2 Fuentes del Derecho y tipos de norma
-
-## Fuentes del Derecho
-
+# 4.2 Fuentes del Derecho
 Según el **art. 1.1 del Código Civil**, las fuentes del Derecho son:
 
 1. **La ley**.
 2. **La costumbre**.
 3. **Los principios generales del Derecho**.
 
-### La ley
+## 4.2.1 La ley
 
 Es la fuente principal. Debe aprobarse conforme al procedimiento legal y publicarse para ser obligatoria.
 
-### La costumbre
+## 4.2.2 La costumbre
 
 Solo se aplica **en defecto de ley**. Para que una costumbre tenga valor jurídico debe ser:
 
@@ -97,7 +109,7 @@ Solo se aplica **en defecto de ley**. Para que una costumbre tenga valor jurídi
 
 El ejemplo clásico es el **Tribunal de las Aguas de Valencia**, tribunal consuetudinario basado en la costumbre.
 
-### Los principios generales del Derecho
+## 4.2.3 Los principios generales del Derecho
 
 Son ideas básicas de justicia y lógica que inspiran todo el ordenamiento. Sirven para:
 
@@ -107,8 +119,9 @@ Son ideas básicas de justicia y lógica que inspiran todo el ordenamiento. Sirv
 
 No deben confundirse con los **principios rectores de la política social y económica**, que son mandatos constitucionales concretos.
 
-## La Constitución Española
+# 4.3 La Norma
 
+## 4.3.1 La Constitución Española
 La **Constitución de 1978** es la **norma suprema** del ordenamiento jurídico. Cumple varias funciones:
 
 - **Legitimadora**: valida el resto de normas e instituciones.
@@ -116,10 +129,12 @@ La **Constitución de 1978** es la **norma suprema** del ordenamiento jurídico.
 - **De validez**: toda norma inferior debe ser conforme a ella; si la contradice, es inconstitucional.
 - **Informadora**: todo el ordenamiento debe interpretarse conforme a la Constitución.
 
-## Tipos de leyes aprobadas por el poder legislativo
+> [!Nota]
+> **Estructura básica de la CE**: la Constitución se organiza en **títulos**, dentro de ellos en **capítulos** y, en algunos casos, en **secciones**. Para examen, recuerda especialmente el **Título I**, el **Capítulo II** y el **Capítulo III**.
+
+## 4.3.2 Tipos de leyes aprobadas por el poder legislativo
 
 ### Ley orgánica
-
 La **ley orgánica** está prevista en el **art. 81 CE**.
 
 - La aprueba el **Poder Legislativo**.
@@ -131,7 +146,6 @@ La **ley orgánica** está prevista en el **art. 81 CE**.
   - **Régimen electoral general**.
 
 ### Ley ordinaria
-
 - También la aprueba el **Poder Legislativo**.
 - Requiere **mayoría simple**.
 - **Mayoría simple** significa que hay más votos a favor que en contra entre los presentes.
@@ -139,10 +153,9 @@ La **ley orgánica** está prevista en el **art. 81 CE**.
 
 Importante: la ley orgánica **no es superior** a la ley ordinaria por jerarquía. La diferencia está en la **materia** y en la **mayoría exigida**.
 
-## Normas con rango de ley aprobadas por el poder ejecutivo
+## 4.3.3 Normas con rango de ley aprobadas por el poder ejecutivo
 
 ### Decreto-ley
-
 El **decreto-ley** está previsto en el **art. 86 CE**.
 
 - Lo dicta el **Gobierno**.
@@ -157,14 +170,16 @@ El **decreto-ley** está previsto en el **art. 86 CE**.
   - Derecho electoral general.
 
 ### Decreto legislativo
-
 El **decreto legislativo** está previsto en el **art. 82 CE**.
 
 - Lo dicta el **Gobierno**, pero por **delegación del Parlamento**.
 - No tiene carácter provisional como el decreto-ley.
 - Puede adoptar dos formas:
-  - **Texto articulado**: cuando deriva de una **ley de bases**.
-  - **Texto refundido**: cuando integra, aclara o armoniza leyes previas mediante una ley delegante.
+  - **Texto articulado**: cuando deriva de una **ley de bases**.  El Gobierno crea una regulación nueva y ordenada a partir de unas bases marcadas por el Parlamento. “te doy las bases, redacta el texto”.
+  - **Texto refundido**: cuando integra, aclara o armoniza leyes previas mediante una ley delegante **ordinaria**.  el Gobierno no crea una regulación nueva desde cero, sino que reúne, aclara, armoniza o sistematiza leyes que ya existían. “te doy varias leyes dispersas, únelas y ordénalas”.
+
+>[!Nota]
+>**Carácter instrumental:** significa que el Gobierno no legisla por iniciativa propia como poder legislativo originario, sino que actúa como instrumento de una delegación que le ha dado el Parlamento. El Gobierno actúa porque el Parlamento le presta temporalmente esa función para un caso concreto.
 
 La **ley delegante** fija el alcance, las condiciones y el plazo de la delegación. La delegación se agota cuando se publica el decreto legislativo o cuando vence el plazo.
 
@@ -172,27 +187,35 @@ No debe confundirse un **texto refundido** con una **ley ómnibus**: el refundid
 
 Cuando estas normas con rango de ley las aprueba el Estado se denominan **Real Decreto-Ley** y **Real Decreto Legislativo**. En el ámbito autonómico pueden existir **Decreto-Ley** y **Decreto Legislativo**.
 
-## Reglamentos
+## 4.3.4 Reglamentos
 
-Los **reglamentos** son normas del **Poder Ejecutivo** con rango inferior a la ley. Sirven para desarrollar o ejecutar las leyes y **nunca pueden contradecirlas**.
+Los **reglamentos** son normas del **Poder Ejecutivo** con **rango inferior a la ley.** Sirven para desarrollar o ejecutar las leyes y **nunca pueden contradecirlas**.
 
 Ejemplos básicos:
 
-- **Real Decreto**: reglamento aprobado por el Gobierno.
-- **Orden ministerial**: reglamento aprobado por un ministro o ministra dentro de su competencia.
+- **Real Decreto**: reglamento aprobado por el **Consejo de Ministros** o por el **Presidente del Gobierno**, según los casos.
+- **Orden ministerial**: reglamento aprobado por un **ministro o ministra** dentro de su competencia.
+- En el **ámbito local** también existen **ordenanzas**.
 
 Si es **decreto-ley** o **decreto legislativo**, tiene **rango de ley**. Si es solo **decreto** en sentido reglamentario, tiene **rango reglamentario**.
 
-# 4.3 Derecho de la Unión Europea e iniciativa legislativa
+>[!Nota]
+>**Carácter:**
+>- **Informador:** orienta e inspira
+>- **Normativo:** obliga jurídicamente
+>- **Gubernativo:** lo dicta el gobierno / poder ejecutivo
 
-## Derecho de la Unión Europea
 
+# 4.4 Derecho de la Unión Europea
 La Unión Europea tiene un ordenamiento propio y España está sometida a él como Estado miembro.
 
 Las dos figuras clave son:
 
-- **Reglamento**: tiene **aplicación directa**. Obliga automáticamente en todos los Estados miembros sin necesidad de transposición.
-- **Directiva**: obliga al resultado, pero necesita **transposición** al Derecho interno.
+- **Reglamento**: tiene **aplicación directa**. Obliga automáticamente en todos los Estados miembros sin necesidad de transposición. Se aplica directamente en España sin que haya que aprobar otra norma española.
+- **Directiva**: obliga al resultado, pero necesita **transposición** al Derecho interno. La UE fija el objetivo que hay que cumplir, pero cada Estado debe aprobar sus propias normas para hacerlo efectivo.
+
+>[!Nota]
+>**Transposición:** significa que el Estado tiene que adaptar o incorporar el contenido de una directiva europea a su propio derecho interno, normalmente mediante una ley o una norma nacional.
 
 Ejemplos importantes:
 
@@ -207,7 +230,7 @@ También conviene no confundir:
 - **Consejo Europeo**: institución de la UE que fija grandes orientaciones políticas.
 - **Consejo de Europa**: organización internacional distinta de la UE, centrada en derechos humanos.
 
-## Iniciativa legislativa
+# 4.5 Iniciativa legislativa
 
 La iniciativa legislativa es el derecho a proponer nuevas leyes. Según la Constitución, pueden impulsarla:
 
@@ -228,9 +251,11 @@ La diferencia entre **proyecto de ley** y **proposición de ley** es quién lo p
 - **Proyecto de ley**: lo presenta el Gobierno. Antes suele existir un **anteproyecto** aprobado por el Consejo de Ministros.
 - **Proposición de ley**: la presentan Congreso, Senado o asambleas autonómicas.
 
-# 4.4 Claves de examen
-
+# 4.6 Claves de examen
 - Si **dos normas del mismo rango** se contradicen, en principio la **posterior deroga a la anterior**, sin perjuicio del criterio de especialidad y del reparto competencial.
 - Una **ley autonómica** no vale menos que una ley estatal por jerarquía. La clave es **quién tiene competencia** sobre la materia.
 - Los **derechos fundamentales**, de forma aproximada, se localizan en la **Sección 1.ª del Capítulo II del Título I**.
 - Los artículos más preguntables de este bloque son: **art. 1.1 CE**, **arts. 9.1 y 9.3 CE**, **art. 53.3 CE**, **art. 1.1 CC**, **art. 81 CE**, **art. 82 CE**, **art. 86 CE** y **art. 87 CE**.
+
+
+![](/ApuntesWeb/images/tercero/segundo-cuatrimestre/seginfo/imagenes/image.png)

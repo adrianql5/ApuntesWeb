@@ -2,6 +2,8 @@
 
 Sitio estático de apuntes de Ingeniería Informática pensado para publicar contenido en GitHub Pages sin depender de backend.
 
+Disponible aquí: https://adrianql5.github.io/ApuntesWeb/
+
 ## Qué tecnologías usa este proyecto
 
 ### Astro

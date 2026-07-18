@@ -80,9 +80,8 @@ function preTransformar(texto, ctx) {
         ctx.sinResolver.push(objetivo);
         return `<span class="imagen-rota">[imagen no encontrada: ${objetivo}]</span>`;
       }
-      const destino = ctx.registrarImagen(abs);
       const alt = objetivo.replace(/"/g, '&quot;');
-      return `<img src="${ctx.rel}img/${destino}" alt="${alt}" loading="lazy"${atributosTamano(hint)}>`;
+      return `<img src="${ctx.srcImagen(abs)}" alt="${alt}" loading="lazy"${atributosTamano(hint)}>`;
     }
     // Transclusión de nota: enlaza si existe en la asignatura, si no texto plano
     const nota = ctx.buscarNota?.(objetivo);
@@ -117,7 +116,7 @@ function pluginImagenesRelativas(md) {
       let abs = ctx.dirBase && existsSync(join(ctx.dirBase, limpio)) ? join(ctx.dirBase, limpio) : null;
       abs ??= resolverImagen(basename(limpio), ctx.asignatura, ctx.vault);
       if (abs) {
-        token.attrSet('src', `${ctx.rel}img/${ctx.registrarImagen(abs)}`);
+        token.attrSet('src', ctx.srcImagen(abs));
         token.attrSet('loading', 'lazy');
       } else {
         ctx.sinResolver.push(limpio);
@@ -146,8 +145,10 @@ export function crearMarkdown() {
  * Renderiza una nota Obsidian a HTML.
  * ctx: {
  *   asignatura, vault,            — modelo del scanner (para resolver imágenes)
- *   rel,                          — prefijo relativo hasta la raíz del sitio ('../../../')
- *   registrarImagen(abs) → ruta   — registra la imagen para copiar; devuelve 'asig-slug/nombre.png'
+ *   dirBase,                      — carpeta de la nota (resolución de rutas relativas)
+ *   srcImagen(abs) → src          — convierte la ruta absoluta en el src final del <img>
+ *                                    (web: registra la copia y devuelve '{rel}img/…';
+ *                                     pdf: devuelve una URL file://)
  *   buscarNota(nombre) → nota|null — nota de la misma asignatura por nombre de archivo
  * }
  */

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>{{titulo}}</title>
+<link rel="stylesheet" href="{{katexCss}}">
+<style>
+  :root {
+    --tinta: #17233b; --lapiz: #6b7280; --boli: #2451d6;
+    --fosforito: #ffe86b; --linea: #d8d8d0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--tinta); font-size: 11pt; line-height: 1.55; margin: 0;
+  }
+  .portada {
+    height: 90vh; display: flex; flex-direction: column; justify-content: center;
+    page-break-after: always;
+  }
+  .portada .sello, .sello {
+    font-family: "SF Mono", Menlo, Consolas, monospace;
+    font-size: 9pt; text-transform: uppercase; letter-spacing: 0.14em; color: var(--lapiz);
+  }
+  .portada h1 {
+    font-family: "Iowan Old Style", Palatino, Georgia, serif;
+    font-size: 30pt; line-height: 1.15; margin: 0.3em 0;
+  }
+  .portada h1 mark { background: var(--fosforito); padding: 0.05em 0.2em; }
+  .portada p { color: var(--lapiz); }
+  h1, h2, h3, h4 {
+    font-family: "Iowan Old Style", Palatino, Georgia, serif;
+    line-height: 1.25; margin: 1.4em 0 0.5em; break-after: avoid;
+  }
+  h1 { font-size: 19pt; } h2 { font-size: 15pt; border-bottom: 1pt solid var(--linea); padding-bottom: 0.2em; }
+  h3 { font-size: 12.5pt; }
+  .nota-pdf { page-break-before: always; }
+  .nota-pdf-titulo {
+    font-family: "Iowan Old Style", Palatino, Georgia, serif; font-size: 22pt;
+    border-bottom: 2pt solid var(--tinta); padding-bottom: 0.3em;
+  }
+  img { max-width: 100%; height: auto; display: block; margin: 0.8em auto; break-inside: avoid; }
+  code {
+    font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 9.5pt;
+    background: #f4f4f0; border: 1pt solid var(--linea); border-radius: 3pt; padding: 0.1em 0.3em;
+  }
+  pre { background: #f4f4f0; border: 1pt solid var(--linea); border-radius: 6pt; padding: 0.8em 1em; overflow-x: hidden; white-space: pre-wrap; word-break: break-word; }
+  pre code { background: none; border: none; padding: 0; }
+  blockquote { margin: 1em 0; padding: 0.1em 1em; border-left: 3pt solid var(--fosforito); color: #3d4a63; }
+  table { border-collapse: collapse; margin: 1em 0; max-width: 100%; }
+  th, td { border: 1pt solid var(--linea); padding: 0.35em 0.7em; text-align: left; font-size: 10pt; }
+  .callout { margin: 1em 0; padding: 0.7em 1em; border: 1pt solid var(--linea); border-left: 3pt solid var(--boli); border-radius: 6pt; break-inside: avoid; }
+  .callout-titulo {
+    font-family: "SF Mono", Menlo, Consolas, monospace; font-size: 8.5pt;
+    text-transform: uppercase; letter-spacing: 0.12em; color: var(--boli); margin: 0 0 0.3em;
+  }
+  .callout-warning, .callout-caution { border-left-color: #c77d00; }
+  .callout-warning .callout-titulo { color: #c77d00; }
+  .callout-danger, .callout-error { border-left-color: #b3261e; }
+  .imagen-rota { color: #b3261e; font-size: 9pt; }
+  .katex-display { overflow: hidden; }
+</style>
+</head>
+<body>
+<div class="portada">
+  <p class="sello">apuntesweb · ingeniería informática</p>
+  <h1><mark>{{titulo}}</mark></h1>
+  <p>{{subtitulo}}</p>
+  <p class="sello">{{fecha}} · {{url}}</p>
+</div>
+{{{cuerpo}}}
+</body>
+</html>

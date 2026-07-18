@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Introducción a la Compilación — apuntes de COMPINT (tercer curso de Ingeniería Informática).">
+<title>1. Introducción a la Compilación · COMPINT · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">compint</a><span class="miga-sep">/</span><span aria-current="page">1-introduccion-a-la-compilacion</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">COMPINT · curso 3</p>
+    <h1>1. Introducción a la Compilación · COMPINT</h1>
+  </header>
+  <div class="prosa">
+<p>El problema de la traducción de código no es nuevo, surge desde la programación del primer ordenador.</p>
+<h1>1.1 Lenguajes de Programación</h1>
+<p>Un lenguaje de programación es la herramienta mediante la cual los humanos dan instrucciones a las máquinas. Según su nivel de abstracción:</p>
+<ul>
+<li>
+<p><strong>Lenguajes Máquina:</strong> son <strong>específicos de cada ordenador</strong>. Consisten en secuencias de unos y ceros. Son inteligibles para el humano promedio pero nativos para le hardware</p>
+</li>
+<li>
+<p><strong>Lenguajes Ensamblador</strong>: también <strong>específicos de cada ordenador</strong>, pero un paso más arriba. Proporcionan <strong>nombres simbólicos</strong> para:</p>
+<ul>
+<li><strong>Instrucciones sencillas</strong></li>
+<li><strong>Posiciones de memoria</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>Lenguajes de Alto Nivel:</strong> Son <strong>independientes de la máquina</strong>. Permiten abstracciones complejas como estructuras de control, variables con tipo, procedimientos, recursividad y tipos abstractos de datos.</p>
+</li>
+<li>
+<p><strong>Lenguajes Orientados a Problemas:</strong> diseñado para dominios específicos. Su objetivo es reducir el tiempo de programación, mantenimiento y depuración.</p>
+</li>
+</ul>
+<h1>1.2 Procesadores de Lenguajes</h1>
+<p>Un procesador de lenguaje es un s<strong>oftware encargado de procesar o traducir un programa fuente</strong>.</p>
+<h2>1.2.1 El Compilador</h2>
+<p>Es un programa que <strong>traduce un programa</strong> escrito en un <strong>lenguaje fuente</strong> a un programa equivalente escrito en un <strong>lenguaje objeto</strong>.</p>
+<ul>
+<li><strong>Genera</strong> un <strong>programa objeto</strong> (generalmente es <strong>lenguaje máquina</strong>). El lenguaje objeto es un lenguaje máquina.</li>
+<li><strong>Informa de la presencia de errores en todo el código fuente</strong>.</li>
+</ul>
+<img src="../../../img/compint/image-34.png" alt="image-34.png" loading="lazy">
+- Se compila una vez, se ejecuta n veces.
+- La ejecución es **rápida**
+- La **gestión de errores abarca todo el programa**
+- Mejor adaptados a entornos de **producción**
+- *Ejemplos:* FORTRAN, C, PASCAL ...
+<h2>1.2.2 El Intérprete</h2>
+<p>A diferencia del compilador, el intérprete <strong>no produce un programa objeto</strong>. <strong>Aparenta ejecutar directamente</strong> cada instrucción del programa fuente utilizando las <strong>entradas</strong> proporcionadas por el usuario. <strong>Traduce y ejecuta instrucción por instrucción</strong>.</p>
+<img src="../../../img/compint/image-35.png" alt="image-35.png" loading="lazy">
+- Se **traduce cada vez** que se ejecuta
+- Necesita **menos memoria**
+- Se permite la **interacción** con el código en **tiempo de ejecución**
+- Mejor adaptados a entornos de **desarrollo y experimentación**
+- *Ejemplos:* BASIC, LISP, PROLOG ...
+<h2>1.2.3 Enfoques Híbridos y Modernos</h2>
+<p>La distinción estricta entre compilador e intérprete se desdibuja en los lenguajes modernos para aprovechar lo mejor de ambos mundos.</p>
+<h3>Compilador - Intérprete</h3>
+<p>El proceso se divide en dos fases:</p>
+<ul>
+<li><strong>Compilación a Lenguaje Intermedio:</strong> El código fuente se compila a un formato intermedio, no a código máquina real.</li>
+<li><strong>Interpretación (Máquina Virtual):</strong> Una máquina virtual interpreta ese código intermedio en el ordenador destino.</li>
+</ul>
+<img src="../../../img/compint/image-36.png" alt="image-36.png" loading="lazy">
+<ul>
+<li><em>Ejemplo:</em> <strong>Java</strong>. El compilador genera <strong>bytecode</strong>, que luego es interpretado por la JVM (Java Virtual Machine).</li>
+</ul>
+<h3>Compiladores JIT (Just-In-Time)</h3>
+<p>Para mejorar la eficiencia de los sistemas basados en máquinas virtuales o intérpretes, se utilizan los compiladores JIT.</p>
+<ul>
+<li><strong>Funcionamiento:</strong> compilan en <strong>tiempo de ejecución</strong> <strong>fragmentos del código intermedio</strong> directamente a código objeto.</li>
+<li><strong>Ventaja:</strong> mejora la <strong>eficiencia de los intérpretes</strong> y en ocasiones la de los propios compiladores.</li>
+</ul>
+<img src="../../../img/compint/image-37.png" alt="image-37.png" loading="lazy">
+<ul>
+<li><em>Ejemplos:</em> JAVA, PHP, PYTHON ...</li>
+</ul>
+<h1>1.3 El proceso de traducción</h1>
+<p>Esta imagen muestra una <strong>cadena clásica de traducción</strong> de un programa, típica de lenguajes como C/C++. Algunos compiladores pueden generar el código máquina directamente.</p>
+<p>Partimos de:</p>
+<pre><code class="language-C">#include &lt;stdio.h&gt;
+
+int main() {
+    printf(&quot;Hola\n&quot;);
+    return 0;
+}
+</code></pre>
+<p>Este archivo todavía no se puede compilar porque tiene cosas como <code>#include &lt;stdio.h&gt;</code> por ello pasa al <strong>preprocesador</strong>. Después pasa al compilador que lo traduce a ensamblador</p>
+<pre><code class="language-asm">mov eax, 0
+call printf
+ret
+</code></pre>
+<p>El compilador se centra en traducir  optimizar el programa. Posteriomente el <strong>ensamblador</strong> convierte ese ensamblador en <strong>código máquina relocalizable</strong>. Que sea relocalizable significa que todavía no se sabe exactamente en qué posición de memoria estará cada cosa cuando el programa final se ejecute. Por ejemplo si el programa llama a :</p>
+<pre><code class="language-C">printf(&quot;Hola\n&quot;);
+</code></pre>
+<p>El código usa <code>printf</code> pero <code>printf</code> no está descrito dentro del archivo, está en una biblioteca externa. Entonces el ensamblador puede decir, aquí hay una llamada a <code>printf</code> pero todavía no sé la dirección exacta de <code>printf</code>. Por eso genera un <strong>archivo objeto</strong>, por ejemplo: <code>main.o</code>.</p>
+<p>Y por último el <strong>enlazodr</strong> junta el código con otros códigos necesarios:</p>
+<pre><code>main.o
++ biblioteca estándar de C
++ código de arranque del programa
++ otras bibliotecas
+= ejecutable final
+</code></pre>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>El <strong>lenguaje ensamblador</strong> es una forma textual y más legible de escribir instrucciones de máquina.
+El <strong>ensamblador</strong> también es un programa que traduce lenguaje ensamblador a código máquina. En Linux, el ensamblador típico se llama <code>as</code>.</p>
+</div>
+<img src="../../../img/compint/pasted-image-20260129170618.png" alt="Pasted image 20260129170618.png" loading="lazy">
+<h1>1.4 Estructura Interna de un Compilador</h1>
+<p>La siguiente imagen es una ampliación de la fase <strong>compilador</strong> de la imagen anterior.</p>
+<img src="../../../img/compint/pasted-image-20260129171224.png" alt="Pasted image 20260129171224.png" loading="lazy">
+<h2>1.4.1 Estrategia para diseñar compiladores</h2>
+<p>Si tenemos <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">M</span></span></span></span></eq> lenguajes fuente y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span></eq> plataformas, crear un compilador para cada combinación requeriría <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span></eq> compiladores.  La solución es usar un <strong>Código Intermedio.</strong></p>
+<p>El código intermedio es una representación del programa que no es exactamente el lenguaje original, pero tampoco es todavía código máquina de un ordenador concreto. Si partimos de:</p>
+<pre><code class="language-C">int x = 2 + 3;
+int y = x * 4;
+</code></pre>
+<p>Se convertiría por ejemplo en:</p>
+<pre><code>t1 = 2 + 3
+x = t1
+t2 = x * 4
+y = t2
+</code></pre>
+<p>No es C pero tampoco es ensamblador x86, ARM o RISC-V. Esto sirve como un <strong>puente universal</strong> entre muchos lenguajes y muchas máquinas. Sin esto si tienes <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">M</span></span></span></span></eq> lenguajes fuente y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span></eq> plataformas. Sin código intermedio necesitaría un compilador específico para cada combinación. <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mord text"><span class="mord"> compiladores</span></span></span></span></span></eq>. Con código intermedio con <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">M</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mord text"><span class="mord"> partes</span></span></span></span></span></eq> apañamos.</p>
+<blockquote>
+<p><strong>Plataforma:</strong> destino donde se va a ejecutar el programa.</p>
+</blockquote>
+<img src="../../../img/compint/pasted-image-20260129171621.png" alt="Pasted image 20260129171621.png" loading="lazy">
+<h2>1.4.2 Analizador Léxico</h2>
+<p>Lee el <strong>flujo de caracteres</strong> del programa fuente y los agrupa en <strong>componentes léxicos</strong>. Cada componente léxico produce como salida un <strong>token</strong> de la forma <code>&lt;nombre, valor-atributo&gt;</code>, que pasa a la fase siguiente.</p>
+<ul>
+<li><em>Ejemplo:</em> Identifica <code>posicion</code>, el símbolo <code>=</code>, el identificador <code>inicial</code>, etc.</li>
+<li><em>Salida:</em> Un flujo de tokens.</li>
+</ul>
+<img src="../../../img/compint/image-38.png" alt="image-38.png" loading="lazy">
+<h2>1.4.3 Analizador Sintáctico</h2>
+<p>Recibe los tokens y crea una <strong>representación intermedia jerárquica</strong> en forma del <strong>árbol</strong> que describe la <strong>estructura gramatical</strong> del <strong>flujo de tokens</strong>.</p>
+<ul>
+<li><strong>Árbol sintáctico:</strong> cada <strong>nodo interior</strong> es una <strong>operación</strong> y los <strong>hijos</strong> son los <strong>argumentos</strong>.</li>
+<li><em>Ejemplo:</em> Crea un árbol donde <code>*</code> (multiplicación) es hijo de <code>+</code> (suma), respetando la precedencia matemática.</li>
+</ul>
+<img src="../../../img/compint/pasted-image-20260129172915.png" alt="Pasted image 20260129172915.png" loading="lazy">
+<h2>1.4.4 Analizador Semántico</h2>
+<p>Revisa el <strong>árbol sintáctico</strong> y la <strong>tabla de símbolos</strong> para comprobar la <strong>consistencia semántica</strong>. Su tarea principal es la <strong>verificación de tipos.</strong></p>
+<ul>
+<li><strong>Coerción:</strong> si el lenguaje lo permite, el analizador puede convertir tipos automáticamente.</li>
+<li><em>Ejemplo:</em> En <code>velocidad * 60</code>, si <code>velocidad</code> es un número real y <code>60</code> es entero, el analizador convierte el <code>60</code> a real (<code>entareal(60)</code>) para que la operación sea válida.</li>
+</ul>
+<img src="../../../img/compint/pasted-image-20260129173103.png" alt="Pasted image 20260129173103.png" loading="lazy">
+<h2>1.4.5 Generador de Código Intermedio</h2>
+<p>Traduce el árbol a un código para una máquina abstracta. Debe ser fácil de <strong>producir y traducir a lenguaje objeto.</strong> Una representación muy común del código intermedio es el <strong>código de 3 direcciones:</strong> una secuencia de instrucciones que tienen como máximo 3 operandos.</p>
+<pre><code class="language-text">temp1 = entareal(60)
+temp2 = id3 * temp1
+temp3 = id2 + temp2
+id1 = temp3
+</code></pre>
+<h2>1.4.6 Optimizador de Código</h2>
+<p><strong>Intenta mejorar el código intermedio</strong> para que sea más rápido o consuma menos recursos, sin cambiar el resultado.</p>
+<ul>
+<li><em>Ejemplo:</em> El optimizador se da cuenta de que la conversión de <code>60</code> a <code>60.0</code> se puede hacer de una vez durante la compilación, ahorrando una instrucción:</li>
+</ul>
+<pre><code class="language-text">temp1 = id3 * 60.0  (Ahorramos la instrucción de conversión)
+id1 = id2 + temp1
+</code></pre>
+<h2>1.4.7 Generador de Código</h2>
+<p><strong>Traduce el código intermedio optimizado al lenguaje destino</strong> (<strong>código máquina o ensamblador</strong>). Aquí se asignan los <strong>registros de memoria</strong> reales de la CPU.</p>
+<ul>
+<li><em>Ejemplo</em>:</li>
+</ul>
+<pre><code class="language-assembly">LDF R2, id3        ; Cargar id3 en Registro 2
+MULF R2, R2, #60.0 ; Multiplicar R2 por 60.0
+LDF R1, id2        ; Cargar id2 en Registro 1
+ADDF R1, R1, R2    ; Sumar R1 y R2
+STF id1, R1        ; Guardar resultado en id1
+</code></pre>
+<h2>1.4.8 La Tabla de Símbolos</h2>
+<p>Registra nos <strong>nombres</strong> de los <strong>elementos del programa fuente</strong> (variables y procedimientos), junto con sus <strong>atributos</strong>, que contienen información de utilidad sobre cada nombre.</p>
+<ul>
+<li>Atributos de <strong>variables:</strong> dirección de almacenamiento, tipo, dimensión, alcance, precisión, si se ha declarado, si se ha inicializado, etc.</li>
+<li>Atributos de <strong>procedimientos:</strong> número y tipos de sus argumentos, modo de paso de cada argumento (valor o referencia), tipo devuelto, recursividad, etc.</li>
+</ul>
+<h1>1.5 Construcción de Compiladores</h1>
+<p>Para definir correctamente la construcción de un compilador, es imprescindible identificar tres lenguajes distintos:</p>
+<ul>
+<li><strong>El lenguaje fuente:</strong> El lenguaje que el compilador traduce (entrada).</li>
+<li><strong>El lenguaje objeto:</strong> El lenguaje al que se traduce y la plataforma donde se ejecutará (salida).</li>
+<li><strong>El lenguaje de implementación:</strong> El lenguaje en el que está escrito el propio programa compilador.</li>
+</ul>
+<p><strong>Ejemplo:</strong> Si tenemos un ejecutable en un PC que traduce Pascal a código máquina:</p>
+<ul>
+<li>Fuente: Pascal.</li>
+<li>Objeto: Código máquina del PC.</li>
+<li>Implementación: Código máquina del PC (porque ya es un ejecutable).</li>
+</ul>
+<h2>1.5.1 Diagramas de Tombstone</h2>
+<p>Son una herramienta visual que facilita el <strong>diseño y la comprensión de cómo interactúan compiladores, intérpretes y máquinas</strong>. Hay cuatro tipos de piezas.</p>
+<ul>
+<li>
+<p><strong>Compiladores (Forma de T):</strong> Representan la traducción de un lenguaje fuente a un lenguaje objeto o destino. En este diagrama, “Objeto” no se refiere necesariamente a un archivo <code>.o</code>; se refiere al <strong>resultado de la traducción</strong>, que puede ser ensamblador, código máquina, bytecode, código intermedio u otro lenguaje destino. En el caso concreto de C, un archivo <code>.o</code> suele contener código máquina relocalizable que todavía debe pasar por el enlazador.
+<img src="../../../img/compint/pasted-image-20260129174619.png" alt="Pasted image 20260129174619.png" loading="lazy"></p>
+</li>
+<li>
+<p><strong>Programas:</strong> Representan un programa <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span></eq> escrito en un lenguaje <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span></span></span></span></eq>.
+<img src="../../../img/compint/pasted-image-20260129174718.png" alt="Pasted image 20260129174718.png" loading="lazy"></p>
+</li>
+<li>
+<p><strong>Máquinas:</strong> Representan el hardware o sistema operativo base. Cuando ponen <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">M</span></span></span></span></eq> es <strong>máquina o plataforma</strong>.
+<img src="../../../img/compint/pasted-image-20260129174757.png" alt="Pasted image 20260129174757.png" loading="lazy"></p>
+</li>
+<li>
+<p><strong>Intérpretes:</strong> Representa el intérprete del lenguaje <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span></span></span></span></eq> escrito en <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">M</span></span></span></span></eq>.
+<img src="../../../img/compint/pasted-image-20260129174850.png" alt="Pasted image 20260129174850.png" loading="lazy"></p>
+</li>
+</ul>
+<h2>1.5.2 Reglas de Unión de Diagramas</h2>
+<p>La regla de oro para conectar estas piezas es: <strong>Dos diagramas se pueden unir si en la unión los lenguajes son iguales</strong>.</p>
+<img src="../../../img/compint/image-39.png" alt="image-39.png" loading="lazy">
+<img src="../../../img/compint/image-40.png" alt="image-40.png" loading="lazy" width="604">
+<h2>1.5.3 Estrategias Avanzadas de Construcción</h2>
+<h3>Compilador- Enlazador</h3>
+<p>Divide la traducción en 2 fases:</p>
+<ul>
+<li>Traducir el lenguaje <strong>fuente a código intermedio</strong></li>
+<li>Traducir el <strong>código intermedio</strong> a <strong>lenguaje máquina</strong></li>
+</ul>
+<p>Se usa para desarrollar <strong>múltiples compiladores</strong> para <strong>múltiples plataformas</strong>.</p>
+<img src="../../../img/compint/image-41.png" alt="image-41.png" loading="lazy">
+<h3>Compilador Cruzado</h3>
+<p>Permite desarrollar compiladores para <strong>maquinas diferentes a la de desarrollo</strong>.
+<img src="../../../img/compint/image-43.png" alt="image-43.png" loading="lazy"></p>
+<img src="../../../img/compint/image-44.png" alt="image-44.png" loading="lazy">
+<h3>Bootstrapping</h3>
+<p>Se basa en <strong>utilizar múltiples etapas de compilación</strong> para mejorar la <strong>expresividad</strong> y <strong>rendimiento</strong> de un compilador. Una forma de bootstrapping consiste en <strong>construir el compilador</strong> de un lenguaje a partir de <strong>una versión reducida del propio lenguaje</strong>, de modo que se obtienen sucesivas versiones que <strong>amplían y mejoran</strong> un lenguaje de programación determinado.</p>
+<p>Un <strong>autocompilador</strong> es aquel que es capaz de compilar su propio código fuente. Las <strong>mayores ventajas</strong> del bootstraping se obtienen cuando un compilador se escribe en el <strong>mismo lenguaje que compila</strong>.
+<img src="../../../img/compint/image-45.png" alt="image-45.png" loading="lazy"></p>
+<img src="../../../img/compint/image-46.png" alt="image-46.png" loading="lazy">
+<h3>Compilador-Intérprete</h3>
+<p>Es la <strong>unión del intérprete y la plataforma de ejecución</strong> recibe el nombre de <strong>maquina virtual</strong>.
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">Int</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord">e</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord">rprete </span></span><span class="mopen">(</span><span class="mord mathnormal">L</span><span class="mord text"><span class="mord"> en </span></span><span class="mord mathnormal" style="margin-right:0.109em;">M</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">M</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord">a</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord">quina </span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.109em;">M</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≡</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">M</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord">a</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord">quina Virtual para </span></span><span class="mord mathnormal">L</span></span></span></span></span></eqn></section></p>
+<img src="../../../img/compint/pasted-image-20260129180609.png" alt="Pasted image 20260129180609.png" loading="lazy">
+<img src="../../../img/compint/image-48.png" alt="image-48.png" loading="lazy">
+<h1>1.6 Aplicaciones</h1>
+<ul>
+<li>Edición de textos con formato. Por ejemplo, LaTeX.</li>
+<li>Reconocimiento de patrones: tanto de texto, como reconocimiento del habla o visión por computadora.</li>
+<li>Desarrollo de editores de lenguajes estructurados. Por ejemplo, Xemacs. o Cálculo simbólico. Por ejemplo, MAPLE, SCILAB,…</li>
+<li>Diseño de circuitos integrados, mediante lenguajes como Verilog y VHDL.</li>
+<li>Traducción binaria. Para portar software entre plataformas.</li>
+<li>Simulación de arquitecturas hardware, para distintos conjuntos de datos, antes de su fabricación.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-analisis-lexico.html"><span class="nav-etiqueta">siguiente →</span>2. Análisis Léxico</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

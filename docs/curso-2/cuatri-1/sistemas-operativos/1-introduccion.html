@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Introduccion — apuntes de SISTEMAS OPERATIVOS (segundo curso de Ingeniería Informática).">
+<title>1. Introduccion · SISTEMAS OPERATIVOS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">sistemas-operativos</a><span class="miga-sep">/</span><span aria-current="page">1-introduccion</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">SISTEMAS OPERATIVOS · curso 2</p>
+    <h1>1. Introduccion · SISTEMAS OPERATIVOS</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Quizás hay errores de formato porque convertí el pdf original a markdown con un script, si ves algo raro consulta el pdf SOIFINAL.pdf</p>
+</div>
+<h1><strong>Introducción - Empieza la Aventura</strong></h1>
+<p>Una computadora moderna es un sistema complejo, y el trabajo de administrar todos sus componentes y utilizarlos de manera óptima es una tarea muy desafiante. Por esta razón, las computadoras están equipadas con una capa de software llamada <strong>sistema operativo</strong>, cuyo trabajo es proporcionar a los programas de usuario un modelo de computadora mejor, más simple y pulcro, así como encargarse de la administración de todos sus recursos, entre ellos, el hardware.</p>
+<p><img src="../../../img/sistemas-operativos/page-2-picture-3.jpeg" alt="" loading="lazy"></p>
+<p>Algunos de los sistemas operativos más usados son Windows, Linux o Mac OS. El programa con el que los usuarios generalmente interactúan se denomina <strong>Shell</strong>, cuando está basado en texto, y <strong>GUI</strong>  (<em>Graphical User Interface</em>) cuando utiliza elementos gráficos o iconos. Aunque no forma parte del sistema operativo, este lo utiliza para llevar a cabo su trabajo. Es el nivel más bajo del software en modo usuario y permite la ejecución de otros programas.</p>
+<p><img src="../../../img/sistemas-operativos/page-2-picture-6.jpeg" alt="" loading="lazy"></p>
+<h1><strong>1.1. ¿Qué es un sistema operativo?</strong></h1>
+<p>Los sistemas operativos realizan dos funciones básicas que no están relacionadas: proporcionar a los programadores de aplicaciones un conjunto abstracto de recursos simples, en vez de los complejos conjuntos de hardware; y administrar estos recursos de hardware.</p>
+<p>Los verdaderos clientes del sistema operativo son los programas de aplicación (a través de los programadores de aplicaciones). Son los que tratan directamente con el sistema operativo y sus abstracciones. En contraste, los usuarios finales tienen que lidiar con las abstracciones que proporciona la interfaz de usuario, ya sea un shell de línea de comandos o una interfaz gráfica.</p>
+<p>Por otra parte, el sistema operativo también está presente para administrar todas las piezas de un sistema complejo. Las computadoras modernas constan de procesadores, memorias, temporizadores, discos, ratones, interfaces de red, impresoras y una amplia variedad de otros dispositivos. El trabajo del sistema operativo es proporcionar una asignación ordenada y controlada de los procesadores, memorias y dispositivos de E/S, entre los diversos programas que compiten por estos recursos.</p>
+<p>Los sistemas operativos modernos permiten la ejecución simultánea de varios programas. Su tarea es llevar un registro de que programa está utilizando qué recursos, de otorgar las peticiones de recursos, de contabilizar su uso y de mediar las peticiones en conflicto provenientes de distintos programas y usuarios. Esta administración de recursos incluye el <strong>multiplexaje</strong> (compartir) de recursos en dos formas distintas: en el tiempo (p.e. una sola CPU) y en el espacio (p.e. memoria principal).</p>
+<p>La mayoría de las computadoras tienen dos modos de operación: modo kernel y modo usuario. El sistema operativo esla pieza fundamental delsoftware y se ejecuta en <strong>modo kernel</strong>. En este modo, elsistema operativo tiene acceso completo a todo el hardware y puede ejecutar cualquier instrucción que la máquina sea capaz de ejecutar. El resto del software se ejecuta en <strong>modo usuario</strong>, en el cual sólo un subconjunto de las instrucciones máquina es permitido. En particular, las instrucciones que afectan el control de la máquina o que se encargan de la E/S (entrada/salida) están prohibidas para los programas en modo usuario.</p>
+<p>Para obtener servicios del sistema operativo, un programa usuario debe lanzar una <strong>llamada al sistema</strong> (<em>system call</em>), la cual se atrapa en el kernel e invoca al sistema operativo. La instrucción TRAP cambia del modo usuario al modo kernel e inicia el sistema operativo. Las computadoras tienen otros traps aparte de la instrucción para ejecutar una llamada al sistema. La mayoría de los demás traps son producidos por el hardware para advertir acerca de una situación excepcional.</p>
+<p><img src="../../../img/sistemas-operativos/page-3-picture-2.jpeg" alt="" loading="lazy"></p>
+<p><strong>FIGURA 1.3.</strong> Los sistemas operativos ocultan el hardware feo con abstracciones hermosas.</p>
+<h1><strong>1.2. Revisión del hardware</strong></h1>
+<p>Un sistema operativo está íntimamente relacionado con el hardware de la computadora sobre la que se ejecuta. Para trabajar debe conocer muy bien el hardware, por lo menos en lo que respecta a cómo aparece para el programador.</p>
+<h1><strong>1.2.1. El procesador</strong></h1>
+<p>El &quot;cerebro&quot; de la computadora es la CPU, que obtiene las instrucciones de la memoria y las ejecuta. El ciclo básico de toda CPU es obtener la primera instrucción de memoria, decodificarla para determinar su tipo y operandos, ejecutarla y después obtener, decodificar y ejecutar las instrucciones subsiguientes. El ciclo se repite hasta que el programa termina. De esta forma se ejecutan los programas.</p>
+<p>Cada CPU tiene un conjunto específico de instrucciones que puede ejecutar. Como el acceso a la memoria para obtener una instrucción o palabra de datos requiere mucho más tiempo que ejecutar una instrucción, todas las CPU contienen ciertos registros en su interior para contener las variables clave y los resultados temporales. Debido a esto, el conjunto de instrucciones generalmente contiene instrucciones para cargar una palabra de memoria en un registro y almacenar una palabra de un registro en la memoria. El sistema operativo debe de estar al tanto de todos los registros, ya que cada vez que se detiene un programa en ejecución, debe guardar todos los registros para poder restaurarlos cuando el programa continúe su ejecución.</p>
+<p>Además de los registros generales utilizados para contener variables y resultados temporales, la mayoría de las computadoras tienen varios registros especiales que están visibles para el programador. Uno de ellos es el <strong>contador de programa</strong> <em>(program counter)</em>, el cual contiene la <strong>dirección de memoria de la siguiente instrucción</strong> a obtener. Una vez que se obtiene esa instrucción, el contador de programa se actualiza para apuntar a la siguiente.</p>
+<p>Otro registro es el <strong>apuntador de pila</strong> (<em>stack pointer</em>), el cual apunta a la parte superior de la <strong>pila</strong> (<em>stack</em>) actual en la memoria. La pila contiene un conjunto de valores por cada procedimiento al que se ha entrado pero del que todavía no se ha salido. El conjunto de valores en la pila por procedimiento contiene los parámetros de entrada, las variables locales y las variables temporales que no se mantienen en los registros.</p>
+<p>Otro de los registros es <strong>PSW</strong> (<em>Program Status Word; Palabra de estado del programa</em>). Este registro contiene los bits de código de condición, que se asignan cada vez que se ejecutan las instrucciones de comparación, la prioridad de la CPU, el modo (usuario o kernel) y varios otros bits de control. Los programas de usuario pueden leer normalmente todo el PSW pero por lo general sólo pueden escribir en algunos de sus campos. El PSW juega un papel importante en las llamadas al sistema y en las operaciones de E/S.</p>
+<p>Muchas CPUs modernas cuentan con medios para ejecutar más de una instrucción al mismo tiempo. Por ejemplo, una CPU podría tener unidades separadas de obtención, decodificación y ejecución. A dicha organización se le conoce como <strong>canalización</strong> (<em>pipeline</em>); la figura 1.4.(a) ilustra una canalización de tres etapas.</p>
+<p><img src="../../../img/sistemas-operativos/page-4-figure-3.jpeg" alt="" loading="lazy"></p>
+<p>Aún más avanzada que el diseño de una canalización es la CPU <strong>superescalar</strong>, que se muestra en la figura 1.4.(b). En este diseño hay varias unidades de ejecución; por ejemplo, una para la aritmética de enteros, una para la aritmética de punto flotante y otra para las operaciones Booleanas.</p>
+<p>A medida que incrementa el número de transistores en los chips surge el problema de qué hacer con todos ellos. Una solución son las arquitecturas superescalares, con múltiples unidades funcionales, pero se puede hacer todavía más. Además de colocar cachés más grandes en el chip de la CPU, ya que en cierto momento se llega al punto de rendimiento decreciente, se multiplican no sólo las unidades funcionales, sino también parte de la lógica de control. Algunos chips de CPU tienen esta propiedad, conocida como <strong>multihilamiento.</strong></p>
+<p>(<em>multithreading</em>) o <strong>hiperhilamiento</strong> (<em>hyperthreading</em>). Lo que hace es permitir que la CPU contenga el estado de dos hilos de ejecución (<em>threads</em>) distintos y luego alterne entre uno y otro con una escala de tiempo en nanosegundos (un hilo de ejecución es algo así como un proceso ligero, que a su vez es un programa en ejecución).</p>
+<p>Mas allá del multihilamiento, tenemos chips de CPU con dos, cuatro o más procesadores completos, o <strong>núcleos</strong> (<em>cores</em>) en su interior. Los chips de multinúcleo (multicore) de la figura 1.5. contienen efectivamente cuatro minichips en su interior, cada uno con su propia CPU independiente. Para hacer uso de dicho chip multinúcleo se requiere en definitiva un sistema operativo multiprocesador.</p>
+<p><img src="../../../img/sistemas-operativos/page-4-figure-9.jpeg" alt="" loading="lazy"></p>
+<h2><strong>1.2.2. La memoria</strong></h2>
+<p>El segundo componente importante en cualquier computadora es la memoria. En teoría, una memoria debe ser en extremo rápida (másrápida que la velocidad de ejecución de una instrucción, de manera que la memoria no detenga a la CPU), de gran tamaño y muy económica.</p>
+<p><img src="../../../img/sistemas-operativos/page-5-figure-2.jpeg" alt="" loading="lazy"></p>
+<p>Ninguna tecnología en la actualidad cumple con todos estos objetivos, por lo que se adopta una solución distinta. El sistema de memoria está construido como una jerarquía de capas, como se muestra en la figura 1.6. Las capas superiores tienen mayor velocidad, menor capacidad y mayor costo por bit que las capas inferiores, a menudo por factores de mil millones o más.</p>
+<p>La capa superior consiste en los registros internos de la CPU, la capacidad de almacenamiento de estos registros suele ser de 64x64 bits.</p>
+<p>El siguiente nivel es la <strong>memoria caché</strong>, que el hardware controla de manera parcial. La memoria principal se divide en líneas de caché, que por lo general son de 64 bytes, con direcciones de 0 a 63 en la línea de caché 0, direcciones de 64 a 127 en la línea de caché 1 y así sucesivamente. Las líneas de caché que se utilizan con más frecuencia se mantienen en <strong>una caché de alta velocidad, ubicada dentro o muy cerca de la CPU.</strong> Cuando el programa necesita leer una palabra de memoria, el hardware de la caché comprueba si la línea que se requiere se encuentra en la caché. Si es así (<em>a lo cual se le conoce como</em> <strong>acierto de caché</strong>), la petición de la caché se cumple y no se envía una petición de memoria a través del bus hacia la memoria principal. Los aciertos de caché por lo general requieren un tiempo aproximado de dos ciclos de reloj. Los fallos de caché <strong>tienen que ir a memoria, con un castigo considerable de tiempo</strong>. La memoria caché está limitada en tamaño debido a su alto costo.</p>
+<p>La memoria principal viene a continuación en la jerarquía de la figura 1-6. Es el &quot;caballo de batalla&quot; del sistema de memoria. Por lo general a la memoria principal se le conoce como <strong>RAM</strong> (<em>Random Access Memory, Memoria de Acceso Aleatorio</em>). Todas las peticiones de la CPU que no se puedan satisfacer desde la caché pasan a la memoria principal.</p>
+<p>Además de la memoria principal, muchas computadoras tienen una pequeña cantidad de memoria de acceso aleatorio no volátil. A diferencia de la <strong>RAM</strong>, la memoria no volátil no pierde su contenido cuando se desconecta la energía. La <strong>ROM</strong>  (<em>Read Only Memory, Memoria de sólo lectura</em>) se programa en la fábrica y no puede modificarse después. Es rápida y económica. En algunas computadoras, el cargador de arranque (bootstrap loader) que se utiliza para iniciar la computadora está contenido en la <strong>ROM</strong>.</p>
+<h1><strong>1.2.3. La memoria secundaria: disco</strong></h1>
+<p>El siguiente lugar en la jerarquía corresponde al disco magnético (disco duro). El almacenamiento en disco es dos órdenes de magnitud más económico que la RAM por cada bit, y a menudo es dos órdenes de magnitud más grande en tamaño también. El único problema es que el tiempo para acceder en forma aleatoria a los datos en ella es de cerca de tres órdenes de magnitud más lento. Esta baja velocidad</p>
+<p><img src="../../../img/sistemas-operativos/page-5-figure-10.jpeg" alt="" loading="lazy"></p>
+<p>se debe al hecho de que un disco es un dispositivo mecánico, como se muestra en la figura 1.7.</p>
+<p>Un disco consiste en uno o más platos que giran a 5400, 7200 o 10,800 rpm. Un <strong>brazo mecánico</strong>, con un punto de giro colocado en una esquina, se mueve sobre los platos de manera similar al brazo de la aguja en un viejo tocadiscos. La información se escribe en el disco en una serie de <strong>círculos concéntricos</strong>. En cualquier posición dada del brazo, cada una de las cabezas puede leer una región anular conocida como <strong>pista</strong> (<em>track</em>). En conjunto, todas las pistas para una posición dada del brazo forman un <strong>cilindro</strong> (<em>cylinder</em>).</p>
+<p><img src="../../../img/sistemas-operativos/page-6-picture-1.jpeg" alt="" loading="lazy"></p>
+<p>Además el <strong>disco</strong> introduce el concepto de <strong>memoria virtual</strong>, que se puede entender como usar el disco como una extension</p>
+<p>de la <strong>RAM</strong>. La memoria virtual nos va a permitir la ejecución de programas más grandes que la memoria física al colocarlos en el disco y usar la <strong>RAM como una especie de caché</strong> para las partes que más se usan. Este esquema requiere la reasignación de direcciones de memoria al instante, para convertir la dirección generada por el programa a la RAM. Esta <strong>traducción</strong> se realiza en el procesador mediante la <strong>MMU</strong>.</p>
+<p>La <strong>presencia de la caché y la MMU</strong> pueden tener un gran impacto en el rendimiento. En un sistema de <strong>multiprogramación</strong>, al cambiar de un programa a otro (<em>lo que se conoce comúnmente como cambio de contexto o context switch</em>), puede ser necesario vaciar todos los bloques modificados de la caché y modificar los registros de asignación en la <strong>MMU</strong>. Ambas operaciones son costosas y los programadores se esfuerzan bastante por evitarlas. Más adelante veremos algunas de las consecuencias de sus tácticas.</p>
+<h2><strong>1.2.4. Los dispositivos de E/S</strong></h2>
+<p>Los dispositivos de E/S también interactúan mucho con el sistema operativo. Como vimos en la figura 1.1., los dispositivos de E/S generalmente constan de dos partes: un <strong>dispositivo controlador y el dispositivo en sí</strong>. El dispositivo controlador es un chip o conjunto de chips que controla físicamente el dispositivo. Por ejemplo, acepta los comandos del sistema operativo para leer datos del dispositivo y los lleva a cabo. La otra pieza es el dispositivo en sí.</p>
+<p>Como cada tipo de <strong>dispositivo controlador</strong> es distinto, se requiere software diferente para controlar cada uno de ellos. El software que se comunica con un dispositivo controlador, que le proporciona comandos y acepta respuestas, se conoce como <strong>driver</strong> (<em>controlador</em>). Cada fabricante de dispositivos controladores tiene que suministrar un driver específico para cada sistema operativo en que pueda funcionar.</p>
+<p>Para utilizar el driver, se tiene que <strong>colocar en el sistema operativo</strong> de manera que pueda ejecutarse en modo <strong>kernel</strong>. Hay varias formas en que el driver se pueda colocar en el kernel, pero nos vamos a centrar en la que lo carga de forma dinámica. Esta forma consiste en que el sistema operativo acepte nuevos drivers mientras los ejecuta e instala al instante, sin necesidad de reiniciar el sistema. Los dispositivos <strong>conectables en caliente</strong>  (<em>hot- pluggable</em>), como los dispositivos USB e IEEE 1394, siempre necesitan drivers que se cargan en forma dinámica.</p>
+<p>Todo dispositivo controlador tiene un <strong>número pequeño de registros</strong> que sirven para comunicarse con él. Por ejemplo, un dispositivo controlador de disco con las mínimas características podría tener registros para especificar la dirección de disco, dirección de memoria, número de sectores e instrucción (lectura o escritura). Para activar el dispositivo controlador, <strong>el driver recibe un comando del sistema operativo</strong> y después lo traduce en los valores apropiados para escribirlos en los registros del dispositivo controlador. La colección de todos los registros del dispositivo controlador forma el <strong>espacio de puertos de E/S</strong>.</p>
+<p>En ciertas computadoras, los registros de dispositivo tienen una correspondencia con el espacio de direcciones del sistema operativo (las direcciones que puede utilizar), de modo que se puedan leer y escribir en ellas como si fuera en palabras de memoria ordinarias. En dichas computadoras no se requieren instrucciones de E/S especiales. En otras computadoras, los registros de dispositivo se colocan en un espacio de puertos de E/S</p>
+<p>especial, donde cada registro tiene una dirección de puerto. En estas máquinas hay instrucciones IN y OUT especiales <strong>disponibles en modo kernel</strong> que permiten a los drivers leer y escribir en los registros. El primer esquema elimina la necesidad de instrucciones de E/S especiales, pero utiliza parte del espacio de direcciones. El segundo esquema no utiliza espacio de direcciones, pero requiere instrucciones especiales.</p>
+<h2><strong>1.2.5. El Bus</strong></h2>
+<p>Consiste en un <strong>conjunto de cables</strong> eléctricos que conecta los distintos dispositivos de la <strong>computadora.</strong> Antes había <strong>un único bus</strong> que conectaba todos los dispositivos, pero eso acabo siendo inmanejable. Ahora hay <strong>8 buses</strong> (caché, local, memoria, PCI, SCSI, USB, IDE e ISA) cada uno con su propia <strong>velocidad de transferencia</strong> y <strong>función distintas.</strong></p>
+<h2><strong>1.2.6. El arranque de la computadora</strong></h2>
+<p>En la placa base hay un programa conocido como <strong>BIOS</strong> (<em>Basic</em></p>
+<p><em>Input Output System, Sistema básico de entrada y salida</em>) del sistema. El BIOS contiene software de E/S de bajo nivel, incluyendo procedimientos para leer el teclado, escribir en la pantalla y realizar operaciones de E/S de disco, entre otras cosas. Hoy en día está contenido en una RAM tipo flash que es no volátil pero el sistema operativo puede actualizarla cuando se encuentran errores en el BIOS.</p>
+<p>Al encender la computadora, el <strong>BIOS</strong> ejecuta pruebas de hardware, como verificar la cantidad de RAM instalada y la respuesta de dispositivos básicos como el teclado. Luego, explora los buses ISA y PCI para detectar dispositivos conectados, tanto los heredados como los de tipo <strong>plug and play</strong>, asignando configuraciones cuando sea necesario.</p>
+<p>El <strong>BIOS</strong> consulta una lista en la memoria <strong>CMOS</strong> para determinar el dispositivo de arranque. Los dispositivos probados en orden suelen ser el <strong>disco flexible, CD-ROM y el Disco Duro.</strong></p>
+<p>Se carga el <strong>Sistema Operativo</strong>, el BIOS lee el primer sector del dispositivo de arranque y lo coloca en memoria. Este sector contiene un programa que examina la <strong>tabla de particiones</strong> para determinar qué partición está activa. Se lee y ejecuta el <strong>cargador de arranque secundario</strong> de esa partición, que carga el sistema operativo desde la partición activa.</p>
+<p>El sistema operativo consulta al <strong>BIOS</strong> para obtener información de configuración y verifica si los <strong>drivers</strong> de los dispositivos están presentes. Si faltan, pide al usuario que inserte un CD-ROM con los drivers correspondientes. Una vez que los drivers están cargados en el <strong>kernel</strong>, el sistema operativo inicializa las tablas necesarias, crea procesos de segundo plano (llamados <strong>demonios</strong>) y arranca un programa de inicio de sesión o <strong>GUI</strong>.
+#Sistemas operativos de servidores</p>
+<h1><strong>1.2.7. Tipos de Sistemas Operativos</strong></h1>
+<h4>Sistemas operativos de mainframe</h4>
+<p>Están orientados hacia el procesamiento de muchos trabajos, sobre todo de muchas operaciones de E/S, a la vez. Se usan en servidores web de alto rendimiento, como en UNIX.</p>
+<h4>Sistemas operativos de servidores</h4>
+<p>Dan servicio a varios usuarios a la vez y les permiten compartir los recursos de hardware y software. Tenemos Linux, Windows, Solaris.</p>
+<h4>Sistemas operativos de multiprocesadores</h4>
+<p>Sistemas de varias CPUs. Linux, Windows.</p>
+<h4>Sistemas operativos de computadoras personales (PC)</h4>
+<p>Su trabajo es proporcionar un buen soporte a un <strong>sólo usuario</strong>. Linux, Windows y MacOS.</p>
+<h4>Sistemas operativos de computadoras de bolsillo (PDA)</h4>
+<p>Proporcionan servicios de telefonía, fotografía digital, etc. Android, IOS, Windows Phone.</p>
+<h4>Sistemas operativos empotrados (embedded)</h4>
+<p>Tienen un <strong>conjunto cerrado de aplicaciones</strong> y no se pueden instalar nuevas. Se usan en microondas, reproductores de música, etc. QNX, VxWorks.</p>
+<h4>SISTEMAS OPERATIVOS EN TIEMPO REAL</h4>
+<p>Su parámetro clave es el <strong>tiempo.</strong> Se usan en fábricas.</p>
+<h1><strong>1.3 Conceptos Básicos de los Sistemas Operativos</strong></h1>
+<h1><strong>1.3.1. Procesos</strong></h1>
+<p>Un concepto clave en todos los sistemas operativos es el <strong>proceso</strong>. Un proceso es en esencia un programa en ejecución. Cada proceso tiene asociado un <strong>espacio de direcciones</strong>, una lista de <strong>ubicaciones de memoria</strong> que va desde algún mínimo (generalmente 0) hasta cierto valor máximo, donde el proceso puede leer y escribir información. El espacio de direcciones contiene el programa ejecutable, los datos del programa y su pila. También hay asociado a cada proceso un conjunto de recursos, que comúnmente incluye registros (el contador de programa CP y el apuntador de pila SP, entre ellos), una lista de archivos abiertos, alarmas pendientes, listas de procesos relacionados y toda la demás información necesaria para ejecutar el programa. En esencia, un proceso es un recipiente que guarda toda la información necesaria para ejecutar un programa.</p>
+<p>Los procesos tienen su memoria dividida en 3 segmentos (lo de llamar a esto segmento es muy confuso y cuanto más sepáis sobre memoria más os va a confundir esto, sin embargo, pensad que en sistemas con segmentación esto es cierto, pero en sistemas con paginación se pueden interpretar como conjuntos de páginas independientes, si es la primera vez que lees esto no te preocupes, haz como que no lo has leído):</p>
+<ul>
+<li>Segmento de <strong>texto</strong> (<em>código del programa</em>).</li>
+<li>Segmento de <strong>datos</strong> (<em>variables</em>).</li>
+<li>Segmento de <strong>pila</strong>.</li>
+</ul>
+<p>Para darse una buena idea de lo que es un proceso, podemos pensar en un sistema de multiprogramación. Cuando tenemos varios procesos activos, cada cierto tiempo el sistema operativo decide detener la ejecución de un proceso y empezar a ejecutar otro; por ejemplo, debido a que el primero ha utilizado más tiempo del que le correspondía de la CPU en el último segundo. Por lo que la CPU <strong>conmuta entre procesos rápidamente,</strong> esto se conoce como un <strong>cambio de contexto</strong>.</p>
+<p>Cuando un proceso se suspende temporalmente, toda la información relevante (<em>como los archivos abiertos y su posición</em>) se guarda para poder reiniciar el proceso en el mismo estado cuando vuelva a ejecutarse. Esta información se almacena en la <strong>tabla de procesos</strong> del sistema operativo, la cual es un array (<em>o lista enlazada</em>) de estructuras, una para cada proceso que se encuentre actualmente en <strong>existencia</strong>. <strong>Esta tabla es global para todo el sistema y está cargada en la RAM.</strong></p>
+<p>La <strong>tabla de procesos</strong> es esencial en un sistema de tiempo compartido porque:</p>
+<ul>
+<li><strong>Almacena el estado de los procesos:</strong> Contiene información sobre cada proceso, como su ID, estado (ejecutando, listo, bloqueado), registros, contador de programa, y recursos asignados.</li>
+<li><strong>Facilita la multitarea:</strong> Permite al sistema operativo gestionar varios procesos a la vez, realizando cambios de contexto de manera eficiente.</li>
+<li><strong>Rastrea recursos:</strong> Ayuda a garantizar que los recursos asignados a cada proceso (como memoria y archivos abiertos) estén correctamente administrados.</li>
+</ul>
+<p><img src="../../../img/sistemas-operativos/page-9-picture-0.jpeg" alt="" loading="lazy"></p>
+<p>En un sistema de <strong>multiprogramación</strong>, varios procesos pueden estar activos simultáneamente. El sistema operativo se encarga de <strong>interrumpir un proceso y asignar tiempo de CPU a otro</strong>, gestionando el intercambio entre procesos mediante suspensiones temporales.</p>
+<p>Las llamadas al sistema de administración de procesos clave son las que se encargan de la creación y la terminación de los procesos. Considere un ejemplo común. Un proceso llamado <strong>intérprete de comandos</strong> o <strong>shell</strong> lee comandos de una terminal. El usuario acaba de escribir un comando, solicitando la compilación de un programa. El shell debe entonces crear un proceso para ejecutar el compilador. Cuando ese proceso ha terminado la compilación, ejecuta una llamada al sistema para terminarse a sí mismo.</p>
+<p>Si un proceso puede crear uno o más procesos aparte (conocidos como <strong>procesos hijos</strong>) y estos procesos a su vez pueden crear procesos hijos, llegamos rápidamente la estructura de árbol de procesos de la figura 1.9. Los procesos relacionados que cooperan para realizar un cierto trabajo a menudo necesitan comunicarse entre sí y sincronizar sus actividades. A esta comunicación se le conoce como <strong>comunicación entre procesos</strong> mediante llamadas.</p>
+<p>En algunas ocasiones se tiene la necesidad de transmitir información a un proceso en ejecución que no está esperando esta información. Cuando ha transcurrido el número especificado de segundos, el sistema operativo envía una <strong>señal de alarma</strong> al proceso. <strong>La señal provoca que el proceso suspenda en forma temporal lo que esté haciendo, almacene</strong></p>
+<p><img src="../../../img/sistemas-operativos/page-9-figure-5.jpeg" alt="" loading="lazy"></p>
+<p><strong>sus registros en la pila y empiece a ejecutar un procedimiento manejador de señales especial</strong>, por ejemplo, para retransmitir un mensaje que se considera perdido. Cuando termina el manejador de señales, el proceso en ejecución <strong>se reinicia en el estado en el que se encontraba justo antes de la señal</strong>. Las señales son la analogía en software de las interrupciones de hardware y se pueden generar mediante una variedad de causas además de la expiración de los temporizadores.</p>
+<p>Cada persona autorizada para utilizar un sistema recibe una <strong>UID</strong> (<em>User Identification</em>, Identificación de usuario) que el administrador del sistema le asigna. Cada proceso iniciado tiene el UID de la persona que lo inició. Un proceso hijo tiene el mismo UID que su padre. Los usuarios pueden ser miembros de grupos, cada uno de los cuales tiene una <strong>GID</strong> (<em>Group Identification</em>, Identificación de grupo). Una UID conocida como <strong>superusuario</strong> (<em>superuser</em> en UNIX) tiene poder especial y puede violar muchas de las reglas de protección.</p>
+<h4><strong>1.3.2 Espacio de direcciones</strong></h4>
+<p>Cada computadora tiene cierta <strong>memoria principal que utiliza para mantener los programas en ejecución,</strong>  por lo que se deduce que los espacios de direcciones de los programas se mantienen en esta <strong>memoria principal</strong>. En un sistema operativo muy simple sólo hay un programa a la vez en la memoria. Para ejecutar un segundo programa se tiene que quitar el primero y colocar el segundo en la memoria.</p>
+<p>Los sistemas operativos más sofisticados permiten colocar varios programas en memoria al mismo tiempo. Para evitar que <strong>interfieran</strong> unos con otros (y con el sistema operativo), se necesita cierto mecanismo de protección. Aunque este mecanismo tiene que estar en el hardware, es controlado por el sistema operativo.</p>
+<p>El problema surge cuando tenemos varios procesos que superan el tamaño de la memoria física. Para manejar esta situación, los sistemas operativos modernos utilizan una técnica llamada <strong>memoria virtual</strong>. Esta técnica permite que un proceso tenga un espacio de <strong>direcciones más grande que la memoria física real disponible</strong>, dividiendo el espacio de direcciones en partes que se mantienen en la memoria principal y en el disco duro. El sistema operativo gestiona el <strong>movimiento de estos fragmentos entre la memoria principal y el disco</strong> según sea necesario.</p>
+<h2><strong>1.3.3 Sistema de archivos</strong></h2>
+<p>Otro concepto clave de casi todos los sistemas operativos es el sistema de archivos. Sin duda se requieren las llamadas al sistema para crear los archivos, eliminarlos, leer y escribir en ellos. Antes de poder leer un archivo, localizarse en el disco para abrirse y una vez que se ha leído información del archivo debe cerrarse, por lo que se proporcionan llamadas para hacer estas cosas.</p>
+<p>Un <strong>directorio</strong> es una forma de agrupar archivos, y puede contener tanto <strong>archivos como otros directorios</strong>, esto da lugar a una <strong>estructura de árbol</strong>. Se necesitan llamadas al sistema para crear y eliminar directorios. También se proporcionan llamadas para poner un archivo existente en un directorio y para eliminar un archivo de un directorio. Las entradas de directorio pueden ser archivos u otros directorios. Este modelo también da surgimiento a una jerarquía (el sistema de archivos) como se muestra en la figura 1.10.</p>
+<p><img src="../../../img/sistemas-operativos/page-10-picture-7.jpeg" alt="" loading="lazy"></p>
+<p>Para especificar cada archivo dentro de la jerarquía de directorio, se proporciona su <strong>nombre de ruta</strong> de la parte superior de la jerarquía de directorios, el <strong>directorio raíz</strong>. Dichos nombres de ruta absolutos consisten de la lista de directorios que deben recorrerse desde el directorio raíz para llegar al archivo, y se utilizan barras diagonales para separar los componentes.</p>
+<p>En cada instante, cada proceso tiene un <strong>directorio de trabajo</strong> actual, en el que se buscan los nombres de ruta que no empiecen con una barra diagonal. Como ejemplo, en la figura 1.10. si <em>/Docentes/Prof.Brown</em> fuera el directorio de trabajo, entonces el uso del nombre de ruta <em>Cursos/CS101</em> produciría el mismo archivo que el nombre de ruta absoluto antes proporcionado. Los procesos pueden modificar su directorio de trabajo mediante</p>
+<p>una llamada al sistema que especifique el nuevo</p>
+<p>directorio de trabajo.</p>
+<p>Otro concepto importante en UNIX es el <strong>sistema de archivos montado</strong>. Consiste en incluir otros <strong>sistemas de archivos externos</strong> a la jerarquía del sistema de archivos raíz del disco duro. En principio, no se puede acceder a los archivos de los sistemas de almacenamiento externos pues no existe manera de especificar sus nombres de ruta.</p>
+<p><img src="../../../img/sistemas-operativos/page-10-figure-13.jpeg" alt="" loading="lazy"></p>
+<p>La llamada al sistema <em>mount</em> permite adjuntar el sistema de archivos externo al sistema de archivos raíz en donde el programa desea que esté.</p>
+<h1><strong>1.3.4 Protección</strong></h1>
+<p>Las computadoras contienen grandes cantidades de información que los usuarios comúnmente desean proteger y mantener de manera confidencial. Es responsabilidad del sistema operativo administrar la seguridad del sistema de manera que los archivos, por ejemplo, sólo sean accesibles para los usuarios autorizados.</p>
+<p>Como un ejemplo simple, sólo para tener una idea de cómo puede funcionar la seguridad, considere el sistema operativo UNIX. Los archivos en UNIX están protegidos debido a que cada uno recibe un código de protección binario de 9 bits. El código de protección consiste en tres campos de 3 bits, uno para el propietario, uno para los demás miembros del grupo del propietario (el administrador del sistema divide a los usuarios en grupos) y uno para todos los demás. Cada campo tiene un bit para el acceso de lectura, un bit para el acceso de escritura y un bit para el acceso de ejecución.</p>
+<p>Estos 3 bits se conocen como los <strong>bits rwx</strong>. Por ejemplo, el código de protección rwxrx--x indica que el propietario puede leer (<strong>r</strong>), escribir (<strong>w</strong>) o ejecutar (<strong>x</strong>) el archivo, otros miembros del grupo pueden leer o ejecutar (pero no escribir) el archivo y todos los demás pueden ejecutarlo (pero no leer ni escribir). Para un directorio, x indica el permiso de búsqueda. Un guion corto indica que no se tiene el permiso correspondiente.</p>
+<h1><strong>1.3.5 El intérprete de comandos (<em><strong>Shell</strong></em>)</strong></h1>
+<p>El <strong>shell</strong> es el intérprete de comandos de UNIX. Aunque <strong>no forma parte del sistema operativo</strong>, utiliza con frecuencia muchas características del mismo y, por ende, sirve como un buen ejemplo de la forma en que se pueden utilizar las llamadas al sistema. También es la interfaz principal entre un usuario sentado en su terminal y el sistema operativo, a menos que el usuario esté usando una interfaz gráfica de usuario. Existen muchos shells, incluyendo <em>sh</em>, <em>csh</em>, <em>ksh</em> y <em>bash</em>.</p>
+<p>Cuando cualquier usuario inicia sesión, se inicia un shell. El shell tiene la terminal como entrada y salida estándar. Empieza por escribir el <strong>indicador de comandos (<em><strong>prompt</strong></em>)</strong>, un carácter tal como un signo de dólar, que indica al usuario que el shell está esperando aceptar un comando. El usuario puede especificar que la salida estándar sea redirigida a un archivo, y la salida de un programa se puede utilizar como entrada para otro, si se conectan mediante un canal.</p>
+<p>En el shell además podemos realizar las siguientes acciones:</p>
+<ul>
+<li><strong>Redireccionamiento:</strong> se puede redirigir la entrada y salida estándar con los operandos &lt; y&gt;, respectivamente. Date &gt; archivo</li>
+<li><strong>Canalización:</strong> la salida de un programa se puede usar como entrada para otro operando | . cat archivo1 archivo2 archivo3 |sort &gt;/dev/lp</li>
+<li><strong>Comodines:</strong> el shell lo sustituye por todas las posibles combinaciones de caracteres provenientes del directorio en cuestión.</li>
+</ul>
+<h1><strong>1.4 Llamadas al Sistema</strong></h1>
+<p>Si un programa de usuario en modo usuario necesita un servicio del sistema, como leer del disco ejecuta un <strong>trap</strong> para pasar el SO. Después este averigua que quiere el <strong>proceso llamador</strong>, lleva a cabo la <strong>llamada al sistema</strong> y devuelve el control a la siguiente instrucción. La verdadera mecánica relacioneada con la acción de emitir una lllamada al sistema es muy <strong>dependiente de la máquina</strong> (y a menudo se expresa en <strong>ensamblador</strong>), se proporciona al programado una <strong>biblioteca de procedimientos</strong> para poder realizar llamadas al sistema desde programas en C y otros lenguajes.</p>
+<p>Una <strong>llamada al sistema</strong> (system call) es el mecanismo que permite a los programas en modo usuario solicitar servicios o recursos del sistema operativo en modo kernel.</p>
+<p>Ejemplo:</p>
+<p>cuenta = read(fd, bufer, nbytes);</p>
+<p>La llamada al sistema (y el procedimiento de biblioteca) devuelve el número de bytes que se leen en cuenta. Si la llamada al sistema no se puede llevar a cabo, ya sea debido a un parámetro inválido o a un error del disco, <em>cuenta</em> se establece a -1 y el número de error se coloca en una variable global llamada <em>errno</em>.</p>
+<p><img src="../../../img/sistemas-operativos/page-12-figure-6.jpeg" alt="" loading="lazy"></p>
+<p><strong>FIGURA 1.12.</strong> Los 11 pasos para realizar la llamada al sistema read(fd, bufer, nbytes).</p>
+<ul>
+<li>El programa de usuario <strong>llamador</strong> introduce los datos en la <strong>pila</strong></li>
+<li>Se llama al procedimiento read de la <strong>biblioteca</strong> correspondiente (que seguramente esté en ensamblador).</li>
+<li>El código de la librería coloca en un <strong>registro</strong> el número de llamada correspondiente para que el SO pueda determinar qué hacer con ella.</li>
+<li>El procedimiento de biblioteca ejecuta un <strong>trap</strong> para cambiar el modod usario a <strong>kernel</strong> y empezar la ejecución en una dirección <strong>fija dentro del núcleo.</strong></li>
+</ul>
+<h4><strong>LA INSTRUCCIÓN DE TRAP SIEMPRE SALTA A UNA DIRECCIÓN FIJA.</strong></h4>
+<ul>
+<li>El en el <strong>kernel</strong>, el <strong>despachador</strong> analiza el número de la llamada y a través de una <strong>tabla de apuntadores</strong> a <strong>manejadores de llamadas</strong> indexados en base al número de llamada, se pasa el control al manejador de llamada correspondiente</li>
+<li>Se ejecuta el <strong>manejador de esa llamada</strong>.</li>
+<li>Se devuelve el control (o no) al procedimiento de biblioteca, en la instrucción de después del trap.</li>
+<li>Después este procedimiento de biblioteca vuelve al programa de usuario.</li>
+<li>El programa de usuario limpia la pila.</li>
+</ul>
+<h1><strong>1.5 Llamadas al sistema para la administración de procesos</strong></h1>
+<table>
+<thead>
+<tr>
+<th>Llamada</th>
+<th>Descripción</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pid = fork()</td>
+<td>Crea un proceso hijo, idéntico al padre</td>
+<td></td>
+</tr>
+<tr>
+<td>pid = waitpid(pid, &amp;statloc, opciones)</td>
+<td>Espera a que un hijo termine</td>
+<td></td>
+</tr>
+<tr>
+<td>s = execve(nombre, argv, entornp)</td>
+<td>Reemplaza la imagen del núcleo de un proceso</td>
+<td></td>
+</tr>
+<tr>
+<td>exit(estado)</td>
+<td>Termina la ejecución de un proceso y devuelve el estado</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Descripción</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Abre un archivo para lectura, escritura o ambas</td>
+<td></td>
+</tr>
+<tr>
+<td>Cierra un archivo abierto</td>
+<td></td>
+</tr>
+<tr>
+<td>Lee datos de un archivo y los coloca en un búfer</td>
+<td></td>
+</tr>
+<tr>
+<td>Escribe datos de un búfer a un archivo</td>
+<td></td>
+</tr>
+<tr>
+<td>Desplaza el apuntador del archivo</td>
+<td></td>
+</tr>
+<tr>
+<td>Obtiene la información de estado de un archivo</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Llamada</th>
+<th>Descripción</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>s = mkdir(nombre, modo)</td>
+<td>Crea un nuevo directorio</td>
+<td></td>
+</tr>
+<tr>
+<td>s = rmdir(nombre)</td>
+<td>Elimina un directorio vacío</td>
+<td></td>
+</tr>
+<tr>
+<td>s = link(nombre1, nombre2)</td>
+<td>Crea una nueva entrada llamada nombre2, que apunta a nombre1</td>
+<td></td>
+</tr>
+<tr>
+<td>s = unlink(nombre)</td>
+<td>Elimina una entrada de directorio</td>
+<td></td>
+</tr>
+<tr>
+<td>s = mount(especial, nombre, bandera)</td>
+<td>Monta un sistema de archivos</td>
+<td></td>
+</tr>
+<tr>
+<td>s = umount(especial)</td>
+<td>Desmonta un sistema de archivos</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1><strong>FIGURA 1.13.</strong> Algunas de las principales llamadas al sistema POSIX. El código de</h1>
+<table>
+<thead>
+<tr>
+<th>Llamada</th>
+<th>Descripción  Cambia el directorio de trabajo</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>s = chdir(nombredir)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>s = chmod(nombre, modo)</td>
+<td>Cambia los bits de protección de un archivo</td>
+<td></td>
+</tr>
+<tr>
+<td>s = kill(pid, senial)</td>
+<td>Envía una señal a un proceso</td>
+<td></td>
+</tr>
+<tr>
+<td>segundos = tiempo(&amp;segundos)</td>
+<td>Obtiene el tiempo transcurrido desde Ene 1, 1970</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>retorno <em>s</em> es –1 si ocurrió un error. Los códigos de retorno son: <em>pid</em> es un id de proceso, <em>fd</em> es un descriptor de archivo, <em>n</em> es una cuenta de bytes, <em>posicion</em> es un desplazamiento dentro del <em>archivo</em> y segundos es el tiempo transcurrido.</p>
+<h1><strong>1.6 Estructura del Sistema Operativo</strong></h1>
+<p><img src="../../../img/sistemas-operativos/page-14-figure-1.jpeg" alt="" loading="lazy"></p>
+<h1><strong>1.7 Cosas importantes de este Tema</strong></h1>
+<p>La definición de Sistema Operativo.</p>
+<p>Saberse el 1.4 perfectamente.</p>
+<p>Entender los siguientes conceptos que en el Tanembaum explica por encima y no se terminan de entender (esta información la sacamos tras mandarle un correo al profesor):</p>
+<ul>
+<li><strong>Trap:</strong> salto para ejecutar algún código del kernel del SO, esto incluye syscalls, interrupciones, excepciones, etc.</li>
+<li><strong>Llamada al sistema:</strong> es producida por <strong>software</strong> (generada por algunas funciones en C o instrucciones en assembly como las del MIPs). Están definidas en las librerías, que pasan el nº de llamada al SO en modo kernel (por lo que son <strong>Traps</strong>) y se ejecutan en el kernel. Se puede pensar que son como una herramienta que permite al usuario acceder a instrucciones privilegiadas, prácticamente cualquier función de librería de C son syscalls (hay una lista en internet de todas ellas para el que se ralle con eso).</li>
+<li><strong>Interrupciones:</strong> son producidas por <strong>hardware</strong> externo al procesador (Disco duro, puertos de E/S, etc.). Son asíncronos y se producen en cualquier momento, el controlador de interrupciones las espera pasivamente. Las interrupciones implican un <strong>Trap</strong> porque el dispositivo controlador que las recibe y la <strong>resolución de la interrupción es un Trap.</strong> Por si no queda claro, el trap no se produce cuando por ejemplo presionas una tecla del teclado, se produce cuando el SO gestiona esa interrupción.</li>
+<li><strong>Excepción:</strong> se producen al intentar ejecutar una instrucción ilegal como una división por 0 o un <strong>fallo de página</strong> (más adelante se explica lo que es porque es muy importante). Una excepción es un <strong>Trap</strong> porque implica pasar a modo kernel. Además sabemos que al ocurrir un fallo de página se debe de traer una página del disco, lo además genera una interrupción cuya resolución implica otro Trap.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-procesos-e-hilos.html"><span class="nav-etiqueta">siguiente →</span>2. Procesos e Hilos</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

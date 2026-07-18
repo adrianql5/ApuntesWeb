@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Protección de la Privacidad en el Mundo Digital — apuntes de SEGINFO (tercer curso de Ingeniería Informática).">
+<title>1. Protección de la Privacidad en el Mundo Digital · SEGINFO · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">seginfo</a><span class="miga-sep">/</span><span aria-current="page">1-proteccion-de-la-privacidad-en-el-mundo-digital</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">SEGINFO · curso 3</p>
+    <h1>1. Protección de la Privacidad en el Mundo Digital · SEGINFO</h1>
+  </header>
+  <div class="prosa">
+<h1>1.1 Privacidad y recogida de datos</h1>
+<p><strong>Privacidad</strong>: derecho a controlar qué conocen otros sobre nosotros, nuestras comunicaciones y nuestra actividad. No afecta solo a nombre o DNI: también incluye hábitos, conducta, ubicación, salud, datos biométricos, finanzas o cualquier <strong>dato sensible según el contexto</strong>.</p>
+<ul>
+<li><strong>Sujeto</strong>: persona o entidad descrita por los datos.</li>
+<li><strong>Propietario</strong>: quien posee los datos.</li>
+<li>Problema actual: recogida masiva, consentimientos poco claros y pérdida de control una vez entregados los datos.</li>
+</ul>
+<p>Una recogida correcta debe ser legal, clara, proporcional a la finalidad, precisa y actualizada. También debe informar de finalidad y conservación, pedir consentimiento o base legal para nuevos usos, proteger contra pérdida o uso indebido, permitir acceso/rectificación/reclamación y tener un responsable o controlador.</p>
+<h1>1.2 Exposición y huella digital</h1>
+<p>En Internet se suelen pedir más datos de los necesarios. Antes de rellenar formularios conviene valorar el servicio, la publicidad/seguimiento asociado y la política de privacidad.</p>
+<p>Fuentes típicas de exposición: listas públicas, boletines, resoluciones, blogs, firmas en manifiestos, asociaciones, sindicatos, peticiones y redes sociales. <strong>Egosurfing</strong> = buscar información propia en Internet para controlar la identidad digital.</p>
+<p><strong>Comportamiento digital</strong>: toda actividad con dispositivos digitales deja rastro. Ordenadores, móviles, cuentas de grandes proveedores y wearables pueden registrar archivos, descargas, llamadas, tiempo de uso, salud o ubicación. Preguntas clave: cómo se transmiten los datos, dónde se almacenan, quién accede y si se comparten con terceros.</p>
+<h1>1.3 Técnicas de seguimiento</h1>
+<ul>
+<li><strong>Cookies</strong>: almacenan datos en el equipo y los recuperan al volver a una web. Tipos: propias/de terceros, de sesión/persistentes, técnicas/personalización/publicidad comportamental/análisis. Las de terceros y publicidad comportamental son las más invasivas.</li>
+<li><strong>Web bugs o web beacons</strong>: elementos invisibles en webs o correos que registran IP, navegador, sistema, fecha u hora. Se reducen bloqueando imágenes automáticas y usando bloqueadores.</li>
+<li><strong>Spyware</strong>: código que espía y recopila datos; los <code>hijackers</code> alteran programas para redirigir o exfiltrar información.</li>
+<li><strong>Logs</strong>: registros de servidores o sistemas, por ejemplo IP, fecha, recurso accedido, navegador y página de procedencia. También permiten perfilar comportamiento.</li>
+</ul>
+<h1>1.4 Reducir rastros y ganar anonimato</h1>
+<p>Medidas básicas: evitar autocompletado con datos sensibles, limitar cookies, borrar caché e historial, no iniciar sesión en el navegador si no hace falta, cerrar sesiones y separar navegadores por uso.</p>
+<p><strong>La navegación privada solo reduce rastros locales; los servidores siguen registrando actividad.</strong></p>
+<p>Para más anonimato: equipos públicos, proxies, cuentas anónimas y redes como <strong>Tor</strong>, <strong>I2P</strong> o <strong>Hyphanet/Freenet</strong>. Aun así, anonimato local o frente a una web no equivale a anonimato total.</p>
+<h1>1.5 Redes sociales y tecnologías</h1>
+<p>En redes sociales: perfil privado si hay duda, verificar desconocidos, no publicar datos de terceros, pensar en la reputación futura y no compartir información no verificada.</p>
+<ul>
+<li><strong>RFID</strong>: identificador único; facilita seguimiento de objetos/personas e inferencias personales.</li>
+<li><strong>Nube</strong>: la ubicación física y jurídica de los datos afecta a privacidad, confidencialidad y jurisdicción.</li>
+<li><strong>Voto electrónico</strong>: debe proteger el secreto del voto y evitar saber si alguien votó o a quién votó.</li>
+</ul>
+<h1>Para test</h1>
+<ul>
+<li>Privacidad = control sobre información personal y comportamiento.</li>
+<li>Los datos sensibles dependen del contexto.</li>
+<li>Privacidad suele costar comodidad, personalización o calidad de servicio.</li>
+<li>Técnicas clave de rastreo: cookies, web bugs, spyware y logs.</li>
+<li>Cookies de terceros/publicidad comportamental = más problemáticas.</li>
+<li>Navegación privada no oculta la actividad al servidor.</li>
+<li>Recursos: <strong>AEPD</strong>, <strong>INCIBE</strong> y <strong>EPIC</strong>.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-sgsi-analisis-y-gestion-de-riesgos.html"><span class="nav-etiqueta">siguiente →</span>2. SGSI Análisis y gestión de riesgos</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

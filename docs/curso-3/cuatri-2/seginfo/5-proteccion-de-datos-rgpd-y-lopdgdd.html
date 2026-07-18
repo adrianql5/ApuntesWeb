@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Protección de datos RGPD y LOPDGDD — apuntes de SEGINFO (tercer curso de Ingeniería Informática).">
+<title>5. Protección de datos RGPD y LOPDGDD · SEGINFO · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">seginfo</a><span class="miga-sep">/</span><span aria-current="page">5-proteccion-de-datos-rgpd-y-lopdgdd</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">SEGINFO · curso 3</p>
+    <h1>5. Protección de datos RGPD y LOPDGDD · SEGINFO</h1>
+  </header>
+  <div class="prosa">
+<h1>5.1 Protección de datos</h1>
+<p>La <strong>protección de datos</strong> es un derecho fundamental reconocido a nivel nacional y europeo.</p>
+<p>Norma principal: <strong>Reglamento (UE) 2016/679, RGPD</strong>, de aplicación directa.</p>
+<p>Objetivos del RGPD:</p>
+<ol>
+<li>Garantizar la libre circulación de datos personales.</li>
+<li>Regular el derecho de las personas físicas a proteger sus datos.</li>
+</ol>
+<h1>5.2 Conceptos básicos</h1>
+<ul>
+<li><strong>Dato personal</strong>: información sobre una persona física identificada o identificable.</li>
+<li><strong>Identificable</strong>: puede saberse quién es directa o indirectamente mediante nombre, DNI, IP, rasgos físicos, genéticos, etc.</li>
+<li><strong>Interesado/titular</strong>: persona física a la que pertenecen los datos.</li>
+<li><strong>Tratamiento</strong>: cualquier operación sobre datos personales, automatizada o no.</li>
+<li><strong>AEPD</strong>: autoridad de control en España.</li>
+</ul>
+<p>Capacidades:</p>
+<ul>
+<li><strong>Capacidad jurídica</strong>: ser titular de derechos y obligaciones. Se adquiere al nacer, es universal y no se pierde.</li>
+<li><strong>Capacidad de obrar</strong>: ejercer derechos válidamente por uno mismo. Depende de edad y condiciones personales.</li>
+</ul>
+<h1>5.3 Ámbitos de aplicación del RGPD</h1>
+<h2>Subjetivo</h2>
+<ul>
+<li>Titulares de derechos: <strong>personas físicas</strong>.</li>
+<li>Titulares de obligaciones: personas físicas o jurídicas, públicas o privadas.</li>
+<li>Personas fallecidas: el RGPD no se aplica directamente. En España, familiares/herederos pueden pedir rectificación o supresión salvo prohibición expresa del fallecido.</li>
+</ul>
+<h2>Territorial</h2>
+<p>Se aplica si:</p>
+<ul>
+<li>El tratamiento se realiza en la UE.</li>
+<li>Se ofrecen bienes o servicios a personas en la UE.</li>
+<li>Se monitoriza el comportamiento de personas en la UE.</li>
+</ul>
+<h2>Material</h2>
+<p>Se aplica a:</p>
+<ul>
+<li>Tratamientos automatizados.</li>
+<li>Tratamientos manuales si los datos están o estarán en un fichero organizado.</li>
+</ul>
+<p>Quedan fuera:</p>
+<ul>
+<li>Seguridad nacional y materias fuera del ámbito UE.</li>
+<li>Política Exterior y de Seguridad Común.</li>
+<li>Investigación, detección o enjuiciamiento penal.</li>
+<li>Actividades personales o domésticas.</li>
+</ul>
+<p>En redes sociales puede no haber excepción doméstica si los datos son accesibles a mucha gente, indexables por buscadores, afectan a terceros o son sensibles.</p>
+<h1>5.4 Consentimiento y menores</h1>
+<p><strong>Consentimiento</strong>: manifestación libre, específica, informada e inequívoca mediante acción afirmativa. No vale el consentimiento tácito.</p>
+<p>Condiciones destacadas:</p>
+<ul>
+<li>Debe poder retirarse tan fácilmente como se dio.</li>
+<li>La información debe ser clara, sencilla e inteligible.</li>
+<li>RGPD: menores pueden consentir desde los <strong>16 años</strong>, con posibilidad estatal de bajarlo hasta 13.</li>
+<li>España: la LOPDGDD lo fija en <strong>14 años</strong>.</li>
+</ul>
+<h1>5.5 Categorías especiales de datos</h1>
+<p>Su tratamiento está prohibido salvo excepciones suficientes, como consentimiento explícito u obligación legal.</p>
+<p>Incluyen:</p>
+<ul>
+<li>Datos biométricos.</li>
+<li>Datos de salud.</li>
+<li>Datos genéticos.</li>
+<li>Orientación sexual.</li>
+<li>Raza/origen.</li>
+<li>Otros datos especialmente sensibles.</li>
+</ul>
+<h1>5.6 Roles en el tratamiento</h1>
+<ul>
+<li><strong>Responsable</strong>: determina fines y medios del tratamiento.</li>
+<li><strong>Encargado</strong>: trata datos por cuenta del responsable.</li>
+<li><strong>Delegado de Protección de Datos (DPD)</strong>: asesora, supervisa cumplimiento y actúa como punto de contacto con interesados y autoridad de control.</li>
+</ul>
+<p>Responsable y encargado deben aplicar medidas técnicas y organizativas adecuadas y valorar evaluación de impacto o consulta previa cuando proceda.</p>
+<h1>5.7 Principios del art. 5 RGPD</h1>
+<ul>
+<li><strong>Licitud, lealtad y transparencia</strong>: base legal y explicación clara.</li>
+<li><strong>Limitación de finalidad</strong>: fines explícitos y legítimos.</li>
+<li><strong>Minimización</strong>: solo datos adecuados, pertinentes y necesarios.</li>
+<li><strong>Exactitud</strong>: datos correctos; si no, rectificación o supresión.</li>
+<li><strong>Limitación de conservación</strong>: conservar solo el tiempo necesario; después suprimir o anonimizar.</li>
+<li><strong>Integridad y confidencialidad</strong>: impedir accesos no autorizados.</li>
+<li><strong>Responsabilidad proactiva</strong>: cumplir y poder demostrarlo.</li>
+</ul>
+<h1>5.8 Licitud del tratamiento: art. 6 RGPD</h1>
+<p>El tratamiento es lícito si existe al menos una base:</p>
+<ol>
+<li>Consentimiento.</li>
+<li>Ejecución de contrato.</li>
+<li>Obligación legal.</li>
+<li>Intereses vitales.</li>
+<li>Interés público o ejercicio de poderes públicos.</li>
+<li>Interés legítimo del responsable o tercero, salvo que prevalezcan derechos del interesado.</li>
+</ol>
+<p>En Administraciones Públicas, el <strong>interés legítimo</strong> no se aplica cuando actúan en ejercicio de sus funciones. Según el <strong>art. 8 LOPDGDD</strong>, interés público o poderes públicos deben derivar de una competencia atribuida por norma con rango de ley.</p>
+<h1>5.9 Autoridades de protección de datos</h1>
+<p>El RGPD exige autoridades de control independientes.</p>
+<p>En España:</p>
+<ul>
+<li><strong>AEPD</strong>.</li>
+<li><strong>APDCAT</strong>.</li>
+<li><strong>AVPD</strong>.</li>
+<li>Consejo de Transparencia y Protección de Datos de Andalucía.</li>
+</ul>
+<p>Las autoridades autonómicas pueden actuar sobre tratamientos del sector público autonómico/local, funciones públicas autonómicas/locales y tratamientos previstos en Estatutos.</p>
+<p>Garantías de independencia:</p>
+<ul>
+<li>Autoridad administrativa independiente.</li>
+<li>Presidencia mediante convocatoria pública y control parlamentario.</li>
+<li>Presupuesto propio.</li>
+<li>Recursos suficientes.</li>
+<li>Sin instrucciones externas.</li>
+</ul>
+<p>Competencias:</p>
+<ul>
+<li><strong>Investigación</strong>: pedir información, auditar, acceder a datos/locales y revisar certificaciones.</li>
+<li><strong>Correctoras</strong>: advertencias, órdenes, limitación/prohibición de tratamientos, suspensión de flujos, retirada de certificaciones, amonestaciones y multas.</li>
+<li><strong>Asesoramiento</strong>: consulta previa, dictámenes, códigos de conducta y certificación.</li>
+</ul>
+<p>Multas RGPD:</p>
+<ul>
+<li>Hasta <strong>10 millones o 2 %</strong> del volumen global anual.</li>
+<li>Hasta <strong>20 millones o 4 %</strong> del volumen global anual para infracciones más graves.</li>
+</ul>
+<h1>5.10 Servicios públicos proactivos</h1>
+<p><strong>Servicios proactivos</strong>: la Administración se anticipa y ofrece servicios ya cumplimentados usando información que ya tiene del ciudadano.</p>
+<p>Ventaja: evita que personas vulnerables pierdan ayudas por desconocimiento.</p>
+<p>Riesgo: puede excluir a quien tiene menos competencias digitales o de quien hay menos datos.</p>
+<p>Idea clave: la protección de datos busca proteger derechos fundamentales, no bloquear por sistema el uso de datos.</p>
+<p>Ejemplos:</p>
+<ul>
+<li><strong>Asturias</strong>: habilita tratamiento de datos en historia social única para gestión de servicios sociales y protección de colectivos vulnerables.</li>
+<li><strong>Cataluña</strong>: la APDCAT ha sido más restrictiva y exige consentimiento explícito en iniciativas de servicios proactivos.</li>
+<li><strong>STS 1206/2025</strong>: permite a la Agencia Tributaria usar datos de terceros sin consentimiento para investigar fraude fiscal por obligación legal e interés público.</li>
+</ul>
+<h1>5.11 Derechos del interesado</h1>
+<p>Derechos principales:</p>
+<ul>
+<li><strong>Información</strong>: arts. 13 y 14 RGPD.</li>
+<li><strong>Acceso</strong>: saber si se tratan datos y obtener copia.</li>
+<li><strong>Rectificación</strong>: corregir datos inexactos o incompletos.</li>
+<li><strong>Supresión/derecho al olvido</strong>: eliminar datos si concurre causa legal.</li>
+<li><strong>Limitación</strong>: restringir temporalmente el tratamiento.</li>
+<li><strong>Portabilidad</strong>: recibir datos en formato estructurado y transmitirlos a otro responsable.</li>
+<li><strong>Oposición</strong>: oponerse por interés público, poderes públicos o interés legítimo; siempre cabe ante marketing directo.</li>
+<li><strong>No decisiones automatizadas</strong>: no sufrir decisiones solo automatizadas con efectos jurídicos o significativos.</li>
+</ul>
+<h2>Información cuando se recogen datos del interesado</h2>
+<p>Debe informarse de responsable, DPD, fines, base jurídica, destinatarios, transferencias internacionales, plazo de conservación, derechos, retirada del consentimiento, reclamación ante autoridad, obligación de facilitar datos y decisiones automatizadas.</p>
+<h2>Información si los datos no se obtienen del interesado</h2>
+<p>Además de lo anterior, deben indicarse categorías de datos y fuente de procedencia.</p>
+<p>Excepciones: información imposible o desproporcionada, obligación legal con garantías o secreto profesional.</p>
+<h2>Aplicación en España: art. 11 LOPDGDD</h2>
+<p>Información básica directa:</p>
+<ul>
+<li>Identidad del responsable.</li>
+<li>Finalidad.</li>
+<li>Posibilidad de ejercer derechos de los arts. 15 a 22 RGPD.</li>
+<li>Si no vienen del interesado: categorías y fuente.</li>
+</ul>
+<p>El resto puede facilitarse mediante dirección electrónica u otro medio sencillo.</p>
+<h1>5.12 Matices de derechos</h1>
+<ul>
+<li><strong>Acceso</strong>: puede pedirse concreción si hay muchos datos. Si es infundado o repetitivo, puede denegarse. Más de una solicitud en seis meses se presume repetitiva salvo causa legítima.</li>
+<li><strong>Supresión</strong>: procede si los datos ya no son necesarios, se retira consentimiento, hay oposición, tratamiento ilícito, obligación legal o datos de menores en servicios de sociedad de la información.</li>
+<li><strong>Supresión no procede</strong> si el tratamiento es necesario para libertad de expresión/información, obligación legal, interés público, salud pública, archivo/investigación/estadística o reclamaciones.</li>
+<li><strong>Limitación</strong>: por impugnación de exactitud, tratamiento ilícito, necesidad para reclamaciones u oposición pendiente.</li>
+<li><strong>Portabilidad</strong>: exige tratamiento basado en consentimiento y por medios automatizados. No se aplica a misión de interés público o poderes públicos.</li>
+<li><strong>Decisiones automatizadas</strong>: excepciones por contrato, norma con garantías o consentimiento explícito. En contrato/consentimiento hay derecho a intervención humana, expresar opinión e impugnar.</li>
+</ul>
+<p>Las normas pueden limitar derechos si es necesario y proporcionado para salvaguardar intereses públicos superiores.</p>
+<h1>5.13 Delegado de Protección de Datos</h1>
+<p>Designación obligatoria si:</p>
+<ul>
+<li>Tratamiento por sector público, salvo tribunales en función judicial.</li>
+<li>Observación habitual y sistemática a gran escala.</li>
+<li>Categorías especiales a gran escala.</li>
+<li>Datos de condenas e infracciones penales.</li>
+</ul>
+<p>En España también aparece en muchos sectores: colegios profesionales, centros docentes, universidades, telecomunicaciones, crédito, aseguradoras, sanidad, seguridad privada, juego online y federaciones deportivas.</p>
+<p>Posición:</p>
+<ul>
+<li>No recibe instrucciones.</li>
+<li>No puede ser sancionado o destituido por sus funciones, salvo negligencia grave o dolo.</li>
+<li>Rinde cuentas al máximo nivel jerárquico.</li>
+<li>Debe tener recursos, secreto profesional y ausencia de conflicto de intereses.</li>
+</ul>
+<p>Funciones:</p>
+<ul>
+<li>Informar y asesorar.</li>
+<li>Supervisar cumplimiento.</li>
+<li>Asesorar sobre evaluaciones de impacto.</li>
+<li>Cooperar con autoridades de control.</li>
+<li>Ser punto de contacto.</li>
+<li>Comunicar fallos a órganos de dirección.</li>
+</ul>
+<h1>5.14 Reglamento de Inteligencia Artificial de la UE</h1>
+<p><strong>Reglamento (UE) 2024/1689</strong>, de 13 de junio de 2024. Publicado el 12 de julio de 2024, en vigor desde el 2 de agosto de 2024 y aplicable con carácter general desde el 2 de agosto de 2026.</p>
+<p>Enfoque: regulación general basada en riesgos, con códigos de conducta para sistemas que no sean de alto riesgo. Se usa reglamento para evitar fragmentación jurídica.</p>
+<p><strong>Sistema de IA</strong>: sistema basado en máquina, con autonomía variable, que genera predicciones, contenidos, recomendaciones o decisiones que influyen en entornos físicos o virtuales.</p>
+<p>Prácticas prohibidas:</p>
+<ul>
+<li>Técnicas subliminales, manipuladoras o engañosas con perjuicios.</li>
+<li>Explotación de vulnerabilidades por edad, discapacidad o situación social/económica.</li>
+<li>Puntuación social injustificada o desproporcionada.</li>
+<li>Predicción penal basada solo en perfiles o rasgos personales.</li>
+<li>Bases de reconocimiento facial por extracción masiva no selectiva.</li>
+<li>Inferencia de emociones en trabajo o educación, salvo motivos médicos o seguridad.</li>
+<li>Categorización biométrica para inferir raza, opiniones, vida u orientación sexual.</li>
+<li>Identificación biométrica remota en tiempo real en espacios públicos, salvo excepciones graves.</li>
+</ul>
+<p>Sistemas de alto riesgo:</p>
+<ul>
+<li>Componentes de seguridad o productos sujetos a evaluación ex ante.</li>
+<li>Sistemas con impacto en derechos fundamentales.</li>
+<li>Requisitos: gestión de riesgos, gobernanza de datos, registros, transparencia, supervisión humana, precisión, solidez y ciberseguridad.</li>
+</ul>
+<p>Sistemas no de alto riesgo: obligaciones de transparencia si interactúan con personas, generan contenido sintético o hacen reconocimiento de emociones/categorización biométrica.</p>
+<p>Modelos de IA de uso general: modelos con gran generalidad y muchas tareas. Los de <strong>riesgo sistémico</strong> tienen capacidades de gran impacto y deben notificarse a la Comisión.</p>
+<h1>5.15 IA en Galicia</h1>
+<p><strong>Ley 2/2025, de 2 de abril</strong>, para el desarrollo e impulso de la IA en Galicia.</p>
+<p>Finalidad:</p>
+<ul>
+<li>Regular el uso de IA en el sector público gallego.</li>
+<li>Impulsar IA en empresa, investigación e innovación.</li>
+</ul>
+<p>Principios:</p>
+<ul>
+<li>Fiabilidad e imparcialidad.</li>
+<li>Comisionados de IA.</li>
+<li>Explicabilidad e interpretabilidad.</li>
+<li>Seguridad y privacidad.</li>
+<li>Universalidad y accesibilidad.</li>
+<li>Proactividad y personalización.</li>
+<li>Reserva de humanidad y revisión humana.</li>
+<li>Precaución y responsabilidad.</li>
+<li>Transparencia y claridad.</li>
+</ul>
+<p>Organización:</p>
+<ul>
+<li>Órganos promotores funcionales y responsables tecnológicos.</li>
+<li>Oficina de IA.</li>
+<li>Comisión estratégica para asesoramiento en IA.</li>
+<li>Consejo Gallego de IA.</li>
+</ul>
+<p>Planificación:</p>
+<ul>
+<li>Estrategia gallega de IA.</li>
+<li>Programas sectoriales de IA.</li>
+<li>Proyectos de IA.</li>
+</ul>
+<p>Medidas de impulso:</p>
+<ul>
+<li>Estratégicas: mapa del ecosistema IA e incorporación a política industrial.</li>
+<li>Técnicas: infraestructuras y simplificación administrativa.</li>
+<li>Económicas: inversión directa/indirecta y beneficios fiscales.</li>
+<li>Capital humano: formación, capacitación y atracción de talento.</li>
+</ul>
+<h1>Para test</h1>
+<ul>
+<li>RGPD = Reglamento UE 2016/679, aplicación directa.</li>
+<li>Dato personal = persona física identificada o identificable.</li>
+<li>Menores en España: consentimiento desde 14 años.</li>
+<li>Bases art. 6: consentimiento, contrato, obligación legal, intereses vitales, interés público/poderes públicos e interés legítimo.</li>
+<li>Principios art. 5: licitud, finalidad, minimización, exactitud, conservación, integridad/confidencialidad y responsabilidad proactiva.</li>
+<li>Responsable decide fines/medios; encargado actúa por cuenta del responsable; DPD asesora y supervisa.</li>
+<li>Derechos: información, acceso, rectificación, supresión, limitación, portabilidad, oposición y no decisiones automatizadas.</li>
+<li>Autoridades: AEPD y autonómicas; competencias de investigación, corrección y asesoramiento.</li>
+<li>Reglamento IA UE = enfoque por riesgos; alto riesgo exige controles fuertes; algunas prácticas están prohibidas.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-fundamentos-juridicos-basicos.html"><span class="nav-etiqueta">← anterior</span>4. Fundamentos jurídicos básicos</a>
+  
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

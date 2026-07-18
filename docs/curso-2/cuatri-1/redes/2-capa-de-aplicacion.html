@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. Capa de Aplicación — apuntes de REDES (segundo curso de Ingeniería Informática).">
+<title>2. Capa de Aplicación · REDES · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">redes</a><span class="miga-sep">/</span><span aria-current="page">2-capa-de-aplicacion</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">REDES · curso 2</p>
+    <h1>2. Capa de Aplicación · REDES</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<h1>2.1 Introducción</h1>
+<p>La capa de aplicación se ocupa de la <strong>comunicación entre procesos.</strong> El esquema típico se muestra en la siguiente figura:</p>
+<img src="../../../img/redes/pasted-image-20241108210200.png" alt="archivos/imagenes/Pasted image 20241108210200.png" loading="lazy">
+<div class="callout callout-recordatorio">
+<p class="callout-titulo">Recordatorio</p>
+<p><img src="../../../img/redes/pasted-image-20241108205726.png" alt="archivos/imagenes/Pasted image 20241108205726.png" loading="lazy"></p>
+</div>
+<p>La comunicación de dos procesos, tanto en el <strong>mismo host</strong> como en hosts diferentes, se hace <strong>enviando mensajes</strong>. Para que los mensajes sean comprendidos hay que establecer un <strong>protocolo</strong>. El <strong>protocolo</strong> facilita la programación. Hay que programar tanto las funciones de envío como las de recepción y si tenemos un protocolo claro de programación será más fácil.</p>
+<p>Se deben especificar que <strong>tipos de mensajes</strong> hay. Las <strong>reglas</strong> que especifican cuando se <strong>envían o responden</strong> mensajes. La <strong>sintaxis del mensaje</strong> y la <strong>semántica de cada campo</strong>.</p>
+<p>Los protocolos de la <strong>capa de aplicación</strong> utilizan por debajo los protocolos básicos proporcionados por la capa de transporte. Como vimos en el tema anterior, estos son: <strong>TCP y UDP</strong>, TCP proporciona un servicio <strong>fiable</strong> y UDP un servicio <strong>sencillo y rapido, pero no garantiza la recepción</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Protocolo</th>
+<th>Aplicaciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>TCP</strong></td>
+<td>HTTP (web)</td>
+</tr>
+<tr>
+<td></td>
+<td>SMTP, POP3 (correo)</td>
+</tr>
+<tr>
+<td></td>
+<td>FTP (ficheros)</td>
+</tr>
+<tr>
+<td><strong>UDP</strong></td>
+<td>DNS (traducciones)</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Denominamos <strong>agente de usuario</strong>, a la interfaz entre el usuario y la aplicación. O sea el programa gráfico que permite al usuario trabajar cómodamente con la aplicación, por ejemplo <strong>firefox</strong>.</p>
+</div>
+<h1>2.2 Protocolo de Transferencia de Hipertexto HTTP</h1>
+<p>Este protocolo define la comunicación entre un servidor y un cliente web. Usa <strong>TCP</strong> y el por defecto, el <strong>puerto 80</strong>. Una <strong>página web</strong> usualmente consta de varios objetos, es decir, de varios <strong>ficheros</strong>:</p>
+<p>Cuando un <strong>navegador</strong> solicita una <strong>página web</strong>, el primer objeto que se devuelve es el <strong>documento base</strong>, que contiene el layout de la página usualmente también el texto. El <strong>layout</strong> indica cómo conseguir lo restantes objetos y dónde han de colocarse.</p>
+<div class="callout callout-ojo">
+<p class="callout-titulo">OJO</p>
+<p>Sin el <strong>layout</strong> no podemos saber como obtener el resto de objetos de la página web</p>
+</div>
+<h2>2.2.1 Conexiones No Persistentes</h2>
+<p>Con <strong>conexiones no persistentes</strong> se utiliza una conexión <strong>TCP</strong> distinta para transferir cada uno de los objetos. Pueden ser o en <strong>serie</strong> o <strong>paralelas</strong>. Son en <strong>serie</strong> si se espera a que acabe la <strong>conexión TCP</strong> previa antes de que comience la siguiente. Son <strong>paralelas</strong> si se inician varias <strong>conexiones TCP</strong> a la vez.</p>
+<img src="../../../img/redes/pasted-image-20240929184416.png" alt="archivos/imagenes/Pasted image 20240929184416.png" loading="lazy">
+<img src="../../../img/redes/pasted-image-20240929184609.png" alt="archivos/imagenes/Pasted image 20240929184609.png" loading="lazy">
+<h2>2.2.2 Conexiones Persistentes</h2>
+<p>Con <strong>conexiones persistentes</strong> se utiliza la misma <strong>conexión TCP</strong> para conseguir <strong>varios objetos</strong> o incluso varias <strong>páginas web</strong> diferentes. Típicamente el <strong>servidor</strong> cierra la <strong>conexión TCP</strong> cuando no ha sido utilizada durante cierto tiempo.
+Existen dos versiones de <strong>conexiones persistentes</strong>, en la versión <strong>sin entubamiento</strong>, el cliente sólo pide un nuevo objeto cuando el previo ha sido recibido. En la versión <strong>con entubamiento</strong> el cliente puede hacer peticiones de varios objetos antes de recibir los anteriores. El modo por defecto de <strong>HTTP/1.1</strong>  es <strong>persistente con entubamiento</strong>.</p>
+<img src="../../../img/redes/pasted-image-20240929184949.png" alt="archivos/imagenes/Pasted image 20240929184949.png" loading="lazy">
+<h2>2.2.3 Tiempo de transferencia de una página web</h2>
+<p>El transferencia del primer objeto <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mord mathnormal">an</span><span class="mord mathnormal">s</span><span class="mord mathnormal">mi</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span></span></span></span></eq>, esto se debe a que necesitamos conocer el <strong>layout</strong> de la página web para obtener el resto de objetos. En cambio, <strong>el tiempo de transferencia</strong> de los siguientes objetos depende del tipo de conexión.</p>
+<img src="../../../img/redes/pasted-image-20241005172705.png" alt="archivos/imagenes/Pasted image 20241005172705.png" loading="lazy">
+<ul>
+<li><strong>Tiempo de ida y vuelta (<em>RTT round-trip time</em>):</strong> Es el tiempo que tarda una solicitud de red en ir de un punto de partida a uno de destino y volver al punto de partida. La solicitud no deja de ser un paquete muy pequeño. El <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span></span></span></span></eq> incluye los retardos de propagación de los paquetes, los retardos de cola en los routers y switches intermedios y los retardos de procesamiento de los paquetes.</li>
+<li><strong>Tiempo de transmisión del fichero:</strong> tiempo que pasa entre que el host escribe en el enlace el primer bit del paquete hasta el último.
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7651em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">trans</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0463em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0077em;">R</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">L</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></eqn></section></li>
+<li><strong>Tiempo total para transmitir un paquete:</strong></li>
+</ul>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">Tiempo total</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7651em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">trans</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></eqn></section><div class="callout callout-importante">
+<p class="callout-titulo">Importante</p>
+<p>No se suman los tiempos extras del tema anterior, porque el <strong>RTT</strong> cuenta el tiempo de <strong>propagación</strong> puesto que no depende del número de bits a enviar, también cuenta el retraso en <strong>colas</strong> y el de <strong>procesamiento</strong>, tanto de ida como de vuelta.</p>
+</div>
+<h2>2.2.4 Mensajes HTTP</h2>
+<p>El protocolo HTTP define cómo se envían y reciben mensajes entre un cliente (por ejemplo, un navegador web) y un servidor (el sitio web al que se accede). Estos mensajes se separan en <strong>cabeceras</strong> (headers) y un <strong>cuerpo</strong> (body), donde la cabecera contiene información de control y el cuerpo contiene los datos solicitados o enviados, como páginas web o imágenes.</p>
+<p><strong>Peticiones (Request)</strong>: El cliente las envía al servidor para solicitar recursos, como páginas web o imágenes.
+<img src="../../../img/redes/pasted-image-20241005175747.png" alt="archivos/imagenes/Pasted image 20241005175747.png" loading="lazy"></p>
+<p>El significado de estos campos es el siguiente:</p>
+<ul>
+<li><strong>método</strong>: <code>GET</code> (página normal) o <code>POST</code> (formulario)</li>
+<li><strong>sp</strong>: espacio, en formato ASCII7</li>
+<li><strong>URL</strong>: la dirección del objeto que se requiere</li>
+<li><strong>versión</strong>: versión de HTTP en uso</li>
+<li><strong>cr</strong>: retorno de carro, <code>\r</code></li>
+<li><strong>lf</strong>: salto de línea <code>\n</code></li>
+<li><strong>nombreCampo</strong>: puede haber varias líneas de este tipo. Esta variable puede ser:
+<ul>
+<li><code>Host</code> (para el nombre del servidor)</li>
+<li><code>Connection</code> (que puede valer “close”, para conexiones no persistentes)</li>
+<li><code>User-agent</code> (nombre del navegador en uso)</li>
+<li><code>Accept-language</code> (el idioma preferido por el solicitante)</li>
+</ul>
+</li>
+<li><strong>valor</strong>: para cada posible <code>nombreCampo</code> también tiene que especificarse el valor que toma</li>
+<li><strong>cuerpo</strong>: en caso de que <code>método=POST</code>, contiene los datos del formulario</li>
+</ul>
+<p>Esta estructura permite que el servidor entienda qué acción debe realizar, sobre qué recurso y con qué parámetros adicionales.</p>
+<p><strong>Mensaje de respuesta:</strong> El servidor responde con los recursos solicitados o con información sobre el éxito o fracaso de la petición.
+<img src="../../../img/redes/pasted-image-20241005180931.png" alt="archivos/imagenes/Pasted image 20241005180931.png" loading="lazy"></p>
+<p>El significado de estos campos es similar al de los mensajes de petición, pero:</p>
+<ul>
+<li><strong>cod</strong>: es la codificación de la frase (por ejemplo, <code>200, OK</code>; <code>404, Not Found</code>; <code>400, Bad Request</code>)</li>
+<li><strong>nombreCampo</strong>: ahora puede ser:
+<ul>
+<li><code>Connection</code> (igual que en los de petición)</li>
+<li><code>Date</code> (fecha de envío)</li>
+<li><code>Server</code> (servidor que envía el objeto)</li>
+<li><code>Last-Modified</code> (fecha de la última modificación del objeto)</li>
+<li><code>Content-Length</code> (tamaño en bytes)</li>
+<li><code>Content-Type</code> (tipo de contenido del objeto, como una extensión)</li>
+</ul>
+</li>
+<li><strong>cuerpo</strong>: los datos del objeto que se envía</li>
+</ul>
+<blockquote>
+<p>[! Info]
+Las <strong>cookies</strong> son pequeñas piezas de datos que un servidor web envía al navegador de un usuario y que el navegador guarda <strong>localmente</strong>. Cada vez que el usuario vuelve a visitar el sitio, el navegador incluye esas cookies en la solicitud HTTP, permitiendo que el servidor &quot;recuerde&quot; al usuario.</p>
+<ol>
+<li>Cuando un usuario visita un sitio web, el servidor crea una <strong>cookie</strong> con un identificador único y se la envía al navegador.</li>
+<li>El navegador guarda esta cookie en un <strong>archivo de cookies</strong>.</li>
+<li>En visitas futuras, el navegador envía esta cookie al servidor junto con las solicitudes HTTP, lo que permite al servidor reconocer al usuario.</li>
+</ol>
+<p>Cuando &quot;Susana&quot; visita Amazon, el servidor de Amazon le asigna un identificador (por ejemplo, &quot;1678&quot;) y lo guarda en <strong>su base de datos</strong> junto con cualquier otra información relevante. Este ID se almacena en una cookie en el navegador de Susana. La próxima vez que Susana visite Amazon, su navegador enviará la cookie, y el servidor podrá identificarla y ofrecerle contenido personalizado.</p>
+<p>Las cookies permiten a los sitios web identificar a los usuarios, recordar preferencias y mantener sesiones (por ejemplo, el carrito de compras en Amazon). Sin embargo, también plantean preocupaciones de privacidad, ya que permiten el seguimiento de la actividad del usuario en la web.</p>
+</blockquote>
+<h1>2.3 FTP: Protocolo Transferencia Ficheros</h1>
+<p>El <strong>FTP (File Transfer Protocol)</strong> es un protocolo diseñado para la <strong>transferencia de archivos</strong> entre un cliente y un servidor. A diferencia de otros protocolos, <strong>FTP</strong> utiliza <strong>dos conexiones TCP en paralelo</strong>: una para el <strong>control</strong> y otra para la <strong>transferencia de datos</strong>.</p>
+<p>La <strong>conexión de control</strong> (<em>puerto 21</em>) es la que se utiliza para gestionar la sesión FTP, enviando y recibiendo <strong>comandos</strong> entre el cliente y el servidor. Este canal permanece <strong>abierto durante toda la sesión</strong>, es decir, <strong>es persistente</strong>.</p>
+<ul>
+<li><strong>Comandos transmitidos</strong>: Se envían comandos como <em>nombre de usuario, contraseña, solicitar directorios, pedir archivos, cerrar la sesión, etc.</em>.</li>
+<li><strong>Formato de los comandos</strong>: Los comandos son legibles, utilizando texto ASCII de 7 bits, y se componen de palabras de 4 letras en mayúsculas seguidas de parámetros (si los hay). Ejemplo: <code>USER</code>, <code>PASS</code>, <code>LIST</code>, <code>RETR</code>.</li>
+<li><strong>Respuestas del servidor</strong>: El servidor responde con <strong>códigos de 3 dígitos</strong> (que indican el resultado de los comandos) acompañados de una <strong>explicación en texto</strong>. Ejemplo: <code>230 User logged in, proceed.</code></li>
+</ul>
+<p>La conexión de control <strong>se mantiene activa</strong> durante toda la sesión de FTP, incluso cuando no se están transfiriendo datos.</p>
+<p>La <strong>conexión de datos</strong> (<em>puerto 20</em>) se encarga de transferir los archivos o listas de directorios entre el cliente y el servidor. A diferencia de la conexión de control, esta conexión <strong>no es persistente</strong>, es decir, <strong>se abre y se cierra</strong> cada vez que se necesita transferir un archivo o realizar alguna operación que implique datos (como listar directorios).</p>
+<ul>
+<li><strong>Datos transmitidos</strong>: Puede ser el contenido de los archivos que se están transfiriendo o el resultado de comandos como <code>LIST</code> (que devuelve un listado de archivos y directorios).</li>
+<li><strong>Formato de transmisión</strong>: Los datos se transmiten en <strong>binario</strong>, lo que permite transferir cualquier tipo de archivo (texto, imágenes, vídeos, etc.) sin pérdida de información.</li>
+<li><strong>Apertura y cierre</strong>: Cada vez que se necesita enviar o recibir un archivo, se establece una nueva conexión TCP para los datos y se cierra al finalizar la transferencia.</li>
+</ul>
+<p><strong>FTP es un protocolo con estado</strong>, lo que significa que el servidor mantiene información sobre la sesión mientras está activa. Entre los datos que guarda están:</p>
+<ul>
+<li>El <strong>nombre del usuario</strong> que ha iniciado sesión.</li>
+<li>El <strong>directorio actual</strong> en el que el usuario está navegando.</li>
+<li>Otros detalles que permiten al servidor recordar el contexto de la sesión hasta que el usuario cierra la conexión.</li>
+</ul>
+<p>Esto es necesario para que el servidor pueda gestionar múltiples usuarios y archivos de forma ordenada.</p>
+<p>Los <strong>comandos FTP</strong> que envía el cliente son cadenas de texto simples, normalmente de una <strong>palabra de cuatro caracteres</strong> en mayúsculas (como <code>USER</code>, <code>PASS</code>, <code>LIST</code>, <code>RETR</code>, <code>STOR</code>), y cada uno va acompañado de una acción específica.
+Por ejemplo:</p>
+<ul>
+<li><code>USER &lt;nombre&gt;</code>: Enviar el nombre de usuario para autenticar.</li>
+<li><code>PASS &lt;clave&gt;</code>: Enviar la contraseña.</li>
+<li><code>LIST</code>: Listar los archivos del directorio actual.</li>
+<li><code>RETR &lt;archivo&gt;</code>: Descargar un archivo desde el servidor.</li>
+<li><code>STOR &lt;archivo&gt;</code>: Subir un archivo al servidor.</li>
+</ul>
+<p>Las <strong>respuestas del servidor</strong> siguen un formato estándar de <strong>códigos de tres dígitos</strong>, que indican el estado de la operación, seguidos de un mensaje explicativo:</p>
+<ul>
+<li><code>200</code>: Operación exitosa.</li>
+<li><code>230</code>: Usuario autenticado correctamente.</li>
+<li><code>550</code>: Error, archivo no encontrado o sin permisos.</li>
+</ul>
+<p>Una de las limitaciones importantes de FTP es que <strong>no cifra los datos</strong>, incluyendo el <strong>nombre de usuario y la contraseña</strong> que se envían por la red. Esto significa que, en una red insegura, alguien podría interceptar y leer esa información.</p>
+<h1>2.4 SMTP: Protocolo Transferencia. Correo Sencillo</h1>
+<img src="../../../img/redes/pasted-image-20241012131936.png" alt="archivos/imagenes/Pasted image 20241012131936.png" loading="lazy">
+<p><strong>SMTP (Simple Mail Transfer Protocol)</strong> es el protocolo estándar para la transferencia de <strong>correo electrónico</strong> entre servidores. SMTP se encarga de <strong>enviar correos</strong> desde el cliente (el remitente) hacia un servidor de correo, y también entre servidores de correo.</p>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Solo se usa para enviar correos entre cliente-servidor y comunicar servidor-servidor. Para acceder al correo se usan protocolos más seguros como IMAP y POP3.</p>
+</div>
+<ul>
+<li><strong>Puerto utilizado</strong>: SMTP utiliza el <strong>puerto 25</strong> para comunicarse entre servidores de correo.</li>
+<li><strong>Conexiones TCP persistentes</strong>: Al igual que FTP, SMTP mantiene una <strong>conexión TCP persistente</strong> mientras dure la sesión de envío del correo.</li>
+<li><strong>Formato de los mensajes</strong>: Los correos y comandos que se envían a través de SMTP utilizan <strong>ASCII de 7 bits</strong>, por lo que los mensajes y las instrucciones son legibles por humanos.</li>
+</ul>
+<p>El <strong>sistema de correo electrónico</strong> consta de varias partes:</p>
+<ol>
+<li>
+<p><strong>Agente de usuario (Mail User Agent, MUA)</strong>: Es el programa que los usuarios utilizan para gestionar su correo, como <strong>Outlook</strong>, <strong>Thunderbird</strong> o los clientes de correo de un navegador web (Gmail, Yahoo, etc.). El agente de usuario permite:</p>
+<ul>
+<li>Escribir correos electrónicos.</li>
+<li>Enviarlos a través de un servidor de correo.</li>
+<li>Descargar correos recibidos desde un servidor, usando otros protocolos como <strong>POP3</strong>, <strong>IMAP</strong>, o incluso <strong>HTTP</strong> (en el caso de interfaces web).</li>
+</ul>
+<p>Es importante notar que el <strong>buzón de correo</strong> (donde se almacenan los correos que recibes) no está en el ordenador local, sino en un <strong>servidor remoto</strong>. Esto es útil porque los correos pueden llegar en cualquier momento del día, mientras que el ordenador del usuario no siempre está encendido o conectado a internet.</p>
+</li>
+<li>
+<p><strong>Servidor de correo (Mail Transfer Agent, MTA)</strong>: Cuando el usuario envía un correo, su agente de usuario lo <strong>transfiere al servidor de correo</strong>. Este servidor de correo se encarga de <strong>procesar</strong> y <strong>enviar</strong> el correo al servidor de destino adecuado. Aquí es donde entra en juego <strong>SMTP</strong>.</p>
+<p>El servidor de correo <strong>origen</strong> examina la dirección de destino y utiliza el protocolo <strong>SMTP</strong> para buscar el <strong>servidor de correo destino</strong>. Una vez identificado, transfiere el correo a dicho servidor, donde queda almacenado en el <strong>buzón del destinatario</strong>.</p>
+</li>
+</ol>
+<p><strong>SMTP</strong> está diseñado para facilitar la <strong>comunicación entre servidores de correo</strong>. Aunque teóricamente la comunicación es directa entre dos servidores (origen y destino), en la práctica puede haber <strong>servidores intermedios</strong> que retransmitan los correos, especialmente si hay problemas de red o fallos temporales.</p>
+<p><strong>Para enviar un correo:</strong></p>
+<ol>
+<li><strong>El usuario escribe un correo</strong> en su agente de usuario y lo envía.</li>
+<li><strong>El agente de usuario</strong> lo transfiere al servidor de correo origen.</li>
+<li><strong>El servidor de correo origen</strong> utiliza <strong>SMTP</strong> para establecer una conexión con el servidor de correo destino.</li>
+<li><strong>SMTP</strong> transmite el correo del servidor origen al servidor destino, donde el mensaje queda almacenado en el buzón del destinatario.</li>
+<li><strong>El destinatario</strong> puede, en cualquier momento, acceder a su correo y descargarlo mediante protocolos como <strong>POP3</strong>, <strong>IMAP</strong>, o directamente a través de un navegador web usando <strong>HTTP</strong>.</li>
+</ol>
+<img src="../../../img/redes/pasted-image-20241012133330.png" alt="archivos/imagenes/Pasted image 20241012133330.png" loading="lazy">
+<p>SMTP también maneja casos en los que no se puede entregar el correo de inmediato:</p>
+<ul>
+<li>Si el <strong>servidor de correo destino</strong> está <strong>fuera de servicio</strong> o no responde, el servidor origen pone el mensaje en una <strong>cola de espera</strong>.</li>
+<li>El servidor de correo intentará reenviar el correo cada cierto tiempo (generalmente, cada 30 minutos).</li>
+<li>Si después de varios intentos fallidos (normalmente, varios días) el correo no ha podido ser entregado, el servidor envía un <strong>mensaje de error</strong> de vuelta al remitente, informando que el correo no ha podido ser entregado.</li>
+</ul>
+<p>SMTP (Simple Mail Transfer Protocol) utiliza tres tipos principales de mensajes para la comunicación entre el <strong>cliente</strong> (quien envía el correo) y el <strong>servidor</strong> (quien lo recibe):</p>
+<ul>
+<li>
+<p><strong>Comandos</strong></p>
+<ul>
+<li><code>HELO</code> (nombre del servidor)</li>
+<li><code>MAIL FROM</code> (dirección del remitente)</li>
+<li><code>RCPT TO</code> (dirección de destino)</li>
+<li><code>DATA</code> (contenido)</li>
+<li><code>QUIT</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Respuestas</strong></p>
+<ul>
+<li>Con códigos numéricos y frases aclaratorias</li>
+</ul>
+</li>
+<li>
+<p><strong>Datos</strong></p>
+<ul>
+<li>Son el contenido de los correos, con todos los objetos encapsulados</li>
+</ul>
+</li>
+</ul>
+<p>SMTP, tal como se diseñó originalmente, es un <strong>protocolo inseguro</strong> porque <strong>no solicita autenticación del remitente</strong>. Esto significa que cualquier cliente puede conectarse a un servidor SMTP y enviar correos a cualquier destinatario sin identificarse, lo que facilita la creación de <strong>spam</strong> (correos no deseados).</p>
+<h1>2.5 Protocolos de Acceso al Correo</h1>
+<p>Una vez que un correo ha llegado al <strong>buzón de destino</strong>, el siguiente paso es transferirlo al ordenador local del usuario. Para esto, no se utiliza SMTP, ya que este protocolo está diseñado para enviar correos (<em>es un protocolo de oferta</em>) y requeriría que el ordenador local estuviera siempre encendido y conectado a Internet, esperando la llegada de mensajes. Por lo tanto, se han diseñado protocolos específicos para <strong>descargar correos</strong>, siendo <strong>POP3</strong>, <strong>IMAP</strong> y <strong>HTTP</strong> los más comunes. Aquí nos centraremos en <strong>POP3</strong>.</p>
+<h2>2.5.1 Funcionamiento de POP3</h2>
+<p><strong>POP3</strong> (Post Office Protocol 3) permite a los usuarios descargar correos desde un servidor a su ordenador local. El proceso se basa en <strong>tres tipos de mensajes</strong> que se intercambian entre el <strong>agente de usuario</strong> (cliente) y el <strong>servidor de correo</strong>:</p>
+<ul>
+<li>
+<p><strong>Comandos</strong> (de 4 caracteres)</p>
+<ul>
+<li><code>user</code> (nombre de usuario)</li>
+<li><code>pass</code> (palabra clave)</li>
+<li><code>list</code></li>
+<li><code>retr</code> (número de correo, para traer correo)</li>
+<li><code>dele</code> (número de correo)</li>
+<li><code>quit</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Respuestas</strong></p>
+<ul>
+<li><code>OK</code> o <code>ERR</code>, con frases explicativas</li>
+</ul>
+</li>
+<li>
+<p><strong>Datos</strong></p>
+<ul>
+<li>La lista de mensajes, los contenidos de los correos, o el correo completo en un único mensaje</li>
+</ul>
+</li>
+</ul>
+<p><strong>POP3</strong> utiliza el <strong>puerto 110</strong> para la comunicación. Durante una sesión de POP3, se utiliza <strong>una única conexión TCP persistente</strong> que puede ser mantenida abierta mientras el usuario descarga varios correos. Esto ahorra tiempo y recursos en comparación con abrir y cerrar conexiones repetidamente.  A diferencia de <strong>SMTP</strong>, <strong>que permite enviar correos sin necesidad de una cuenta</strong>, <strong>POP3 requiere que el usuario tenga una cuenta y una contraseña válidas</strong>. Esto significa que el <strong>servidor verifica la identidad del usuario</strong> antes de permitir el acceso a los correos, lo que ayuda a prevenir el acceso no autorizado.</p>
+<p><strong>Modos de Operación de POP3:</strong></p>
+<ul>
+<li><strong>Descargar y borrar</strong>: Con el comando <code>RETR</code> seguido de <code>DELE</code>, los correos son descargados y luego eliminados del servidor.</li>
+<li><strong>Descargar y mantener</strong>: Solo se utiliza el comando <code>RETR</code>, permitiendo que los correos permanezcan en el servidor después de ser descargados.</li>
+</ul>
+<p>POP3 es un protocolo eficiente y seguro para la transferencia de correos, permitiendo a los usuarios gestionar su correspondencia sin necesidad de mantener sus dispositivos siempre conectados. Su estructura de comandos y respuestas proporciona un método sencillo para acceder a los mensajes, lo que lo convierte en una opción popular para el acceso a correos en muchos entornos.</p>
+<h2>2.5.2 Funcionamiento de IMAP</h2>
+<p>IMAP es un protocolo diseñado para acceder y gestionar correos electrónicos de manera más <strong>versátil y eficiente que su predecesor POP3</strong>, especialmente para usuarios que necesitan <strong>acceso remoto y sincronización constante entre dispositivos</strong>.</p>
+<p>Con POP3, los mensajes <strong>se descargan y se guardan localmente en el dispositivo del usuario</strong>. Una vez descargados, se <strong>eliminan</strong> del servidor (<em>aunque algunas configuraciones permiten dejarlos en el servidor</em>).  Por lo que no se puede acceder a los mensajes desde otros dispositivos. Además, POP3 no soporta la creación y manejo de carpetas en el servidor remoto, lo que limita la organización del correo en múltiples dispositivos.</p>
+<p>IMAP permite crear, renombrar y borrar carpetas <strong>directamente en el servidor</strong>. Los mensajes pueden moverse entre carpetas en el servidor. Esto asegura que la organización del correo sea consistente y accesible desde cualquier dispositivo conectado.</p>
+<p>A diferencia de POP3, IMAP <strong>guarda información sobre el estado de los mensajes y carpetas</strong> en el servidor. Por ejemplo, si un mensaje ha sido leído, movido o borrado desde un dispositivo, esos cambios se reflejan en todos los dispositivos conectados.</p>
+<p>El servidor asocia cada mensaje con una carpeta. Cuando llega un mensaje va a la carpeta <strong>INBOX</strong>. Permite leer, borrar, mover a otra carpeta. Hay comandos para crear carpetas, realizar búsquedas, descargar partes del mensaje.</p>
+<h1>2.6 DNS: Servicio de Nombres de Dominio</h1>
+<p>Nosotros en Internet, para poder comunicar a un cliente y a un servidor, necesitamos conocer ambos <strong>sockets</strong>. Si recordamos, los sockets están formados por <strong>IP:Puerto</strong>. Entonces, ¿cómo podemos conocer la IP destino de una página web? Para eso tenemos los <strong>DNS</strong>.</p>
+<div class="callout callout-info">
+<p class="callout-titulo">INFO</p>
+<p>Con el comando <code>ping dominio</code> obtenemos la ip de un determinado dominio</p>
+</div>
+<p>El <strong>Sistema de Nombres de Dominio (DNS)</strong> es fundamental para el funcionamiento de Internet, ya que se encarga de traducir los <strong>nombres de host</strong> (como <code>www.ejemplo.com</code>) <strong>a direcciones IP</strong> (como <code>192.0.2.1</code>) y viceversa. Este sistema permite que los usuarios accedan a sitios web utilizando <strong>nombres fáciles de recordar</strong> en lugar de tener que memorizar largas cadenas de números.</p>
+<p>DNS utiliza el protocolo <strong>UDP</strong> (<em>User Datagram Protocol</em>), específicamente el <strong>puerto 53</strong>. Esto se debe a que DNS no necesita mantener el estado de las conexiones. Cada host tiene una lista de direcciones de servidores de nombres, generalmente configurada durante la instalación del sistema operativo.</p>
+<p>Cuando un host <strong>necesita realizar una traducción</strong>, se dirige al primer servidor de la lista. Si no recibe respuesta, se mueve al siguiente, y así sucesivamente. Esta estrategia permite que <strong>DNS</strong> sea más eficiente, ya que, en lugar de intentar reestablecer una conexión con el primer servidor, <strong>busca otros</strong>.</p>
+<p>Realiza <strong>traducciones</strong> de nombres de hosts a direcciones IP y viceversa, permitiendo obtener alias de hosts. Indica <strong>qué servidor está autorizado para proporcionar información</strong> sobre un dominio específico, lo que es crucial para la administración de dominios.</p>
+<p><strong>Permite simplificar direcciones de correo electrónico.</strong> Por ejemplo, <code>usc.es</code> puede ser un alias para el servidor de correo <code>smtp.usc.es</code>, facilitando la escritura de direcciones como <code>peptio@usc.es</code>.</p>
+<p>Un mismo nombre de host puede tener múltiples direcciones IP asociadas, lo cual es útil para <strong>servidores espejo</strong> (<em>servidores que tienen el mismo contenido</em>). DNS puede configurarse para devolver estas direcciones IP de manera rotativa.</p>
+<h2>2.6.1 Elementos del DNS</h2>
+<p>El DNS se compone de numerosos <strong>servidores de nombres</strong> distribuidos por Internet. Estos servidores trabajan en conjunto para <strong>traducir</strong> los nombres de dominio en direcciones IP.</p>
+<p>El DNS utiliza un protocolo que permite a los hosts (computadoras) solicitar traducciones a los servidores de nombres y que <strong>los servidores intercambien información entre ellos.</strong></p>
+<p><strong>Servidores Raíz</strong>: Hay un número limitado de servidores raíz en Internet que proporcionan información sobre los dominios de nivel superior (como <code>.com</code>, <code>.org</code>, <code>.es</code>). Si se pregunta a un servidor raíz sobre el dominio <code>.es</code>, proporcionará información sobre servidores de nombres en ese dominio.</p>
+<p><strong>Servidores Intermedios o TLD</strong>: Estos servidores proporcionan información sobre dominios de niveles intermedios (como <code>usc.es</code>). Si se le pregunta a un servidor en la raíz sobre el dominio <code>usc.es</code>, puede proporcionar información sobre un servidor en la Universidad de Santiago.</p>
+<p><strong>Servidores autoritativos:</strong> todas las organizaciones que tienen hosts accesibles públicamente a través de internet deben proporcionar registros DNS accesibles públicamente que establezcan la correspondencia entre los nombres de dichos hosts y sus direcciones IPs.
+Una organización puede elegir implementar su propio servidor DNS autoritativo para almacenar estos registros.</p>
+<img src="../../../img/redes/pasted-image-20250121163148.png" alt="archivos/imagenes/Pasted image 20250121163148.png" loading="lazy">
+<p><strong>Servidores Locales</strong>: Son los que manejan las consultas de los hosts en una red local. Cada host tiene una lista de estos servidores, que a menudo son proporcionados por el ISP (Proveedor de Servicios de Internet). El host comienza consultando el primer servidor de la lista.</p>
+<div class="callout callout-info">
+<p class="callout-titulo">INFO</p>
+<p>Un <strong>dominio</strong> es un nombre que identifica a un sitio web en Internet. Es una parte fundamental de la dirección de un sitio web y se utiliza para acceder a recursos en la red de manera fácil y comprensible para los usuarios. Por ejemplo, en la URL <code>www.ejemplo.com</code>, <code>ejemplo.com</code> es el dominio.</p>
+</div>
+<h2>2.6.2 Tipos de Consultas a Servidores DNS</h2>
+<p><strong>Consultas Recursivas</strong>: En este tipo de consulta, cada servidor de nombres se encarga de interrogar al siguiente hasta obtener la respuesta final.</p>
+<img src="../../../img/redes/pasted-image-20241013171148.png" alt="archivos/imagenes/Pasted image 20241013171148.png" loading="lazy">
+<p><strong>Consultas Iterativas</strong>: En este caso, el servidor de nombres local se pone en contacto con todos los servidores necesarios para obtener la información.</p>
+<img src="../../../img/redes/pasted-image-20241013171228.png" alt="archivos/imagenes/Pasted image 20241013171228.png" loading="lazy">
+<h2>2.6.3 Caché DNS</h2>
+<p>Cuando un servidor DNS obtiene una traducción, <strong>almacena una copia en su memoria local</strong> (disco o RAM) <strong>para futuras consultas</strong>. Esta caché se utiliza para responder a <strong>consultas repetidas</strong> de manera más rápida. Las entradas de la caché se eliminan después de un tiempo específico (generalmente, cada dos días).</p>
+<h2>2.6.4 Mensajes DNS</h2>
+<p>Existen <strong>dos tipos de mensajes</strong> en el DNS: <strong>Consultas</strong> y <strong>Respuestas</strong>. Ambos mensajes tienen un formato similar, que consta de una cabecera con información de control y un cuerpo que contiene las consultas y respuestas.</p>
+<img src="../../../img/redes/pasted-image-20241013171434.png" alt="archivos/imagenes/Pasted image 20241013171434.png" loading="lazy">
+<ol>
+<li>
+<p><strong>Cabecera</strong>: Contiene 6 campos, algunos de los cuales son en binario:</p>
+<ul>
+<li><strong>Identificación</strong>: Un número de 16 bits que identifica la consulta, permitiendo que un host realice múltiples consultas simultáneamente.</li>
+<li><strong>Señales</strong>: 4 bits que indican el tipo de mensaje (consulta o respuesta), si la respuesta proviene de un servidor autorizado, si se requiere una consulta recursiva, etc.</li>
+<li><strong>Tamaño de Campos del Cuerpo</strong>: Indica la cantidad de preguntas, respuestas, servidores autorizados y datos adicionales en el mensaje.</li>
+</ul>
+</li>
+<li>
+<p><strong>Cuerpo</strong>: Consta de 4 campos:</p>
+<ul>
+<li><strong>Cuestiones</strong>: Preguntas que incluyen el nombre o dirección IP a traducir.</li>
+<li><strong>Respuestas</strong>: Respuestas obtenidas, como pares de nombres de host y direcciones IP. Un nombre de host puede corresponder a múltiples direcciones IP.</li>
+<li><strong>Servidores Autorizados</strong>: Indica los servidores de nombres autorizados que se pueden consultar para un dominio específico.</li>
+<li><strong>Información Adicional</strong>: Incluye datos que no fueron solicitados explícitamente.</li>
+</ul>
+</li>
+</ol>
+ <img src="../../../img/redes/pasted-image-20241013171414.png" alt="archivos/imagenes/Pasted image 20241013171414.png" loading="lazy">
+<h1>2.7 Distribución de contenidos</h1>
+<p>La distribución de contenidos se refiere a las diversas <strong>técnicas</strong> utilizadas para gestionar y entregar contenidos digitales (<em>como páginas web, archivos de audio, video, etc.</em>) de manera eficiente, reduciendo el tiempo de carga y mejorando la experiencia del usuario.</p>
+<p>Los accesos a servidores centralizados pueden ser lentos por la <strong>congestión de red</strong> y la <strong>sobrecarga del servidor</strong>. Para abordar estas limitaciones, se utilizan <strong>métodos alternativos a los servidores centralizados</strong>. En lugar de almacenar todos los contenidos en un solo servidor, se distribuyen y duplican en diferentes ubicaciones geográficas, dirigiendo las peticiones al servidor que <strong>ofrezca el menor tiempo de respuesta</strong>.</p>
+<h2>2.7.1 Caché Web (Servidor Proxy)</h2>
+<p>La <strong>caché web</strong> implica la utilización de un <strong>servidor intermedio</strong>, conocido como <strong>proxy</strong>, que gestiona todas las peticiones web de los usuarios en una red. Este servidor proxy normalmente es proporcionado por el <strong>ISP</strong>.</p>
+<img src="../../../img/redes/pasted-image-20241013173230.png" alt="archivos/imagenes/Pasted image 20241013173230.png" loading="lazy">
+<p>El navegador establece una <strong>conexión TCP</strong> con la <strong>caché web</strong> y envía una solicitud HTTP para el objeto a la caché web. La caché comprueba si tiene una <strong>copia</strong> del objeto almacenada localmente, si la tiene devuelve el objeto.
+Si no tiene el objeto, abre una <strong>conexión TCP</strong> con el servidor origen y envía una solicitud HTTP para obtener el objeto. Cuando recibe este objeto <strong>almacena una copia localmente</strong> y se lo envía como mensaje de respuesta HTTP al cliente.</p>
+<p>Los usuarios deben configurar sus navegadores para utilizar el servidor proxy, indicando la dirección del mismo.</p>
+<p>Puede haber un <strong>esquema jerárquico de proxies</strong>, donde varios proxies se comunican entre sí para optimizar aún más la distribución.</p>
+<img src="../../../img/redes/pasted-image-20241013173336.png" alt="archivos/imagenes/Pasted image 20241013173336.png" loading="lazy">
+<h2>2.7.2 Redes de Distribución de Contenidos (CDN)</h2>
+<p>El objetivo es aumentar la velocidad y reducir la latencia. Las usan empresas que tienen páginas web muy visitadas (Youtube).</p>
+<p>Las <strong>CDN</strong> son gestionadas por empresas que poseen una infraestructura de múltiples servidores distribuidos globalmente. Estas empresas no crean contenido, sino que alquilan su infraestructura a otras organizaciones. Por ejemplo, Akamai replica contenidos de sitios como El País en sus centros de hospedaje.</p>
+<p>La <strong>CDN</strong> <strong>replica los contenidos de sus clientes</strong> en los servidores CDN y <strong>los mantiene actualizados</strong>. La CDN proporciona un mecanismo para que el contenido sea entregado por el servidor CDN que pueda hacerlo <strong>más rápidamente</strong>.</p>
+<p>Cuando se indica al navegador del host de un usuario que extraiga un <strong>vídeo</strong> concreto, la CDN debe <strong>interceptar</strong> la solicitud para <strong>determinar un conjunto de servidores</strong> de la CDN que resulte <strong>adecuado</strong> para ese cliente en ese preciso instante y <strong>redirigir</strong> la solicitud del cliente a un servidor situado en dicho conjunto.</p>
+<div class="callout callout-aclaración">
+<p class="callout-titulo">Si estas en España, no te va a mandar a un conjunto de servidores de Etiopía por ejemplo. Si todo el mundo accede a los servidores de Islandia, posiblemente colapsen.</p>
+</div>
+<img src="../../../img/redes/pasted-image-20241229110333.png" alt="archivos/imagenes/Pasted image 20241229110333.png" loading="lazy">
+<h2>2.7.3 Redes P2P (de Igual a Igual)</h2>
+<p>Las <strong>redes P2P</strong> permiten a los usuarios actuar tanto como clientes como servidores, compartiendo archivos entre sí. Al unirse a una red P2P, los usuarios pueden descargar y compartir contenido desde sus propios discos duros. Esto implica que no dependen de que haya un <strong>servidor activo funcionando</strong>.
+Un usuario se une a la red P2P ejecutando una aplicación (<em>bittorrent</em>).</p>
+<p>Cuando se ejecuta la aplicación, lo primero que hace es buscar a otros usuarios P2P. Se necesita por lo menos un <strong>nodo de arranque</strong>, es decir por lo menos conocer a un usuario que ya esté en la red.</p>
+<p>Una vez conecto a la red P2P, el usuario da a conocer <strong>públicamente</strong> el contenido de su disco duro. La red P2P necesita construir un <strong>directorio</strong> con la totalidad de los contenidos y su ubicación.</p>
+<h3><strong>Directorio Centralizado</strong></h3>
+<p><strong>Napstar</strong>. Con este método, un único host en Internet centraliza la construcción y almacenamiento del directorio. Cuando un usuario ejecuta la aplicación P2P se dirige al <strong>host central</strong> y le proporciona su lista de contenidos. <strong>El host central</strong> construye el directorio con todos los datos proporcionados por los usuarios y atiende a todas las consultas.</p>
+<p>Se puede pensar como que el <strong>host central</strong> contiene un listado de que ordenadores hay y qué archivos ofertan por eso es un directorio.</p>
+<p>El directorio se <strong>actualiza constantemente</strong>. Cuando un usuario consigue un contenido pasa a ser servidor de ese contenido. Cuando un usuario deja de tener actividad es borrado del directorio.</p>
+<p>Cuando se quiere obtener un archivo se consulta al <strong>host central</strong> y así sabe a que ordenador conectarse, porque el host central contiene toda la información de los ordenadores de la red.</p>
+<p>Sin embargo, si falla el <strong>host central</strong> falla todo. El host central tiene que mantener el directorio de millones de usuarios y millones de consultas. <strong>Hay un tráfico enorme hacia ese punto</strong>.</p>
+<h3><strong>Directorio Descentralizado</strong></h3>
+<p><strong>Kaaza</strong> .Consiste en distribuir el directorio entre algunos de los usuarios P2P. Ciertos usuarios son designados como líderes en función de ciertos criterios (<em>velocidad de las conexiones, antigüedad en la red, etc</em>).</p>
+<img src="../../../img/redes/pasted-image-20241013173858.png" alt="archivos/imagenes/Pasted image 20241013173858.png" loading="lazy">
+<p>Cada líder es responsable de atender las consultas de un grupo de usuarios que tiene a su cargo. Las consultas que no puede resolver por sí mismo las redirecciona a los otros líderes con los que está conectado. Esto origina una red de superposición (red virtual sobre la red real) con la correspondencia siguiente:</p>
+<img src="../../../img/redes/pasted-image-20241013173929.png" alt="archivos/imagenes/Pasted image 20241013173929.png" loading="lazy">
+<p>Se resuelven así el problema del <strong>centralizado</strong> que tenía un único punto de fallo y el cuello de botella.</p>
+<h3><strong>Inundación de Consultas</strong></h3>
+<p><strong>Gnutella</strong>. Con este método, la red de superposición es plana, con todos los <strong>usuarios al mismo nivel</strong>. No se utiliza directorio, sino <strong>inundación de consultas</strong>. Las consultas <strong>se retransmiten de usuario en usuario hasta que se encuentra el contenido solicitado</strong>. El problema que tiene es que origina un tráfico enorme de mensajes. Esto se resuelve parcialmente limitando la profundidad de la inundación: se cuenta el número de nodos por los que pasa la consulta y cuando llegue a un cierto valor se da por terminada la consulta.</p>
+<h3><strong>Descarga de Archivos</strong></h3>
+<p>En una <strong>aplicación</strong> P2P <strong>clásica</strong>, una vez que un usuario ha descargado un fichero completo puede convertirse a su vez en <strong>servidor de dicho fichero</strong>.</p>
+<p>Este método de descarga puede mejorarse si la descarga de los ficheros se hace por <strong>segmentos</strong>. Un usuario que ha descargado un segmento de un fichero puede convertirse a su vez en <strong>servidor de dicho segmento</strong> antes de que complete la descarga del fichero.</p>
+<img src="../../../img/redes/pasted-image-20241013174117.png" alt="archivos/imagenes/Pasted image 20241013174117.png" loading="lazy">
+<p>Podemos pensarlo como que cada usuario tiene fragmentos de 1 GB de una película pirata, y después si un usuario quiere verla, los junta en su ordenador. Van dpm pa piratear y no te pueden denunciar.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-introduccion.html"><span class="nav-etiqueta">← anterior</span>1. Introducción</a>
+  <a class="nav-siguiente" href="3-capa-de-transporte.html"><span class="nav-etiqueta">siguiente →</span>3. Capa de Transporte</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

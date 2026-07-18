@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. SGSI Análisis y gestión de riesgos — apuntes de SEGINFO (tercer curso de Ingeniería Informática).">
+<title>2. SGSI Análisis y gestión de riesgos · SEGINFO · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">seginfo</a><span class="miga-sep">/</span><span aria-current="page">2-sgsi-analisis-y-gestion-de-riesgos</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">SEGINFO · curso 3</p>
+    <h1>2. SGSI Análisis y gestión de riesgos · SEGINFO</h1>
+  </header>
+  <div class="prosa">
+<h1>2.1 Información, activos y SGSI</h1>
+<p><strong>Información</strong>: conjunto de datos organizados con valor para una entidad, sin importar formato, origen o fecha. Es un activo crítico durante todo su ciclo de vida: creación, almacenamiento, proceso, transmisión, uso, corrupción, robo, pérdida o destrucción.</p>
+<p>Seguridad de la información según ISO/IEC 27001: preservar <strong>confidencialidad, integridad y disponibilidad (CIA)</strong>. También pueden añadirse autenticidad, responsabilidad, no repudio y confiabilidad.</p>
+<p>Clasificación típica de la información:</p>
+<ul>
+<li><strong>Pública/open</strong>: puede difundirse sin daño relevante.</li>
+<li><strong>Interna/propietaria</strong>: su divulgación no autorizada sería inconveniente.</li>
+<li><strong>Confidencial/restringida</strong>: sensible o valiosa; requiere autorización expresa.</li>
+</ul>
+<p>Un <strong>SGSI</strong> es un sistema formal, documentado, conocido por la organización, basado en riesgos y orientado a mejora continua. Busca proteger eficientemente y mantener el riesgo por debajo del nivel asumible.</p>
+<h1>2.2 Ciclo PDCA del SGSI</h1>
+<ul>
+<li><strong>Plan</strong>: definir política, metodología de riesgo, identificar/evaluar riesgos, elegir tratamiento y controles, elaborar <strong>SoA</strong>, aprobar riesgos residuales y autorizar el SGSI.</li>
+<li><strong>Do</strong>: implantar tratamiento y controles, formar al personal, gestionar operaciones/recursos y preparar detección/respuesta ante incidentes.</li>
+<li><strong>Check</strong>: revisar SGSI, medir controles, revisar riesgos residuales, registrar eventos y hacer auditorías internas.</li>
+<li><strong>Act</strong>: aplicar mejoras, acciones correctivas/preventivas, comunicar resultados y comprobar eficacia.</li>
+</ul>
+<h1>2.3 Análisis de riesgos</h1>
+<p>El análisis empieza identificando <strong>activos</strong>: todo lo que tiene valor y debe protegerse. Ejemplos: datos, contratos, documentación, software, equipos, comunicaciones, servicios, suministros, personas, tiempo de recuperación e imagen.</p>
+<p>Conceptos básicos:</p>
+<ul>
+<li><strong>Amenaza</strong>: evento que puede dañar un activo.</li>
+<li><strong>Vulnerabilidad</strong>: debilidad que puede explotar una amenaza.</li>
+<li><strong>Impacto</strong>: daño producido.</li>
+<li><strong>Riesgo</strong>: impacto ponderado por la probabilidad.</li>
+</ul>
+<p>Relación clave: las amenazas explotan vulnerabilidades, afectan a activos y los controles reducen el riesgo.</p>
+<p>Amenazas típicas: empleados, temporales, consultores, competidores, atacantes, errores, desastres naturales, malware, robo, sabotaje, fallos de red/sistema, incendios, falta de documentación o seguridad física débil.</p>
+<h1>2.4 Valoración y tratamiento</h1>
+<p>Los activos se valoran con la tríada <strong>CIA</strong>. El impacto puede ser:</p>
+<ul>
+<li><strong>Coste inmediato</strong>: recuperar la operación en los días siguientes.</li>
+<li><strong>Coste a largo plazo</strong>: pérdida de imagen, confianza o clientes.</li>
+</ul>
+<p>Escala de probabilidad vista en clase:</p>
+<ul>
+<li><code>1</code>: nunca.</li>
+<li><code>2</code>: raro, aprox. una vez al año.</li>
+<li><code>3</code>: periódico, aprox. una vez por trimestre.</li>
+<li><code>4</code>: regular, aprox. una vez cada 15 días.</li>
+<li><code>5</code>: frecuente, aprox. una vez por semana.</li>
+</ul>
+<p>Fórmula simplificada: <code>Riesgo = impacto o severidad x probabilidad</code>.</p>
+<p>Tratamiento del riesgo:</p>
+<ul>
+<li><strong>Asumirlo</strong>: aceptarlo.</li>
+<li><strong>Eliminarlo</strong>: quitar la causa o actividad.</li>
+<li><strong>Mitigarlo</strong>: reducirlo con controles.</li>
+<li><strong>Transferirlo</strong>: pasarlo a terceros, por ejemplo seguros.</li>
+</ul>
+<p>Los riesgos aceptables se asumen, los tolerables requieren seguimiento y los no aceptables deben tratarse. Mitigar compensa si el coste del control es menor que la pérdida esperada. La dirección acepta el riesgo residual.</p>
+<h1>2.5 Dirección y plan director</h1>
+<p>La dirección aprueba riesgos residuales, autoriza la implantación del SGSI y formaliza el compromiso de ejecutar acciones.</p>
+<p><strong>Plan director de seguridad</strong>: diagnóstico, análisis de riesgos, verificación de cumplimiento (por ejemplo ISO 27001), proyectos a corto/medio/largo plazo y gestión de riesgos. <strong>MAGERIT v3</strong> es referencia importante en la administración electrónica española.</p>
+<h1>Para test</h1>
+<ul>
+<li>Información = activo esencial.</li>
+<li>SGSI = sistema documentado, basado en riesgos y mejora continua.</li>
+<li>Seguridad de la información = CIA.</li>
+<li>Riesgo = impacto x probabilidad.</li>
+<li>Riesgo se puede asumir, eliminar, mitigar o transferir.</li>
+<li>La dirección aprueba riesgos residuales e implantación.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-proteccion-de-la-privacidad-en-el-mundo-digital.html"><span class="nav-etiqueta">← anterior</span>1. Protección de la Privacidad en el Mundo Digital</a>
+  <a class="nav-siguiente" href="3-politicas-de-seguridad-y-estandares.html"><span class="nav-etiqueta">siguiente →</span>3. Políticas de seguridad y estándares</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

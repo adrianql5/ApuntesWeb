@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. Segmentación — apuntes de AQRCOMP (segundo curso de Ingeniería Informática).">
+<title>2. Segmentación · AQRCOMP · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">aqrcomp</a><span class="miga-sep">/</span><span aria-current="page">2-segmentacion</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">AQRCOMP · curso 2</p>
+    <h1>2. Segmentación · AQRCOMP</h1>
+  </header>
+  <div class="prosa">
+<h1>2.1 Introducción a la Segmentación</h1>
+<h2>2.1.1 Ciclo de Instrucción</h2>
+<p>El <strong>Ciclo de Instrucción</strong> son las etapas necesarias en un caso general para ejecutar cada instrucción. Etapas de ejecución:</p>
+<ul>
+<li><strong>IF:</strong> Lectura de instrucción y actualización del registro contador de programa.</li>
+<li><strong>ID:</strong> decodificación de la instrucción, lectura de registros, extensión de signo de desplazamientos y cálculo de posible dirección de salto.</li>
+<li><strong>EX:</strong> operación de ALU sobre registros y cálculo de dirección efectiva de salto.</li>
+<li><strong>MEM:</strong> Lectura o escritura en memoria.</li>
+<li><strong>WB:</strong> Escritura de resultado en el banco de registros.</li>
+</ul>
+<h2>2.1.2 Implementación Monociclo</h2>
+<p>En MIPS, <strong>cada instrucción se ejecuta en un ciclo de reloj</strong> (CPI=1). Entonces, es muy importante decidir una longitud de ciclo de reloj adecuada. Como hay instrucciones con <strong>más etapas</strong> de ejecución que otras, se tendrá que escoger una <strong>longitud de ciclo</strong> que permita que se ejecute la <strong>más lenta</strong>. Como consecuencia, el resto de instrucciones tendrán tiempos muerto durante su ciclo de ejecución.
+<img src="../../../img/aqrcomp/pasted-image-20250419155505.png" alt="Pasted image 20250419155505.png" loading="lazy">
+<strong>Opciones para reducir el ciclo de reloj:</strong></p>
+<ul>
+<li>Mejoras <strong>tecnológicas de los circuitos</strong> que permitan reducir el tiempo de ejecución de <strong>cada etapa</strong>.</li>
+<li>Mejoras de la <strong>organización del hardware</strong> que pueda ejecutar más de una instrucción <strong>al mismo tiempo</strong>.</li>
+</ul>
+<h2>2.1.3 Implementación Multiciclo</h2>
+<p>La implementación multiciclo y la segmentación son dos métodos de <strong>mejora de la organización</strong> del <strong>hardware</strong>.</p>
+<p>En las <strong>implementaciones multiciclo</strong> cada etapa de ejecución se ejecuta en un ciclo. Para conseguirla hay que <strong>subdividir</strong> la unidad de ejecución y colocar <strong>registros entre etapas</strong>. Si permitimos lanzar a ejecutar una instrucción y mientras se ejecuta ir lanzando la siguiente, la implementación multiciclo se usa como una <strong>unidad segmentada</strong> (pipeline).</p>
+<p>La <strong>segmentación</strong> se consigue a partir de una implementación multiciclo si se permite comenzar a ejecutar una instrucción mientras se ejecutan otras. Sin embargo, no todas las instrucciones <strong>terminan al mismo tiempo</strong>. Cuando dos instrucciones necesitan usar la <strong>misma unidad funcional</strong> se pueden producir <strong>conflictos</strong> (hazards). Los <strong>saltos</strong> pueden provocar <strong>paradas</strong>.</p>
+<p>El objetivo es aprovechar todas las etapas a la vez para ir progresando en la ejecución de diferentes instrucciones simultáneamente.</p>
+<ul>
+<li>En cada instante habrá como <strong>máximo una instrucción en cada etapa</strong>.</li>
+<li><strong>Idealmente</strong> se inicia <strong>una instrucción cada ciclo</strong> de reloj.</li>
+</ul>
+<img src="../../../img/aqrcomp/pasted-image-20250419161430.png" alt="Pasted image 20250419161430.png" loading="lazy">
+<h2>2.1.4 Tiempo del Pipeline</h2>
+<p><strong>La complejidad del conjunto de instrucciones afecta directamente a la complejidad del pipeline</strong>. Una unidad convencional de ejecución de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span></eq> etapas tardará en ejecutar una instrucción la suma del tiempo que tarda cada una de las etapas.
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">co</span><span class="mord mathnormal mtight">mb</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord">...</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.109em;">N</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></eqn></section>
+<img src="../../../img/aqrcomp/pasted-image-20250419162602.png" alt="Pasted image 20250419162602.png" loading="lazy">
+Una unidad <strong>segmentada</strong> con <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span></eq> etapas tardará más en ejecutar cada instrucción por separado, pues tiene que cargar los registros entre cada etapa. El ciclo de reloj debe ser lo suficientemente largo para ejecutar la etapa más lenta y realizar su carga de registros. Por tanto, conviene que <strong>todas las etapas</strong> del pipeline tengan una <strong>duración similar</strong>.
+<img src="../../../img/aqrcomp/pasted-image-20250419163333.png" alt="Pasted image 20250419163333.png" loading="lazy">
+En cada ciclo de reloj se solapa la ejecución de diferentes instrucciones, de manera que, tras una <strong>latencia inicial</strong> igual al tiempo de ejecución de la primera instrucción, se obtiene <strong>una instrucción por ciclo (<em>idealmente</em>)</strong>.</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight" style="margin-right:0.0197em;">l</span><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">ma</span><span class="mord mathnormal">x</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0077em;">R</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">A</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">...</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0077em;">R</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.109em;">N</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></eqn></section><img src="../../../img/aqrcomp/pasted-image-20250529165540.png" alt="Pasted image 20250529165540.png" loading="lazy">
+<h2>2.1.5 Fases del Pipeline</h2>
+<h3>IF-Instruction Fetching</h3>
+<ul>
+<li>Envío del PC a memoria</li>
+<li>Lectura de la Instrucción</li>
+<li>Actualización del PC</li>
+<li>En esta etapa se calcula el PC de la siguiente instrucción (útil recordarlo para los saltos que se explican después)
+<img src="../../../img/aqrcomp/pasted-image-20250529165843.png" alt="Pasted image 20250529165843.png" loading="lazy"></li>
+</ul>
+<h3>ID-Instruction Decodification</h3>
+<ul>
+<li>Decodificación de Instrucciones</li>
+<li>Lectura de Registros</li>
+<li>Extensión de Signo de Desplazamientos</li>
+<li>Calculo de posible dirección de salto
+<img src="../../../img/aqrcomp/pasted-image-20250529170006.png" alt="Pasted image 20250529170006.png" loading="lazy"></li>
+</ul>
+<h3>EX- Execution</h3>
+<ul>
+<li>Operación de la ALU sobre registros</li>
+<li>Alternativamente, cálculo de la dirección de salto final
+<img src="../../../img/aqrcomp/pasted-image-20250529170130.png" alt="Pasted image 20250529170130.png" loading="lazy"></li>
+</ul>
+<h3>MEM- Memoria</h3>
+<ul>
+<li>Lectura o escritura en memoria
+<img src="../../../img/aqrcomp/pasted-image-20250529170220.png" alt="Pasted image 20250529170220.png" loading="lazy"></li>
+</ul>
+<h3>WB-WriteBack</h3>
+<ul>
+<li>Escritura del resultado en banco de registros
+<img src="../../../img/aqrcomp/pasted-image-20250529170257.png" alt="Pasted image 20250529170257.png" loading="lazy"></li>
+</ul>
+<img src="../../../img/aqrcomp/pasted-image-20250529170331.png" alt="Pasted image 20250529170331.png" loading="lazy">
+<h1>2.2 Riesgos en la Ejecución (Hazards)</h1>
+<p>Un riesgo es una situación que <strong>impide que la siguiente instrucción pueda comenzar en el ciclo de reloj previsto</strong>. Estas situaciones reducen el rendimiento de las arquitecturas segmentadas. Los riesgos pueden ser de tres tipos: estructurales, de datos o de control. La aproximación más simple (y menos eficiente) consiste en <strong>detener el flujo de instrucciones</strong> hasta que se elimina el riesgo.</p>
+<p>El <strong>CPI ideal</strong> de un procesador segmentado es 1. Los ciclos del pipeline en los que no se computa se denominan <strong>burbujas del pipeline</strong> y en ellos se introduce en el pipeline un <strong>código de no operación</strong> (NOP).</p>
+<h2>2.2.1 Riesgos Estructurales</h2>
+<p>Los riesgos estructurales se producen cuando el <strong>hardware</strong> no puede soportar todas las posibles <strong>secuencias de instrucciones</strong>. Esto se produce si dos etapas necesitan hacer <strong>uso del mismo recurso hardware</strong>.</p>
+<p>Las razones suelen ser la presencia de unidades funcionales que no están totalmente segmentadas o unidades funcionales no duplicadas. En general, los riesgos estructurales se pueden evitar en el diseño pero encarecen el hardware resultante.</p>
+<img src="../../../img/aqrcomp/pasted-image-20250529171211.png" alt="Pasted image 20250529171211.png" loading="lazy">
+<img src="../../../img/aqrcomp/pasted-image-20250529171222.png" alt="Pasted image 20250529171222.png" loading="lazy">
+<img src="../../../img/aqrcomp/pasted-image-20250529171241.png" alt="Pasted image 20250529171241.png" loading="lazy">
+<h2>2.2.2 Riesgos de Datos</h2>
+<p>Un riesgo de datos se produce cuando la segmentación <strong>modifica el orden de acceso de lectura/escritura a los operandos</strong>. Los riesgos de datos pueden ser de tres tipos:</p>
+<ul>
+<li>RAW (Read After Write)</li>
+<li>WAR (Write After Read )</li>
+<li>WAW (Write After Write).</li>
+</ul>
+<p>De estos tres, solamente los riesgos <strong>RAW</strong> pueden darse en una arquitectura de cinco etapas tipo MIPS. Los riesgos de tipo RAW pueden resolverse en algunos casos mediante el uso de la técnica del <strong>envío adelantado</strong> (<strong>forwarding</strong>).</p>
+<img src="../../../img/aqrcomp/pasted-image-20250529172729.png" alt="Pasted image 20250529172729.png" loading="lazy">
+<img src="../../../img/aqrcomp/pasted-image-20250529172744.png" alt="Pasted image 20250529172744.png" loading="lazy">
+<h3>RAW - Read After Write</h3>
+<p>Una instrucción intenta leer un dato justo antes de que otra anterior lo escriba. Las instrucciones no pueden ejecutarse en paralelo ni solaparse completamente, provoca una <strong>parada</strong>. Se pueden detectas por <strong>hardware</strong> o por <strong>compilador</strong>
+<img src="../../../img/aqrcomp/pasted-image-20250529172911.png" alt="Pasted image 20250529172911.png" loading="lazy"></p>
+<h3>WAR - Write After Read</h3>
+<p>Una instrucción intenta modificar un dato antes de que otra anterior lo lea. No puede ocurrir en un MIPS con pipeline de 5 etapas ya que ID es la etapa 2 y WB es la 5, <strong>no provoca una parada</strong>.
+<img src="../../../img/aqrcomp/pasted-image-20250529173058.png" alt="Pasted image 20250529173058.png" loading="lazy"></p>
+<h3>WAW - Write After Write</h3>
+<p>Una instrucción intenta escribir un dato antes de que otra anterior lo escriba. No puede ocurrir en un MIPS con pipeline de 5 etapas, pues estas siempre se ejecutan en el mismo orden, <strong>no</strong> provoca una <strong>parada</strong>.
+<img src="../../../img/aqrcomp/pasted-image-20250529173148.png" alt="Pasted image 20250529173148.png" loading="lazy"></p>
+<h3>Soluciones</h3>
+<p><strong>WAR o WAW:</strong> renombrado de registros.</p>
+<ul>
+<li>Renombrado <strong>estático:</strong> por el compilador</li>
+<li>Renombrado <strong>dinámico:</strong> por el hardware</li>
+</ul>
+<p><strong>RAW:</strong></p>
+<ul>
+<li><strong>Bloquear</strong> la instrucción hasta que se realice la escritura necesaria.</li>
+<li>El compilador <strong>reordena el código</strong> para mitigar el riesgo, introduce una secuencia de instrucciones independientes entre las conflictivas. Si no hay instrucciones independientes inserta instrucciones <strong>NOP</strong>.</li>
+<li><strong>Envío adelantado</strong> (fowarding, bypassing, anticipación)</li>
+</ul>
+<h3>Fowarding</h3>
+<p>El <strong>fowarding</strong> consiste en enviar resultados de las últimas etapas del pipeline a las primeras para evitar esperas. Por tanto requiere <strong>conexiones adicionales.</strong></p>
+<p>No hace falta esperar a que el resultado se escriba en el banco de registros. Ya están en los registros de segmentación. Se puede usar ese valor en vez del que hay en el banco de registros.</p>
+<p>Los resultados de las fases <strong>EX</strong> y <strong>MEM</strong> se escriben en <strong>registros de entrada a ALU</strong>.
+La lógica de forwarding selecciona entre entradas reales y registros de forwarding.</p>
+<img src="../../../img/aqrcomp/pasted-image-20250529173803.png" alt="Pasted image 20250529173803.png" loading="lazy">
+<img src="../../../img/aqrcomp/pasted-image-20250419171739.png" alt="Pasted image 20250419171739.png" loading="lazy">
+<p><strong>No todos los riesgos se pueden evitar con forwarding.</strong> Si el riesgo no se puede evitar se debe introducir una <strong>detención</strong>.</p>
+<img src="../../../img/aqrcomp/pasted-image-20250529174131.png" alt="Pasted image 20250529174131.png" loading="lazy">
+<img src="../../../img/aqrcomp/pasted-image-20250529174150.png" alt="Pasted image 20250529174150.png" loading="lazy">
+<p><strong>El control de interbloqueo de instrucciones</strong> es un proceso que consiste en detectar cuándo una instrucción <strong>no puede avanzar por dependencia</strong> en operandos con otra, <strong>aunque se aplique adelantamiento</strong>, provocando que se <strong>pare la emisión de instrucciones</strong> hasta que se solucione el bloqueo. La <strong>duración</strong> de la detección depende del <strong>tipo</strong> de instrucciones involucradas. Se detecta en la etapa <strong>ID</strong> pues en ella se averigua qué registros son operandos de entrada. Se activa una parada si:</p>
+<ul>
+<li>En la etapa ID hay una instrucción tipo ALU, salto o de almacenamiento.</li>
+<li>En la etapa EX se está ejecutando una carga</li>
+<li>El registro destino de la carga es operando de entrada de la instrucción que está en etapa ID</li>
+</ul>
+<img src="../../../img/aqrcomp/pasted-image-20250419172454.png" alt="Pasted image 20250419172454.png" loading="lazy">
+<h2>2.2.3 Riesgos de Control</h2>
+<p><strong>Un riesgo de control</strong> se produce en una instrucción de bifurcación cuando no dispone todavía del <strong>valor sobre el que se debe tomar la decisión de salto</strong>. Los riesgos de control pueden resolverse en <strong>tiempo de compilación</strong> (soluciones estáticas) o en <strong>tiempo de ejecución</strong> (soluciones dinámicas).</p>
+<p>Las soluciones estáticas ante los riesgos de control pueden ir desde la congelación del pipeline o la predicción prefijada (predecir siempre a no tomado o siempre a tomado), hasta el uso de bifurcaciones con ranuras de retraso.</p>
+<p>Las soluciones dinámicas pueden usar una tabla histórica de saltos (BHT - Branch History Table) y una máquina de estados para realizar la predicción. De esta manera se tiene una máquina de estados asociada a cada entrada de la tabla.</p>
+<p>Llamaremos <strong>salto tomado</strong> a la situación en la que se modifica el PC y <strong>salto no tomado</strong> a aquella en la que no se modifica.</p>
+<h3>Soluciones Estáticas</h3>
+<h4>Congelar el Pipeline</h4>
+<p>Si la instrucción actual es una salto → parar o eliminar del pipeline instrucciones posteriores hasta que se conozca el destino. El <strong>destino</strong> de la bifurcación se conoce en la etapa ID e implica repetir el <strong>FETCH</strong> de la siguiente instrucción. Esta repetición equivale a una detención.</p>
+<img src="../../../img/aqrcomp/pasted-image-20250529175857.png" alt="Pasted image 20250529175857.png" loading="lazy">
+<h4>Prediccion Prefijada</h4>
+<h5>No tomada</h5>
+<p>Asumir que el salto no será tomado. Se evita modificar el estado del <strong>procesador</strong> hasta que se tiene la confirmación de que el salto no se toma. Si el salto se toma, las instrucciones siguientes se retiran del pipeline y se capta la instrucción en el destino del salto. Transformar instrucciones en NOP.
+<img src="../../../img/aqrcomp/pasted-image-20250529181013.png" alt="Pasted image 20250529181013.png" loading="lazy"></p>
+<h5>Tomada</h5>
+<p>Asumir que el salto será tomado. Tan pronto como se <strong>decodifica</strong> el salto y se calcula el
+destino se comienza a <strong>captar instrucciones del destino</strong>. En pipeline de 5 etapas no aporta ventajas. No se conoce dirección destino antes que decisión de salto. Útil en procesadores con condiciones complejas y lentas.</p>
+<img src="../../../img/aqrcomp/pasted-image-20250529181325.png" alt="Pasted image 20250529181325.png" loading="lazy">
+<h4>Decisión Retardada</h4>
+<p>La bifurcación se produce después de ejecutar las <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></eq> instrucciones posteriores a la propia instrucción de bifurcación. En pipeline de 5 etapas → <strong>1 ranura de retraso</strong> (delay slot).</p>
+<img src="../../../img/aqrcomp/pasted-image-20250529182609.png" alt="Pasted image 20250529182609.png" loading="lazy">
+<p>Las instrucciones <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">...</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span></eq> se ejecutan independientemente del sentido de la condición de salto.
+La instrucción <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></eq> solamente se ejecuta si no se produce el salto.</p>
+<img src="../../../img/aqrcomp/pasted-image-20250529182707.png" alt="Pasted image 20250529182707.png" loading="lazy">
+Caso de salto retrasada con una ranura de retraso. Se espera siempre una instrucción antes de tomar el salto. Es responsabilidad del programador poner código útil en la ranura.
+<img src="../../../img/aqrcomp/pasted-image-20250529182918.png" alt="Pasted image 20250529182918.png" loading="lazy">
+<h3>Soluciones Dinámicas</h3>
+<div class="callout callout-nota">
+<p class="callout-titulo">Robando un poco de info para variar</p>
+<p><a href="https://www.youtube.com/watch?v=L7NfhA23Fjg">https://www.youtube.com/watch?v=L7NfhA23Fjg</a></p>
+</div>
+<p>Las soluciones dinámicas pueden usar una tabla histórica de saltos (BHT - Branch History Table) y una máquina de estados para realizar la predicción. De esta manera se tiene una máquina de estados asociada a cada entrada de la tabla. Son muy útiles cuando usamos pipelines muy largos pero implican un alto coste hardware.</p>
+<h4>Predictor de 1 BIT</h4>
+<p>La idea es que si un salto fue efectivo, lo más probable es que vuelva a serlo en un futuro. Para aprovechar esto necesitamos un buffer de predicción de salto. Este buffer es una tabla de un único bit para anotar si el salto fue <strong>tomado</strong> o <strong>no tomado</strong>. A este buffer se accede mirando los lsb de la dirección del salto, y así sabemos si fue tomado o no. En caso de predicción errónea se invierten los bits.</p>
+<img src="../../../img/aqrcomp/pasted-image-20250529194334.png" alt="Pasted image 20250529194334.png" loading="lazy">
+<p>Si tenemos un bucle interno y otro externo, si el salto se toma siempre en el interno, por cada vez que itere el externo, va a volver a tener ese fallo el interno.</p>
+<img src="../../../img/aqrcomp/pasted-image-20250529195421.png" alt="Pasted image 20250529195421.png" loading="lazy">
+<h4>Predictor de 2 BITS</h4>
+<p>La idea es darle una segunda oportunidad antes de cambiar la predicción (inercia). BTH de 2 bits: cuatro estados posibles
+Así le damos la oportunidad de reconsiderar sus errores y disminuir el número de fallos. Se puede generalizar para <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></eq> bits con <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6644em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></eq> estados posibles, aunque son poco adaptativos y por eso no se suelen usar.</p>
+<img src="../../../img/aqrcomp/pasted-image-20250529200156.png" alt="Pasted image 20250529200156.png" loading="lazy">
+<img src="../../../img/aqrcomp/pasted-image-20250529200641.png" alt="Pasted image 20250529200641.png" loading="lazy">
+#### Predictor Basado en Información Local
+Tiene en cuenta la historia del comportamiento **de un mismo salto** para tomar la decisión. 
+- Se almacena el resultado de cada salto correspondiente a sus últimas k ocurrencias
+- Con estos bits se accede a los bits de estado que informan de la predicción
+- Una vez conocido el resultado real del salto, se actualiza el contenido de la memoria de historia y el filtro de decisión
+- Una vez conocido el resultado real del salto, se actualiza el contenido de la memoria de historia y el filtro de decisión.
+<p>Usa <strong>dos filtros de decisión</strong> y así evita el 100% de los fallos que sucederían al usar un predictor de 1 bit para secuencias tipo T NT T NT...</p>
+<img src="../../../img/aqrcomp/pasted-image-20250419183739.png" alt="Pasted image 20250419183739.png" loading="lazy">
+<h4>Predictor Basado en Información Global</h4>
+<p>Tiene en cuenta la historia del comportamiento de <strong>las últimas <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span></eq> instrucciones de salto</strong> para tomar una decisión. Se usa un <strong>registro de desplazamiento</strong> para almacenar el <strong>resultado de los saltos</strong>. El contenido del registro indexa una <strong>memoria</strong> que guarda los <strong>bits de estado</strong> correspondientes al filtro de decisión.
+<img src="../../../img/aqrcomp/pasted-image-20250419183945.png" alt="Pasted image 20250419183945.png" loading="lazy"></p>
+<h4>Predictor Combinado</h4>
+<p>Combina un predictor <strong>local</strong> y otro <strong>local</strong>. La <strong>tasa de acierto</strong> de los saltos en procesadores reales depende del <strong>tipo de programa</strong> y suele estas entre 85% y 99%</p>
+<img src="../../../img/aqrcomp/pasted-image-20250419184121.png" alt="Pasted image 20250419184121.png" loading="lazy">
+<h1>2.3 Operaciones Multiciclo.</h1>
+<p>La asignación de un único ciclo a las operaciones de coma flotante requiere un ciclo de reloj extremadamente largo o el uso de una lógica de coma flotante muy compleja (con el consiguiente consumo de recursos). La alternativa a estas opciones es la segmentación de la unidad de coma flotante, por lo que estas instrucciones requerirán múltiples ciclos en la etapa de ejecución.</p>
+<p>Las instrucciones en punto flotante tienen la <strong>misma segmentación</strong> que las enteras, pero con las siguientes modificaciones:</p>
+<ul>
+<li>La etapa EX tiene <strong>diferente latencia</strong> dependiendo de la <strong>instrucción</strong>.</li>
+<li>Existen <strong>diversas unidades</strong> funcionales para cada <strong>tipo de operación</strong>.</li>
+</ul>
+<p>Se añade un <strong>banco de registros</strong> separado para operaciones en <strong>punto flotante</strong>. Se añade una <strong>unidad de multiplicación</strong> segmentada de <strong>7 etapas</strong> en <strong>enteros y punto flotante</strong>. Se añade una <strong>unidad de suma de 4 etapas</strong> en punto flotante. Se añade una <strong>unidad de división no segmentada</strong> que requiere <strong>varios ciclos</strong> reutilizando la <strong>misma etapa</strong> (en esta unidad no se puede ejecutar una instrucción por ciclo).</p>
+<img src="../../../img/aqrcomp/pasted-image-20250529201834.png" alt="Pasted image 20250529201834.png" loading="lazy">
+<p><strong>Chequeo de riesgos estructurales</strong>: hay que detectarlos en la unidad de DIV  y en la etapa de WB. Para detectarlos:</p>
+<ul>
+<li>Para el paso de la instrucción a EX si es una división y hay otra división en ejecución.</li>
+<li>Para la emisión si se detecta que van a llegar al WB más instrucciones que puertas de acceso de escritura al banco de registros.</li>
+</ul>
+<p>Chequeo de <strong>riesgos por dependencias RAW:</strong> similar al caso de pipeline simple con una única etapa de ejecución pero con más casos posibles.</p>
+<p>Chequeo de <strong>riesgos por dependencias WAW:</strong> son <strong>poco comunes.</strong> Para detectarlos:</p>
+<ul>
+<li>Determinar si hay una instrucción en una etapa posterior a ID que tiene como destino el mismo registro que la etapa de ejecución, pero que haría la escritura del registro un número de ciclos posterior.</li>
+<li>Si sucede, para el paso a EX de la instrucción que está en una etapa posterior a ID.</li>
+</ul>
+<h1>2.4 Excepciones</h1>
+<p>Las <strong>excepciones</strong> se producen por diferentes <strong>eventos en la CPU</strong> (código de operación indefinido, overflows, syscalls,..) y requieren que el programa se ejecute de nuevo <strong>desde el punto en que se produjo la excepción.</strong></p>
+<p>Para poder restablecer el estado es necesario que se haya <strong>guardado</strong> el contenido de los <strong>registros</strong> y de la <strong>memoria</strong>.</p>
+<ul>
+<li>Las excepciones que permiten recuperar un estado anterior por completo se llaman <strong>excepciones precisas</strong>.</li>
+<li>Es complicado gestionarlas sin sacrificar el rendimiento, ya que reestablecer el estado del sistema significa almacenar información y perder ciclos.</li>
+</ul>
+<p>Posibles soluciones:</p>
+<ul>
+<li>Incorporar un <strong>banco de registros adicional</strong> para ayudar a guardar los valores producidos por <strong>cada instrucción</strong>.</li>
+<li>Utilizar una <strong>rutina software</strong> que permita <strong>repetir la ejecución</strong> de instrucciones desde la que produjo la excepción.</li>
+<li><strong>Parar la emisión de instrucciones</strong> si en la capa EX se detecta <strong>riesgo de excepción</strong>.</li>
+</ul>
+<p>Si suceden múltiples excepciones anidadas, se gestiona <strong>la más antigua primera</strong>.
+<img src="../../../img/aqrcomp/pasted-image-20250419185919.png" alt="Pasted image 20250419185919.png" loading="lazy"></p>
+<h1>2.5 MIPS R4000 (Ha caído en examen)</h1>
+<img src="../../../img/aqrcomp/pasted-image-20250419185957.png" alt="Pasted image 20250419185957.png" loading="lazy">
+<img src="../../../img/aqrcomp/pasted-image-20250419190013.png" alt="Pasted image 20250419190013.png" loading="lazy">
+<img src="../../../img/aqrcomp/pasted-image-20250419190035.png" alt="Pasted image 20250419190035.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-sistemas-multinucleo.html"><span class="nav-etiqueta">← anterior</span>1. Sistemas Multinúcleo</a>
+  <a class="nav-siguiente" href="3-paralelismo-a-nivel-de-instruccion.html"><span class="nav-etiqueta">siguiente →</span>3. Paralelismo a Nivel de Instrucción</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

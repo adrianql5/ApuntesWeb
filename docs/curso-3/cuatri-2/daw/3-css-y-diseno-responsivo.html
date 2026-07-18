@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="3. CSS y Diseño Responsivo — apuntes de DAW (tercer curso de Ingeniería Informática).">
+<title>3. CSS y Diseño Responsivo · DAW · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">daw</a><span class="miga-sep">/</span><span aria-current="page">3-css-y-diseno-responsivo</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DAW · curso 3</p>
+    <h1>3. CSS y Diseño Responsivo · DAW</h1>
+  </header>
+  <div class="prosa">
+<h2>3.1 Qué es CSS</h2>
+<p><strong>CSS</strong> significa <strong>Cascading Style Sheets</strong>. Fue introducido en HTML 4.0 y propuesto por el W3C para separar <strong>contenido</strong> y <strong>formato</strong>:</p>
+<ul>
+<li>HTML describe la estructura y el contenido.</li>
+<li>CSS describe cómo se muestran los elementos HTML.</li>
+<li>El navegador carga HTML, aplica las hojas de estilo y pinta el resultado.</li>
+</ul>
+<p>CSS controla color, tipografía, márgenes, tamaños, fondos, distribución y colocación de elementos. Su origen es asociado a <strong>Hakon Wium Lie</strong>.</p>
+<p>Una regla de estilo tiene esta forma:</p>
+<p><code>selector { propiedad: valor; propiedad: valor; }</code></p>
+<table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Selector</td>
+<td>Determina qué elementos se ven afectados.</td>
+</tr>
+<tr>
+<td>Declaración</td>
+<td>Uno o más pares <code>propiedad: valor</code>, separados por <code>;</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Los comentarios se escriben con <code>/* comentario */</code>; son multilínea y pueden aparecer dentro de una línea.</p>
+<h2>3.2 Cómo añadir CSS, cascada y precedencia</h2>
+<h3>Formas de aplicar CSS</h3>
+<table>
+<thead>
+<tr>
+<th>Forma</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>En línea</td>
+<td>Usa el atributo <code>style</code> en un elemento concreto. Es puntual y poco reutilizable.</td>
+</tr>
+<tr>
+<td>Hoja interna</td>
+<td>Usa <code>&lt;style&gt;</code> dentro de <code>head</code>; afecta a la página actual.</td>
+</tr>
+<tr>
+<td>Hoja externa desde HTML</td>
+<td>Usa <code>&lt;link rel=&quot;stylesheet&quot; href=&quot;hoja.css&quot;&gt;</code>; es la forma normal de trabajo.</td>
+</tr>
+<tr>
+<td>Hoja externa desde CSS</td>
+<td>Usa <code>@import</code>; sirve para modularizar hojas de estilo.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-44.png" alt="image-44.png" loading="lazy">
+<img src="../../../img/daw/image-45.png" alt="image-45.png" loading="lazy">
+<img src="../../../img/daw/image-46.png" alt="image-46.png" loading="lazy">
+<img src="../../../img/daw/image-47.png" alt="image-47.png" loading="lazy">
+<p>CSS también permite cargar hojas según el contexto:</p>
+<table>
+<thead>
+<tr>
+<th>Caso</th>
+<th>Ejemplo o idea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Según dispositivo</td>
+<td><code>&lt;link rel=&quot;stylesheet&quot; media=&quot;screen&quot; href=&quot;hoja.css&quot;&gt;</code>; valores como <code>screen</code>, <code>print</code>, <code>handheld</code>.</td>
+</tr>
+<tr>
+<td>Estilos de sitio</td>
+<td>Hoja común, por ejemplo <code>sitio.css</code>.</td>
+</tr>
+<tr>
+<td>Estilos de página</td>
+<td>Hoja específica, por ejemplo <code>pagina.css</code>.</td>
+</tr>
+<tr>
+<td>Estilos alternativos</td>
+<td>En Firefox se cita <code>rel=&quot;alternate stylesheet&quot;</code> con <code>title=&quot;nombre&quot;</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3>Cascada y precedencia</h3>
+<p>Cuando varias reglas afectan a un mismo elemento, CSS decide con:</p>
+<ol>
+<li>origen e importancia;</li>
+<li>especificidad;</li>
+<li>orden de aparición.</li>
+</ol>
+<p>Capas principales de la cascada:</p>
+<p><code>Navegador -&gt; Usuario -&gt; Autor -&gt; Autor + !important -&gt; Usuario + !important -&gt; Navegador + !important</code></p>
+<p>Dentro de los estilos de autor, la precedencia práctica es:</p>
+<table>
+<thead>
+<tr>
+<th>Criterio</th>
+<th>Idea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Estilo en línea</td>
+<td>Tiene prioridad sobre reglas internas o externas normales.</td>
+</tr>
+<tr>
+<td>Especificidad</td>
+<td>Gana el selector más específico: primero identificadores, luego clases/atributos/pseudoclases, después etiquetas/pseudoelementos.</td>
+</tr>
+<tr>
+<td>Última regla</td>
+<td>Si la especificidad empata, gana la regla que aparece más tarde.</td>
+</tr>
+</tbody>
+</table>
+<p>Valores especiales de propiedades:</p>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>initial</code></td>
+<td>Recupera el valor inicial de la propiedad.</td>
+</tr>
+<tr>
+<td><code>auto</code></td>
+<td>El navegador calcula el valor.</td>
+</tr>
+<tr>
+<td><code>inherit</code></td>
+<td>Toma el valor heredado del elemento padre.</td>
+</tr>
+<tr>
+<td><code>unset</code></td>
+<td>Se comporta como heredado o inicial según la propiedad.</td>
+</tr>
+<tr>
+<td><code>revert</code></td>
+<td>Intenta volver al valor de una capa anterior de la cascada.</td>
+</tr>
+</tbody>
+</table>
+<h3>Unidades de medida</h3>
+<table>
+<thead>
+<tr>
+<th>Unidad</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>%</code></td>
+<td>Relativa al tamaño del contenedor padre.</td>
+</tr>
+<tr>
+<td><code>vw</code> / <code>vh</code></td>
+<td>1% del ancho/alto del viewport.</td>
+</tr>
+<tr>
+<td><code>em</code></td>
+<td>Relativa al tamaño de fuente del padre o contexto.</td>
+</tr>
+<tr>
+<td><code>rem</code></td>
+<td>Relativa al tamaño de fuente raíz (<code>html</code>).</td>
+</tr>
+<tr>
+<td><code>fit-content</code></td>
+<td>Ajuste al tamaño exacto del contenido.</td>
+</tr>
+<tr>
+<td><code>px</code>, <code>cm</code>, <code>mm</code></td>
+<td>Unidades absolutas o físicas usadas según contexto.</td>
+</tr>
+</tbody>
+</table>
+<h2>3.3 Selectores, pseudoclases y herencia</h2>
+<p>Los selectores CSS localizan elementos HTML a los que se quiere aplicar estilo.</p>
+<h3>Selectores básicos</h3>
+<table>
+<thead>
+<tr>
+<th>Selector</th>
+<th>Regla</th>
+<th>Elemento afectado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Universal</td>
+<td><code>* {}</code></td>
+<td>Todos los elementos.</td>
+</tr>
+<tr>
+<td>Agrupación</td>
+<td><code>h1, h2, h3 {}</code></td>
+<td>Varios selectores comparten regla.</td>
+</tr>
+<tr>
+<td>Por etiqueta</td>
+<td><code>h1 {}</code></td>
+<td>Todos los <code>h1</code>.</td>
+</tr>
+<tr>
+<td>Por clase</td>
+<td><code>.header {}</code></td>
+<td>Elementos con <code>class=&quot;header&quot;</code>.</td>
+</tr>
+<tr>
+<td>Por identificador</td>
+<td><code>#principal {}</code></td>
+<td>Elemento con <code>id=&quot;principal&quot;</code>.</td>
+</tr>
+<tr>
+<td>Por atributo</td>
+<td><code>a[href*=&quot;usc&quot;] {}</code></td>
+<td>Enlaces cuyo <code>href</code> contiene <code>usc</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Reglas prácticas:</p>
+<ul>
+<li><code>id</code> debe ser único en el documento.</li>
+<li><code>class</code> permite reutilización y combinación, por ejemplo <code>class=&quot;clase1 clase2&quot;</code>.</li>
+<li>La combinación <code>etiqueta.clase1.clase2</code> selecciona etiquetas que tengan todas esas clases.</li>
+</ul>
+<h3>Combinadores</h3>
+<table>
+<thead>
+<tr>
+<th>Combinador</th>
+<th>Significado</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Espacio</td>
+<td>Descendiente, aunque haya niveles intermedios.</td>
+<td><code>div a {}</code></td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>Hijo directo.</td>
+<td><code>div &gt; a {}</code></td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>Hermano adyacente situado a la derecha.</td>
+<td><code>div + a {}</code></td>
+</tr>
+<tr>
+<td><code>~</code></td>
+<td>Hermanos posteriores situados a la derecha.</td>
+<td><code>div ~ a {}</code></td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-49.png" alt="image-49.png" loading="lazy">
+<h3>Pseudoclases y pseudoelementos</h3>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Casos citados</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pseudoclases interactivas</td>
+<td><code>:link</code>, <code>:visited</code>, <code>:active</code>, <code>:hover</code>, <code>:focus</code>.</td>
+</tr>
+<tr>
+<td>Pseudoclases estructurales</td>
+<td><code>:first-child</code>, <code>:last-child</code>, <code>:nth-child(n)</code>, <code>:lang()</code>.</td>
+</tr>
+<tr>
+<td>Pseudoelementos de texto</td>
+<td><code>::first-line</code>, <code>::first-letter</code>.</td>
+</tr>
+<tr>
+<td>Pseudoelementos de contenido</td>
+<td><code>::before</code>, <code>::after</code>, <code>::marker</code>, <code>::selection</code>, <code>::backdrop</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Una pseudoclase define el estilo de un <strong>estado</strong> del elemento (<code>selector:pseudoclase</code>). Un pseudoelemento define el estilo de una <strong>parte concreta</strong> del elemento (<code>selector::pseudoelemento</code>).</p>
+<h3>Herencia</h3>
+<p>Algunas propiedades se heredan y otras no.</p>
+<ul>
+<li>Suelen heredarse: <code>color</code>, tipografía y propiedades de texto.</li>
+<li>No suelen heredarse: <code>margin</code>, <code>padding</code>, <code>border</code>, <code>background</code>, dimensiones y posicionamiento.</li>
+<li>Puede forzarse con <code>inherit</code>.</li>
+</ul>
+<p>Idea clave: la herencia importa mucho en tipografía y menos en layout.</p>
+<img src="../../../img/daw/image-50.png" alt="image-50.png" loading="lazy">
+<img src="../../../img/daw/image-51.png" alt="image-51.png" loading="lazy">
+<h2>3.4 Modelo de caja y propiedades base</h2>
+<p>Todo elemento HTML se representa como una caja:</p>
+<table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Content</td>
+<td>Contenido real: texto, imágenes, etc.</td>
+</tr>
+<tr>
+<td>Padding</td>
+<td>Área transparente alrededor del contenido.</td>
+</tr>
+<tr>
+<td>Border</td>
+<td>Borde que rodea contenido y padding.</td>
+</tr>
+<tr>
+<td>Margin</td>
+<td>Separación exterior respecto a otros elementos.</td>
+</tr>
+<tr>
+<td>Outline</td>
+<td>Línea externa al borde, útil para foco o resaltado.</td>
+</tr>
+</tbody>
+</table>
+<p>El ancho total de la caja se calcula como:</p>
+<p><code>width + padding-left + padding-right + border-left + border-right</code></p>
+<p>El alto total se calcula como:</p>
+<p><code>height + padding-top + padding-bottom + border-top + border-bottom</code></p>
+<p>El margen afecta al espacio total ocupado, pero no forma parte del tamaño de la caja.</p>
+<img src="../../../img/daw/image-1.png" alt="image-1.png" loading="lazy" width="697">
+<img src="../../../img/daw/image-2.png" alt="image-2.png" loading="lazy">
+<h3><code>box-sizing</code></h3>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>content-box</code></td>
+<td><code>width</code> y <code>height</code> solo miden el contenido; padding y border se suman aparte.</td>
+</tr>
+<tr>
+<td><code>border-box</code></td>
+<td><code>width</code> y <code>height</code> incluyen contenido, padding y border. Suele ser más predecible.</td>
+</tr>
+</tbody>
+</table>
+<h3>Propiedades de caja</h3>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>width</code>, <code>height</code></td>
+<td>Tamaño del elemento; <code>auto</code> deja calcular al navegador.</td>
+</tr>
+<tr>
+<td><code>min-width</code>, <code>max-width</code></td>
+<td>Evitan tamaños demasiado pequeños o grandes; ayudan a impedir barras de desplazamiento innecesarias.</td>
+</tr>
+<tr>
+<td><code>min-height</code>, <code>max-height</code></td>
+<td>Equivalente vertical para altura.</td>
+</tr>
+<tr>
+<td><code>padding</code></td>
+<td>Resumen de <code>padding-top/right/bottom/left</code>.</td>
+</tr>
+<tr>
+<td><code>margin</code></td>
+<td>Resumen de <code>margin-top/right/bottom/left</code>; los márgenes verticales adyacentes pueden colapsar y quedarse en el mayor.</td>
+</tr>
+<tr>
+<td><code>border-style</code></td>
+<td><code>dotted</code>, <code>dashed</code>, <code>solid</code>, <code>double</code>, <code>groove</code>, <code>ridge</code>, <code>inset</code>, <code>outset</code>, <code>none</code>, <code>hidden</code>.</td>
+</tr>
+<tr>
+<td><code>border-width</code></td>
+<td><code>thin</code>, <code>medium</code>, <code>thick</code> o medidas como <code>Xpx</code>.</td>
+</tr>
+<tr>
+<td><code>border-color</code></td>
+<td>Color del borde.</td>
+</tr>
+<tr>
+<td><code>border-radius</code></td>
+<td>Bordes redondeados.</td>
+</tr>
+<tr>
+<td><code>outline-style</code></td>
+<td>Mismos estilos generales que <code>border-style</code>.</td>
+</tr>
+<tr>
+<td><code>outline-width</code></td>
+<td>Ancho del outline.</td>
+</tr>
+<tr>
+<td><code>outline-color</code></td>
+<td>Color del outline.</td>
+</tr>
+<tr>
+<td><code>outline-offset</code></td>
+<td>Distancia entre outline y borde; puede ser negativa.</td>
+</tr>
+</tbody>
+</table>
+<p>Las propiedades resumen de lados admiten:</p>
+<ul>
+<li>1 valor: todos los lados;</li>
+<li>2 valores: vertical y horizontal;</li>
+<li>3 valores: superior, horizontal e inferior;</li>
+<li>4 valores: superior, derecho, inferior e izquierdo.</li>
+</ul>
+<h3>Fondo, desbordamiento, color y visibilidad</h3>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>background-color</code></td>
+<td>Color de fondo.</td>
+</tr>
+<tr>
+<td><code>background-image: url(...)</code></td>
+<td>Imagen de fondo.</td>
+</tr>
+<tr>
+<td><code>background-repeat</code></td>
+<td><code>repeat</code>, <code>repeat-x</code>, <code>repeat-y</code>, <code>no-repeat</code>.</td>
+</tr>
+<tr>
+<td><code>background-position</code></td>
+<td>Posición inicial: <code>left top</code>, porcentajes, coordenadas, etc.</td>
+</tr>
+<tr>
+<td><code>background-attachment</code></td>
+<td><code>scroll</code>, <code>fixed</code>, <code>local</code>; controla si el fondo se mueve con la página o con el contenido.</td>
+</tr>
+<tr>
+<td><code>background</code></td>
+<td>Propiedad resumen de las anteriores.</td>
+</tr>
+<tr>
+<td><code>overflow</code></td>
+<td><code>visible</code>, <code>hidden</code>, <code>scroll</code>, <code>auto</code>; también existen <code>overflow-x</code> y <code>overflow-y</code>.</td>
+</tr>
+<tr>
+<td><code>border-collapse</code></td>
+<td>En tablas: <code>separate</code> o <code>collapse</code>; si se separan puede usarse <code>border-spacing</code>.</td>
+</tr>
+<tr>
+<td><code>opacity</code></td>
+<td>Transparencia entre <code>0.0</code> y <code>1.0</code>.</td>
+</tr>
+<tr>
+<td><code>z-index</code></td>
+<td>Orden de apilado; solo funciona en elementos posicionados. Si no se indica, manda el orden del HTML.</td>
+</tr>
+<tr>
+<td><code>visibility</code></td>
+<td><code>visible</code>, <code>hidden</code>, <code>collapse</code>; <code>hidden</code> oculta pero conserva espacio.</td>
+</tr>
+</tbody>
+</table>
+<p>Formas de indicar color RGB:</p>
+<ul>
+<li><code>#rgb</code>;</li>
+<li><code>#rrggbb</code>;</li>
+<li><code>rgb(r, g, b)</code> y <code>rgba(r, g, b, a)</code>;</li>
+<li><code>rgb(r%, g%, b%)</code> y variantes con alfa;</li>
+<li>colores predefinidos.</li>
+</ul>
+<h2>3.5 <code>display</code>, posicionamiento y layout clásico</h2>
+<h3><code>div</code>, <code>span</code>, <code>display</code> y <code>visibility</code></h3>
+<p><code>div</code> es un contenedor genérico de bloque; <code>span</code> es un contenedor genérico en línea. No aportan significado semántico, pero sirven para agrupar y aplicar estilo.</p>
+<table>
+<thead>
+<tr>
+<th>Propiedad/valor</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>display: none</code></td>
+<td>Elimina el elemento visualmente y también el espacio que ocupaba.</td>
+</tr>
+<tr>
+<td><code>display: inline</code></td>
+<td>Hace que el elemento se comporte como elemento de línea.</td>
+</tr>
+<tr>
+<td><code>display: block</code></td>
+<td>Hace que el elemento se comporte como bloque.</td>
+</tr>
+<tr>
+<td><code>display: inline-block</code></td>
+<td>Se coloca en línea, pero conserva control de <code>width</code> y <code>height</code>.</td>
+</tr>
+<tr>
+<td><code>visibility: hidden</code></td>
+<td>Oculta el elemento, pero mantiene su espacio.</td>
+</tr>
+<tr>
+<td><code>visibility: collapse</code></td>
+<td>Elimina fila/columna/grupo de tabla o ítem flex como si fuera <code>display: none</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3>Posicionamiento</h3>
+<p>Por defecto, el navegador distribuye elementos siguiendo el flujo natural del fichero fuente.</p>
+<table>
+<thead>
+<tr>
+<th>Valor de <code>position</code></th>
+<th>Comportamiento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static</code></td>
+<td>Valor por defecto; sigue el flujo normal.</td>
+</tr>
+<tr>
+<td><code>relative</code></td>
+<td>Permanece en el flujo, pero puede desplazarse respecto a su posición natural.</td>
+</tr>
+<tr>
+<td><code>absolute</code></td>
+<td>Sale del flujo y se coloca respecto a su contenedor padre <strong>posicionado</strong> más cercano; se resume como relativo al contenedor padre.</td>
+</tr>
+<tr>
+<td><code>fixed</code></td>
+<td>Sale del flujo y se coloca respecto a la ventana del navegador.</td>
+</tr>
+<tr>
+<td><code>sticky</code></td>
+<td>Se comporta como <code>relative</code> hasta cierto scroll y luego como <code>fixed</code>.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>El tío te chanta esto y se queda tan ancho, es jodido expresar un concepto tan mal que locura.</p>
+<img src="../../../img/daw/image-306.png" alt="image-306.png" loading="lazy">
+<p>Un elemento puede ser <strong>contenedor</strong> de otros elementos aunque no tenga <code>position</code> definido.</p>
+<p>Pero para que un hijo con <code>position: absolute</code> lo tome como <strong>referencia de posicionamiento</strong>, el contenedor debe estar <strong>posicionado</strong>, es decir, tener un <code>position</code> distinto de <code>static</code>.</p>
+<p>Ejemplo habitual:</p>
+<pre><code class="language-css">.contenedor {
+  position: relative;
+}
+
+.hijo {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+</code></pre>
+<p>Si el contenedor no tiene <code>position: relative</code>, <code>absolute</code>, <code>fixed</code> o <code>sticky</code>, el hijo buscará otro ancestro posicionado. Si no encuentra ninguno, se posicionará respecto al bloque inicial de la página.</p>
+</div>
+<p>La localización se especifica con <code>top</code>, <code>right</code>, <code>bottom</code> y <code>left</code>.</p>
+<img src="../../../img/daw/image-52.png" alt="image-52.png" loading="lazy">
+<img src="../../../img/daw/image-3.png" alt="image-3.png" loading="lazy">
+<h3><code>float</code> y <code>clear</code></h3>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>float</code></td>
+<td>Hace flotar un elemento a <code>left</code>, <code>right</code> o <code>none</code>, elevándolo sobre la página.</td>
+</tr>
+<tr>
+<td><code>clear</code></td>
+<td>Controla qué ocurre con elementos colocados junto a flotantes: <code>left</code>, <code>right</code>, <code>both</code>, <code>none</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><code>float</code> desplaza elementos de bloque cercanos para ocupar el hueco que deja; los elementos de línea lo rodean. Si se combina con <code>position: relative</code>, parte de una posición relativa. Hoy se usa sobre todo para texto alrededor de imágenes o mantenimiento de layouts antiguos.</p>
+<pre><code class="language-css">clear: left;   /* baja si hay un float a la izquierda */
+clear: right;  /* baja si hay un float a la derecha */
+clear: both;   /* baja si hay floats a cualquier lado */
+clear: none;   /* valor normal */
+</code></pre>
+<h3>CSS3 y prefijos de navegador</h3>
+<p>Algunos efectos de CSS3 dependían históricamente del navegador y podían necesitar prefijos:</p>
+<ul>
+<li><code>-moz-</code>: Firefox;</li>
+<li><code>-o-</code>: Opera;</li>
+<li><code>-webkit-</code>: Safari y Chrome;</li>
+<li><code>-ms-</code>: Internet Explorer.</li>
+</ul>
+<h2>3.6 Texto y tipografía</h2>
+<p>Las fuentes se agrupan en familias:</p>
+<table>
+<thead>
+<tr>
+<th>Familia</th>
+<th>Rasgo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sans-serif</code></td>
+<td>Líneas limpias.</td>
+</tr>
+<tr>
+<td><code>serif</code></td>
+<td>Serifas en vértices.</td>
+</tr>
+<tr>
+<td><code>monospace</code></td>
+<td>Todas las letras con el mismo ancho.</td>
+</tr>
+<tr>
+<td><code>cursive</code></td>
+<td>Imitan escritura a mano.</td>
+</tr>
+<tr>
+<td><code>fantasy</code></td>
+<td>Decorativas.</td>
+</tr>
+</tbody>
+</table>
+<p><code>font-family</code> debe listar varias fuentes: primero la deseada y al final una familia genérica. Los nombres compuestos se colocan entre comillas. Para fuentes externas se usa <code>@font-face</code>, indicando el nombre y la URL de la fuente.</p>
+<p>Cualquier símbolo no presente en el teclado puede obtenerse mediante Unicode: <code>&amp;#numero</code> o <code>&amp;#xnumero</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>font-size</code></td>
+<td>Tamaño: <code>xx-small</code>, <code>small</code>, <code>medium</code>, <code>large</code>, <code>Xpx</code>, <code>Xrem</code>, <code>Xvw</code>, etc.</td>
+</tr>
+<tr>
+<td><code>font-weight</code></td>
+<td>Grosor: <code>normal</code>, <code>bold</code>, <code>bolder</code>, <code>lighter</code>, <code>100</code> a <code>900</code>.</td>
+</tr>
+<tr>
+<td><code>font-style</code></td>
+<td><code>normal</code>, <code>italic</code>, <code>oblique</code>.</td>
+</tr>
+<tr>
+<td><code>font</code></td>
+<td>Resumen de <code>font-style</code>, <code>font-variant</code>, <code>font-weight</code>, <code>font-stretch</code>, <code>font-size</code>, <code>line-height</code>, <code>font-family</code>.</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td>Color del texto.</td>
+</tr>
+<tr>
+<td><code>text-align</code></td>
+<td>Alineación horizontal: <code>left</code>, <code>right</code>, <code>center</code>, <code>justify</code>.</td>
+</tr>
+<tr>
+<td><code>text-align-last</code></td>
+<td>Alineación horizontal de la última línea.</td>
+</tr>
+<tr>
+<td><code>vertical-align</code></td>
+<td>Alineación vertical: <code>baseline</code>, medidas, <code>sub</code>, <code>super</code>, <code>top</code>, etc.</td>
+</tr>
+<tr>
+<td><code>text-decoration</code></td>
+<td>Resumen de línea, color y estilo: <code>none</code>, <code>underline</code>, <code>overline</code>, <code>line-through</code>; <code>blink</code> está obsoleto.</td>
+</tr>
+<tr>
+<td><code>text-transform</code></td>
+<td><code>none</code>, <code>capitalize</code>, <code>uppercase</code>, <code>lowercase</code>.</td>
+</tr>
+<tr>
+<td><code>text-indent</code></td>
+<td>Sangría de la primera línea.</td>
+</tr>
+<tr>
+<td><code>letter-spacing</code></td>
+<td>Espacio entre caracteres; en el PDF aparece como <code>text-spacing</code>.</td>
+</tr>
+<tr>
+<td><code>word-spacing</code></td>
+<td>Espacio entre palabras.</td>
+</tr>
+<tr>
+<td><code>line-height</code></td>
+<td>Espacio entre líneas.</td>
+</tr>
+<tr>
+<td><code>white-space</code></td>
+<td><code>normal</code>, <code>nowrap</code>, <code>pre</code>, <code>pre-line</code>, <code>pre-wrap</code>.</td>
+</tr>
+<tr>
+<td><code>text-shadow</code></td>
+<td>Sombras: <code>x y blur color</code>, con posibilidad de varias sombras.</td>
+</tr>
+<tr>
+<td><code>direction</code></td>
+<td>Dirección de escritura: <code>rtl</code> o <code>ltr</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>La tipografía afecta a la apariencia y al espacio que ocupa el contenido, por lo que también influye en el layout.</p>
+<img src="../../../img/daw/image-56.png" alt="image-56.png" loading="lazy">
+<h2>3.7 Diseño responsivo</h2>
+<p>El <strong>layout</strong> es la forma en la que se disponen los elementos de una página.</p>
+<table>
+<thead>
+<tr>
+<th>Enfoque</th>
+<th>Idea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Layout fijo</td>
+<td>Tamaño absoluto de cajas; si cambia la pantalla aparecen barras o espacios desaprovechados.</td>
+</tr>
+<tr>
+<td>Layout líquido</td>
+<td>El navegador adapta tamaños al ancho disponible y a la cantidad de contenido.</td>
+</tr>
+<tr>
+<td>Diseño responsivo</td>
+<td>La página se adapta automáticamente al tamaño del dispositivo.</td>
+</tr>
+</tbody>
+</table>
+<p>La aproximación actual es <strong>mobile first</strong>: primero se diseña una versión simple para móviles, normalmente a una columna, y después se amplía a varias columnas en pantallas mayores.</p>
+<p>Hitos:</p>
+<ul>
+<li><strong>Cameron Adams (2004)</strong>: diseños que se adaptan al tamaño de pantalla usando JavaScript para detectar tamaño y cargar CSS adecuado.</li>
+<li><strong>Ethan Marcotte (2010)</strong>: término &quot;diseño responsivo&quot;, basado en rejillas fluidas, imágenes fluidas y solicitudes de tipo de medio.</li>
+</ul>
+<h3>Viewport</h3>
+<p>El <strong>viewport</strong> es el área visible de una página web para el usuario. La metaetiqueta habitual establece el ancho al dispositivo y el zoom inicial a 1:</p>
+<p><code>&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;</code></p>
+<h3>Reglas <code>@media</code></h3>
+<p>Las reglas <code>@media</code> aplican CSS solo si se cumple una condición:</p>
+<p><code>@media not/only mediatype and (mediafeature) { CSS-Code; }</code></p>
+<table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Valores o uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mediatype</code></td>
+<td><code>all</code> por defecto, <code>print</code>, <code>screen</code>.</td>
+</tr>
+<tr>
+<td><code>mediafeature</code></td>
+<td><code>width</code>, <code>height</code>, <code>orientation</code> (<code>portrait</code> o <code>landscape</code>), <code>resolution</code>, entre otras.</td>
+</tr>
+<tr>
+<td><code>not</code></td>
+<td>Invierte la condición.</td>
+</tr>
+<tr>
+<td><code>only</code></td>
+<td>Evita problemas con navegadores antiguos; no tiene efecto práctico en navegadores modernos.</td>
+</tr>
+<tr>
+<td><code>and</code></td>
+<td>Combina tipo de medio y características.</td>
+</tr>
+</tbody>
+</table>
+<p>También pueden incluirse condiciones de medios directamente en etiquetas <code>link</code> para seleccionar hojas alternativas.</p>
+<h3>Puntos de ruptura</h3>
+<p>Los <strong>breakpoints</strong> son dimensiones a partir de las cuales se planifica un cambio de diseño.</p>
+<table>
+<thead>
+<tr>
+<th>Punto</th>
+<th>Dispositivo orientativo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>min-width: 320px</code></td>
+<td>Móviles pequeños.</td>
+</tr>
+<tr>
+<td><code>min-width: 480px</code></td>
+<td>Pequeños dispositivos y la mayoría de móviles.</td>
+</tr>
+<tr>
+<td><code>min-width: 768px</code></td>
+<td>La mayoría de tablets.</td>
+</tr>
+<tr>
+<td><code>min-width: 992px</code></td>
+<td>Ordenadores con pantallas pequeñas.</td>
+</tr>
+<tr>
+<td><code>min-width: 1200px</code></td>
+<td>Grandes dispositivos y pantallas grandes.</td>
+</tr>
+</tbody>
+</table>
+<p>Tipografía e imágenes responsivas:</p>
+<ul>
+<li>La tipografía responsiva adapta tamaños al dispositivo.</li>
+<li>Las imágenes responsivas adaptan el recurso o su tamaño al dispositivo; la solución actual se apoya en imágenes preparadas para distintos tamaños/orígenes.</li>
+</ul>
+<h2>3.8 Técnicas de layout responsivo</h2>
+<h3>Flexible grids tradicionales</h3>
+<p>Mecanismo antiguo de responsividad basado en:</p>
+<ul>
+<li>reglas <code>@media</code>;</li>
+<li><code>float</code>;</li>
+<li>abuso de medidas relativas en <code>%</code>;</li>
+<li>cálculo <code>width = 100 * ancho_deseado / ancho_pagina</code>.</li>
+</ul>
+<p>Funcionaba, pero era más frágil y menos mantenible que Flexbox o Grid.</p>
+<img src="../../../img/daw/image-57.png" alt="image-57.png" loading="lazy">
+<h3>CSS Multicol</h3>
+<p><strong>Multicol</strong> divide un contenedor en columnas y deja que el navegador calcule el reparto según el viewport.</p>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>column-count</code></td>
+<td>Número de columnas del contenedor.</td>
+</tr>
+</tbody>
+</table>
+<p>Es útil para texto continuo, artículos o diseños tipo periódico, pero no ofrece control completo de layout.</p>
+<img src="../../../img/daw/image-58.png" alt="image-58.png" loading="lazy">
+<h3>Flexbox</h3>
+<p><strong>Flexbox</strong> facilita la disposición flexible en <strong>una dimensión</strong>: filas o columnas.</p>
+<p>Una flexbox tiene:</p>
+<ul>
+<li>un <strong>contenedor flex</strong> con <code>display: flex</code>;</li>
+<li>varios <strong>ítems flex</strong>, que son sus hijos directos.</li>
+</ul>
+<p>Propiedades del contenedor:</p>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Valores o uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flex-direction</code></td>
+<td><code>row</code>, <code>column</code>, <code>row-reverse</code>, <code>column-reverse</code>.</td>
+</tr>
+<tr>
+<td><code>flex-wrap</code></td>
+<td><code>nowrap</code>, <code>wrap</code>, <code>wrap-reverse</code>.</td>
+</tr>
+<tr>
+<td><code>flex-flow</code></td>
+<td>Resumen de <code>flex-direction</code> y <code>flex-wrap</code>.</td>
+</tr>
+<tr>
+<td><code>align-items</code></td>
+<td>Alinea ítems en el eje secundario: <code>flex-start</code>, <code>flex-end</code>, <code>stretch</code>, <code>baseline</code>.</td>
+</tr>
+<tr>
+<td><code>align-content</code></td>
+<td>Alinea líneas cuando hay varias por <code>wrap</code>: <code>stretch</code>, <code>center</code>, <code>space-between</code>, <code>space-around</code>, <code>space-evenly</code>.</td>
+</tr>
+<tr>
+<td><code>justify-content</code></td>
+<td>Reparte ítems en el eje principal: <code>flex-start</code>, <code>flex-end</code>, <code>center</code>, <code>space-between</code>, <code>space-around</code>, <code>space-evenly</code>.</td>
+</tr>
+<tr>
+<td><code>place-content</code></td>
+<td>Resumen de alineación de contenido.</td>
+</tr>
+<tr>
+<td><code>gap</code></td>
+<td>Resumen de <code>row-gap</code> y <code>column-gap</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Propiedades de los ítems:</p>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>flex-grow</code></td>
+<td>Cuánto crece el ítem respecto a los demás.</td>
+</tr>
+<tr>
+<td><code>flex-shrink</code></td>
+<td>Cuánto decrece el ítem respecto a los demás.</td>
+</tr>
+<tr>
+<td><code>flex-basis</code></td>
+<td>Longitud inicial del ítem.</td>
+</tr>
+<tr>
+<td><code>flex</code></td>
+<td>Resumen de <code>flex-grow</code>, <code>flex-shrink</code> y <code>flex-basis</code>.</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>Orden visual dentro del contenedor.</td>
+</tr>
+<tr>
+<td><code>align-self</code></td>
+<td>Alineación individual; sobrescribe <code>align-items</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Notas del apunte:</p>
+<ul>
+<li><code>nowrap</code> es el valor por defecto y puede hacer que los ítems encojan.</li>
+<li><code>wrap</code> permite que bajen a otra línea.</li>
+<li><code>flex-shrink: 0</code> impide que un ítem se encoja, aunque pueda salirse del contenedor.</li>
+</ul>
+<img src="../../../img/daw/image-66.png" alt="image-66.png" loading="lazy">
+<img src="../../../img/daw/image-60.png" alt="image-60.png" loading="lazy">
+<img src="../../../img/daw/image-61.png" alt="image-61.png" loading="lazy">
+<img src="../../../img/daw/image-62.png" alt="image-62.png" loading="lazy">
+<h3>CSS Grid</h3>
+<p><strong>Grid</strong> facilita layouts flexibles en <strong>dos dimensiones</strong>: filas y columnas.</p>
+<p>Una grid tiene:</p>
+<ul>
+<li>un <strong>contenedor grid</strong> con <code>display: grid</code>;</li>
+<li>uno o más <strong>ítems grid</strong>, hijos directos del contenedor.</li>
+</ul>
+<p>Propiedades del contenedor:</p>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grid-template-rows</code></td>
+<td>Tamaño de filas.</td>
+</tr>
+<tr>
+<td><code>grid-template-columns</code></td>
+<td>Tamaño y número de columnas; admite <code>px</code>, <code>%</code>, <code>auto</code> y <code>fr</code>.</td>
+</tr>
+<tr>
+<td><code>grid-template-areas</code></td>
+<td>Define áreas con nombres; cada fila va entre comillas y <code>.</code> indica celda vacía.</td>
+</tr>
+<tr>
+<td><code>grid-template</code></td>
+<td>Resumen de las tres anteriores.</td>
+</tr>
+<tr>
+<td><code>align-items</code></td>
+<td>Alineamiento vertical por defecto: <code>stretch</code>, <code>start</code>, <code>end</code>, <code>center</code>, <code>baseline</code>.</td>
+</tr>
+<tr>
+<td><code>justify-items</code></td>
+<td>Alineamiento horizontal por defecto: <code>stretch</code>, <code>start</code>, <code>end</code>, <code>center</code>.</td>
+</tr>
+<tr>
+<td><code>align-content</code></td>
+<td>Alinea la rejilla verticalmente: <code>start</code>, <code>end</code>, <code>center</code>, <code>stretch</code>, <code>space-around</code>, <code>space-between</code>, <code>space-evenly</code>.</td>
+</tr>
+<tr>
+<td><code>justify-content</code></td>
+<td>Alinea la rejilla horizontalmente con valores equivalentes.</td>
+</tr>
+<tr>
+<td><code>gap</code></td>
+<td>Resumen de <code>row-gap</code> y <code>column-gap</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Propiedades de los ítems:</p>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>grid-column-start</code> / <code>grid-column-end</code></td>
+<td>Columna inicial y final.</td>
+</tr>
+<tr>
+<td><code>grid-column</code></td>
+<td>Resumen de las dos anteriores.</td>
+</tr>
+<tr>
+<td><code>grid-row-start</code> / <code>grid-row-end</code></td>
+<td>Fila inicial y final.</td>
+</tr>
+<tr>
+<td><code>grid-row</code></td>
+<td>Resumen de las dos anteriores.</td>
+</tr>
+<tr>
+<td><code>grid-area</code></td>
+<td>Nombre del ítem o área.</td>
+</tr>
+<tr>
+<td><code>justify-self</code></td>
+<td>Alineación horizontal individual; sobrescribe <code>justify-items</code>.</td>
+</tr>
+<tr>
+<td><code>align-self</code></td>
+<td>Alineación vertical individual; sobrescribe <code>align-items</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Notas prácticas añadidas:</p>
+<ul>
+<li><code>fr</code> reparte el espacio disponible en fracciones.</li>
+<li><code>repeat(auto-fit, minmax(220px, 1fr))</code> es un patrón útil para galerías responsivas.</li>
+<li>Si el problema es una fila o columna, suele encajar Flexbox; si son filas y columnas a la vez, suele encajar Grid.</li>
+</ul>
+<img src="../../../img/daw/image-67.png" alt="image-67.png" loading="lazy">
+<img src="../../../img/daw/image-68.png" alt="image-68.png" loading="lazy">
+<img src="../../../img/daw/image-63.png" alt="image-63.png" loading="lazy">
+<img src="../../../img/daw/image-64.png" alt="image-64.png" loading="lazy">
+<h2>3.9 Frameworks CSS y Bootstrap</h2>
+<p>Un <strong>framework CSS</strong> es una biblioteca de reglas predefinidas apoyadas en clases HTML.</p>
+<table>
+<thead>
+<tr>
+<th>Ventajas</th>
+<th>Inconvenientes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Facilitan compatibilidad entre navegadores.</td>
+<td>Importan código innecesario y aumentan ancho de banda.</td>
+</tr>
+<tr>
+<td>Facilitan responsividad entre dispositivos.</td>
+<td>Reducen parte del control sobre el diseño.</td>
+</tr>
+<tr>
+<td>Simplifican el desarrollo.</td>
+<td>Limitan opciones visuales si se usan sin personalizar.</td>
+</tr>
+<tr>
+<td>Aportan fiabilidad y eficacia.</td>
+<td>Pueden homogeneizar demasiado la interfaz.</td>
+</tr>
+</tbody>
+</table>
+<h3>Bootstrap</h3>
+<p>Bootstrap es una librería orientada al RWD, especialmente a móviles. Fue creada por <strong>Mark Otto</strong> y <strong>Jacob Thornton</strong> en Twitter y liberada en GitHub en 2011.</p>
+<p>Según el material:</p>
+<ul>
+<li>la versión usada actualmente en clase es Bootstrap 5, publicada en 2021;</li>
+<li>Bootstrap 5 aporta componentes nuevos, hoja de estilos más rápida y mayor capacidad de respuesta;</li>
+<li>es compatible con versiones estables recientes de navegadores y plataformas;</li>
+<li>no es compatible con Internet Explorer 11 y anteriores;</li>
+<li>cambió a JavaScript nativo en lugar de depender de jQuery.</li>
+</ul>
+<p>Para integrarlo se añade la hoja CSS y, si se usan componentes interactivos, también el bundle JavaScript.</p>
+<img src="../../../img/daw/image-69.png" alt="image-69.png" loading="lazy">
+<h3>Contenedores, espaciado y layout</h3>
+<table>
+<thead>
+<tr>
+<th>Clase</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.container</code></td>
+<td>Contenedor con <code>max-width</code> adaptado a puntos de ruptura prefijados.</td>
+</tr>
+<tr>
+<td><code>.container-XX</code></td>
+<td>Variante según sufijo <code>sm</code>, <code>md</code>, <code>lg</code>, <code>xl</code>, <code>xxl</code>.</td>
+</tr>
+<tr>
+<td><code>.container-fluid</code></td>
+<td>Contenedor líquido con <code>max-width: 100%</code> en cualquier punto.</td>
+</tr>
+</tbody>
+</table>
+<p>Espaciados:</p>
+<p><code>{propiedad}{lado}-{tamaño}</code> para <code>xs</code> y <code>{propiedad}{lado}-{punto-ruptura}-{tamaño}</code> para <code>sm</code>, <code>md</code>, <code>lg</code>, <code>xl</code>, <code>xxl</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Valores</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Propiedad</td>
+<td><code>m</code> para <code>margin</code>, <code>p</code> para <code>padding</code>.</td>
+</tr>
+<tr>
+<td>Lado</td>
+<td><code>t</code>, <code>b</code>, <code>l</code>, <code>r</code>, <code>x</code> para izquierda/derecha, <code>y</code> para superior/inferior.</td>
+</tr>
+<tr>
+<td>Tamaño</td>
+<td><code>0</code>, <code>1</code>, <code>2</code>, <code>3</code>, <code>4</code>, <code>5</code>, <code>auto</code>; se basan en <code>$spacer</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>El layout de Bootstrap se basa en Flexbox y en una rejilla de hasta <strong>12 columnas</strong>:</p>
+<ol>
+<li>crear un contenedor con <code>.container</code> o <code>.container-fluid</code>;</li>
+<li>crear filas con <code>.row</code>;</li>
+<li>definir columnas con <code>col-{dispositivo}-{numero}</code>.</li>
+</ol>
+<img src="../../../img/daw/image-71.png" alt="image-71.png" loading="lazy">
+<img src="../../../img/daw/image-70.png" alt="image-70.png" loading="lazy">
+<p>Propiedades y componentes fijados o facilitados por Bootstrap según el PDF:</p>
+<ul>
+<li>texto/tipografía: <code>rem = 16px</code>, <code>$spacer = 1rem</code>, <code>line-height = 1.5rem</code>;</li>
+<li>formatos de tablas;</li>
+<li>imágenes con redondeo de esquinas y marcos;</li>
+<li>párrafos resaltados mediante <code>jumbotron</code>;</li>
+<li>cajas con bordes redondeados mediante <code>well</code>;</li>
+<li>iconos con <code>glyphicon</code>;</li>
+<li>paginación y migas de pan con <code>pagination</code> y <code>breadcrumb</code>;</li>
+<li>desplegables con <code>dropdown</code>;</li>
+<li>barras de navegación con <code>navbar</code> y <code>navbar-*</code>;</li>
+<li>carruseles con <code>carousel-*</code>.</li>
+</ul>
+<img src="../../../img/daw/image-72.png" alt="image-72.png" loading="lazy">
+<h2>3.10 Validación y compatibilidad</h2>
+<p>Para validar CSS se puede usar:</p>
+<p><code>http://jigsaw.w3.org/css-validator</code></p>
+<p>También conviene recordar que muchas propiedades modernas ya no requieren prefijo en navegadores actuales, pero los prefijos históricos pueden aparecer en código antiguo, documentación o ejemplos heredados.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="2-html.html"><span class="nav-etiqueta">← anterior</span>2. HTML</a>
+  <a class="nav-siguiente" href="4-javascript.html"><span class="nav-etiqueta">siguiente →</span>4. JavaScript</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

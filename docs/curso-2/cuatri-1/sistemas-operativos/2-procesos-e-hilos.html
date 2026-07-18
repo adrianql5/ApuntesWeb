@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. Procesos e Hilos — apuntes de SISTEMAS OPERATIVOS (segundo curso de Ingeniería Informática).">
+<title>2. Procesos e Hilos · SISTEMAS OPERATIVOS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">sistemas-operativos</a><span class="miga-sep">/</span><span aria-current="page">2-procesos-e-hilos</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">SISTEMAS OPERATIVOS · curso 2</p>
+    <h1>2. Procesos e Hilos · SISTEMAS OPERATIVOS</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<h1><strong>Procesos e hilos - Perdiendo la Cordura</strong></h1>
+<p>El concepto más importante en cualquier sistema operativo es el de <strong>proceso</strong>, una <strong>abstracción</strong> de un programa en ejecución; todo lo demás depende de este concepto. Los procesos son una de las abstracciones más antiguas e importantes que proporcionan los sistemas operativos: proporcionan la capacidad de operar (pseudo) <strong>concurrentemente</strong>, incluso cuando hay sólo una CPU disponible. Convierten una CPU en varias CPUs virtuales.</p>
+<h1><strong>2.1. Concepto de proceso</strong></h1>
+<p>En cualquier sistema de multiprogramación, la CPU conmuta de un proceso a otro con rapidez, ejecutando cada uno durante décimas o centésimas de milisegundos: hablando en sentido estricto, en cualquier instante la CPU está ejecutando sólo un proceso, y en el transcurso de 1 segundo podría trabajar en varios de ellos, dando la apariencia de un paralelismo (o <strong>pseudoparalelismo</strong>, para distinguirlo del verdadero paralelismo de hardware de los sistemas <strong>multiprocesadores</strong> con dos o más CPUs que comparten la misma memoria física). Es difícil para las personas llevar la cuenta de varias actividades en paralelo; por lo tanto, los diseñadores de sistemas operativos han evolucionado con el paso de los años a un modelo conceptual (procesos secuenciales) que facilita el trabajo con el paralelismo.</p>
+<p>En concepto, cada proceso tiene su propia CPU virtual. En realidad, los procesos compiten por una o varias CPUs reales, que conmutan de un proceso a otro con rapidez. Así, auqnue en todos los intantes la CPU está ejecutando un único proceso, nos da la apariencia de <strong>pseudoparalelismo</strong>. El algoritmo de <strong>planificación de procesos</strong> determina cuándo se debe detener el trabajo en un proceso para dar servicio a otro y qué proceso será el nuevo.</p>
+<p>La diferencia clave entre un programa y un proceso es que:</p>
+<ul>
+<li><strong>Programa:</strong> Es <strong>estático</strong>, un conjunto de instrucciones <strong>almacenadas</strong> (por ejemplo, una receta de cocina).</li>
+<li><strong>Proceso:</strong> Es <strong>dinámico</strong>, la actividad de ejecutar un programa con entradas y salidas específicas (como seguir la receta para hornear un pastel).</li>
+</ul>
+<h1><strong>2.1.1. El modelo del proceso</strong></h1>
+<p>La figura 2.1.(a) muestra una computadora <strong>multiprogramando</strong>  cuatro programas en memoria; la figura 2.1(b) lista <strong>cuatro procesos, cada uno con su propio flujo de control</strong> (<em>es decir, su propio contador de programa lógico</em>) y cada uno</p>
+<p>ejecutándose en forma independiente. Desde luego que <strong>sólo hay un contador de programa físico</strong>, por lo que cuando se ejecuta cada proceso, <strong>se carga su contador de programa lógico en el contador de programa real</strong>. Cuando termina (<em>por el tiempo que tenga asignado</em>), el contador de programa físico se guarda en el contador de programa lógico almacenado del proceso en memoria. En la figura 2.1(c) podemos ver que durante un intervalo suficientemente largo todos los procesos han progresado, pero en cualquier momento dado sólo hay un proceso en ejecución.</p>
+<p>La diferencia entre un proceso y un programa es sutil pero crucial. La idea clave es que un proceso es una actividad de cierto tipo: tiene un programa, una entrada, una salida y un estado. Varios procesos pueden compartir un solo procesador mediante el uso de un algoritmo de planificación para determinar cuándo se debe detener el trabajo en un proceso para dar servicio a otro. En resumen, un proceso es un programa en ejecución o un programa cargado que incluye códigos, datos, pilas, espacio de direcciones, señales, archivos, etc. Un programa, en cambio, es una secuencia de instrucciones y estructuras de datos necesarias para la ejecución, y se almacena en un fichero ejecutable llamado código máquina.</p>
+<h1><strong>2.2. Gestión de procesos</strong></h1>
+<h4><strong>2.2.1. Creación de un proceso</strong></h4>
+<p>Los sistemas operativos necesitan cierta manera de crear procesos. Hay cuatro eventos principales que provocan la creación de un proceso:</p>
+<ul>
+<li>
+<ol>
+<li>El arranque del sistema.</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>La ejecución, desde un proceso, de una llamada al sistema para creación de procesos (fork).</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>Una petición del usuario para crear un proceso (abrir la app del navegador).</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>El inicio del trabajo por lotes</li>
+</ol>
+</li>
+</ul>
+<p>Generalmente, cuando se arranca un sistema operativo se crean varios procesos. Algunos de ellos son procesos en primer plano; es decir, procesos que interactúan con los usuarios (humanos) y realizan trabajo para ellos. Otros son procesos en segundo plano, que no están asociados con usuarios específicos sino con una función específica. Los procesos que permanecen en segundo plano para manejar ciertas actividades se conocen como <strong>demonios</strong> (<em>demons</em>). Estos procesos se inician mediante una secuencia de comandos de shell cuando se inicia el sistema.</p>
+<p>En Linux, los procesos se crean de una forma especialmente simple. La <strong>llamada al sistema fork</strong> crea una copia exacta del proceso original. El proceso que va a realizar la bifurcación es el <strong>proceso padre</strong>. Al nuevo proceso se le conoce como <strong>proceso hijo</strong>. El padre y el hijo tienen cada uno sus propias imágenes de memoria privadas. Si el padre cambia después una de sus variables, los cambios no son visibles para el hijo y viceversa. La llamada al sistema fork devuelve un 0 para el hijo y un valor distinto de cero para el padre, el <strong>PID</strong> (<em>Process Identifier</em>, Identificador de proceso) del hijo, al padre.</p>
+<p>Los procesos padre e hijo tienen la misma <strong>memoria</strong>, las mismas <strong>variables</strong> y los mismos <strong>archivos abeirtos</strong>. Sin embargo, tienen <strong>espacios de direcciones</strong> distintos, por lo que si uno de ellos modifica una palabra en su espacio de direcciones, la modificación no es visible para el otro.</p>
+<p><strong>Carrera Crítica:</strong> como el padre y el hijo comparten el mismo puntero en el archivo, si ambos actual sobre él al mismo tiempo pueden aparecer errores de lectura o escritura, pues es imposible predecir cuál ejecutará primero el SO.</p>
+<h1><strong>2.2.2. Terminación de procesos</strong></h1>
+<p>Una vez que se crea un proceso, empieza a ejecutarse y realiza el trabajo al que está destinado, Tarde o temprano el nuevo proceso terminará, por lo general debido a una de las siguientes condiciones:</p>
+<ol>
+<li><strong>Salida normal</strong> (<em>voluntaria</em>) (exit(0))</li>
+</ol>
+<ul>
+<li>
+<ol start="2">
+<li><strong>Salida por error</strong> (<em>voluntaria</em>)</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li><strong>Error fatal</strong> (<em>involuntaria</em>) (segfault)</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li><strong>Eliminado por otro proceso</strong> (<em>involuntaria</em>) (kill(Pid))</li>
+</ol>
+</li>
+</ul>
+<p>La mayoría de los procesos terminan debido a que han concluido su trabajo. Cuando un compilador ha compilado el programa que recibe, ejecuta una llamada al sistema para indicar al sistema operativo que ha terminado. Esta llamada es <strong>exit</strong> en UNIX. La segunda razón de terminación es que el proceso descubra un error. Por ejemplo, si un usuario escribe el comando para compilar el programa <em>foo.c</em> y no existe dicho archivo, el compilador simplemente termina. La tercera razón de terminación es un error fatal producido por el proceso, a menudo debido a un error en el programa. Algunos ejemplos incluyen el ejecutar una instrucción ilegal, hacer referencia a una parte de memoria no existente o la división entre cero. La cuarta razón por la que un proceso podría terminar es que ejecute una llamada al sistema que indique al sistema operativo que elimine otros procesos. En UNIX esta llamada es <strong>kill</strong> (en caso de que kill no especifique otra señal manda la señal <strong>SIGTERM</strong>, que mata al proceso).</p>
+<p><strong>Exit implícitos:</strong> si un proceso finaliza sin realizar un <em>exit</em> el compilador lo incluirá de manera automática. Además, si tenemos una función que devuelve un tipo distinto de void y en algún caso no especificamos en valor de retorno, esa función va a devolver un valor aleatorio por normal general, aunque si probáis con códigos de este estilo dará la salida esperada, aunque no tendría por qué darla.</p>
+<p>Ahora vamos a explicar cómo esperar a la terminación de un proceso. Considere el caso de un shell. Lee un comando de la terminal, bifurca un proceso hijo, espera a que el hijo ejecute el comando y después lee el siguiente comando cuando el hijo termina. Para esperar a que el hijo termine, el padre ejecuta una llamada al sistema <strong>waitpid</strong>, que sólo espera a que el hijo termine (cualquier hijo, si existe más de uno). Waitpid tiene tres parámetros. El primero permite al proceso que hizo la llamada esperar a un hijo específico. Si es -1, puede ser cualquier hijo anterior (<em>es decir, el primer hijo que termine</em>). El segundo parámetro es la dirección de una variable que se establecerá con el estado de salida del hijo (<em>terminación normal o anormal y valor de salida</em>). El tercero determina si el proceso que hizo la llamada se bloquea o regresa si ningún hijo ha terminado.</p>
+<p>En el caso del shell, el proceso hijo debe ejecutar el comando escrito por el usuario. Para ello utiliza la llamada al sistema exec, la cual hace que la imagen de todo su núcleo se reemplace por el archivo nombrado en su primer parámetro. En la figura 2.4. se muestra un shell muy simplificado, en el que se ilustra el uso de <strong>execve</strong>. Normalmente tras crear los procesos todos ejecutan un cambio de imagen.</p>
+<p>Exec es la llamada al sistema más compleja. El resto de las llamadas son más simples. Como ejemplo de una llamada simple considere exit, que los procesos deben usar al terminar su ejecución. Tiene un parámetro: el estado de salida (0 a 255), el cual se devuelve al padre en la variable status de la llamada al sistema waitpid. El byte de orden inferior de status contiene el estado de terminación, donde 0 es la terminación normal y los</p>
+<p>otros valores son diversas condiciones de error. El byte de orden superior contiene el estado de salida del hijo (0 a 255), según lo especificado en la llamada del hijo a exit.</p>
+<h1><strong>2.2.3 Señales</strong></h1>
+<p>Un proceso puede enviar lo que se conoce como una <strong>señal</strong> a otro proceso. Las señales sirven para identificar a los procesos sobre los <strong>eventos</strong> que ocurren en el sistema. Se identifican mediante una constante simbólica o con un entero. Pueden ser generadas por excepciones, otros procesos (kill), interrupciones de terminal, control de tareas, notificaciones de E/S y alarmas.</p>
+<p>Cada señal tiene asignado un comportamiento por defecto. Esta acción se realiza en el proceso receptor de la señal. Los procesos pueden indicar al sistema lo que quieren que ocurra cuando llegue una señal. Las opciones son ignorarla, atraparla o dejar que la señal elimine el proceso (la opción predeterminada para la mayoría de las señales). Si un proceso elige atrapar las señales que se le envían, debe especificar un procedimiento para el manejo de señales. Las señales también se utilizan para otros fines. Por ejemplo, si un proceso está realizando operaciones aritméticas de punto flotante, y de manea inadvertida realiza una división entre 0, recibe una señal SIGFPE (excepción de punto flotante).</p>
+<p>Las <strong>señales</strong> son un mecanismo de comunicación <strong>asíncrono</strong> utilizado en los sistemas operativos basados en POSIX para notificar a un proceso de eventos del sistema o para sincronización entre procesos. Son esenciales para <strong>manejar interrupciones, errores y acciones específicas del sistema operativo o de otros procesos.</strong> Se parecen a las interrupciones, pero son lanzadas por software y se puede definiar qué rutina se ejecuta cuando se reciben</p>
+<table>
+<thead>
+<tr>
+<th>Señal</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SIGABRT</td>
+<td>Solicita que el proceso aborte y genere un núcleo de depuración ( <i>core dump</i> ).</td>
+</tr>
+<tr>
+<td>SIGALRM</td>
+<td>Indica que expiró un temporizador configurado por el proceso.</td>
+</tr>
+<tr>
+<td>SIGFPE</td>
+<td>Error matemático (como división por cero o error de punto flotante).</td>
+</tr>
+<tr>
+<td>SIGHUP</td>
+<td>Indica que se desconectó la terminal o línea telefónica asociada.</td>
+</tr>
+<tr>
+<td>SIGILL</td>
+<td>Instrucción ilegal detectada en el proceso.</td>
+</tr>
+<tr>
+<td>SIGKILL</td>
+<td>Termina el proceso inmediatamente (no se puede capturar ni ignorar).</td>
+</tr>
+<tr>
+<td>SIGPIPE</td>
+<td>Escritura en un <i>pipe</i> sin lectores activos.</td>
+</tr>
+<tr>
+<td>SIGSEGV</td>
+<td>Violación de memoria (acceso a una dirección no válida).</td>
+</tr>
+<tr>
+<td>SIGTERM</td>
+<td>Solicita la finalización ordenada del proceso.</td>
+</tr>
+<tr>
+<td>SIGUSR1</td>
+<td>Señal personalizada definida por el usuario.</td>
+</tr>
+<tr>
+<td>SIGUSR2</td>
+<td>Otra señal personalizada para propósitos definidos por el usuario.</td>
+</tr>
+</tbody>
+</table>
+<p>La señal <strong>SIGINT</strong> (<em>Signal Interrupt</em>) es una interrupción que se envía a un proceso cuando el usuario presiona <strong>CTRL+C</strong> en la terminal. Esta señal le indica al proceso que debe finalizar de manera controlada. Si no se maneja explícitamente, el sistema termina el proceso de forma predeterminada. La señal <strong>SIGCHLD</strong> se envía a un proceso padre cuando uno de sus procesos hijo cambia de estado. El proceso padre puede usar esta señal para manejar eventos del hijo. Es ignorada por defecto, esto significa que, si un proceso padre no la maneja explícitamente ni espera a los procesos hijos con funciones como wait, los procesos hijos que terminan pueden quedar en estado zombie hasta que se recolecten.</p>
+<p>Las señales pueden generarse por diversas razones, como excepciones del sistema, comandos de otros procesos</p>
+<p>(<em>como el uso de kill</em>), interrupciones desde la terminal (<em>por ejemplo, al presionar CTRL+C</em>), la finalización de un proceso hijo en el control de tareas, la gestión de cuotas, notificaciones relacionadas con operaciones de E/S (siempre que no sean interrupciones generadas por controladoras hardware), y alarmas programadas. La recepción de estas señales implica que el proceso receptor ejecute la acción correspondiente, incluyendo, en algunos casos, su propia terminación.</p>
+<p>Para ello, es esencial que el proceso esté correctamente planificado para responder adecuadamente al evento señalado. Para anunciar que un proceso está dispuesto a atrapar una señal, el proceso puede usar la llamada al sistema <strong>sigaction</strong>. El primer parámetro es la señal que va a atrapar. El segundo es el apuntador a una estructura que proporciona un apuntador al procedimiento de manejo de señales, así como otros bits y banderas. El tercero apunta a una estructura en la que el sistema desenvuelve la información sobre el manejo de señales que está en efecto, en caso de que se tenga que restaurar después.</p>
+<p>El manejador de señales se puede ejecutar todo el tiempo que quiera. Sin embargo, en la práctica es común encontrar manejadores de señales muy cortos. Cuando termina el procedimiento de manejo de señales, regresa al punto desde el cual se interrumpió. La llamada al sistema sigaction también se puede utilizar para hacer que se ignore una señal, o para restaurar la acción predeterminada, que es eliminar el proceso. La llamada al sistema kill permite que un proceso envíe una señal a otro proceso relacionado. Para muchas aplicaciones en tiempo real, hay que interrumpir un proceso después de un intervalo específico para realizar una acción. Para manejar esta situación se utiliza la llamada al sistema alarm. El parámetro especifica un intervalo en segundos, después del cual se envía una señal SIGALARM al proceso. Un proceso sólo puede tener una alarma pendiente en cualquier momento.</p>
+<h4><strong>2.3.4. Jerarquías de procesos</strong></h4>
+<p>Un proceso y todos sus hijos, junto con sus posteriores descendientes, forman un grupo de procesos. Cuando un usuario envía una señal del teclado, esta se envía a todos los miembros del grupo de procesos. De manera individual, cada proceso puede atrapar la señal, ignorarla o tomar la acción predeterminada que es ser eliminado por la señal.</p>
+<p>Veamos la forma en que UNIX se inicializa a sí mismo cuando se enciende la computadora. Hay un proceso especial (llamado <em>init</em>) en la imagen de inicio. Cuando empieza a ejecutarse, lee un archivo que le indica cuántas terminales hay. Después utiliza fork para crear un proceso por cada terminal. Estos procesos esperan a que alguien inicie la sesión. Si un inicio de sesión tiene éxito, el proceso de inicio de sesión ejecuta un shell para aceptar comandos. Estos pueden iniciar más procesos y así sucesivamente.</p>
+<p>En contraste, Windows no tiene un concepto de una jerarquía de procesos. Todos los procesos son iguales, La única sugerencia de jerarquía de procesos es que, cuando se crea un proceso, el padre recibe un indicador especial un <em>token</em> (llamado <strong>manejador</strong>) que puede utilizar para controlar al hijo. Sin embargo, tiene la libertad de pasar este indicador a otros procesos, con lo cual invalida la jerarquía.</p>
+<h1><strong>2.3.5. Estados de un proceso</strong></h1>
+<p>Aunque cada proceso es una entidad independiente, con su propio contador de programa y estado interno, a menudo los procesos necesitan interactuar con otros. Un proceso puede generar cierta salida que otro proceso utiliza como entrada. En el comando de shell</p>
+<p>cat capitulo1 capitulo2 capitulo3 | grep arbol</p>
+<p>el primer proceso, que ejecuta cat, concatena tres archivos y los envía como salida. El segundo proceso, que ejecuta grep, selecciona todas las líneas que contengan la palabra &quot;arbol&quot;. Dependiendo de la velocidad relativa de los dos procesos (que dependen tanto de la complejidad relativa de los programas, como de cuánto tiempo ha tenido cada uno la CPU), puede ocurrir que grep esté listo para ejecutarse, pero que no haya una entrada esperándolo. Entonces debe bloquear hasta que haya una entrada disponible.</p>
+<p>Cuando un proceso se bloquea, lo hace debido a que por lógica no puede continuar, comúnmente porque está esperando una entrada que todavía no está disponible. También es posible que un proceso, que esté listo en concepto y pueda ejecutarse, se detenga debido a que el sistema operativo ha decidido asignar la CPU a otro proceso por cierto tiempo.</p>
+<p><img src="../../../img/sistemas-operativos/page-21-picture-9.jpeg" alt="" loading="lazy"></p>
+<p>Si utilizamos el modelo de los procesos, es mucho más fácil pensar en lo que está ocurriendo dentro del sistema. Algunos de los procesos ejecutan programas que llevan a cabo los comandos que escribe un usuario; otros son parte del sistema y se encargan de tareas como cumplir con las peticiones de los servicios de archivos o administrar los detalles de ejecutar una unidad de disco. Cuando ocurre una interrupción de disco, el sistema toma una decisión para dejar de ejecutar el proceso actual y ejecutar el proceso de disco que está bloqueado esperando esta interrupción. Así, en vez de pensar en las interrupciones, podemos pensar en los procesos de usuario, procesos de disco, procesos de terminal, etc., que se bloquean cuando están esperando a que algo ocurra. Cuando se ha leído el disco o se ha escrito el carácter, el proceso que espera se desbloquea y es elegible para continuar ejecutándose. El nivel más bajo del sistema operativo es el planificador, con una variedad de procesos encima de él. Todo el manejo de las interrupciones y los detalles relacionados con iniciar y detener los procesos se ocultan en lo que aquí se denomina planificador.</p>
+<p><img src="../../../img/sistemas-operativos/page-22-figure-0.jpeg" alt="" loading="lazy"></p>
+<table>
+<thead>
+<tr>
+<th>Swapping</th>
+<th>El sistema operativo necesita liberar suficiente memoria princi-<br>pal para traer un proceso en estado Listo de ejecución.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Otras razones del sistema operativo</td>
+<td>El sistema operativo puede suspender un proceso en segundo plano o de utilidad o un proceso que se sospecha puede cau sar algún problema.</td>
+</tr>
+<tr>
+<td>Solicitud interactiva del usuario</td>
+<td>Un usuario puede desear suspender la ejecución de un progra<br>ma con motivo de su depuración o porque está utilizando un<br>recurso.</td>
+</tr>
+<tr>
+<td>Temporización</td>
+<td>Un proceso puede ejecutarse periódicamente (por ejemplo, ur proceso monitor de estadísticas sobre el sistema) y puede sus penderse mientras espera el siguiente intervalo de ejecución.</td>
+</tr>
+<tr>
+<td>Solicitud del proceso padre</td>
+<td>Un proceso padre puede querer suspender la ejecución de un descendiente para examinar o modificar dicho proceso sus pendido, o para coordinar la actividad de varios procesos des cendientes.</td>
+</tr>
+</tbody>
+</table>
+<h1><strong>2.3.6. Implementación de los procesos</strong></h1>
+<p>Para implementar el modelo de procesos, el sistema operativo mantiene una tabla llamada <strong>tabla de procesos</strong>, con sólo una entrada por cada proceso. Esta entrada contiene información importante acerca del estado del proceso, incluyendo su contador de programa, apuntador de pila, asignación de memoria, estado de sus archivos abiertos, información de contabilidad y planificación, y todo lo demás que debe guardarse acerca del proceso cuando éste cambia del estado en <em>ejecución</em> a <em>listo</em> o <em>bloqueado</em>, de manera que se pueda reiniciar posteriormente como si nunca se hubiera detenido.</p>
+<table>
+<thead>
+<tr>
+<th><b>Adminis</b></th>
+<th>tración de archivos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Directorio</td>
+<td>o raíz</td>
+</tr>
+<tr>
+<td>Directorio</td>
+<td>o de trabajo</td>
+</tr>
+<tr>
+<td>Descripc</td>
+<td>iones de archivos</td>
+</tr>
+<tr>
+<td>ID de usi</td>
+<td>uario</td>
+</tr>
+<tr>
+<td>ID de gru</td>
+<td>oqu</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/sistemas-operativos/page-23-figure-3.jpeg" alt="" loading="lazy"></p>
+<ul>
+<li><strong>Pila del núcleo</strong>: almacena funciones o rutinas invocadas durante la ejecución de un proceso en modo núcleo.</li>
+<li><strong>Área U</strong>: almacena información de control necesaria para que el kernel gestione el proceso mientras se está ejecutando. Contiene un puntero a la entrada a la entrada del proceso en la tabla de procesos.</li>
+<li><strong>Tabla de regiones</strong>: almacena una entrada para cada región (código, datos y pila de usuario) asignada a algún proceso</li>
+</ul>
+<h4><strong>2.3.7 Introducción a las Interrupciones</strong></h4>
+<p>Ahora que hemos analizado la tabla de procesos, es posible explicar un poco más acerca de cómo la ilusión de varios procesos secuenciales se mantiene en una (o en varias) CPU.</p>
+<p>Cada clase de operación de E/S tiene una entrada en el <strong>VECTOR DE INTERRUPCIÓN</strong> del sistema, que contiene la dirección del procedimiento de interrupción para esa clase. El procedimiento de interrupción de un tipo de operación de E/S sirve para manejar las interrupciones de dicha clase.</p>
+<p><img src="../../../img/sistemas-operativos/page-24-figure-3.jpeg" alt="" loading="lazy"></p>
+<p><strong>FIGURA 2.11.</strong> (a) Los pasos para iniciar un dispositivo de E/S y obtener una interrupción. (b) El procesamiento de interrupciones involucra tomar la interrupción, ejecutar el manejador de interrupciones y regresar al programa de usuario.</p>
+<ul>
+<li>Se recibe una interrupción desde una <strong>controladora E/S</strong> (o desde un reloj)</li>
+<li>El hardware guarda en la <strong>pila del proceso en ejecución</strong> actual ciertos registros como el <strong>PC,</strong> el <strong>PSW</strong>, etc.</li>
+<li>El hardware carga como nuevo PC l<strong>a dirección especificada en la entrada adecuada del vector de interrupción</strong> para ejecutar el procedimiento de interrupción.
+<ul>
+<li>o Rutina 1 (en ensamblador): igual para todas las interrupciones de todas las clases.
+<ul>
+<li>o Guarda los registros en la entrada de la tabla de procesos del proceso en ejecución actual</li>
+<li>o Establece una nueva pila temporal, que usará el procedimiento de interrupción.</li>
+</ul>
+</li>
+<li>o Rutina 2 (en C): específica para cada interrupción.</li>
+</ul>
+</li>
+<li>El planificador decide qué proceso va a ejecutar a continuación.</li>
+<li>El control se devuelve al código ensamblador para cargar los registros y el mapa de memoria del proceso seleccionado</li>
+<li>Se ejecuta el proceso seleccionado.</li>
+</ul>
+<h1><strong>2.3.7 Modelación de la multiprogramación</strong></h1>
+<p>Cuando se utiliza la multiprogramación, el uso de la CPU se puede mejorar. Dicho en forma cruda: si el proceso promedio realiza cálculos sólo 20 por ciento del tiempo que está en la memoria, con cinco procesos en memoria a la vez la CPU deberá estar ocupada todo el tiempo. Sin embargo, este modelo es demasiado optimista, ya que supone que los cinco procesos nunca estarán esperando la E/S al mismo tiempo.</p>
+<p>Un mejor modelo es analizar el uso de la CPU desde un punto de vista probabilístico. Suponga que un proceso gasta una fracción p de su tiempo esperando a que se complete una operación de E/S. Con n procesos en memoria a la vez, la probabilidad de que todos los n procesos estén</p>
+<p><img src="../../../img/sistemas-operativos/page-25-figure-2.jpeg" alt="" loading="lazy"></p>
+<p>esperando la E/S (en cuyo caso, la CPU estará inactiva) es p n. Entonces, el uso de la CPU se obtiene mediante la fórmula:</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">U</span><span class="mord mathnormal">so</span><span class="mspace"> </span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal">a</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mord mathnormal" style="margin-right:0.109em;">U</span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9088em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></span></eqn></section><p>Dónde <em>n</em> es el número de procesos y <em>p</em> es la fracción de tiempo esperando a completar una operación de E/S.</p>
+<h1><strong>2.4. Hilos</strong></h1>
+<p>En los sistemas operativos tradicionales, cada proceso tiene un espacio de direcciones y un solo hilo de control. De hecho, ésa es casi la definición de un proceso. Sin embargo, con frecuencia hay situaciones en las que es conveniente tener varios hilos de control en el mismo espacio de direcciones que se ejecuta en cuasi-paralelo, como si fueran procesos (casi) separados (excepto por el espacio de direcciones compartido).</p>
+<h4><strong>2.4.1. Uso de hilos</strong></h4>
+<p>Hay varias razones de tener estos miniprocesos, conocidos como <strong>hilos</strong>. La principal razón de tener hilos es que en muchas aplicaciones se desarrollan varias actividades a la vez. Algunas de ésas se pueden bloquear de vez en cuando. Al descomponer una aplicación en varios hilos secuenciales que se ejecutan en cuasi-paralelo, el modelo de programación se simplifica.</p>
+<p>Esta precisamente la justificación de tener procesos. En vez de pensar en interrupciones, temporizadores y conmutaciones de contexto, podemos pensar en procesos paralelos. Sólo que ahora con los hilos agregamos un nuevo elemento: la habilidad de las entidades en paralelo de compartir un espacio de direcciones y todos sus datos entre ellas. Esta habilidad es esencial para ciertas aplicaciones, razón por la cual no funcionará el tener varios procesos (con sus espacios de direcciones separados).</p>
+<p>Un segundo argumento para tener hilos es que, como son más ligeros que los procesos, son más fáciles de crear (es decir, rápidos) y destruir. En muchos sistemas, la creación de un hilo es de 10 a 100 veces más rápida que la de un proceso. Cuando el número de hilos necesarios cambia de manera dinámica y rápida, es útil tener esta propiedad.</p>
+<p>Una tercera razón de tener hilos es también un argumento relacionado con el rendimiento. Los hilos no producen un aumento en el rendimiento cuando todos ellos están ligados a la CPU, pero cuando hay una cantidad considerable de cálculos y operaciones de E/S, al tener hilos estas actividades se pueden traslapar, con lo cual se agiliza la velocidad de la aplicación.</p>
+<p>Por último, los hilos son útiles en los sistemas con varias CPUs, en donde es posible el verdadero paralelismo. Es más fácil ver por qué los hilos son útiles si utilizamos ejemplos concretos. Como primer ejemplo considere un procesador de palabras.</p>
+<p>Por lo general, los procesadores de palabras muestran el documento que se va crear en la pantalla exactamente como aparecerá en la página impresa. En especial, todos los saltos de línea y de página están en sus posiciones correctas y finales, de manera que el usuario pueda inspeccionarlas y cambiar el documento si es necesario.</p>
+<p>Suponga que el usuario está escribiendo un libro. Desde el punto de vista del autor, es más fácil mantener todo el libro en un solo archivo para facilitar la búsqueda de temas, realizar sustituciones globales, etc. También, cada capítulo podría estar en un archivo separado; sin embargo, tener cada sección y subsección como un archivo separado puede ser una verdadera molestia si hay que realizar cambios globales en todo el libro, ya que entonces tendrían que editarse cientos de archivos en forma individual.</p>
+<p>Ahora considere lo que ocurre cuando el usuario repentinamente elimina un enunciado de la página 1 de un documento de 800 páginas. Después de revisar que la página modificada esté correcta, el usuario desea realizar otro cambio en la página 600 y escribe un comando que indica al procesador de palabras que vaya a esa página. Entonces, el procesador de palabras tiene que volver a dar formato a todo el libro hasta la página 600 en ese momento, debido a que no sabe cuál será la primera línea de la página 600 sino hasta que haya procesado las demás páginas. Puede haber un retraso considerable antes de que pueda mostrar la página 600 y el usuario estaría descontento.</p>
+<p>Aquí pueden ayudar los hilos. Suponga que el procesador de palabras se escribe como un programa con dos hilos. Un hilo interactúa con el usuario y el otro se encarga de volver a dar formato en segundo plano. El proceso de volver a dar formato se completará antes de que el usuario pida ver la página 600, para que pueda mostrarse al instante Ahora agregamos un tercer hilo. Muchos procesadores de palabras tienen la característica de guardar de</p>
+<p><img src="../../../img/sistemas-operativos/page-26-picture-4.jpeg" alt="" loading="lazy"></p>
+<p>manera automática todo el archivo en el disco cada cierto número de minutos, para proteger al usuario contra la pérdida de todo un día de trabajo en caso de un fallo en el programa, el sistema o la energía. El tercer hilo se puede encargar de los respaldos en disco sin interferir con los otros dos.</p>
+<p>Si el programa tuviera sólo un hilo, entonces cada vez que iniciara un respaldo en el disco se ignorarían los comandos del teclado y el ratón hasta que se terminara el respaldo. El usuario sin duda consideraría esto como un rendimiento pobre. De manera alternativa, los eventos de teclado y ratón podrían interrumpir el respaldo en disco, permitiendo un buen rendimiento, pero produciendo un modelo de programación complejo, controlado por interrupciones. Con tres hilos, el modelo de programación es mucho más simple. El primer hilo interactúa sólo con el usuario, el segundo proceso vuelve a dar formato al documento cuando se le indica y el tercero escribe el contenido de la RAM al disco en forma periódica. Debemos aclarar que aquí no funcionaría tener tres procesos separados, ya que los tres hilos necesitan operar en el documento. Al tener tres hilos en vez de tres procesos, comparten una memoria común y por ende todos tienen acceso al documento que se está editando.</p>
+<p>Ahora considere otro ejemplo más de la utilidad de los hilos: un servidor para un sitio en World Wide Web. Las solicitudes de páginas llegan y la página solicitada se envía de vuelta al cliente. En la mayoría de los sitios Web, algunas páginas se visitan con más frecuencia que otras. Considere la forma en que podría escribirse el servidor Web sin hilos. El resultado neto es que se pueden procesar menos peticiones/segundo.</p>
+<p>Por ende, los hilos obtienen un aumento considerable en el rendimiento, pero cada hilo se programa de manera secuencial, en forma usual.</p>
+<h4><strong>2.4.2. El modelo clásico de hilo</strong></h4>
+<p>El modelo de procesos se basa en dos conceptos independientes: agrupamiento de recursos y ejecución. Una manera de ver a un proceso es como si fuera una forma de agrupar recursos relacionados. Un proceso tiene</p>
+<p><img src="../../../img/sistemas-operativos/page-27-picture-3.jpeg" alt="" loading="lazy"></p>
+<p>un espacio de direcciones que contiene texto y datos del programa, así como otros recursos. Estos pueden incluir archivos abiertos, procesos hijos, alarmas pendientes, manejadores de señales, información contable y mucho más. Al reunirlos en forma de un proceso, pueden administrarse con más facilidad.</p>
+<p>El otro concepto que tiene un proceso es un <strong>hilo de ejecución</strong>. El hilo tiene un contador de programa que lleva el registro de cuál instrucción se va a ejecutar a continuación. Tiene registros que contienen sus variables de trabajo actuales. Tiene una pila, que contiene el historial de ejecución, con un conjunto de valores para cada procedimiento al que se haya llamado, pero del cual no se haya devuelto todavía. Los procesos se utilizan para agrupar los recursos; son las entidades planificadas para su ejecución en la CPU.</p>
+<p>Lo que agregan los hilos al modelo de procesos es permitir que se lleven a cabo varias ejecuciones en el <strong>mismo entorno del proceso</strong>, que son en gran parte independientes unas de las otras. Tener varios procesos ejecutándose en paralelo en un proceso es algo similar a tener varios procesos ejecutándose en paralelo en una computadora. En el primer caso, los hilos <strong>comparten un espacio de direcciones y otros recursos</strong>; en el segundo, los procesos comparten la memoria física, los discos, las impresoras y otros recursos. Como los hilos tienen algunas de las propiedades de los procesos, algunas veces se les llama <strong>procesos ligeros</strong>.</p>
+<p><img src="../../../img/sistemas-operativos/page-27-picture-7.jpeg" alt="" loading="lazy"></p>
+<p><img src="../../../img/sistemas-operativos/page-27-picture-8.jpeg" alt="" loading="lazy"></p>
+<p>El término <strong>multihilamiento</strong> también se utiliza para describir la situación de permitir varios hilos en el mismo proceso. Cuando se ejecuta un proceso con multihilamiento en un sistema con una CPU, los hilos toman turnos para ejecutarse. La CPU conmuta rápidamente entre un hilo y otro, dando la ilusión de que los hilos se ejecutan en paralelo, aunque en una CPU más lenta que la verdadera.</p>
+<p>Los distintos hilos en un proceso <strong>no son tan independientes como los procesos</strong>. Todos los hilos tienen el mismo espacio de direcciones, lo cual significa que también comparten las mismas variables globales. Como cada hilo puede acceder a cada dirección de memoria dentro del espacio de direcciones del proceso, un hilo puede leer, escribir o incluso borrar la pila de otro hilo. No hay protección entre los hilos debido a que (1) es imposible y (2) no debe ser necesario. A diferencia de tener procesos diferentes, que pueden ser de distintos usuarios y hostiles entre sí, un proceso siempre es propiedad de un solo usuario, quien se supone que ha creado varios hilos para que puedan cooperar, no pelear. Además de compartir un espacio de direcciones, todos los hilos pueden compartir el mismo conjunto de archivos abiertos, procesos hijos, alarmas y señales, etc.</p>
+<p>Es importante tener en cuenta que cada hilo tiene su propia pila. La pila de cada hilo contiene un conjunto de valores para cada procedimiento llamado, pero del que todavía no se ha regresado. Este conjunto de valores contiene las variables locales del procedimiento y la dirección de retorno que se debe utilizar cuando haya terminado la llamada al procedimiento.</p>
+<p>Aunque obviamente si un hilo conoce la dirección de la pila de otro hilo la puede modificar.</p>
+<p><img src="../../../img/sistemas-operativos/page-28-figure-2.jpeg" alt="" loading="lazy"></p>
+<p>Al igual que un proceso tradicional (es decir, un proceso con sólo un hilo), un hilo puede estar en uno de varios estados: en ejecución, bloqueado, listo o terminado. Un hilo en ejecución tiene la CPU en un momento dado y está activo. Un hilo bloqueado está esperando a que cierto evento lo desbloquee. Un hilo listo se programa para ejecutarse y lo hará tan pronto como sea su turno.</p>
+<p>Cuando hay multihilamiento, por lo general los procesos empiezan con un solo hilo presente. Este hilo tiene la habilidad de crear hilos mediante la llamada a un procedimiento de biblioteca, como <em>pthread_create</em>. Comúnmente, un parámetro para <em>pthread_create</em> especifica el nombre de un procedimiento para que se ejecute el nuevo hilo. El hilo creador generalmente recibe un identificador de hilo que da nombre al nuevo hilo.</p>
+<p>Cuando un hilo termina su trabajo, puede salir mediante la llamada a un procedimiento de biblioteca, como <em>pthread_exit</em>. Después desaparece y ya no puede planificarse para volver a ejecutarse. En algunos sistemas con hilos, un hilo puede esperar a que un hilo (específico) termine mediante a llamada a un procedimiento, por ejemplo, <em>pthread_join</em>. Este procedimiento bloquea al hilo llamador hasta que un hilo (específico) haya terminado. Otra llamada de hilos común es <em>pthread_yield</em>, que permite a un hilo entregar voluntariamente la CPU para dejar que otro hilo se ejecute. <strong>Cuando se llama a</strong> <em>phtread_yield</em> <strong>el hilo pasa de estar en estado de ejecución a estado listo, es decir, NO SE BLOQUEA y será planificable nada más se llame a la función.</strong></p>
+<h4><strong>2.4.3. Hilos en POSIX</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Llamada de hilo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pthread_create</td>
+<td>Crea un nuevo hilo</td>
+</tr>
+<tr>
+<td>pthread_exit</td>
+<td>Termina el hilo llamador</td>
+</tr>
+<tr>
+<td>pthread_join</td>
+<td>Espera a que un hilo específico termine</td>
+</tr>
+<tr>
+<td>pthread_yield</td>
+<td>Libera la CPU para dejar que otro hilo se ejecute</td>
+</tr>
+<tr>
+<td>pthread_attr_init</td>
+<td>Crea e inicializa la estructura de atributos de un hilo</td>
+</tr>
+<tr>
+<td>pthread_attr_destroy</td>
+<td>Elimina la estructura de atributos de un hilo</td>
+</tr>
+</tbody>
+</table>
+<h4><strong>2.4.4. Implementación de hilos en el espacio de usuario</strong></h4>
+<p>Hay dos formas principales de implementar un paquete de hilos: en espacio de usuario y en el kernel. cribiremos estos métodos, junto con sus ventajas y desventajas. El primer método es colocar el paquete de hilos <strong>completamente en espacio de usuario</strong>. El <strong>kernel no sabe nada acerca de ellos</strong>. En lo que al kernel concierne, está administrando procesos ordinarios con un solo hilo. La primera ventaja, la más obvia, es que un paquete de hilos de nivel usuario <strong>puede implementarse en un sistema operativo que no acepte hilos</strong>. Con este método, los hilos se implementan mediante una biblioteca. Cuando los hilos se administran en espacio de usuario, cada proceso necesita <strong>su propia tabla de hilos privada</strong> para llevar la cuenta de los hilos en ese proceso.</p>
+<p>Los hilos se ejecutan encima de un sistema en tiempo de ejecución, el cual es una colección de procedimientos que administran hilos (biblioteca de procedimientos).</p>
+<p>Cuando un hilo hace algo que puede ponerlo en estado bloqueado en forma local llama a un procedimiento del sistema en <strong>tiempo de ejecución.</strong> Para <strong>evitar</strong> que el hilo bloquee a todo un proceso de usar la <strong>ENVOLTURA</strong>, que es un procedimiento que se llama en tiempo de ejecución cuando un hilo pretende hacer algo que lo puede bloquear.</p>
+<ul>
+<li>El procedimiento comprueba si el hilo se va a bloquear.</li>
+<li>De ser así, cede la CPU a otro hilo.</li>
+<li>Se almacenan los registros del hilo actual en la tabla de hilos del proceso.</li>
+<li>Se busca en la tabla un hilo listo para ejecutarse (será un hilo <strong>del mismo proceso</strong>).</li>
+<li>Se cargan los registros con los valores del nuevo hilo.</li>
+<li>Se ejecuta el nuevo hilo.</li>
+</ul>
+<p>Hacer esta <strong>conmutación de hilos</strong> de esta manera es <strong>mucho más veloz</strong> que la conmutación de procesos que se tendría que hacer si se bloquease el proceso entero.</p>
+<p>Los hilos de nivel usuario también tienen otras ventajas. Las <strong>funciones de manejo</strong> de hilos y el <strong>planificador</strong>  de hilos son procedimientos del espacio de usuario, por lo que invocarlos es mucho más rápido que invocar el <strong>trap</strong> al kernel que se usa en la implementación en el núcleo (<em>el trap a kernel es más costos pues implica realizar un cambio de contexto, vaciar la cache, etc</em>)<em>.</em> <strong>Permiten que cada proceso tenga su propio algoritmo de planificación personalizado</strong>. Tienen una mejor <strong>escalabilidad</strong> que el kernel, ya que la tabla de hilos central puede llegar a ocupar mucho espacio cuando hay muchos procesos con muchos hilos.</p>
+<p><img src="../../../img/sistemas-operativos/page-29-picture-13.jpeg" alt="" loading="lazy"></p>
+<p>Sin embargo, no se puede impedir que un <strong>fallo de página</strong> (que es un bloqueo impredecible) en un hilo bloquee a todo su proceso, pues no se puede programar una envoltura. Los hilos <strong>no cederán CPU automáticamente</strong>  nunca pues dentro de un mismo proceso no hay interrupciones de reloj. Por tanto, cuando se comienza a ejecutar un hilo, no se podrá ejecutar ningún otro hasta que esta ceda la CPU voluntariamente</p>
+<h4><strong>2.4.5. Implementación de hilos en el kernel</strong></h4>
+<p>Ahora vamos a considerar el caso en que el <strong>kernel sabe acerca de los hilos y los administra</strong>. No se necesita un <strong>sistema en tiempo de ejecución para ninguna de las dos acciones</strong>. Además, no hay tabla de hilos en cada proceso. En vez de ello, el <strong>kernel tiene una única tabla de hilos</strong> que lleva la cuenta de todos los hilos en el sistema. Cuando un hilo desea crear un nuevo hilo o destruir uno existente, realiza una l<strong>lamada al kerne</strong>l, la cual se encarga de la creación o destrucción mediante una actualización en la tabla de hilos del kernel. No es necesario crear <strong>envolturas</strong></p>
+<p>La tabla de hilos del kernel contiene losregistros, el estado y demás información de cada hilo. Esta información es la misma que con los hilos de nivel usuario, pero ahora se mantiene en el kernel, en vez de hacerlo en espacio de usuario (<em>dentro del sistema en tiempo de ejecución</em>). Todas las llamadas que podrían gestionar un hilo se implementan como llamadas al sistema, a un costo considerablemente mayor que una llamada a un procedimiento del sistema en tiempo de ejecución.</p>
+<p>Cuando un hilo se bloquea <em>(se encuentra con un fallo de página),</em> el kernel, según lo que decida, <strong>puede ejecutar otro hilo del mismo proceso</strong> (<em>si hay uno listo</em>) <strong>o un hilo de un proceso distinto</strong>. Con los hilos de nivel usuario, el sistema en tiempo de ejecución ejecuta hilos de su propio proceso hasta que el kernel le quita la CPU (<em>o cuando ya no hay hilos para ejecutar</em>). Debido al costo considerablemente mayor de crear y destruir hilos en el kernel, algunos sistemas optan por un método ambientalmente correcto, reciclando sus hilos.</p>
+<p><img src="../../../img/sistemas-operativos/page-30-figure-5.jpeg" alt="" loading="lazy"></p>
+<p>Las <strong>funciones de manejo</strong> de hilos y el <strong>planificador</strong> son llamadas al sistema, así que su invoación será más lenta que en la implementación en espacio de usuario. Un trap al kernel es más costoso pues implica relaizar un cambio de contexto, vaciar la caché, etc.</p>
+<p>Todos los hilos usarán el <strong>mismo planificador</strong>. Tienen una <strong>mala escalabilidad</strong>, ya que la tabla de hlos central puede llegar a ocupar mucho espacio cuando hay muchos procesos con muchos hilos.</p>
+<h1><strong>2.4.6. Implementaciones híbridas</strong></h1>
+<p>Se han investigado varias formas de tratar de combinar las ventajas de los hilos de nivel usuario con los hilos de nivel kernel. Una de esas formas es utilizar hilos de nivel kernel y después multiplexar los hilos de nivel usuario con alguno o con todos los hilos de nivel kernel. Cuando se utiliza este método, el programador</p>
+<p>puede determinar cuántos hilos de kernel va a utilizar y cuántos hilos de nivel usuario va a multiplexar en cada uno. El kernel está consciente sólo de los hilos de nivel kernel y los planifica.</p>
+<h4><strong>2.4.7. Hilos emergentes</strong></h4>
+<p>EL método <strong>tradicional</strong> para manejar los mensajes entrantes de un <strong>sistema distribuido</strong> es hacer que un proceso o hilo, que está bloqueado en una llamada al</p>
+<p>sistema para recibir mensajes, espere al mensaje entrante.</p>
+<p><img src="../../../img/sistemas-operativos/page-31-picture-4.jpeg" alt="" loading="lazy"></p>
+<p>Una alternativa es que la <strong>llegada de un mensaje</strong> haga que el sistema <strong>cree un nuevo hilo</strong>, un HILO EMERGENTE, para manejar el mensaje. Como este hilo es complemente nuevo, no tiene ninguna información que restaurar, así que <strong>se crea muy rápido.</strong></p>
+<p><img src="../../../img/sistemas-operativos/page-31-picture-6.jpeg" alt="" loading="lazy"></p>
+<h4><strong>2.4.8. Hilos en Linux</strong></h4>
+<p>Linux es un SO con <strong>implementación de hilos en el núcleo.</strong> La llamada al sistema</p>
+<p><em>clone(accion, pila, flags, arg)</em> permite disolver la distinción entre hilos y procesos, creando un nivel de abstracción superior a ellos. En función de las banderas pasadas, creará un hilo o un proceso, pero en principio no hay manera de saberlo.</p>
+<p>Su salida en caso de existo es el pid del hijo, -1 en caso de fracaso.</p>
+<ul>
+<li>Acción: función que ejecutará el hilo/proceso creado.</li>
+<li>Pila: tamaño de la pila para el nuevo hilo/proceso.</li>
+<li>Flags: especifican qué se comparte y qué se mantiene en privado. También permiten especificar si el hilo se creará en el proceso actual o en uno nuevo.</li>
+<li>Arg: único argumento de la función acción.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Meaning when set</th>
+<th>Meaning when cleared</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CLONE_VM</td>
+<td>Create a new thread</td>
+<td>Create a new process</td>
+</tr>
+<tr>
+<td>CLONE_FS</td>
+<td>Share umask, root, and working dirs</td>
+<td>Do not share them</td>
+</tr>
+<tr>
+<td>CLONE_FILES</td>
+<td>Share the file descriptors</td>
+<td>Copy the file descriptors</td>
+</tr>
+<tr>
+<td>CLONE_SIGHAND</td>
+<td>Share the signal handler table</td>
+<td>Copy the table</td>
+</tr>
+<tr>
+<td>CLONE_PID</td>
+<td>New thread gets old PID</td>
+<td>New thread gets own PID</td>
+</tr>
+<tr>
+<td>CLONE_PARENT</td>
+<td>New thread has same parent as caller</td>
+<td>New thread's parent is called</td>
+</tr>
+</tbody>
+</table>
+<h1><strong>2.5. Planificación de procesos</strong></h1>
+<p>Cuando una computadora se multiprograma, con frecuencia tiene varios procesos o hilos que compiten por la CPU al mismo tiempo. Esta situación ocurre cada vez que dos o más de estos procesos se encuentran al mismo tiempo en el estado listo. Si sólo hay una CPU disponible, hay que decidir cuál proceso se va a ejecutar a continuación.</p>
+<p>La parte del sistema operativo que realiza esa decisión se conoce como <strong>planificador de procesos</strong> y el algoritmo que utiliza se conoce como algoritmo de planificación. El planificador sólo considera como candidatos los procesos que están en estado listo. Siempre habrá como mínimo un proceso en estado listo, el proceso inactivo (o idle).</p>
+<p>En los PC hay pocos procesos activos, por lo que la planificación es poco importante. En los servidores, hay muchos procesos activos, por lo que la planificación es crítica. En cualquier caso, el principal objetivo del planificador es buscar un uso eficiente de la CPU.</p>
+<h2><strong>2.5.1. Cambio de contexto</strong></h2>
+<p>El planificador debe escoger muy bien cuándo realizará un cambio de contexto, pues es una operación <strong>muy cara computacionalmente</strong>.</p>
+<ul>
+<li>Se pasa de modo usuario a modo núcleo.</li>
+<li>Se guarda el estado del proceso actual (incluyendo los registros) en la tabla de procesos y el mapa de memoria.</li>
+<li>Se selecciona un nuevo proceso a ejecutar mediante el algoritmo de planificación.</li>
+<li>Se cargan los datos del nuevo proceso.</li>
+<li>Se inicia el nuevo proceso.</li>
+<li>Probablemente sucedan muchos fallos de caché pues, desde que este nuevo proceso perdió en su momento la CPU hasta ahora, es posible que toda la información que usaba en la caché ya no esté en ella (pues los procesos que se ejecutaron entre tanto la fueron eliminado).</li>
+</ul>
+<p>Por tanto, si las conmutaciones de procesos son <strong>muy frecuentes,</strong> puede llegar a consumir mucho tiempo de CPU, que podría haber sido invertido en avanzar procesos.</p>
+<h1><strong>2.5.2. Tipos de procesos y planificación</strong></h1>
+<p>Casi todos los procesos alternan ráfagas de cálculos con peticiones de E/S (de disco), como se muestra en la figura 2.23. Lo importante a observar acerca de la figura 2.23. es que algunos procesos, como el que se muestra en la figura 2.23.(a), invierten la mayor parte de su tiempo realizando cálculos, mientras que otros, como el que se muestra en la figura 2.23.(b), invierten la mayor parte de su tiempo esperando la E/S. A los primeros se les conoce como <strong>limitados a cálculos</strong>; a los segundos como <strong>limitados a E/S (I/O-bound)</strong>.</p>
+<p>Por lo general, los procesos limitados a cálculos tienen ráfagas de CPU largas y, en consecuencia, esperas infrecuentes por la E/S, mientras que los procesos limitados a E/S tienen ráfagas de CPU cortas y, por ende, esperas frecuentes por la E/S. Observe que el factor clave es la longitud de la ráfaga de CPU, no de la ráfaga de E/S.</p>
+<p>Los procesos limitados a E/S Los procesos limitados a E/S están limitados a la E/S debido a que no realizan muchos cálculos entre una petición de E/S y otra, no debido a que tengan peticiones de E/S en especial largas. Vale la pena observar que, a medida que las CPUs se vuelven más rápidas, los procesos tienden a ser más limitados a E/S. La idea básica aquí es que, si un proceso limitado a E/S desea ejecutarse, debe obtener rápidamente la oportunidad de hacerlo para que pueda emitir su petición de disco y mantener el disco ocupado. Como se ve en la figura 2.24., cuando los procesos están limitados a E/S, se requieren muchos de ellos para que la CPU pueda estar completamente ocupada.</p>
+<p><img src="../../../img/sistemas-operativos/page-33-figure-0.jpeg" alt="" loading="lazy"></p>
+<p>La figura deja claro que, si los procesos gastan 80% de su tiempo esperando las operaciones de E/S, por lo menos debe haber 10 procesos en memoria a la vez para que el desperdicio de la CPU esté por debajo de 10%. Si el proceso promedio realiza cálculos sólo 20% del tiempo que está en la memoria, con cinco procesos en memoria a la vez la CPU deberá estar ocupada todo el tiempo.</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">U</span><span class="mord mathnormal">so</span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mord mathnormal" style="margin-right:0.109em;">U</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9088em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></span></eqn></section><h4><strong>2.5.2. Cuando planificar un proceso</strong></h4>
+<p>Una cuestión clave relacionada con la planificación es saber cuándo tomar decisiones de planificación. Resulta ser que hay una variedad de situaciones en las que se necesita la planificación. En primer lugar, <strong>cuando se crea un nuevo proceso</strong> se debe tomar una decisión en cuanto a sise debe ejecutar el proceso padre o el proceso hijo. Como ambos procesos se encuentran en el <strong>estado listo</strong>, es una decisión normal de programación y puede ejecutar cualquiera; es decir, el programador de procesos puede elegir ejecutar de manera legítima, ya sea el padre o el hijo.</p>
+<p>En segundo lugar, se debe tomar una decisión de planificación cuando <strong>un proceso termina.</strong> Ese proceso ya no se puede ejecutar (debido a que ya no existe), por lo que se debe elegir algún otro proceso del conjunto de procesos listos. Si no hay un proceso listo, por lo general se ejecuta un <strong>proceso inactivo</strong> suministrado por el sistema.</p>
+<p>En tercer lugar, cuando <strong>un proceso se bloquea</strong>, hay que elegir otro proceso para ejecutarlo. Algunas veces la razón del bloqueo puede jugar un papel en la elección. Sin embargo, el problema es que el planificador comúnmente no tiene la información necesaria para tomar en cuenta esta dependencia.</p>
+<p>En cuarto lugar, cuando <strong>ocurre una interrupción de E/S</strong> tal vez haya que tomar una decisión de planificación. Si la interrupción proviene de un dispositivo de E/S que ha terminado su trabajo, tal vez ahora un proceso que haya estado bloqueado en espera de esa operación de E/S esté listo para ejecutarse. Es responsabilidad del planificador decidir si debe ejecutar el proceso que acaba de entrar al estado listo, el proceso que se estaba ejecutando al momento de la interrupción, o algún otro.</p>
+<p>Si un <strong>reloj de hardware proporciona interrupciones periódicas</strong>, se puede tomar una decisión de planificación en cada interrupción de reloj o en cada <em>k</em>-ésima interrupción de reloj. Los algoritmos de planificación se pueden dividir en dos categorías con respecto a la forma en que manejan las interrupciones del reloj. Un algoritmo de programación <strong>no apropiativo</strong> (<em>nonpreemptive</em>) selecciona un proceso para ejecutarlo y después sólo deja que se ejecute hasta que <strong>el mismo se bloquea o hasta que libera la CPU en forma voluntaria</strong>. Por el contrario, un algoritmo de planificación <strong>apropiativa</strong> selecciona un proceso y deja que se ejecute por un <strong>máximo de tiempo fijo</strong> (<em>quantum)</em>.</p>
+<h4><strong>2.5.3. Metas de los Algoritmos de Planificación</strong></h4>
+<p>El planificador debe cumplir las siguientes <strong>condiciones</strong> dependiendo del tipo de sistema.</p>
+<h4>En <strong>todos los sistemas:</strong></h4>
+<ul>
+<li><strong>Equidad:</strong> los procesos comparables deben recibir un servicio comparable.</li>
+<li><strong>Aplicación de políticas del sistema:</strong> por ejemplo, darle más prioridad a un tipo de procesos que a otro.</li>
+<li><strong>Balance:</strong> se debe intentar mantener ocupadas todas las partes del sistema cuando se posible (tanto la CPU como los dispositivos de E/S).</li>
+</ul>
+<h4>En los sistemas de <strong>procesamiento por lotes:</strong></h4>
+<ul>
+<li><strong>Maximizar el rendimiento:</strong> en rendimiento es el número de trabajos por hora que completa elsistema.</li>
+<li><strong>Minimizar el tiempo de retorno:</strong> el tiempo de retorno es la media artimética de los tiempos de respuesta de todos los procesos.</li>
+<li><strong>Utilización de la CPU:</strong> se debe intentar mantener ocupada a la CPU todo el tiempo</li>
+</ul>
+<h4>En los sistemas con <strong>usuarios interactivos:</strong></h4>
+<ul>
+<li><strong>Minimizar el tiempo de respuesta:</strong> el tiempo de respuesta es el tiempo que transcurre entre emitir un comando y obtener su respuesta.</li>
+<li><strong>Proporcionalidad:</strong> se debe intentar cumplir las expectativas de los usuarios.</li>
+</ul>
+<h4>En los sistemas de <strong>tiempo real:</strong></h4>
+<ul>
+<li><strong>Cumplir con los plazos:</strong> los plazos son el límite de tiempo que tiene una tarea para finalizar.</li>
+<li><strong>Predictibilidad:</strong> se debe evitar la degradación repentina de calidad en los sistemas multimedia.</li>
+</ul>
+<h1><strong>2.5.4. Algoritmos de planificación</strong></h1>
+<p>No es sorprendente que distintos entornos requieran algoritmos de planificación diferentes. Esta situación se presenta debido a que las diferentes áreas de aplicación (y los distintos tipos de sistemas operativos) tienen diferentes objetivos. Tres de los entornos que vale la pena mencionar son:</p>
+<ul>
+<li>
+<ol>
+<li>Procesamiento por lotes.</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>Interactivo.</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>De tiempo real.</li>
+</ol>
+</li>
+</ul>
+<p>En los <strong>sistemas de procesamiento por lotes</strong> no hay usuarios que esperen impacientemente en sus terminales para obtener una respuesta rápida a una petición corta. En consecuencia, son aceptables los algoritmos no apropiativos (o apropiativos con largos periodos para cada proceso). Este método reduce la conmutación de procesos y, por ende, mejora el rendimiento.</p>
+<p>En un <strong>entorno con usuarios interactivos</strong>, la apropiación es esencial para evitar que un proceso acapare la CPU y niegue el servicio a los demás. Aun si no hubiera un proceso que se ejecutara indefinidamente de manera intencional, podría haber un proceso que deshabilitara a los demás de manera indefinida, debido a un error en el programa. La apropiación es necesaria para evitar este comportamiento.</p>
+<p>En los sistemas con restricciones de <strong>tiempo real,</strong> aunque parezca extraño, la apropiación a veces es no necesaria debido a que los procesos saben que no se pueden ejecutar durante periodos extensos, que por lo</p>
+<p>general realizan su trabajo y se bloquean con rapidez. La diferencia con los sistemas interactivos es que los sistemas de tiempo real sólo ejecutan programas destinados para ampliar la aplicación en cuestión.</p>
+<h1><strong>2.5.5. Planificación en sistemas de procesamientos por lotes</strong></h1>
+<h4><strong>2.5.5.1. Primero en entrar, primero en ser atendido</strong></h4>
+<p>Su funcionamiento se basa en una <strong>cola de procesos listos.</strong></p>
+<ul>
+<li>
+<ol>
+<li>Mientras se ejecuta un proceso, todos los que van llegando se introducen al final de la cola.</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>Cuando se bloquea el proceso en ejecución, s<strong>e escogerá siempre como proceso a ejecutar el primero de la cola.</strong></li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>Cuando el proceso que se había bloqueado pase a estar listo otra vez se colocará al final de la cola como todos los demás.</li>
+</ol>
+</li>
+</ul>
+<p>Es muy <strong>sencillo y fácil de implementar</strong> mediante una <strong>lista enlazada</strong> de procesos listos.</p>
+<p>Si se ejecutan <strong>muchos procesos limitados a E/S</strong>, cada vez que un proceso limitado a CPU se bloquee (por ejemplo, por un fallo de página), tendrá que esperar a que terminen de ejecutarse todos los de E/S antes de poder continuar</p>
+<h4><strong>2.5.5.2. Trabajo más corto primero</strong></h4>
+<p>Su funcionamiento se basa en <strong>ejecutar primero el proceso con menor tiempo de ejecución</strong>.</p>
+<p>-El tiempo de ejecución del primer trabajo ejecutado repercutirá en el tiempo de respuesta de todos los demás, por lo que debe ser el más veloz.</p>
+<p>Naturalmente, se deben conocer de antemano los tiempos de ejecución de todos los procesos.</p>
+<p>-Normalmente se consigue pidiéndole al usuario que lanza el proceso una estimación de cuánto tardará.</p>
+<p><strong>Aumenta el rendimiento</strong> del sistema pues realiza muchos procesos cortos.</p>
+<p><strong>Sólo es óptimo</strong> en términos del tiempo de retorno si todos los trabajos están disponibles al mismo tiempo</p>
+<p>Considere el caso de cuatro trabajos, con tiempos de ejecución de <em>a</em>, <em>b</em>, <em>c</em> y <em>d</em>, respectivamente. El primer trabajo termina en el tiempo <em>a</em>, el segundo termina en el tiempo <em>a + b</em>, y así en lo sucesivo. El tiempo promedio de respuesta es <em>(4a + 3b + 2c + d)/4</em>. Está claro que <em>a</em> contribuye más al promedio que los otros tiempos, por lo que debe ser el trabajo más corto, con <em>b</em> a continuación, después <em>c</em> y por último <em>d</em> como el más largo, ya que sólo afecta a su tiempo de retorno.</p>
+<p><img src="../../../img/sistemas-operativos/page-36-picture-1.jpeg" alt="" loading="lazy"></p>
+<p><img src="../../../img/sistemas-operativos/page-36-picture-2.jpeg" alt="" loading="lazy"></p>
+<p>Como ejemplo contrario, considere cinco trabajos (del <em>A</em> al <em>E</em>) con</p>
+<p>tiempos de ejecución de 2, 4, 1, 1 y 1, respectivamente. Sus tiempos de llegada son 0, 0, 3, 3 y 3. Al principio sólo se pueden elegir <em>A</em> o <em>B</em>, ya que los otros tres trabajos no han llegado todavía. Utilizando el trabajo más corto primero, ejecutaremos los trabajos en el orden <em>A, B, C, D, E</em> para un tiempo de espera promedio de 4.6. Sin embargo, al ejecutarlos en el orden <em>B, C, D, E, A</em> hay una espera promedio de 4.4.</p>
+<h4><strong>2.5.5.3. El menor tiempo restante a continuación</strong></h4>
+<p>Su funcionamiento se basa en <strong>seleccionar el proceso con menor tiempo de ejecución restante.</strong> Cuando llega un nuevo proceso:</p>
+<ul>
+<li>
+<ol>
+<li>El tiempo total del nuevo proceso se compara con el tiempo restante del que se estaba ejecutando.</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>Si necesita menos tiempo, se suspende el proceso actual y se guarda su tiempo restante.</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>Se inicia el nuevo proceso.</li>
+</ol>
+</li>
+</ul>
+<p>Naturalmente, se deben c<strong>onocer de antemano</strong> los <strong>tiempos de ejecución</strong> de todos los procesos.</p>
+<p>-Normalmente se consigue pidiéndole al usuario que lanza el proceso una estimación de cuánto tardará.</p>
+<p>Da <strong>muy buen servicio</strong> a los procesos cortos</p>
+<h1><strong>2.5.6. Planificación en sistemas interactivos</strong></h1>
+<h2><strong>2.5.6.1. Planificación por turno circular- round robin (apropiativo)</strong></h2>
+<p>Su funcionamiento se basa en <strong>asignar un quantum a cada proceso y ejecutarlos secuencialmente.</strong></p>
+<p>Cuando el proceso actual pierda la CPU se escogerá como nuevo proceso al <strong>primero</strong> de la lista, y el actual se pondrá al fina. Es <strong>muy fácil de implementar</strong> mediante una <strong>lista enlazada</strong> de</p>
+<p><img src="../../../img/sistemas-operativos/page-36-picture-19.jpeg" alt="" loading="lazy"></p>
+<p>procesos listos. El problema es que considera que todos los procesos tienen la misma <strong>importancia.</strong> La conmutación de procesos lleva un tiempo que colabora a la <strong>sobrecarga administrativa</strong> (overhead), que es el tiempo de CPU gastado en ejecutar código que no es de procesos. Por lo que se debe escoger muy bien la longitud del quantum.</p>
+<p>Si se coge un quantum demasiado <strong>corto</strong>, se realizan demasiado cambios de contexto, por lo que el overhead es una proporción grande del tiempo de CPU, aunque los procesos tengan que esperar meno para poder ejecutarse. Si se escoge un quantum demasiado <strong>largo</strong>, se realizan menos cambios de contexto innecesarios pues muchos procesos no agotan sus quantums, pero si hay muchos procesos los tiempos de esperar serán muy largos.</p>
+<h4><strong>2.5.6.2. Planificación por prioridad</strong></h4>
+<p>Su funcionamiento se basa en <strong>asignar una prioridad a cada proceso y ejecutar aquel proceso listo con prioridad más alta.</strong> Se debe <strong>evitar</strong> que los procesos con alta prioridad <strong>acaparen la CPU.</strong> Hay 2 métodos para conseguir esto:</p>
+<ul>
+<li>
+<p>Envejecimiento: cada vez que el proceso en ejecución agote un quantum, se reduce su prioridad y si otro proceso tiene alguna más alta, se conmuta.</p>
+</li>
+<li>
+<p>Cuotas de CPU: cada vez que el proceso en ejecución agote un quantum, se cambia al siguiente proceso con más prioridad.</p>
+</li>
+</ul>
+<p>La asignación de prioridad a los procesos se puede hacer de dos formas:</p>
+<ul>
+<li>Estática: se asigna la prioridad del proceso cuando este comienza y se mantiene toda su ejecución</li>
+<li>Dinámica: la prioridad del proceso puede cambiar durante su ejecución. Por ejemplo, se le asigna a cada proceso una prioridad de 1/f donde f es la fracción del último quantum usada por el proceso. Así nos aseguramos de darle <strong>más prioridad a los procesos limitados a E/S</strong>, como habíamos explicado antes.</li>
+</ul>
+<p>Se <strong>agrupan</strong> los procesos en <strong>colas de prioridad</strong> y se usa planificación por prioridad entre clases, o planificación round robin dentro de cada clase.</p>
+<p>Mientras haya proceso en la clase de mayor prioridad, se ejecutarán estos en round robin. SI la clase de mayor prioridad está vacía, se ejecutarán los de la siguiente, y así sucesivamente. Para asegurarse de que incluso los procesos de prioridad más baja consiguen ejecutarse, se deben ajustar las clases dinámicamente.</p>
+<p><img src="../../../img/sistemas-operativos/page-37-picture-6.jpeg" alt="" loading="lazy"></p>
+<h4>2.6.6.3. Otros algoritmos de planificación</h4>
+<p>El <strong>proceso más corto a continuación</strong> es una adaptación del trabajo más corto primero. realizar estimaciones con base en el comportamiento anterior y ejecutar el proceso con el tiempo de ejecución estimado más corto. Suponga que el tiempo estimado por cada comando para cierta terminal es  <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> . Ahora suponga que su siguiente ejecución se mide como  <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> . Podríamos actualizar nuestra estimación mediante una suma ponderada de estos dos números, es decir,  <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord mathnormal">a</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">a</span><span class="mclose">)</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> . Por medio de la elección de a podemos decidir hacer que el proceso de estimación olvide las ejecuciones anteriores rápidamente o que las recuerde por mucho tiempo.</p>
+<p>Si nos dan
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></eqn></section>
+,  <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span><span class="mord mathnormal">m</span><span class="mord mathnormal">s</span></span></span></span></eq> ,  <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">4</span><span class="mord mathnormal">m</span><span class="mord mathnormal">s</span></span></span></span></eq> ,  <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">3</span><span class="mord mathnormal">m</span><span class="mord mathnormal" style="margin-right:0.0359em;">sy</span></span></span></span></eq> ,  <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span><span class="mord mathnormal">m</span><span class="mord mathnormal">s</span></span></span></span></eq> :
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7144em;"></span><span class="mord"><span class="mord">1</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">a</span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ima</span><span class="mord mathnormal">c</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></eqn></section></p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7144em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">a</span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ima</span><span class="mord mathnormal">c</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></eqn></section><section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7144em;"></span><span class="mord"><span class="mord">3</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">a</span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ima</span><span class="mord mathnormal">c</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">a</span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></eqn></section><section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7144em;"></span><span class="mord"><span class="mord">4</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">a</span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ima</span><span class="mord mathnormal">c</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord">3</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7144em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">a</span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></eqn></section><p>La <strong>planificación garantizada</strong> es un método completamente distinto para la planificación que consiste en hacer promesas reales a los usuarios acerca del rendimiento y después cumplirlas. Una de ellas, que es realista y fácil de cumplir es: si hay n usuarios conectados mientras usted está trabajando, recibirá aproximadamente 1/n del poder de la CPU. De manera similar, en un sistema de un solo usuario con n procesos en ejecución, mientras no haya diferencias, cada usuario debe obtener 1/n de los ciclos de la CPU.</p>
+<p>Se puede utilizar otro algoritmo distinto a la panificación garantizada para producir resultados similares con una implementación mucho más sencilla. Este algoritmo se conoce como <strong>planificación por sorteo</strong>. La idea básica es dar a los procesos boletos de lotería para diversos recursos del sistema, como el tiempo de la CPU. Cada vez que hay que tomar una decisión de planificación, se selecciona un boleto de lotería al azar y el proceso que tiene ese boleto obtiene el recurso.</p>
+<p>Algunos sistemas toman en consideración quién es el propietario de un proceso antes de planificarlo. En este modelo, a cada usuario se le asigna cierta fracción de la CPU y el planificador selecciona procesos de tal forma que se cumpla con este modelo. Esto se conoce como <strong>planificación por partes equitativas</strong>.</p>
+<h1><strong>2.7. Planificación de hilos</strong></h1>
+<p>Cuando varios procesos tienen múltiples hilos cada uno, tenemos dos niveles de paralelismo presentes: procesos e hilos. La planificación en tales sistemas difiere en forma considerable, dependiendo de si hay soporte para hilos a nivel usuario o para hilos a nivel kernel (o ambos).</p>
+<p>En los hilos a nivel de usuario el <strong>kernel planifica los procesos,</strong> pues no es consciente de la existencia de hilos. Cuando se planifica un proceso, el <strong>planificador de hilos del sistema en ejecución</strong> de ese proceso <strong>selecciona un hilo</strong> en concreto. Mientras dure el quantum de ese proceso, seguirá seleccionando sus hijos. Permite crear <strong>planificadores específicos</strong> adaptados a las características de una aplicación concreta.</p>
+<p>En los hilos a nivel de núcleo, el <strong>kernel planifica hilos,</strong> en principio sin tener en cuenta de qué proceso son (aunque puede hacerlo). Puede darle más importancia a planificar hilos del proceso que se está ejecutando actualmente pues conmutar a un hilo de otro proceso sería más caro. CUando un hilo se <strong>bloquea,</strong> no suspende todo el proceso.</p>
+<p><img src="../../../img/sistemas-operativos/page-38-figure-4.jpeg" alt="" loading="lazy"></p>
+<p><strong>FIGURA 2.29.</strong> (a) Posible planificación de hilos a nivel usuario con un quántum de 50 mseg para cada proceso e hilos que se ejecutan durante 5 mseg por cada ráfaga de la CPU. (b) Posible planificación de hilos a nivel kernel con las mismas características que (a).</p>
+<h1><strong>2.8 Cosas importantes de este Tema</strong></h1>
+<p>Saber sobre señales y sobre cómo usar los procesos tanto como hilos tema teoría le suele dar más igual. Lo del sigaction y todas esas funciones raras lo suele preguntar. Sobre los algoritmos saber cómo funcionan y las fórmulas porque, aunque no suele, las puede preguntar. Las diferentes implementaciones de hilos son muy importantes al igual que los estados de los procesos.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-introduccion.html"><span class="nav-etiqueta">← anterior</span>1. Introduccion</a>
+  <a class="nav-siguiente" href="3-memoria.html"><span class="nav-etiqueta">siguiente →</span>3. Memoria</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

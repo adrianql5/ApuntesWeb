@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. ÁRBOLES BINARIOS — apuntes de AED (segundo curso de Ingeniería Informática).">
+<title>1. ÁRBOLES BINARIOS · AED · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">aed</a><span class="miga-sep">/</span><span aria-current="page">1-arboles-binarios</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">AED · curso 2</p>
+    <h1>1. ÁRBOLES BINARIOS · AED</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>. <a href="https://github.com/adrianql5">adrianql5</a></p>
+<p>Un árbol es una <strong>estructura de datos no lineal</strong> con un organización jerárquica de elementos  <strong>homogéneos</strong> (del mismo tipo), donde cada elemento tiene un único <strong>padre</strong>, pero generar varios <strong>hijos</strong>.</p>
+<h1>1.1 Conceptos Básicos:</h1>
+<ul>
+<li><strong>Nodo:</strong> cada elemento componente del árbol</li>
+<li><strong>Ascendientes:</strong> nodos de los niveles superiores</li>
+<li><strong>Descendientes:</strong> nodos sucesores de uno dado, niveles inferiores</li>
+<li><strong>Nodo raíz:</strong> nodo original del árbol, nivel más alto y no se deriva de ningún nodo padre</li>
+<li><strong>Nodo hoja:</strong> nodo terminal del árbol. No tiene ningún descendiente.</li>
+<li><strong>Subárbol:</strong> subconjunto de elementos de un árbol que a su vez mantienen estructura de árbol</li>
+<li><strong>Nodo padre:</strong> nodo ascendiente directo del elemento actual. Solo existe un nodo padre por cada nodo, o cero en caso del nodo raíz.</li>
+<li><strong>Nodo hijo:</strong> nodo descendiente directo del elemento actual</li>
+<li><strong>Nodos hermanos:</strong> nodos que se encuentras en el mismo nivel y derivan del mismo padre</li>
+<li><strong>Nodo interno</strong>: nodo que cuenta con padre e hijo.</li>
+</ul>
+<ul>
+<li><strong>Camino:</strong> secuencia de nodos entre un nodo origen y un nodo destino donde cualquier par de nodos consecutivos son padre e hijo</li>
+<li><strong>Rama:</strong> camino desde nodo raíz hasta un nodo hoja</li>
+<li><strong>Grado:</strong> número de hijos de un nodo dado</li>
+<li><strong>Altura:</strong> nivel más alto de un árbol, número de nodos de la rama más larga</li>
+<li><strong>Grado de un árbol:</strong> máximo grado de sus nodos</li>
+</ul>
+<img src="../../../img/aed/pasted-image-20240926162942.png" alt="archivos/imagenes/Pasted image 20240926162942.png" loading="lazy">
+<h1>1.2 Tipos de Árbol</h1>
+<h2>Árbol Binario:</h2>
+<p>Árbol donde cada nodo tiene como máximo grado 2 (<em>2 nodos hijo</em>).</p>
+<h2>Árbol Binario Equilibrado:</h2>
+<p>árbol binario donde la diferencia de altura entre los subárboles de cada nodo es como máximo una unidad. Esto quiere decir que si por ejemplo tengo una hoja en el nivel 3 y otra en el 4 estará equilibrado. Si tiene una en el 2 y otra en el 4 no estará equilibrado.
+<img src="../../../img/aed/pasted-image-20240926163341.png" alt="archivos/imagenes/Pasted image 20240926163341.png" loading="lazy"></p>
+<h2>Árbol Binario Totalmente equilibrado:</h2>
+<p>Árbol binario donde la atura de los subárboles de cada nodo es igual. Todo los nodos hoja de cada uno de los subárboles de un nodo dado están en el mismo nivel.</p>
+<h2>Árbol Binario Lleno:</h2>
+<p>Árbol donde todos los nodos hoja se encuentran en el mismo nivel y sus padres tienen todos 2 hijos.
+<img src="../../../img/aed/pasted-image-20240926163611.png" alt="archivos/imagenes/Pasted image 20240926163611.png" loading="lazy">
+<strong>Un árbol binario lleno también es totalmente equilibrado</strong></p>
+<h2>Árbol binario completo:</h2>
+<p>Árbol binario donde en el último nivel todos los nodos hoja se distribuyen de izquierda a derecha sin dejar huecos
+<img src="../../../img/aed/pasted-image-20240926163341.png" alt="archivos/imagenes/Pasted image 20240926163341.png" loading="lazy">
+<strong>Un árbol binario completo es equilibrado</strong></p>
+<h1>1.3 TAD ABIN EXPLICADO</h1>
+<p>Abin será un puntero a un struct, por ello hacemos</p>
+<pre><code class="language-c">typedef struct celda *Abin
+</code></pre>
+<p><em>der</em> e <em>izq</em> serán puntero que apunta a otra celda del mismo tipo.</p>
+<img src="../../../img/aed/pasted-image-20240926164812.png" alt="archivos/imagenes/Pasted image 20240926164812.png" loading="lazy">
+<p><strong>Crear:</strong> hacemos que <em>abin</em> apunte a <em>null</em> inicialmente.</p>
+<pre><code class="language-C">void crear(abin *A){
+	*A=NULL;
+}
+</code></pre>
+<img src="../../../img/aed/pasted-image-20240926165103.png" alt="archivos/imagenes/Pasted image 20240926165103.png" loading="lazy">
+<p><strong>Der e Izq:</strong> nos devolveran los consiguientes nodos</p>
+<pre><code class="language-C">abin izq(abin A){
+	return A-&gt;izq;
+}
+abin der(abin A){
+	return A-&gt;der;
+}
+</code></pre>
+<img src="../../../img/aed/pasted-image-20240926165153.png" alt="archivos/imagenes/Pasted image 20240926165153.png" loading="lazy">
+<p><strong>Insizq e Insder:</strong> insertan las celdas</p>
+<ul>
+<li>Si acabamos de crear el árbol y está vacío, creamos el nodo con un <em>Abin aux</em> reservando memoria y apuntamos <em>Abin</em> a este nuevo nodo.</li>
+<li>Si no está vacío simplemente lo añadimos apuntando el de la derecha a este nuevo nodo.</li>
+</ul>
+<pre><code class="language-C">void insizq/insder(abin *A, tipoelem E){
+	abin aux;
+	aux=(abin)malloc(sizeof(struct celda));
+	aux-&gt;info=E;
+	aux-&gt;izq=NULL;
+	aux-&gt;der=NULL;
+	if(esVacio(*A))
+		*A=aux;
+	else
+	(*A)-&gt;izq=aux;
+	//(*A)-&gt;der=aux;
+}
+</code></pre>
+<img src="../../../img/aed/pasted-image-20240926165251.png" alt="archivos/imagenes/Pasted image 20240926165251.png" loading="lazy">
+<p><strong>Suprimir:</strong> Creamos un <em>Abin aux</em> que será igual a lo que está en el nodo que queremos eliminar.</p>
+<ul>
+<li>En caso de no ser vacío ese aux suprimo lo que esta a la derecha y a la izquierda con la misma función de forma <strong>recursiva</strong>. Después hago que abin al lado que deseo eliminar apunte a <em>null</em> y libero el nodo auxiliar.</li>
+</ul>
+<pre><code class="language-C">void supizq/supder(abin *A){
+	abin aux;
+	aux=izq(*A); //aux=der(*A);
+	if(!esVacio(aux)){
+		supizq(&amp;aux);
+		supder(&amp;aux);
+		(*A)-&gt;izq=NULL; //(*A)-&gt;der=NULL;
+		free(aux);
+	}
+}
+</code></pre>
+<img src="../../../img/aed/pasted-image-20240926165402.png" alt="archivos/imagenes/Pasted image 20240926165402.png" loading="lazy">
+<p><strong>Eliminar:</strong> sigo la lógica de la función anterior pero desde la raíz</p>
+<pre><code class="language-C">void destruir(abin *A){
+	abin aux;
+	aux=*A;
+	if(!esVacio(aux)){
+		supizq(&amp;aux);
+		supder(&amp;aux);
+		free(aux);
+		*A=NULL;
+	}
+}
+</code></pre>
+<p><strong>Funciones Restantes:</strong></p>
+<pre><code class="language-C">unsigned es_vacio(abin A){
+	return (A==NULL);
+}
+
+void leer(abin A, tipoelem *E){
+	*E=A-&gt;info;
+}
+
+void modificar(abin A, tipoelem E){
+	A-&gt;info=E;
+}
+</code></pre>
+<h1>1.4 Recorridos</h1>
+<p>Se usan para enumerar los elementos del árbol</p>
+<h2>Recorrido en anchura</h2>
+<p>Consiste en recorrer los distintos niveles de forma ordenada, del menos al mayor. Implementación no recursiva mediante una <strong>cola</strong> como estructura auxiliar.</p>
+<ul>
+<li>Empezamos en el nivel más bajo (<em>nodo raíz</em>).</li>
+<li>Sacamos el primer elemento de la lista</li>
+<li>Miramos si tiene descendiente, de tenerlo se encola</li>
+<li>Repetimos los pasos hasta que esté vacía</li>
+</ul>
+<img src="../../../img/aed/pasted-image-20240926171552.png" alt="archivos/imagenes/Pasted image 20240926171552.png" loading="lazy">
+<h2>Recorridos en Profundidad:</h2>
+<p>Tiene 2 tipos de implementaciones, recursivas y no recursivas:</p>
+<h3>Recursivas:</h3>
+<img src="../../../img/aed/pasted-image-20240926171935.png" alt="archivos/imagenes/Pasted image 20240926171935.png" loading="lazy">
+En cada nodo, en función del recorrido seleccionado, se imprime el elemento actual o se sigue descendiendo por el subárbol hasta llegar a un nodo hoja y empieza a subir hasta los demás.
+#### Inorden
+Izquierda-Raíz-Derecha
+#### Preorden
+Raíz-Izquierda-Derecha
+#### Postorden
+Izquierda-Derecha-Raíz
+<h3>No recursivas:</h3>
+<p>Utilizamos una <strong>pila</strong>:</p>
+<ul>
+<li>Se guardan los elementos izquierdos en la pila hasta llegar a un <em>nodo hoja</em></li>
+<li>Se desapila el tope, se imprime y se inserta en la pila el hijo derecho.</li>
+<li>Repetimos estos pasos sucesivamente hasta que se vacíe
+<img src="../../../img/aed/pasted-image-20240926172332.png" alt="archivos/imagenes/Pasted image 20240926172332.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20240926172441.png" alt="archivos/imagenes/Pasted image 20240926172441.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20240926172458.png" alt="archivos/imagenes/Pasted image 20240926172458.png" loading="lazy"></li>
+</ul>
+<h1>1.5 Árboles de Expresión</h1>
+<ul>
+<li><strong>A+B</strong>: <em>+</em> es el nodo padre, <em>A</em> el hijo izquierdo y <em>B</em> el hijo derecho</li>
+<li>Si a los árboles de expresión se les realiza el recorrido <strong>inorden</strong> , obtenemos la notación natural de la operación matemática.</li>
+<li>Usamos 2 pilas, una de <em>operadores</em> y otra de <em>operandos</em> . Se van apilando hasta llegar a un operador cuya prioridad es menor o igual que la del tope de la pila. Esto provoca que se desapile en dicha pila  y se vaya formando la expresión en la pila de <em>operandos</em> con los operadores desapilados.</li>
+<li>EL paréntesis izquierdo se apila siempre,  y el derecho produce siempre que se desapile hasta llegar al paréntesis izquierdo.</li>
+</ul>
+<img src="../../../img/aed/pasted-image-20240926173032.png" alt="archivos/imagenes/Pasted image 20240926173032.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-estructuras-para-busqueda.html"><span class="nav-etiqueta">siguiente →</span>2. ESTRUCTURAS PARA BÚSQUEDA</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

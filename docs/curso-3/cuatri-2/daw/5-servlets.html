@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Servlets — apuntes de DAW (tercer curso de Ingeniería Informática).">
+<title>5. Servlets · DAW · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">daw</a><span class="miga-sep">/</span><span aria-current="page">5-servlets</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DAW · curso 3</p>
+    <h1>5. Servlets · DAW</h1>
+  </header>
+  <div class="prosa">
+<h2>5.1 Aplicaciones web en Java</h2>
+<table>
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Definición</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sitio web</td>
+<td>Conjunto de páginas web almacenadas en un servidor y relacionadas por contenido. Usa principalmente tecnologías front-end: HTML, CSS y JS.</td>
+</tr>
+<tr>
+<td>Aplicación web</td>
+<td>Conjunto de páginas generadas en respuesta a peticiones del usuario, normalmente mediante formularios. Requiere front-end y back-end.</td>
+</tr>
+<tr>
+<td>Página HTML estática</td>
+<td>Página almacenada en el servidor cuyo contenido no depende de la llamada.</td>
+</tr>
+<tr>
+<td>Página HTML dinámica</td>
+<td>Página generada en el servidor cuyo contenido puede depender de la llamada.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-220.png" alt="image-220.png" loading="lazy">
+<img src="../../../img/daw/image-222.png" alt="image-222.png" loading="lazy">
+<p>Para desarrollar aplicaciones web en Java se usa <strong>Java EE / Jakarta EE</strong>, una especificación construida sobre <strong>Java SE</strong>.</p>
+<p>Elementos necesarios:</p>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Incluye o aporta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JDK</td>
+<td>Compilador de Java, clases core y JRE.</td>
+</tr>
+<tr>
+<td>APIs Java EE/Jakarta EE</td>
+<td>Servlets, JSP, JSF, JPA, EJB, etc.</td>
+</tr>
+</tbody>
+</table>
+<p>Definiciones útiles:</p>
+<table>
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Papel habitual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Servlet</td>
+<td>Clase Java gestionada por el contenedor web; atiende HTTP y suele actuar como controlador.</td>
+</tr>
+<tr>
+<td>JSP</td>
+<td>Java Server Pages: página HTML con etiquetas y fragmentos Java que el servidor traduce a un servlet; suele actuar como vista.</td>
+</tr>
+<tr>
+<td>JavaBean</td>
+<td>Clase reutilizable con constructor vacío, atributos privados y <code>get/set</code>; encapsula datos o lógica sencilla del modelo.</td>
+</tr>
+</tbody>
+</table>
+<p>Enfoques habituales:</p>
+<table>
+<thead>
+<tr>
+<th>Enfoque</th>
+<th>Nivel</th>
+<th>Control sobre HTML/CSS/JS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Servlets + JSP</td>
+<td>Bajo nivel; hace poco trabajo por el programador.</td>
+<td>Alto control.</td>
+</tr>
+<tr>
+<td>JSF</td>
+<td>Alto nivel; delega mucho trabajo.</td>
+<td>Menor control.</td>
+</tr>
+<tr>
+<td>Frameworks como Spring o Struts</td>
+<td>Alto nivel; delegan trabajo.</td>
+<td>Alto control.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-223.png" alt="image-223.png" loading="lazy">
+<img src="../../../img/daw/image-224.png" alt="image-224.png" loading="lazy">
+<h3>MVC</h3>
+<p><strong>MVC (Modelo-Vista-Controlador)</strong> es un patrón introducido por <strong>Trygve Reenskaug en 1979</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Responsabilidad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Modelo</td>
+<td>Datos, lógica de negocio, acceso a datos, reglas de negocio y funciones de base de datos.</td>
+</tr>
+<tr>
+<td>Vista</td>
+<td>Interfaz de usuario y presentación de datos.</td>
+</tr>
+<tr>
+<td>Controlador</td>
+<td>Intermediario: recibe entradas, las procesa, actualiza modelo y decide la vista.</td>
+</tr>
+</tbody>
+</table>
+<p>Flujo MVC general:</p>
+<ol>
+<li>El usuario interactúa con la vista.</li>
+<li>El controlador procesa la acción.</li>
+<li>El modelo actualiza los datos.</li>
+<li>La vista se actualiza y muestra la información.</li>
+</ol>
+<p>En Java web clásico:</p>
+<ul>
+<li><strong>Servlet</strong> = controlador.</li>
+<li><strong>JSP/HTML</strong> = vista.</li>
+<li><strong>JavaBeans, DAOs y clases de negocio</strong> = modelo.</li>
+</ul>
+<p>Flujo web con Java:</p>
+<ol>
+<li>El usuario solicita una URL mediante un objeto <code>request</code>.</li>
+<li>El servlet controlador atiende la solicitud.</li>
+<li>El controlador obtiene datos del modelo.</li>
+<li>Añade datos a <code>request</code> o prepara <code>response</code>.</li>
+<li>La vista muestra los datos mediante HTML/JSP.</li>
+</ol>
+<img src="../../../img/daw/image-225.png" alt="image-225.png" loading="lazy">
+<img src="../../../img/daw/image-226.png" alt="image-226.png" loading="lazy">
+<h2>5.2 Qué es un servlet</h2>
+<p>Un <strong>contenedor web</strong> es la interfaz entre un componente y el sistema inferior que lo soporta. Gestiona ciclo de vida, peticiones, objetos <code>request/response</code>, mapeo de URLs y ejecución dentro del servidor. Ejemplos: <strong>Tomcat</strong> o <strong>Jetty</strong>.</p>
+<p>Un <strong>servlet</strong> es un programa Java que se ejecuta en el contenedor web de un servidor de aplicaciones y es invocado por un cliente mediante HTTP.</p>
+<p>Características:</p>
+<ul>
+<li>independiente de plataforma, al estar escrito en Java;</li>
+<li>se carga en memoria la primera vez y en peticiones posteriores se usan hilos;</li>
+<li>consume menos recursos que CGI;</li>
+<li>está precompilado;</li>
+<li>se ejecuta dentro de la JVM, con excepciones y seguridad Java;</li>
+<li>es portable y seguro;</li>
+<li>es invisible para el cliente: el navegador no necesita Java.</li>
+</ul>
+<p>Idea práctica importante: normalmente existe una instancia del servlet y varias peticiones concurrentes la usan con hilos; por eso no se debe guardar estado mutable de usuario en atributos de instancia.</p>
+<h3>API Servlet</h3>
+<p>Desde el punto de vista del código, un servlet pertenece a la API Java Servlet e implementa la interfaz <code>Servlet</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Paquete clásico</th>
+<th>Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>javax.servlet</code></td>
+<td>Clases e interfaces genéricas, independientes del protocolo.</td>
+</tr>
+<tr>
+<td><code>javax.servlet.http</code></td>
+<td>Clases e interfaces específicas para HTTP.</td>
+</tr>
+</tbody>
+</table>
+<p>En versiones actuales se usa <code>jakarta.servlet</code> y <code>jakarta.servlet.http</code>.</p>
+<p>Jerarquía habitual:</p>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Papel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Servlet</code></td>
+<td>Interfaz base.</td>
+</tr>
+<tr>
+<td><code>GenericServlet</code></td>
+<td>Implementa servicio genérico, no limitado a HTTP.</td>
+</tr>
+<tr>
+<td><code>HttpServlet</code></td>
+<td>Especialización para HTTP; hereda de <code>GenericServlet</code>.</td>
+</tr>
+<tr>
+<td>Clase propia</td>
+<td>Servlet escrito por el desarrollador.</td>
+</tr>
+</tbody>
+</table>
+<p>Los métodos del ciclo de vida y de petición los invoca el <strong>contenedor</strong>, no el programador.</p>
+<h2>5.3 Ciclo de vida y procesamiento de peticiones</h2>
+<h3>Ciclo de vida</h3>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Cuándo se ejecuta</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>init(ServletConfig)</code></td>
+<td>Una vez, cuando el servidor arranca o inicializa el servlet.</td>
+<td>Inicializar recursos.</td>
+</tr>
+<tr>
+<td><code>service(request, response)</code></td>
+<td>En cada petición.</td>
+<td>Crear la respuesta; en HTTP despacha hacia <code>doGet()</code>, <code>doPost()</code>, etc.</td>
+</tr>
+<tr>
+<td><code>destroy()</code></td>
+<td>Una vez, antes de apagar o descargar el servlet.</td>
+<td>Cerrar conexiones, liberar memoria.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-228.png" alt="image-228.png" loading="lazy">
+<img src="../../../img/daw/image-229.png" alt="image-229.png" loading="lazy">
+<h3>Cómo maneja el contenedor una petición</h3>
+<ol>
+<li>El usuario hace clic en una URL asociada a un servlet.</li>
+<li>El contenedor comprueba si la petición es para un servlet.</li>
+<li>Crea objetos <code>HttpServletRequest</code> y <code>HttpServletResponse</code>.</li>
+<li>Encuentra el servlet correcto según la URL, usando <code>web.xml</code> o anotaciones.</li>
+<li>Crea un hilo para la petición y le pasa <code>request</code> y <code>response</code>.</li>
+<li>Ejecuta <code>doGet()</code> o <code>doPost()</code>.</li>
+<li>El hilo termina.</li>
+<li>El contenedor convierte <code>response</code> en respuesta HTTP y la devuelve al cliente.</li>
+<li>El contenedor elimina los objetos de petición y respuesta.</li>
+</ol>
+<img src="../../../img/daw/image-231.png" alt="image-231.png" loading="lazy">
+<img src="../../../img/daw/image-230.png" alt="image-230.png" loading="lazy">
+<img src="../../../img/daw/image-232.png" alt="image-232.png" loading="lazy">
+<img src="../../../img/daw/image-233.png" alt="image-233.png" loading="lazy">
+<img src="../../../img/daw/image-234.png" alt="image-234.png" loading="lazy">
+<img src="../../../img/daw/image-235.png" alt="image-235.png" loading="lazy">
+<img src="../../../img/daw/image-236.png" alt="image-236.png" loading="lazy">
+<h3>Métodos principales</h3>
+<p><code>GenericServlet</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getServletConfig()</code></td>
+<td>Configuración de arranque pasada a <code>init()</code>.</td>
+</tr>
+<tr>
+<td><code>getServletContext()</code></td>
+<td>Contexto de la aplicación.</td>
+</tr>
+<tr>
+<td><code>getInitParameter(nombre)</code></td>
+<td>Valor de un parámetro de inicialización.</td>
+</tr>
+<tr>
+<td><code>getInitParameterNames()</code></td>
+<td>Nombres de parámetros disponibles.</td>
+</tr>
+<tr>
+<td><code>getServletInfo()</code></td>
+<td>Información general: autor, versión, copyright, etc.</td>
+</tr>
+<tr>
+<td><code>log(mensaje)</code></td>
+<td>Escribe en el log del servidor.</td>
+</tr>
+<tr>
+<td><code>log(mensaje, excepcion)</code></td>
+<td>Escribe mensaje y traza de error.</td>
+</tr>
+</tbody>
+</table>
+<p><code>HttpServlet</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>doGet(request, response)</code></td>
+<td>Atiende GET.</td>
+</tr>
+<tr>
+<td><code>doPost(request, response)</code></td>
+<td>Atiende POST.</td>
+</tr>
+<tr>
+<td><code>doHead(request, response)</code></td>
+<td>Como GET, pero solo devuelve cabeceras.</td>
+</tr>
+<tr>
+<td><code>doOptions(request, response)</code></td>
+<td>Indica métodos permitidos en la URL.</td>
+</tr>
+<tr>
+<td><code>doPut(request, response)</code></td>
+<td>Atiende PUT.</td>
+</tr>
+<tr>
+<td><code>doTrace(request, response)</code></td>
+<td>Devuelve la misma petición recibida.</td>
+</tr>
+<tr>
+<td><code>doDelete(request, response)</code></td>
+<td>Atiende DELETE.</td>
+</tr>
+<tr>
+<td><code>getLastModified(request)</code></td>
+<td>Fecha en milisegundos del último cambio del recurso.</td>
+</tr>
+</tbody>
+</table>
+<h2>5.4 <code>HttpServletRequest</code> y <code>HttpServletResponse</code></h2>
+<p><code>HttpServletRequest</code> encapsula datos enviados por el cliente. <code>HttpServletResponse</code> encapsula datos enviados por el servidor al cliente.</p>
+<h3><code>HttpServletRequest</code></h3>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getAttribute(nombre)</code></td>
+<td>Valor de un atributo guardado en la petición.</td>
+</tr>
+<tr>
+<td><code>getParameter(nombre)</code></td>
+<td>Valor enviado por URL o formulario.</td>
+</tr>
+<tr>
+<td><code>getParameterNames()</code></td>
+<td>Nombres de parámetros enviados.</td>
+</tr>
+<tr>
+<td><code>getMethod()</code></td>
+<td>Método HTTP usado.</td>
+</tr>
+<tr>
+<td><code>getContentLength()</code></td>
+<td>Tamaño exacto en bytes del cuerpo.</td>
+</tr>
+<tr>
+<td><code>getInputStream()</code></td>
+<td>Canal de entrada byte a byte.</td>
+</tr>
+<tr>
+<td><code>getLocalPort()</code></td>
+<td>Puerto del servidor por el que entró la petición.</td>
+</tr>
+<tr>
+<td><code>getContextPath()</code></td>
+<td>Parte de la URL que identifica la aplicación.</td>
+</tr>
+<tr>
+<td><code>getHeader(nombre)</code></td>
+<td>Cabecera enviada por el navegador.</td>
+</tr>
+<tr>
+<td><code>getQueryString()</code></td>
+<td>Parte de la URL posterior a <code>?</code>.</td>
+</tr>
+<tr>
+<td><code>getSession()</code></td>
+<td>Sesión actual, o creación de una nueva.</td>
+</tr>
+<tr>
+<td><code>getCookies()</code></td>
+<td>Cookies enviadas por el navegador.</td>
+</tr>
+</tbody>
+</table>
+<h3><code>HttpServletResponse</code></h3>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getOutputStream()</code></td>
+<td>Salida binaria.</td>
+</tr>
+<tr>
+<td><code>getWriter()</code></td>
+<td><code>PrintWriter</code> para texto o HTML.</td>
+</tr>
+<tr>
+<td><code>sendError(codigo)</code></td>
+<td>Interrumpe y envía error HTTP estándar.</td>
+</tr>
+<tr>
+<td><code>setStatus(codigo)</code></td>
+<td>Establece código HTTP sin interrumpir la generación.</td>
+</tr>
+<tr>
+<td><code>getBufferSize()</code></td>
+<td>Tamaño del buffer.</td>
+</tr>
+<tr>
+<td><code>setContentType(tipo)</code></td>
+<td>Tipo de contenido enviado.</td>
+</tr>
+<tr>
+<td><code>addCookie(cookie)</code></td>
+<td>Ordena guardar una cookie.</td>
+</tr>
+<tr>
+<td><code>addHeader(nombre, valor)</code></td>
+<td>Añade cabecera técnica.</td>
+</tr>
+<tr>
+<td><code>encodeRedirectURL(url)</code></td>
+<td>Incrusta ID de sesión en URL si es necesario.</td>
+</tr>
+</tbody>
+</table>
+<p><code>getWriter()</code> se usa para texto; <code>getOutputStream()</code> para datos binarios.</p>
+<h2>5.5 Estructura de aplicación y configuración</h2>
+<h3>Estructura clásica</h3>
+<pre><code class="language-text">miAplicacion/
+├── index.html
+├── css/
+├── img/
+└── WEB-INF/
+    ├── web.xml
+    ├── classes/
+    └── lib/
+</code></pre>
+<p>Ideas:</p>
+<ul>
+<li><code>WEB-INF</code> no es accesible directamente por URL.</li>
+<li><code>classes/</code> contiene clases compiladas.</li>
+<li><code>lib/</code> contiene <code>.jar</code>.</li>
+<li><code>web.xml</code> es el descriptor de despliegue.</li>
+</ul>
+<h3>Estructura Maven</h3>
+<pre><code class="language-text">proyecto/
+├── pom.xml
+└── src/
+    ├── main/
+    │   ├── java/
+    │   ├── resources/
+    │   └── webapp/
+    │       └── WEB-INF/
+    └── test/
+</code></pre>
+<p>Maven automatiza dependencias, compilación y empaquetado <code>.war</code>. Esta información no aparece tan desarrollada en el PDF, pero es útil para proyectos actuales.</p>
+<h3><code>web.xml</code> y anotaciones</h3>
+<p>Tradicionalmente se configuraba el servlet en <code>web.xml</code> con <code>&lt;servlet&gt;</code>, <code>&lt;servlet-name&gt;</code>, <code>&lt;servlet-class&gt;</code>, <code>&lt;servlet-mapping&gt;</code> y <code>&lt;url-pattern&gt;</code>.</p>
+<p>Desde <strong>Servlet 3.0 (2009)</strong> se puede usar <code>@WebServlet</code>, moviendo parte de la configuración al código Java:</p>
+<table>
+<thead>
+<tr>
+<th><code>web.xml</code></th>
+<th><code>@WebServlet</code></th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;servlet-name&gt;</code></td>
+<td><code>name</code></td>
+<td>Nombre del servlet.</td>
+</tr>
+<tr>
+<td><code>&lt;url-pattern&gt;</code></td>
+<td><code>urlPatterns</code></td>
+<td>Array de URLs que activan el servlet.</td>
+</tr>
+<tr>
+<td><code>&lt;url-pattern&gt;</code></td>
+<td><code>value</code></td>
+<td>Igual que <code>urlPatterns</code>, pero para un solo valor.</td>
+</tr>
+<tr>
+<td><code>&lt;init-param&gt;</code></td>
+<td><code>initParams</code></td>
+<td>Parámetros de inicialización con <code>@WebInitParam(name=&quot;...&quot;, value=&quot;...&quot;)</code>.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-258.png" alt="image-258.png" loading="lazy">
+<p><code>@Override</code> es otro ejemplo de anotación Java, usada para evitar errores al sobrescribir métodos.</p>
+<p>Conclusión:</p>
+<ul>
+<li>las anotaciones reducen XML;</li>
+<li>en aplicaciones complejas puede seguir usándose <code>web.xml</code>;</li>
+<li>las anotaciones incrementan dependencia de librerías externas si no se gestionan bien;</li>
+<li>los gestores de proyectos automatizan descarga de dependencias, versiones y empaquetado <code>.war</code>;</li>
+<li>frameworks modernos suelen apoyarse en gestores de proyectos.</li>
+</ul>
+<h2>5.6 Parámetros, contexto y atributos</h2>
+<p>Un <strong>parámetro</strong> es un dato <code>String</code> de configuración. Evita recompilar código para cambiar valores.</p>
+<h3>Parámetros de inicialización</h3>
+<table>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th>Idea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dónde se definen</td>
+<td><code>&lt;init-param&gt;</code> dentro de <code>&lt;servlet&gt;</code>.</td>
+</tr>
+<tr>
+<td>Alcance</td>
+<td>Un servlet.</td>
+</tr>
+<tr>
+<td>Objeto de acceso</td>
+<td><code>ServletConfig</code>.</td>
+</tr>
+<tr>
+<td>Inicialización</td>
+<td><code>ServletConfig config = getServletConfig()</code>.</td>
+</tr>
+<tr>
+<td>Métodos</td>
+<td><code>getInitParameter(nombre)</code>, <code>getInitParameterNames()</code>, <code>getServletName()</code>, <code>getServletContext()</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3>Parámetros de contexto</h3>
+<table>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th>Idea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dónde se definen</td>
+<td><code>&lt;context-param&gt;</code> dentro de <code>&lt;web-app&gt;</code>.</td>
+</tr>
+<tr>
+<td>Alcance</td>
+<td>Toda la aplicación.</td>
+</tr>
+<tr>
+<td>Objeto de acceso</td>
+<td><code>ServletContext</code>.</td>
+</tr>
+<tr>
+<td>Inicialización</td>
+<td><code>getServletContext()</code> o <code>getServletConfig().getServletContext()</code>.</td>
+</tr>
+<tr>
+<td>Métodos</td>
+<td><code>getInitParameter(nombre)</code>, <code>getInitParameterNames()</code>, <code>setAttribute()</code>, <code>getAttribute()</code>, <code>removeAttribute()</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3><code>ServletConfig</code> vs <code>ServletContext</code></h3>
+<table>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th><code>ServletConfig</code></th>
+<th><code>ServletContext</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alcance</td>
+<td>Un servlet.</td>
+<td>Toda la aplicación.</td>
+</tr>
+<tr>
+<td>Instancias</td>
+<td>Una por servlet.</td>
+<td>Una por aplicación.</td>
+</tr>
+<tr>
+<td>Inicializado por</td>
+<td>Contenedor al crear el servlet.</td>
+<td>Contenedor al desplegar la aplicación.</td>
+</tr>
+<tr>
+<td>Parámetros</td>
+<td><code>&lt;init-param&gt;</code> dentro de <code>&lt;servlet&gt;</code>.</td>
+<td><code>&lt;context-param&gt;</code> dentro de <code>&lt;web-app&gt;</code>.</td>
+</tr>
+<tr>
+<td>Acceso</td>
+<td><code>getServletConfig()</code>.</td>
+<td><code>getServletContext()</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Flujo:</p>
+<ol>
+<li>Despliegue de la aplicación.</li>
+<li>Creación de <code>ServletContext</code>.</li>
+<li>Carga de <code>&lt;context-param&gt;</code>.</li>
+<li>Creación de cada servlet.</li>
+<li>Creación de su <code>ServletConfig</code>.</li>
+<li>Llamada a <code>servlet.init(config)</code>.</li>
+</ol>
+<img src="../../../img/daw/image-237.png" alt="image-237.png" loading="lazy">
+<img src="../../../img/daw/image-238.png" alt="image-238.png" loading="lazy">
+<img src="../../../img/daw/image-239.png" alt="image-239.png" loading="lazy">
+<h3>Atributos</h3>
+<p>Un <strong>atributo</strong> es un objeto con nombre, valor y periodo de validez que se almacena en memoria del servidor para compartir información entre componentes.</p>
+<table>
+<thead>
+<tr>
+<th>Ámbito</th>
+<th>Acceso</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aplicación</td>
+<td><code>getServletContext().getAttribute()</code></td>
+<td>Afecta a todos los servlets de la web.</td>
+</tr>
+<tr>
+<td>Petición</td>
+<td><code>request.getAttribute()</code></td>
+<td>Afecta a la petición actual.</td>
+</tr>
+<tr>
+<td>Sesión</td>
+<td><code>request.getSession().getAttribute()</code></td>
+<td>Afecta al usuario de esa sesión.</td>
+</tr>
+</tbody>
+</table>
+<p>Métodos comunes:</p>
+<ul>
+<li><code>getAttribute(nombre)</code>;</li>
+<li><code>setAttribute(nombre, objeto)</code>;</li>
+<li><code>removeAttribute(nombre)</code>;</li>
+<li><code>getAttributeNames()</code>.</li>
+</ul>
+<p>Resumen: <strong>parámetros = configuración</strong>, <strong>atributos = datos compartidos en ejecución</strong>.</p>
+<h2>5.7 Construcción de respuesta y redirección</h2>
+<p>Cuando un servlet toma el control puede:</p>
+<ol>
+<li>implementar directamente la respuesta con <code>PrintWriter</code>;</li>
+<li>pasar el control a otro recurso con <code>RequestDispatcher</code>;</li>
+<li>redirigir al navegador con <code>HttpServletResponse</code>.</li>
+</ol>
+<h3><code>PrintWriter</code></h3>
+<p><code>PrintWriter</code> devuelve cadenas de texto al navegador:</p>
+<ul>
+<li>inicialización: <code>PrintWriter wr = response.getWriter()</code>;</li>
+<li><code>print(string)</code>;</li>
+<li><code>println(string)</code>.</li>
+</ul>
+<p>Mezcla lógica y presentación, por eso en aplicaciones medias suele preferirse JSP como vista.</p>
+<img src="../../../img/daw/image-242.png" alt="image-242.png" loading="lazy">
+<img src="../../../img/daw/image-240.png" alt="image-240.png" loading="lazy">
+<h3><code>RequestDispatcher</code></h3>
+<p>Permite enviar la solicitud a otro recurso del mismo servidor: HTML, servlet o JSP.</p>
+<ul>
+<li>inicialización: <code>RequestDispatcher rd = request.getRequestDispatcher(resource)</code>;</li>
+<li><code>forward(request, response)</code>: reenvía la petición y pasa el control;</li>
+<li><code>include(request, response)</code>: incluye contenido en la respuesta y no pierde el control;</li>
+<li><code>request</code> y <code>response</code> pueden ser modificados por ambos recursos.</li>
+</ul>
+<img src="../../../img/daw/image-241.png" alt="image-241.png" loading="lazy">
+<img src="../../../img/daw/image-243.png" alt="image-243.png" loading="lazy">
+<img src="../../../img/daw/image-244.png" alt="image-244.png" loading="lazy">
+<img src="../../../img/daw/image-245.png" alt="image-245.png" loading="lazy">
+<img src="../../../img/daw/image-246.png" alt="image-246.png" loading="lazy">
+<img src="../../../img/daw/image-247.png" alt="image-247.png" loading="lazy">
+<h3><code>sendRedirect()</code></h3>
+<p><code>response.sendRedirect(resource)</code> redirige la respuesta a otro recurso. Acepta URLs relativas o absolutas y genera una nueva petición HTTP, con nuevos objetos <code>request</code> y <code>response</code>.</p>
+<img src="../../../img/daw/image-248.png" alt="image-248.png" loading="lazy">
+<img src="../../../img/daw/image-250.png" alt="image-250.png" loading="lazy">
+<table>
+<thead>
+<tr>
+<th><code>forward()</code></th>
+<th><code>sendRedirect()</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Se ejecuta en el servidor.</td>
+<td>Se ejecuta desde el cliente.</td>
+</tr>
+<tr>
+<td>Conserva los mismos <code>request</code> y <code>response</code>.</td>
+<td>Genera nueva solicitud.</td>
+</tr>
+<tr>
+<td>Solo puede usarse con recursos del servidor.</td>
+<td>Puede apuntar dentro o fuera del servidor.</td>
+</tr>
+<tr>
+<td>La URL del navegador no cambia.</td>
+<td>La URL del navegador cambia.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-251.png" alt="image-251.png" loading="lazy">
+<h2>5.8 Sesiones y seguimiento de estado</h2>
+<p>HTTP es un protocolo <strong>sin estado</strong>: cada petición se trata de forma independiente. El servidor no sabe por sí mismo si dos peticiones pertenecen al mismo cliente ni si están relacionadas.</p>
+<p>Una <strong>sesión</strong> permite identificar y guardar información individual de cada cliente. Empieza con una petición y puede terminar por cierre, inactividad o métodos de fin de sesión.</p>
+<img src="../../../img/daw/image-252.png" alt="image-252.png" loading="lazy">
+<h3>Mecanismos de seguimiento de sesión</h3>
+<table>
+<thead>
+<tr>
+<th>Mecanismo</th>
+<th>Ventajas</th>
+<th>Inconvenientes</th>
+<th>Situación actual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Campos ocultos</td>
+<td>No dependen de cookies; funcionan con formularios.</td>
+<td>Manuales, difíciles de mantener, requieren formularios, solo texto.</td>
+<td>Obsoleto.</td>
+</tr>
+<tr>
+<td>Reescritura de URL</td>
+<td>No depende de cookies, no necesita formularios, <code>encodeURL()</code> puede automatizar.</td>
+<td>Solo enlaces, URLs largas, problemas de seguridad, SEO y caché.</td>
+<td>Respaldo.</td>
+</tr>
+<tr>
+<td>Cookies</td>
+<td>No ensucian URL, más estándar y transparente.</td>
+<td>Pueden rechazarse, privacidad, tamaño limitado, mantenimiento.</td>
+<td>Muy habitual.</td>
+</tr>
+<tr>
+<td><code>HttpSession</code></td>
+<td>Fácil, integrada, gestiona cookies y reescritura.</td>
+<td>Consumo de memoria y problemas de escalabilidad si se gestiona mal.</td>
+<td>Recomendada.</td>
+</tr>
+</tbody>
+</table>
+<h3>Campos ocultos</h3>
+<p>Consiste en almacenar información en un campo <code>hidden</code> de un formulario y recuperarla con <code>request.getParameter()</code>.</p>
+<pre><code class="language-html">&lt;input type=&quot;hidden&quot; name=&quot;id&quot; value=&quot;123&quot;&gt;
+</code></pre>
+<h3>Reescritura de URL</h3>
+<p>Añade un token o identificador a la URL del siguiente recurso:</p>
+<pre><code class="language-text">url?name1=value1&amp;name2=value2
+</code></pre>
+<p>Se recupera con <code>getParameter()</code>. Puede automatizarse con <code>response.encodeURL()</code>, y <code>HttpSession</code> la soporta como respaldo.</p>
+<img src="../../../img/daw/image-253.png" alt="image-253.png" loading="lazy">
+<img src="../../../img/daw/image-254.png" alt="image-254.png" loading="lazy">
+<h3>Cookies</h3>
+<p>Una <strong>cookie</strong> es un fragmento de información almacenado en el cliente a petición del servidor. El navegador la devuelve en solicitudes posteriores.</p>
+<p>Métodos:</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>new Cookie(nombre, valor)</code></td>
+<td>Crea cookie.</td>
+</tr>
+<tr>
+<td><code>response.addCookie(cookie)</code></td>
+<td>Envía cookie al cliente.</td>
+</tr>
+<tr>
+<td><code>getName()</code> / <code>setName()</code></td>
+<td>Nombre.</td>
+</tr>
+<tr>
+<td><code>getValue()</code> / <code>setValue()</code></td>
+<td>Valor.</td>
+</tr>
+<tr>
+<td><code>getMaxAge()</code> / <code>setMaxAge(segundos)</code></td>
+<td>Tiempo máximo; negativo implica cookie de sesión.</td>
+</tr>
+<tr>
+<td><code>getDomain()</code> / <code>setDomain()</code></td>
+<td>Dominio válido.</td>
+</tr>
+<tr>
+<td><code>getSecure()</code></td>
+<td><code>true</code> si solo viaja por HTTPS.</td>
+</tr>
+<tr>
+<td><code>setPath(ruta)</code></td>
+<td>Restringe uso a una ruta.</td>
+</tr>
+</tbody>
+</table>
+<h3><code>HttpSession</code></h3>
+<p><code>HttpSession</code> deja que el contenedor cree un identificador de sesión, normalmente mediante la cookie predefinida <strong><code>JSESSIONID</code></strong>, y mantenga el estado automáticamente.</p>
+<p>Inicialización:</p>
+<ul>
+<li><code>request.getSession()</code> o <code>request.getSession(true)</code>: devuelve sesión actual o crea una nueva;</li>
+<li><code>request.getSession(false)</code>: devuelve sesión actual, pero no crea una si no existe.</li>
+</ul>
+<p>Métodos:</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>setAttribute(nombre, valor)</code></td>
+<td>Guarda dato en sesión.</td>
+</tr>
+<tr>
+<td><code>getAttribute(nombre)</code></td>
+<td>Recupera dato.</td>
+</tr>
+<tr>
+<td><code>removeAttribute(nombre)</code></td>
+<td>Elimina dato.</td>
+</tr>
+<tr>
+<td><code>getId()</code></td>
+<td>Identificador único.</td>
+</tr>
+<tr>
+<td><code>isNew()</code></td>
+<td><code>true</code> si acaba de crearse y el navegador aún no la conoce.</td>
+</tr>
+<tr>
+<td><code>invalidate()</code></td>
+<td>Destruye la sesión y sus atributos.</td>
+</tr>
+<tr>
+<td><code>getServletContext()</code></td>
+<td>Contexto global de la aplicación.</td>
+</tr>
+<tr>
+<td><code>getCreationTime()</code></td>
+<td>Fecha/hora de creación.</td>
+</tr>
+<tr>
+<td><code>getLastAccessedTime()</code></td>
+<td>Último acceso del cliente.</td>
+</tr>
+<tr>
+<td><code>getMaxInactiveInterval()</code> / <code>setMaxInactiveInterval(segundos)</code></td>
+<td>Tiempo máximo de inactividad.</td>
+</tr>
+</tbody>
+</table>
+<p>Finalización:</p>
+<ul>
+<li>en <code>web.xml</code> con <code>&lt;session-config&gt;&lt;session-timeout&gt;X&lt;/session-timeout&gt;&lt;/session-config&gt;</code>;</li>
+<li>con <code>session.setMaxInactiveInterval(segundos)</code>;</li>
+<li>con <code>session.invalidate()</code>.</li>
+</ul>
+<img src="../../../img/daw/image-255.png" alt="image-255.png" loading="lazy">
+<h2>5.9 Evolución de Servlets y migración a Jakarta</h2>
+<table>
+<thead>
+<tr>
+<th>Versión</th>
+<th>Año</th>
+<th>Novedades</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Servlet 3.0</td>
+<td>2009</td>
+<td>Anotaciones, asíncrono, pluggability, menos XML.</td>
+</tr>
+<tr>
+<td>Servlet 3.1</td>
+<td>2013</td>
+<td>Soporte WebSocket, mejoras asíncronas, NonBlocking IO.</td>
+</tr>
+<tr>
+<td>Servlet 4.0</td>
+<td>2017</td>
+<td>HTTP/2 y Server Push.</td>
+</tr>
+<tr>
+<td>Servlet 5.0</td>
+<td>2020</td>
+<td>Migración a Jakarta EE, mejoras de seguridad, compatibilidad con Jakarta EE 9, limpieza de APIs antiguas.</td>
+</tr>
+<tr>
+<td>Servlet 6.0</td>
+<td>2022</td>
+<td>Alta compatibilidad con HTTP/2, mejoras en headers, optimizaciones cloud-native.</td>
+</tr>
+</tbody>
+</table>
+<h3>De <code>javax</code> a <code>jakarta</code></h3>
+<p>En <strong>2017</strong>, Oracle donó Java EE a la comunidad mediante la <strong>Fundación Eclipse</strong>, pero conservó la marca Java y prohibió modificar el paquete <code>javax</code>.</p>
+<p>Consecuencia:</p>
+<ul>
+<li>se crea el paquete <code>jakarta</code>;</li>
+<li><strong>Jakarta EE 9</strong> introduce el cambio de nombre sin añadir nuevas funciones;</li>
+<li>antes: <code>javax.servlet.*</code>;</li>
+<li>ahora: <code>jakarta.servlet.*</code>.</li>
+</ul>
+<img src="../../../img/daw/image-256.png" alt="image-256.png" loading="lazy">
+<img src="../../../img/daw/image-257.png" alt="image-257.png" loading="lazy">
+<p>La documentación antigua puede seguir usando <code>javax</code>, pero en entornos actuales se trabaja con <code>jakarta</code>.</p>
+<h2>5.10 Ideas que no se deben confundir</h2>
+<table>
+<thead>
+<tr>
+<th>No confundir</th>
+<th>Diferencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Servlet vs HTML</td>
+<td>El servlet es código Java del servidor; HTML es la respuesta o vista.</td>
+</tr>
+<tr>
+<td>Servlet vs navegador</td>
+<td>El servlet vive en el contenedor web, no en el navegador.</td>
+</tr>
+<tr>
+<td><code>request</code> vs <code>response</code></td>
+<td><code>request</code> es lo que llega del cliente; <code>response</code> es lo que se devuelve.</td>
+</tr>
+<tr>
+<td>Parámetro vs atributo</td>
+<td>Parámetro es configuración o dato textual enviado; atributo es objeto compartido en ejecución.</td>
+</tr>
+<tr>
+<td><code>forward()</code> vs <code>sendRedirect()</code></td>
+<td><code>forward()</code> reenvía internamente; <code>sendRedirect()</code> crea nueva petición del cliente.</td>
+</tr>
+<tr>
+<td>Sesión vs cookie</td>
+<td>La sesión se mantiene en servidor; la cookie suele transportar el identificador.</td>
+</tr>
+</tbody>
+</table>
+<h2>5.11 Plantilla compacta de examen</h2>
+<p>Si piden una aplicación web con servlets, JSP y <code>web.xml</code>, una estructura MVC típica es:</p>
+<pre><code class="language-text">src/main/java/daw/
+├── model/UsuarioBean.java
+└── web/
+    ├── InicioServlet.java
+    ├── LoginServlet.java
+    ├── ListadoServlet.java
+    └── LogoutServlet.java
+
+src/main/webapp/WEB-INF/
+├── jsp/login.jsp
+├── jsp/panel.jsp
+└── web.xml
+</code></pre>
+<p>Roles:</p>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Papel</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>UsuarioBean</code></td>
+<td>Bean de datos: constructor vacío, atributos privados, getters/setters.</td>
+</tr>
+<tr>
+<td><code>InicioServlet</code></td>
+<td><code>doGet()</code>: hace <code>forward()</code> a <code>login.jsp</code>.</td>
+</tr>
+<tr>
+<td><code>LoginServlet</code></td>
+<td><code>doPost()</code>: lee formulario con <code>getParameter()</code>, valida, guarda usuario en <code>session</code> o vuelve al login con atributo de error.</td>
+</tr>
+<tr>
+<td><code>ListadoServlet</code></td>
+<td><code>doGet()</code>: comprueba sesión, carga datos en <code>request</code> y hace <code>forward()</code> a <code>panel.jsp</code>.</td>
+</tr>
+<tr>
+<td><code>LogoutServlet</code></td>
+<td><code>doGet()</code>: recupera sesión con <code>getSession(false)</code>, invalida y redirige a inicio.</td>
+</tr>
+<tr>
+<td><code>web.xml</code></td>
+<td>Mapea URLs como <code>/inicio</code>, <code>/login</code>, <code>/listado</code>, <code>/logout</code> y puede configurar <code>session-timeout</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Flujo que debes saber explicar:</p>
+<ol>
+<li><code>/inicio</code> entra en <code>InicioServlet</code>.</li>
+<li><code>InicioServlet</code> hace <code>forward()</code> a <code>login.jsp</code>.</li>
+<li>El formulario envía <code>POST</code> a <code>/login</code>.</li>
+<li><code>LoginServlet</code> valida.</li>
+<li>Si es correcto, guarda <code>UsuarioBean</code> en <code>session</code> y hace <code>sendRedirect()</code> a <code>/listado</code>.</li>
+<li><code>ListadoServlet</code> comprueba sesión, carga datos en <code>request</code> y hace <code>forward()</code> a <code>panel.jsp</code>.</li>
+<li><code>panel.jsp</code> muestra usuario y datos.</li>
+<li><code>LogoutServlet</code> invalida sesión y redirige a <code>/inicio</code>.</li>
+</ol>
+<p>Patrones de código que suelen bastar:</p>
+<pre><code class="language-java">request.getRequestDispatcher(&quot;/WEB-INF/jsp/login.jsp&quot;).forward(request, response);
+String nombre = request.getParameter(&quot;nombre&quot;);
+request.getSession().setAttribute(&quot;usuario&quot;, usuario);
+response.sendRedirect(request.getContextPath() + &quot;/listado&quot;);
+HttpSession session = request.getSession(false);
+if (session != null) session.invalidate();
+</code></pre>
+<p>La parte JSP de este flujo queda desarrollada en el tema <code>6. JSP</code>.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-javascript.html"><span class="nav-etiqueta">← anterior</span>4. JavaScript</a>
+  <a class="nav-siguiente" href="6-jsp.html"><span class="nav-etiqueta">siguiente →</span>6. JSP</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

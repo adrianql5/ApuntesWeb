@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="4. Modelado de Comportamiento — apuntes de DESOFT (segundo curso de Ingeniería Informática).">
+<title>4. Modelado de Comportamiento · DESOFT · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">desoft</a><span class="miga-sep">/</span><span aria-current="page">4-modelado-de-comportamiento</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DESOFT · curso 2</p>
+    <h1>4. Modelado de Comportamiento · DESOFT</h1>
+  </header>
+  <div class="prosa">
+<p>(<em>diagramas de interacción</em>)</p>
+<p>Una <strong>interacción</strong> es un comportamiento que incluye <strong>mensajes</strong> intercambiados por un conjunto de objetos dentro de un <strong>contexto</strong> para lograr un propósito.</p>
+<p>Es un modelado dinámico de <strong>colaboraciones</strong> (<em>sociedad de objetos que proporcionan un comportamiento mayor que la suma de sus comportamientos</em>).</p>
+<p>Un <strong>mensaje</strong> es una trasmisión de información entre objetos para desencadenar una actividad. Pueden ser:</p>
+<ul>
+<li><strong>Llamadas</strong>-&gt; invocan operaciones.</li>
+<li><strong>Retornos</strong>-&gt; devuelven un valor</li>
+<li><strong>Señales</strong></li>
+<li><strong>Creación</strong></li>
+<li><strong>Destrucción</strong></li>
+</ul>
+<img src="../../../img/desoft/pasted-image-20250323161253.png" alt="Pasted image 20250323161253.png" loading="lazy">
+<p>Las interacciones sirven para modelar <strong>flujo de control</strong> en un sistema o subsistema. La implementación de una operación, o una clase o componente. Los objetos pueden ser <strong>concretos</strong> o <strong>prototípicos</strong>.</p>
+<p>Los <strong>enlaces</strong> son conexiones semánticas entre objetos por las que se transmite un mensaje. Una <strong>secuencia</strong> es un flujo de mensajes encadenados entre diferentes objetos, se origina dentro de un <strong>proceso</strong> o <strong>hilo</strong> y continúa mientras este exista. Cada proceso redefine un <strong>flujo de control</strong> separado en el que los mensajes se ordenan según se suceden en el tiempo.</p>
+<p>Los <strong>diagramas de interacción</strong> describen la forma en la que <strong>colaboras</strong> distintos objetos para producir un comportamiento. Contienen objetos, enlaces y mensajes, y muestran la secuencia dinámica de mensajes que fluyen por los enlaces. Suelen capturar el comportamiento de un solo <strong>caso de uso</strong>. Hay dos tipos <strong>isomorfos:</strong></p>
+<ul>
+<li><strong>Diagramas de secuencia:</strong> ordenaciones temporal de mensajes</li>
+<li><strong>Diagramas de colaboración:</strong> organización estructural de objetos</li>
+</ul>
+<p>Los <strong>diagramas de secuencia</strong> tienen una <strong>linea de vida</strong> que representa la existencia de un objeto y un <strong>foco de control</strong> que representa el tiempo durante el cual un objeto ejecuta una acción. Las <strong>diagramas de colaboración</strong> tienen un <strong>enlace</strong> y un <strong>número de secuencia</strong>.</p>
+<p>Una <strong>iteración</strong> indica la repetición de un mensaje, y una <strong>bifurcación</strong> representa un mensaje cuya ejecución depende de la evaluación de una condición.</p>
+<img src="../../../img/desoft/pasted-image-20250323162659.png" alt="Pasted image 20250323162659.png" loading="lazy">
+<img src="../../../img/desoft/pasted-image-20250323162914.png" alt="Pasted image 20250323162914.png" loading="lazy">
+<p>Los diagramas de interacción pueden modelar <strong>colaboraciones</strong> y <strong>escenarios</strong> dentro de una caso de uso. Los <strong>diagramas de secuencia</strong> modelan escenarios o visualizan iteraciones y bifurcaciones sencillas; los de <strong>colaboración</strong> son preferibles para iteraciones y bifurcaciones complejas.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="3-modelado-estructural.html"><span class="nav-etiqueta">← anterior</span>3. Modelado Estructural</a>
+  <a class="nav-siguiente" href="5-modelado-estructural-avanzado.html"><span class="nav-etiqueta">siguiente →</span>5. Modelado Estructural Avanzado</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

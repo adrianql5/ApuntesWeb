@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="10. Patrones de Comportamiento — apuntes de DESOFT (segundo curso de Ingeniería Informática).">
+<title>10. Patrones de Comportamiento · DESOFT · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">desoft</a><span class="miga-sep">/</span><span aria-current="page">10-patrones-de-comportamiento</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DESOFT · curso 2</p>
+    <h1>10. Patrones de Comportamiento · DESOFT</h1>
+  </header>
+  <div class="prosa">
+<h1>10.1 Patrón Observer</h1>
+<p>El <strong>cambio de estado</strong> en un objeto (sujeto) se <strong>notifica</strong> a los objetos <strong>suscritos</strong> a él (observadores), que <strong>sincronizan</strong> su estado con el del sujeto. Establece una <strong>dependencia de uno a muchos</strong> entre objetos. Se usa cuando:</p>
+<ul>
+<li>Un cambio en un objeto requiera modificar otros objetos <strong>sin que importe cuántos</strong> son.</li>
+<li>Un objeto deba ser capaz de hacer notificaciones a otros <strong>sin hacer suposiciones sobre quiénes</strong> son exactamente.</li>
+</ul>
+<img src="../../../img/desoft/pasted-image-20250423163803.png" alt="Pasted image 20250423163803.png" loading="lazy">
+<img src="../../../img/desoft/pasted-image-20250423163817.png" alt="Pasted image 20250423163817.png" loading="lazy">
+<h2>Participantes</h2>
+<table>
+<thead>
+<tr>
+<th>Participante</th>
+<th>Rol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sujeto (Subject)</strong></td>
+<td>El objeto que tiene el estado que puede cambiar. Mantiene una lista de observadores y define métodos para añadir, eliminar y notificar observadores.</td>
+</tr>
+<tr>
+<td><strong>Observador (Observer)</strong></td>
+<td>Interfaz que deben implementar los objetos que quieren enterarse de los cambios. Contiene el método <code>actualizar()</code>.</td>
+</tr>
+<tr>
+<td><strong>SujetoConcreto</strong></td>
+<td>Implementación del sujeto, guarda el estado que interesa a los observadores y los notifica cuando cambia.</td>
+</tr>
+<tr>
+<td><strong>ObservadorConcreto</strong></td>
+<td>Implementación del observador. Se registra al sujeto y actualiza su estado cuando recibe una notificación.</td>
+</tr>
+</tbody>
+</table>
+<h2>Estructura</h2>
+<img src="../../../img/desoft/pasted-image-20250423163956.png" alt="Pasted image 20250423163956.png" loading="lazy">
+<img src="../../../img/desoft/pasted-image-20250423164110.png" alt="Pasted image 20250423164110.png" loading="lazy">
+## Ventajas e Inconvenientes
+- **Desacopla el sujeto de los observadores**: pueden evolucionar por separado.
+- Permite una **arquitectura reactiva**, donde los componentes se actualizan automáticamente.
+- Fácil de **añadir o quitar observadores** en tiempo de ejecución.
+<ul>
+<li>Puede ser difícil de <strong>depurar o seguir</strong>, ya que los cambios se propagan automáticamente.</li>
+<li>Si hay muchos observadores, puede impactar en el <strong>rendimiento</strong>.</li>
+<li>El orden en que se notifican no está garantizado (salvo que lo controles explícitamente).</li>
+</ul>
+<h1>10.2 State</h1>
+<p>Permite que un objeto <strong>modifique su comportamiento</strong> cada vez que cambia su estado. <strong>Parecerá</strong> que <strong>cambia la clase</strong> de ese objeto. Se usa cuando:</p>
+<ul>
+<li>El comportamiento de un objeto <strong>depende de su estado</strong> y cambiar en <strong>tiempo de ejecución</strong>.</li>
+<li>Algunos métodos presentan estructuras <strong>condicionales con múltiples ramas</strong> formadas por bloques extensos de código.</li>
+</ul>
+<img src="../../../img/desoft/pasted-image-20250423164755.png" alt="Pasted image 20250423164755.png" loading="lazy">
+<img src="../../../img/desoft/pasted-image-20250423164804.png" alt="Pasted image 20250423164804.png" loading="lazy">
+<h2>Participantes</h2>
+<table>
+<thead>
+<tr>
+<th>Participante</th>
+<th>Rol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sujeto (Subject)</strong></td>
+<td>El objeto que tiene el estado que puede cambiar. Mantiene una lista de observadores y define métodos para añadir, eliminar y notificar observadores.</td>
+</tr>
+<tr>
+<td><strong>Observador (Observer)</strong></td>
+<td>Interfaz que deben implementar los objetos que quieren enterarse de los cambios. Contiene el método <code>actualizar()</code>.</td>
+</tr>
+<tr>
+<td><strong>SujetoConcreto</strong></td>
+<td>Implementación del sujeto, guarda el estado que interesa a los observadores y los notifica cuando cambia.</td>
+</tr>
+<tr>
+<td><strong>ObservadorConcreto</strong></td>
+<td>Implementación del observador. Se registra al sujeto y actualiza su estado cuando recibe una notificación.</td>
+</tr>
+</tbody>
+</table>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="9-patrones-estructurales.html"><span class="nav-etiqueta">← anterior</span>9. Patrones Estructurales</a>
+  
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

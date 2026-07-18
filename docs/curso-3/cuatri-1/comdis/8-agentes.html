@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="8. Agentes — apuntes de COMDIS (tercer curso de Ingeniería Informática).">
+<title>8. Agentes · COMDIS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">comdis</a><span class="miga-sep">/</span><span aria-current="page">8-agentes</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">COMDIS · curso 3</p>
+    <h1>8. Agentes · COMDIS</h1>
+  </header>
+  <div class="prosa">
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>La cantidad de relleno que hay en este tema es histórico y mira que intenté quitar la mayor cantidad de mierda posible.</p>
+</div>
+<h1>8.1 ¿Qué es un Agente? (Conceptos Básicos)</h1>
+<p>Imagina un <strong>mayordomo digital</strong>. A diferencia de un programa normal (como una calculadora) que espera a que tú le des órdenes paso a paso, el mayordomo sabe qué quieres y actúa por su cuenta para conseguirlo.</p>
+<blockquote>
+<p><strong>Definición Clave:</strong> Un agente es un sistema informático situado en un entorno, capaz de realizar acciones de forma <strong>autónoma</strong> y flexible para cumplir los objetivos de su &quot;dueño&quot; (usuario).</p>
+</blockquote>
+<h3>Diferencia principal con el software tradicional</h3>
+<ul>
+<li><strong>Objeto/Programa normal:</strong> &quot;¿Qué hago ahora?&quot; (Es pasivo, espera órdenes).</li>
+<li><strong>Agente:</strong> &quot;¿Qué necesito hacer para conseguir mi meta?&quot; (Es activo, toma decisiones).</li>
+</ul>
+<h1>8.2 Características Fundamentales</h1>
+<p>Para que un programa sea considerado un &quot;Agente&quot;, debe cumplir estas propiedades (especialmente las tres primeras):</p>
+<ol>
+<li>
+<p><strong>Autonomía (La más importante):</strong> Opera sin intervención directa. Tiene control sobre su estado interno y sus acciones.</p>
+</li>
+<li>
+<p><strong>Reactividad:</strong> Percibe su entorno y responde a cambios rápidamente (ej: si un robot ve una pared, frena).</p>
+</li>
+<li>
+<p><strong>Proactividad (Iniciativa):</strong> No solo reacciona; toma la iniciativa para cumplir objetivos a largo plazo (ej: un agente de bolsa que compra acciones porque predice una subida, no solo porque el precio cambió hace un segundo).</p>
+</li>
+<li>
+<p><strong>Habilidad Social:</strong> Interactúa con otros agentes o humanos (coopera, negocia o compite).</p>
+</li>
+<li>
+<p><strong>Movilidad:</strong> El agente tiene la capacidad de viajar de nodo en nodo de la red preservando su estado</p>
+</li>
+</ol>
+<h1>8.3 El Entorno</h1>
+<p><strong>El entorno es &quot;el mundo&quot; donde vive el agente.</strong></p>
+<p>Clasificar el entorno es vital porque <strong>determina la dificultad</strong> de diseñar el agente. Cuanto más difícil es el entorno, más inteligente debe ser el agente.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Propiedad del Entorno</strong></th>
+<th><strong>Definición Sencilla</strong></th>
+<th><strong>Ejemplo Fácil (Ajedrez)</strong></th>
+<th><strong>Ejemplo Difícil (Conducir un Taxi)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Accesibilidad</strong></td>
+<td>¿El agente puede ver TODO el escenario?</td>
+<td><strong>Totalmente Accesible:</strong> Ves todo el tablero.</td>
+<td><strong>Inaccesible:</strong> No ves qué hay tras la esquina o qué piensan otros conductores.</td>
+</tr>
+<tr>
+<td><strong>Determinismo</strong></td>
+<td>Si hago una acción, ¿el resultado es 100% seguro?</td>
+<td><strong>Determinista:</strong> Si muevo el peón, se queda ahí. No hay azar.</td>
+<td><strong>No Determinista (Estocástico):</strong> Si giro el volante, puede que el coche patine si hay aceite. Hay incertidumbre.</td>
+</tr>
+<tr>
+<td><strong>Episodicidad</strong></td>
+<td>¿Lo que hice antes afecta a lo que hago ahora?</td>
+<td><strong>Secuencial (No episódico):</strong> Un mal movimiento al inicio afecta el final del juego.</td>
+<td><strong>Episódico:</strong> Identificar fotos defectuosas en una cadena de montaje (la foto anterior no afecta a la actual).</td>
+</tr>
+<tr>
+<td><strong>Dinamismo</strong></td>
+<td>¿El mundo cambia mientras el agente &quot;piensa&quot;?</td>
+<td><strong>Estático:</strong> El tablero no se mueve hasta que tú mueves.</td>
+<td><strong>Dinámico:</strong> Mientras decides si frenar, el coche de delante sigue avanzando.</td>
+</tr>
+<tr>
+<td><strong>Continuidad</strong></td>
+<td>¿Las opciones son finitas o infinitas?</td>
+<td><strong>Discreto:</strong> Hay un número fijo de casillas y movimientos.</td>
+<td><strong>Continuo:</strong> La velocidad y el ángulo del volante tienen infinitos valores posibles.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Resumen:</strong> El entorno más difícil es <strong>Inaccesible, No determinista, Dinámico y Continuo</strong> (como el mundo real). El más fácil es Accesible, Determinista, Estático y Discreto (como un puzzle).</p>
+</blockquote>
+<h1>8.4 Arquitecturas de Agentes</h1>
+<p>La arquitectura es el &quot;cerebro&quot; del agente. Define cómo pasa de <strong>Percibir (sensores)</strong> a <strong>Actuar (actuadores)</strong>. Las ordenamos de la más &quot;tonta&quot; a la más compleja.</p>
+<h2>A. Arquitecturas Reactivas (Estímulo-Respuesta)</h2>
+<p>Son como insectos. No &quot;piensan&quot; ni tienen memoria compleja.</p>
+<ul>
+<li>
+<p><strong>Funcionamiento:</strong> Si ocurre X, haz Y.</p>
+</li>
+<li>
+<p><strong>Ventaja:</strong> Son rapidísimos.</p>
+</li>
+<li>
+<p><strong>Desventaja:</strong> No pueden planificar a futuro. Si el entorno cambia de forma que sus reglas no cubren, fallan.</p>
+</li>
+<li>
+<p><strong>Ejemplo:</strong> Un termostato (Si T &lt; 20º <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> Encender calefacción).</p>
+</li>
+<li>
+<p><strong>Subsunción (Rodney Brooks):</strong> Es un tipo famoso de arquitectura reactiva organizada en capas de comportamientos simples (ej: evitar obstáculos) que, al sumarse, crean un comportamiento complejo (caminar).</p>
+</li>
+</ul>
+<h2>B. Arquitecturas Basadas en Lógica (El enfoque purista)</h2>
+<p>Es el modelo teórico clásico. El agente funciona como un <strong>matemático</strong>: todo lo que percibe lo convierte en fórmulas para &quot;demostrar&quot; qué acción debe tomar.</p>
+<ul>
+<li>
+<p><strong>Funcionamiento:</strong> Su &quot;cerebro&quot; es una base de datos de conocimiento lógico.</p>
+<ol>
+<li><strong>Representación:</strong> Usa <strong>Lógica de Primer Orden</strong> para describir el estado del mundo.</li>
+<li><strong>Deducción:</strong> Usa reglas lógicas para deducir qué acción realizar.</li>
+</ol>
+</li>
+<li>
+<p>El Ciclo Lógico (Formal):
+El agente usa tres funciones matemáticas clave:</p>
+<ol>
+<li><strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="mord mathnormal" style="margin-right:0.0278em;">er</span><span class="mopen">(</span><span class="mord mathnormal">s</span><span class="mclose">)</span></span></span></span></eq>:</strong> Transforma lo que ven los sensores (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">s</span></span></span></span></eq>) en una percepción (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span></eq>).</li>
+<li><strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">o</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord mathnormal">x</span><span class="mord mathnormal">im</span><span class="mord mathnormal">o</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mclose">)</span></span></span></span></eq>:</strong> Actualiza su base de datos interna (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span></span></span></span></eq>) combinando lo que ya sabía con la nueva percepción.</li>
+<li><strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal">cc</span><span class="mord mathnormal">i</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">o</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord mathnormal">n</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="mclose">)</span></span></span></span></eq>:</strong> Consulta su base de datos y decide lógicamente qué acción (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq>) ejecutar.</li>
+</ol>
+</li>
+<li>
+<p><strong>Ventajas:</strong></p>
+<ul>
+<li><strong>Elegancia:</strong> Es una representación muy clara, limpia y formal.</li>
+</ul>
+</li>
+<li>
+<p><strong>Desventajas:</strong></p>
+<ul>
+<li><strong>Lentitud extrema:</strong> La deducción lógica tiene una complejidad temporal muy alta.</li>
+<li><strong>Abstracción difícil:</strong> Es muy complicado traducir el mundo real (que es caótico) a símbolos lógicos perfectos.</li>
+</ul>
+</li>
+</ul>
+<h2>C. Arquitecturas Deliberativas</h2>
+<p>Son como filósofos o jugadores de ajedrez.</p>
+<ul>
+<li>
+<p><strong>Funcionamiento:</strong> Tienen un modelo simbólico del mundo (un mapa mental). Antes de actuar, razonan lógicamente para buscar un plan que les lleve a su meta.</p>
+</li>
+<li>
+<p><strong>Ventaja:</strong> Pueden resolver problemas complejos y explicar por qué hicieron algo.</p>
+</li>
+<li>
+<p><strong>Desventaja:</strong> Son lentos. En entornos de tiempo real (dinámicos), pueden quedarse &quot;pensando&quot; mientras el mundo cambia y los atropella.</p>
+</li>
+</ul>
+<h2>D. Arquitectura B.D.I. (Belief, Desire, Intention)</h2>
+<p>Es la arquitectura deliberativa más famosa porque imita el razonamiento humano práctico.</p>
+<ol>
+<li><strong>Creencias (Beliefs):</strong> Lo que el agente <em>sabe</em> o cree saber del mundo (Información).</li>
+<li><strong>Deseos (Desires):</strong> Lo que el agente <em>quiere</em> conseguir (Metas posibles).</li>
+<li><strong>Intenciones (Intentions):</strong> Los deseos por los que ha decidido <em>actuar</em> ahora mismo (Plan actual).</li>
+</ol>
+<ul>
+<li><strong>El dilema del BDI:</strong>
+<ul>
+<li><em>Agente Audaz:</em> Elige un plan y lo sigue ciegamente hasta terminar o fallar. (Rápido, pero terco).</li>
+<li><em>Agente Cauto:</em> Para a cada paso para ver si el plan sigue siendo válido. (Seguro, pero muy lento).</li>
+</ul>
+</li>
+</ul>
+<h2>E. Arquitecturas Híbridas (Lo mejor de ambos mundos)</h2>
+<p>La mayoría de sistemas modernos usan esto. Combinan una parte reactiva (para reflejos rápidos) y una deliberativa (para planes a largo plazo).</p>
+<p>Se organizan en Capas:</p>
+<ol>
+<li><strong>Capas Horizontales:</strong> Todas las capas tienen acceso a los sensores y actuadores.
+<ul>
+<li><em>Problema:</em> Necesitas un &quot;árbitro&quot; central que decida a qué capa hacer caso si se contradicen (Cuello de botella).</li>
+</ul>
+</li>
+<li><strong>Capas Verticales:</strong> La información pasa como una cadena de mando.
+<ul>
+<li><em>Problema:</em> Si una capa falla, se rompe toda la cadena.</li>
+</ul>
+</li>
+</ol>
+<h1>8.5 Sistemas Multiagente (Sociedades)</h1>
+<p>Cuando juntamos varios agentes, pasamos de diseñar individuos a diseñar sociedades. Aquí surgen conceptos clave:</p>
+<ul>
+<li><strong>Heterogeneidad:</strong> Agentes distintos trabajando juntos (ej: un agente busca vuelos, otro reserva hoteles).</li>
+<li><strong>Cooperación vs. Competición:</strong> ¿Trabajan juntos para un fin común (equipo de fútbol) o compiten por recursos limitados (subasta)?</li>
+<li><strong>Comunicación:</strong> Necesitan un lenguaje común para negociar o delegar tareas.</li>
+</ul>
+<p>La principal diferencia entre los sistemas multiagente y las redes P2P es la <strong>homogeneidad</strong>, el nivel de autonomía e inteligencia. EN una red P2P los nodos que intervienen son todos homogéneos, su comportamiento es <strong>rígido y reactivo</strong>, todos los nodos realizan las mismas funciones y <strong>colaboran entre sí</strong>. Por el otro lado, los agentes son <strong>heterogéneos</strong> , cada uno se especializa en realizar una tarea o función y puede <strong>competir o colaborar</strong> con otros agentes. Además su comportamiento es <strong>proactivo y autónomo</strong>, no solo reactivo.</p>
+<h2>¿Por qué usar Agentes? (Utilidad)</h2>
+<p>Son ideales para sistemas donde <strong>no hay un control centralizado</strong> o el problema es muy grande y cambiante.</p>
+<ul>
+<li><strong>Escalabilidad:</strong> Puedes añadir más agentes si hay más trabajo.</li>
+<li><strong>Robustez:</strong> Si un agente falla, los otros pueden seguir trabajando.</li>
+<li><strong>Abstracción:</strong> Es más natural modelar un mercado con &quot;agentes compradores y vendedores&quot; que con un código monolítico gigante.</li>
+</ul>
+<h1>8.6 Comunicación entre Agentes</h1>
+<p>A diferencia de los objetos (que invocan métodos), los agentes se comunican para <strong>negociar, cooperar y delegar</strong>. No se trata solo de mover datos, sino de provocar una reacción o un cambio en el otro.</p>
+<h2>8.6.1 Teoría de los Actos del Habla (La Base Teórica)</h2>
+<p>La comunicación de agentes se basa en la idea de que <strong>&quot;decir algo es hacer algo&quot;</strong>. El mensaje no es solo información, lleva una intención.</p>
+<p>Se divide en tres dimensiones:</p>
+<ol>
+<li><strong>Locución:</strong> El acto físico de emitir el mensaje (decir la frase).</li>
+<li><strong>Ilocución (La más importante):</strong> La <strong>intención</strong> real del mensaje. ¿Es una orden? ¿Una promesa? ¿Una pregunta? Esto define el &quot;Performative&quot;.</li>
+<li><strong>Perlocución:</strong> El efecto que se logra en el receptor (convencer, asustar, informar).</li>
+</ol>
+<p><strong>Clasificación de la Intención (Ilocución)</strong></p>
+<ul>
+<li><strong>Asertivas:</strong> Informar sobre hechos (&quot;El cielo es azul&quot;).</li>
+<li><strong>Directivas:</strong> Intentar que el receptor haga algo (&quot;Cierra la puerta&quot;, &quot;¿Qué hora es?&quot;).</li>
+<li><strong>Comisivas:</strong> Comprometerse a hacer algo (&quot;Prometo ir mañana&quot;).</li>
+<li><strong>Permisivas/Prohibitivas:</strong> Dar o quitar autorizaciones.</li>
+<li><strong>Declarativas:</strong> Cambian la realidad con solo decirlo (&quot;Os declaro marido y mujer&quot;).</li>
+<li><strong>Expresivas:</strong> Muestran estado emocional (&quot;Estoy cansado&quot;).</li>
+</ul>
+<blockquote>
+<p><strong>Objetivo del diseño:</strong> Se busca <strong>completitud</strong> (poder decir todo lo necesario), <strong>simplicidad</strong> (que no sea imposible de programar) y <strong>concisión</strong> (evitar ambigüedad).</p>
+</blockquote>
+<h2>8.6.2 La &quot;Pila&quot; de Comunicación</h2>
+<p>Para que dos agentes se entiendan, deben coincidir en varios niveles, de abajo a arriba:</p>
+<h3>Nivel 1: Transporte y Conexión (¿Cómo llega el mensaje?)</h3>
+<p>Es la tubería física. Los agentes no se preocupan de los bytes, delegan en un <strong>Servicio de Transporte</strong>.</p>
+<ul>
+<li><strong>Mecanismos:</strong> Puede ser síncrono (espero respuesta) o asíncrono (envío y sigo trabajando). Puede ser a uno (Unicast), a varios (Multicast) o a todos (Broadcast).</li>
+<li><strong>Tecnologías:</strong> CORBA, RMI, DCOM.</li>
+<li><strong>Funciones:</strong> Garantizar que el mensaje llega, detectar errores y manejar las direcciones (nombres) de los agentes.</li>
+</ul>
+<h3>Nivel 2: Lenguaje de Comunicación (ACL)</h3>
+<p>Es la sintaxis. Define la estructura del mensaje para que sea comprensible.</p>
+<ul>
+<li><strong>Estándares:</strong> <strong>FIPA-ACL</strong> (el más usado) o KQML.</li>
+<li><strong>Requisito clave:</strong> Debe ser formal y tener una semántica bien definida.</li>
+</ul>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>Un <strong>estándar</strong> es simplemente un <strong>conjunto de reglas acordadas</strong> que todo el mundo decide seguir para que cosas diferentes puedan funcionar juntas.</p>
+<p>Por ejemplo los enchufes de las paredes, en Europa todos acordaron usar dos clavijas redondas. Eso es un estándar. Si cada fabricante de neveras hiciese un enchufe diferente sería un puto caos.
+En agentes necesitas estándares para que un agente programado en Java por una empresa en España pueda hablar con un agente programado en Python por una empresa en Japón.</p>
+</div>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p><strong>FIPA (Foundation for Intelligent Physical Agents)</strong> es la organización que <strong>escribe</strong> esos estándares.
+Es como la <strong>FIFA</strong> en fútbol, no juega los partidos, pero escribe el reglamento. La <strong>FIPA</strong> dice: &quot;así es como debe hablar una gente para que el resto del mundo lo entienda&quot;.</p>
+</div>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p><strong>ACL (Agent Communication Language)</strong> es el lenguaje estándar que inventó FIPA. Pero no se refiere al idioma, sino a la <strong>estructura del mensaje</strong>. Piensa en un <strong>formulario oficial</strong> o en el <strong>sobre de una carta</strong>. ACL define los campos obligatorios para que el mensaje sea válido, independientemente de lo que quieras decir.</p>
+</div>
+<h3>Nivel 3: Ontologías (El Vocabulario)</h3>
+<p>Los agentes no tienen &quot;sentido común&quot;. Si el Agente A le pide al Agente B: <em>&quot;Tráeme un gato&quot;</em>, hay un problema grave de ambigüedad.</p>
+<ul>
+<li>¿Se refiere a un <strong>animal</strong> (mascota)?</li>
+<li>¿Se refiere a una <strong>herramienta</strong> (para levantar el coche)?</li>
+</ul>
+<p><strong>La Ontología es la solución a este problema.</strong> Es una especificación formal y explícita de un vocabulario compartido. Define <strong>QUÉ</strong> significan las palabras en un contexto concreto y cómo se relacionan entre sí.</p>
+<p>Para que dos agentes se entiendan, ambos deben acordar usar la misma ontología (el mismo diccionario) antes de hablar.</p>
+<h4>Ejemplo práctico:</h4>
+<ol>
+<li>
+<p><strong>Sin Ontología:</strong></p>
+<ul>
+<li>Agente A: &quot;Envía planta&quot;.</li>
+<li>Agente B: (Confuso) &quot;¿Una flor o una fábrica?&quot;</li>
+</ul>
+</li>
+<li>
+<p><strong>Con Ontología de Botánica:</strong></p>
+<ul>
+<li>La ontología define: <code>Planta</code> es un <code>Ser Vivo</code> que realiza fotosíntesis.</li>
+<li>Agente A: &quot;Envía planta (Ontología: Botánica)&quot;</li>
+<li>Agente B: &quot;Entendido, enviando un ficus&quot;.</li>
+</ul>
+</li>
+<li>
+<p><strong>Con Ontología Industrial:</strong></p>
+<ul>
+<li>La ontología define: <code>Planta</code> es un <code>Edificio</code> donde se manufacturan bienes.</li>
+<li>Agente A: &quot;Envía planta (Ontología: Industrial)&quot;.</li>
+<li>Agente B: &quot;Entendido, enviando planos de la fábrica de Ford&quot;.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Resumen:</strong> La ontología da <strong>semántica</strong> (significado real) a los datos. Sin ella, los agentes solo se pasan palabras vacías.</p>
+<h3>Nivel 4: Protocolos de Interacción (La Conversación)</h3>
+<p>Son patrones predefinidos de mensajes. No basta con enviar una frase, hay que saber qué se espera después. (Ej: Si pregunto, espero una respuesta).</p>
+<h2>8.6.3 El Estándar FIPA-ACL</h2>
+<p>Es el estándar de facto para la comunicación de agentes. Un mensaje FIPA tiene una estructura &quot;tipo sobre de carta&quot; que incluye:</p>
+<ul>
+<li><strong>Performative:</strong> El tipo de acto (REQUEST, INFORM, AGREE).</li>
+<li><strong>Sender / Receiver:</strong> Quién envía y quién recibe.</li>
+<li><strong>Content:</strong> El contenido real de la comunicación.</li>
+<li><strong>Language &amp; Ontology:</strong> Qué idioma y diccionario se usan para entender el contenido.</li>
+<li><strong>Protocol:</strong> A qué conversación pertenece esto.</li>
+</ul>
+<h3>Requerimientos para ser un Agente FIPA</h3>
+<ol>
+<li><strong>Manejo de errores:</strong> Si recibes un mensaje que no entiendes, <strong>debes</strong> responder con <code>not-understood</code>. Nunca ignorarlo silenciosamente.</li>
+<li><strong>Fidelidad:</strong> Si usas un acto comunicativo estándar (ej: <code>INFORM</code>), debes cumplir estrictamente su definición oficial.</li>
+<li><strong>Flexibilidad:</strong> No estás obligado a implementar todos los protocolos, solo el subconjunto que necesites.</li>
+</ol>
+<h2>8.6.4 Protocolos FIPA (Patrones de Conversación)</h2>
+<p>Los protocolos definen el &quot;baile&quot; de mensajes entre agentes. Un protocolo es el <strong>patrón de comportamiento</strong> esperado en una conversación. No basta con enviar un mensaje, hay que saber qué respuesta esperar y en qué orden. Los más importantes son:</p>
+<h3>A. Protocolos Básicos (Petición e Información)</h3>
+<ul>
+<li><strong>FIPA-Query:</strong> Para preguntar. (<code>query-if</code> para sí/no, <code>query-ref</code> para obtener un dato concreto).</li>
+<li><strong>FIPA-Request:</strong> Ordenar a otro que haga algo. El otro puede aceptar (<code>agree</code>) o rechazar (<code>refuse</code>).</li>
+<li><strong>FIPA-Request-When:</strong> Como el anterior, pero la acción se hace solo cuando se cumple una condición futura.</li>
+<li><strong>FIPA-Subscribe:</strong> &quot;Avísame cada vez que pase X&quot;.</li>
+</ul>
+<h3>B. Protocolos de Mercado (Negociación)</h3>
+<ul>
+<li>
+<p><strong>FIPA-Contract-Net (Red de Contratos):</strong></p>
+<ol>
+<li><em>Manager</em> envía una oferta de trabajo (<code>cfp</code>: call for proposal).</li>
+<li><em>Contratistas</em> envían sus presupuestos (<code>propose</code>) o rechazan (<code>refuse</code>).</li>
+<li><em>Manager</em> elige la mejor y la acepta (<code>accept-proposal</code>) rechazando el resto.</li>
+</ol>
+<ul>
+<li><em>Versión Iterated:</em> Se hacen varias rondas para afinar el precio.</li>
+</ul>
+</li>
+<li>
+<p><strong>FIPA-English-Auction:</strong> Subasta clásica (hacia arriba). El subastador sube el precio hasta que nadie más puje.</p>
+</li>
+<li>
+<p><strong>FIPA-Dutch-Auction:</strong> Subasta holandesa (hacia abajo). Empieza muy alto y baja hasta que alguien dice &quot;mío&quot;.</p>
+</li>
+</ul>
+<img src="../../../img/comdis/pasted-image-20251230104116.png" alt="Pasted image 20251230104116.png" loading="lazy">
+<p><strong>INFORM:</strong> Es el acto más básico.</p>
+<ul>
+<li><strong>Qué significa:</strong> &quot;Te cuento esto que sé y asumo que es verdad&quot;.</li>
+<li><strong>Ejemplo:</strong> Un sensor de temperatura dice: <em>&quot;Hace 25 grados&quot;</em>.</li>
+<li><strong>Ojo:</strong> El receptor no está obligado a hacer nada, solo &quot;toma nota&quot;.</li>
+</ul>
+<p><strong>CFP (Call For Proposal):</strong> El &quot;Llamamiento&quot;.</p>
+<ul>
+<li><strong>Qué significa:</strong> &quot;Tengo un problema, ¿quién me lo soluciona y qué condiciones me ponéis?&quot;. No es una orden, es una invitación a negociar.</li>
+<li><strong>Ejemplo:</strong> <em>&quot;Necesito un taxi para ir al aeropuerto, ¿quién me lleva y por cuánto?&quot;</em></li>
+</ul>
+<p><strong>PROPOSE:</strong> La &quot;Oferta&quot;.</p>
+<ul>
+<li><strong>Qué significa:</strong> Respuesta a un CFP. El agente dice que puede hacerlo y bajo qué condiciones.</li>
+<li><strong>Ejemplo:</strong> <em>&quot;Yo te llevo por 20 euros&quot;</em>.</li>
+</ul>
+<p><strong>ACCEPT-PROPOSAL:</strong> El &quot;Trato hecho&quot;.</p>
+<ul>
+<li><strong>Qué significa:</strong> El que envió el CFP ha recibido varias ofertas (proposals) y elige esta.</li>
+<li><strong>Ejemplo:</strong> <em>&quot;Vale, tú me llevas por 20 euros. Vente&quot;</em>.</li>
+</ul>
+<p><strong>REJECT-PROPOSAL:</strong> El &quot;No, gracias&quot;.</p>
+<ul>
+<li><strong>Qué significa:</strong> Has recibido la oferta, pero no te interesa (porque es cara, porque ya elegiste a otro, etc.).</li>
+<li><strong>Ejemplo:</strong> <em>&quot;30 euros es muy caro, paso de ti&quot;</em>.</li>
+</ul>
+<div class="callout callout-danger">
+<p class="callout-titulo">Danger</p>
+<p>Se dice que el profesor tiene este protocolo tatuado en la espalda y que incluso ha llamado a sus hijos FIPA e English Auction. Si no lo usas en sus prácticas se calienta una burrada, a pesar de que haya sido creado por un medico holandés en el 1836 y sea la mierda más ineficiente nunca jamás creada.</p>
+</div>
+<h3>C. Protocolos de Intermediación</h3>
+<p>Cuando no sabes quién puede hacer el trabajo, usas un intermediario.</p>
+<ul>
+<li><strong>FIPA-Brokering:</strong> Le pides algo al bróker, él busca al agente adecuado, consigue la respuesta y <strong>te la devuelve él mismo</strong>. (Tú no ves al agente final).</li>
+<li><strong>FIPA-Recruiting:</strong> Le pides al reclutador que busque a alguien. El reclutador le pasa tu petición al agente final y este <strong>te responde a ti directamente</strong>. (El reclutador solo os presenta).</li>
+</ul>
+<h1>8.7 JADE (Java Agent Development Framework)</h1>
+<h2>8.7.1 ¿Qué es y para que sirve?</h2>
+<p>JADE es un <strong>framework</strong> de código abierto que facilita la creación de sistemas distribuidos multiagente.</p>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>Es un <strong>esqueleto de software</strong> o estructura base que proporciona el código necesario para las tareas comunes y repetitivas (como la comunicación, seguridad o gestión de errores). A diferencia de una simple librería (donde tú llamas al código), el framework <strong>te impone unas reglas</strong> y una forma de trabajar, encargándose él de &quot;llamar&quot; a tu código cuando es necesario. Su objetivo es que el programador no empiece desde cero y se centre solo en la lógica específica de su problema. JADE te da la &quot;casa&quot; (el sistema de mensajería, el ciclo de vida, la conexión entre ordenadores). Tú solo pones los &quot;muebles&quot; (la inteligencia del agente y sus decisiones).</p>
+</div>
+<p>Piensa en JADE como el <strong>Sistema Operativo</strong> de los agentes. En lugar de tener que programar desde cero cómo se envían los bytes por la red o cómo se encuentra dos programas, JADE te da esa infraestructura hecha para que tú solo te preocupes de la inteligencia del agente.</p>
+<ul>
+<li>Está escrito en <strong>Java</strong></li>
+<li>Cumple totalmente con <strong>FIPA</strong>. Lo que garantiza que un agente JADE puede hablar con agentes de otras plataformas si también son FIPA</li>
+<li><strong>Servicios que regala:</strong> Ciclo de vida (nacer/morir), movilidad (viajar entre ordenadores), páginas amarillas (búsqueda), mensajería y seguridad.</li>
+</ul>
+<h2>8.7.2 La Arquitectura JADE (El &quot;Mundo&quot;)</h2>
+<img src="../../../img/comdis/pasted-image-20251209183923.png" alt="Pasted image 20251209183923.png" loading="lazy">
+<p>Imagina una <strong>Universidad (La Plataforma)</strong>. Una universidad no es un solo edificio. Es una institución formada por varios edificios repartidos por la ciudad (Campus Norte, Campus Sur, Rectorado).</p>
+<ul>
+<li><strong>La Plataforma (La Universidad):</strong> Es el concepto abstracto. Es el <strong>grupo total</strong> de ordenadores que están conectados trabajando juntos en tu sistema de agentes.</li>
+<li><strong>El Contenedor (Cada Edificio):</strong> Es lo que ejecutas en cada ordenador físico.
+<ul>
+<li>Si tienes 3 ordenadores conectados formando tu sistema JADE, tienes <strong>1 Plataforma</strong> distribuida en <strong>3 Contenedores</strong>.</li>
+<li>Dentro de cada &quot;Edificio&quot; (Contenedor) viven las personas (Agentes).</li>
+</ul>
+</li>
+<li><strong>Main Container:</strong> es el primer contenedor que se arranca. Es el cerebro de la plataforma. Si este se cae, la plataforma muere. Contiene dos agentes especiales obligatorios:
+<ul>
+<li><strong>AMS (Agent Management System):</strong> la policia. Controla quién entra, quién sale, crea agentes y mata agentes.</li>
+<li><strong>DF (Directory Facilitator):</strong> las páginas amarillas. Los agentes se anuncian aquí (Vendo servicios de impresión) para que los encuentren.</li>
+</ul>
+</li>
+</ul>
+<p><strong>Comando para lanzar JADE:</strong> <code>java jade.Boot -gui</code> (Arranca el Main Container y la interfaz gráfica).</p>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>Java inventó una &quot;máquina virtual&quot;. Es un programa que instalas en tu ordenador y actúa como un <strong>traductor en tiempo real</strong>.</p>
+<ul>
+<li>Tú escribes código Java (JADE).</li>
+<li>La JVM lee ese código y se lo traduce a TU ordenador específico.</li>
+</ul>
+<p>Cuando decimos &quot;Un contenedor JADE corre sobre una JVM&quot;, significa que para arrancar JADE, necesitas tener instalado Java y ejecutar el proceso. <strong>1 Contenedor = 1 Proceso de Java abierto en tu ordenador.</strong></p>
+</div>
+<p>Además tenemos otros agentes disponibles:</p>
+<ul>
+<li><strong>RMA (Remote Management Agent):</strong> Es la consola principal (la ventana que se abre al inicio). Controla la plataforma, mata agentes, lanza otros agentes y monitoriza contenedores remotos.</li>
+<li><strong>DF (Directory Facilitator):</strong> Son las <strong>&quot;Páginas Amarillas&quot;</strong> del sistema.
+<ul>
+<li><strong>Función:</strong> Permite que los agentes se encuentren entre sí por lo que <em>hacen</em> y no por su nombre.</li>
+<li><strong>Ejemplo:</strong> Un agente se registra aquí diciendo &quot;Yo ofrezco el servicio de impresión&quot;. Otro agente que necesite imprimir consultará al DF: &quot;¿Quién imprime?&quot;, y el DF le dará la dirección del primero.</li>
+</ul>
+</li>
+<li><strong>Sniffer Agent:</strong> Fundamental para entender qué pasa. Muestra un diagrama visual de quién envía mensajes a quién (como flechas entre líneas de vida en un diagrama de secuencia).</li>
+<li><strong>Introspector Agent:</strong> Es como una radiografía. Te permite ver el <strong>estado interno</strong> de un agente: qué comportamientos (<code>Behaviours</code>) está ejecutando ahora mismo, la cola de mensajes pendientes y el valor de sus variables.</li>
+<li><strong>Log Manager Agent:</strong> Gestiona los logs de la plataforma en tiempo de ejecución. Permite cambiar qué nivel de detalle se guarda sin tener que reiniciar el programa.</li>
+<li><strong>Dummy Agent:</strong> Un agente manual para enviar mensajes de prueba y comprobar si tu sistema responde correctamente.</li>
+</ul>
+<h2>8.7.3 Programación de un Agente</h2>
+<p>Un agente es un componente activo con un nombre único y un <strong>AID</strong> (Agent ID)</p>
+<img src="../../../img/comdis/pasted-image-20251209184001.png" alt="Pasted image 20251209184001.png" loading="lazy">
+<p><strong>El ciclo de vida de un agente es el siguiente:</strong></p>
+<ul>
+<li><strong>Nacimiento (<code>setup</code>):</strong> se ejecuta una sola vez al arrancar. Aquí inicializas variables y, lo más importante, <strong>añades los primeros comportamientos</strong> (<code>addBehaviorur</code>)  a la &quot;piscina&quot; de tareas.</li>
+<li><strong>El Bucle Principal (El corazón del Agente):</strong> el agente entra en un bucle <code>while</code> que dura toda su vida. ¿El agente ha muerto (<code>doDelte</code> llamado)? Si ha muerto sale del bucle y va a <code>takeDown()</code>, si no continúa.</li>
+<li><strong>Ejecución de Comportamientos:</strong> el agente coge el siguiente comportamiento activo de su lista, ejecuta el método <code>b.action()</code> de ese comportamiento (solo se ejecuta un paso, no todo el proceso si es largo).</li>
+<li><strong>Verificación:</strong> Pregunta <code>b.done()?</code> . Si devuelve <strong>True</strong> el comportamiento ha terminado y se elimina de la lista, si devuelve <strong>False</strong> el comportamiento sigue vivo y se queda en la lista para la siguiente vuelta</li>
+<li><strong>Muerte (<code>takeDown()</code>):</strong> se ejecuta antes de desaparecer. Aquí cierra conexiones a bases de datos, te desregistras de las páginas amarillas, etc.</li>
+</ul>
+<p>Para crear un agente, heredas de la clase <code>jade.core.Agent</code></p>
+<pre><code class="language-java">import jade.core.Agent;
+
+public class MiAgente extends Agent {
+    
+    // 1. SETUP: Equivale al &quot;main&quot;. Se ejecuta al nacer.
+    protected void setup() {
+        System.out.println(&quot;Hola, soy el agente &quot; + getAID().getName());
+        // Aquí se añaden los comportamientos (el cerebro)
+        addBehaviour(new MiComportamiento()); 
+    }
+
+    // 2. TAKEDOWN: Se ejecuta justo antes de morir (limpieza).
+    protected void takeDown() {
+        System.out.println(&quot;Adios mundo cruel.&quot;);
+    }
+}
+</code></pre>
+<h2>8.7.4 Los comportamientos</h2>
+<p><strong>Un agente JADE funciona en un SOLO HILO de Java</strong>. ¿Cómo puede hacer varias cosas a la vez (escuchar mensajes y calcular datos)? Usando <strong>comportamientos colaborativos</strong>, <strong>no apropiativos.</strong> Para realizar esto, el programador debe definir cuando el comportamiento debe <strong>ceder CPU</strong> de forma voluntaria a otros comportamientos (normalmente cuando se usan operaciones bloqueantes, esto se explica más abajo).</p>
+<p>Todo trabajo que hace el agente debe ir dentro de una clase que herede de <code>jade.core.behaviours.Behaviour</code>. Tiene dos métodos clave:</p>
+<ul>
+<li><code>action()</code>: lo que hace el agente</li>
+<li><code>done()</code>: devuelve <code>true</code> si ha terminado para siempre, o <code>false</code> si debe volver a ejecutarse</li>
+</ul>
+<p><strong>Tipos de Comportamientos</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>Tipo</strong></th>
+<th><strong>Clase Java</strong></th>
+<th><strong>Descripción</strong></th>
+<th><strong>done() devuelve...</strong></th>
+<th><strong>Ejemplo</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>OneShot</strong></td>
+<td><code>OneShotBehaviour</code></td>
+<td>Se ejecuta <strong>una sola vez</strong> y termina.</td>
+<td><code>true</code></td>
+<td>Enviar un email de bienvenida.</td>
+</tr>
+<tr>
+<td><strong>Cíclico</strong></td>
+<td><code>CyclicBehaviour</code></td>
+<td><strong>Nunca termina</strong>. Se repite infinitamente.</td>
+<td><code>false</code></td>
+<td>Escuchar mensajes entrantes.</td>
+</tr>
+<tr>
+<td><strong>Waker</strong></td>
+<td><code>WakerBehaviour</code></td>
+<td>Se ejecuta una vez tras un tiempo de espera (<strong>Temporizador</strong>).</td>
+<td><code>true</code></td>
+<td>&quot;Despiértame en 10 segundos&quot;.</td>
+</tr>
+<tr>
+<td><strong>Ticker</strong></td>
+<td><code>TickerBehaviour</code></td>
+<td>Se ejecuta repetidamente cada X tiempo (<strong>Metrónomo</strong>).</td>
+<td><code>false</code></td>
+<td>Comprobar el precio de una acción cada minuto.</td>
+</tr>
+<tr>
+<td><strong>Complejo</strong></td>
+<td><code>FSMBehaviour</code>, etc.</td>
+<td>Máquinas de estados. Cambia de tarea según lo que pase.</td>
+<td>Depende</td>
+<td>Lógica compleja de negocio.</td>
+</tr>
+</tbody>
+</table>
+<h2>8.7.5 Comunicación en JADE</h2>
+<p>Los agentes se comunican enviando objetos <code>ACLMessage</code> de forma asíncrona.</p>
+<h3>Enviar un mensaje</h3>
+<pre><code class="language-java">ACLMessage msg = new ACLMessage(ACLMessage.INFORM); // 1. Performative
+msg.addReceiver(new AID(&quot;AgenteB&quot;, AID.ISLOCALNAME)); // 2. Receptor
+msg.setLanguage(&quot;Castellano&quot;);
+msg.setContent(&quot;Está lloviendo&quot;); // 3. Contenido
+send(msg); // 4. Enviar
+</code></pre>
+<h3>Recibir mensajes</h3>
+<p>El agente tiene una cola de mensajes</p>
+<p><strong>Forma no bloqueante:</strong></p>
+<pre><code class="language-java">ACLMessage msg = receive(); // Mira si hay mensaje
+if (msg != null) {
+    // Procesar mensaje
+} else {
+    block(); // ¡IMPORTANTE!
+}
+</code></pre>
+<ul>
+<li><code>block()</code>: Saca el comportamiento de la lista de ejecución y pone el agente a dormir para ahorrar CPU. El agente se despierta solo cuando llega un mensaje nuevo.</li>
+<li><strong><code>MessageTemplate</code>:</strong> Sirve para filtrar. &quot;Solo quiero leer mensajes que vengan de Juan&quot;: <code>receive(MessageTemplate.MatchSender(juan))</code>.</li>
+</ul>
+<p><strong>Forma bloqueante:</strong></p>
+<ul>
+<li>Detiene toda la ejecución hasta que llega un mensaje.</li>
+<li><strong>Peligro:</strong> Como congela el único hilo del agente, <strong>nunca lo uses dentro de un Behaviour</strong>. Úsalo solo en <code>setup()</code> o en hilos separados.</li>
+</ul>
+<div class="callout callout-info">
+<p class="callout-titulo">JADE: Diferencia entre `block()` y `blockingReceive()`</p>
+<p><strong>1. <code>myBehaviour.block()</code> (Enfoque Colaborativo)</strong></p>
+<ul>
+<li><strong>Mecanismo:</strong> Es un bloqueo <strong>lógico</strong>. Marca el comportamiento como &quot;en espera&quot; y devuelve el control al planificador del agente.</li>
+<li><strong>El Hilo (Thread):</strong> <strong>No se detiene.</strong> El agente aprovecha para ejecutar otros comportamientos concurrentes.</li>
+<li><strong>Despertador:</strong> El comportamiento se reactiva automáticamente cuando llega un <strong>nuevo mensaje</strong> a la cola del agente.</li>
+<li><strong>Uso:</strong> Es la forma correcta de esperar mensajes dentro del método <code>action()</code>.</li>
+</ul>
+<p><strong>2. <code>myAgent.blockingReceive()</code> (Enfoque Bloqueante)</strong></p>
+<ul>
+<li><strong>Mecanismo:</strong> Es una llamada <strong>síncrona</strong>.</li>
+<li><strong>El Hilo (Thread):</strong> <strong>Se bloquea físicamente.</strong> Detiene por completo el flujo de ejecución del hilo Java del agente.</li>
+<li><strong>Consecuencia:</strong> El agente se &quot;congela&quot; totalmente. Ningún otro comportamiento puede ejecutarse hasta que llegue el mensaje esperado.</li>
+<li><strong>Uso:</strong> Evitar en comportamientos cíclicos. Útil solo en la inicialización (<code>setup()</code>) o fases lineales estrictas.</li>
+</ul>
+</div>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="7-sistemas-de-mensajes.html"><span class="nav-etiqueta">← anterior</span>7. Sistemas de Mensajes</a>
+  <a class="nav-siguiente" href="9-ontologias.html"><span class="nav-etiqueta">siguiente →</span>9. Ontologías</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

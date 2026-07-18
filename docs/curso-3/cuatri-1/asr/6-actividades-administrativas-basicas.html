@@ -1,0 +1,1356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="6. Actividades Administrativas Básicas — apuntes de ASR (tercer curso de Ingeniería Informática).">
+<title>6. Actividades Administrativas Básicas · ASR · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">asr</a><span class="miga-sep">/</span><span aria-current="page">6-actividades-administrativas-basicas</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">ASR · curso 3</p>
+    <h1>6. Actividades Administrativas Básicas · ASR</h1>
+  </header>
+  <div class="prosa">
+<h1>6.1 Gestión de procesos</h1>
+<p>Un <strong>proceso</strong> no es más que una instancia de un programa en ejecución. Imagina que el programa (en el disco duro) es una receta de cocina, y el proceso es &quot;estar cocinando esa receta&quot; en este momento.</p>
+<h2>6.1.1 Conceptos Fundamentales</h2>
+<p>El <strong>Planificador (Scheduler)</strong> del Kernel es el &quot;jefe de cocina&quot;. Decide qué proceso entra a la CPU y cuánto tiempo se queda.</p>
+<ul>
+<li>
+<p><strong>Proceso vs. Hilo (Thread):</strong></p>
+<ul>
+<li><strong>Proceso:</strong> Es pesado. Tiene su propio espacio de memoria aislado. Si uno falla, los demás suelen seguir vivos.</li>
+<li><strong>Hilo (Subproceso):</strong> Es ligero. Viven <em>dentro</em> de un proceso y comparten memoria y recursos. Si un hilo corrompe la memoria, puede tumbar todo el proceso.</li>
+</ul>
+</li>
+<li>
+<p><strong>Afinidad de Núcleo:</strong> Mover un proceso de un núcleo (Core A) a otro (Core B) es costoso (&quot;cache miss&quot;). El sistema intenta evitarlo.</p>
+</li>
+</ul>
+<h2>6.1.2 Ciclo de Vida y Estados</h2>
+<p>Los procesos no solo están &quot;ejecutándose&quot; o &quot;parados&quot;. Tienen un ciclo de vida complejo.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Código</strong></th>
+<th><strong>Estado</strong></th>
+<th><strong>Significado para el Admin</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>R</strong></td>
+<td><strong>Running</strong></td>
+<td>Está en la CPU o en la cola listo para entrar ya.</td>
+</tr>
+<tr>
+<td><strong>S</strong></td>
+<td><strong>Sleep (Interruptible)</strong></td>
+<td>Durmiendo. Espera algo trivial (que teclees algo, un temporizador).</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td><strong>Disk Sleep (Uninterruptible)</strong></td>
+<td><strong>Peligroso.</strong> Espera al Hardware (Disco/Red). No se puede matar con <code>kill -9</code> hasta que el hardware responda.</td>
+</tr>
+<tr>
+<td><strong>T</strong></td>
+<td><strong>Stopped</strong></td>
+<td>Pausado manualmente (Ctrl+Z o señal SIGSTOP).</td>
+</tr>
+<tr>
+<td><strong>Z</strong></td>
+<td><strong>Zombie</strong></td>
+<td>Muerto viviente. El proceso terminó, pero su proceso &quot;padre&quot; no ha leído su estado de salida. No consumen RAM ni CPU, solo un hueco en la tabla.</td>
+</tr>
+</tbody>
+</table>
+<h2>6.1.3 Monitorización: &quot;Ver qué pasa&quot;</h2>
+<h3>Herramientas Estáticas (<code>ps</code>, <code>pstree</code>)</h3>
+<p><code>ps</code> toma una &quot;foto fija&quot; del momento actual.</p>
+<p>Sin opciones, <code>ps</code> sólo muestra los procesos lanzados desde el terminal actual y con el mismo <code>EUID</code> que el usuario que lo lanzó</p>
+<img src="../../../img/asr/pasted-image-20251213120909.png" alt="Pasted image 20251213120909.png" loading="lazy">
+<p><strong>Sintaxis Clave (Trucos):</strong></p>
+<ul>
+<li><strong>Estilo UNIX (con guion):</strong> <code>ps -ef</code> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> Muestra <strong>todo</strong> con detalles (formato estándar).</li>
+<li><strong>Estilo BSD (sin guion):</strong> <code>ps aux</code> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> Muestra <strong>todo</strong> incluyendo consumo de CPU/MEM y procesos sin terminal.</li>
+<li><strong>Personalizado:</strong> <code>ps -eo pid,user,cmd --sort -%mem</code> (Muestra PID, usuario y comando ordenado por consumo de RAM).</li>
+</ul>
+<p>Algunas opciones:</p>
+<ul>
+<li><code>-e</code>: muestra todos los procesos</li>
+<li><code>-u usuario</code>: muestra los procesos de un usuario</li>
+<li><code>-o formato</code>: permite definir el formato de salida, por ejemplo</li>
+</ul>
+<img src="../../../img/asr/pasted-image-20251213121521.png" alt="Pasted image 20251213121521.png" loading="lazy">
+<p><strong><code>pstree</code></strong>: Muestra la jerarquía. Fundamental para ver quién es el padre de quién (y entender por qué si matas al padre, mueren los hijos).</p>
+<img src="../../../img/asr/pasted-image-20251213121741.png" alt="Pasted image 20251213121741.png" loading="lazy">
+<h3>Herramientas Dinámicas (<code>top</code>)</h3>
+<p><code>top</code> es un monitor en tiempo real. En la <strong>cabecera</strong> podemos ver la hora actual, tiempo que el sistema lleva encendido, el número de usuarios conectados y la carga media del sistema para los últimos 1, 5, y 15 minutos. El número total de tareas y resumen por estado y el estado de ocupación de la CPU y la memoria. En un sistema de n núcleos el máximo de uso de CPU es n × 100 %.</p>
+<img src="../../../img/asr/pasted-image-20251213121811.png" alt="Pasted image 20251213121811.png" loading="lazy">
+<div class="callout callout-tip">
+<p class="callout-titulo">Debug avanzado: strace</p>
+<p>Si un proceso falla y no sabes por qué, strace -p PID te muestra las &quot;tripas&quot;: todas las llamadas que el proceso le hace al Kernel (abrir archivos, leer memoria, etc.).</p>
+</div>
+<img src="../../../img/asr/pasted-image-20251213121938.png" alt="Pasted image 20251213121938.png" loading="lazy">
+<h2>6.1.4 Control y Señales: &quot;Mandar órdenes&quot;</h2>
+<p>No &quot;matamos&quot; procesos, les enviamos <strong>señales</strong>. El proceso recibe la señal y decide qué hacer (salvo con SIGKILL).</p>
+<p><code>kill -l</code> lista el conjunto de señales</p>
+<table>
+<thead>
+<tr>
+<th><strong>ID</strong></th>
+<th><strong>Nombre</strong></th>
+<th><strong>Atajo Teclado</strong></th>
+<th><strong>¿Qué hace?</strong></th>
+<th><strong>Descripción</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>15</strong></td>
+<td><strong>SIGTERM</strong></td>
+<td><code>kill PID</code></td>
+<td>&quot;Termina, por favor&quot;</td>
+<td><strong>Recomendada.</strong> Permite al proceso guardar datos y cerrar ficheros antes de salir.</td>
+</tr>
+<tr>
+<td><strong>9</strong></td>
+<td><strong>SIGKILL</strong></td>
+<td><code>kill -9 PID</code></td>
+<td>&quot;¡MUERE!&quot;</td>
+<td><strong>Brutal.</strong> El Kernel arranca el proceso de la CPU. Puede corromper datos.</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td><strong>SIGINT</strong></td>
+<td><code>Ctrl + C</code></td>
+<td>Interrumpir</td>
+<td>Cancela el comando actual en terminal.</td>
+</tr>
+<tr>
+<td><strong>1</strong></td>
+<td><strong>SIGHUP</strong></td>
+<td>-</td>
+<td>Recargar</td>
+<td>Se usa para reiniciar <em>daemons</em> y que relean su configuración sin detenerse.</td>
+</tr>
+<tr>
+<td><strong>20</strong></td>
+<td><strong>SIGSTOP</strong></td>
+<td><code>Ctrl + Z</code></td>
+<td>Pausa</td>
+<td>Detiene el proceso y lo deja en segundo plano (estado T).</td>
+</tr>
+</tbody>
+</table>
+<h3>Comandos de Envío</h3>
+<ul>
+<li><strong><code>kill [señal] PID</code></strong>: Envía señal a un ID específico.</li>
+<li><strong><code>pkill nombre</code></strong>: Mata procesos buscando por nombre (ej: <code>pkill firefox</code>).</li>
+<li><strong><code>killall nombre</code></strong>: Mata <em>todos</em> los procesos con ese nombre exacto.</li>
+</ul>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>Con <code>pgrep</code> buscamos en la lista de procesos para localizar el PID a partir del nombre (similar a <code>ps | grep</code>)
+<code>pgrep sshd # devuelve el PID del proceso sshd de root</code></p>
+<p><code>exec</code> ejecuta un comando reemplazado al shell desde el que se lanza. Por ejemplo si te tiras en la terminal un <code>exec ls</code> tu terminal va a morir, porque se va a convertir en un <code>ls</code>.</p>
+<ul>
+<li>
+<p><strong>Situación inicial:</strong> Estás sentado. El <strong>Camarero</strong> (tu Shell, digamos <code>bash</code>) está esperando una orden.</p>
+</li>
+<li>
+<p><strong>La Orden:</strong> Tú le dices: <code>exec ls</code>.</p>
+<ul>
+<li>Traducido: <em>&quot;Camarero, quiero que dejes de ser camarero y te transformes en el comando 'Listar Archivos'&quot;</em>.</li>
+</ul>
+</li>
+<li>
+<p><strong>La Transformación:</strong> El Camarero <strong>desaparece</strong>. En su lugar, aparece el programa <code>ls</code> (que es muy simple y rápido).</p>
+</li>
+<li>
+<p><strong>OJO:</strong> Ya no hay Camarero. Solo está <code>ls</code>.</p>
+</li>
+</ul>
+</div>
+<p><strong>1. Ejecución normal (sin <code>exec</code>):</strong> Tú le pides un café al Camarero.</p>
+<blockquote>
+<ul>
+<li>El Camarero (Shell) llama a un Ayudante (Proceso hijo).</li>
+<li>El Ayudante va a por el café.</li>
+<li>El Camarero se queda esperando en tu mesa hasta que el Ayudante vuelve.</li>
+<li><strong>Resultado:</strong> Tienes al Camarero Y al Ayudante ocupados. Cuando el ayudante acaba, el Camarero sigue ahí para pedirle otra cosa.</li>
+</ul>
+<p><strong>2. Ejecución con <code>exec</code> (El suicidio del camarero):</strong> Tú usas <code>exec</code>. Le dices al Camarero: <em>&quot;Conviértete en una Cafetera&quot;</em>.</p>
+<ul>
+<li>El Camarero se quita el uniforme, desaparece y <strong>se transforma</strong> en la Cafetera.</li>
+<li>Ya no hay Camarero. Solo hay Cafetera.</li>
+<li>La Cafetera hace el café.</li>
+<li>Cuando el café está listo y la Cafetera se apaga... <strong>¿quién te atiende?</strong> ¡Nadie! El Camarero desapareció para convertirse en Cafetera.</li>
+<li>Por eso, se cierra la ventana. Se acabó el servicio.</li>
+</ul>
+</blockquote>
+<h3>Segundo Plano (Background)</h3>
+<p>Ideal para scripts largos o tareas que no quieres esperar.</p>
+<ol>
+<li>Lanzas con <code>&amp;</code>: <code>backup.sh &amp;</code></li>
+<li>Si ya lanzaste, pausas con <code>Ctrl+Z</code> y mandas al fondo con <code>bg</code>.</li>
+<li>Recuperas al frente con <code>fg</code>.</li>
+<li><strong><code>nohup</code></strong>: Vital si vas a cerrar la terminal y no quieres que el proceso muera (inmune a SIGHUP).</li>
+</ol>
+<img src="../../../img/asr/pasted-image-20251213122036.png" alt="Pasted image 20251213122036.png" loading="lazy">
+<p>El comando <code>jobs</code> permite ver la lista de comandos en background lanzados desde el shell, así como su estado (<code>fg</code> y <code>bg</code> pueden actuar sobre uno de los jobs identificándolo por su número).</p>
+<img src="../../../img/asr/pasted-image-20251213123212.png" alt="Pasted image 20251213123212.png" loading="lazy">
+<h2>6.1.5 Prioridades: <code>nice</code> y <code>renice</code></h2>
+<p>Linux es &quot;democrático&quot; pero permite favoritismos.</p>
+<ul>
+<li><strong>Rango:</strong> De <strong>-20</strong> (Máxima prioridad / &quot;Egoísta&quot;) a <strong>+19</strong> (Mínima prioridad / &quot;Amable&quot;).</li>
+<li><strong>Por defecto:</strong> Los procesos nacen con <strong>0</strong>.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>Comando</strong></th>
+<th><strong>Uso</strong></th>
+<th><strong>¿Quién puede usarlo?</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>nice</code></strong></td>
+<td>Al arrancar: <code>nice -n -5 comando</code></td>
+<td>Solo Root puede poner valores negativos (prioridad alta).</td>
+</tr>
+<tr>
+<td><strong><code>renice</code></strong></td>
+<td>Ya ejecutándose: <code>renice 10 -p PID</code></td>
+<td>Usuarios normales solo pueden <em>bajar</em> prioridad (hacerse más <em>nice</em>).</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p><code>ulimit</code> El comando interno de bash ulimit permite controlar los recursos de los que dispone un proceso arrancado por el shell. <code>ulimit [opciones] [limite]</code></p>
+</div>
+<h2>6.1.6 Recursos y el Sistema <code>/proc</code></h2>
+<h3><code>/proc</code> y <code>/sys</code> (Sistemas de Archivos Virtuales)</h3>
+<p>No están en el disco duro, están en la <strong>RAM</strong>. Son la ventana para ver los datos del Kernel en vivo.</p>
+<ul>
+<li><strong><code>/proc/cpuinfo</code></strong>: Qué procesador tienes.</li>
+<li><strong><code>/proc/meminfo</code></strong>: Cuánta RAM hay libre.</li>
+<li><strong><code>/proc/1234/</code></strong>: Directorio con toda la info del proceso con PID 1234 (sus ficheros abiertos <code>fd</code>, su memoria <code>maps</code>).</li>
+</ul>
+<h3>Análisis de Rendimiento (Cheatsheet)</h3>
+<ol>
+<li>
+<p><strong>¿Cuánto lleva encendido?</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> <code>uptime</code> (mira el <em>load average</em>).</p>
+</li>
+<li>
+<p><strong>¿Quién consume RAM/CPU?</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> <code>top</code> (o <code>htop</code> si está instalado).</p>
+</li>
+<li>
+<p><strong>¿Tengo memoria libre?</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> <code>free -h</code> (Mira la columna <em>available</em>, no solo <em>free</em>).</p>
+</li>
+<li>
+<p><strong>¿Qué hacen los usuarios?</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> <code>w</code>.</p>
+</li>
+</ol>
+<h1>6.2 Gestión del sistema de ficheros</h1>
+<p>En UNIX/Linux, la filosofía base es que <strong>todo objeto es un fichero</strong>. Esto incluye desde documentos de texto hasta dispositivos de hardware (donde leer datos es recibir input y escribir órdenes es enviar output).</p>
+<p>Tenemos múltiples comandos para trabajar con ficheros y directorios: <code>ls, rm, cp, mv, mkdir, rmdir, touch, etc.</code></p>
+<h2>6.2.1 Tipos de ficheros y operaciones</h2>
+<p>El sistema define siete tipos distintos. Se pueden identificar usando el comando <code>file</code> o mirando el primer carácter de <code>ls -l</code>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Tipo</strong></th>
+<th><strong>Carácter (ls -l)</strong></th>
+<th><strong>Descripción</strong></th>
+<th><strong>Creación / Borrado</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ficheros Regulares</strong></td>
+<td><code>-</code></td>
+<td>Archivos usuales (texto, binarios, imágenes).</td>
+<td><code>touch</code>, <code>cp</code>, <code>vi</code> / <code>rm</code></td>
+</tr>
+<tr>
+<td><strong>Directorios</strong></td>
+<td><code>d</code></td>
+<td>Contenedores de referencias a otros ficheros.</td>
+<td><code>mkdir</code> / <code>rmdir</code>, <code>rm -r</code></td>
+</tr>
+<tr>
+<td><strong>Enlaces Simbólicos</strong></td>
+<td><code>l</code></td>
+<td>Punteros a otros ficheros (accesos directos).</td>
+<td><code>ln -s</code> / <code>rm</code></td>
+</tr>
+<tr>
+<td><strong>Dispositivos Caracteres</strong></td>
+<td><code>c</code></td>
+<td>Hardware con E/S byte a byte (ej. teclado).</td>
+<td><code>mknod</code> / <code>rm</code></td>
+</tr>
+<tr>
+<td><strong>Dispositivos Bloques</strong></td>
+<td><code>b</code></td>
+<td>Hardware con E/S por bloques (ej. discos).</td>
+<td><code>mknod</code> / <code>rm</code></td>
+</tr>
+<tr>
+<td><strong>Tuberías (Named Pipes)</strong></td>
+<td><code>p</code></td>
+<td>Comunicación entre procesos (FIFO).</td>
+<td><code>mknod</code> / <code>rm</code></td>
+</tr>
+<tr>
+<td><strong>Sockets</strong></td>
+<td><code>s</code></td>
+<td>Comunicación de procesos en red.</td>
+<td><code>socket()</code> / <code>rm</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Nota:</strong> El comando <code>file [nombre_fichero]</code> analiza el contenido para determinar qué es (ej. PDF, ASCII, PNG).</p>
+<h2>6.2.2 Gestión de Enlaces</h2>
+<p>Los enlaces permiten acceder a un mismo contenido con diferentes nombres. Se gestionan con el comando <code>ln</code>.</p>
+<h3>Enlaces Duros (Hard Links)</h3>
+<ul>
+<li>
+<p><strong>Concepto:</strong> Es un nombre adicional para el <strong>mismo inodo</strong> (referencia física en disco).</p>
+</li>
+<li>
+<p><strong>Características:</strong></p>
+<ul>
+<li>Todos los enlaces duros son el fichero original.</li>
+<li>El fichero no se borra hasta eliminar <strong>todos</strong> sus enlaces.</li>
+<li>No pueden cruzar particiones (deben estar en el mismo sistema de ficheros).</li>
+</ul>
+</li>
+<li>
+<p><strong>Comando:</strong> <code>ln destino nombre_enlace</code></p>
+</li>
+</ul>
+<h3>Enlaces Simbólicos (Soft Links)</h3>
+<ul>
+<li>
+<p><strong>Concepto:</strong> Un fichero pequeño que contiene la <strong>ruta</strong> hacia otro fichero.</p>
+</li>
+<li>
+<p><strong>Características:</strong></p>
+<ul>
+<li>Si se borra el original, el enlace queda &quot;roto&quot; (apunta a nada).</li>
+<li>Pueden apuntar a ficheros en otras particiones.</li>
+</ul>
+</li>
+<li>
+<p><strong>Comando:</strong> <code>ln -s destino nombre_enlace</code></p>
+</li>
+</ul>
+<img src="../../../img/asr/pasted-image-20251214192819.png" alt="Pasted image 20251214192819.png" loading="lazy">
+<h2>6.2.3 Atributos de un Fichero</h2>
+<p>Toda la metainformación se puede consultar con <code>ls -l</code>.</p>
+<h3>Estructura de <code>ls -l</code></h3>
+<p>Ejemplo: <code>-rw--r--r-- 2 luis luis 12 Sep 22 20:19 fichero</code></p>
+<ol>
+<li><strong>Tipo:</strong> 1er carácter (<code>-</code>, <code>d</code>, <code>l</code>...).</li>
+<li><strong>Permisos:</strong> Siguientes 9 caracteres (ej. <code>rw-r--r--</code>).</li>
+<li><strong>Enlaces:</strong> Número de enlaces duros (o subdirectorios si es un dir).</li>
+<li><strong>Usuario:</strong> Propietario (<code>u</code>).</li>
+<li><strong>Grupo:</strong> Grupo propietario (<code>g</code>).</li>
+<li><strong>Tamaño:</strong> En bytes (usar <code>ls -lh</code> para verlo en KB/MB).</li>
+<li><strong>Fecha:</strong> Última modificación (<code>mtime</code>).</li>
+<li><strong>Nombre:</strong> Hasta 255 caracteres (evitar espacios y especiales).</li>
+</ol>
+<img src="../../../img/asr/pasted-image-20251214192924.png" alt="Pasted image 20251214192924.png" loading="lazy">
+<h3>Tipos de Fechas (Timestamps)</h3>
+<p>Linux guarda tres marcas de tiempo para cada fichero:</p>
+<ul>
+<li><strong>mtime:</strong> Modificación del contenido (por defecto en <code>ls -l</code>).</li>
+<li><strong>atime:</strong> Último acceso/lectura (<code>ls -l --time=atime</code>).</li>
+<li><strong>ctime:</strong> Cambio de estado o metadatos, como permisos (<code>ls -l --time=ctime</code>).</li>
+</ul>
+<h2>6.2.4 Permisos y Seguridad</h2>
+<h3>Operaciones Básicas (r, w, x)</h3>
+<p>El efecto de los permisos cambia si se aplica a un fichero o a un directorio:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Permiso</strong></th>
+<th><strong>En Fichero</strong></th>
+<th><strong>En Directorio</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Lectura (r)</strong></td>
+<td>Abrir y leer contenido.</td>
+<td>Listar contenido (<code>ls</code>).</td>
+</tr>
+<tr>
+<td><strong>Escritura (w)</strong></td>
+<td>Modificar o truncar contenido.</td>
+<td>Crear, borrar o renombrar ficheros dentro.</td>
+</tr>
+<tr>
+<td><strong>Ejecución (x)</strong></td>
+<td>Ejecutar como programa/script.</td>
+<td>Entrar en el directorio (<code>cd</code>).</td>
+</tr>
+</tbody>
+</table>
+<h3>Categorías de Usuarios</h3>
+<ul>
+<li>
+<p><strong>User (u) - El Dueño:</strong></p>
+<ul>
+<li>Es el <strong>propietario</strong> del fichero. Generalmente, es quien lo creó.</li>
+<li><em>Analogía:</em> Es tu diario personal. Tú decides quién lo lee.</li>
+</ul>
+</li>
+<li>
+<p><strong>Group (g) - El Equipo:</strong></p>
+<ul>
+<li>Es un conjunto de usuarios que comparten permisos. Si perteneces al grupo &quot;Contabilidad&quot;, podrás ver los archivos de ese grupo.</li>
+<li><em>Analogía:</em> Una pizarra en la sala de reuniones de tu departamento. Tú y tus compañeros de equipo pueden escribir, pero los de otros departamentos no.</li>
+</ul>
+</li>
+<li>
+<p><strong>Others (o) - El Resto del Mundo:</strong></p>
+<ul>
+<li>Cualquier usuario que <strong>no</strong> seas tú (el dueño) y que <strong>no</strong> pertenezca al grupo del archivo.</li>
+<li><em>Analogía:</em> Gente que pasa por la calle frente a la oficina. Quizás puedan mirar por la ventana (leer), pero no entrar (ejecutar) ni reordenar los muebles (escribir).</li>
+</ul>
+</li>
+</ul>
+<img src="../../../img/asr/pasted-image-20251031172301.png" alt="Pasted image 20251031172301.png" loading="lazy">
+<h3>Modificación de Permisos: <code>chmod</code></h3>
+<p>Solo el propietario o <code>root</code> pueden cambiarlos.</p>
+<p><strong>Modo Simbólico</strong> Formato: <code>quien</code> <code>operacion</code> <code>permiso</code></p>
+<ul>
+<li><em>Quien:</em> <code>u</code>, <code>g</code>, <code>o</code>, <code>a</code> (all).</li>
+<li><em>Op:</em> <code>+</code> (añadir), <code>-</code> (quitar), <code>=</code> (fijar).</li>
+<li><em>Ejemplo:</em> <code>chmod u+x archivo</code> (añade ejecución al dueño).</li>
+</ul>
+<p><strong>Modo Numérico (Octal)</strong> Se suma el valor de los permisos deseados:</p>
+<ul>
+<li>
+<p><code>r</code> = 4</p>
+</li>
+<li>
+<p><code>w</code> = 2</p>
+</li>
+<li>
+<p><code>x</code> = 1</p>
+</li>
+<li>
+<p><code>h</code> = 0</p>
+</li>
+<li>
+<p><em>Ejemplo:</em> <code>chmod 750 archivo</code></p>
+<ul>
+<li>Usuario (7): 4+2+1 (rwx)</li>
+<li>Grupo (5): 4+1 (r-x)</li>
+<li>Otros (0): ---</li>
+</ul>
+</li>
+</ul>
+<h3>Permisos Especiales</h3>
+<p>Afectan a la ejecución y seguridad del sistema. Funcionan mediante <strong>UID</strong> (User ID) y <strong>GID</strong> (Group ID), los números internos que Linux usa para identificar usuarios y grupos.</p>
+<p><strong>Regla visual (Mayúsculas vs Minúsculas):</strong> Estos permisos se &quot;superponen&quot; visualmente sobre el permiso de ejecución (<code>x</code>).</p>
+<ul>
+<li><strong>Minúscula (<code>s</code>, <code>t</code>):</strong> El permiso especial está activo <strong>Y</strong> hay permiso de ejecución (<code>x</code>). (Correcto).</li>
+<li><strong>Mayúscula (<code>S</code>, <code>T</code>):</strong> El permiso especial está activo <strong>PERO NO</strong> hay ejecución. (Suele ser un error o inútil; piensa en <strong>S</strong>top).</li>
+</ul>
+<p><strong>Ejemplo:</strong> Cuando haces un <code>ls -l</code>, tú ves <code>luis</code>, pero el sistema internamente está chequeando el número <code>1001</code>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Permiso</strong></th>
+<th><strong>Letra</strong></th>
+<th><strong>Valor Octal</strong></th>
+<th><strong>Descripción</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SetUID</strong></td>
+<td><code>s</code> / <code>S</code></td>
+<td>4000</td>
+<td>El proceso se ejecuta con los permisos del <strong>propietario</strong> (ej. <code>passwd</code>). Se ve en el bloque de <em>User</em>.</td>
+</tr>
+<tr>
+<td><strong>SetGID</strong></td>
+<td><code>s</code> / <code>S</code></td>
+<td>2000</td>
+<td><strong>Archivos:</strong> Se ejecuta con permisos del grupo.<br><br>  <br><br><strong>Directorios:</strong> Los archivos nuevos <strong>heredan el grupo</strong> de la carpeta. Se ve en el bloque de <em>Group</em>.</td>
+</tr>
+<tr>
+<td><strong>Sticky Bit</strong></td>
+<td><code>t</code> / <code>T</code></td>
+<td>1000</td>
+<td>Usado en directorios (ej. <code>/tmp</code>). Solo el dueño del archivo puede borrarlo, aunque otros tengan permiso de escritura. Se ve en el bloque <em>Others</em>.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Fijar:</strong> <code>chmod u+s file</code>, <code>chmod g+s file</code>, <code>chmod +t dir</code>.</li>
+</ul>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p><strong>Identificadores Reales vs. Efectivos (RUID vs. EUID)</strong>
+Aquí es donde entra la &quot;magia&quot; de los permisos en procesos. Cuando ejecutas un programa, este tiene una &quot;identidad&quot;.</p>
+<ul>
+<li><strong>UID Real (RUID):</strong> Es <strong>quién eres realmente</strong>. Es el ID del usuario que lanzó el proceso (tú logueado en la terminal).</li>
+<li><strong>UID Efectivo (EUID):</strong> Es <strong>con qué permisos estás actuando</strong> en ese momento preciso. Determina qué puedes hacer.</li>
+</ul>
+<p><strong>La Analogía del Actor</strong></p>
+<ul>
+<li><strong>Real:</strong> Eres el actor (Juan).</li>
+<li><strong>Efectivo:</strong> Te pones un uniforme de Policía para una escena. Mientras llevas el uniforme (Efectivo), la gente te trata como policía y tienes &quot;permisos&quot; de policía, aunque en realidad sigues siendo Juan.</li>
+</ul>
+<p><strong>El caso práctico: Cambiar tu contraseña</strong>
+El fichero donde se guardan las contraseñas (<code>/etc/shadow</code>) solo puede ser modificado por <strong>root</strong>. Tú (usuario normal) no tienes permiso. ¿Cómo cambias tu contraseña entonces usando el comando <code>passwd</code>?</p>
+<ol>
+<li>Lanzas el comando <code>passwd</code>.</li>
+<li><strong>RUID:</strong> Eres tú (usuario normal).</li>
+<li><strong>Efectivo (EUID):</strong> El comando tiene un permiso especial (<strong>SetUID</strong>) que hace que, momentáneamente, tu &quot;uniforme&quot; sea el de <strong>root</strong>.</li>
+<li>Como tu ID <em>efectivo</em> es root, el sistema te deja escribir en el fichero protegido.</li>
+<li>Al terminar, el proceso muere y tú sigues siendo un usuario normal.</li>
+</ol>
+</div>
+<h3>Cambio de Propiedad</h3>
+<ul>
+<li><code>chown usuario fichero</code>: Cambia el propietario.</li>
+<li><code>chgrp grupo fichero</code>: Cambia el grupo.</li>
+<li><code>chown usuario:grupo fichero</code>: Cambia ambos a la vez.</li>
+</ul>
+<h2>6.2.5 Localización de ficheros</h2>
+<h3>El comando <code>find</code></h3>
+<p>Buscan en tiempo real recorriendo el árbol de directorios. <strong>Sintaxis:</strong> <code>find [ruta] [expresión]</code></p>
+<p><strong>Criterios de búsqueda comunes:</strong></p>
+<ul>
+<li><code>-name &quot;patron&quot;</code>: Por nombre (usar comillas).</li>
+<li><code>-type [f/d/l...]</code>: Por tipo de fichero.</li>
+<li><code>-user / -group</code>: Por propietario.</li>
+<li><code>-size [+n/-n]</code>: Por tamaño (<code>k</code>, <code>M</code>, <code>G</code>).</li>
+<li><code>-mtime [+n/-n]</code>: Por días de modificación.</li>
+<li><code>-perm</code>: Por permisos.</li>
+</ul>
+<p><strong>Acciones y Operadores:</strong></p>
+<ul>
+<li><code>-exec comando {} \;</code>: Ejecuta un comando sobre cada resultado (<code>{}</code> es el fichero).</li>
+<li>Operadores lógicos: <code>-o</code> (OR), <code>!</code> (NOT), <code>-a</code> (AND implícito).</li>
+</ul>
+<p><strong>Ejemplos:</strong>
+<strong>A. Buscar por nombre (ignorando mayúsculas/minúsculas):</strong> Imagina que perdiste un informe, pero no sabes si lo guardaste como <code>Informe.txt</code>, <code>informe.pdf</code>, etc.</p>
+<pre><code class="language-shell">find /home/luis -iname &quot;informe*&quot;
+</code></pre>
+<blockquote>
+<p><strong>Explicación:</strong> Busca en la carpeta de luis cualquier fichero que empiece por &quot;informe&quot; (la <code>i</code> de <code>iname</code> hace que le de igual mayúsculas o minúsculas).</p>
+</blockquote>
+<p><strong>B. Buscar &quot;ficheros fantasma&quot; (muy pesados):</strong> Quieres limpiar el disco y buscas archivos de más de 100 Megas.</p>
+<pre><code class="language-shell">find / -size +100M
+</code></pre>
+<blockquote>
+<p><strong>Explicación:</strong> Busca en todo el sistema (<code>/</code>) ficheros con tamaño mayor (<code>+</code>) a 100 MB.</p>
+</blockquote>
+<p><strong>C. Buscar por usuario y borrarlos (Cuidado con este):</strong> Un empleado llamado &quot;pepe&quot; se fue y quieres buscar todos sus archivos temporales en <code>/tmp</code> y borrarlos automáticamente.</p>
+<pre><code class="language-bash">find /tmp -user pepe -exec rm {} \;
+</code></pre>
+<blockquote>
+<p><strong>Explicación:</strong></p>
+<ul>
+<li>Busca en <code>/tmp</code>.</li>
+<li>Criterio: pertenecen al usuario <code>pepe</code>.</li>
+<li>Acción: <code>-exec</code> ejecuta el comando <code>rm</code> (borrar).</li>
+<li><code>{}</code>: Linux sustituye estos corchetes por el nombre de cada archivo que encuentra.</li>
+</ul>
+</blockquote>
+<p><strong>D. Buscar ficheros modificados recientemente:</strong> ¿Qué ficheros se modificaron en los últimos 2 días en la carpeta <code>/etc</code>? (Útil para saber si un virus o una actualización tocó algo).</p>
+<pre><code class="language-shell">find /etc -mtime -2
+</code></pre>
+<blockquote>
+<p><strong>Explicación:</strong> Busca en configuración (<code>/etc</code>) por tiempo de modificación (<code>mtime</code>) de menos de 2 días (<code>-2</code>).</p>
+</blockquote>
+<h3>Otros comandos de búsqueda</h3>
+<ul>
+<li><strong><code>which</code></strong>: Busca ejecutables en las rutas del <code>$PATH</code>.</li>
+<li><strong><code>whereis</code></strong>: Busca binarios, fuentes y páginas de manual.</li>
+<li><strong><code>locate</code></strong>: Búsqueda instantánea usando una base de datos indexada (requiere actualización previa).</li>
+</ul>
+<h1>6.3 Gestión de Discos y Particiones</h1>
+<h2>6.1.1 Particiones y Sistemas de Ficheros</h2>
+<p>Para añadir un nuevo disco a un sistema Linux ya instalado, el proceso obligatorio sigue siempre estos tres pasos secuenciales:</p>
+<ol>
+<li><strong>Particionamiento:</strong> Dividir el disco físico en secciones lógicas (<code>fdisk</code>)</li>
+<li><strong>Creación del Sistema de Ficheros (Formateo):</strong> Organizar los datos dentro de la partición (<code>mkfs</code>).</li>
+<li><strong>Montado:</strong> Conectar esa partición al árbol de directorios para poder usarla (<code>mount</code>)</li>
+</ol>
+<h3>Paso 1: Creación de Particiones</h3>
+<p>Antes de guardar datos, debemos definir las fronteras del disco.</p>
+<p><strong>Identificación de Dispositivos</strong>. Los discos se encuentran en el directorio <code>/dev/</code>.</p>
+<ul>
+<li><strong>SATA/SCSI/USB:</strong> <code>/dev/sdX</code> (ej. <code>/dev/sda</code> es el disco 1, <code>/dev/sdb</code> el disco 2).</li>
+<li><strong>NVMe:</strong> <code>/dev/nvmeX</code> (discos SSD modernos).</li>
+</ul>
+<p><strong>Herramientas de Particionamiento</strong>
+El <strong>comando</strong> <code>fdisk</code> es la herramienta clásica. Requiere permisos de administrador (<code>root</code>).</p>
+<ul>
+<li><strong>Sintaxis:</strong> <code>fdisk [opciones] dispositivo</code></li>
+<li><strong>Opción clave:</strong> <code>-l</code> (lista la tabla de particiones actual)
+<ul>
+<li><em>Ejemplo:</em> <code>fdisk -l /dev/sdb</code> (muestra particiones sdb1, sdb2...).</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>Si no se le pone opciones abre un menú interactivo para poder borrar, crear, listar, etc.</p>
+</blockquote>
+<p>El <strong>comando</strong> <code>parted</code>, que es una herramienta de GNU más avanzada. Permite:</p>
+<ul>
+<li>Crear y borrar particiones</li>
+<li><strong>Redimensionar</strong> (cambiar tamaño)</li>
+<li>Copiar y comprobar particiones</li>
+</ul>
+<blockquote>
+<p>[!Lección de Historia for fri]
+Imagina que <strong>Unix</strong> es el <strong>latín</strong> de los sistemas operativos: es la &quot;lengua madre&quot; de la que derivan casi todos los modernos (Linux, macOS, Android, iOS...), excepto Windows.</p>
+<p>Unix nació a finales de los 60 en los <strong>Bell Labs</strong> (propiedad de la compañía telefónica AT&amp;T). Sus creadores principales fueron <strong>Ken Thompson</strong> y <strong>Dennis Ritchie</strong> (quien también creó el lenguaje de programación <strong>C</strong>).</p>
+<p>Hasta ese momento, cada ordenador tenía su propio sistema operativo incompatible. Unix trajo tres ideas:</p>
+<ol>
+<li><strong>Multiusuario y Multitarea:</strong> Varias personas podían usar la máquina a la vez.</li>
+<li><strong>Portabilidad:</strong> Estaba escrito en lenguaje C, así que se podía instalar en diferentes máquinas (no solo en una marca).</li>
+<li><strong>La Filosofía Unix:</strong> &quot;Haz una cosa y hazla bien&quot;.
+<ul>
+<li>En lugar de programas gigantes, usa programas pequeños (<code>ls</code>, <code>cp</code>, <code>rm</code>) que se unen con tuberías (<code>|</code>).</li>
+</ul>
+</li>
+</ol>
+<p>Al principio, Unix se compartía libremente entre universidades. Pero cuando AT&amp;T se dio cuenta de que tenía una mina de oro, <strong>cerró el código</strong>.</p>
+<ul>
+<li><strong>Unix se volvió &quot;Software Propietario&quot;:</strong></li>
+<li>Costaba miles de dólares la licencia.</li>
+<li>No podías ver cómo estaba hecho (código cerrado).</li>
+<li>No podías modificarlo ni compartirlo con tu vecino.</li>
+<li>Empresas como HP, IBM y Sun Microsystems crearon sus propias versiones de Unix (HP-UX, AIX, Solaris), incompatibles entre sí.
+Aquí entra <strong>Richard Stallman</strong>. Él trabajaba en el MIT y estaba acostumbrado a la cultura de compartir código. Cuando vio que Unix y las empresas cerraban el software, se enfadó.</li>
+</ul>
+</blockquote>
+<p>Decidió crear un sistema operativo que fuera:</p>
+<blockquote>
+<ol>
+<li><strong>Técnicamente igual a Unix:</strong> Porque Unix era bueno, estable y todos sabían usarlo (los mismos comandos <code>ls</code>, <code>cd</code>, <code>grep</code>...).</li>
+<li><strong>Filosóficamente opuesto:</strong> Totalmente libre y gratuito.<br>
+<strong>El nombre lo dice todo:</strong> Llamó a su proyecto <strong>GNU</strong> = <strong>G</strong>NU's <strong>N</strong>ot <strong>U</strong>nix.</li>
+</ol>
+<ul>
+<li><em>Traducción:</em> &quot;Voy a hacer un sistema que funciona y se siente exactamente igual que Unix, pero <strong>NO</strong> tiene ni una sola línea de código de AT&amp;T original, por lo que es legalmente libre&quot;.</li>
+</ul>
+<p>Para visualizarlo mejor, imagina una receta de cocina secreta y famosa:</p>
+<ol>
+<li><strong>Unix (La receta original):</strong> Es una hamburguesa deliciosa, pero la receta es secreta, carísima y solo la venden en restaurantes de lujo (Servidores empresariales, Mainframes).</li>
+<li><strong>GNU (El libro de cocina libre):</strong> Stallman dijo: &quot;Voy a escribir una receta que sepa igual que la hamburguesa Unix, pero la escribiré desde cero y regalaré el libro&quot;. GNU creó el pan, la lechuga, el tomate (las herramientas: compiladores, editores, bash).</li>
+<li><strong>Linux (La carne):</strong> A GNU le faltaba la pieza central (el Kernel). Linus Torvalds creó esa pieza en 1991.
+Aunque el Unix original &quot;puro&quot; casi ha desaparecido, su legado está dividido en dos familias:</li>
+</ol>
+<p>|<strong>Familia</strong>|<strong>Estado</strong>|<strong>Ejemplos</strong>|
+|---|---|---|
+|<strong>Unix Certificado (Descendientes directos)</strong>|Código cerrado, comercial, caro.|<strong>macOS</strong> (sí, el de Apple es un Unix certificado), <strong>Solaris</strong>, <strong>AIX</strong> (IBM), <strong>HP-UX</strong>.|
+|<strong>Tipo Unix (Clones Libres)</strong>|Código abierto, imitan a Unix.|<strong>GNU/Linux</strong> (Ubuntu, Debian, RedHat, Android), <strong>FreeBSD</strong>.|</p>
+</blockquote>
+<h3>Paso 2: Creación del sistema de Ficheros</h3>
+<p>Una vez creada la partición (ej. <code>/dev/sdb1</code>), está &quot;cruda&quot;. Hay que darle una estructura (NTFS, EXT4, etc.) para guardar archivos.</p>
+<p>El comando <code>mkfs</code> (Make FileSystem) es un &quot;front-end&quot; (interfaz) que llama a comandos específicos según el tipo deseado.</p>
+<ul>
+<li><strong>Sintaxis:</strong> <code>mkfs.tipo [opciones] dispositivo</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>Comando Específico</strong></th>
+<th><strong>Sistema de Ficheros</strong></th>
+<th><strong>Uso Habitual</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mkfs.ext4</code> (o ext2/3)</td>
+<td><strong>Linux</strong></td>
+<td>El estándar actual en Linux.</td>
+</tr>
+<tr>
+<td><code>mkfs.vfat</code> / <code>mkfs.exfat</code></td>
+<td><strong>Windows</strong></td>
+<td>Compatibilidad con USBs/Windows.</td>
+</tr>
+<tr>
+<td><code>mkfs.ntfs</code></td>
+<td><strong>Windows</strong></td>
+<td>Discos duros de Windows.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Caso Especial: La Partición Swap (Intercambio)</strong>. La memoria Swap actúa como RAM virtual. No usa <code>mkfs</code> normal, tiene sus propios comandos.</p>
+<ul>
+<li><strong>Crear (Formatear):</strong> <code>mkswap /dev/sdb2</code>, prepara la partición y asigna un UUID.</li>
+<li><strong>Activar:</strong> <code>swapon /dev/sdb2</code>, hace que el sistema la empiece a usar</li>
+<li><strong>Verificar:</strong> <code>swapon -s</code>, muestra el tamaño y prioridad de las swap activas</li>
+</ul>
+<h3>Paso Intermedio: Identificación Única (UUID)</h3>
+<p>En linux, los nombres <code>/dev/sda</code> pueden cambiar si cambias los cables de sitio. Para evitar errores usamos el <strong>UUID</strong> (Identificador Único Universal), que es como la &quot;matrícula&quot; fija de la partición.</p>
+<ul>
+<li><strong>Comando:</strong> <code>blkid</code> (Block ID)</li>
+<li><strong>Uso:</strong> muestra el UUID y el tipo de sistema de archivos
+<ul>
+<li><em>Ejemplo:</em> <code>dev/sda1: UUID=&quot;b0f7f038...&quot; TYPE=&quot;ext4&quot;</code></li>
+</ul>
+</li>
+</ul>
+<h3>Paso 3: Montado (Mounting)</h3>
+<p>Para acceder a los datos, la partición debe &quot;colgarse&quot; (montarse) de un directorio existente.</p>
+<p><strong>Montaje Manual (<code>mount</code>/<code>unmount</code>):</strong></p>
+<ul>
+<li><strong>Montar:</strong> <code>mount [opciones] dispositivo directorio_destino</code>
+<ul>
+<li><em>Ejemplo:</em> <code>mout /dev/sdb1 /home2</code></li>
+</ul>
+</li>
+<li><strong>Desmontar:</strong> <code>unmount directorio</code>
+<ul>
+<li><em>Ejemplo:</em> <code>unmount /home2</code></li>
+</ul>
+</li>
+<li><strong>Ver montados:</strong> El fichero <code>/etc/mtab</code> contiene la lista en tiempo real de lo que está montado actualmente</li>
+</ul>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Si montas un dispositivo sobre un directorio que ya existía, si el directorio tenía archivos, no los vas a ver porque este nuevo dispositivo montado los va a &quot;eclipsar&quot;, pero no se van a borrar, una vez lo desmontes se volverán a ver.</p>
+</div>
+<p><strong>Montaje Persistente (<code>etc/fstab</code>):</strong>
+Para que los discos se monten solos al encender el PC, se configuran en este fichero. <strong>Estructura de las columnas en <code>fstab</code>:</strong></p>
+<ol>
+<li><strong>File System:</strong> Dispositivo (<code>/dev/sdb1</code>) o mejor su <strong>UUID</strong> (<code>UUID=...</code>).</li>
+<li><strong>Mount Point:</strong> Carpeta donde aparecerá (<code>/home</code>, <code>/</code>, <code>none</code> para swap).</li>
+<li><strong>Tipo:</strong> <code>ext4</code>, <code>swap</code>, <code>auto</code>.</li>
+<li><strong>Opciones:</strong> Reglas de montaje (separadas por comas).
+<ul>
+<li><code>rw</code> / <code>ro</code>: Lectura-Escritura o Solo-Lectura.</li>
+<li><code>auto</code> / <code>noauto</code>: ¿Se monta al arrancar?</li>
+<li><code>user</code> / <code>nouser</code>: ¿Un usuario normal puede montarlo?</li>
+<li><code>defaults</code>: Equivale a <code>rw, suid, dev, exec, auto, nouser, async</code>.</li>
+</ul>
+</li>
+<li><strong>Dump:</strong> (0 o 1) Para copias de seguridad antiguas (usualmente 0).</li>
+<li><strong>Pass:</strong> (0, 1, 2) Orden de chequeo de errores al inicio (0 = no chequear).</li>
+</ol>
+<p>Si un directorio aparece listado en el fstab puede montarse sin especificar el dispositivo.</p>
+<h3>Mantenimiento y Monitorización</h3>
+<p>Una vez el sistema está funcionando, el administrador debe vigilar el espacio y la salud de los datos.</p>
+<p><strong>Espacio en Disco (<code>df</code> vs <code>du</code>):</strong> Es vital no confundirlos:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Comando</strong></th>
+<th><strong>Significado</strong></th>
+<th><strong>Qué mide</strong></th>
+<th><strong>Opción Clave</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>df</code></strong></td>
+<td><strong>D</strong>isk <strong>F</strong>ree</td>
+<td>Muestra espacio libre/usado de <strong>particiones montadas</strong>.</td>
+<td><code>-h</code> (human readable: GB, MB).</td>
+</tr>
+<tr>
+<td><strong><code>du</code></strong></td>
+<td><strong>D</strong>isk <strong>U</strong>sage</td>
+<td>Muestra espacio ocupado por <strong>archivos y carpetas</strong>.</td>
+<td><code>-h</code> (human), <code>-s</code> (summary/resumen total).</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><em>Ejemplo <code>df -h</code>:</em> Veo que mi disco duro está al 90% de capacidad.</li>
+<li><em>Ejemplo <code>du -hs /home</code>:</em> Veo cuánto pesa exactamente la carpeta de usuarios.</li>
+</ul>
+<p><strong>Salud del Sistema de Ficheros (<code>fsck</code>):</strong> Si el sistema se apaga mal, los ficheros pueden corromperse.</p>
+<ul>
+<li>
+<p><strong>Comando:</strong> <code>fsck.tipo [opciones] dispositivo</code></p>
+<ul>
+<li><em>Ejemplos:</em> <code>fsck.ext4</code>, <code>fsck.vfat</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Opción clave:</strong> <code>-y</code> (Responde &quot;Yes&quot; a todas las reparaciones automáticamente).</p>
+</li>
+<li>
+<p><strong>Importante:</strong> Nunca ejecutar <code>fsck</code> sobre una partición montada (podrías romper datos).</p>
+</li>
+</ul>
+<h2>6.3.2 Sistemas de ficheros LVM</h2>
+<p>LVM es una capa de abstracción entre el disco físico y el sistema de ficheros. Rompe la rigidez de las particiones tradicionales.</p>
+<p><strong>Ventajas principales:</strong></p>
+<ul>
+<li><strong>Flexibilidad:</strong> Permite distribuir el espacio disponible sin depender de la ubicación física en el disco.</li>
+<li><strong>Redimensionado en caliente:</strong> Puedes aumentar o reducir volúmenes sin apagar la máquina (especialmente útil en servidores).</li>
+<li><strong>Agregación de espacio:</strong> Si añades un disco nuevo, puedes sumarlo a tu grupo y &quot;estirar&quot; tus particiones actuales para que ocupen ese nuevo espacio.</li>
+</ul>
+<h3>Arquitectura y Jerarquía LVM</h3>
+<p>LVM se organiza en capas, desde lo físico (abajo) hasta lo lógico (arriba).</p>
+<p><strong>Las Capas:</strong></p>
+<ol>
+<li><strong>Discos/Particiones Físicas:</strong> El hardware real (ej. <code>/dev/sda1</code>, <code>/dev/sdb</code>).</li>
+<li><strong>PV (Physical Volume - Volumen Físico):</strong> Es la etiqueta que se le pone a una partición para decirle a Linux &quot;esto será usado por LVM&quot;.</li>
+<li><strong>VG (Volume Group - Grupo de Volúmenes):</strong> Es una &quot;bolsa de almacenamiento&quot;. Agrupa varios PVs en un solo gran almacén de espacio.</li>
+<li><strong>LV (Logical Volume - Volumen Lógico):</strong> Son las particiones virtuales que creamos sacando espacio de la &quot;bolsa&quot; (VG). Es el equivalente a <code>/dev/sda1</code> en el mundo clásico.</li>
+<li><strong>Sistema de Ficheros:</strong> Formateo final (<code>mkfs</code>) sobre el LV.</li>
+</ol>
+<img src="../../../img/asr/pasted-image-20251215122456.png" alt="Pasted image 20251215122456.png" loading="lazy">
+<p><strong>Unidades de Medida:</strong> LVM no trabaja bit a bit, sino en bloques:</p>
+<ul>
+<li><strong>PE (Physical Extent):</strong> Unidad básica en la que se divide el Volumen Físico.</li>
+<li><strong>LE (Logical Extent):</strong> Unidad básica del Volumen Lógico.</li>
+<li><strong>Relación:</strong> Generalmente 1 LE = 1 PE.</li>
+<li><strong>Mapeado:</strong> La forma en que los LE se guardan en los PE puede ser:
+<ul>
+<li><em>Lineal:</em> Uno detrás de otro.</li>
+<li><em>Stripping:</em> Datos distribuidos (mayor rendimiento).</li>
+<li><em>Mirroring:</em> Espejo (redundancia).</li>
+</ul>
+</li>
+</ul>
+<img src="../../../img/asr/pasted-image-20251215122534.png" alt="Pasted image 20251215122534.png" loading="lazy">
+<h3>Comandos de Gestión LVM</h3>
+<p>Los comandos siguen una lógica de nombres muy clara según la capa que gestionen: <code>pv...</code>, <code>vg...</code>, <code>lv...</code>.</p>
+<p><strong>Comandos de Información (Montorización):</strong> Para ver qué tenemos configurado.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Capa</strong></th>
+<th><strong>Comando Detallado</strong></th>
+<th><strong>Comando Resumido</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Physical Volume</strong></td>
+<td><code>pvdisplay</code></td>
+<td><code>pvs</code></td>
+</tr>
+<tr>
+<td><strong>Volume Group</strong></td>
+<td><code>vgdisplay</code></td>
+<td><code>vgs</code></td>
+</tr>
+<tr>
+<td><strong>Logical Volume</strong></td>
+<td><code>lvdisplay</code></td>
+<td><code>lvs</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Comandos de Operación (Crear y Modificar):</strong></p>
+<ul>
+<li>
+<p><strong>Gestión de Volúmenes Físicos (PV):</strong> Antes de nada, marcamos la partición para usarla</p>
+<ul>
+<li><strong>Crear:</strong> <code>pvcreate /dev/sdc1</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Gestión de Grupos de Volúmenes (VG):</strong> Agrupamos los discos</p>
+<ul>
+<li><strong>Crear:</strong> <code>vgcreate [NombreVG] [Disco1] [Disco2]</code></li>
+<li><strong>Borrar:</strong> <code>vgremove [NombreVG]</code></li>
+<li><strong>Ampliar (Añadir disco):</strong> <code>vgextend [NombreVG] [NuevoDisco]</code></li>
+<li><strong>Reducir (Quitar disco):</strong> <code>vgreduce [NombreVG] [DiscoAQuitar]</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Gestión de Volúmenes Lógicos (LV):</strong> Creamos las particiones útiles.</p>
+<ul>
+<li><strong>Crear:</strong> <code>lvcreate -L[Tamaño] -n [NombreLV] [NombreVG]</code>
+<ul>
+<li><em>Ej:</em> <code>lvcreate -L4.20G -n testlv NuevoGrupo</code></li>
+</ul>
+</li>
+<li><strong>Borrar:</strong> <code>lvremove /dev/GrupoVolmen/testlv</code> (¡Desmontar antes!)</li>
+<li><strong>Ampliar (Extend):</strong>
+<ul>
+<li>Por tamaño fijo: <code>lvextend -L12G ...</code> (Fija el total a 12GB).</li>
+<li>Sumando espacio: <code>lvextend -L+1G ...</code> (Añade 1GB al actual).</li>
+<li>Por Extents: <code>lvextend -l+200 ...</code> (Añade 200 bloques lógicos).</li>
+</ul>
+</li>
+<li><strong>Reducir:</strong> <code>lvreduce</code> (Misma sintaxis que extend, pero reduce).</li>
+</ul>
+</li>
+</ul>
+<h3>Uso del Volumen Lógico</h3>
+<p>Una vez creado el LV, el sistema operativo necesita saber cómo acceder a él</p>
+<p><strong>Nomenclatura de Dispositivos:</strong>
+Hay dos formas de llamar a un volumen lógico (ambas llevan al mismo sitio):</p>
+<ul>
+<li><strong>Directa:</strong> <code>/dev/NombreVG/NombreLV</code> (ej. <code>/dev/GrupoVolumen/homelv</code>).</li>
+<li><strong>Device Mapper:</strong> <code>/dev/mapper/NombreVG-NombreLV</code>.
+<ul>
+<li><em>Nota:</em> El <strong>Device Mapper</strong> es el componente del kernel que hace la magia de mapear bloques físicos a virtuales. También se usa para cifrado (<code>dm-crypt</code>).</li>
+</ul>
+</li>
+</ul>
+<p><strong>Dar Formato y Montar:</strong> Igual que una partición normal</p>
+<ul>
+<li><strong>Formatear:</strong> <code>mkfs.ext4 /dev/GrupoVolumen/homelv</code></li>
+<li><strong>Montar:</strong> <code>mount /dev/GrupoVolumen/homelv /home</code></li>
+<li><strong>Persistencia:</strong> Añadir al <code>/etc/fstab</code>.</li>
+</ul>
+<h3>Redimensionado del Sistema de Ficheros</h3>
+<p>Si agrandas un LV (<code>lvextend</code>), el sistema de ficheros que hay dentro (ext4, xfs) no se entera automáticamente. Tienes que &quot;estirarlo&quot; también.</p>
+<p><strong>Comando <code>fsadm</code>:</strong> Es una herramienta genérica que chequea y redimensiona.</p>
+<ul>
+<li><em>Sintaxis:</em> <code>fsadm resize [dispositivo] [nuevo_tamaño]</code></li>
+<li><em>Ej:</em> <code>fsadm resize /dev/mapper/Grupo-vol 2048M</code> (Si no pones tamaño, ocupa todo el disponible).</li>
+</ul>
+<p><strong>Regla de Oro del Redimensionado:</strong></p>
+<ol>
+<li>Para <strong>Agrandar</strong>: Primero el LVM (<code>lvextend</code>), luego el sistema de ficheros (<code>fsadm</code> o <code>resize2fs</code>).</li>
+<li>Para <strong>Reducir</strong>: Primero el sistema de ficheros (peligroso), luego el LVM (<code>lvreduce</code>).</li>
+</ol>
+<h1>6.4 Gestión de Usuarios y Grupos</h1>
+<h2>6.4.1 Conceptos Básicos de la Cuenta Unix</h2>
+<p>En Linux, nadie entra sin una cuenta. Una cuenta no es más que una colección de atributos lógicos que definen <strong>quién eres</strong> y <strong>qué puedes hacer</strong>.</p>
+<h3>Componentes de una cuenta</h3>
+<ul>
+<li><strong>Username (Login):</strong> Nombre único (ej: <code>pepe</code>).</li>
+<li><strong>UID (User ID):</strong> Identificador numérico único. El sistema usa esto, no el nombre.</li>
+<li><strong>GID (Group ID):</strong> Identificador del grupo principal.</li>
+<li><strong>Password:</strong> La credencial de acceso.</li>
+<li><strong>Home Directory:</strong> Tu &quot;casa&quot; en el sistema (ej: <code>/home/pepe</code>).</li>
+<li><strong>Shell:</strong> El intérprete de comandos por defecto (ej: <code>/bin/bash</code>).</li>
+</ul>
+<h3>Tipos de Usuarios</h3>
+<table>
+<thead>
+<tr>
+<th><strong>Tipo</strong></th>
+<th><strong>UID Típico</strong></th>
+<th><strong>Descripción</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Root (Superusuario)</strong></td>
+<td><code>0</code></td>
+<td>Dios del sistema. Acceso total.</td>
+</tr>
+<tr>
+<td><strong>Cuentas de Servicio</strong></td>
+<td><code>1</code> - <code>999</code></td>
+<td>Usuarios &quot;fantasma&quot; para demonios (ej: <code>apache</code>, <code>lp</code>, <code>mail</code>). Aumentan la seguridad aislando procesos.</td>
+</tr>
+<tr>
+<td><strong>Usuarios Normales</strong></td>
+<td><code>1000</code> - <code>65535</code></td>
+<td>Personas reales. Tienen restricciones.</td>
+</tr>
+</tbody>
+</table>
+<h2>6.4.2 Almacenamiento de Información (Los Ficheros)</h2>
+<p>Toda la gestión de usuarios reside en archivos de texto plano en <code>/etc/</code></p>
+<h3><code>/etc/passwd</code> (Información Pública)</h3>
+<p>Define a los usuarios. Todo el mundo puede leerlo. <strong>Formato:</strong> <code>usuario:x:UID:GID:GECOS:home:shell</code></p>
+<ul>
+<li><code>pepe</code>: Nombre de usuario.</li>
+<li><code>x</code>: Indica que la contraseña está oculta en <code>/etc/shadow</code>.</li>
+<li><code>1002</code>: UID.</li>
+<li><code>1002</code>: GID principal.</li>
+<li><code>GECOS</code>: Información extra (Nombre completo, teléfono...).</li>
+<li><code>/home/pepe</code>: Ruta del directorio personal.</li>
+<li><code>/bin/bash</code>: Shell de inicio.</li>
+</ul>
+<h3><code>/etc/shadow</code> (Seguridad / Contraseñas)</h3>
+<p>Solo <code>root</code> puede leerlo. Contiene las contraseñas cifradas y datos de expiración. <strong>Formato:</strong> <code>usuario:password_cifrado:días_cambio:...</code></p>
+<ul>
+<li>Si en el password hay <code>!</code> o <code>*</code>, la cuenta está bloqueada (no puede hacer login).</li>
+<li>Guarda fechas de caducidad, días de aviso, etc.</li>
+</ul>
+<h3>Grupos (<code>/etc/group</code> y <code>/etc/gshadow</code>)</h3>
+<ul>
+<li><code>/etc/group</code>: Define qué usuarios pertenecen a qué grupos.
+<ul>
+<li>Formato: <code>nombre_grupo:x:GID:usuario1,usuario2</code></li>
+</ul>
+</li>
+<li><code>/etc/gshadow</code>: Contraseñas de grupo (raramente usadas) y administradores de grupo.</li>
+</ul>
+<h2>6.4.3 Gestión de Cuentas: Creación y Modificación</h2>
+<h3>Método Manual (&quot;The Hard Way&quot;)</h3>
+<p>Útil para entender qué ocurre &quot;bajo el capó&quot;. Pasos:</p>
+<ol>
+<li>Editar <code>/etc/passwd</code> (usar <code>vipw</code> para bloqueo seguro).</li>
+<li>Editar <code>/etc/shadow</code> (usar <code>vipw -s</code>).</li>
+<li>Editar <code>/etc/group</code>.</li>
+<li>Crear directorio home (<code>mkdir</code>).</li>
+<li>Copiar ficheros base desde <code>/etc/skel</code> (plantilla de inicio).</li>
+<li>Ajustar permisos y dueños (<code>chown</code>, <code>chmod</code>).</li>
+<li>Asignar contraseña (<code>passwd</code>)</li>
+</ol>
+<h3>Comandos de Bajo Nivel (Estándar Linux)</h3>
+<p>Son universales pero requieren muchas opciones manuales.</p>
+<ul>
+<li><strong><code>useradd</code></strong>: Crea el usuario (a veces inhabilitado por defecto si no se pasan flags).</li>
+<li><strong><code>usermod</code></strong>: Modifica (cambiar shell, grupos, home).</li>
+<li><strong><code>userdel</code></strong>: Borra el usuario.</li>
+<li><strong><code>groupadd</code> / <code>groupmod</code> / <code>groupdel</code></strong>: Gestión de grupos.</li>
+</ul>
+<h3>Comandos de Alto Nivel (Debian/Ubuntu)</h3>
+<p>Son scripts más amigables que hacen preguntas interactivas.</p>
+<ul>
+<li><strong><code>adduser</code></strong>: Pide contraseña, datos GECOS y crea el home automáticamente.</li>
+<li><strong><code>deluser</code></strong>: Borra usuario y puede preguntar si borrar el home.</li>
+</ul>
+<h3>Gestión Masiva</h3>
+<ul>
+<li><strong><code>newusers</code></strong>: Crea múltiples usuarios desde un fichero de texto.</li>
+<li><strong><code>chpasswd</code></strong>: Actualiza contraseñas en lote (formato <code>user:pass</code>).</li>
+</ul>
+<h2>6.4.4 Gestión de Contraseñas y Seguridad</h2>
+<h3>Comandos Clave</h3>
+<ul>
+<li>
+<p><strong><code>passwd [usuario]</code></strong>: Cambia la contraseña.</p>
+<ul>
+<li><code>-e</code>: Fuerza al usuario a cambiarla en el próximo inicio de sesión.</li>
+</ul>
+</li>
+<li>
+<p><code>gpasswd</code>: Para cambiar la contraseña de un grupo</p>
+</li>
+<li>
+<p><strong><code>chage</code></strong>: Gestiona la caducidad (expiration) de la contraseña.</p>
+<ul>
+<li><em>Ejemplo:</em> Obligar a cambiar la clave cada 90 días.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>mkpasswd</code></strong>: Genera un hash cifrado de una cadena (útil para scripts).</p>
+</li>
+</ul>
+<h3>Cambiar de Identidad (<code>su</code> vs <code>sudo</code>)</h3>
+<ul>
+<li>
+<p><strong><code>su [usuario]</code></strong> (Switch User):</p>
+<ul>
+<li>Cambia tu sesión a la de otro usuario.</li>
+<li>Si no pones usuario, asume <code>root</code>.</li>
+<li>Requiere saber la <strong>contraseña del destino</strong> (la de root).</li>
+</ul>
+</li>
+<li>
+<p><strong><code>sudo [comando]</code></strong> (SuperUser DO):</p>
+<ul>
+<li>Ejecuta un comando con privilegios de otro (generalmente root).</li>
+<li>Requiere la <strong>contraseña del propio usuario</strong> (no la de root).</li>
+<li>Se configura en <code>/etc/sudoers</code> (editar siempre con <code>visudo</code> para evitar romper el sistema).</li>
+</ul>
+</li>
+</ul>
+<h2>6.4.5 Módulos PAM (Pluggable Authentication Modules)</h2>
+<p>Es el &quot;portero&quot; universal de Linux. Es una librería que usan los programas (<code>login</code>, <code>ssh</code>, <code>su</code>) para saber si dejarte pasar o no.</p>
+<p><strong>Los 4 tipos de control:</strong></p>
+<ol>
+<li><strong>Auth:</strong> ¿Eres quien dices ser? (Pide contraseña, huella, etc.).</li>
+<li><strong>Account:</strong> ¿Tienes permiso <em>ahora</em>? (Horario permitido, cuenta no caducada).</li>
+<li><strong>Password:</strong> Gestión del cambio de clave (complejidad mínima, no repetir la anterior).</li>
+<li><strong>Session:</strong> Qué hacer antes/después de entrar (montar directorios, logs).</li>
+</ol>
+<h2>6.4.6 Cuotas de Disco</h2>
+<p>Sistema para evitar que un usuario llene el disco duro.</p>
+<h3>Tipos de Límites</h3>
+<ul>
+<li><strong>Límite Suave (Soft):</strong> Puedes pasarte temporalmente.</li>
+<li><strong>Límite Duro (Hard):</strong> No puedes escribir ni un byte más.</li>
+<li><strong>Período de Gracia:</strong> Tiempo que tienes para volver por debajo del límite suave antes de que se convierta en duro.</li>
+</ul>
+<h3>Implementación</h3>
+<ol>
+<li>Añadir opción <code>usrquota</code> o <code>grpquota</code> en <code>/etc/fstab</code>.</li>
+<li>Remontar partición.</li>
+<li><strong><code>quotacheck</code></strong>: Crear los archivos de base de datos de cuotas.</li>
+<li><strong><code>quotaon</code></strong>: Activar el sistema.</li>
+<li><strong><code>edquota [usuario]</code></strong>: Editar los límites (abre un editor de texto).</li>
+<li><strong><code>repquota</code></strong>: Ver informe de uso.</li>
+</ol>
+<h1>6.5 Gestión de redes de área local</h1>
+<h2>6.5.1 Fundamentos y Nomenclatura de Interfaces</h2>
+<p>Linux abstrae el hardware de red en &quot;interfaces&quot;. No importa si es cobre, fibra o aire, el sistema lo ve como un dispositivo lógico.</p>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>En informática, una <strong>interfaz</strong> es el punto de conexión entre dos cosas distintas. En redes, es el <strong>intermediario</strong> entre tu sistema operativo (Linux) y el mundo exterior (el cable o el Wi-Fi).</p>
+<p><strong>La analogía de la casa:</strong> Imagina que tu ordenador es una <strong>casa</strong>.</p>
+<ul>
+<li>
+<p>Los datos son <strong>personas</strong> dentro de la casa que quieren salir.</p>
+</li>
+<li>
+<p>La red (Internet/LAN) es la <strong>calle</strong>.</p>
+</li>
+</ul>
+<p>Para salir a la calle, necesitas <strong>puertas</strong>. Las interfaces son esas puertas.</p>
+<ul>
+<li>
+<p><strong><code>eth0</code> (Ethernet):</strong> Es la puerta principal.</p>
+</li>
+<li>
+<p><strong><code>wlan0</code> (Wi-Fi):</strong> Es la puerta trasera.</p>
+</li>
+<li>
+<p><strong><code>lo</code> (Loopback):</strong> Es como un espejo dentro de la casa. Si le hablas, te respondes a ti mismo (se usa para pruebas internas).</p>
+</li>
+</ul>
+<p>Linux no &quot;habla&quot; directamente con el cable de cobre; le da los datos a la interfaz <code>eth0</code>, y ella se encarga de traducirlos a electricidad.</p>
+</div>
+<h3>Nombres de las Interfaces (NICs)</h3>
+<p>La forma de llamar a las tarjetas de red ha evolucionado:</p>
+<ul>
+<li>
+<p><strong>Esquema Clásico (Antiguo):</strong> Nombres simples secuenciales.</p>
+<ul>
+<li><code>eth0</code>, <code>eth1</code>: Ethernet (cable).</li>
+<li><code>wlan0</code>: Wi-Fi.</li>
+<li><code>ppp0</code>: Conexiones punto a punto (módem/VPN).</li>
+</ul>
+</li>
+<li>
+<p><strong>Esquema Predecible (Nuevo):</strong> Nombres basados en la ubicación física para evitar que cambien al reiniciar.</p>
+<ul>
+<li>Ejemplo: <code>enp3s0</code> (Ethernet, Bus PCI 3, Slot 0).</li>
+</ul>
+</li>
+<li>
+<p><strong>Loopback (<code>lo</code>):</strong></p>
+<ul>
+<li>Es una interfaz virtual de &quot;circuito cerrado&quot;.</li>
+<li>IP estándar: <code>127.0.0.1</code>.</li>
+<li>Uso: Pruebas internas y comunicación entre procesos de la misma máquina.</li>
+</ul>
+</li>
+</ul>
+<h2>6.5.2 Archivos de Configuración Clave</h2>
+<p>En Linux (específicamente basado en Debian/Ubuntu según tu texto), la red se configura mediante ficheros de texto que lee el servicio <code>networking</code> al arrancar.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Archivo</strong></th>
+<th><strong>Función</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>/etc/network/interfaces</code></strong></td>
+<td>Configuración principal de las tarjetas (IP, máscara, gateway).</td>
+</tr>
+<tr>
+<td><strong><code>/etc/resolv.conf</code></strong></td>
+<td>Configuración de los servidores DNS (quién resuelve los nombres).</td>
+</tr>
+<tr>
+<td><strong><code>/etc/hosts</code></strong></td>
+<td>&quot;DNS local&quot;. Asocia Nombres &lt;-&gt; IPs manualmente. Tiene prioridad sobre el DNS externo.</td>
+</tr>
+<tr>
+<td><strong><code>/etc/hostname</code></strong></td>
+<td>Contiene el nombre de la máquina.</td>
+</tr>
+</tbody>
+</table>
+<h3>Configuración Estática vs. Dinámica</h3>
+<p>Se define en <code>/etc/network/interfaces</code>.</p>
+<p><strong>A. Estática (Manual)</strong>
+Tú defines todos los valores. Ideal para servidores.</p>
+<pre><code class="language-shell">auto eth0
+iface eth0 inet static
+    address 193.144.84.77    # Tu IP
+    netmask 255.255.255.0    # Máscara de subred
+    gateway 193.144.84.1     # Puerta de enlace (salida a internet)
+</code></pre>
+<p><strong>B. Dinámica (DHCP)</strong>
+Un servidor externo te asigna la configuración.</p>
+<pre><code class="language-shell">auto eth0
+iface eth0 inet dhcp
+</code></pre>
+<blockquote>
+<p><strong>Nota:</strong> Se puede forzar la petición DHCP manualmente con el comando <code>dhclient eth0</code>.</p>
+</blockquote>
+<h3>Configuración de DNS (<code>/etc/resolv.conf</code>)</h3>
+<p>Define a quién preguntar para traducir <code>google.com</code> a una IP.</p>
+<pre><code class="language-shell">search usc.es           # Si buscas &quot;servidor&quot;, probará &quot;servidor.usc.es&quot;
+nameserver 8.8.8.8      # Servidor DNS 1
+nameserver 8.8.4.4      # Servidor DNS 2 (Backup)
+</code></pre>
+<p><em>Atención:</em> Si usas DHCP, este archivo suele sobrescribirse automáticamente con lo que diga el servidor DHCP.</p>
+<h2>6.5.3 Comandos de Gestión y Configuración</h2>
+<h3><code>ifconfig</code> (Interface Configuration)</h3>
+<p>Muestra el estado o configura la IP temporalmente (se pierde al reiniciar).</p>
+<ul>
+<li>
+<p><strong>Lectura (<code>ifconfig eth0</code>):</strong></p>
+<ul>
+<li><strong>UP / RUNNING:</strong> La tarjeta está encendida y tiene cable conectado.</li>
+<li><strong>MTU:</strong> Tamaño máximo del paquete (v.g. 1500 bytes).</li>
+<li><strong>RX / TX:</strong> Estadísticas de paquetes recibidos/transmitidos y errores.</li>
+</ul>
+</li>
+<li>
+<p><strong>Escritura:</strong></p>
+<ul>
+<li><code>ifconfig eth0 192.168.1.5 netmask 255.255.255.0 up</code></li>
+</ul>
+</li>
+<li>
+<p><strong>Wireless:</strong> Para Wi-Fi se usa su primo hermano <code>iwconfig</code> (ej: <code>iwconfig eth1 essid &quot;MiWifi&quot;</code>).</p>
+</li>
+</ul>
+<h3><code>route</code> (Tabla de Enrutamiento)</h3>
+<p>Decide por dónde enviar los paquetes.</p>
+<pre><code class="language-bash">$ route -n
+Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
+192.168.1.0     0.0.0.0         255.255.255.0   U     0      0        0 eth0
+0.0.0.0         192.168.1.1     0.0.0.0         UG    0      0        0 eth0
+</code></pre>
+<p><strong>1. Destination (¿A dónde quieres ir?)</strong> Es la dirección final del paquete. Puede ser una dirección concreta o una red entera.</p>
+<ul>
+<li><code>192.168.1.0</code>: Significa &quot;Cualquier ordenador de mi red local (mi casa)&quot;.</li>
+<li><code>0.0.0.0</code>: Es un comodín. Significa &quot;Cualquier otro sitio que no esté listado arriba&quot; (es decir, <strong>Internet</strong>).</li>
+</ul>
+<p><strong>2. Gateway (¿Quién me ayuda?)</strong> Esta es la columna más confusa, pero la más importante.</p>
+<ul>
+<li><strong>Si pone <code>0.0.0.0</code> (o <code>*</code>):</strong> Significa <strong>&quot;Nadie&quot;</strong>. El destino está cerca, conectado directamente a mí por un cable. Puedo gritar y me oyen. No necesito ayuda.</li>
+<li><strong>Si pone una IP (ej. <code>192.168.1.1</code>):</strong> Significa que el destino está lejos (en Internet). Yo no sé llegar. Tengo que enviarle el paquete a ese &quot;Gateway&quot; (tu Router) para que él se encargue de llevarlo a Google, Facebook, etc.</li>
+</ul>
+<p><strong>3. Iface (¿Por qué puerta salgo?)</strong> Por qué tarjeta física va a salir el dato (<code>eth0</code>, <code>wlan0</code>...).</p>
+<p><strong>4. Flags:</strong>
+- <code>U</code> (Up): Ruta activa.
+- <code>G</code> (Gateway): Usa un router intermediario.
+- <code>H</code> (Host): Ruta a una sola máquina, no a una red.</p>
+<p>La estructura general para modificar rutas es:
+<code>route [add|del] [default] [-net|-host] destino [netmask máscara] [gw pasarela] [dev interfaz]</code></p>
+<h3><code>netstat</code> (Estadísticas de Red)</h3>
+<p>Muestra qué puertos están abiertos y quién está conectado.</p>
+<ul>
+<li>
+<p><strong>Estados:</strong></p>
+<ul>
+<li><code>ESTABLISHED</code>: Conexión activa transmitiendo datos.</li>
+<li><code>LISTEN</code>: Servidor esperando conexiones (ej. un servidor Web).</li>
+</ul>
+</li>
+<li>
+<p><strong>Uso:</strong> <code>netstat -s</code> (estadísticas por protocolo: TCP, UDP, ICMP).</p>
+</li>
+</ul>
+<h2>6.5.4 Diagnóstico y Resolución de Problemas</h2>
+<table>
+<thead>
+<tr>
+<th><strong>Comando</strong></th>
+<th><strong>Función</strong></th>
+<th><strong>Protocolo</strong></th>
+<th><strong>Notas</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>ping [ip]</code></strong></td>
+<td>Comprueba si hay conexión. Mide el tiempo (RTT).</td>
+<td>ICMP</td>
+<td>Los firewalls pueden bloquearlo.</td>
+</tr>
+<tr>
+<td><strong><code>traceroute [ip]</code></strong></td>
+<td>Muestra el camino (saltos) hasta el destino.</td>
+<td>UDP + TTL</td>
+<td>Si sale <code>*</code>, ese router no responde o tiene firewall.</td>
+</tr>
+<tr>
+<td><strong><code>host</code> / <code>dig</code></strong></td>
+<td>Pregunta al DNS la IP de un nombre.</td>
+<td>DNS</td>
+<td>Útil para saber si falla la red o falla el nombre.</td>
+</tr>
+<tr>
+<td><strong><code>arp</code></strong></td>
+<td>Muestra la tabla IP &lt;-&gt; MAC.</td>
+<td>ARP</td>
+<td>Útil para ver conflictos de IP o problemas de hardware local.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>Un firewall es un sistema (puede ser un programa o un aparato físico) que <strong>monitoriza y controla</strong> el tráfico de red entrante y saliente. Se coloca entre tu red interna (de confianza) y una red externa (Internet, no confiable).</p>
+<p><strong>La Analogía del Portero de Discoteca:</strong> Imagina que tu ordenador es una discoteca exclusiva.</p>
+<ul>
+<li>
+<p><strong>La Interfaz:</strong> Es la puerta de entrada.</p>
+</li>
+<li>
+<p><strong>El Firewall:</strong> Es el portero.</p>
+</li>
+<li>
+<p><strong>Las Reglas:</strong> El portero tiene una lista.</p>
+<ul>
+<li><em>&quot;Si viene Luis, déjalo pasar.&quot;</em> (Allow)
+<ul>
+<li><em>&quot;Si viene alguien con zapatillas, no lo dejes pasar.&quot;</em> (Deny/Drop)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<h2>6.5.5 Conceptos Avanzados</h2>
+<h3>IP Forwarding (Convertir PC en Router)</h3>
+<p>Por defecto, Linux descarta paquetes que no son para él.</p>
+<p>Si activamos el IP Forwarding (ip_forward), Linux cogerá paquetes que entran por una tarjeta y los reenviará por otra. Esto convierte al ordenador en un router.</p>
+<h3><code>ip</code> (El comando moderno)</h3>
+<p><code>ip</code> unifica a <code>ifconfig</code>, <code>route</code> y <code>netstat</code>. Es más potente y complejo, y es el estándar actual aunque en estos apuntes nos hemos centrado en los clásicos.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="5-programacion-de-scripts.html"><span class="nav-etiqueta">← anterior</span>5. Programación de Scripts</a>
+  
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

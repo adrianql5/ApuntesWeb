@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="7. Patrones de Diseño — apuntes de DESOFT (segundo curso de Ingeniería Informática).">
+<title>7. Patrones de Diseño · DESOFT · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">desoft</a><span class="miga-sep">/</span><span aria-current="page">7-patrones-de-diseno</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DESOFT · curso 2</p>
+    <h1>7. Patrones de Diseño · DESOFT</h1>
+  </header>
+  <div class="prosa">
+<h1>7.1 Patrones de Diseño</h1>
+<p>Los <strong>patrones de diseño</strong> son <strong>soluciones reutilizables, probadas y eficientes</strong> a problemas de diseño que se repiten con frecuencia en el desarrollo de software.</p>
+<h2>Reutilización</h2>
+<ul>
+<li>Un diseño debe adecuarse a <strong>requisitos actuales</strong> y anticipar <strong>problemas futuros</strong>.</li>
+<li>Los expertos <strong>no</strong> afrontan cada situación partiendo de <strong>cero</strong>, si no que <strong>reutilizan soluciones</strong> útiles en el pasado.</li>
+<li>Los patrones resuelven problemas concretos de diseño y ayudan a lograr soluciones <strong>flexibles y reutilizables</strong>.</li>
+</ul>
+<h2>Ventajas</h2>
+<ul>
+<li>Cada patrón nombre, explica y evalua un <strong>diseño recurrente</strong> en sistemas.</li>
+<li>Periten lograr <strong>rápidamente</strong> un bien diseño <strong>reutilizando</strong> experiencia previa.</li>
+<li>Ayudan a <strong>elegir alternativas</strong> que hacen que un sistema sea reutilizable y a evitar las que provocan el efecto contrario.</li>
+<li>Facilitan la <strong>documentación</strong> y el mantenimiento de sistema existentes.</li>
+</ul>
+<h2>Elementos</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nombre</strong></td>
+<td>Descripción concisa del problema de diseño</td>
+</tr>
+<tr>
+<td><strong>Problema</strong></td>
+<td>Contexto + situación en la que usar el patrón.</td>
+</tr>
+<tr>
+<td><strong>Solución</strong></td>
+<td>Estructura de clases y objetos que resuelve el problema.</td>
+</tr>
+<tr>
+<td><strong>Consecuencias</strong></td>
+<td>Ventajas, desventajas, y efectos secundarios.</td>
+</tr>
+</tbody>
+</table>
+<h1>7.2 MVC (Model-View-Controller)</h1>
+<p><strong>MVC</strong> es un patrón de diseño arquitectónico muy usado en interfaces gráficas y aplicaciones web.</p>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Rol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Modelo</strong></td>
+<td>Contiene los datos y lógica de negocio.</td>
+</tr>
+<tr>
+<td><strong>Vista</strong></td>
+<td>Muestra los datos del modelo al usuario.</td>
+</tr>
+<tr>
+<td><strong>Controlador</strong></td>
+<td>Gestiona la entrada del usuario y actualiza el modelo o la vista.</td>
+</tr>
+<tr>
+<td><img src="../../../img/desoft/pasted-image-20250423154458.png" alt="Pasted image 20250423154458.png" loading="lazy"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ventajas</strong>:</p>
+<ul>
+<li>Vista y modelo <strong>desacoplados</strong>: puedes cambiar el aspecto visual sin tocar la lógica.</li>
+<li>Puedes <strong>anidar vistas</strong> o tener múltiples representaciones del mismo modelo.</li>
+<li>La interacción puede modificarse sin tocar la visualización.</li>
+</ul>
+<h1>7.3 Tipos de Patrones</h1>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>De creación</th>
+<th>Estrucutales</th>
+<th>De comportamiento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Clase</strong></td>
+<td><strong>Factory Method</strong></td>
+<td>Adapter</td>
+<td>Interpreter<br>Template Method</td>
+</tr>
+<tr>
+<td><strong>Objeto</strong></td>
+<td><strong>Abstract Factory</strong><br>Builder<br>Prototype<br><strong>Singleton</strong></td>
+<td>Adapter<br>Bridge<br><strong>Composite</strong><br><strong>Decorator</strong><br><strong>Facade</strong><br>Flyweight<br>Proxy</td>
+<td>Chain of Responsibility<br>Command<br>Iterator<br>Mediator<br>Memento<br><strong>Observer</strong><br><strong>State</strong><br>Strategy<br>Visitor</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1>7.4 ¿Qué problemas resuelven?</h1>
+<p>Los patrones de diseño ayudan a la:</p>
+<ul>
+<li>Identificación de los objetos necesarios.</li>
+<li>Determinación del tamaño de los objetos.</li>
+<li>Diseñar <strong>interfaces limpias y coherentes</strong>.</li>
+<li>Reutilización.</li>
+<li>Diseñar pensando en <strong>la evolución del sistema</strong>.</li>
+</ul>
+<h2>Identificación de los objetos necesarios</h2>
+<p>Muchos elementos de un diseño proceden del análisis. Después aparecen clases <strong>sin equivalente en el mundo real</strong>. Los patrones ayudan a identificar las <strong>abstracciones menos obvias</strong>.</p>
+<h2>Determinación del tamaño de los objetos</h2>
+<p>Los objetos pueden varias en tamaño y en número. ALgunos patrones de diseño describen formas concretas de <strong>descomponer un objeto en otras más pequeños.</strong></p>
+<h2>Diseñar interfaces limpias y coherentes</h2>
+<p>Se debe <strong>restringir</strong> el <strong>uso de referencias</strong> a clases concretas, los objetos deben mantener un <strong>conocimiento mutuo limitado</strong>. Los <strong>patrones de creación</strong> aseguran que el sistema se diseñe en términos de interfaces.</p>
+<h2>Reutilización</h2>
+<ul>
+<li><strong>Herencia:</strong> se define en tiempo de <strong>compilación</strong>, <strong>rompe el principio de encapsulación</strong>. (Flecha con triangulo blanco)</li>
+<li><strong>Composición:</strong> los enlaces entre objetos se establecen en tiempo de <strong>ejecución</strong>. Cualquier otro objeto puede ser <strong>reemplazado</strong> dinámicamente por otro del <strong>mismo tipo</strong>. El acceso a objetos a través de interfaces <strong>no rompe</strong> la <strong>encapsulación</strong>.</li>
+<li>Principio de DOO: <strong>equilibra el uso de la asociación y la generalización como mecanismos complementarios</strong>. Facilita la <strong>hncia</strong> facilita la construcción, pero la <strong>composición</strong> aporta mayor <strong>flexibilidad</strong>.</li>
+<li><strong>Delegación:</strong> modo de asociación que <strong>suple a la herencia</strong> por la cual dos objetos tratan una <strong>petición</strong>, un objeto receptor delega en su <strong>ayudante</strong>. Facilita <strong>combianción de comportamientos</strong> en tiempo de ejecución.</li>
+</ul>
+<img src="../../../img/desoft/pasted-image-20250423160509.png" alt="Pasted image 20250423160509.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="6-otros-diagramas-de-modelado.html"><span class="nav-etiqueta">← anterior</span>6. Otros Diagramas de Modelado</a>
+  <a class="nav-siguiente" href="8-patrones-de-creacion.html"><span class="nav-etiqueta">siguiente →</span>8. Patrones de Creación</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

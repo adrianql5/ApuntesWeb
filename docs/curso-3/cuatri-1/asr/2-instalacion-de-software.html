@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. Instalación de Software — apuntes de ASR (tercer curso de Ingeniería Informática).">
+<title>2. Instalación de Software · ASR · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">asr</a><span class="miga-sep">/</span><span aria-current="page">2-instalacion-de-software</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">ASR · curso 3</p>
+    <h1>2. Instalación de Software · ASR</h1>
+  </header>
+  <div class="prosa">
+<h1>2.1 Formas de instalación</h1>
+<p>Podemos clasificar la instalación en dos grandes familias según cómo nos llega el software:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Método</strong></th>
+<th><strong>Descripción</strong></th>
+<th><strong>Ventajas ✅</strong></th>
+<th><strong>Inconvenientes ❌</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Paquetería / Binarios</strong><br><br>  <br><br><em>(Estándar: .deb, .rpm, .exe)</em></td>
+<td>El programa ya viene compilado (&quot;cocinado&quot;) desde el servidor. Tú solo descargas el ejecutable listo para usar.</td>
+<td>• <strong>Instalación rápida:</strong> No consume CPU procesando.<br><br>  <br><br>• <strong>Gestión de dependencias:</strong> El gestor (APT/DNF) descarga las librerías necesarias automáticamente.<br><br>  <br><br>• <strong>Actualizaciones sencillas:</strong> Un comando actualiza todo.</td>
+<td>• <strong>Menor personalización:</strong> Viene con las opciones que decidió el creador, no tú.<br><br>  <br><br>• <strong>Optimización genérica:</strong> Está hecho para funcionar en cualquier CPU, no exprime al 100% la tuya específica.</td>
+</tr>
+<tr>
+<td><strong>Código Fuente</strong><br><br>  <br><br><em>(Compilación manual)</em></td>
+<td>Descargas el código &quot;crudo&quot; (texto legible por humanos) y tu ordenador lo traduce a lenguaje máquina (compilación).</td>
+<td>• <strong>Máxima optimización:</strong> El programa se adapta a la arquitectura exacta de tu procesador.<br><br>  <br><br>• <strong>Control total:</strong> Puedes activar o desactivar funciones específicas antes de &quot;cocinarlo&quot;.</td>
+<td>• <strong>Lento y Complejo:</strong> Tarda tiempo en compilar (CPU al 100%).<br><br>  <br><br>• <strong>Dependencias manuales:</strong> A menudo fallará si te falta una librería.<br><br>  <br><br>• <strong>Difícil de desinstalar:</strong> Si no usas herramientas extra, puede dejar &quot;basura&quot; en el sistema.</td>
+</tr>
+</tbody>
+</table>
+<h2>2.1.1 Gestores de paquetes</h2>
+<p>En la mayoría de distribuciones, usamos <strong>Gestores de Paquetes</strong>. Estos programas consultan una base de datos central (repositorios), descargan el software y lo instalan.</p>
+<p>Ventajas del sistema de paquetes:</p>
+<ul>
+<li><strong>Centralización:</strong> Todo el software viene de fuentes oficiales y verificadas (sin virus).</li>
+<li><strong>Dependencias:</strong> Si instalas el &quot;Programa A&quot; y este necesita la &quot;Librería B&quot;, el gestor descarga ambos automáticamente.</li>
+<li><strong>Mantenimiento:</strong> Un solo comando actualiza <em>todo</em> el sistema y sus programas.</li>
+</ul>
+<p>El mundo Linux se divide principalmente en dos &quot;dialectos&quot;:</p>
+<ol>
+<li><strong>Paquetes <code>.deb</code>:</strong> Usados por <strong>Debian</strong>, Ubuntu, Linux Mint, Kali.</li>
+<li><strong>Paquetes <code>.rpm</code>:</strong> Usados por <strong>RedHat</strong>, Fedora, CentOS, SUSE.</li>
+</ol>
+<h2>2.1.3 Gestión de paquetes en Debian</h2>
+<p>Debian utiliza una estructura de herramientas por capas (&quot;cebolla&quot;). De más bajo nivel a más alto nivel:</p>
+<h3>Nivel bajo: <code>dpkg</code> (Debian Package)</h3>
+<p>Es la herramienta base. Gestiona los archivos <code>.deb</code> individuales que ya tienes descargados en tu disco.</p>
+<ul>
+<li><strong>Limitación grave:</strong> <strong>NO resuelve dependencias.</strong> Si el paquete necesita una librería extra, <code>dpkg</code> fallará y te dirá que la busques tú.</li>
+<li><em>Uso:</em> Instalar un <code>.deb</code> suelto descargado manualmente.</li>
+</ul>
+<h3>Nivel Alto: <code>apt</code> (Advanced Package Tool)</h3>
+<p>Es la herramienta inteligente que usamos a diario. Se conecta a internet (repositorios).</p>
+<ul>
+<li><strong>La magia:</strong> Resuelve dependencias. Si pides instalar <code>vlc</code>, <code>apt</code> calculará qué librerías faltan, las descargará de los servidores y llamará a <code>dpkg</code> por detrás para instalarlas.</li>
+<li><em>Fuentes:</em> Lee la lista de repositorios desde <code>/etc/apt/sources.list</code>.</li>
+</ul>
+<h3>Herramientas Especiales</h3>
+<ul>
+<li><strong>Tiendas de Software (GUI):</strong> Interfaces gráficas (como GNOME Software) que por debajo ejecutan <code>apt</code>.</li>
+<li><strong><code>alien</code>:</strong> Una herramienta de &quot;traducción&quot;. Permite convertir un paquete <code>.rpm</code> (de RedHat) a <code>.deb</code> (para Debian).</li>
+</ul>
+<h2>2.1.4 La nueva Era: Paquetes Universales y Contenedores</h2>
+<p>Para solucionar el problema de &quot;esto funciona en Fedora pero no en Ubuntu&quot;, nacieron los paquetes autocontenidos.</p>
+<p><strong>SNAP</strong> y <strong>FLATPAK</strong>
+Son paquetes que incluyen <strong>todas sus dependencias dentro</strong>. Llevan sus propias librerías y no usan las del sistema operativo</p>
+<table>
+<thead>
+<tr>
+<th><strong>Característica</strong></th>
+<th><strong>Paquete Tradicional (apt)</strong></th>
+<th><strong>Paquete Universal (snap/flatpak)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dependencias</strong></td>
+<td>Usa las librerías compartidas del sistema.</td>
+<td><strong>Autocontenido:</strong> Lleva sus propias librerías dentro.</td>
+</tr>
+<tr>
+<td><strong>Seguridad</strong></td>
+<td>Acceso total al sistema (generalmente).</td>
+<td><strong>Sandboxing:</strong> Se ejecutan en una &quot;caja&quot; aislada (contenedor).</td>
+</tr>
+<tr>
+<td><strong>Versiones</strong></td>
+<td>Depende de la versión de tu Linux.</td>
+<td>Siempre la última versión disponible del desarrollador.</td>
+</tr>
+<tr>
+<td><strong>Tamaño</strong></td>
+<td>Pequeño (reusa librerías).</td>
+<td><strong>Grande</strong> (mucha redundancia de librerías).</td>
+</tr>
+<tr>
+<td><strong>Arranque</strong></td>
+<td>Rápido.</td>
+<td>Lento (sobre todo el primer arranque).</td>
+</tr>
+</tbody>
+</table>
+<h2>2.1.5 Gestores de Lenguajes: PIP (Python)</h2>
+<p>A veces no instalamos un &quot;programa&quot;, sino una librería para programar. Cada lenguaje tiene su propio gestor:</p>
+<p><strong>PIP</strong> es el estándar para instalar librerías del lenguaje Python:</p>
+<ul>
+<li><strong><code>pip</code> (o <code>pip2</code>):</strong> Para Python antiguo (versión 2.7, obsoleto).</li>
+<li><strong><code>pip3</code>:</strong> Para Python moderno (versión 3.x).</li>
+</ul>
+<pre><code class="language-bash"># Instalar el gestor pip
+sudo apt install python3-pip
+
+# Instalar una librería de Python (ej. NumPy para matemáticas)
+pip3 install numpy
+
+# Desinstalar
+pip3 remove pytorch
+</code></pre>
+<h1>2.2 <code>dpkg</code> - Debian Package</h1>
+<p><strong><code>dpkg</code></strong> (Debian Package) es la herramienta base para gestionar paquetes <code>.deb</code>. A diferencia de <code>apt</code>, <code>dpkg</code> <strong>no descarga nada de internet ni resuelve dependencias</strong>. Solo trabaja con archivos que ya tienes descargados localmente en tu disco duro.</p>
+<h2>2.2.1 Estructura de un Paquete DEB</h2>
+<p>Un archivo <code>.deb</code> es un contenedor comprimido (similar a un .zip) que incluye:</p>
+<ol>
+<li><strong>Binarios:</strong> El programa ejecutable, librerías y documentación.</li>
+<li><strong>Metadatos:</strong> Información de versión, dependencias, arquitectura y scripts de configuración (pre-instalación y post-instalación).</li>
+</ol>
+<h2>2.2.2 Nomeclatura estándar</h2>
+<p>Formato: <code>paquete_versión-build_arquitectura.deb</code></p>
+<table>
+<thead>
+<tr>
+<th><strong>Parte</strong></th>
+<th><strong>Descripción</strong></th>
+<th><strong>Ejemplo</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Paquete</strong></td>
+<td>Nombre de la aplicación.</td>
+<td><code>ethereal</code></td>
+</tr>
+<tr>
+<td><strong>Versión</strong></td>
+<td>Versión del desarrollador.</td>
+<td><code>0.10.11</code></td>
+</tr>
+<tr>
+<td><strong>Build</strong></td>
+<td>Revisión/Compilación del empaquetador.</td>
+<td><code>1</code></td>
+</tr>
+<tr>
+<td><strong>Arquitectura</strong></td>
+<td>CPU destino (amd64, i386, armhf).</td>
+<td><code>i386</code></td>
+</tr>
+<tr>
+<td><strong>Extensión</strong></td>
+<td>Siempre .deb</td>
+<td><code>.deb</code></td>
+</tr>
+</tbody>
+</table>
+<h2>2.2.3 Opciones <code>dpkg</code></h2>
+<table>
+<thead>
+<tr>
+<th><strong>Acción</strong></th>
+<th><strong>Opción Corta</strong></th>
+<th><strong>Opción Larga</strong></th>
+<th><strong>Argumento necesario</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Instalar</strong></td>
+<td><code>-i</code></td>
+<td><code>--install</code></td>
+<td><strong>Nombre del Fichero</strong> (.deb)</td>
+</tr>
+<tr>
+<td><strong>Eliminar</strong></td>
+<td><code>-r</code></td>
+<td><code>--remove</code></td>
+<td>Nombre del Paquete</td>
+</tr>
+<tr>
+<td><strong>Purgar</strong></td>
+<td><code>-P</code></td>
+<td><code>--purge</code></td>
+<td>Nombre del Paquete</td>
+</tr>
+<tr>
+<td><strong>Listar</strong></td>
+<td><code>-l</code></td>
+<td><code>--list</code></td>
+<td>(Opcional) Patrón</td>
+</tr>
+<tr>
+<td><strong>Estado</strong></td>
+<td><code>-s</code></td>
+<td><code>--status</code></td>
+<td>Nombre del Paquete</td>
+</tr>
+<tr>
+<td><strong>Ver Ficheros</strong></td>
+<td><code>-L</code></td>
+<td><code>--listfiles</code></td>
+<td>Nombre del Paquete</td>
+</tr>
+<tr>
+<td><strong>Buscar</strong></td>
+<td><code>-S</code></td>
+<td><code>--search</code></td>
+<td>Ruta de un fichero</td>
+</tr>
+</tbody>
+</table>
+<h2>2.2.4 Operaciones de instalación y eliminación</h2>
+<h3>Instalación (<code>-i</code>)</h3>
+<p>Instala un paquete que tienes descargado.</p>
+<ul>
+<li><strong>⚠️ Importante:</strong> Es el único caso donde necesitas escribir el <strong>nombre completo del archivo</strong> (incluyendo <code>.deb</code>).</li>
+<li><strong>Dependencias:</strong> Si el paquete necesita librerías que no tienes, <code>dpkg</code> fallará (no las descarga automáticamente).</li>
+</ul>
+<pre><code class="language-bash"># Sintaxis: dpkg -i [fichero.deb]
+dpkg -i ethereal_0.10.11-1_i386.deb
+</code></pre>
+<blockquote>
+<p><em>Si falla por dependencias, un truco es ejecutar inmediatamente después <code>apt-get install -f</code> para que APT descargue lo que falta.</em></p>
+</blockquote>
+<h3>Eliminación (<code>-r</code> vs <code>-P</code>)</h3>
+<p>Aquí ya no usamos el nombre del archivo, sino el <strong>nombre del paquete</strong> (ej: <code>wget</code>).</p>
+<ol>
+<li><strong>Eliminar (<code>remove</code>):</strong> Desinstala el programa, pero <strong>mantiene los ficheros de configuración</strong> en <code>/etc</code>. Útil si planeas reinstalarlo en el futuro y no quieres perder tu configuración.</li>
+</ol>
+<pre><code class="language-bash">dpkg -r wget
+</code></pre>
+<ol start="2">
+<li><strong>Purgar (<code>purge</code>):</strong> Desinstala el programa y <strong>borra también la configuración</strong>. Limpieza total.</li>
+</ol>
+<pre><code class="language-bash">dpkg -P wget
+</code></pre>
+<h3>Reconfiguración</h3>
+<p>Si un paquete ya instalado da problemas o quieres cambiar sus opciones iniciales (como el idioma o la distribución de teclado):</p>
+<pre><code class="language-bash">dpkg-reconfigure nombre_paquete
+</code></pre>
+<h2>2.2.5 Consultas e información</h2>
+<h3>Listar Paquetes (<code>-l</code>)</h3>
+<p>Muestra una tabla con todos los paquetes instalados. Es muy útil entender la primera columna (Estado).</p>
+<pre><code class="language-bash">dpkg -l &quot;telnet*&quot;
+</code></pre>
+<p><strong>Interpretación de la salida (Las siglas <code>ii</code>, <code>un</code>, etc.):</strong> La primera columna tiene dos o tres letras.</p>
+<ul>
+<li><strong>1ª Letra (Deseado):</strong> Lo que tú quieres que pase.
+<ul>
+<li><code>i</code>: Install (Quieres que esté instalado).</li>
+<li><code>r</code>: Remove (Quieres desinstalarlo).</li>
+</ul>
+</li>
+<li><strong>2ª Letra (Actual):</strong> Lo que realmente hay.
+<ul>
+<li><code>i</code>: Installed (Está instalado correctamente).</li>
+<li><code>c</code>: Config-files (Se borró el programa, pero quedan archivos de configuración).</li>
+<li><code>n</code>: Not-installed (No está instalado).</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>El objetivo:</strong> Un paquete sano debe mostrar <strong><code>ii</code></strong> (Deseado: Instalar / Actual: Instalado).</p>
+</blockquote>
+<h3>Ver Estado Detallado (<code>-s</code>)</h3>
+<p>Muestra toda la información técnica (versión, dependencias, tamaño).</p>
+<pre><code class="language-bash">$ dpkg --status wget
+Package: wget
+Status: install ok installed   &lt;-- ESTADO IMPORTANTE
+Priority: important
+Section: web
+Version: 1.10-2
+Depends: libc6, libssl0.9.7    &lt;-- DEPENDENCIAS
+Description: Retrieves files from the web...
+</code></pre>
+<h3>Ver Ficheros de un Paquete (<code>-L</code>)</h3>
+<p>¿Qué ha instalado este paquete y dónde?</p>
+<pre><code class="language-bash">$ dpkg -L wget
+/usr/bin/wget          (El ejecutable)
+/etc/wgetrc            (La configuración)
+/usr/share/man/man1/.. (El manual)
+</code></pre>
+<h3>Búsqueda Inversa (<code>-S</code>)</h3>
+<p>¿Tienes un archivo misterioso y no sabes qué paquete lo puso ahí?</p>
+<pre><code class="language-bash"># ¿A quién pertenece este fichero?
+$ dpkg -S /usr/bin/wget
+wget: /usr/bin/wget
+</code></pre>
+<h1>2.3 APT - Advanced Packaging Tools</h1>
+<p><strong>APT</strong> es la herramienta de gestión de paquetes de alto nivel del proyecto Debian. Mientras que <code>dpkg</code> trabaja con archivos locales, <strong>APT</strong> gestiona todo el ciclo de vida del software conectándose a repositorios de internet.</p>
+<p><strong>Sus superpoderes son:</strong></p>
+<ol>
+<li><strong>Resolución de Dependencias:</strong> Si quieres instalar el <em>Programa A</em>, y este necesita la <em>Librería B</em>, APT descarga e instala ambos automáticamente.</li>
+<li><strong>Repositorios Remotos:</strong> Descarga el software desde servidores oficiales (mirrors).</li>
+<li><strong>Actualización Integral:</strong> Actualiza todo el sistema operativo con un solo comando.</li>
+</ol>
+<h2>2.3.1 Archivo de configuración</h2>
+<h3>La lista de fuentes (<code>sources.list</code>)</h3>
+<p>El archivo <code>/etc/apt/sources.list</code> es el mapa del tesoro. Le dice a APT <strong>dónde</strong> buscar los paquetes.
+<strong>Sintaxis de una línea:</strong> <code>[Tipo] [URI] [Distribución] [Componentes]</code></p>
+<p>Ejemplo real desglosado:</p>
+<pre><code class="language-bash">deb http://ftp.es.debian.org/debian/ bookworm main contrib non-free
+</code></pre>
+<table>
+<thead>
+<tr>
+<th><strong>Campo</strong></th>
+<th><strong>Significado</strong></th>
+<th><strong>Opciones comunes</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tipo</strong></td>
+<td>¿Qué bajamos?</td>
+<td><code>deb</code> (Binarios/Programas listos)<br><br>  <br><br><code>deb-src</code> (Código fuente para compilar)</td>
+</tr>
+<tr>
+<td><strong>URI</strong></td>
+<td>¿Dónde está?</td>
+<td><code>http://...</code>, <code>ftp://...</code>, <code>file://...</code></td>
+</tr>
+<tr>
+<td><strong>Distribución</strong></td>
+<td>¿Qué versión?</td>
+<td><code>stable</code> (Estable/Recomendada)<br><br>  <br><br><code>testing</code> (Pruebas/Más nueva)<br><br>  <br><br><code>unstable</code>/<code>sid</code> (Desarrollo/Inestable)</td>
+</tr>
+<tr>
+<td><strong>Componentes</strong></td>
+<td>¿Qué licencia?</td>
+<td><code>main</code> (Software libre oficial)<br><br>  <br><br><code>contrib</code> (Libre pero depende de no-libres)<br><br>  <br><br><code>non-free</code> (Software privativo/propietario)</td>
+</tr>
+</tbody>
+</table>
+<h3>Configuración Avanzada (<code>apt.conf</code>)</h3>
+<p>ara cambiar el comportamiento de APT (ej. configurar un proxy), se usan estos ficheros:</p>
+<ol>
+<li><strong><code>/etc/apt/apt.conf</code></strong>: Fichero único (estilo clásico).</li>
+<li><strong><code>/etc/apt/apt.conf.d/</code></strong>: Directorio modular (estilo moderno). Aquí se crean ficheros pequeños (ej: <code>01proxy</code>, <code>99mysettings</code>). APT los lee todos en orden numérico. Es más ordenado y fácil de administrar.</li>
+</ol>
+<h2>2.3.2 Comandos y opciones de APT</h2>
+<p>Históricamente había dos comandos separados: uno para <em>hacer</em> cosas (<code>apt-get</code>) y otro para <em>buscar</em> cosas (<code>apt-cache</code>). Modernamente, se recomienda usar <strong><code>apt</code></strong>, que unifica a los dos anteriores y añade barras de progreso y colores.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Acción</strong></th>
+<th><strong>Comando Moderno (Recomendado)</strong></th>
+<th><strong>Comando Clásico (Scripts)</strong></th>
+<th><strong>Comando Consulta</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Actualizar lista</strong></td>
+<td><code>apt update</code></td>
+<td><code>apt-get update</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>Instalar</strong></td>
+<td><code>apt install</code></td>
+<td><code>apt-get install</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>Eliminar</strong></td>
+<td><code>apt remove</code></td>
+<td><code>apt-get remove</code></td>
+<td>-</td>
+</tr>
+<tr>
+<td><strong>Buscar</strong></td>
+<td><code>apt search</code></td>
+<td>-</td>
+<td><code>apt-cache search</code></td>
+</tr>
+<tr>
+<td><strong>Mostrar info</strong></td>
+<td><code>apt show</code></td>
+<td>-</td>
+<td><code>apt-cache show</code></td>
+</tr>
+</tbody>
+</table>
+<h2>2.3.3 Flujo de Trabajo (Operaciones comunes)</h2>
+<h3>Actualizar el catálogo</h3>
+<p><strong>¡Vital!</strong> Antes de instalar nada, hay que sincronizar el índice local con el servidor remoto.</p>
+<pre><code class="language-bash">apt update
+</code></pre>
+<h3>Actualizar el sistema</h3>
+<p>Actualiza los programas instalados a su última versión disponible</p>
+<pre><code class="language-bash">apt upgrade
+</code></pre>
+<ul>
+<li><strong><code>apt upgrade</code>:</strong> Actualiza paquetes de forma segura. No borra paquetes existentes.</li>
+<li><strong><code>apt dist-upgrade</code></strong> (o <code>full-upgrade</code>): Es más agresivo. Si para actualizar el Navegador X necesita borrar la Librería Y, lo hará. Es necesario para cambios grandes de versión de Debian.</li>
+</ul>
+<h3>Instalar paquetes</h3>
+<pre><code class="language-bash">apt install firefox
+</code></pre>
+<h3>Eliminar paquetes</h3>
+<p>Hay dos formas de borrar:</p>
+<ol>
+<li><strong><code>remove</code>:</strong> Desinstala el programa pero <strong>deja los archivos de configuración</strong> (útil si crees que volverás a instalarlo).</li>
+</ol>
+<pre><code class="language-bash">apt remove firefox
+</code></pre>
+<ol start="2">
+<li><strong><code>purge</code>:</strong> Desinstala el programa y <strong>borra todo rastro</strong> de configuración.</li>
+</ol>
+<pre><code class="language-bash"> apt purge firefox
+</code></pre>
+<h3>Limpieza</h3>
+<p>APT guarda los <code>.deb</code> descargados en <code>/var/cache/apt/archives/</code>. Con el tiempo, esto ocupa mucho espacio.</p>
+<ul>
+<li><strong><code>apt autoremove</code>:</strong> Borra dependencias &quot;huérfanas&quot; (librerías que se instalaron para un programa que ya has borrado y que nadie más usa).</li>
+<li><strong><code>apt clean</code>:</strong> Borra los instaladores <code>.deb</code> descargados de la caché para liberar disco.</li>
+</ul>
+<h2>2.3.4 Gestión de Fuentes</h2>
+<p>Solo para usuarios avanzados que necesitan modificar el código. Requiere líneas <code>deb-src</code> en el <code>sources.list</code></p>
+<ul>
+<li><strong><code>apt-get source paquete</code></strong>: Descarga el código fuente.</li>
+<li><strong><code>apt-get build-dep paquete</code></strong>: Instala automáticamente todas las herramientas y librerías necesarias para compilar ese paquete.</li>
+<li><strong><code>apt-get source --compile paquete</code></strong>: Descarga y compila directamente creando un <code>.deb</code></li>
+</ul>
+<h2>2.3.5 Comando apt-cache</h2>
+<p>Mientras que <code>apt-get</code> se encarga de <em>instalar</em> y <em>modificar</em>, <strong><code>apt-cache</code></strong> es la herramienta de <strong>consulta e investigación</strong>.</p>
+<p>Su función es leer la base de datos local (la caché que descargaste con <code>apt update</code>) para darte información sobre los paquetes disponibles, <strong>incluso si no los tienes instalados</strong>.</p>
+<h3>Buscar Paquetes (<code>search</code>)</h3>
+<p>Funciona como un buscador (Google) dentro de tu lista de software. Busca el texto que le indiques tanto en el <strong>nombre</strong> como en la <strong>descripción</strong> del paquete.</p>
+<ul>
+<li><strong>Sintaxis:</strong> <code>apt-cache search [patrón]</code></li>
+<li><strong>Detalle:</strong> Admite expresiones regulares (Regex) para búsquedas avanzadas.</li>
+</ul>
+<pre><code class="language-shell">$ apt-cache search firefox
+# Salida de ejemplo:
+firefox - Mozilla Firefox web browser
+firefox-locale-es - Spanish language pack for Firefox
+iceweasel - Web browser based on Firefox (Transitional package)
+</code></pre>
+<h3>Ficha Técnica del Paquete (<code>show</code>)</h3>
+<p>Muestra toda la información detallada (&quot;metadatos&quot;) de un paquete específico.</p>
+<ul>
+<li><strong>Uso:</strong> Leer la descripción larga, ver quién es el mantenedor, el tamaño de la descarga o la suma de verificación (SHA256).</li>
+</ul>
+<pre><code class="language-shell">apt-cache show nombre_paquete
+</code></pre>
+<h3>Ver Dependencias (<code>depends</code>)</h3>
+<p>Muestra el árbol de relaciones del paquete. Es útil para saber <strong>qué más se instalará</strong> si decides instalar ese paquete.</p>
+<ul>
+<li><strong>Depends:</strong> Lo que es obligatorio instalar.</li>
+<li><strong>Suggests:</strong> Lo que te sugiere instalar (opcional).</li>
+<li><strong>Conflicts:</strong> Con qué programas es incompatible.</li>
+</ul>
+<pre><code class="language-shell">$ apt-cache depends nano
+nano
+  Depends: libc6
+  Depends: libncursesw6
+  Depends: libtinfo6
+  Suggests: spell
+</code></pre>
+<h3>Política de Versiones (<code>policy</code>)</h3>
+<p>Este es el comando más técnico y útil para diagnosticar problemas. Te dice <strong>de dónde</strong> viene un paquete y <strong>qué versión</strong> tiene prioridad.</p>
+<p>Muestra tres datos clave:</p>
+<ol>
+<li><strong>Installed:</strong> La versión que tienes instalada ahora (o <code>(none)</code> si no lo tienes).</li>
+<li><strong>Candidate:</strong> La versión que se instalaría si ejecutaras <code>install</code> ahora nismo.</li>
+<li><strong>Version Table:</strong> La lista de todos los repositorios que ofrecen este paquete y su prioridad</li>
+</ol>
+<pre><code class="language-shell">$ apt-cache policy firefox
+firefox:
+  Installed: (none)
+  Candidate: 115.0-2
+  Version Table:
+     115.0-2 500
+        500 http://deb.debian.org/debian stable/main amd64 Packages
+</code></pre>
+<h2>2.3.6 Solución de Problemas</h2>
+<h3>Dependencias Rotas</h3>
+<p>Si una instalación falla a medias o se va la luz, el sistema de paquetes puede quedar &quot;roto&quot;.</p>
+<pre><code class="language-shell"># El comando mágico para arreglarlo
+apt --fix-broken install
+# (o su versión antigua: apt-get -f install)
+</code></pre>
+<p>Esto intenta descargar lo que falta y configurar lo que quedó a medias.</p>
+<h2>El fichero de bloqueo (Lock File)</h2>
+<p>APT usa un archivo &quot;cerrojo&quot; en <code>/var/lib/dpkg/lock</code> para asegurar que <strong>solo una persona instala cosas a la vez</strong>.</p>
+<p><strong>Síntoma:</strong> Intentas usar apt y dice: <code>E: Could not get lock /var/lib/dpkg/lock - open (11: Resource temporarily unavailable)</code></p>
+<p><strong>Causas:</strong></p>
+<ol>
+<li>Tienes otra terminal abierta instalando algo.</li>
+<li>El sistema de actualizaciones automáticas (<code>unattended-upgrades</code>) está trabajando en segundo plano.</li>
+<li>Se fue la luz durante una instalación y el fichero no se borró.</li>
+</ol>
+<p><strong>Solución:</strong></p>
+<ol>
+<li>Esperar (lo más recomendable).</li>
+<li>Verificar si hay procesos apt corriendo: <code>ps aux | grep apt</code>.</li>
+<li>(Último recurso) Borrar el fichero manualmente si estás 100% seguro de que nada está corriendo</li>
+</ol>
+<h1>2.4 Instalación desde el código fuente</h1>
+<p>Este método consiste en descargar el código &quot;crudo&quot; creado por el programador y transformarlo (compilarlo) en un programa ejecutable adaptado específicamente a tu ordenador.</p>
+<h2>2.4.1 Flujo de trabaho estándar</h2>
+<h3>Descarga del código (Tarballs)</h3>
+<p>El código suele venir empaquetado y comprimido para ocupar menos espacio. Las extensiones nos dicen cómo tratarlo:</p>
+<ul>
+<li><strong>.tar:</strong> Empaquetado (agrupado en un solo fichero) pero sin comprimir.</li>
+<li><strong>.tar.gz / .tgz:</strong> Empaquetado y comprimido con Gzip (el más común).</li>
+<li><strong>.tar.bz2 / .tbz:</strong> Empaquetado y comprimido con Bzip2 (comprime más, tarda más).</li>
+</ul>
+<h3>Desempaquetado</h3>
+<p>Usamos el comando <code>tar</code> (Tape ARchiver).</p>
+<ul>
+<li>Descomprimir .tar.gz: <code>tar -xzvf archivo.tar.gz</code></li>
+<li>Descomprimir .tar.bz2: <code>tar -xjvf archivo.tar.bz2</code></li>
+</ul>
+<blockquote>
+<p><strong>Nota:</strong> Tras descomprimir, siempre se crea un directorio nuevo. Debemos entrar en él: <code>cd nombre-directorio</code>.</p>
+</blockquote>
+<h3>Leer la instruacciones (<code>README</code> /<code>INSTALL</code>)</h3>
+<p>Dentro del directorio siempre hay ficheros de texto con instrucciones vitales. <strong>Léelos antes de seguir.</strong> Te dirán qué dependencias necesitas instalar antes de empezar.</p>
+<h3>Configuración (<code>.configure</code> )</h3>
+<p>Ejecutamos el script <code>./configure</code> que viene con el código (generado por herramientas como <code>autoconf</code>).</p>
+<ul>
+<li><strong>¿Qué hace?</strong> Chequea tu sistema. Verifica si tienes el compilador (gcc), si te faltan librerías y si tu entorno es compatible.</li>
+<li><strong>Resultado:</strong> Si todo va bien, crea un fichero llamado <strong><code>Makefile</code></strong>. Este fichero es la &quot;receta&quot; personalizada para tu PC.</li>
+<li><strong>Personalización:</strong> Puedes decirle dónde instalar el programa usando la opción <code>--prefix</code>.</li>
+</ul>
+<pre><code class="language-shell">./configure --prefix=/home/usuario/mi_programa
+</code></pre>
+<h2>Compilación (<code>make</code>)</h2>
+<p>El comando <code>make</code> lee el <code>Makefile</code> generado en el paso anterior y empieza a compilar.</p>
+<ul>
+<li><strong><code>make</code></strong>: Compila el código (traduce C/C++ a binario). Tarda desde segundos hasta horas.</li>
+<li><strong><code>make clean</code></strong>: Si la compilación falla o quieres empezar de cero, esto borra todos los archivos temporales creados.</li>
+</ul>
+<h3>Instalación (<code>make install</code>)</h3>
+<p>Copia los binarios finales y las librerías a sus destinos definitivos (normalmente <code>/usr/bin</code>, <code>/usr/lib</code>, etc.).</p>
+<ul>
+<li><strong>Permisos:</strong> Si instalas en directorios del sistema, necesitas <code>sudo make install</code>. Si usaste <code>--prefix</code> a tu carpeta, no hace falta.</li>
+</ul>
+<h2>2.4.2 Tipos de Ejecutables y Librerías</h2>
+<p>Una vez compilado el programa, obtenemos un <strong>binario</strong>. Dependiendo de cómo se haya &quot;enlazado&quot; (linked), puede ser de dos tipos:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Tipo</strong></th>
+<th><strong>Descripción</strong></th>
+<th><strong>Ventajas/Desventajas</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Estático</strong> (Static)</td>
+<td>El ejecutable lleva <strong>todas</strong> las librerías que necesita metidas dentro de sí mismo. Es un bloque único.</td>
+<td>✅ Funciona en cualquier sistema.<br><br>  <br><br>❌ Ocupa mucho espacio en disco y RAM.<br><br>  <br><br>❌ Difícil de actualizar (hay que recompilar todo).</td>
+</tr>
+<tr>
+<td><strong>Dinámico</strong> (Dynamic)</td>
+<td>El ejecutable es pequeño. Cuando se inicia, pide al sistema operativo las librerías que necesita (<code>.so</code>).</td>
+<td>✅ Ocupa muy poco espacio.<br><br>  <br><br>✅ Si actualizas una librería del sistema, todos los programas mejoran.<br><br>  <br><br>❌ Si falta una librería, el programa no arranca.</td>
+</tr>
+</tbody>
+</table>
+<h2>2.4.3 Gestión de Librerías Dinamicas (<code>ldd</code>)</h2>
+<p>Como los programas dinámicos dependen de archivos externos, a veces fallan porque no los encuentran. Para diagnosticar esto usamos <strong><code>ldd</code></strong> (List Dynamic Dependencies).</p>
+<h3>Verificar dependencias</h3>
+<p>El comando muestra qué librerías pide el programa y dónde las ha encontrado el sistema.</p>
+<p><strong>Formato:</strong> <code>librería_necesaria =&gt; librería_encontrada (dirección_memoria)</code></p>
+<pre><code class="language-bash">$ ldd /bin/ls
+    libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x0000...)
+    libpcre.so.3 =&gt; /lib/x86_64-linux-gnu/libpcre.so.3 (0x0000...)
+    ```
+
+### Problemas comunes (&quot;Not found&quot;)
+Si ves esto, el programa no arrancará:
+```shell
+libgdal.so.20 =&gt; Not found
+</code></pre>
+<p><strong>Posibles causas y soluciones:</strong></p>
+<ol>
+<li><strong>La librería no está instalada:</strong> Tienes que instalar el paquete que la contiene (usando <code>apt</code>).</li>
+<li><strong>La librería está en una ruta rara:</strong> El sistema busca en <code>/lib</code> y <code>/usr/lib</code>. Si tu librería está en <code>/opt/mi_app/lib</code>, el sistema no la ve.
+<ul>
+<li>
+<p><em>Solución:</em> Añadir esa ruta a la variable de entorno <strong><code>LD_LIBRARY_PATH</code></strong>.</p>
+</li>
+<li>
+<p><em>Ejemplo:</em> <code>export LD_LIBRARY_PATH=/opt/mi_app/lib:$LD_LIBRARY_PATH</code></p>
+</li>
+</ul>
+</li>
+<li><strong>Error de Versión (Version Mismatch):</strong> El programa pide <code>lib.so.3</code> y tú tienes <code>lib.so.4</code>.
+<ul>
+<li><em>Solución &quot;sucia&quot; (Symlink):</em> Engañar al programa creando un enlace simbólico.</li>
+</ul>
+</li>
+</ol>
+<pre><code class="language-shell"># Hacemos creer al sistema que la versión 4 es la 3
+ln -s libgdal.so.30.0.4 libgdal.so.30.0.3
+</code></pre>
+<h3>El cargador dinámico (<code>ld.so</code> )</h3>
+<p>Es el programa &quot;invisible&quot; del sistema operativo que se ejecuta cada vez que abres una aplicación. Su trabajo es leer la lista de dependencias del ejecutable, buscar esos archivos <code>.so</code> en el disco duro y cargarlos en la RAM para que el programa funcione.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-instalacion-de-linux-debian.html"><span class="nav-etiqueta">← anterior</span>1. Instalación de Linux Debian</a>
+  <a class="nav-siguiente" href="3-automatizacion-de-tareas.html"><span class="nav-etiqueta">siguiente →</span>3. Automatización de Tareas</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Instalación de Linux Debian — apuntes de ASR (tercer curso de Ingeniería Informática).">
+<title>1. Instalación de Linux Debian · ASR · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">asr</a><span class="miga-sep">/</span><span aria-current="page">1-instalacion-de-linux-debian</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">ASR · curso 3</p>
+    <h1>1. Instalación de Linux Debian · ASR</h1>
+  </header>
+  <div class="prosa">
+<div class="callout callout-importante">
+<p class="callout-titulo">Importante</p>
+<p>Estos apuntes están bien para entender ciertos conceptos complejos. Sin embargo si quieres sacar nota en el examen (ya te aviso que complicado), yo complementaría con los del profe porque tiene más ejemplos e información más concisa.</p>
+</div>
+<h1>1.1 Tipos de Instalación</h1>
+<p>A la hora de instalar un sistema, tenemos que tener en cuenta el tipo de funciones que va a desempeñar.</p>
+<ul>
+<li><strong>Sistema de escritorio:</strong> usado en tareas rutinarias</li>
+<li><strong>Estación de trabajo:</strong> sistema de alto rendimiento, generalmente orientado a una tarea específica.</li>
+<li><strong>Servidores:</strong> ofrecen servicios a otras máquinas de la red
+<ul>
+<li><strong>Servicios de disco:</strong> acceso a ficheros a través de FTP, servicio de disco transparente a través de NFS o Samba</li>
+<li><strong>Servicios de aplicaciones</strong>, por ejemplo, terminales, conexión remota (telnet, ssh) ...</li>
+<li><strong>Servicios de directorio</strong>, por ejemplo, LDAP, que almacena credenciales de usuarios, directorios, etc.</li>
+<li><strong>Servicios de bd</strong></li>
+<li><strong>Servicios de impresión</strong></li>
+<li><strong>Servicios de red</strong></li>
+</ul>
+</li>
+</ul>
+<h1>1.2 Instalación</h1>
+<p>Primero descargamos la imagen de CD de instalación por red de le versión seleccionada (<code>debian-versión-amd64-netinst.iso</code>).</p>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Esta explicación antes de la imagen no entra en el final, pero joder yo creo que son cosas que no todo el mundo tiene claro y veo importantes. Seguramente meta más cosas que vea interesantes pero ya pondré algo como esto para saber si entra o no. Me jode q una asignatura como esta no explique la mitad de conceptos como se debería.</p>
+</div>
+<p>Un archivo <strong>.iso</strong> (o imagen ISO) es una <strong>copia digital exacta</strong> de un disco óptico (CD, DVD o Blu-ray). Imagínatelo como una &quot;caja virtual&quot; que contiene todos los archivos de instalación del sistema operativo y, lo más importante, la estructura necesaria para que tu ordenador pueda &quot;arrancar&quot; (bootear) desde ese archivo.</p>
+<p>Cuando ves una opción llamada <strong>Netinst</strong> (Network Installer) o &quot;Imagen de instalación por red&quot;, se refiere a una <strong>ISO minimalista</strong>. A diferencia de una imagen estándar, esta ISO contiene <strong>solamente lo estrictamente necesario</strong> para:</p>
+<ol>
+<li>Arrancar el ordenador.</li>
+<li>Detectar tu hardware básico (tarjeta de red, disco duro).</li>
+<li>Conectarse a internet.</li>
+</ol>
+<p>Una vez que arranca el instalador, este <strong>descarga</strong> el resto del sistema operativo (el entorno gráfico, las aplicaciones, el navegador, etc.) directamente desde los servidores oficiales de Linux <em>durante</em> el proceso de instalación.</p>
+<p>Tiene ciertas ventajas, como que siempre va a estar actualizado, ocupa poco espacio y es personalizable, si no te quieres bajar algunos paquetes puedes desmarcarlos y quitarte bastante morralla.</p>
+<p>Sin embargo como no tengas internet estás jodido y la instalación obviamente va a ser más lenta si usas internet.</p>
+<p>Además ya para llegar a este paso deberías saber cómo bootear un SO. Eso lo tengo explicado en un repositorio llamado HyprDebian en mi perfil de github.</p>
+<img src="../../../img/asr/pasted-image-20251204162155.png" alt="Pasted image 20251204162155.png" loading="lazy">
+<p>Cuando lanzas el iso te salta esta pestaña y empieza la magia.</p>
+<h2>1.2.1 Siguientes pasos en la instalación</h2>
+<p>Seleccionas el idioma, localización y teclado.</p>
+<p>Configuración de la red, por defecto, intenta configurarla por DHCP. Si no lo consigue, pasa a configuración manual (indicar máscara, pasarela y DNSs)</p>
+<p>Para que nos entendamos, configurar la red es decirle a tu ordenador quién es, dónde está y a quién debe preguntar para salir a internet.</p>
+<p>Por si no te acuerdas de redes, <strong>DHCP</strong> es un sistema de <strong>configuración automática</strong>. Cuando tu ordenador arranca, grita a la red &quot;Soy nuevo, alguién me da una dirección&quot;, y el servidor DHCP (normalmente el router de casa) responde y le entrega todos los datos necesarios (IP, máscara, puerta de enlace, DNS) automáticamente.</p>
+<p>Si esto falla estamos jodidos porque la tienes que configurar tu a mano completando esos campos:</p>
+<ul>
+<li><strong>IP</strong>, matrícula única que identifica a tu máquina dentro de la red</li>
+<li><strong>Máscara de subred</strong>, le indica a tu ordenador qué direcciones IP son sus vecinos (red local) y cuales están fuera (internet). Por lo que define el tamaño de tu red local.</li>
+<li><strong>Pasarela o Puerta de enlace</strong>, es la dirección IP del <strong>router</strong>. Cuando tu pc quiere entrar a una web que no está en tu casa, no sabe como llegar, la pasarela es a quien le entrega el paquetes de datos para que lo envíe fuera a Internet, si pones mal esto, vas a tener red local pero no acceso a internet.</li>
+<li><strong>DNS</strong>, Domain Name System. Son servidores que traducen nombres humanos a direcciones IP. Cuando escribes <code>google.com</code> el servidor DNS le dice a tu ordenador: eso es la IP <code>142.250.200.46</code></li>
+</ul>
+<p>Después le ponemos un nombre a la máquina e indicar el dominio. El nombre de la máquina (<strong>hostname</strong>) es como te llamas tú o como quieres que se le llame a tu PC para diferenciarlo de otros en la misma red (bastante más cómodo que andarle metiendo la ip para comunicarse con el). El dominio es como tu apellidos, si vas a usar tu pc para ti no tiene mucho sentido ponérselo. Sim embargo si estas en una empresa es bastante útil.</p>
+<p>Por último se fija el password del superusuario (root) y se crea un usuario no privilegiado.</p>
+<h2>1.2.2 Cuenta del superusuario</h2>
+<p>Es un usuario especial que actúa como administrador del sistema. Tiene acceso a todos los ficheros y directorios del sistema, puede crear otros usuarios o eliminarlos. Además puede tanto borrar como instalar software del sistema o aplicaciones. Puede detener cualquier proceso que se está ejecutando en el sistema. Hasta puede detener y reiniciar el sistema.</p>
+<p>Para cambiarnos de un usuario normal a <strong>superusuario</strong> usamos <code>su -</code>, dónde <code>su</code> es un comando que nos permite cambiar de usuario <code>su [opciones] [-] username</code>, si no especificamos <code>username</code> pasamos a <strong>root</strong> (<strong>superusuario</strong>).</p>
+<h2>1.2.3 Elección de contraseña</h2>
+<p>Lo suyo es escoger una constreña segura, si eres tonto y metiste como contraseña <code>asdf</code> y quieres proteger a tu ordenador un mínimo siempre la puedes cambiar gracias al comando <code>passwd</code>:
+<img src="../../../img/asr/pasted-image-20251204170450.png" alt="Pasted image 20251204170450.png" loading="lazy"></p>
+<h2>1.2.4 Continuación de la instalación</h2>
+<p>En una instalación por red los paquetes se traen de un repositorio remoto a través de http o ftp (ftp no se usa normalmente pero aún hay algunos servidores de debian que lo usan).</p>
+<p>Seleccionamos el huso horario. Y realizamos el particionado del disco (modo guiado o manual).</p>
+<img src="../../../img/asr/pasted-image-20251204171009.png" alt="Pasted image 20251204171009.png" loading="lazy">
+<h2>1.2.5 Particionado del disco</h2>
+<p>Podemos optar por instalar todo el sistema en una sola partición, aunque no es nada recomendable (a ver en verdad es recomendable si no quieres romperte la cabeza o arriesgarte a joder todo el disco). Lo más recomendable es instalar diferentes directorios del sistema en diferentes particiones.</p>
+<p>Para entender bien lo que es una <strong>partición</strong> imagínate que tu disco duro es una <strong>nave industrial vacía</strong>. Una partición es levantar paredes para dividir esa nave en <strong>habitaciones separadas</strong>. Físicamente sigue siendo el mismo edificio pero lógicamente, lo que ocurre en una habitación no afecta al resto. Si se inunda el baño (una partición), no se te van a mojar los muebles del salón.</p>
+<p>Los <strong>directorios</strong> son simplemente las carpetas donde el sistema operativo organiza los archivos. Los más importantes en linux son:</p>
+<ul>
+<li><code>/</code>: es la base de todo, aquí van los archivos vitales</li>
+<li><code>/home</code>: aquí van los documentos personales</li>
+<li><code>/var</code>: aquí se guardan cosas que cambian muco, como los registros de errores o web si tienes un servidor</li>
+<li>y así otros muchos directorios que se explican más adelante</li>
+</ul>
+<p>Se recomienda poner directorios en diferentes particiones porque:</p>
+<ul>
+<li>
+<p>Caso de <code>/home</code>:</p>
+<ul>
+<li>Si tienes todo en <strong>una partición</strong> y tu linux se rompe o quieres instalar una versión más nueva, al formatear el disco para instalar el sistema, <strong>borrar también tus fotos y documentos personales</strong> porque todo está en el mismo saco.</li>
+<li>Si lo tienes <strong>separado:</strong> tienes una partición para el sistema y otra diferentes para tus datos, por lo que puedes borrar, formatear y reinstalar el sistema operativo 50 veces en la primera partición y tus fotos en <code>/home</code> siguen intactas.</li>
+</ul>
+</li>
+<li>
+<p>Caso de <code>/var</code>: Imagínate que un programa se vuelve loco y empiez a escribir errores en un archivo de texto sin parar</p>
+<ul>
+<li><strong>Todo en una partición:</strong> el archivo crece hasta llenar el disco y el ordenador se bloquea</li>
+<li><code>/var</code> <strong>separado:</strong> el archivo llena <code>/var</code> pero <code>/</code> sigue con espacio y el ordenador sigue funcionando.</li>
+</ul>
+</li>
+</ul>
+<h2>1.2.6 Fylesystem Hierarchy Standard</h2>
+<h3>La entrada principal</h3>
+<p><code>/</code> todo pende de este directorio llamado <strong>root o raíz</strong>, se puede pensar como que vestíbulo principal y el resto de carpetas son pasillos que salen de este vestíbulo.</p>
+<h3>Las Herramientas (programas)</h3>
+<p>En lugar de tener una carpeta por programa, Linux separa los archivos en diferentes &quot;cajas&quot; según quién los usa y para qué:</p>
+<ul>
+<li><code>/bin/</code> (Binaries): es la <strong>caja de herramientas de emergencia</strong>. Contiene lo mínimo para que el sistema funcione (como <code>ls</code> para listar archivos o <code>cp</code> para copiar). Si se rompe todo, esto debe estar disponible.</li>
+<li><code>/sbin/</code>(System Binaries): son herramientas exclusivas para el <strong>administrador del sistema</strong>. Aquí están los comandos para formatear discos, configurar redes, etc. Un usuario normal no los puede usar.</li>
+<li><code>/usr/</code>(User System Resources): aquí es donde vive el 90% del software &quot;normal&quot;. Es como el almacén general.
+<ul>
+<li><code>/usr/bin</code>: aquí están chrome, libreoffice, etc</li>
+<li><code>/usr/local</code>: aquí va lo que instalar tú manualmente para no mezclarlo con lo que trae el sistema</li>
+</ul>
+</li>
+<li><code>/opt</code>(Optional): es para software extraño o comercial que no sigue las reglas de Linux. Son aplicaciones que requieren un subdirectorio separado del resto.</li>
+</ul>
+<h3>La sala de máquinas y configuración</h3>
+<ul>
+<li><code>/boot</code>: es el <strong>botón de encendido</strong>. Contiene los mapas y las instrucciones exactas para arrancar el ordenador</li>
+<li><code>/etc</code>: es el <strong>panel de control</strong>. Aquí no hay programas, solo archivos de texto con configuraciones. Si por ejemplo quieres cambiar la IP, está en un archivo en <code>etc</code>. Scripts de configuración.</li>
+<li><code>/lib</code>: son las <strong>piezas de repuesto compartidas</strong>. Los programas de <code>/bin</code> necesitan estas piezas para funcionar. Librerías.</li>
+</ul>
+<h3>Los despachos</h3>
+<ul>
+<li><code>/home</code>: es tu <strong>despacho personal</strong>. Aquí hay una carpeta con tu nombre. Es el único sitio donde guardar fotos, descargar y documentos libremente, fuera de aquí no tienes permiso para escribir. Es el directorio donde están los directorios de los distintos usuarios.</li>
+<li><code>/root</code>: <strong>despacho blindado del superusuario</strong>.</li>
+</ul>
+<h3>El almacén dinámico y temporal</h3>
+<ul>
+<li><code>/var</code> (variable): piensa en esto como el <strong>buzón de correos y el libro de reclamaciones</strong>. Aquí se guardan cosas que crecen y cambian constantemente</li>
+<li><code>/tmp</code>(temporal): es la <strong>pizarra borrable</strong>. Los programas escriben notas aquí mientras trabajan cuando reinicias el ordenador, todo lo que hay aquí se borra.</li>
+<li><code>/srv</code>: datos de servicios proporcionados por el sistema</li>
+</ul>
+<h3>Las conexiones externas</h3>
+<ul>
+<li><code>/media</code>: es automático. Si metes un usb, el sistema crea una carpeta aquí automáticamente para que veas el contenido. Es el punto de montaje para medios removibles</li>
+<li><code>/mnt</code>: es manual. Se usa históricamente para que el administrador &quot;pegue&quot; discos duros o redes temporalmente. Es el punto de montaje para otros sistemas temporales (por ejemplo, el montaje de una unidad de red, de una partición de otro sistema operativo, etc)</li>
+</ul>
+<h3>Los fantasmas (directorios virtuales)</h3>
+<p>Son complejos de entender puesto que <strong>no existen en el disco duro</strong>. Son ilusiones creadas por el sistema operativo en la memoria RAM.</p>
+<ul>
+<li><code>/proc</code> y <code>/sys</code>: son una ventana al cerebro del ordenador en tiempo real, si entras en <code>/proc/cpuinfo</code>, no lees un archivo guardo, lees directamente lo que el procesador le está diciendo al SO en ese milisegudno. <code>/proc</code> contiene información del sistema y <code>/sys</code> contiene información de dispositivos</li>
+<li><code>/dev</code> (devices): en linux, <strong>todo es un archivo</strong>. Tu ratón es un archivo, tu disco duro es un archivo. Es un directorio que contiene seudoficheros de acceso a periférico</li>
+</ul>
+<h2>1.2.7 Esquemas de particionamiento</h2>
+<p>Dependiendo del tipo de sistema que queramos montar podemos escoger diferentes esquemas de particionamiento:</p>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>He metido información de más que considero interesante, si solo quieres aprobar con que sepas que particiones se recomiendan por esquema puedes continuar.</p>
+</div>
+<h3>Máquina de escritorio (Tu pc personal)</h3>
+<p>El objetivo es la simplicidad y proteger tus datos, por lo que se recomiendan 3 particiones:</p>
+<ul>
+<li><code>/</code> raíz, aquí va el Sistema Operativo</li>
+<li><strong>swap</strong> (área de intercambio): cuando la RAM se llena, el sistema coge aquellos archivos que menos estás usando en ese momento para liberar espacio y los mete al swap, y cuando los vuelve a necesitar los saca del swap. Es un proceso mucho más <strong>lento</strong>, es un simple <strong>salvavidas</strong> que evita que un programa que usa mucha memoria se cierre de golpe o el PC se congele. <strong>Si quieres hibernar</strong>, todo lo que hay en la RAM se copia al <strong>swap</strong> y cuando quieres volver a arrancarlo se vuelve de nuevo a la RAM. La mítica frase de <strong>tienes que tener el doble de swap que de RAM</strong> pues joder tiene matices porque claro si tienes una castaña de RAM de 4 gb la vas a llenar muchas veces entonces pues el lógico tener el doble de swap, pero si tienes una RAM de 16 GB intenta llenarla fenómeno, por eso meter 32 gb de swap con poco disco es de no ser muy listo.</li>
+<li><code>/home</code>, esto es lo crucial. Al tener tus datos personales en una <strong>habitación aparte</strong>, si mañana te da por romper tu sistema operativo no vas a peder toso tus datos, puedes formatear la partición <code>/</code> y reinstalar el sistema sin tocar la partición.</li>
+</ul>
+<h3>Sistema multiusuario</h3>
+<p>El objetivo es la seguridad y que el servidor nunca se apague. Hay que evitar que uno de los múltiples usuarios sea capaz de cargarse todo el sistema, por ello hay múltiples particiones:</p>
+<ul>
+<li>Separar <code>/var</code> y <code>/tmp</code> , imágina que un usuario ejecuta un programa mal hecho que empieza a generar errores infinitos o a descargar archivos basura sin parar. <strong>Si todo está junto</strong> se llena el disco entero y el sistema operativo se queda sin espacio y el <strong>servidor colapsa</strong>. Si tenemos <code>/var</code> separado el archivo de errores solo llena la partición, sin afectar a <code>/</code> el servidor seguirá funcionando.</li>
+<li>Separar <code>/usr</code> sirve para protegerse de virus y hackers, puesto que es donde viven los programas ejecutables. Si lo pones en una partición aparte, puedes activarla como <strong>solo lectura</strong>, esto implica que una vez instalado el sistema, pones un candado a esa partición. Aunque entre un virus o un hacker, no podrá modificar los archivos ejecutables para infectarlos, porque estará prohibido. Tus usuarios no podrán bajarse apps de forma libre.</li>
+</ul>
+<h2>1.2.8 Particionamiento durante la instalación</h2>
+<p>Dos opciones:</p>
+<ul>
+<li>Particionamiento guiado (con o sin LVM, LVM ya lo explico más alante), donde se selecciona el tamaño de las particiones de manera automática</li>
+<li>Particionamiento manual, con control del número y tamaño de las particiones</li>
+</ul>
+<h2>1.2.9 Particionamiento manual</h2>
+<p>Seleccionamos el disco a particionar y crear nueva tabla de particiones
+<img src="../../../img/asr/pasted-image-20251206134702.png" alt="Pasted image 20251206134702.png" loading="lazy"></p>
+<p>Creamos una nueva partición indicándole el tamaño, el tipo (primaria o lógica) y la localización (comienzo o final). Con la <strong>BIOS</strong> clásica puede haber 4 primarias o 3 primarias y una extendida, que a su vez se puede dividir en varias lógicas. Con <strong>UEFI</strong> se pueden crear hasta 128 primarias por disco.</p>
+<p>Si no sabes que es <strong>BIOS o UEFI</strong> es simplemente un <strong>firmware</strong> (un mini-software) que vive en un chip de la placa base de tu ordenador. Es lo primero que se despierta al pulsar el botón de encendido, comprueba que la RAM y el procesador funcionan y luego busca un disco duro para arrancar el SO.</p>
+<ul>
+<li><strong>BIOS</strong> es el sistema <strong>antiguo</strong></li>
+<li><strong>UEFI</strong> el <strong>moderno</strong></li>
+</ul>
+<h2>1.2.10 Sistemas de ficheros</h2>
+<p>Linux soporta varios sistemas de archivos:</p>
+<ul>
+<li><strong>ext4:</strong> Fourth EXTended filesystem, es el sistema de ficheros estándar en Linux
+<ul>
+<li>Es un sistema de ficheros transaccional (como una bd)</li>
+<li>Tiene características que le permiten reducir la fragmentación</li>
+<li>Puede trabajar con discos y ficheros de gran tamaño.</li>
+<li>Las opciones pueden configurarse con el comando <code>tuen2fs</code></li>
+<li>Las anteriores versiones <code>ext3</code> y <code>ext2</code>  siguen estando disponibles</li>
+</ul>
+</li>
+</ul>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>btrfs no entra pero yo de ti si fuese a montar mi SO usaría este porque es la versión moderna</p>
+</div>
+<ul>
+<li>
+<p><strong>btrfs:</strong> posible sucesor de ext4, pues presenta características avanzadas que además de mejorar el rendimiento, van dirigidas a la gestión y seguridad del almacenamiento:</p>
+<ul>
+<li>Gestiona de manera integrada el almacenamiento, pues incluye funciones que antes formaban parte del sistema de ficheros, del controlador RAID y del gestor lógico de volúmenes LVM</li>
+<li>Hace uso extensivo de <em>copy-on-write</em>, si varios recursos son idénticos se devuelve un puntero a un único recurso; en el momento en que se modifica una “copia” del recurso, se crea una copia auténtica para prevenir que los cambios sean visibles a las demás copias.</li>
+<li>Permite <em>snapshots</em> de solo lectura o modificables</li>
+<li>Etc</li>
+</ul>
+</li>
+<li>
+<p><strong>NFTS, exFAT:</strong> usados por Windows en ordenadores domésticos soportados también por linux</p>
+</li>
+<li>
+<p><strong>ReFS:</strong> usado por windows para empresas, no disponible de forma nativa para windows</p>
+</li>
+</ul>
+<h2>1.2.11 Últimos pasos de la instalación</h2>
+<p>Debemos seleccionar el <strong>mirror</strong> desde el que descargar el software. Existen varios repositorios de paquetes Debian, y debemos elegir el más cercano. Introducir la información del proxy.</p>
+<p>Después seleccionas los paquetes de software a instalar y por último instalas el gestor de arranque.</p>
+<p>Si quieres entender lo que es un <strong>mirror</strong> piensa que debian es una <strong>fábrica gigante de USA</strong> donde se fabrica el software. Si millones de personas de todo el mundo se intentase bajar el SO de esa fabrica el mismo tiempo, sería todo lentísimo y la fábrica colapsaría. Un <strong>mirror</strong> es un servidor que contiene una copia exacta (un espejo) de todo lo que hay en el servidor principal. Hay miles por todo el mundo, por ello escoges el más cercano a tu país.</p>
+<p>Un <strong>proxy</strong> es un intermediario.</p>
+<ul>
+<li>Sin Proxy: Tu PC -&gt; Internet</li>
+<li>Con Proxy: Tu pc -&gt; Servidor proxy (revisa quién eres y qué pides) -&gt; Internet</li>
+</ul>
+<h2>1.2.12 Instalación del gestor de arranque</h2>
+<p>Podemos tener diferentes distribuciones de Linux y Windows en el mismo ordenador, cada una con sus correspondientes particiones. El gestor de arranque (cargador o <em>bootloader</em>) nos permite seleccionar el SO  a arrancar.</p>
+<ul>
+<li>Las distribuciones <strong>Linux</strong> usan el cargador <strong>GRUB</strong> (GRand Unified Bootloader)</li>
+<li>Cuando el sistema se inicia, la <strong>BIOS</strong> carga el gestor de arranque que nos permite seleccionar el SO y a continuación transfiere el control al programa de inicio del correspondiente SO (localizado en /boot)</li>
+</ul>
+<p>Tenemos dos posibilidades a la hora de instalarlo:</p>
+<ul>
+<li>Instalarlo en el <strong>MBR</strong> o <strong>GTP</strong> del primer disco:
+<ul>
+<li>El MBR contiene información sobre las particiones del disco y un pequeño código del gestor de arranque. MBR se almacena solo en el primer sector del disco, como se joda esta parte del disco te jodiste.</li>
+<li>El GTP es el nuevo estándar que sustituye al anterior, más fiable y asociado a los sistemas UEFI. GTP Crea múltiples copias redundantes a lo largo de todo el disco y su nombre hace referencia a que a cada partición se le asocia un identificador global único</li>
+</ul>
+</li>
+<li>En caso de que tengamos otro cargador en el MBR o GTP, el gestor de arranque GRUB puede instalarse en el primer sector de la partición Linux que contenga /boot</li>
+</ul>
+<p>Debemos instalar al menos un gestor de arranque, en caso contrario no podríamos arrancar el sistema operativo. Si tenemos varios sistemas operativos en la misma máquina basta con instalar el gestor de arranque para uno de ellos (usualmente el del último sistema que instalemos).</p>
+<p>Podemos configurar GRUB para evitar que sea modificado el menu de arranque. En concreto, podemos usar una contraseña para limitar:</p>
+<ul>
+<li>la modificación de los parámetros iniciales</li>
+<li>el acceso a determinadas imágenes</li>
+<li>el acceso a opciones avanzadas</li>
+</ul>
+<p>Una vez acabada la instalación <strong>reinciamos</strong>.</p>
+<h2>1.2.13 Logical Volume Management (LVM)</h2>
+<p><strong>LVM</strong> es una de las tecnologías más potentes de Linux, pero también abstracta.</p>
+<p>Imaginate que tienes dos discos duros, son como dos barras de plastilina dura y seca. Sin LVM, si necesitas hacer una figura (partición) y se te acaba la plastilina de la barra 1, <strong>no puedes</strong> coger un trozo de la barra 2 y  pegárselo. Son independientes. Si tu carpeta de usuario se llena, tienes que comprar un disco más grande y moverlo todo, es rígido.</p>
+<p><strong>LVM</strong> coge esos discos duros, los tritura y crea una <strong>masa gigante y uniforme de plastilina</strong>. Ahora, el sistema operativo no le importa de qué disco viene el material, solo ve una gran reserva de espacio para usar.</p>
+<p><strong>Los 3 niveles de LVM:</strong></p>
+<ul>
+<li><strong>PV - Physical Volume</strong>. Son los discos duros, particiones,... Las barras de plastilina originales (llamadas por norma general <code>sda</code>, <code>sdb</code> ). Para usar LVM, primero tienes que marcar tus discos como listos para ser usados en LVM.</li>
+<li><strong>VG - Volume Group</strong>. En una grupación de PV. Es la bola gigante de plastilina. Puedes coger tus PVs y los mezclas en un solo grupo (<code>diskvg</code>). Ahora tienes un montón de espacio libre sumado. Ahora el sistema en vez de ver dos discos pequeños ve uno grande.</li>
+<li><strong>LV - Logical Volume</strong>. Particiones lógicas sobre las que se montan los sistemas. Son las <strong>figuras que moldeas</strong> sacando material de la bola grande. Creas particiones virtuales. Creas un LV para el sistema, otro para datos, etc. Si tu figura (LV) se queda pequeña, simplemente coges más plastilina de la bola grande (VG) y la haces más grande al instante, sin reiniciar. Y si te quedas sin espacio simplemente compras un nuevo disco y lo añades al VG.</li>
+</ul>
+<img src="../../../img/asr/pasted-image-20250917104001.png" alt="Pasted image 20250917104001.png" loading="lazy">
+<h2>1.2.14 Como crear un sistema LVM</h2>
+<p><strong>Crear los PV (Preparar los ingredientes):</strong> reservar espacio para /boot fuera de LVM. El gestor de arranque (GRUB) es muy básico. A veces le cuesta &quot;entender&quot; la complejidad de LVM. Por seguridad, se crea una partición pequeña normal y corriente para el arranque (<code>/boot</code>), y el resto del disco se marca como PV (plastilina para el sistema).</p>
+<p><strong>Crear un grupo de volumen (Hacer la masa):</strong> Incluye sda2 y sdb1. Aquí estás fusionando el espacio del primer disco y del segundo disco en un único almacén gigante llamado <code>diskvg</code>.</p>
+<p><strong>Crear los volúmenes lógicos (Hacer las figuras):</strong> Ahora que tienes el almacén <code>diskvg</code>, empiezas a cortar trozos virtuales:</p>
+<ul>
+<li>Un trozo para <code>/</code> (<code>rootlv</code>).</li>
+<li>Un trozo para <code>/usr</code> (<code>usrlv</code>).</li>
+<li>Un trozo para <code>/var</code> (<code>varlv</code>).</li>
+</ul>
+<p><strong>Cifrar (Poner caja fuerte):</strong> Como LVM es una capa de software, puedes decirle al sistema:  Oye, este volumen lógico (<code>varlv</code>) quiero que vaya cifrado. El sistema te pedirá contraseña cada vez que intente acceder a esa &quot;figura&quot; de plastilina.</p>
+<p><strong>Asignar sistema de ficheros (Pintar):</strong> Finalmente, a esos volúmenes lógicos les das formato (ext4, xfs, etc.) para poder guardar archivos, igual que harías con una partición normal.</p>
+<h1>1.3 Arranque del sistema</h1>
+<p>Al arrancar el ordenador se realizan las siguientes operaciones:</p>
+<h2>BIOS/UEFI (El vigilante de seguridad)</h2>
+<p>El vigilante (firmware de la placa base) llega al edificio oscuro y empieza su turno:</p>
+<ul>
+<li><strong>Chequeo (POST):</strong> Comprueba que el edificio no se cae (mira si la RAM, el teclado y la pantalla funcionan).</li>
+<li><strong>Decisión:</strong> Mira su lista de tareas para ver el orden de arranque. ¿A quién le doy las llaves? ¿Al disco duro, al USB o a la red?</li>
+<li><strong>Lectura del Disco:</strong> Encuentra el disco duro principal. Aquí cambia según el sistema:
+<ul>
+<li><strong>Si es MBR (Antiguo):</strong> El vigilante va a la puerta de entrada (primer sector) y despierta a quien esté allí durmiendo (ejecuta el código ciego del MBR).</li>
+<li><strong>Si es GPT (Moderno):</strong> El vigilante <strong>lee un mapa en la pared</strong> (La Tabla de Particiones GUID). El mapa le dice: <em>&quot;El Recepcionista está en la oficina 1&quot;</em>. El vigilante va allí y lo busca.</li>
+</ul>
+</li>
+</ul>
+<h2>Gestor de Arranque - GRUB (El recepcionista)</h2>
+<p>Una vez que el vigilante ha localizado y despertado al recepcionista (GRUB), el vigilante se retira.</p>
+<ul>
+<li><strong>El Menú:</strong> El trabajo del recepcionista es saludarte y mostrarte un menú: <em>&quot;¿Qué sistema operativo quiere usar hoy?&quot;</em>.</li>
+<li><strong>La Elección:</strong> Si no tocas nada, elige la opción por defecto. Si eliges tú (ej. Linux), el recepcionista mira en su lista dónde están las llaves de ese sistema.</li>
+<li><strong>El Traspaso:</strong> Va al almacén (<code>/boot</code>), saca al <strong>Gerente</strong> (<strong>Kernel</strong>) y lo despierta (carga el kernel en la memoria RAM), cediéndole el control total del edificio.</li>
+</ul>
+<h2>El kernel e initframs (El gerente y su mochila)</h2>
+<p>El <strong>kernel</strong> es el cerebro del sistema, el gerente. Pero tiene un problema. Imagina que las herramientas para abrir las puertas del centro comercial están guardadas dentro del centro comercial:</p>
+<ul>
+<li>El Kernel necesita acceder al disco duro real para cargar los controladores (drivers) del disco duro.</li>
+<li>Pero no puede leer el disco duro porque aún no ha cargado los controladores.</li>
+</ul>
+<p><strong>La solución:</strong> <code>initframs</code> (la mochila de emergencia). Para solucionar esto, el Kernel no va al disco duro real todavía. Carga en la memoria RAM un <strong>disco falso y temporal</strong> (virtual) llamado <code>initframs</code>. <code>initframs</code> contiene una partición raíz virtual y un programa <code>init</code> que permite arrancar todo.</p>
+<ul>
+<li>Es como si el gerente trajera una <strong>mochila de casa</strong>.</li>
+<li>Dentro de esa mochila (RAM) tiene las herramientas mínimas para entender como funciona el disco duro, desbloquear el disco si está cifrado y entender LVM</li>
+</ul>
+<p>Una vez que usa las herramientas de la mochila para abrir el disco duro real, tira la mochila y entra al sistema real.</p>
+<h2><code>systemd</code> (El jefe de la planta)</h2>
+<p>Una vez que el Kernel ha entrado en el disco real, llama al primer proceso real: <code>systemd</code> (o <code>init</code> ).</p>
+<p>A partir de aquí, el kernel, se dedica a gestionar el hardware, y <code>systemd</code> se encarga de organizar a los empleados.</p>
+<p>Muchos de estos procesos ofrecen servicios, por ejemplo, networking (red), cups (servicio de impresión), ssh, {xdm, gdm, ligthdm} (diferentes gestores de display), lvm (gestor de volúmenes lógicos), etc</p>
+<p>Paralelismo: antiguamente se despertaba a los empleados uno a uno. <code>systemd</code> es moderno: despierta al de la luz, al del agua, al de la limpieza y al de seguridad <strong>todos a la vez</strong> para abrir más rápido</p>
+<h2><code>systemctl</code> (el mando a distancia)</h2>
+<p><code>systemd</code> controla servicios. Tú, como administrador, controlas a <code>systemd</code> usando el comando `systemctl</p>
+<table>
+<thead>
+<tr>
+<th><strong>Acción</strong></th>
+<th><strong>Comando</strong></th>
+<th><strong>Significado</strong></th>
+<th><strong>Analogía Luz</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ahora mismo</strong></td>
+<td><code>start</code> / <code>stop</code></td>
+<td>Enciende o apaga el servicio <strong>en este instante</strong>.</td>
+<td>Pulsas el interruptor de la luz ahora.</td>
+</tr>
+<tr>
+<td><strong>Para el futuro</strong></td>
+<td><code>enable</code> / <code>disable</code></td>
+<td>Configura si el servicio debe arrancar <strong>automáticamente la próxima vez que reinicies</strong>.</td>
+<td>Programas el temporizador para que la luz se encienda sola mañana.</td>
+</tr>
+</tbody>
+</table>
+<p><code>systemctl status ssh</code>  comprueba si hay servidor de ssh.</p>
+<p>Si haces <code>systemctl stop ssh</code>, el servicio se para ahora. Pero si no haces <code>disable</code>, al reiniciar el PC, volverá a arrancar. También existe <code>systemctl restart ssh</code></p>
+<h2>Los Targets (Los niveles de alerta)</h2>
+<p><code>systemd</code> puede poner el ordenador en diferetes modos o estados de ánimo, llamados Targets.</p>
+<p><strong>Emergency / Rescue (Modo Pánico)</strong>: El sistema está roto. Solo arranca lo mínimo vital. No hay gráficos, ni red, ni usuarios. Solo una pantalla negra con letras para que el administrador intente arreglarlo (en emergencia abre un único shell).</p>
+<p><strong>Multi-user (Modo Servidor):</strong> arranca todo <strong>menos los gráficos</strong>, es como se usan los servidores profesionales: ahorras memoria al no cargar ventanas ni ratón.</p>
+<p><strong>Graphical (Modo Normal):</strong> arranca todo lo anterior + la interfaz gráfica (ventanas, ratón, escritorio). Es como usas tu PC normalmente.</p>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p><strong>Shell</strong> (cáscara, concha). Si el <strong>kernel</strong> (núcleo) es la parte blanda y vital de una nuez, el <strong>Shell</strong> es la cáscara dura que lo rodea.</p>
+<p>Un <strong>shell</strong> es un programa informático que actúa como <strong>intérprete de comandos</strong>. Es el intermediario o traductor entre tú y el kernel.</p>
+<p>Tu no hablas binario, y el kernel no habla español. Tu escribes <code>date</code> palabra humana. El <strong>shell</strong> lee eso, busca el programa correspondiente y le dice al kernel: ejecuta las instrucciones de tiempo del sistema. El kernel devuelve el resultado y el shell te lo muestra en pantalla.</p>
+<p><strong>Confusión Terminal vs Shell</strong>
+La <strong>terminal</strong> es la <strong>ventana negra</strong> que ves en la pantalla. Es solo un programa que muestra texto y envía lo que tecleas. El <strong>shell</strong> es el <strong>software</strong> que vive dentro de esa ventana, es quien procesa lo que escribes.
+Tu puedes abrir una ventana de terminal y cambiar el shell que usas dentro sin cerrar la ventana.</p>
+<p>Igual que hay muchas marcas de coches, hay muchos tipos de Shells. En linux el más famoso es <strong>Bash</strong> pero hay otros:</p>
+<ul>
+<li><strong>Bash (Bourne Again Shell):</strong> es el estándar. Robusto y universal</li>
+<li><strong>Sh (Bourne Shell):</strong> el abuelo, muy antiguo y básico</li>
+<li><strong>Zsh (Z Shell):</strong> el moderno, por defecto usado en MarOS. Tiene colores, autocompletado inteligente y muchas ayudas visuales.
+También existen modelos de terminales.</li>
+</ul>
+</div>
+<h1>1.4 Verificación de la instalación</h1>
+<p>Linux soporta la inmensa mayoría del hardware actual (arquitecturas i386, AMD64, ARM, etc.). Durante la instalación, el sistema suele detectar y configurar los componentes automáticamente.</p>
+<p>Para verificar esta detección y diagnosticar problemas, disponemos de herramientas que leen la información directamente del kernel y la BIOS.</p>
+<h2>1.4.1 Información de hardware</h2>
+<table>
+<thead>
+<tr>
+<th><strong>Comando</strong></th>
+<th><strong>Descripción</strong></th>
+<th><strong>¿Requiere Root?</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>lscpu</code> / <code>nproc</code></td>
+<td>Información del procesador y número de núcleos.</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>lsram</code> / <code>free -h</code></td>
+<td>Estado de la memoria RAM y Swap.</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>lspci</code></td>
+<td>Dispositivos conectados a la placa (Gráfica, Red, Sonido).</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>lsusb</code></td>
+<td>Dispositivos externos USB (Teclado, Ratón, Pendrives).</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>dmidecode</code></td>
+<td>Información profunda de la BIOS (Hardware físico real).</td>
+<td><strong>Sí (sudo)</strong></td>
+</tr>
+<tr>
+<td><code>fdisk -l</code></td>
+<td>Muestra discos y particiones físicas.</td>
+<td><strong>Sí (sudo)</strong></td>
+</tr>
+<tr>
+<td><code>df -h</code></td>
+<td>Muestra particiones <strong>montadas</strong> y espacio disponible.</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>uname -a</code></td>
+<td>Versión del Kernel.</td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>lsb_release -a</code></td>
+<td>Versión de la Distribución (Debian, Ubuntu, etc.).</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<h2>1.4.2 Información de Bajo Nivel (BIOS/DMI)</h2>
+<p>El comando <code>dmidecode</code> vuelca la información de la <strong>DMI</strong> (Desktop Management Interface). Es fundamental porque nos dice <strong>qué hardware físico hay conectado</strong>, incluso si el sistema operativo no tiene drivers para usarlo.</p>
+<ul>
+<li><strong>¿Qué muestra?</strong> Modelo de placa base, slots de RAM ocupados/libres, versión de BIOS, números de serie, etc.</li>
+<li><strong>Uso común:</strong> Saber cuánta RAM máxima soporta tu placa o qué modelo exacto de RAM tienes sin abrir el PC.</li>
+</ul>
+<pre><code>System Information
+    Manufacturer: Gigabyte Technology Co., Ltd.
+    Product Name: H81M-HD3
+Memory Device
+    Size: 4 GB
+    Type: DDR3
+    Speed: 1333 MT/s
+</code></pre>
+<h2>1.4.3 Información general de hardware</h2>
+<p>El comando <code>lshw</code> muestra información general del hardware. La información es similar a la del comando anterior, si bien en este caso el comando lee la información de los directorios <code>/proc</code> y <code>/sys</code></p>
+<h2>1.4.4 Información CPU</h2>
+<p><strong>Comandos:</strong> <code>lscpu</code>, <code>nproc</code></p>
+<ul>
+<li><strong><code>lscpu</code>:</strong> Muestra la arquitectura (x86_64), modo de operación (32/64 bits), velocidad (MHz), y el tamaño de las memorias Caché (L1, L2, L3), vitales para el rendimiento.</li>
+<li><strong><code>nproc</code>:</strong> Solo devuelve un número (el total de hilos de procesamiento disponibles).</li>
+</ul>
+<h2>1.4.5 Dispositivos y Buses</h2>
+<h3>A. Bus PCI (<code>lspci</code>)</h3>
+<p>Muestra las tarjetas internas pinchadas en la placa base (o soldadas).</p>
+<ul>
+<li><strong>Ejemplos:</strong> Tarjeta Gráfica (VGA/3D), Tarjeta de Red (Ethernet/WiFi), Tarjeta de Sonido.</li>
+<li><strong>Lectura:</strong> <code>00:02.0 VGA compatible controller...</code> (Indica el slot y el dispositivo).</li>
+</ul>
+<h3>B. Bus USB (<code>lsusb</code>)</h3>
+<p>Muestra periféricos externos.</p>
+<ul>
+<li><strong>Ejemplos:</strong> Teclados, ratones, webcams, discos externos.</li>
+<li><strong>Lectura:</strong> <code>Bus 001 Device 005: ID 413c:1002...</code> (El ID es crucial para buscar drivers si algo no funciona).</li>
+</ul>
+<h2>1.4.6 Discos duros</h2>
+<p>Esta es una de las partes más críticas. Linux trata los discos como <strong>archivos de dispositivo</strong> en <code>/dev/</code>.</p>
+<h3>Nomenclatura de Discos</h3>
+<table>
+<thead>
+<tr>
+<th><strong>Tipo de Disco</strong></th>
+<th><strong>Bus</strong></th>
+<th><strong>Nombre en Linux</strong></th>
+<th><strong>Ejemplo</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SATA / SSD</strong></td>
+<td>Serial ATA</td>
+<td><code>sd</code> + letra (a, b, c...)</td>
+<td><code>/dev/sda</code> (Disco 1), <code>/dev/sdb</code> (Disco 2)</td>
+</tr>
+<tr>
+<td><strong>NVMe (Moderno)</strong></td>
+<td>PCI Express</td>
+<td><code>nvme</code> + controlador + dispositivo</td>
+<td><code>/dev/nvme0n1</code> (Disco NVMe 1)</td>
+</tr>
+</tbody>
+</table>
+<h3>Nomenclatura de Particiones</h3>
+<p>Se añade un número al final del disco.</p>
+<ul>
+<li><strong>SATA:</strong> <code>/dev/sda1</code> (Partición 1 del disco A).</li>
+<li><strong>NVMe:</strong> <code>/dev/nvme0n1p1</code> (Partición 1 del disco NVMe 0).</li>
+</ul>
+<h3>Comandos de Visualización</h3>
+<p><strong><code>fdisk -l</code> (La realidad física):</strong></p>
+<ul>
+<li>Muestra <strong>todo</strong> lo que hay en el disco, esté en uso o no.</li>
+<li>Información: Tamaño de sectores, tipo de partición (Linux, Swap, EFI, Windows Data).</li>
+</ul>
+<p><strong><code>df -h</code> (La realidad lógica):</strong></p>
+<ul>
+<li>Muestra solo las particiones <strong>montadas</strong> (las que el sistema está usando ahora mismo).</li>
+<li>Información: Espacio total, usado y libre.</li>
+<li><em>Nota:</em> Muestra sistemas de archivos virtuales como <code>tmpfs</code> (RAM usada como disco temporal).</li>
+</ul>
+<h2>Memoria (<code>free</code>)</h2>
+<p>Muestra el estado de la RAM y la Swap. <strong>Opción clave:</strong> Usar siempre <code>-h</code> (human readable) para ver Gigas (Gi) en vez de bytes.</p>
+<pre><code class="language-bash">$ free -h
+              total        used        free      shared  buff/cache   available
+Mem:          7,6Gi       1,0Gi       5,7Gi        19Mi       928Mi       6,4Gi
+Swap:          52Gi       182Mi        51Gi
+</code></pre>
+<h3>Sistema y Kernel</h3>
+<p>Kernel (Motor)</p>
+<ul>
+<li><strong>Comando:</strong> <code>uname -a</code></li>
+<li><strong>Qué dice:</strong> Versión del núcleo (ej. <code>6.8.0-45-generic</code>). Útil para saber si tu kernel soporta un hardware muy nuevo.</li>
+</ul>
+<p>Distribución (Carrocería)</p>
+<ul>
+<li><strong>Comando:</strong> <code>lsb_release -a</code></li>
+<li><strong>Qué dice:</strong> Versión comercial (ej. <code>Ubuntu 24.04 LTS</code>, <code>Debian 12</code>).</li>
+</ul>
+<p>Módulos del Kernel (<code>*.ko</code>)
+Son los &quot;drivers&quot; de Linux. No son programas normales, son piezas de código que se insertan en el kernel vivo.</p>
+<ul>
+<li><code>lsmod</code>: Lista lo que está cargado (ej. <code>nvidia</code>, <code>snd_hda_intel</code>).</li>
+<li><code>modprobe [modulo]</code>: Carga un módulo (inteligente, carga dependencias).</li>
+<li><code>rmmod [modulo]</code>: Elimina un módulo (si no se está usando).</li>
+</ul>
+<h3>Directorios virtuales</h3>
+<p>Son directorios mágicos. <strong>No están en el disco duro</strong>, sino en la memoria RAM. Son la forma que tiene el Kernel de &quot;hablar&quot; contigo.</p>
+<ul>
+<li>Si haces <code>cat /proc/cpuinfo</code>, no estás leyendo un archivo de texto, estás pidiendo al Kernel que te &quot;imprima&quot; el estado actual de la CPU.</li>
+<li>La mayoría de comandos anteriores (<code>lscpu</code>, <code>lshw</code>, <code>free</code>) en realidad lo único que hacen es leer estos archivos, ordenarlos y mostrártelos bonitos.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-instalacion-de-software.html"><span class="nav-etiqueta">siguiente →</span>2. Instalación de Software</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

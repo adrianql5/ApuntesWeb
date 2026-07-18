@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Introducción — apuntes de CIBER (tercer curso de Ingeniería Informática).">
+<title>1. Introducción · CIBER · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">ciber</a><span class="miga-sep">/</span><span aria-current="page">1-introduccion</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">CIBER · curso 3</p>
+    <h1>1. Introducción · CIBER</h1>
+  </header>
+  <div class="prosa">
+<p>La <strong>ciberseguridad</strong>  busca la <strong>proteccón</strong> de los <strong>activos</strong> de un sistema informático: los datos, el software, el hardware y las comunicaciones.</p>
+<p>Los <strong>activos</strong> se valoran como elementos <strong>reemplazables</strong> <strong>fácilmente</strong>, elementos con <strong>especial valor</strong> para el negocio/usuario o elementos únicos e <strong>irremplazables</strong>.</p>
+<p><strong>Proteger</strong> significa tomar las medidas adecuadas al valor de los activos</p>
+<h1>1.1 Activos</h1>
+<h2>1.1.1 Los Datos</h2>
+<p>Los <strong>datos</strong> son información almacenada/distribuida/compartida en distintos formatos. En los equipos de <strong>uso personal</strong> cada día hay más datos que buscan los delincuentes. Incluso datos como el <strong>DNI</strong> pueden usarse para un ataque de suplantación de identidad. Los datos de una <strong>empresa</strong> pueden ser deseados por competidores, espías, gobiernos, etc., por lo que es fácil ser objetivo de ataques maliciosos.</p>
+<p>Hay que valorar cuáles son las <strong>medidas más adecuadas</strong> para proteger los datos según su valor y lo que supondría su pérdida.</p>
+<h3>1.1.2 El software</h3>
+<p>Uno de los objetivos de los atacantes de un sistema es hacerse con el <strong>control del software</strong> para que trabajen para ellos. Existen dos métodos de ataque básico al software:</p>
+<ul>
+<li>Buscar <strong>puntos débiles:</strong> fallos del sistema operativo y vulnerabilidades conocidas de los programas instalados.</li>
+<li>Introducir un <strong>caballo de Troya:</strong> como un gestor de correo que, además de gestionar el correo, envía copia de los mensajes al atacante.</li>
+</ul>
+<p>Para protegerse de este tipo de ataques, hay que tener los programas actualizados y evitar instalar programas de procedencia dudosa.</p>
+<h3>1.1.3 El hardware</h3>
+<p>Una persona con conocimientos informáticos con <strong>acceso físico</strong> a un equipo, aún si tener su contraseña, puede hacer muchas averiguaciones sobre él. Los <strong>dispositivos móviles</strong> suponen un riesgo mayor al tener más posibilidad de extravío o robo. El <strong>IoT</strong> (Internet of Things) incrementa la superficie de posibles ataques.</p>
+<p>No hay que descuidar las medidas de control de acceso físico a <strong>instalaciones</strong>.</p>
+<h3>1.1.4 Las comunicaciones</h3>
+<p>Normalmente, el canal para transmitir información entre equipos es <strong>Internet,</strong> que emplea múltiples <strong>nodos de interconexión</strong> a los que tienen acceso <strong>muchos usuarios</strong>. Esto unido al hecho de que los protocolos de comunicación más empleados no <strong>implementan mecanismos de seguridad adecuados</strong>, provocan que cualquier persona con acceso a dichos nodos o a alguna de las redes intermedia pueda <strong>intercepta</strong> y leer/modificar los mensajes.</p>
+<p>La solución a este problema es emplear <strong>técnicas criptográficas</strong>.</p>
+<h1>1.2 Amenazas</h1>
+<h2>1.2.1 Ataques Aleatorios</h2>
+<p>Posibles <strong>motivaciones</strong>:</p>
+<ul>
+<li><strong>Diversión</strong> de alguien que busca sistemas mal protegidos para alguna <strong>travesura</strong></li>
+<li>Instalar en nuestro sistema <strong>programas espía</strong> para capturar datos nuestros y aprovecharlos en su beneficio.</li>
+<li><strong>Controlar nuestro sistema</strong> para emplearlo como cabeza de puente en ataques contra otros sitios ocultando así su verdadera identidad.
+Ej: <strong>escaneo al azar de direcciónes IP y puertos abiertos</strong>.</li>
+</ul>
+<h2>1.2.2 Ataques Dirigidos</h2>
+<p>Posibles <strong>motivaciones</strong>:</p>
+<ul>
+<li><strong>Competencia industrial:</strong> interés de una empresa rival en acceder a nuestra comunicaciones internas</li>
+<li><strong>Ataques de organizaciones religiosas, políticas, ONGs</strong> que defienden ideas contrapuestas a las de la organización.</li>
+<li><strong>Afán de notoriedad</strong>, si somos por ejemplo una empresa con cierta imagen pública.</li>
+<li><strong>Facilidad:</strong> ataques a sistemas porque son fáciles de atacar.</li>
+</ul>
+<p>Muchas empresas suponen que los ataques siempre son externos, y por eso se dedican a establecer una defensa perimetral, pero <strong>los ataques pueden ser internos</strong> (provenientes de un empleado descontento o un infiltrado para hacer espionaje industrial.</p>
+<p><strong>Método Oportunidad-Objetivo</strong></p>
+<ul>
+<li><strong>Oportunidad:</strong> el activo es vulnerable en un determinado aspecto</li>
+<li><strong>Método:</strong> existe un mecanismo par atacar dicha vulnerabilidad</li>
+<li><strong>Motivo:</strong> existe un interés por parte del atacante</li>
+</ul>
+<h1>1.3 Servicios básicos de seguridad</h1>
+<ul>
+<li>
+<p><strong>Disponibilidad:</strong> asegurar que la información puede ser utilizado por las partes autorizadas</p>
+</li>
+<li>
+<p><strong>Confidencialidad:</strong> asegurar que la información es visto solo por partes autorizadas</p>
+</li>
+<li>
+<p><strong>Integridad:</strong> asegurar que la información es modificada únicamente por partes autorizadas.</p>
+</li>
+<li>
+<p><strong>Autenticación:</strong> asegurar que el origen de la información es quien dice ser</p>
+</li>
+<li>
+<p><strong>No repudio:</strong> impedir que alguien niegue haber realizado una acción cuando efectivamente lo ha hecho</p>
+</li>
+<li>
+<p><strong>Control de acceso:</strong> garantizar acceso únicamente a partes autorizadas a los recursos.</p>
+</li>
+</ul>
+<img src="../../../img/ciber/image.png" alt="image.png" loading="lazy">
+<img src="../../../img/ciber/pasted-image-20260217140244.png" alt="Pasted image 20260217140244.png" loading="lazy" width="700" height="427">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-criptografia.html"><span class="nav-etiqueta">siguiente →</span>2. Criptografía</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

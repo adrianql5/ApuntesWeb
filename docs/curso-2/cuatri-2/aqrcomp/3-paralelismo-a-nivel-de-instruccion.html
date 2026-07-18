@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="3. Paralelismo a Nivel de Instrucción — apuntes de AQRCOMP (segundo curso de Ingeniería Informática).">
+<title>3. Paralelismo a Nivel de Instrucción · AQRCOMP · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">aqrcomp</a><span class="miga-sep">/</span><span aria-current="page">3-paralelismo-a-nivel-de-instruccion</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">AQRCOMP · curso 2</p>
+    <h1>3. Paralelismo a Nivel de Instrucción · AQRCOMP</h1>
+  </header>
+  <div class="prosa">
+<h1>3.1 Instruction Level Paralelism</h1>
+<p>El paralelismo de instrucción es aplicable dentro de cada bloque básico (secuencia de instrucciones sin saltos). Sin embargo, la longitud media de un bloque básico es de 3 a 6 instrucciones lo que reduce bastante su posible aprovechamiento. Una técnica para mejorar el aprovechamiento del ILP dentro de un bucle se conoce como <strong>desenrollamiento de bucles</strong>. También podemos entrelazar ejecución de instrucciones no relacionadas y rellenar detenciones con instrucciones.</p>
+<p>El <strong>desenrollamiento</strong> de bucles consiste en entrelazar la ejecución de instrucciones de varias iteraciones de un bucle. Al tratarse de instrucciones <strong>no relacionadas</strong> no generan dependencias y <strong>permiten un mejor aprovechamiento de la arquitectura segmentada</strong>.</p>
+<p>(Cuando en los enunciados pone planificación de lazo se refiere a que reordenemos o desenrollemos el código que nos dan).</p>
+<img src="../../../img/aqrcomp/pasted-image-20250529205205.png" alt="Pasted image 20250529205205.png" loading="lazy">
+<img src="../../../img/aqrcomp/pasted-image-20250529205229.png" alt="Pasted image 20250529205229.png" loading="lazy">
+<img src="../../../img/aqrcomp/pasted-image-20250529205253.png" alt="Pasted image 20250529205253.png" loading="lazy">
+<h1>3.2 Emisión Múltiple</h1>
+<p>La <strong>segmentación</strong> permite ejecutar varias instrucciones a la vez. El objetivo de explotar el <strong>ILP</strong> (Instruction Level Paralelism) es <strong>optimizar el CPI</strong>:
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.0197em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">Paradas por riesgos estructurales</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">Paradas por riesgos de control</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">Paradas por riesgos de datos</span></span></span></span></span></span></eqn></section>
+La predicción de saltos realizada por el compilador, el unrolling,etc. ayudan a exponer más el paralelismo.</p>
+<p>Hay dos alternativas para <strong>mejorar el ILP</strong>:</p>
+<ul>
+<li>Hacer más <strong>profundo el pipeline</strong> (tema2)-&gt;menos trabajo por etapa -&gt; <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight" style="margin-right:0.0197em;">l</span><span class="mord mathnormal mtight">oc</span><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> más corto -&gt; mayor <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1076em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">c</span><span class="mord mathnormal mtight" style="margin-right:0.0197em;">l</span><span class="mord mathnormal mtight">oc</span><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq></li>
+<li><strong>Emisión múltiple</strong> (tema3) -&gt; se replican las etapas del pipeline en <strong>multiples pipelines</strong> en los que se comenzarán <strong>varias instrucciones en cada ciclo</strong>. Entonces <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7224em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></eq>, por lo que en su lugar se usa el <strong>IPC</strong> (numero de instrucciones por ciclo) como medida de rapidez.</li>
+</ul>
+<h1>3.3 Emisión Múltiple Estática</h1>
+<p>En la <strong>emisión múltiple estática</strong> el <strong>compilador</strong> agrupa instrucciones en <strong>paquetes de emisión</strong> para emitirlas juntas. Un <strong>paquete de emisión</strong> es un grupo instrucciones que pueden ser <strong>emitidas</strong> en un solo <strong>ciclo</strong>, y viene determinado por los <strong>recursos del pipeline</strong>.
+Usan <strong>planificación estática</strong> donde el <strong>compilador</strong> debe <strong>eliminar algunos/todos los riesgos:</strong></p>
+<ul>
+<li>En un paquete de emisión sólo puede haber instrucciones <strong>sin dependencias entre ellas</strong> (si no, no se podrían ejecutar simultáneamente).</li>
+<li>Posiblemente haya <strong>dependencias entre paquetes</strong> -&gt; su tratamiento varía entre ISAs. <strong>El compilador debe saberlo</strong>.</li>
+<li>Se rellenará el resto del paquete con <strong>NOP</strong> si no se encuentran las instrucciones adecuadas.</li>
+</ul>
+<img src="../../../img/aqrcomp/pasted-image-20250428222902.png" alt="Pasted image 20250428222902.png" loading="lazy">
+<p>Para poder hacer la emisión dual debemos añadir hardware adicional:
+<img src="../../../img/aqrcomp/pasted-image-20250428222829.png" alt="Pasted image 20250428222829.png" loading="lazy"></p>
+<p>Las arquitecturas <strong>VLIW</strong> (Very Long Instruction Word) ven los paquetes como una <strong>instrucción muy larga</strong> por ejemplo:</p>
+<ul>
+<li>Una operación con enteros o una operación de salto</li>
+<li>Dos operaciones independientes en punto flotante</li>
+<li>Dos referencias a memoria independientes</li>
+</ul>
+<p>Es necesario encontrar paralelismo estáticamente ya que no hay hardware de detección de riesgos.Gran tamaño del código.Esto implica <strong>hardware</strong> de la CPU más <strong>simplificado</strong>, menor <strong>consumo de potencia</strong>.</p>
+<p>Se forman paquetes de emisión con una instrucción <strong>ALU</strong> o un <strong>salto</strong> seguida de una instrucción de <strong>load</strong> o <strong>store</strong>. Las instrucciones no utilizadas se rellenan con <strong>NOP</strong>.</p>
+<img src="../../../img/aqrcomp/pasted-image-20250529214216.png" alt="Pasted image 20250529214216.png" loading="lazy">
+<img src="../../../img/aqrcomp/pasted-image-20250601161242.png" alt="Pasted image 20250601161242.png" loading="lazy">
+# 3.4 Emisión Múltiple Dinámica
+La **emisión múltiple estática** la **cpu** examina el flujo de instrucciones y selecciona las que se deben emitir en cada ciclo. Los procesadores que la realizan denominan **procesadores superescalares**.
+<p>Evita la necesidad de <strong>planificación</strong> del <strong>compilador</strong>, ya que se realiza por hardware, por lo que tampoco debe conocer como es el hardware. La CPU asegura la semántica del código, pero da lugar a CPUs más complicadas en cuanto a hardware. Permite a la CPU emitir varias instrucciones que:</p>
+<ul>
+<li>Se <strong>ejecutan fuera de orden</strong> (para evitar paradas).</li>
+<li><strong>Terminan fuera de orden</strong> en muchos casos.</li>
+<li>Pero el <strong>WB</strong> respeta la semántica del programa</li>
+</ul>
+<p>La <strong>planificación dinámica</strong> consiste en <strong>reordenar</strong> las instrucciones para reducir las paradas a la vez que se mantiene el flujo de datos del programa. Puede gestionar casos en los que las <strong>dependencias no</strong> se conocen en <strong>tiempo de compilación</strong>.</p>
+<img src="../../../img/aqrcomp/pasted-image-20250529214733.png" alt="Pasted image 20250529214733.png" loading="lazy">
+<p><strong>Motivos para hacer planificación dinámica:</strong></p>
+<ul>
+<li>No todas las paradas son <strong>predecible</strong> (por ejemplo, los fallos de caché).</li>
+<li>No siempre se pueden planificar estáticamente, por ejemplo, si hay instrucciones de <strong>salto</strong>, ya que el <strong>resultado</strong> del salto se determina <strong>dinámicamente</strong>.</li>
+<li><strong>Diferentes implementaciones de un ISA</strong> pueden tener diferentes <strong>latencias</strong> y dar lugar a diferentes <strong>riesgos</strong>.</li>
+<li><strong>Instruction commit:</strong> proceso que se produce cuando una instrucción actualiza su resultado en el <strong>archivo de registros</strong>.</li>
+</ul>
+<p>Tenemos el siguiente <strong>camino de datos:</strong>
+<img src="../../../img/aqrcomp/pasted-image-20250530095222.png" alt="Pasted image 20250530095222.png" loading="lazy"></p>
+<ul>
+<li>
+<p><strong>Lectura de múltiples instrucciones en orden</strong></p>
+</li>
+<li>
+<p><strong>Decodificación de múltiples instrucciones en orden</strong></p>
+</li>
+<li>
+<p><strong>Distribución/Emisión de multiples instrucciones en orden</strong>: Cada instrucción se distribuye en una <strong>estación de reserva,</strong> y se almacena también en el buffer de terminación.</p>
+<ul>
+<li>
+<p>Se realiza el <strong>renombramiento de registros</strong> para resolver dependencias <strong>WAR y WAW</strong>.</p>
+</li>
+<li>
+<p>Si los operandos fuente de la instrucción están disponibles en el <strong>banco de registros</strong> o en el <strong>buffer de terminación/reodenamiento</strong>, se copian en la <strong>estación de reserva</strong>, y se realiza la <strong>emisión de la instrucción</strong> (envío a una unidad de ejecución) en cuanto la unidad está disponible.</p>
+</li>
+<li>
+<p>Si falta algún operando fuente en la instrucción (por una dependencia), la instrucción queda retenida en la estación de reserva hasta que el dato está disponible; cuando la unidad funcional correspondiente produce el dato esperado, se copia en la estación de reserva y la instrucción queda lista para su ejecución.
+El renombrado de registros se realiza mediante <strong>estaciones de reserva</strong> (RS), que tienen una <strong>entrada</strong> por cada <strong>instrucción</strong> en <strong>ejecución</strong>.
+<img src="../../../img/aqrcomp/pasted-image-20250429115334.png" alt="Pasted image 20250429115334.png" loading="lazy"></p>
+<p>Campos de una entrada en la RS:</p>
+<ul>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span></eq>: indica si la entrada está ocupada por una instrucción o libre</li>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span></span></span></span></eq>: campo de código de instrucción.</li>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mord">1</span></span></span></span></eq> y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mord">2</span></span></span></span></eq>: operandos de entrada de la instrucción: proceden de registros o de caminos de adelantamiento de las unidades de ejecución. Pueden ser un identificador de registro o de renombrado, es decir, que su valor está siendo calculado.</li>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="mord">1</span></span></span></span></eq> y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="mord">2</span></span></span></span></eq>: indica si los operandos <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mord">1</span></span></span></span></eq> y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mord">2</span></span></span></span></eq> son válidos.</li>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span></span></span></span></eq>: indica si la instrucción está lista para la emisión.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Ejecución</strong> de la instrucción en la unidad funcional: al terminar, se escribe el resultado en el <strong>buffer de terminación</strong> (y en las estaciones de reserva que están a la espera)</p>
+</li>
+<li>
+<p><strong>Terminación:</strong> a medida que los resultados se copian en el buffer de terminación, se escriben en el banco de registros <strong>en orden</strong> y las instrucciones se terminan</p>
+</li>
+<li>
+<p><strong>Retirada:</strong> las instrucciones de almacenamiento realizan la escritura en memoria</p>
+</li>
+</ul>
+<h2>Algoritmo de Tomasulo</h2>
+<p>Algoritmo diseñado para permitir a un procesador ejecutar instrucciones fuera de orden, este algoritmo permite el lanzamiento de las instrucciones de WAR y WAW sin detener la ejecución, del mismo modo utiliza un bus de datos común (CDB) en el que los valores calculados son enviados a todas las estaciones de reserva que lo necesiten
+<strong>Emisión:</strong></p>
+<ul>
+<li>Se lee la instrucción del buffer de instrucciones.</li>
+<li>Se reserva una estación si está disponible.</li>
+<li>Se renombra el destino si es necesario.</li>
+<li>Si los operandos están listos, se colocan. Si no, se apunta al productor (quién lo generará).</li>
+</ul>
+<p><strong>Ejecución:</strong></p>
+<ul>
+<li>Una vez que todos los operandos están listos, la instrucción se ejecuta.</li>
+<li>La ejecución puede tardar varios ciclos.</li>
+</ul>
+<p><strong>Escribir resultado:</strong></p>
+<ul>
+<li>El resultado se envía por el <strong>CDB</strong>.</li>
+<li>Todas las unidades que esperaban ese resultado lo reciben.</li>
+<li>El registro de destino se actualiza si aún corresponde a esa instrucción.</li>
+</ul>
+<p><strong>Dependencias:</strong></p>
+<ul>
+<li><strong>RAW (Read After Write):</strong> Tomasulo espera hasta que el dato esté disponible.</li>
+<li><strong>WAW (Write After Write):</strong> Se evita con renombramiento de registros.</li>
+<li><strong>WAR (Write After Read):</strong> Se evita porque las instrucciones no escriben directamente hasta la fase final.</li>
+</ul>
+<img src="../../../img/aqrcomp/pasted-image-20250429121045.png" alt="Pasted image 20250429121045.png" loading="lazy">
+<img src="../../../img/aqrcomp/pasted-image-20250530103547.png" alt="Pasted image 20250530103547.png" loading="lazy">
+<img src="../../../img/aqrcomp/pasted-image-20250601175601.png" alt="Pasted image 20250601175601.png" loading="lazy">
+<div class="callout callout-nota">
+<p class="callout-titulo">Manda huevos ir hasta Alemania para tener una explicación decente</p>
+<p><a href="https://www.youtube.com/watch?v=YH2fFu-35L8">https://www.youtube.com/watch?v=YH2fFu-35L8</a></p>
+</div>
+<h1>3.4 Especulación Basada en Hardware</h1>
+<p>La <strong>especulación</strong> consiste en hacer conjeturas sobre de lo que hará una instrucción.</p>
+<ul>
+<li>Comenzar la operación tan pronto como sea posible</li>
+<li>Comprobar si se acertó:
+<ul>
+<li>Si se acertó: completar la operación</li>
+<li>Si no se acertó: retroceder y corregir</li>
+</ul>
+</li>
+</ul>
+<p>Se realiza tanto en la emisión <strong>multiple</strong> como en dinámica.</p>
+<p>Tipos de especulación:</p>
+<ul>
+<li>
+<p>Especulación realizada por el <strong>compilador:</strong> reordena instrucciones (ej, mover la carga antes de un salto). Si la especulación es incorrecta, puede incluir <strong>instrucciones de arreglo</strong> para recuperarse.</p>
+</li>
+<li>
+<p>Especulación realizada por <strong>hardware:</strong> busca por adelantado instrucciones para ejecutar. Mete los resultados de ejecutar la instrucción en un buffer hasta que se determine si se necesitan realmente, si la especulación es incorrecta se <strong>vacían los buffers</strong>.</p>
+</li>
+</ul>
+<h3>Especulación acerca del Salto</h3>
+<p>Consiste en especular acerca del resultado de un salto y continuar emitiendo instrucciones asumiendo que son las correctas. No se actualizan los registros (Instruction Commit) hasta que se determine el resultado de salto.</p>
+<h3>Especulación acerca de la Carga</h3>
+<p>Trata de evitar el retardo por carga y fallo caché.</p>
+<ul>
+<li>Predecir la dirección efectiva</li>
+<li>Predecir el valor cargado</li>
+<li>Pasar los valores almacenado a la unidad de carga
+No se actualizan los registros hasta que se resuelve la especulación.</li>
+</ul>
+<h2>Buffers de Reordenamiento (ROB)</h2>
+<p>Posibles estados para una instrucción:</p>
+<ul>
+<li><strong>En ejecución</strong>: la instrucción no acabó de ejecutarse</li>
+<li><strong>Finalizada</strong>: la ejecución acabó y se escribe el resultado en un <strong>registro renombrado</strong> o en un <strong>buffer</strong> previo a escribir memoria (si es un store)</li>
+<li><strong>Completada</strong>: modifica los registros del núcleo.</li>
+<li><strong>Retirada</strong>:
+<ul>
+<li>Si el destino es un registro: coincide con <strong>completada</strong></li>
+<li>Si el destino es la memoria: se escribe en la caché de datos</li>
+</ul>
+</li>
+</ul>
+<img src="../../../img/aqrcomp/pasted-image-20250429123014.png" alt="Pasted image 20250429123014.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="2-segmentacion.html"><span class="nav-etiqueta">← anterior</span>2. Segmentación</a>
+  <a class="nav-siguiente" href="4-subsistema-de-memoria-compartida-en-procesadores-multinucleo-coherencia-cache.html"><span class="nav-etiqueta">siguiente →</span>4. Subsistema de Memoria Compartida en Procesadores Multinúcleo (Coherencia caché)</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

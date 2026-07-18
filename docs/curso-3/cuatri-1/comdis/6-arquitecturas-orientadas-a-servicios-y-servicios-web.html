@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="6. Arquitecturas Orientadas a Servicios y Servicios Web — apuntes de COMDIS (tercer curso de Ingeniería Informática).">
+<title>6. Arquitecturas Orientadas a Servicios y Servicios Web · COMDIS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">comdis</a><span class="miga-sep">/</span><span aria-current="page">6-arquitecturas-orientadas-a-servicios-y-servicios-web</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">COMDIS · curso 3</p>
+    <h1>6. Arquitecturas Orientadas a Servicios y Servicios Web · COMDIS</h1>
+  </header>
+  <div class="prosa">
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Yo este tema no se para que lo damos, a día de hoy tengo entendido que se usa REST con JSON en vez de SOAP con XML. Creo que estaban mirando de cambiar el contenido de la asignatura así que no tengo claro que el tipo vaya a cambiar el examen y preguntar algo de esto. Pero más vale prevenir que curar.</p>
+</div>
+<h1>6.1 El Desafío de la Comunicación en Entornos Web Abiertos</h1>
+<p>El problema fundamental de la computación distribuida a escala global radica en la necesidad de invocar métodos de objetos situados en máquinas remotas a través de redes no confiables como Internet. El objetivo es lograr que una aplicación cliente local pueda ejecutar lógica de negocio alojada en un servidor remoto (posiblemente ubicado en otro continente) con la misma transparencia que si fuera una llamada local.</p>
+<h2>6.1.1 Antecedentes y Limitaciones: La Era de RPC, CORBA y DCOM</h2>
+<p>Inicialmente, se utilizaron protocolos binarios que establecían conexiones directas mediante puertos específicos. Este enfoque fracasó en la web abierta por dos factores críticos:</p>
+<ol>
+<li>
+<p><strong>Seguridad Perimetral:</strong> Los cortafuegos corporativos bloquean por defecto cualquier tráfico en puertos no estándar, impidiendo la comunicación externa.</p>
+</li>
+<li>
+<p><strong>Acoplamiento Tecnológico:</strong> Estas arquitecturas exigían homogeneidad, requiriendo que cliente y servidor operasen bajo la misma plataforma o lenguaje, lo que limitaba la interoperabilidad.</p>
+</li>
+</ol>
+<h2>6.1.2 La Aproximación Basada en HTTP: El Uso de Java Servlets</h2>
+<p>Para superar las restricciones de seguridad, la ingeniería de software evolucionó hacia el aprovechamiento de la infraestructura existente de la Web. Se identificó que el puerto 80 (HTTP), utilizado para la navegación web estándar, permanecía abierto en casi todos los cortafuegos.</p>
+<p>Esta estrategia dio lugar al concepto de <strong>Tunneling</strong> a través de Java Servlets. La técnica consistía en encapsular las peticiones de datos dentro de tráfico HTTP estándar, permitiendo que la información atravesara los cortafuegos sin ser bloqueada. Los Servlets actuaban como pequeños programas en el servidor que escuchaban estas peticiones en el puerto 80.</p>
+<p>Aunque resolvió el problema de conectividad, introdujo una deficiencia estructural: los Servlets devolvían contenido en HTML (diseñado para presentación visual), obligando al cliente a realizar un <em>parsing</em> complejo para extraer los datos. Esto generaba un sistema frágil y difícil de mantener, donde cualquier cambio en la interfaz visual rompía la lógica de comunicación.</p>
+<h2>6.1.3 La Evolución hacia la Arquitectura Orientada a Servicios (SOA)</h2>
+<p>Como respuesta a la necesidad de una comunicación robusta, estandarizada y capaz de atravesar cortafuegos, surgió la <strong>Arquitectura Orientada a Servicios (SOA)</strong>. Esta arquitectura propuso una solución definitiva al combinar la ubicuidad del transporte web con un formato de datos estricto.</p>
+<p>La ecuación fundamental de SOA en el contexto de los Servicios Web se define por la integración de dos estándares: el <strong>Protocolo HTTP</strong> como medio de transporte universal para garantizar la conectividad, y el lenguaje <strong>XML</strong> para la representación de datos, asegurando que la información sea estructurada, legible por máquinas e independiente de la plataforma de presentación.</p>
+<h1>6.2 Arquitectura SOA</h1>
+<p><strong>SOA (Arquitectura Orientada a Servicios):</strong> Es un estilo arquitectónico para construir sistemas distribuidos basado en la integración de servicios autónomos, débilmente acoplados e interoperables. Permite que aplicaciones desarrolladas en tecnologías heterogéneas se comuniquen mediante estándares abiertos, fundamentalmente combinando un transporte universal (<strong>HTTP</strong>) con un formato de datos estructurado (<strong>XML</strong>).</p>
+<p>La arquitectura se basa en tres actores y cuatro estándares fundamentales:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Actor</strong></th>
+<th><strong>Acción</strong></th>
+<th><strong>Estándar Clave</strong></th>
+<th><strong>Función del Estándar</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Proveedor</strong></td>
+<td>Crea y expone</td>
+<td><strong>WSDL</strong></td>
+<td><strong>Descripción</strong>: Fichero XML que define <em>qué</em> hace el servicio (interfaz) y <em>cómo</em> llamarlo.</td>
+</tr>
+<tr>
+<td><strong>Registro</strong></td>
+<td>Directorio (&quot;Páginas Amarillas&quot;)</td>
+<td><strong>UDDI</strong></td>
+<td><strong>Publicación</strong>: Donde se registran los servicios para ser encontrados. <em>(Nota: Baja implantación real)</em>.</td>
+</tr>
+<tr>
+<td><strong>Consumidor</strong></td>
+<td>Busca y usa</td>
+<td><strong>SOAP</strong></td>
+<td><strong>Mensajería</strong>: Formato del sobre XML para enviar la petición y recibir la respuesta.</td>
+</tr>
+<tr>
+<td><em>(Todos)</em></td>
+<td>Canal de comunicación</td>
+<td><strong>HTTP</strong></td>
+<td><strong>Transporte</strong>: La carretera por la que viajan los mensajes SOAP.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Flujo de Funcionamiento (Publish - Find - Bind):</strong></p>
+<ol>
+<li><strong>Despliegue (Provider):</strong> El proveedor crea el servicio y su contrato (<strong>WSDL</strong>) accesible vía URL.</li>
+<li><strong>Publicación (Provider <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> UDDI):</strong> Registra el servicio en el directorio UDDI para que sea visible.</li>
+<li><strong>Descubrimiento (Consumer <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> UDDI):</strong> El consumidor busca en UDDI y obtiene la URL del <strong>WSDL</strong>.</li>
+<li><strong>Generación (Consumer):</strong> Con el WSDL, el consumidor genera automáticamente los <strong>Stubs/Proxies</strong> (clases locales para comunicar).</li>
+<li><strong>Invocación (Consumer <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> Provider):</strong> Se lanza la petición encapsulada en <strong>SOAP</strong> a través de <strong>HTTP</strong>.</li>
+</ol>
+<img src="../../../img/comdis/pasted-image-20251212155730.png" alt="Pasted image 20251212155730.png" loading="lazy">
+<p>Gracias al uso de <strong>XML</strong>, se pueden integrar aplicaciones dispares:</p>
+<ul>
+<li><strong>Lenguajes diferentes:</strong> Se traduce de XML al lenguaje local (Java, Python, C#, etc.).</li>
+<li><strong>Modelos de datos diferentes:</strong> Se traduce el modelo del formato XML al modelo interno de la aplicación.</li>
+</ul>
+<h1>6.3 El Manual de Instrucciones: WSDL</h1>
+<p>Para conectar tu código con un servicio remoto, necesitas un contrato: el <strong>WSDL</strong> (<em>Web Service Description Language</em>). Es un XML jerárquico dividido en dos bloques:</p>
+<h2>6.3.1 Descripción Abstracta (La Lógica - El &quot;Qué&quot;)</h2>
+<p>Define la interfaz funcional sin importar el lenguaje de programación.</p>
+<ol>
+<li><strong><code>types</code> (Diccionario):</strong> Define los datos (<code>int</code>, <code>Cliente</code>) usando <strong>XSD</strong> (XML Schema).</li>
+<li><strong><code>message</code> (Paquetes):</strong> Combina los datos anteriores para formar entradas y salidas.</li>
+<li><strong><code>portType</code> (Interfaz):</strong> Es el agrupador clave (como una <code>interface</code> Java). Contiene las operaciones.</li>
+<li><strong><code>operation</code> (Funciones):</strong> Define la acción (<code>sumar</code>) conectando un mensaje de entrada con uno de salida.</li>
+</ol>
+<blockquote>
+<p><strong>Jerarquía:</strong> <code>types</code> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> componen <code>message</code> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> usados en <code>operation</code> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> agrupados en <code>portType</code>.</p>
+</blockquote>
+<h2>6.3.2 Descripción Concreta (La Red - El &quot;Cómo&quot;)</h2>
+<p>Baja la lógica a tierra definiendo la conexión física.</p>
+<ol>
+<li><strong><code>binding</code> (Protocolo):</strong> Asigna un protocolo concreto (ej. <strong>SOAP</strong> sobre HTTP) al <code>portType</code>.</li>
+<li><strong><code>service</code> (Servidor):</strong> Agrupa los puertos.</li>
+<li><strong><code>port</code> (Dirección):</strong> Une un <code>binding</code> con una <strong>URL</strong> física (Endpoint).</li>
+</ol>
+<h2>6.3.3 Resumen Práctico (WSDL vs Java)</h2>
+<table>
+<thead>
+<tr>
+<th><strong>Elemento WSDL</strong></th>
+<th><strong>Equivalente Java</strong></th>
+<th><strong>Función</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>types</code></strong></td>
+<td>Clases / Beans</td>
+<td>Estructura de datos.</td>
+</tr>
+<tr>
+<td><strong><code>message</code></strong></td>
+<td>Argumentos</td>
+<td>Paquete de datos de E/S.</td>
+</tr>
+<tr>
+<td><strong><code>portType</code></strong></td>
+<td><strong><code>interface</code></strong></td>
+<td>Agrupa métodos abstractos.</td>
+</tr>
+<tr>
+<td><strong><code>operation</code></strong></td>
+<td><strong>Método</strong></td>
+<td>Firma de la función (<code>sumar</code>).</td>
+</tr>
+<tr>
+<td><strong><code>binding</code></strong></td>
+<td>Implementación</td>
+<td>Protocolo (SOAP/HTTP).</td>
+</tr>
+<tr>
+<td><strong><code>service</code></strong></td>
+<td>Instancia</td>
+<td>URL del servicio.</td>
+</tr>
+</tbody>
+</table>
+<h1>6.4 Protocolo SOAP (La Invocación)</h1>
+<p><strong>SOAP</strong> (<em>Simple Object Access Protocol</em>) es el estándar XML para invocar servicios. A diferencia de REST, es un protocolo estricto basado en mensajes.</p>
+<ul>
+<li><strong>Filosofía:</strong> Es <strong>sin estado</strong> (stateless) y, por defecto, <strong>unidireccional</strong> (one-way).</li>
+<li><strong>Sincronía:</strong> Logra el modelo Petición-Respuesta apoyándose en el transporte (HTTP).</li>
+</ul>
+<h2>6.4.1 Estructura del Mensaje (El Sobre)</h2>
+<p>Todo mensaje SOAP es un documento XML con tres partes:</p>
+<ol>
+<li><strong>Envelope (Sobre):</strong> Raíz obligatoria que encapsula todo.</li>
+<li><strong>Header (Cabecera) - <em>Opcional</em>:</strong> Metadatos (seguridad, transacciones). Puede ser procesado por nodos <strong>intermediarios</strong>.</li>
+<li><strong>Body (Cuerpo) - <em>Obligatorio</em>:</strong> La carga útil (payload) con los datos de negocio. Solo para el <strong>destinatario final</strong>.</li>
+</ol>
+<h3>Atributos Clave de la Cabecera</h3>
+<p>Permiten controlar el flujo a través de intermediarios:</p>
+<ul>
+<li><strong><code>role</code> (¿Quién?):</strong> Define qué nodo debe leer la cabecera (<code>next</code>, <code>ultimateReceiver</code>).</li>
+<li><strong><code>mustUnderstand</code> (¿Obligatorio?):</strong> Si es <code>true</code> y el nodo no entiende la etiqueta, <strong>debe fallar</strong>.</li>
+</ul>
+<h2>6.4.2 Estilos de Invocación (Body Styles)</h2>
+<p>SOAP define dos formas de estructurar el XML dentro del Body:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Estilo</strong></th>
+<th><strong>Filosofía</strong></th>
+<th><strong>Características</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Document</strong></td>
+<td>&quot;Te envío datos&quot;</td>
+<td>Flexible. El XML es arbitrario. No se ve el nombre del método explícitamente.</td>
+</tr>
+<tr>
+<td><strong>RPC</strong></td>
+<td>&quot;Ejecuta esta función&quot;</td>
+<td>Rígido. Simula una llamada a código (<code>&lt;metodo&gt;&lt;arg1&gt;...&lt;/arg1&gt;&lt;/metodo&gt;</code>).</td>
+</tr>
+</tbody>
+</table>
+<h2>6.4.3 Flujo de Ejecución (Arquitectura)</h2>
+<p>El viaje del mensaje desde tu código Java hasta el servidor remoto:</p>
+<ol>
+<li><strong>Código Cliente:</strong> Llama al método local (<code>stub.sumar(5,5)</code>).</li>
+<li><strong>Stub Cliente:</strong> Delega en el <strong>Motor SOAP</strong> (JAX-WS).</li>
+<li><strong>Motor SOAP:</strong> Serializa a XML (SOAP) y lo pasa al <strong>Cliente HTTP</strong>.</li>
+<li><strong>Red:</strong> El mensaje viaja por HTTP (POST).</li>
+<li><strong>Router SOAP (Servidor):</strong> Recibe el XML, lo parsea y decide a qué servicio llamar.</li>
+<li><strong>Skeleton/Stub Servidor:</strong> Deserializa el XML a objetos Java.</li>
+<li><strong>Implementación:</strong> Se ejecuta el código real (<code>public int sumar...</code>).</li>
+</ol>
+<h1>6.5 Ejemplo Práctico: JAX-WS</h1>
+<h2>A. El Servidor (Service Provider)</h2>
+<p>Se compone de tres partes: Contrato, Lógica y Despliegue.</p>
+<ol>
+<li><strong>La Interfaz (Contrato)</strong>. Define qué operaciones están disponibles.</li>
+</ol>
+<pre><code class="language-java">@WebService
+public interface Calculadora {
+    @WebMethod
+    int sumar(int a, int b);
+}
+</code></pre>
+<ol start="2">
+<li><strong>La Implementación (Lógica).</strong> El código real que ejecuta la suma.</li>
+</ol>
+<pre><code class="language-java">@WebService(endpointInterface = &quot;com.ejemplo.Calculadora&quot;)
+public class CalculadoraImpl implements Calculadora {
+    public int sumar(int a, int b) { return a + b; }
+}
+</code></pre>
+<ol start="3">
+<li><strong>El Publicador (Despliegue).</strong> Arranca el servidor.</li>
+</ol>
+<pre><code class="language-java">public class Publicador {
+    public static void main(String[] args) {
+        // Publica la implementación en una URL específica
+        Endpoint.publish(&quot;http://localhost:8080/miCalculadora&quot;, new CalculadoraImpl());
+    }
+}
+</code></pre>
+<h3>Método Clave: <code>Endpoint.publish(url, implementor)</code></h3>
+<p>Es el interruptor de encendido.</p>
+<ul>
+<li><strong>Arranca:</strong> Inicia un servidor HTTP ligero interno en el puerto 8080.</li>
+<li><strong>Genera:</strong> Crea el WSDL dinámicamente en memoria.</li>
+<li><strong>Expone:</strong> Habilita la escucha de peticiones SOAP en esa URL.</li>
+</ul>
+<h2>B. El Cliente (Service Consumer)</h2>
+<p>El cliente no tiene la lógica de la suma, solo invoca al servidor remoto.</p>
+<pre><code class="language-java">public class Cliente {
+    public static void main(String[] args) {
+        try {
+            // 1. URL del WSDL (El Manual)
+            URL wsdlURL = new URL(&quot;http://localhost:8080/miCalculadora?wsdl&quot;);
+
+            // 2. QName (Identificador Único: Namespace + ServiceName)
+            QName qname = new QName(&quot;http://ejemplo.com/&quot;, &quot;CalculadoraImplService&quot;);
+
+            // 3. Crear la Fábrica (Service)
+            Service service = Service.create(wsdlURL, qname);
+
+            // 4. Obtener el Proxy (Stub)
+            Calculadora proxy = service.getPort(Calculadora.class);
+
+            // 5. Invocación Remota (Marshalling -&gt; Red -&gt; Unmarshalling)
+            System.out.println(&quot;Resultado: &quot; + proxy.sumar(10, 20));
+
+        } catch (Exception e) { e.printStackTrace(); }
+    }
+}
+</code></pre>
+<h3>Métodos Clave del Cliente</h3>
+<table>
+<thead>
+<tr>
+<th><strong>Método</strong></th>
+<th><strong>Función Técnica</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>URL(...?wsdl)</code></strong></td>
+<td>Apunta a la ubicación del contrato. Sin el <code>?wsdl</code> al final, no funciona.</td>
+</tr>
+<tr>
+<td><strong><code>QName</code></strong></td>
+<td><strong>Nombre Cualificado</strong>. Identifica al servicio exacto dentro del XML del WSDL. Se forma con el <code>TargetNamespace</code> (paquete invertido) y el <code>ServiceName</code>.</td>
+</tr>
+<tr>
+<td><strong><code>Service.create()</code></strong></td>
+<td><strong>La Fábrica</strong>. Descarga el WSDL, lo valida y prepara la conexión.</td>
+</tr>
+<tr>
+<td><strong><code>getPort()</code></strong></td>
+<td><strong>El Proxy (Stub)</strong>. Crea un objeto local falso. Convierte tus llamadas Java (<code>.sumar</code>) en mensajes XML SOAP (<strong>Marshalling</strong>) y los envía por HTTP.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>En este tema miraros las cosas por encima, yo le metí mucho detalle y mucha explicación pero porque no entendía un carallo. Pero con entender un poco los conceptos principales malo será.</p>
+</div>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="5-redes-p2p.html"><span class="nav-etiqueta">← anterior</span>5. Redes P2P</a>
+  <a class="nav-siguiente" href="7-sistemas-de-mensajes.html"><span class="nav-etiqueta">siguiente →</span>7. Sistemas de Mensajes</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

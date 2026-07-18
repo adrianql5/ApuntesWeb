@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="3. Sistemas Basados en Conocimiento — apuntes de IA (tercer curso de Ingeniería Informática).">
+<title>3. Sistemas Basados en Conocimiento · IA · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">ia</a><span class="miga-sep">/</span><span aria-current="page">3-sistemas-basados-en-conocimiento</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">IA · curso 3</p>
+    <h1>3. Sistemas Basados en Conocimiento · IA</h1>
+  </header>
+  <div class="prosa">
+<h1>3.1 Introducción y Definición</h1>
+<p>A diferencia de los sistemas de &quot;búsqueda en espacio de estados&quot; (vistos anteriormente), donde se busca una solución explorando estados ciegamente o con heurísticas, los SBC se basan en <strong>conocimiento explícito</strong> para razonar.</p>
+<p>Diferencias Clave: Búsqueda vs. Conocimiento.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Característica</strong></th>
+<th><strong>Búsqueda en Espacios de Estados</strong></th>
+<th><strong>Sistemas Basados en Conocimiento</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Base</strong></td>
+<td>Estados y operadores</td>
+<td>Base de Conocimiento (Reglas/Lógica)</td>
+</tr>
+<tr>
+<td><strong>Método</strong></td>
+<td>Algoritmo de búsqueda (exploración)</td>
+<td>Método de razonamiento (inferencia)</td>
+</tr>
+<tr>
+<td><strong>Datos Iniciales</strong></td>
+<td>Estado inicial</td>
+<td>Hechos conocidos</td>
+</tr>
+<tr>
+<td><strong>Resultado</strong></td>
+<td>Camino o estado solución</td>
+<td>Respuesta a una consulta / Diagnóstico</td>
+</tr>
+</tbody>
+</table>
+<h1>3.2 Sistemas Expertos (SE)</h1>
+<p>Son el tipo más representativo de SBC. Se definen como sistemas con un nivel de competencia equivalente o superior a un experto humano en un dominio concreto.</p>
+<p><strong>¿Cuándo usar un Sistema Experto?</strong>
+No sirven para todo. Se recomiendan cuando:</p>
+<ul>
+<li>El problema es complejo y de un dominio especializado.</li>
+<li><strong>No existe un algoritmo tradicional</strong> para resolverlo.</li>
+<li>Existen expertos humanos capaces de articular ese conocimiento.</li>
+</ul>
+<p>Historia y Ejemplos</p>
+<ul>
+<li><strong>Dendral (1965)</strong>: Identificación de compuestos químicos.</li>
+<li><strong>Mycin (años 70)</strong>: Diagnóstico de infecciones bacterianas.</li>
+</ul>
+<h1>3.3 Arquitectura de un Sistema Experto</h1>
+<p>Para que una máquina &quot;razone&quot;, necesita separar lo que <em>sabe</em> (conocimiento) de lo que <em>está pasando</em> (hechos) y de <em>cómo pensar</em> (motor).</p>
+<p><strong>Componentes Principales:</strong></p>
+<ol>
+<li><strong>Base de Conocimiento (BC)</strong>: Es estática y general del dominio. Contiene las reglas (&quot;Si X entonces Y&quot;).</li>
+<li><strong>Base de Hechos (BH)</strong>: Es dinámica y específica del caso actual. Contiene los datos del problema y lo que se va descubriendo.</li>
+<li><strong>Motor de Inferencia</strong>: Es el &quot;cerebro&quot;. Aplica el conocimiento a los hechos para deducir nuevas verdades. Realiza tareas de <strong>equiparación</strong> (matching) y <strong>resolución de conflictos</strong>.</li>
+</ol>
+<img src="../../../img/ia/pasted-image-20251221170854.png" alt="Pasted image 20251221170854.png" loading="lazy">
+<table>
+<thead>
+<tr>
+<th><strong>Hechos</strong></th>
+<th><strong>Conocimiento</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Específicos, relacionados con el problema concreto que se intenta resolver.</td>
+<td>General, relacionado con el dominio en el que se opera y el tipo de problemas.</td>
+</tr>
+<tr>
+<td>Dinámicos, a partir de unos hechos iniciales pueden aparecer otros distintos.</td>
+<td>Relativamente estático, aunque puede cambiar si se añade nuevo conocimiento.</td>
+</tr>
+<tr>
+<td>Aumenta durante la resolución del problema.</td>
+<td>Normalmente no aumenta durante la resolución del problema.</td>
+</tr>
+<tr>
+<td>Necesidad de almacenamiento y recuperación eficiente.</td>
+<td>Necesidad de razonamiento eficiente.</td>
+</tr>
+<tr>
+<td>Se busca que los hechos obtenidos directamente del problema sean precisos y exactos.</td>
+<td>Puede ser impreciso e incierto; por lo tanto, también los hechos inferidos pueden serlo.</td>
+</tr>
+</tbody>
+</table>
+<h1>3.4 Representación del Conocimiento</h1>
+<p>¿Cómo guardamos el conocimiento en la máquina?</p>
+<h3>Lógica Formal (La base matemática)</h3>
+<p>Es la forma más rigurosa de representar relaciones.</p>
+<ul>
+<li><strong>Lógica Proposicional</strong>: Usa afirmaciones verdaderas/falsas y operadores (AND, OR, NOT, Implicación). Se basa en reglas de inferencia.Imagina siempre una regla condicional: <strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Q</span></span></span></span></eq></strong> (&quot;Si pasa P, entonces pasa Q&quot;):
+<ul>
+<li><strong>Modus Ponens:</strong> Si la regla es cierta (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Q</span></span></span></span></eq>) y la condición (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span></eq>) se cumple, entonces la consecuencia (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Q</span></span></span></span></eq>) <strong>también es cierta</strong>.</li>
+<li><strong>Modus Tollens</strong>. Si la regla es cierta (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Q</span></span></span></span></eq>), pero vemos que la consecuencia (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Q</span></span></span></span></eq>) <strong>NO</strong> ha ocurrido, entonces la causa (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span></eq>) <strong>tampoco pudo ocurrir</strong>.</li>
+</ul>
+</li>
+</ul>
+<img src="../../../img/ia/pasted-image-20251226214639.png" alt="Pasted image 20251226214639.png" loading="lazy">
+<ul>
+<li><strong>Lógica de Predicados</strong>:
+<ol>
+<li>
+<p><strong>Objetos (Constantes):</strong> Las cosas del mundo real (ej: <code>Juan</code>, <code>Ana</code>, <code>Coche</code>).</p>
+</li>
+<li>
+<p><strong>Predicados:</strong> Son las <strong>propiedades</strong> o <strong>relaciones</strong> que afectan a los objetos. Se escriben como funciones:</p>
+<ul>
+<li><code>es_hombre(Juan)</code> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> Predicado de propiedad.</li>
+<li><code>es_hermano(Juan, Ana)</code> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> Predicado de relación.</li>
+</ul>
+</li>
+<li>
+<p><strong>Variables:</strong> Usamos letras (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span></span></span></eq>) para referirnos a &quot;cualquier cosa&quot; sin especificar quién.</p>
+</li>
+<li>
+<p><strong>Cuantificadores:</strong> Las herramientas poderosas:</p>
+<ul>
+<li><strong>Universal (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">∀</span></span></span></span></eq> - &quot;Para todo&quot;):</strong> Permite crear reglas generales.
+<ul>
+<li><em>Ejemplo:</em> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">∀</span><span class="mord mathnormal">x</span></span></span></span></eq> (Si <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></eq> es humano <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></eq> es mortal).</li>
+</ul>
+</li>
+<li><strong>Existencial (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">∃</span></span></span></span></eq> - &quot;Existe&quot;):</strong> Indica que hay al menos uno.
+<ul>
+<li><em>Ejemplo:</em> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">∃</span><span class="mord mathnormal">x</span></span></span></span></eq> (Padre(<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></eq>, Juan)) <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> &quot;Existe alguien que es el padre de Juan&quot;.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h3>Reglas de Producción y Sistemas Basados en Reglas (SBR)</h3>
+<p>Es la estructura más utilizada en los Sistemas Expertos. Cuando representamos el conocimiento de esta forma, hablamos de <strong>Sistemas Basados en Reglas</strong>.</p>
+<ul>
+<li>
+<p><strong>Unidad básica</strong>: La Regla de Producción.</p>
+<ul>
+<li>Formato: <code>SI &lt;condición/situación&gt; ENTONCES &lt;acción&gt;</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Dinámica del SBR</strong>:</p>
+<ul>
+<li>
+<p>La parte <code>SI</code> busca coincidencias en la <strong>Base de Hechos</strong>.</p>
+</li>
+<li>
+<p>La parte <code>ENTONCES</code> modifica la memoria: añade nuevos hechos, borra antiguos o ejecuta acciones .</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Ejemplo</strong>:</p>
+<ul>
+<li><em>Regla</em>: SI &quot;coche no arranca&quot; Y &quot;batería &lt; 10V&quot; ENTONCES &quot;cambiar batería&quot;.</li>
+</ul>
+</li>
+</ul>
+<h3>Redes Semánticas</h3>
+<p>Representación gráfica mediante grafos.</p>
+<ul>
+<li>
+<p>Nodos = Conceptos/Objetos (ej. &quot;Juan&quot;, &quot;Persona&quot;).</p>
+</li>
+<li>
+<p>Arcos = Relaciones o herencia (ej. &quot;es un&quot;, &quot;tipo de&quot;). Permite heredar propiedades (si Juan es Persona, y Persona tiene altura, Juan tiene altura).</p>
+</li>
+</ul>
+<h1>3.5 Estrategias de Razonamiento (El Motor en acción)</h1>
+<p>Una vez tenemos reglas y hechos, ¿cómo los procesa el motor? Existen dos estrategias opuestas:</p>
+<h3>Encadenamiento Hacia Adelante (Forward Chaining)</h3>
+<ul>
+<li>
+<p><strong>Filosofía</strong>: Guiado por los <strong>datos</strong> (Data-driven).</p>
+</li>
+<li>
+<p><strong>Proceso</strong>: Partimos de los hechos conocidos <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> buscamos reglas que se cumplan <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> ejecutamos acciones (disparamos reglas) <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> obtenemos nuevos hechos hasta llegar a un objetivo o no poder seguir .</p>
+</li>
+<li>
+<p><strong>Ejemplo (Coches)</strong>: Sé que &quot;el coche no arranca&quot; y &quot;batería &lt; 10V&quot; <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> Deduzco &quot;cambiar batería&quot;.</p>
+</li>
+<li>
+<p><strong>Algoritmo</strong>: Ciclo de <strong>Equiparar</strong> (ver qué reglas se cumplen) <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> <strong>Resolver</strong> (elegir una del conjunto conflicto) <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> <strong>Aplicar</strong> (ejecutarla).</p>
+</li>
+</ul>
+<p>El <strong>conjunto conflicto</strong> es el grupo de reglas que, en un momento determinado del razonamiento, <strong>cumplen todas sus condiciones</strong> (antecedentes) en base a los hechos disponibles y <strong>aún no fueron ejecutadas</strong>.</p>
+<p>Es decir, no es una sola regla, sino la colección de <strong>todas las reglas posibles</strong> que el sistema <em>podría</em> ejecutar en ese instante porque sus requisitos (&quot;SI...&quot;) son ciertos.</p>
+<p>El <strong>principio de refracción</strong> evita la aplicación reiterada de una <strong>regla aplicable</strong>. Imagina que no existiera este principio. Tienes la siguiente situación:</p>
+<ul>
+<li><strong>Hecho:</strong> <code>(temperatura 40)</code></li>
+<li><strong>Regla:</strong> <code>SI temperatura &gt; 38 ENTONCES imprime &quot;Tiene Fiebre&quot;</code></li>
+</ul>
+<p><strong>¿Qué pasaría sin refracción?</strong></p>
+<ol>
+<li><strong>Ciclo 1:</strong> El motor ve que la temperatura es 40. Se cumple la regla. <strong>Acción:</strong> Imprime &quot;Tiene Fiebre&quot;.</li>
+<li><strong>Ciclo 2:</strong> El motor vuelve a mirar los hechos. La temperatura <em>sigue</em> siendo 40 (nadie la ha borrado). La regla se cumple de nuevo. <strong>Acción:</strong> Imprime &quot;Tiene Fiebre&quot;.</li>
+<li><strong>Ciclo 3:</strong> La temperatura sigue siendo 40... <strong>Acción:</strong> Imprime &quot;Tiene Fiebre&quot;.</li>
+</ol>
+<p>El sistema entraría en un <strong>bucle infinito</strong>, repitiendo la misma acción una y otra vez, porque la condición sigue siendo verdad. Para que no pase, el motor de inferencia dice: <em>&quot;Vale, esta regla se cumple con el dato (temperatura 40), PERO yo ya ejecuté esta regla exacta con este dato exacto en el ciclo anterior. Así que no la voy a volver a meter en el conjunto conflicto hasta que los datos cambien.&quot;</em></p>
+<h3>Encadenamiento Hacia Atrás (Backward Chaining)</h3>
+<ul>
+<li>
+<p><strong>Filosofía</strong>: Guiado por los <strong>objetivos</strong> (Goal-driven).</p>
+</li>
+<li>
+<p><strong>Proceso</strong>: Partimos de una <strong>hipótesis</strong> (¿Tiene gripe?) <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> buscamos reglas que concluyan eso <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> verificamos si se cumplen sus premisas (antecedentes).</p>
+</li>
+<li>
+<p><strong>Estructura</strong>: Se suele modelar como un <strong>Grafo AND/OR</strong>. Para probar una meta, debo probar sus sub-metas.</p>
+</li>
+<li>
+<p><strong>Ejemplo (Médico)</strong>: ¿Tiene infección? (Meta) <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> Para ello necesito saber si tiene fiebre y dolor (Sub-metas) <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> Verifico temperatura.</p>
+</li>
+</ul>
+<h1>3.6 Comparativa: SE vs. Programación Convencional</h1>
+<p>Es fundamental entender que programar un Sistema Experto no es programar un algoritmo clásico.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Programación Convencional</strong></th>
+<th><strong>Sistemas Expertos</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Imperativa</strong> (Cómo hacerlo)</td>
+<td><strong>Declarativa</strong> (Qué se sabe)</td>
+</tr>
+<tr>
+<td>Modificación por re-programación de código</td>
+<td>Modificación añadiendo/quitando reglas en la base de conocimiento</td>
+</tr>
+<tr>
+<td>Solución algorítmica (precisa, única)</td>
+<td>Solución inferida (puede ser incierta/probabilística)</td>
+</tr>
+<tr>
+<td>Guiada por flujo de control</td>
+<td>Guiada por el Motor de Inferencia</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tendencias Modernas: LLMs y &quot;Chain of Thought&quot;:</strong></p>
+<ul>
+<li>
+<p>Los Grandes Modelos de Lenguaje (LLMs) pueden realizar razonamientos lógicos (silogismos), aunque a veces fallan si las premisas del mundo real entran en conflicto con la lógica formal (ej. &quot;todos los pájaros vuelan&quot; vs &quot;pingüinos&quot;).</p>
+</li>
+<li>
+<p><strong>Chain-of-Thought (CoT)</strong>: Técnica de <em>prompting</em> donde se pide al modelo que &quot;piense paso a paso&quot;. Esto mejora drásticamente la capacidad de resolver problemas matemáticos o lógicos complejos en comparación con pedir solo la respuesta final.</p>
+</li>
+</ul>
+<h1>3.7 CLIPS (C Language Integrated Production System)</h1>
+<h2>¿Qué es CLIPS?</h2>
+<p>Es una herramienta de software diseñada para desarrollar <strong>Sistemas Expertos</strong> y sistemas basados en reglas. Funciona mediante un paradigma de <strong>programación declarativa</strong>: tú dices <em>qué</em> sabes (hechos) y <em>qué</em> hacer si ocurren ciertas cosas (reglas), y el motor decide <em>cuándo</em> hacerlo.</p>
+<h2>Los 3 Pilares de la Memoria</h2>
+<p>Debes distinguir claramente entre estos tres espacios:</p>
+<ol>
+<li>
+<p><strong>Base de Conocimiento (Knowledge Base):</strong> Es donde se almacena la &quot;inteligencia&quot; estática del programa. Aquí viven las Reglas (<code>defrule</code>), las Plantillas (<code>deftemplate</code>) y las definiciones de hechos iniciales (<code>deffacts</code>).</p>
+<ul>
+<li><em>Se llena usando:</em> El comando <code>(load)</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Memoria de Trabajo (Working Memory):</strong> Es la &quot;pizarra&quot; volátil donde están los datos actuales (los Hechos). Cambia constantemente.</p>
+<ul>
+<li><em>Se llena usando:</em> Los comandos <code>(reset)</code> y <code>(assert)</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Motor de Inferencia:</strong> El &quot;cerebro&quot; que compara constantemente la <em>Memoria de Trabajo</em> con la <em>Base de Conocimiento</em> para ver qué reglas activar.</p>
+</li>
+</ol>
+<h2>Los Hechos (Datos)</h2>
+<h3>1. Tipos de Hechos</h3>
+<ul>
+<li><strong>Vectores Ordenados:</strong> Listas simples. <code>(Pedro 45 V)</code>. Rígidos.</li>
+<li><strong>Plantillas (Deftemplates):</strong> Estructurados con campos. <code>(Persona (Nombre Juan) (Edad 30))</code>. Flexibles.</li>
+</ul>
+<h3>2. Propiedades Críticas para el Examen (IMPORTANTE)</h3>
+<p><strong>a) El Hecho Especial <code>f-0</code> (initial-fact)</strong></p>
+<ul>
+<li><strong>¿Qué es?</strong> Es el &quot;hecho cero&quot;. El primer dato que CLIPS crea automáticamente cuando reinicias el sistema.</li>
+<li><strong>¿Para qué sirve?</strong> Actúa como una chispa de arranque. Permite que se disparen reglas que no tienen condiciones específicas en su parte izquierda (reglas que quieres que se ejecuten &quot;siempre&quot; al principio).</li>
+<li><strong>Prohibición:</strong> <strong>El usuario NO puede definir ni manipular el hecho f-0</strong>. Está reservado. Si intentas hacer <code>(assert (f-0 ...))</code> o borrarlo manualmente sin cuidado, el sistema puede fallar o ignorarte.</li>
+</ul>
+<p><strong>b) Unicidad (Conjuntos)</strong></p>
+<ul>
+<li>La memoria de CLIPS es un <strong>conjunto matemático</strong>, no una lista.</li>
+<li><strong>No hay duplicados:</strong> Si intentas añadir un hecho idéntico a uno que ya existe (mismos campos, mismos valores), CLIPS <strong>no hace nada</strong>. No crea un duplicado ni genera un nuevo ID. Simplemente mantiene el viejo.</li>
+</ul>
+<h2>El Ciclo de Vida: De Cargar a Ejecutar</h2>
+<p>Aquí es donde suelen pillar en las preguntas tipo test (como la pregunta 14 de tu imagen). El orden lógico es:</p>
+<h3>1. <code>(clear)</code>: El Borrado Total</h3>
+<ul>
+<li><strong>Acción:</strong> Elimina <strong>TODO</strong>. Deja el sistema vacío, como recién instalado.</li>
+<li><strong>Efecto:</strong> Borra hechos, reglas, templates y deffacts.</li>
+</ul>
+<h3>2. <code>(load &quot;archivo.clp&quot;)</code>: La Carga</h3>
+<ul>
+<li><strong>Acción:</strong> Lee un archivo de texto <code>.clp</code> línea por línea.</li>
+<li><strong>Efecto (OJO):</strong>
+<ul>
+<li>Carga las definiciones (<code>defrule</code>, <code>deftemplate</code>, <code>deffacts</code>) en la <strong>Base de Conocimiento</strong>.</li>
+<li><strong>NO ejecuta nada.</strong></li>
+<li><strong>NO mete hechos en la Memoria de Trabajo</strong> (a menos que haya <code>asserts</code> sueltos fuera de reglas, lo cual es mala práctica).</li>
+<li>Los hechos definidos en <code>deffacts</code> se quedan &quot;en espera&quot;, memorizados, pero aún no activos.</li>
+</ul>
+</li>
+</ul>
+<h3>3. <code>(reset)</code>: El Reinicio y Preparación</h3>
+<p>Este comando es el puente entre la teoría (lo cargado) y la práctica (la memoria). Realiza 3 pasos estrictos:</p>
+<ol>
+<li><strong>Borra</strong> todos los hechos actuales de la Memoria de Trabajo (<code>retract *</code>).</li>
+<li><strong>Crea</strong> automáticamente el hecho <strong><code>f-0</code> (initial-fact)</strong>.</li>
+<li><strong>Activa</strong> todos los hechos que estaban definidos en los <code>deffacts</code> que cargaste previamente con <code>load</code>, metiéndolos ahora sí en la Memoria de Trabajo.</li>
+</ol>
+<h3>4. <code>(run)</code>: La Ejecución</h3>
+<ul>
+<li><strong>Acción:</strong> Arranca el Motor de Inferencia.</li>
+<li><strong>Efecto:</strong> El motor mira los hechos que <code>reset</code> acaba de poner, busca reglas que coincidan (Pattern Matching), las mete en la Agenda y las ejecuta hasta que no queden más</li>
+</ul>
+<h2>La Agenda y el Orden de Ejecución (MUY IMPORTANTE)</h2>
+<p>La Agenda es la lista de tareas pendientes del sistema.</p>
+<h3>¿Qué hay dentro de la Agenda?</h3>
+<p>No contiene solo reglas, ni solo hechos. Contiene <strong>Activaciones (Instancias)</strong>.</p>
+<ul>
+<li>Definición de Activación: Es la pareja formada por:
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0813em;">H</span><span class="mord mathnormal">ec</span><span class="mord mathnormal">h</span><span class="mord mathnormal">os</span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mord mathnormal">s</span><span class="mord mathnormal">p</span><span class="mord mathnormal">ec</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord latin_fallback">ı</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mord mathnormal">i</span><span class="mord mathnormal">cos</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="mord mathnormal">s</span><span class="mclose">)</span></span></span></span></span></eqn></section></li>
+<li><em>Ejemplo:</em> Si tienes la regla &quot;Si tienes hambre, come&quot; y el hecho &quot;tengo hambre&quot;, en la agenda aparece: <code>Activación: Regla_Comer + Hecho_f-1</code>.</li>
+</ul>
+<h3>¿Cómo decide CLIPS qué ejecutar primero? (Resolución de Conflictos)</h3>
+<p>Si hay varias reglas en la agenda (Conjunto Conflicto), CLIPS tiene que elegir una. El orden por defecto suele ser <strong>Salience + LIFO (Depth Strategy)</strong>.</p>
+<p><strong>A. Salience (Prioridad Explícita)</strong></p>
+<ul>
+<li>Puedes dar &quot;rangos militares&quot; a las reglas.</li>
+<li><code>(declare (salience 100))</code>: Esta regla es VIP. Se ejecutará antes que una de salience 0.</li>
+<li>Rango: de -10,000 a +10,000.</li>
+</ul>
+<p><strong>B. Recency (Recencia - LIFO)</strong></p>
+<ul>
+<li>Si dos reglas tienen la misma prioridad (salience), ¿cuál va primero?</li>
+<li><strong>Regla de oro:</strong> CLIPS favorece a los hechos <strong>más recientes</strong>.</li>
+<li><em>Comportamiento de Pila (Stack):</em> El último hecho que entró (<code>assert</code>) es el primero que dispara reglas. Esto permite que el sistema se centre en &quot;lo último que ha pasado&quot; antes de volver a tareas antiguas.</li>
+</ul>
+<h3>3. Casos que se pueden dar en la Agenda</h3>
+<p><strong>Caso 1: Agenda Vacía</strong></p>
+<ul>
+<li>Si haces <code>(run)</code> y no hay activaciones, el programa termina inmediatamente. No hace nada.</li>
+</ul>
+<p><strong>Caso 2: Una regla coincide con varios hechos distintos</strong></p>
+<ul>
+<li>Imagina la regla: <code>Si (número ?n) =&gt; imprimir ?n</code>.</li>
+<li>Hechos: <code>(número 1)</code> y <code>(número 2)</code>.</li>
+<li><strong>Resultado:</strong> En la agenda habrá <strong>dos activaciones</strong> distintas de la misma regla. La regla se ejecutará dos veces (una para el 1 y otra para el 2).</li>
+</ul>
+<p><strong>Caso 3: Principio de Refracción (Loop Prevention)</strong></p>
+<ul>
+<li><strong>Pregunta de examen:</strong> ¿Se ejecuta una regla infinitamente si el hecho sigue ahí?</li>
+<li><strong>Respuesta:</strong> <strong>NO</strong>. CLIPS recuerda que ya ejecutó la regla <code>R1</code> con el hecho <code>f-1</code>. Aunque <code>f-1</code> siga existiendo, esa activación específica se borra de la agenda para no repetirse eternamente. Solo se volverá a activar si modificas el hecho (porque al modificarlo cambia su ID o su &quot;timestamp&quot;).</li>
+</ul>
+<h2>Ejemplo Práctico de Traza</h2>
+<p>Imagina que tienes este archivo <code>enfermedades.clp</code>:
+Fragmento de código</p>
+<pre><code class="language-c">; DEFINICIÓN DE DATOS INICIALES (La lista de la compra)
+(deffacts mis-datos
+   (temperatura 40)
+   (garganta_inflamada)
+)
+
+; REGLA
+(defrule detectar-fiebre
+   (temperatura ?t&amp;:(&gt; ?t 38))
+   =&gt;
+   (printout t &quot;Tienes fiebre&quot; crLF)
+)
+</code></pre>
+<p><strong>Secuencia de Comandos:</strong></p>
+<ol>
+<li><strong>(load &quot;enfermedades.clp&quot;)</strong>:
+<ul>
+<li>CLIPS lee el archivo. Memoriza que existe una regla <code>detectar-fiebre</code> y un grupo de datos <code>mis-datos</code>.</li>
+<li><em>Estado Memoria Trabajo:</em> <strong>VACÍA</strong>. (Ni siquiera f-0).</li>
+</ul>
+</li>
+<li><strong>(reset)</strong>:
+<ul>
+<li>Paso 1: Borra lo que hubiera (no borra reglas)</li>
+<li>Paso 2: Crea <code>f-0 (initial-fact)</code>.</li>
+<li>Paso 3: Lee el <code>deffacts mis-datos</code> y hace assert de <code>f-1 (temperatura 40)</code> y <code>f-2 (garganta_inflamada)</code>.</li>
+<li><em>Estado Memoria Trabajo:</em> <code>f-0, f-1, f-2</code>.</li>
+</ul>
+</li>
+<li><strong>(run)</strong>:
+<ul>
+<li>El motor ve <code>f-1 (temperatura 40)</code>.</li>
+<li>La regla <code>detectar-fiebre</code> se activa (porque 40 &gt; 38).</li>
+<li>Sale por pantalla: &quot;Tienes fiebre&quot;.</li>
+</ul>
+</li>
+</ol>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="2-busqueda-en-espacio-de-estados.html"><span class="nav-etiqueta">← anterior</span>2. Búsqueda en Espacio de Estados</a>
+  <a class="nav-siguiente" href="4-sistemas-conexionistas.html"><span class="nav-etiqueta">siguiente →</span>4. Sistemas Conexionistas</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

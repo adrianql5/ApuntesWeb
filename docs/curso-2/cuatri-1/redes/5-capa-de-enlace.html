@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Capa de Enlace — apuntes de REDES (segundo curso de Ingeniería Informática).">
+<title>5. Capa de Enlace · REDES · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">redes</a><span class="miga-sep">/</span><span aria-current="page">5-capa-de-enlace</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">REDES · curso 2</p>
+    <h1>5. Capa de Enlace · REDES</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<h1>5.1 Introducción</h1>
+<p>La <strong>capa de enlace</strong> es la segunda capa del modelo OSI y se encarga de gestionar la transmisión de datos entre nodos directamente conectados en una red. Su propósito principal es asegurar que los datos se transfieran de forma confiable a través de un enlace físico entre los extremos de una conexión.</p>
+<ul>
+<li><strong>Nodos</strong>: hosts origen y destino y los routers</li>
+<li><strong>Enlaces</strong>: LANs o redes punto a punto</li>
+</ul>
+<img src="../../../img/redes/pasted-image-20241125103956.png" alt="archivos/imagenes/Pasted image 20241125103956.png" loading="lazy">
+<p>El objetivo principal de esta capa en transmitir bloques de bits de un lado a otro. La capa de enlace organiza los datos en unidades manejables llamadas <em>tramas</em> (<em>frames</em> o <em>marcos</em>), las cuales encapsulan información del nivel superior junto con metadatos para su correcta transmisión y recepción.</p>
+<p>La unidad de medida o <em>PDU (Protocol Data Unit)</em> de la capa de enlace es la <strong>trama</strong>. Esta incluye:</p>
+<ul>
+<li>Cabecera (<em>header</em>): contiene información de control, como direcciones físicas y mecanismos de detección de errores.</li>
+<li>Datos (<em>payload</em>): la información útil.</li>
+<li>Cola (<em>trailer</em>): bits adicionales usados para la detección y corrección de errores.</li>
+</ul>
+<p>La capa de enlace se implementa generalmente en la <strong>tarjeta de red</strong> del dispositivo. El sistema operativo transfiere los datos al adaptador de red. Este adaptador añade la cabecera y envía las tramas al medio físico.</p>
+<img src="../../../img/redes/pasted-image-20241125103825.png" alt="archivos/imagenes/Pasted image 20241125103825.png" loading="lazy">
+<p>Encontramos <strong>dos tipos de enlaces:</strong></p>
+<ol>
+<li><strong>Punto a Punto:</strong> Enlace directo entre un emisor y un receptor (un único par de dispositivos).</li>
+<li><strong>Difusión:</strong> Un medio compartido donde múltiples emisores y receptores pueden comunicarse (ejemplo: redes Ethernet).</li>
+</ol>
+<img src="../../../img/redes/pasted-image-20241125103656.png" alt="archivos/imagenes/Pasted image 20241125103656.png" loading="lazy">
+<p>Los protocolos en esta capa definen el <strong>formato de las tramas</strong> y las acciones a realizar cuando un nodo envía o recibe tramas.
+La <strong>capa de red</strong> encapsula los datos de las capas superiores en tramas, delimitando dónde empieza y termina cada trama. <strong>Controla el acceso al medio físico</strong> mediante protocolos de acceso múltiple (<em>MAC</em>), esenciales en medios compartidos. Asegura que las tramas lleguen al receptor mediante confirmaciones y retransmisiones si es necesario. <strong>Regula la velocidad de envío</strong> para evitar saturar al receptor. Utiliza técnicas avanzadas para <strong>identificar errores</strong> en los datos causados por interferencias electromagnéticas o ruido en la señal.  <strong>Repara errores</strong> detectados mediante mecanismos integrados en hardware o software. <strong>Especifica el modo de Transmisión:</strong>
+- <strong>Half-Duplex:</strong> Transmisión en un solo sentido a la vez.
+- <strong>Full-Duplex:</strong> Transmisión simultánea en ambos sentidos.</p>
+<img src="../../../img/redes/pasted-image-20241125104106.png" alt="archivos/imagenes/Pasted image 20241125104106.png" loading="lazy">
+<div class="callout callout-recordatorio">
+<p class="callout-titulo">Recordatorio</p>
+<p><img src="../../../img/redes/pasted-image-20241108205726.png" alt="archivos/imagenes/Pasted image 20241108205726.png" loading="lazy"></p>
+</div>
+<h1>5.2 Modelo IEEE 802</h1>
+<p>El <strong>modelo IEEE 802</strong> define estándares para <strong>redes de área local</strong> (<em>LANs</em>) y <strong>redes de área metropolitana</strong> (<em>MANs</em>). Este modelo organiza la <strong>capa de enlace</strong> en dos subcapas principales para manejar la comunicación y garantizar la interoperabilidad entre dispositivos de diferentes fabricantes.</p>
+<img src="../../../img/redes/pasted-image-20241125104820.png" alt="archivos/imagenes/Pasted image 20241125104820.png" loading="lazy">
+## 5.2.1 LLC (Control de Enlace Lógico)
+La **capa LLC** actúa como una interfaz entre las capas superiores (como la capa de red) y la subcapa MAC. Se encarga del **control de errores y de flujo**.
+<p><strong>Sin conexión ni confirmaciones:</strong></p>
+<ul>
+<li>No verifica que los datos lleguen correctamente.</li>
+<li>No hay control de flujo ni control de errores.</li>
+<li>Las capas superiores son responsables de gestionar problemas como retransmisiones.
+<strong>Sin conexión con confirmaciones:</strong></li>
+<li>Confirma la recepción de las tramas individuales.</li>
+<li>No establece una conexión previa (es decir, no asegura que haya una sesión de comunicación predefinida).
+<strong>Con conexión y confirmaciones:</strong></li>
+<li>Establece una conexión lógica antes de la transmisión.</li>
+<li>Asegura el control de flujo y la detección/corrección de errores.</li>
+</ul>
+<h2>5.2.2 MAC (Control de Acceso al Medio)</h2>
+<p>La <strong>capa MAC</strong> es responsable de <strong>ensamblar</strong> los datos en <em>tramas</em> (frames) y <strong>gestionar el acceso al medio físico compartido.</strong> Especifica cómo los dispositivos en una red <strong>comparten el medio de transmisión</strong> y garantiza que las tramas lleguen al destino correcto.</p>
+<p><strong>Maneja la transmisión en medios compartidos</strong>, controlando quién puede enviar en cada momento (evita colisiones). <strong>Detecta y corrige errores</strong> en las tramas cuando sea posible. <strong>Desensambla</strong> las tramas en el receptor, verificando las direcciones y detectando errores.</p>
+<img src="../../../img/redes/pasted-image-20241125104909.png" alt="archivos/imagenes/Pasted image 20241125104909.png" loading="lazy">
+<h2>5.2.3 Relación Entre LLC y MAC</h2>
+<p>La subcapa <strong>LLC</strong> es <strong>independiente de la tecnología del medio físico</strong>. Esto significa que los <strong>mismos mecanismos de control de flujo y errores pueden usarse sobre cualquier tecnología subyacente</strong>.
+La subcapa <strong>MAC</strong>, en cambio, está <strong>directamente relacionada con el medio de transmisión</strong> y varía según el tipo de red:
+- Ethernet tiene sus propias reglas para el acceso al medio, diferentes de las usadas en Token Ring o Wi-Fi.
+<strong>Un LLC puede trabajar con múltiples MACs</strong>, lo que hace al modelo IEEE 802 modular y flexible.</p>
+<img src="../../../img/redes/pasted-image-20241125105005.png" alt="archivos/imagenes/Pasted image 20241125105005.png" loading="lazy">
+<h1>5.3 Direcciones MAC Ethernet</h1>
+<p>La arquitectura de redes combina diferentes tipos de direcciones para identificar dispositivos y facilitar la comunicación. En este contexto, las <strong>direcciones MAC</strong> y las <strong>direcciones IP</strong> desempeñan roles complementarios. La <strong>dirección MAC (Media Access Control)</strong> es un <strong>identificador único asignado a cada adaptador de red o interfaz de red</strong>. Es una dirección física, grabada generalmente en la memoria ROM del adaptador Ethernet durante su fabricación.</p>
+<p>Tiene una longitud de <strong>6 bytes</strong> expresados en hexadecimal. Ejemplo: <code>00:1A:2B:3C:4D:5E</code>.
+Para garantizar que las direcciones no se repitan:</p>
+<ul>
+<li>Los primeros 3 bytes (24 bits) representan un <strong>OUI (Organizationally Unique Identifier)</strong>, asignado al fabricante por la IEEE.</li>
+<li>Los últimos 3 bytes (24 bits) son asignados por el fabricante para identificar de forma única cada dispositivo.</li>
+</ul>
+<p>Se puede pensar que la <strong>IP</strong> indica la dirección física de un dispositivo (<em>la cual puede cambiar</em>) y la <strong>MAC</strong> es como su DNI (<em>no cambia</em>).
+<strong>Direcciones especiales:</strong></p>
+<ul>
+<li>
+<p><strong>Unicast:</strong> Se usa para identificar un único dispositivo en la red. Una trama con una dirección unicast de destino es <strong>procesada solo por el dispositivo cuyo adaptador tiene esa dirección MAC</strong>.</p>
+</li>
+<li>
+<p><strong>Broadcast:</strong> Direcciones con <strong>todos los bits en 1</strong> (<code>FF:FF:FF:FF:FF:FF</code>).  Se utilizan para enviar tramas a <strong>todos los dispositivos</strong> de una red local.</p>
+</li>
+<li>
+<p><strong>Multicast:</strong> Direcciones en las que el <strong>bit menos significativo del primer byte</strong> es <code>1</code>. Permite enviar tramas a un <strong>grupo específico de dispositivos</strong> en la red.</p>
+</li>
+<li>
+<p><strong>Modo promiscuo:</strong>  En este modo, un adaptador puede aceptar <strong>todas las tramas</strong>, independientemente de su dirección de destino. Útil para herramientas de diagnóstico y análisis de redes, como los analizadores de paquetes (sniffers). Puede activarse manualmente con comandos como <code>ifconfig eth0 promisc</code>.</p>
+</li>
+</ul>
+<img src="../../../img/redes/pasted-image-20241230190237.png" alt="archivos/imagenes/Pasted image 20241230190237.png" loading="lazy">
+> [!Importante]
+> **Podemos ver que la IP no cambia a lo largo del recorrido, pero la MAC address sí.**
+<h2>5.3.1 Protocolo ARP (Address Resolution Protocol)</h2>
+<p>El protocolo <strong>ARP es esencial para traducir las direcciones IP</strong>, que <strong>son lógicas y funcionan en la capa de red</strong>, a <strong>direcciones MAC</strong>, <strong>necesarias en la capa de enlace para la transmisión física de datos</strong>.</p>
+<p>Cuando un dispositivo necesita enviar datos a una dirección IP, primero consulta la <strong>tabla de caché ARP</strong> para verificar si ya tiene la dirección MAC correspondiente. Si la entrada existe, se utiliza directamente. <strong>Si la dirección IP no está en la tabla</strong>, se envía una <strong>solicitud ARP</strong> a través de la red local usando una <strong>trama de broadcast</strong>. Ejemplo: &quot;¿Quién tiene la dirección IP 192.168.1.10?&quot;. **Después viene la respuesta ARP donde el dispositivo con la dirección IP indicada responde con su dirección MAC en una <strong>trama</strong> . Ejemplo: &quot;192.168.1.10 está en la dirección <code>MAC 00:1A:2B:3C:4D:5E</code>. <strong>Finalmente actualiza la tabla</strong>, la dirección MAC recibida se almacena en la <strong>tabla de caché ARP</strong> para uso futuro. Las entradas en la caché tienen una <strong>duración limitada</strong> (por defecto, 15 minutos).</p>
+<img src="../../../img/redes/pasted-image-20241125110006.png" alt="archivos/imagenes/Pasted image 20241125110006.png" loading="lazy">
+# 5.4 Ethernet
+Ethernet es un estándar ampliamente utilizado para redes LAN (Local Area Network). Su simplicidad y versatilidad lo han convertido en el tipo de red más común. Se caracteriza por ser una red **de difusión** y proporcionar un servicio **no fiable**, lo que significa que no garantiza la entrega de datos, dejando el control de errores a capas superiores (como TCP).
+## 5.4.1 Formato de la trama Ethernet
+<img src="../../../img/redes/pasted-image-20241125111045.png" alt="archivos/imagenes/Pasted image 20241125111045.png" loading="lazy">
+<p><strong>Cabecera</strong> tiene <strong>7 bytes</strong> con el patrón <code>10101010</code> repetido. Permite sincronizar al receptor con el emisor. Además tiene el <strong>SFD (Start of Frame Delimiter)</strong> <strong>1 byte</strong> con el patrón <code>10101011</code>. Indica el inicio de la trama.</p>
+<p><strong>Longitud del campo de datos</strong> (2 bytes) (<em>En Ethernet DIX, campo de Tipo, indica el protocolo de red usado (IP o ARP)</em>)
+<strong>Relleno</strong>: para que la trama tenga un <strong>tamaño mínimo</strong>. Tamaño mínimo (sin cabecera ni SFD): <strong>64 bytes</strong> = 512 bits
+Tamaño máximo: <strong>1518</strong> bytes = 12144 bits. <strong>FCS</strong> (Frame Check Sequence): código CRC de 4 bytes</p>
+<h2>5.4.2 Difusión y control de acceso: CSMA/CD</h2>
+<p>Ethernet utiliza el protocolo <strong>CSMA/CD</strong> (<em>Carrier Sense Multiple Access with Collision Detection</em>), un método para gestionar el acceso al medio compartido.</p>
+<p>Todos los adaptadores conectados a la red están <strong>constantemente escuchando el medio</strong>. Antes de transmitir, el adaptador <strong>verifica si el medio está ocupado</strong>. Si el medio está <strong>libre</strong>, comienza a transmitir y si el medio está <strong>ocupado</strong>, espera a que quede libre y <strong>deja un intervalo de seguridad</strong> antes de intentar transmitir.</p>
+<p>Se pueden producir <strong>colisiones en el medio</strong>. Una <strong>colisión</strong> ocurre cuando dos nodos transmiten al mismo tiempo y sus señales se superponen en el medio. Ethernet, al ser una red de difusión, es susceptible a estas colisiones.</p>
+<p>El nodo transmisor escucha el medio mientras transmite. <strong>Si detecta una colisión</strong> (señal alterada), <strong>detiene la transmisión</strong>. Existe un período en el que un nodo puede creer que el medio está libre mientras otra señal está en tránsito. Para evitar esto:</p>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal">i</span><span class="mord mathnormal">e</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">o</span><span class="mspace"> </span><span class="mord mathnormal">m</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord latin_fallback">ı</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord mathnormal">nim</span><span class="mord mathnormal">o</span><span class="mspace"> </span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal">a</span><span class="mspace"> </span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mord mathnormal">ama</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal">i</span><span class="mord mathnormal">e</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">o</span><span class="mspace"> </span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mord mathnormal">an</span><span class="mord mathnormal">s</span><span class="mord mathnormal">mi</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">o</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord mathnormal">n</span><span class="mspace"> </span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal">a</span><span class="mspace"> </span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mord mathnormal">ama</span></span></span></span></eq>
+Así nos aseguramos de que tarde más en escribir la trama en el enlace que lo que tarda en propagarse la info 2 veces.</p>
+</div>
+<p><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal">i</span><span class="mord mathnormal">e</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">o</span><span class="mspace"> </span><span class="mord mathnormal">m</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord latin_fallback">ı</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord mathnormal">nim</span><span class="mord mathnormal">o</span><span class="mspace"> </span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal">a</span><span class="mspace"> </span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mord mathnormal">ama</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal">i</span><span class="mord mathnormal">e</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">o</span><span class="mspace"> </span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal">p</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mord mathnormal">o</span><span class="mord mathnormal">p</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="mord mathnormal">a</span><span class="mord mathnormal">c</span><span class="mord mathnormal">i</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">o</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.1944em;"><span class="mord">ˊ</span></span></span></span></span></span></span><span class="mord mathnormal">n</span><span class="mspace"> </span><span class="mopen">(</span><span class="mord mathnormal">t</span><span class="mord mathnormal">am</span><span class="mord mathnormal">p</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mord mathnormal">o</span><span class="mord mathnormal">p</span><span class="mclose">)</span></span></span></span></eq></p>
+<p>Cuando  se detecta una <strong>colisión</strong> termina de transmitir la cabecera de la trama. Al detectar una colisión, el nodo transmite una secuencia de <strong>32 bits</strong> conocida como <strong>secuencia de interferencia</strong> (<em>jamming sequence</em>), para garantizar que todos los nodos detecten la colisión. Detiene la transmisión y usa el algoritmo de <strong>espera exponencial binaria:</strong></p>
+<p>Divide el tiempo en ranuras de longitud proporcional a
+<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9012em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord text"><span class="mord">t</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">propM</span><span class="mord accent mtight"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="mord mtight">a</span></span><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord mtight">ˊ</span></span></span></span></span></span></span><span class="mord mtight">x</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></eq>
+<strong>Primera colisión:</strong></p>
+<ul>
+<li>El nodo espera un tiempo aleatorio de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></eq> o <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span></span></span></span></eq> antes de reintentar.
+**Colisiones subsecuentes: **</li>
+<li>El tiempo de espera aumenta exponencialmente:
+<ul>
+<li>Segunda colisión: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">3</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span></span></span></span></eq>.</li>
+<li>Hasta 10 colisiones: 0 hasta <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">1023</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span></span></span></span></eq>.</li>
+</ul>
+</li>
+</ul>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>El intervalo es [0, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span></span></span></span></eq>]</p>
+</div>
+<p><strong>Límite de reintentos:</strong></p>
+<ul>
+<li>Tras <strong>16 colisiones consecutivas</strong>, el nodo desiste e informa del fallo. Y las capas superiores se encargan de recuperar el fallo.</li>
+</ul>
+<h2>5.4.3 Ventajas y desventajas de Ethernet</h2>
+<table>
+<thead>
+<tr>
+<th><strong>Ventajas</strong></th>
+<th><strong>Desventajas</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Es <strong>sencillo y económico</strong> de implementar.</td>
+<td>No garantiza la entrega de datos (no fiable).</td>
+</tr>
+<tr>
+<td>Ofrece <strong>alta velocidad</strong> y escalabilidad.</td>
+<td>Sensible a colisiones en entornos congestionados.</td>
+</tr>
+<tr>
+<td>Es compatible con múltiples medios físicos.</td>
+<td>El rendimiento decrece con un gran número de nodos.</td>
+</tr>
+</tbody>
+</table>
+<p>Ethernet ha evolucionado desde sus primeras versiones para soportar redes más rápidas, confiables y eficientes, adaptándose a entornos modernos gracias a tecnologías como Ethernet full-duplex y switches que eliminan las colisiones.</p>
+<h1>5.5 Tecnologías Ethernet</h1>
+<h2>5.5.1 Repetidores</h2>
+<p>Los repetidores son dispositivos de la <strong>capa física</strong> del modelo OSI que trabajan exclusivamente a nivel de <strong>bits individuales</strong>. Su función principal es <strong>extender la distancia de transmisión copiando y regenerando los bits</strong> que reciben por una interfaz y enviándolos al resto de interfaces conectadas. Se usan en transmisiones largas.</p>
+<img src="../../../img/redes/pasted-image-20241125113116.png" alt="archivos/imagenes/Pasted image 20241125113116.png" loading="lazy">
+<h2>5.6.2 Topología Bus (Obsoleta)</h2>
+<p>Esta fue una de las primeras configuraciones utilizadas en redes Ethernet.</p>
+<p>Consiste en un <strong>bus único</strong> de cable coaxial al que se conectan los adaptadores mediante conectores <strong>T</strong>. En cada extremo del bus, hay <strong>terminadores</strong> para evitar reflexiones de señal. Los adaptadores transmiten y reciben señales eléctricas a través del cable.</p>
+<p>Soporta un número limitado de adaptadores por segmento. No permite más de <strong>4 repetidores</strong> entre <a href="http://extremos.La">extremos.La</a> <strong>distancia máxima</strong> está definida por la especificación del estándar utilizado.</p>
+<p><strong>Nomenclatura:</strong> El formato de las denominaciones sigue este patrón: <strong>Mbps, tipo de transmisión, centenas de metros:</strong>
+<code>10Base2</code>:</p>
+<ul>
+<li>Velocidad de 10 Mbps.</li>
+<li>Banda base (sin modulación).</li>
+<li>Segmentos de hasta 200 metros.</li>
+</ul>
+<img src="../../../img/redes/pasted-image-20241125113137.png" alt="archivos/imagenes/Pasted image 20241125113137.png" loading="lazy">
+<h2>5.6.3 Topología Estrella</h2>
+<p>Es la <strong>configuración predominante en redes Ethernet modernas</strong>. Cada nodo está conectado mediante un <strong>par trenzado</strong> o <strong>fibra óptica</strong> a un dispositivo central (<em>hub o conmutador | switch</em>). La comunicación entre nodos siempre pasa a través de este dispositivo central.</p>
+<p>Cada nodo usa <strong>par trenzado</strong> (<em>limitado a 100m</em>) o <strong>fibra óptica</strong>. Para velocidades superiores a <strong>1000 Mbps</strong>, requiere <strong>4 pares trenzados</strong>.</p>
+<p>Nomenclatura: <strong>T</strong>: Par trenzado. <strong>F, S, L, E</strong>: Fibra óptica.</p>
+<img src="../../../img/redes/pasted-image-20241125113156.png" alt="archivos/imagenes/Pasted image 20241125113156.png" loading="lazy">
+<h2>5.6.4 Hubs (Concentradores)</h2>
+<p>Un <strong>hub</strong> es un dispositivo simple que también opera en la <strong>capa física</strong> del modelo OSI. <strong>Regenera y retransmite los bits</strong> que recibe por una interfaz a <strong>todas las demás interfaces</strong>. No distingue entre las tramas que transmite, lo que puede generar <strong>colisiones</strong> si dos adaptadores transmiten simultáneamente. Han quedado obsoletos y han sido reemplazados por dispositivos más avanzados como <strong>switches</strong>.</p>
+<img src="../../../img/redes/pasted-image-20241125113215.png" alt="archivos/imagenes/Pasted image 20241125113215.png" loading="lazy">
+<h2>5.6.5 Bridges (Puentes) y Switches (Conmutadores)</h2>
+<p>Los bridges y switches operan en las capas <strong>física</strong> y <strong>de enlace</strong>. Su objetivo principal es <strong>procesar tramas Ethernet, filtrar tráfico y evitar colisiones</strong>.</p>
+<img src="../../../img/redes/pasted-image-20241125113235.png" alt="archivos/imagenes/Pasted image 20241125113235.png" loading="lazy">
+<p>Los <strong>bridges</strong> tienen pocas interfaces (generalmente 2 o 4). Ya no se utilizan en redes modernas.
+Los <strong>Switches</strong> soportan <strong>decenas de interfaces</strong>. Reemplazaron a los bridges debido a su mayor capacidad.</p>
+<p>Inspeccionan campos como la <strong>dirección destino</strong> para decidir el reenvío. Detectan y descartan tramas con <strong>errores</strong>. Gestionan el tráfico en interfaces ocupadas almacenando tramas temporalmente.</p>
+<p>Construyen una <strong>tabla de reenvío</strong> dinámica. La tabla almacena la <strong>dirección MAC</strong>, la <strong>interfaz asociada</strong> y el <strong>tiempo de última actualización</strong>. Inicialmente, la tabla está vacía, y el dispositivo recurre a <strong>difusión</strong>.</p>
+<img src="../../../img/redes/pasted-image-20241125113359.png" alt="archivos/imagenes/Pasted image 20241125113359.png" loading="lazy">
+<p>Si la dirección de destino está en la tabla,  <strong>la trama se reenvía únicamente por la interfaz correspondiente, evitando colisiones y mejorando la eficiencia</strong>. Si la interfaz origen coincide con la de destino, se filtra la trama (se elimina). Si no está en la tabla el switch utiliza <strong>difusión</strong> para localizar al adaptador.</p>
+<img src="../../../img/redes/pasted-image-20241125113314.png" alt="archivos/imagenes/Pasted image 20241125113314.png" loading="lazy">
+<h1>5.7 VLANs (Redes de Área Local Virtuales)</h1>
+<p>Anteriormente las redes institucionales, cada <strong>switch</strong> formaba una red <strong>LAN propia</strong>, pero esto tenía varios inconvenientes:</p>
+<ul>
+<li>Si un usuario se cambia físicamente de departamento, no podía seguir conectado al anterior. Solo hay un dominio de broadcast único (<em>para tramas de mensajes ARP o DHCP</em>).</li>
+<li>Solo hay un dominio de broadcast único (<em>para tramas de mensajes ARP o DHCP</em>).</li>
+<li>Uso ineficientes de los switches (<em>cada uno solo tenía unos pocos puertos</em>).</li>
+</ul>
+<p>Por lo que si en una empresa la red va <strong>aumentando</strong> vamos a tener que comprar más y más <strong>switches</strong> y es prácticamente imposible aprovechar todos los <strong>puertos</strong> de esta forma, por lo que además de <strong>añadir complejidad innecesaria a la red</strong> se añade un <strong>costo económico inasumible</strong> (<em>tener en cuenta que cada switch se va a conectar a un router y pasar ese cable de ethernet de un piso a otro del edificio es caro</em>).</p>
+<p>Estos problemas se abordan con <strong>switches</strong> compatibles con VLANs, que soporten el estándar IEE 802.1Q (<em>añade unos campos a la cabecera</em>). <strong>Estos switches permiten definir múltiples LANs virtuales sobre una única red fija</strong>. Los host de una VLAN se comunican entre si como si solo ellos (<em>y ningún otro host</em>) estuvieran conectados al switch.</p>
+<img src="../../../img/redes/pasted-image-20241231130321.png" alt="archivos/imagenes/Pasted image 20241231130321.png" loading="lazy">
+<p>En una <strong>VLAN basada en puertos</strong>, el administrador de la red <strong>divide los puertos</strong> (<em>interfaces</em>) <strong>del switch en grupos</strong>.
+<strong>Cada grupo constituye una VLAN</strong>. Se mantienen una tabla de puertos - VLAN. Solo se entregan tramas <strong>entre puertos de la misma VLAN</strong>.</p>
+<p>Si se produce el caso anterior de que un usuario cambia físicamente e departamento, solo hay que actualizar la tabla de puertos para que ahora otro puerto pase a formar parte del VLAN de ese departamento.</p>
+<p>Conseguimos:</p>
+<ul>
+<li><strong>Aislamiento del tráfico:</strong> solo se entregan tramas entre puertos de la misma VLAN.</li>
+<li><strong>Pertenencia dinámica:</strong> asignación dinámica de puertos a VLANs (<em>se establece en que VLAN se sitúa automáticamente</em>). Por ejemplo, un empleado que se conecta al puerto de red en el área de finanzas podría ser asignado automáticamente a la VLAN de finanzas, mientras que un invitado conectado a la red Wi-Fi se podrías asignar a una VLAN asilada para invitados.</li>
+<li><strong>Reenvío entre VLANs mediante encaminamiento</strong>: en la práctica se combinan routers y switches.</li>
+</ul>
+<h1>5.8 Conmutación de etiquetas multiprotocolo (MPLS)</h1>
+<p>La conmutación de etiquetas multiprotocolo es un mecanismo de transporte de datos. Opera entre la <strong>capa de enlace de datos</strong> y la <strong>capa de red</strong> del modelo OSI. <strong>Fue diseñado para unificar el servicio de transporte de datos</strong> para las redes basadas en <strong>circuitos virtuales</strong> y en <strong>redes de datagramas</strong>. Puede ser utilizado para transportar diferentes tipos de tráfico.</p>
+<div class="callout callout-recodatorio">
+<p class="callout-titulo">Recodatorio</p>
+<p>Las redes de circuitos virtuales son un modelo de transmisión de datos, en las cuales se establece un camino lógico entre el emisor y el receptor antes de que los datos se transfieran.</p>
+</div>
+<p><strong>MPLS</strong> busca un enfoque diferente intentando juntar la <strong>red de circuitos virtuales</strong> cuando sea posible (<em>etiquetando selectivamente los datagramas y permitiendo a los routers el reenvío de estos datagramas en base a etiquetas de longitud fija</em>), pero también utilizando los datagramas (<em>direccionamiento y encaminamiento IP</em>)</p>
+<p>Así se logró mezclar de forma efectiva las técnicas de <strong>circuitos virtuales de una red de datagramas enrutados</strong>.</p>
+<img src="../../../img/redes/pasted-image-20241125114410.png" alt="archivos/imagenes/Pasted image 20241125114410.png" loading="lazy">
+<p><strong>Exp:</strong> bits experimentales, relacionados con la QoS.
+<strong>S:</strong> stack, vale 1 si es la última etiqueta de la jerarquía.</p>
+<p>Una trama ampliada MPLS solo se puede intercambiar entre routers <strong>compatibles con MPLS</strong>.</p>
+<h2>5.8.1 Routers de conmutación de etiquetas</h2>
+<p>Los routes compatibles con MPLS cuando reciben una trama:</p>
+<ul>
+<li>Analiza la etiqueta MPLS en vez de revisar toda la dirección IP</li>
+<li>Consultan una tabla de conmutación de etiquetas para decidir como reenviar el paquete.</li>
+<li>No tocan para nada la cabecera IP.</li>
+</ul>
+<img src="../../../img/redes/pasted-image-20241125114437.png" alt="archivos/imagenes/Pasted image 20241125114437.png" loading="lazy">
+<h2>5.8.2 Cálculo de rutas entre routers compatibles con MPLS</h2>
+<p>Para calcular este tipo de rutas se utiliza una extensión de algoritmos como OSPF(open shortest path first). Cada fabricante utiliza el algoritmo que quiera.</p>
+<h2>5.8.3 Cálculo de rutas entre routers compatibles con MPLS</h2>
+<ul>
+<li><strong>Ingeniería de tráfico:</strong> El direccionamiento IP siempre nos intenta dar la ruta más corta, en cambio <strong>MPLS proporciona la capacidad de reenviar</strong> paquetes a <strong>través de rutas</strong> que no serían posibles utilizando los protocolos de enrutamiento IP estándar. <strong>Se puede anular en enrutamiento IP normal</strong> y <strong>forzar a que aparte del tráfico dirigido hacia un cierto destino tome una determinada ruta</strong>, mientras que el resto del tráfico dirigido siga <strong>rutas distintas</strong>.</li>
+<li><strong>Establecer VPNs</strong></li>
+<li>Aislar tanto los recursos como el direccionamiento empleados por la <strong>VPN</strong> del cliente con respecto a los de otros usuarios que también tenga que atravesar la red del ISP.</li>
+</ul>
+<h1>5.9 WLAN</h1>
+<p>WLAN significa <strong>red de área local inalámbrica</strong> y se basa en el estándar IEEE 802.11, que define cómo se comunican los dispositivos inalámbricos (como routers, móviles, laptops, etc.) usando Wi-Fi.</p>
+<p>El estándar 802.11 tiene varias versiones (b, a, g, n, etc.), y cada una mejora aspectos como la velocidad, el alcance, y la resistencia a interferencias.</p>
+<h2>5.9.1 Redes Ad-hoc</h2>
+<p>Se crean directamente entre dispositivos sin necesidad de un punto de acceso (Access Point, AP). Son redes <strong>temporales</strong> y de <strong>igual a igual</strong> (peer-to-peer). Solo funcionan mientras los dispositivos están <strong>dentro del radio de alcance</strong>.</p>
+<img src="../../../img/redes/pasted-image-20241125115936.png" alt="archivos/imagenes/Pasted image 20241125115936.png" loading="lazy">
+<h2>5.9.2 Redes distribuidas (Managed)</h2>
+<p>Utilizan puntos de acceso (<strong>Access Points, AP</strong>) conectados a una <strong>LAN cableada</strong>. AP conecta a los dispositivos inalámbricos dentro de su radio y los comunica con la LAN troncal. Se usan en redes Wi-Fi gestionadas, como en <strong>oficinas o en casa</strong> con routers Wi-Fi.</p>
+<img src="../../../img/redes/pasted-image-20241125120007.png" alt="archivos/imagenes/Pasted image 20241125120007.png" loading="lazy">
+<h2>5.9.3 Protocolo de Acceso al Medio (MACA)</h2>
+<p>MACA (<strong>Multiple Access with Collision Avoidance</strong>) o <strong>CSMA/CA</strong> es el protocolo que evita colisiones en redes inalámbricas (donde no se pueden detectar colisiones como en Ethernet). Así funciona:</p>
+<p>Un dispositivo que quiere transmitir verifica si el canal está <a href="http://libre.Si">libre.Si</a> el canal está libre, espera un intervalo llamado <strong>DIFS</strong> (Distributed Inter Frame Space) para asegurarse de que sigue libre. Si aún está libre, comienza a transmitir.
+Si el canal está ocupado, sigue esperando y usa un mecanismo de <strong>backoff exponencial</strong> donde el dispositivo espera un tiempo aleatorio creciente antes de intentarlo de nuevo.</p>
+<p>No puede detectar colisiones directamente, así que confía en los <strong>ACKs</strong>, después de transmitir, el emisor espera un <strong>ACK</strong> (acuse de recibo) del receptor. Si no recibe el ACK, supone que hubo un problema y <strong>MACA / CSMA/CA (Protocolo de acceso al medio)</strong>.</p>
+<img src="../../../img/redes/pasted-image-20241231143106.png" alt="archivos/imagenes/Pasted image 20241231143106.png" loading="lazy">
+<img src="../../../img/redes/pasted-image-20241125120115.png" alt="archivos/imagenes/Pasted image 20241125120115.png" loading="lazy">
+<h2>5.9.4 Ejemplo Práctico</h2>
+<p>Supón que tienes un router Wi-Fi en casa y dispositivos como una ordenador y un móvil:</p>
+<ol>
+<li>
+<p><strong>El móvil quiere enviar datos</strong>:</p>
+<ul>
+<li>Verifica si el canal está libre. Si lo está, envía los datos tras el intervalo DIFS.</li>
+<li>Si el canal está ocupado, espera y reintenta según el algoritmo de backoff.</li>
+</ul>
+</li>
+<li>
+<p><strong>El router confirma la recepción</strong>:</p>
+<ul>
+<li>Responde con un <strong>ACK</strong> si recibió los datos correctamente.</li>
+<li>Si el móvil no recibe el ACK, reintenta.</li>
+</ul>
+</li>
+<li>
+<p><strong>Otros dispositivos respetan las tramas RTS/CTS</strong>:</p>
+<ul>
+<li>Si el móvil y el router están transmitiendo, los demás dispositivos en la red esperan hasta que acaben.</li>
+</ul>
+</li>
+</ol>
+<h1>5.10 Redes ATM</h1>
+<p>Es un tipo de red con el que <strong>trabajan las compañías telefónicas</strong>. Fue diseñada para operar a <strong>alta velocidad</strong>. Pueden transmitir <strong>datos, voz y video</strong>. Los <strong>conmutadores</strong> pueden operar a velocidades de <strong>terabit por segundo</strong>. El modelo ATM cubre las <strong>tres capas inferiores</strong>:</p>
+<ul>
+<li><strong>Capa física</strong></li>
+<li><strong>Capa de enlace</strong></li>
+<li><strong>Capa de red</strong></li>
+</ul>
+<p>Se integra en la <strong>arquitectura TCP/IP</strong>. Se usaba en <strong>redes telefónicas</strong>y en las <strong>troncales de Internet.</strong></p>
+<h2>5.10.1 Tipos de servicio en ATM</h2>
+<p><strong>CBR (Constant Bit Rate)</strong>:
+Se reserva y garantiza una cierta <strong>tasa de transmisión</strong>. Los <strong>retardos y las pérdidas</strong> están bajo ciertos límites garantizados. Adecuado para transmitir <strong>audio y vídeo</strong>.</p>
+<p><strong>ABR (Available Bit Rate)</strong>:
+La <strong>tasa de transmisión</strong> <strong>varía</strong> según los recursos disponibles, pero se garantiza un mínimo. NO se garantiza un mínimo en las <strong>pérdidas o el retardo.</strong></p>
+<p><strong>UBR (Unspecified Bit Rate)</strong>:
+Solo se transmiten paquetes cuando el resto de los servicios dejan recursos libres.</p>
+<p><strong>VBR (Variable Bit Rate)</strong>:
+Se usa para aplicaciones en tiempo real (<em>VBR-rt</em>) o no en tiempo real (<em>VBR-nrt</em>).</p>
+<h2>5.10.2 Características de las redes ATM</h2>
+<p>Paquetes <strong>muy pequeños y sencillos</strong> (<em>celdas</em>) para garantizar su <strong>conmutación a altas velocidades</strong>. Tamaño de celda de <strong>53 bytes</strong> (<em>5 de cabecera y 48 de datos</em>).</p>
+<p>Red de <strong>circuitos virtuales</strong> orientada a conexión. Antes de la transmisión, hay <strong>una solicitud de conexión</strong>. Se planifica la <strong>ruta</strong>. Las celdas llevan el <strong>número de canal virtual</strong>. El <strong>conmutador ATM</strong> consulta la tabla de canales virtuales y selecciona la línea de salida. Todas las celda siguen <strong>el mismo camino</strong> y llegan <strong>en orden</strong>. Al finalizar hay una fase de <strong>desconexión</strong> donde se elimina los canales virtuales.</p>
+<p>No hay ACKs ni <strong>retransmisiones</strong>, pero las celdas tienen <strong>control de errores de la cabecera</strong></p>
+<h2>5.10.3 Capas de ATM</h2>
+<img src="../../../img/redes/pasted-image-20241125120225.png" alt="archivos/imagenes/Pasted image 20241125120225.png" loading="lazy">
+<p><strong>ATM</strong> puede funcionar sobre <strong>cualquier capa física</strong>. La <strong>capa de adaptación a ATM</strong> (<em>AAL</em>) permite que otros protocolos usen las red ATM. Diferentes AAL dependiendo del tipo de servicio:</p>
+<ul>
+<li><strong>TCP/IP:</strong> Los datagramas se fragmentan para que quepan en las celas y se reensamblan a la salida.</li>
+<li><strong>Audio y vídeo:</strong> se agrupan los datos hasta llenar una celda.</li>
+</ul>
+<h2>5.10.4 Identificación de circuitos virtuales**</h2>
+<img src="../../../img/redes/pasted-image-20241125120441.png" alt="archivos/imagenes/Pasted image 20241125120441.png" loading="lazy">
+<p>En ATM hay dos niveles de conexión:</p>
+<ul>
+<li><strong>VCC</strong>(<em>Virtual Channel Connection</em>): Canal virtual.</li>
+<li><strong>VPC</strong>(<em>Virtual Patch Connection</em>): Camino virtual.
+<ul>
+<li>Conjunto de <strong>VCCs</strong> con los mismos extremos.</li>
+<li>Facilitan la gestión de los <strong>VCCs</strong>.</li>
+</ul>
+</li>
+</ul>
+<p>El identificador de circuito virtual permite distinguir entre caminos virtuales, y dentro de cada camino virtual entre canales.</p>
+<h2>5.10.5 Estructura de las celdas ATM</h2>
+<img src="../../../img/redes/pasted-image-20241125120455.png" alt="archivos/imagenes/Pasted image 20241125120455.png" loading="lazy">
+<p>Dos formatos:</p>
+<ul>
+<li><strong>Interfaz usuario-red</strong></li>
+<li><strong>Interfaz red-red</strong></li>
+</ul>
+<p><strong>Control de Flujo Genérico</strong> (<em>GFC</em>): solo en las interfaz usuario-red para la QoS.
+<strong>Identificador de canal virtual:</strong> VPI y VCI
+<strong>Tipo de carga útil:</strong> si la celda es de <strong>datos</strong> o de <strong>control</strong>
+<strong>Bit de prioridad:</strong> de la celda (<em>CLP</em>)
+<strong>Byte de control de error</strong> de la cabecera.</p>
+<h2>5.10.6 Ejemplo práctico de ATM</h2>
+<p>Imagina que un proveedor de servicios de Internet (ISP) usa ATM para transmitir tráfico de red:</p>
+<ol>
+<li>Un cliente envía datos desde su casa.</li>
+<li>El ISP utiliza ATM para dividir esos datos en celdas pequeñas (53 bytes) y las envía a través de su red troncal.</li>
+<li>Las celdas siguen un circuito virtual preestablecido, identificado por VPI y VCI.</li>
+<li>Cuando llegan al destino, las celdas se reensamblan para reconstruir los datos originales.</li>
+</ol>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-capa-de-red.html"><span class="nav-etiqueta">← anterior</span>4. Capa de Red</a>
+  
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

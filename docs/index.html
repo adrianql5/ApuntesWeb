@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Apuntes de teoría de Ingeniería Informática: 126 temas con fórmulas, imágenes y PDFs descargables.">
+<title>Apuntes de Ingeniería Informática · ApuntesWeb</title>
+<link rel="stylesheet" href="vendor/katex/katex.min.css">
+<link rel="stylesheet" href="css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><span aria-current="page">inicio</span></nav>
+<main class="principal">
+<section class="portada">
+  <p class="sello">ingeniería informática · USC</p>
+  <h1>Los apuntes, <mark>subrayados y todo</mark>.</h1>
+  <p class="portada-texto">Teoría de la carrera tal y como la fui escribiendo en Obsidian:
+  con fórmulas, capturas, avisos y opiniones sinceras sobre cada asignatura.
+  Cada asignatura se puede descargar entera en PDF.</p>
+</section>
+<section aria-label="Cursos">
+  <ul class="tarjetas tarjetas-cursos">
+    <li class="tarjeta"><a href="curso-1/index.html"><span class="tarjeta-codigo">CURSO 1</span><h2>Primer curso</h2><p>10 asignaturas · resúmenes y PDFs</p></a></li>
+    <li class="tarjeta"><a href="curso-2/index.html"><span class="tarjeta-codigo">CURSO 2</span><h2>Segundo curso</h2><p>2 cuatrimestres · 11 asignaturas</p></a></li>
+    <li class="tarjeta"><a href="curso-3/index.html"><span class="tarjeta-codigo">CURSO 3</span><h2>Tercer curso</h2><p>2 cuatrimestres · 8 asignaturas</p></a></li>
+  </ul>
+</section>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Entrada-Salida — apuntes de SISTEMAS OPERATIVOS (segundo curso de Ingeniería Informática).">
+<title>5. Entrada-Salida · SISTEMAS OPERATIVOS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">sistemas-operativos</a><span class="miga-sep">/</span><span aria-current="page">5-entrada-salida</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">SISTEMAS OPERATIVOS · curso 2</p>
+    <h1>5. Entrada-Salida · SISTEMAS OPERATIVOS</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<h1><strong>Entrada/Salida - Métodos de Tortura Medieval PT2</strong></h1>
+<p>Una de las principales tareas del SO es <strong>controlar todos los dispositivos de E/S de la computadora.</strong> Para poder hacer esto, el SO debe de ser capaz de:</p>
+<ul>
+<li>Emitir <strong>comandos</strong> para los dispositivos.</li>
+<li>Captar las <strong>interrupciones que</strong> produzcan los dispositivos.</li>
+<li>Manejar los <strong>errores</strong> que puedan provocar los dispositivos.</li>
+<li>Proporcionar una abstracción al usuario en forma de <strong>interfaz</strong> simple <strong>entre los dispositivos y el resto del sistema.</strong> Hasta donde sea posible, esta interfaz debe ser igual para todos los dispositivos.</li>
+</ul>
+<p>El <strong>software</strong> de E/S forma una parte significante del código del SO. Está estructurado en <strong>niveles,</strong> cada uno de los cuales tienen una <strong>tarea bien definida.</strong> Sobre el <strong>hardware</strong> de E/S nos centraremos únicamente en su <strong>interfaz</strong> con el software.</p>
+<h1><strong>5.1. Principios del Hardware de E/S</strong></h1>
+<h1><strong>5.1.1. Dispositivos de E/S</strong></h1>
+<p>Los dispositivos de E/S se pueden dividir básicamente en dos categorías: <strong>dispositivos de bloque</strong> y <strong>dispositivos de carácter</strong>. Un dispositivo de bloque almacena información en bloques de tamaño fijo, c<strong>ada uno con su propia dirección</strong>. Los tamaños de bloque comunes varían desde 512 bytes hasta 32,768 bytes. Todas las <strong>lecturas y escrituras</strong> se realizan en unidades de <strong>uno o más bloques enteros consecutivos</strong>. La propiedad esencial de un dispositivo de bloque es que es posible leer o escribir cada bloque de manera <strong>independiente</strong> de los demás. Los discos duros, CDs y memorias USBs son dispositivos de bloque comunes.</p>
+<p>El otro tipo de dispositivo de E/S es el <strong>dispositivo de carácter</strong>. Un dispositivo de carácter envía o acepta un flujo de caracteres, sin importar la estructura del bloque. Los caracteres n<strong>o son</strong></p>
+<table>
+<thead>
+<tr>
+<th>Dispositivo</th>
+<th>Velocidad de transferencia de datos</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Teclado</td>
+<td>10 bytes/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>Ratón</td>
+<td>100 bytes/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>Módem de 56K</td>
+<td>7 KB/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>Escáner</td>
+<td>400 KB/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>Cámara de video digital</td>
+<td>3.5 MB/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>802.11g inalámbrico</td>
+<td>6.75 MB/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>CD-ROM de 52X</td>
+<td>7.8 MB/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>Fast Ethernet</td>
+<td>12.5 MB/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>Tarjeta Compact Flash</td>
+<td>40 MB/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>FireWire (IEEE 1394)</td>
+<td>50 MB/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>USB 2.0</td>
+<td>60 MB/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>Red SONET OC-12</td>
+<td>78 MB/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>Disco SCSI Ultra 2</td>
+<td>80 MB/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>Gigabit Ethernet</td>
+<td>125 MB/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>Unidad de disco SATA</td>
+<td>300 MB/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>Cinta de Ultrium</td>
+<td>320 MB/seg</td>
+<td></td>
+</tr>
+<tr>
+<td>Bus PCI</td>
+<td>528 MB/seg</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>direccionables</strong> y <strong>no tienen ninguna operación de búsqueda.</strong> Lasimpresoras, lasinterfaces de red, losratones y la mayoría de los demás dispositivos que no son parecidos al disco se pueden considerar como dispositivos de carácter.</p>
+<p><strong>Este esquema de clasificación no es perfecto</strong>. Algunos dispositivos simplemente no se adaptan. Por ejemplo, los <strong>relojes</strong> no son direccionables por bloques. Tampoco generan ni aceptan flujos de caracteres. Todo lo que hacen es producir interrupciones a intervalos bien definidos. Aún así, el modelo de dispositivos de bloque y de carácter es lo bastante general como para poder utilizarlo como base para hacer que parte del sistema operativo que lidia con los dispositivos de E/S sea independiente.</p>
+<p>Los dispositivos de E/S cubren un amplio rango de velocidades. La figura 5.1. muestra las velocidades de transferencia de datos de algunos dispositivos comunes. La mayoría de estos dispositivos tienden a hacerse más rápidos a medida que pasa el tiempo.</p>
+<h4><strong>5.1.2. Controladores de Dispositivos</strong></h4>
+<p>Por lo general, las unidades de E/S consisten en un componente mecánico (dispositivo) y un componente electrónico (dispositivo controlador). A menudo es posible separar las dos porciones para proveer un diseño más modular y general. El componente electrónico se llama <strong>controlador de dispositivo</strong> o adaptador. En las computadoras personales, comúnmente tiene la forma de un <strong>chip</strong> en la <strong>tarjeta principa</strong>l o una <strong>tarjeta de circuito integrado</strong> que se puede insertar en una ranura de expansión (PCI). El componente mecánico es el dispositivo en sí.</p>
+<p>El controlador tendrá un conector para un cable que lleva al dispositivo en sí. Muchas veces, a una sola tarjeta controladora se le pueden conectar <strong>varios dispositivos.</strong> Si la <strong>interfaz</strong> entre la controladorea y el dispositivo es <strong>estándar,</strong> las empresas fabricarán controladores y dispositivos que se adapten a ella.</p>
+<h2><strong>5.1.3. Comunicación Controladora – CPU</strong></h2>
+<p>Cada <strong>controlador</strong> tiene unos cuantos <strong>registros</strong> que se utilizan para <strong>comunicarse con la CPU</strong>. Al escribir en los <strong>registros</strong>, el sistema operativo puede hacer que el dispositivo envíe o acepte datos, se encienda o se apague, o realice cualquier otra acción. Al leer de estos <strong>registros</strong>, el sistema operativo puede <strong>conocer el estado del dispositivo</strong>, si está <strong>preparado o no para aceptar un nuevo comando</strong>, y sigue procediendo de esa manera. Además de los registros de control, muchos dispositivos tienen un <strong>búfer de datos</strong> que el sistema operativo puede leer y escribir.</p>
+<p>De todo esto surge la cuestión acerca de cómo se comunica <strong>la CPU</strong> con los registros de control y los búferes de datos de los dispositivos. Existen dos alternativas. Mediante un <strong>puerto de E/S</strong> o una <strong>dirección de memoria.</strong></p>
+<h4><strong>5.1.3.1 Puertos de E/S</strong></h4>
+<p>Consiste en aginarle a cada registro de control un <strong>número de puertos de E/S</strong> (entero de 8 o 16 bits). El conjunto de todos los puertos de E/S forma el <strong>espacio de puertos de E/S. Sólo el SO</strong> puede acceder a él. Es <strong>independiente del espacio de direcciones de la memoria:</strong> una dirección x en el espacio de direcciones de memoria es diferente a una dirección x en el de puertos. Las operaciones de lectura y escritura en puertos no se pueden realizar con las instrucciones para memoria <em>lw</em> y <em>sw</em> , se usan <strong>instrucciones especiales</strong> <em>IN</em> y <em>OUT.</em></p>
+<h4>IN REG,PUERTO, o OUT PUERTO, REG</h4>
+<p>En este esquema, los espacios de direcciones para la memoria y la E/S son distintos, como se muestra en la figura 5.2.(a). Las instrucciones IN R0,4 y MOV R0,4 son completamente distintas en este diseño. La primera lee el contenido del puerto 4 de E/S y lo coloca en RO, mientras que la segunda lee el contenido de la palabra de memoria 4 y lo coloca en RO. Los 4s en estos ejemplos se refieren a espacios de direcciones distintos y que no están relacionados.</p>
+<h4><strong>5.1.3.2 Asignación de Memoria.</strong></h4>
+<p>Consiste en asignar los registros de control al <strong>espacio de direcciones de memoria.</strong> A cada registro de control se le asigna una dirección de memoria <strong>única</strong> para la que <strong>no hay memoria asignada.</strong></p>
+<h4><strong>5.1.3.3 Esquema Híbrido</strong></h4>
+<p>Consiste en asignar los <strong>búferes de datos al espacio de direcciones de memoria</strong> y los <strong>registros de control en un espacio de puertos de E/S</strong> separados.</p>
+<h4><strong>5.1.3.4 Funcionamiento de estos Esquemas.</strong></h4>
+<p>Cuando la CPU desea una palabra (ya sea de memoria o de un puerto de E/S):</p>
+<ul>
+<li>La CPU coloca la dirección que necesita (ya sea de memoria o de un puerto de E/S) en el bus de direcciones.</li>
+<li>La CPU activa la señal <em>read</em> en el bus de control.</li>
+<li>En función del esquema usado:
+<ul>
+<li>o Usando <strong>puertos de E/S:</strong>
+<ul>
+<li>Se añade un bit en el bus de control para indicar si se necesita una palabra de E/S o de memoria.</li>
+<li>Responde la memoria o el dispositivo de E/S.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4>o Usando <strong>asignación de memoria:</strong></h4>
+<ul>
+<li>Todos los módulos de memoria y los dispositivos de E/S comprueban si la dirección está en su rango.</li>
+<li>Si la dirección está en su rango, responde a la petición. Como ninguna dirección se asigna tanto a la memoria como a un dispositivo de E/S, <strong>no hay ambigüedad ni conflicto</strong>.</li>
+</ul>
+<p><img src="../../../img/sistemas-operativos/page-86-picture-11.jpeg" alt="" loading="lazy"></p>
+<p><strong>FIGURA 5.2.</strong> (a) Espacio separado de E/S y memoria. (b) E/S por asignación de memoria. (c) Híbrido.</p>
+<p>En la imagen <em>a</em> se encuentran en el dispositivo controlador. En la imagen <em>b</em> se encuentran en la RAM en una región protegida en el kernel.</p>
+<h4><strong>5.1.3.5 Ventajas de la E/S por asignación de Memoria.</strong></h4>
+<p>Los dos esquemas para direccionar los controladores tienen distintos puntos fuertes y débiles. Vamos a empezar con las ventajas de la E/S por <strong>asignación de memoria</strong>. En primer lugar, si usamos el <strong>sistema de puertos de E/S</strong> si se necesitan instrucciones de E/S especiales para leer y escribir en los registros de control, para acceder a ellosse requiere el uso de código <strong>ensamblador</strong>, ya que no hay forma de ejecutar una instrucción IN o OUT en C o C++. En contraste, con la E/S por <strong>asignación de memoria</strong> los registros de control de dispositivos son sólo variables en memoria y se pueden direccionar en C de la misma forma que cualquier otra variable. Así, con la E/S por asignación de memoria, un controlador de dispositivo de E/S puede escribirse completamente en C.</p>
+<p>En segundo lugar, con la E/S por <strong>asignación de memoria</strong> no se requiere un mecanismo de <strong>protección</strong> especial para evitar que los procesos realicen operaciones de E/S. Todo lo que el sistema operativo tiene que hacer es abstenerse de colocar esa porción del espacio de direcciones que contiene los registros de control en el espacio de direcciones virtuales de cualquier usuario. Mejor aún, si cada dispositivo tiene sus registros de control en una página distinta del espacio de direcciones, el sistema operativo puede proporcionar a un usuario el control sobre dispositivos específicos, pero no el de los demás, con sólo incluir las páginas deseadas en su tabla de páginas.</p>
+<h4><strong>5.1.3.6 Desventajas de la E/S por asignación de Memoria.</strong></h4>
+<p>La E/S por asignación de memoria también tiene sus <strong>desventajas</strong>. En primer lugar, la mayoría de las computadoras actuales tienen alguna forma de colocar en caché las palabras de memoria. <strong>Sería desastroso</strong> <strong>colocar en caché un registro de control de dispositivos</strong>. Considere el ciclo de código en lenguaje ensamblador mostrado a continuación en presencia de caché. La</p>
+<p>primera referencia a PUERTO_4 haría que se colocara en la caché. Las referencias subsiguientes sólo tomarían el valor de la caché sin siquiera preguntar al dispositivo. Después, cuando el dispositivo por fin estuviera listo, el software no tendría manera de averiguarlo. En vez de ello, el ciclo continuaría para siempre.</p>
+<p>Para evitar esto, las páginas del espacio de direcciones asignadas a los registros de control deben marcarse como <strong>no cacheables. Coherencia caché:</strong> si guradamos el registro de control en caché, los datos que la CPU lee o escribe pueden estas desfasados. La CPU puede leer de la cache en vez del dispositivo.</p>
+<p><strong>Todos los módulos de memoria</strong> y los <strong>dispositivos de E/S</strong> deben <strong>examinar todas las referencias</strong> a memoria para saber a cuáles tienen que responder. Esto es sencillo si el ordenador tiene un solo bus, pero normalmente existirá un <strong>bus separado</strong> de alta velocidad dedicado únicamente a la <strong>memoria.</strong> Como consecuencia, <strong>los disipativos de E/S no tienen manera de ver las direcciones de memoria que van por el bus de memoria</strong>, así que no las pueden responder. Hay dos posibles soluciones a esto:</p>
+<ul>
+<li>Se envían todas las referencias a la memoria principal, y si esta no puede responder, la CPU prueba con otros buses. Requiere hardware adicional.</li>
+<li>Se filtran las direcciones que salen de la CPU con un <strong>puente PCI</strong> que contiene registros de rango que se cargan durante el arranque del sistema, de manera que las direcciones ubicadas dentro de un rango que no pertenece a la memoria se envían al bus PCI en lugar de al bus de memoria.</li>
+</ul>
+<p><img src="../../../img/sistemas-operativos/page-87-figure-8.jpeg" alt="" loading="lazy"></p>
+<p><img src="../../../img/sistemas-operativos/page-87-figure-9.jpeg" alt="" loading="lazy"></p>
+<h1><strong>5.1.4. Acceso directo a memoria (DMA)</strong></h1>
+<p>El <strong>acceso directo a memoria</strong> (DMA) permite liberar a la CPU de labores poco sofisticadas relacionadas con la transferencia de datos de operaciones de E/S. Para usar este esquema, el hardware debe tener alguna <strong>controladora de DMA,</strong> que accede al bus de forma independiente de la CPU. Normalmente hay <strong>una única controladora DMA,</strong> que accede al bus de forma independiente de la CPU. Contiene <strong>varios registros</strong> en los que escribir y leer:</p>
+<ul>
+<li>Registro de <strong>dirección de memoria.</strong></li>
+<li>Registro de <strong>contador de bytes.</strong></li>
+<li>Registros de <strong>control,</strong> que especifican:
+<ul>
+<li>o El <strong>puerto E/S</strong> a utilizar</li>
+<li>o El <strong>tipo</strong> de transferencia (R/W)</li>
+<li>o <strong>Unidad</strong> de transferencia (byte o palabra)</li>
+<li>o Número de bytes a transferir por <strong>ráfaga.</strong></li>
+</ul>
+</li>
+</ul>
+<p>Puede gestionar <strong>varias transferencias</strong> a la vez, de manera que cada una de ellas usar una <strong>controladora de E/S distinta</strong> y tiene un <strong>canal con sus propios registros</strong>. Usa <strong>direcciones físicas</strong> para realizar las</p>
+<p>transferencias, por lo que las direcciones virtuales se tendrán que traducir antes de pasárselas a la controladora DMA.</p>
+<h4>Las <strong>lecturas de disco sin DMA</strong> siguen el siguiente esquema:</h4>
+<ul>
+<li>La controladora del disco lee el bloque solicitado, lo coloca bit a bit en su buffer interno y comprueba que no hay errores en él.</li>
+<li>La controladora del disco produce una <strong>interrupción</strong>.</li>
+<li>La CPU lee el bloque del buffer palabra a palabra (pues para poder acceder al buffer se tienen que cargar sus datos en un registro) y las va almacenando en memoria.</li>
+</ul>
+<h4>Las <strong>lecturas de disco con DMA</strong> siguen el siguiente esquema:</h4>
+<ul>
+<li>El SO programa la controladora del DMA escribiendo en sus registros y le indica al disco que debe leer datos en su buffer y verificarlos.</li>
+<li>Cuando ya hay datos válidos en el búfer del disco, la controladora de DMA envía una petición de lectura al controlador del disco que incluirá la dirección de memoria principal donde se escribirán los datos.</li>
+<li>La controladora del disco va escribiendo los datos de su buffer en memoria principal en ciclos de bus estándar, es decir, palabra por palabra.</li>
+<li>Cuando acaba una escritura, le envía un reconocimiento a la controladora de DMA. Esta incrementa la dirección de memoria a escribir y disminuye la cuenta de bytes.</li>
+<li>Cuando la cuenta de bytes llega a 0, la controladora de DMA envía una señal a la CPU para informarle de que ya acabó la transferencia de datos.</li>
+</ul>
+<h4>Las controladoras DMA pueden operar en el bus de dos maneras:</h4>
+<ul>
+<li>En <strong>modo palabra</strong>: la controladora DMA compite con la CPU por el acceso al bus, <strong>robando ciclos</strong> de bus a la CPU para hacer las transferencias de datos.</li>
+<li>En <strong>modo bloque:</strong> la controladora DMA indica al dispositivo que debe adquirir el bus, relaizar una <strong>ráfaga</strong> de transferencias y después liberarlo. El <strong>modo de ráfaga</strong> es mucho <strong>más eficiente</strong> que el robo de ciclo, pero <strong>puede bloquear la CPU</strong> si las ráfagas son muy largas.</li>
+</ul>
+<p><strong>No todoslos sistemas usan DMA,</strong> pues si no hay más trabajo que realizar, es másrápido que la CPU se ocupe de las transferencias.</p>
+<p><img src="../../../img/sistemas-operativos/page-88-figure-15.jpeg" alt="" loading="lazy"></p>
+<p><strong>FIGURA 5.4.</strong> Operación de una transferencia de DMA.</p>
+<h4><strong>Concluyendo:</strong></h4>
+<p>El <strong>robo de ciclo</strong> consiste en la apropiación del bus por parte de la controladora DMA de forma intermitente en momentos de actividad baja de la CPU, &quot;robando&quot; un ciclo de reloj para realizar sus operaciones de acceso a memoria e intercambio de datos. Dado que el proceso de apropiación del bus lleva un tiempo, la CPU puede verse ralentizada ligeramente debido a dichos &quot;robos&quot;, ya que es considerablemente más rápida que la DMA.</p>
+<p>Por otro lado, el modo ráfaga es un procedimiento más eficiente en general ya que consiste en la coordinación entre la DMA y el dispositivo periférico para realizar la transmisión de secuencias de datos completos, ocupando un menor número de veces el bus y tratando un mayor número de datos de cada vez. No obstante, si la secuencia de datos es extensa puede bloquear el acceso de la CPU al bus durante más tiempo.</p>
+<p>No compensa usar DMA en procesos donde las operaciones de E/S son rápidas, dado que la CPU es más veloz que la DMA. La existencia de la DMA sirve para que los demás procesos se beneficien de que la CPU no se encuentre ocupada gestionando operaciones de E/S, permitiendo así un mayor acceso a la misma.</p>
+<p>La mayoría de los controladores de DMA utilizan direcciones físicas de memoria para sus transferencias. No todas las computadoras utilizan DMA. El argumento en contra es que la CPU principal es a menudo más rápida que el controlador de DMA y puede realizar el trabajo con mucha mayor facilidad (cuando el factor limitante no es la velocidad del dispositivo de E/S). Si no hay otro trabajo que realizar, hacer que la CPU (rápida) tenga que esperar al controlador de DMA (lento) para terminar no tiene caso.</p>
+<h1><strong>5.1.5. Repaso de interrupciones</strong></h1>
+<p>A nivel de hardware, las interrupciones funcionan de la siguiente manera:</p>
+<ul>
+<li>Cuando un dispositivo de E/S (o DMA) termina su trabajo, produce una interrupción imponiendo una señal en la línea de bus que tenga asignada.</li>
+<li>Esta señal es detectada por la controladora de interrupciones, que está dentro de la placa base.</li>
+<li>La controladora de interrupciones emite una señal para interrumpir a la CPU, pasándole un número que indica qué dispositivo de E/S (o DMA) provocó la interrupción.</li>
+<li>La CPU deja lo que está haciendo y comienza a ejecutar la rutina de manejo de la interrupción, cuya dirección se encuentra en la entrada del vector de interrupciones correspondiente al número del dispositivo que provocó la interrupción.</li>
+<li>La CPU ejecuta la rutina de interrupción, que siempre comenzará por guarda lar información en la pila.</li>
+</ul>
+<p><img src="../../../img/sistemas-operativos/page-89-picture-12.jpeg" alt="" loading="lazy"></p>
+<p><strong>FIGURA 5.5.</strong> Cómo ocurre una interrupción. Las conexiones entre los dispositivos y el controlador de interrupciones en realidad utilizan líneas de interrupción en el bus, en vez de cables dedicados.</p>
+<p>Cabe destacar que el <strong>vector de interrupciones</strong> es una estructura que no está relacionada con ningún proceso en particular. Es una estructura encargada de indicar al sistema operativo las rutinas asociadas a determinadas interrupciones para su posterior gestión, y <strong>se almacena en el kernel</strong>.</p>
+<h1><strong>5.2. Fundamentos del software de E/S</strong></h1>
+<h4><strong>5.2.1. Conceptos clave</strong></h4>
+<p>Existen <strong>2 tipos de transferencias E/S</strong>:</p>
+<ul>
+<li>Transferencias <strong>síncronas</strong> → implican el bloqueo del proceso involucrado.</li>
+<li>Transferencias <strong>asíncronas</strong> → son controladas por interrupciones, la CPU inicia la transferencia y hace otras cosas hasta que llega la interrupción.</li>
+</ul>
+<p>La mayoría de las operaciones de E/S son <strong>asíncronas</strong>, el SO es el responsable de hacer que en los programas de usuario parezcan de bloqueo. Todas las transferencias usan un <strong>buffer en la zona de kernel de la memoria principal</strong> como almacenamiento temporal hasta que se llevan los datos a su destino final, que en ocasiones no se conoce hasta que se examina el contenido del búfer.</p>
+<ul>
+<li>Permite realizar un chequeo de errores sobre los datos y desacoplar el llenado del vaciado del búfer.</li>
+<li>Su uso implica una cantidad considerable de copiado, lo que afecta al rendimiento de las operaciones de E/S.</li>
+</ul>
+<p>Hay 3 maneras distintas para llevar a cabo la E/S: programada, controlada por interrupciones o mediante DMA</p>
+<h1><strong>5.2.2. E/S programada</strong></h1>
+<p>La CPU <strong>sondea constantemente el dispositivo de E/S</strong> para ver si está listo para continuar con la transferencia. Es la forma más <strong>simple</strong> de realizar operaciones de E/S. El problema es que se <strong>ocupa la CPU hasta que se finaliza la operación</strong>.</p>
+<p><img src="../../../img/sistemas-operativos/page-90-picture-11.jpeg" alt="" loading="lazy"></p>
+<p>Ejemplo: syscall para imprimir &quot;ABCDEFGH&quot; en una impresora.</p>
+<ul>
+<li>El SO copia el búfer del espacio de usuario en un array en el espacio de kernel para usarlo con más facilidad.</li>
+<li>El SO comprueba si la impresora está disponible. Si no lo está, espera hasta que lo esté.</li>
+<li>Tan pronto como la impresora esté disponible, el SO copia un carácter al registro de datos de la impresora.</li>
+<li>Se repiten los pasos 2 y 3 hasta finalizar la cadena.</li>
+</ul>
+<p>Las acciones realizadas por el sistema operativo se sintetizan en la figura 5.7. El aspecto esencial de la E/S programada, que se ilustra con claridad en esta figura, es que después de imprimir un carácter, la CPU sondea en forma continua el dispositivo para ver si está listo para aceptar otro. Este comportamiento se conoce comúnmente como <strong>sondeo</strong> u <strong>ocupado en espera</strong>. La E/S programada es simple, pero tiene la desventaja de ocupar la CPU tiempo completo hasta que se completen todas las operaciones de E/S.</p>
+<h4><strong>5.2.3. E/S controlada por interrupciones</strong></h4>
+<p>La CPU comienza la transferencia y <strong>se planifica otro proceso</strong>, de manera que el que comenzó la transferencia queda <strong>bloqueado</strong> hasta que esta finalice. Sin embargo, el dispositivo de E/S <strong>generará muchas interrupciones</strong>  para poder realizar la operación, que tendrá que resolver la CPU, <strong>desperdiciando tiempo de CPU</strong>. Ejemplo: syscall y manejador de interrupciones para imprimir &quot;ABCDEFGH&quot; en una impresora.</p>
+<ul>
+<li>
+<ol>
+<li>El SO copia el búfer del espacio de usuario en un arreglo en el espacio de kernel para usarlo con más facilidad.</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>Tan pronto como la impresora esté disponible se envía el primer carácter.</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>La CPU llama al planificador y se bloquea el proceso.</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>Cuando la impresora ha impreso el carácter y puede recibir otro, genera una interrupción.</li>
+</ol>
+</li>
+<li>
+<ol start="5">
+<li>La interrupción bloquea el proceso actual y ejecuta el procedimiento de manejo de interrupciones de la impresora.</li>
+</ol>
+</li>
+<li>
+<ol start="6">
+<li>Si no hay más caracteres en la cadena, se desbloquea el proceso.</li>
+</ol>
+</li>
+<li>
+<ol start="7">
+<li>Si hay más caracteres por imprimir, se le envía a la impresora el siguiente y la CPU vuelve a hacer lo que estaba haciendo antes de la interrupción</li>
+</ol>
+</li>
+</ul>
+<h4><strong>5.2.4. E/S mediante el uso de DMA</strong></h4>
+<p>La <strong>controladora DMA realiza la transferencia sin intervención de la CPU</strong>. Es como una E/S programada pero el trabajo lo realiza la DMA en lugar de la CPU.</p>
+<p><strong>Libera la CPU</strong> durante la operación de E/S para realizar otro trabajo. Sin embargo, <strong>requiere hardware especial</strong>.</p>
+<p>Ejemplo: syscall y manejador de interrupciones para imprimir &quot;ABCDEFGH&quot; en una impresora.</p>
+<p><strong>FIGURA 5.9.</strong> Cómo imprimir una cadena mediante el uso de DMA.</p>
+<ul>
+<li>(a) Código que se ejecuta cuando se hace la llamada al sistema para imprimir.
+<ul>
+<li>(b) Procedimiento de servicio de interrupciones.</li>
+</ul>
+</li>
+</ul>
+<h1><strong>5.3. Cosas Importantes de este Tema</strong></h1>
+<p>Saber muy bien cómo funcionan los distintos tipos de acceso a memoria o chaparlos porque siempre pregunta uno y cómo funciona.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-sistema-de-archivos.html"><span class="nav-etiqueta">← anterior</span>4. Sistema de Archivos</a>
+  
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

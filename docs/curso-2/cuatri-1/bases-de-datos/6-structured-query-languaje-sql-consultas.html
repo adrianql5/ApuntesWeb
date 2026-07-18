@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="6. Structured Query Languaje (SQL) Consultas — apuntes de BASES DE DATOS (segundo curso de Ingeniería Informática).">
+<title>6. Structured Query Languaje (SQL) Consultas · BASES DE DATOS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">bases-de-datos</a><span class="miga-sep">/</span><span aria-current="page">6-structured-query-languaje-sql-consultas</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">BASES DE DATOS · curso 2</p>
+    <h1>6. Structured Query Languaje (SQL) Consultas · BASES DE DATOS</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<h1>6.1 Estructura Básica de una Consulta en SQL</h1>
+<p>Las consultas SQL tienen una estructura básica que consiste en tres cláusulas principales:</p>
+<pre><code class="language-sql">select atrib1,..., atribN
+from tabla
+where predicado
+</code></pre>
+<h1>6.2 <strong>Select</strong> operación de proyección</h1>
+<p>Por defecto, SQL permite que se repitan valores en los resultados. Si varios profesores pertenecen al mismo departamento, podríamos obtener el nombre del departamento repetido. Si deseamos evitar estos duplicados, utilizamos la palabra clave <code>DISTINCT</code>:</p>
+<pre><code class="language-sql">SELECT DISTINCT nombre_dept 
+FROM profesor;
+</code></pre>
+<p>SQL permite incluir operaciones matemáticas en las consultas. Por ejemplo, si queremos aumentar un 10% el sueldo de todos los profesores:</p>
+<pre><code class="language-sql">SELECT ID, nombre, nombre_dept, sueldo * 1.1 
+FROM profesor;
+</code></pre>
+<p>También podemos renombrar tanto atributos como relaciones. Utilizamos la cláusula <code>AS</code> para renombrar columnas y tablas en las consultas SQL.</p>
+<p>Cuando ejecutamos una consulta SQL, los resultados incluyen columnas cuyos nombres provienen de las tablas de la cláusula <code>FROM</code>. Sin embargo, si hay columnas con el mismo nombre en diferentes tablas, el resultado tendrá nombres duplicados. Además, cuando se utilizan expresiones en la cláusula <code>SELECT</code>, estas no tendrán un nombre explícito.</p>
+<p>Si queremos que el atributo <code>nombre</code> aparezca como <code>nombre_profesor</code>, podemos modificar la consulta:</p>
+<pre><code class="language-sql">SELECT nombre AS nombre_profesor, asignatura_id 
+FROM profesor, enseña 
+WHERE profesor.ID = enseña.ID;
+</code></pre>
+<p>También podemos renombrar tablas utilizando la cláusula <code>AS</code>. Esto es especialmente útil cuando queremos hacer referencias a la misma tabla varias veces. Por ejemplo, si queremos comparar los sueldos de los profesores en un departamento específico:</p>
+<pre><code class="language-sql">SELECT DISTINCT T.nombre 
+FROM profesor AS T, profesor AS S 
+WHERE T.sueldo &gt; S.sueldo AND S.nombre_dept = 'Biología';
+</code></pre>
+<p>Aquí, <code>T</code> y <code>S</code> son alias para la misma tabla <code>profesor</code>, permitiendo que la consulta sea más legible y que podamos diferenciar entre las dos instancias de la misma tabla.</p>
+<h2>6.3 <strong>Where</strong> operación de selección</h2>
+<p>Podemos usar la cláusula <code>WHERE</code> para aplicar condiciones. Por ejemplo, si queremos encontrar solo a los profesores del departamento de Informática cuyo sueldo sea mayor a 70,000 €:</p>
+<pre><code class="language-sql">SELECT nombre 
+FROM profesor 
+WHERE nombre_dept = 'Informática' AND sueldo &gt; 70000;
+</code></pre>
+<p><strong>Ejemplo de Uso de <code>BETWEEN</code>:</strong></p>
+<pre><code class="language-sql">SELECT nombre 
+FROM profesor 
+WHERE sueldo BETWEEN 90000 AND 100000;
+</code></pre>
+<p><strong>Ejemplo de Uso de <code>IN</code>:</strong></p>
+<pre><code class="language-sql">SELECT nombre 
+FROM profesor 
+WHERE sueldo IN (900 ,1000);
+</code></pre>
+<p><strong>Si queremos filtrar por un nulo</strong></p>
+<pre><code class="language-sql">where profesor IS NULL
+
+where profesor IS NOT NULL
+</code></pre>
+<h1>6.4  Operaciones con Cadenas de Caracteres</h1>
+<p>SQL permite varias funciones que operan sobre cadenas de caracteres con <code>upper(s)</code> para convertir a mayúsculas y <code>lower(s)</code> para convertir a minúsculas, o <code>trim(s)</code> para eliminar espacios al final de las cadenas.</p>
+<p>El operador <code>LIKE</code> se utiliza para buscar patrones en cadenas. Los caracteres especiales son <code>%</code> (<em>cualquier subcadena</em>) y <code>_</code> (<em>cualquier carácter</em>).</p>
+<p><strong>Ejemplo de Búsqueda de Patrones:</strong></p>
+<pre><code class="language-sql">SELECT nombre_dept 
+FROM departamento 
+--Esto busca todos los departamentos cuyo nombre de edificio contenga &quot;Watson&quot;--
+WHERE edificio LIKE '%Watson%';
+--Esto busca todos los departamentos cuyo nombre de edificio termine por &quot;Watson&quot;--
+WHERE edificio LIKE '%Watson';
+</code></pre>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>También se pueden hacer casts en SQL:</p>
+<pre><code class="language-sql">cast(entero as numeric(8,1))
+</code></pre>
+</div>
+<h2>6.5 Orden en la Presentación de las Tuplas</h2>
+<p>SQL permite controlar el orden de las filas devueltas con la cláusula <code>ORDER BY</code>. Por defecto, el orden es ascendente.</p>
+<p><strong>Ejemplo de Ordenación Ascendente:</strong></p>
+<pre><code class="language-sql">SELECT nombre 
+FROM profesor 
+WHERE nombre_dept = 'Física' 
+ORDER BY nombre;
+</code></pre>
+<p><strong>Orden Descendente y Múltiples Atributos:</strong></p>
+<pre><code class="language-sql">SELECT * 
+FROM profesor 
+ORDER BY sueldo DESC, nombre ASC;
+</code></pre>
+<p>Esto ordena los resultados por <code>sueldo</code> de manera descendente y, en caso de empate, por <code>nombre</code> de manera ascendente.</p>
+<h3><strong>6.6 Operaciones sobre Conjuntos</strong></h3>
+<h3><strong>6.6.1 Unión (<code>UNION</code>)</strong></h3>
+<p>Combina los resultados de dos consultas, eliminando duplicados por defecto. Si necesitas conservar los duplicados, usa <code>UNION ALL</code>.</p>
+<pre><code class="language-sql">SELECT columna FROM tabla1
+UNION
+SELECT columna FROM tabla2;
+</code></pre>
+<h3><strong>6.6.2 Intersección (<code>INTERSECT</code>)</strong></h3>
+<p>Devuelve únicamente las filas comunes entre dos consultas, eliminando duplicados automáticamente.</p>
+<pre><code class="language-sql">SELECT columna FROM tabla1
+INTERSECT
+SELECT columna FROM tabla2;
+</code></pre>
+<h3><strong>6.6.3 Excepto (<code>EXCEPT</code>)</strong></h3>
+<p>Devuelve las filas que están en la primera consulta pero no en la segunda. Para conservar duplicados, usa <code>EXCEPT ALL</code>.</p>
+<pre><code class="language-sql">SELECT columna FROM tabla1
+EXCEPT
+SELECT columna FROM tabla2;
+</code></pre>
+<h3><strong>Resumen</strong></h3>
+<ul>
+<li><strong>UNION</strong>: Combina resultados y elimina duplicados.</li>
+<li><strong>INTERSECT</strong>: Devuelve los elementos comunes.</li>
+<li><strong>EXCEPT</strong>: Devuelve las filas exclusivas de la primera consulta.</li>
+</ul>
+<h1>6.7 Valor NULL</h1>
+<p>Los valores nulos en SQL son un concepto importante que implica ciertas peculiaridades en las operaciones aritméticas, de comparación y de conjunto. Aquí te explico en detalle cómo funcionan y cómo afectan las consultas:</p>
+<pre><code class="language-sql">SELECT r.A + 5 FROM tabla r;
+</code></pre>
+<p>Si <code>r.A</code> es nulo para alguna de las tuplas, el resultado de <code>r.A + 5</code> también será nulo para esa tupla. Esto se debe a que no se puede determinar un resultado numérico válido si uno de los operandos es nulo.</p>
+<p>Las comparaciones que involucran valores nulos son problemáticas. Por ejemplo, consideremos la comparación:</p>
+<pre><code class="language-sql">1 &lt; NULL
+</code></pre>
+<p>No se puede afirmar que esta comparación sea verdadera o falsa porque no se conoce el valor que representa <code>NULL</code>. Por lo tanto, SQL considera el resultado de cualquier comparación que involucre un valor nulo como <code>unknown</code> (desconocido). Esto crea un tercer estado lógico además de <code>true</code> (verdadero) y <code>false</code> (falso).</p>
+<p>Debido a la introducción de <code>unknown</code>, las operaciones booleanas deben extenderse para incluir este estado adicional. Aquí están las reglas:</p>
+<ul>
+<li>
+<p><strong>AND</strong></p>
+<ul>
+<li><code>true AND unknown</code> → <code>unknown</code></li>
+<li><code>false AND unknown</code> → <code>false</code></li>
+<li><code>unknown AND unknown</code> → <code>unknown</code></li>
+</ul>
+</li>
+<li>
+<p><strong>OR</strong></p>
+<ul>
+<li><code>true OR unknown</code> → <code>true</code></li>
+<li><code>false OR unknown</code> → <code>unknown</code></li>
+<li><code>unknown OR unknown</code> → <code>unknown</code></li>
+</ul>
+</li>
+<li>
+<p><strong>NOT</strong></p>
+<ul>
+<li><code>NOT unknown</code> → <code>unknown</code></li>
+</ul>
+</li>
+</ul>
+<h1>6.8 Funciones de agregación</h1>
+<p>Las funciones de agregación toman un conjunto de valores y devuelven un único valor. SQL incluye las siguientes funciones de agregación incorporadas:</p>
+<ol>
+<li><strong>Media (<code>avg</code>)</strong>: Calcula la media aritmética de un conjunto de valores.</li>
+<li><strong>Mínimo (<code>min</code>)</strong>: Devuelve el valor mínimo de un conjunto.</li>
+<li><strong>Máximo (<code>max</code>)</strong>: Devuelve el valor máximo de un conjunto.</li>
+<li><strong>Total (<code>sum</code>)</strong>: Calcula la suma total de un conjunto de valores.</li>
+<li><strong>Recuento (<code>count</code>)</strong>: Devuelve el número de elementos en un conjunto.</li>
+</ol>
+<pre><code class="language-sql">SELECT AVG(sueldo) FROM profesor WHERE nombre_dept = 'Informática';
+</code></pre>
+<p>Cuando se trata de valores nulos, las funciones de agregación se comportan de la siguiente manera:</p>
+<ul>
+<li><strong><code>SUM</code></strong> e <strong><code>AVG</code></strong> ignoran los valores nulos. Por ejemplo:</li>
+</ul>
+<pre><code class="language-sql">SELECT SUM(sueldo) FROM profesor;
+</code></pre>
+<p>Si algunas tuplas tienen <code>NULL</code> en <code>sueldo</code>, estas se ignoran en el cálculo.</p>
+<ul>
+<li><strong><code>COUNT(*)</code></strong> cuenta todas las tuplas, incluso si contienen valores nulos. Sin embargo, <strong><code>COUNT(columna)</code></strong> ignora los nulos en esa columna.</li>
+</ul>
+<h1>6.9 Agrupar Resultados</h1>
+<p>La cláusula <code>GROUP BY</code> unida a un <code>SELECT</code><strong>permite agrupar filas según las columnas que de indiquen como parámetros.</strong> Se suele usar para obtener datos resumidos y agrupados por las columnas que se necesiten.</p>
+<pre><code class="language-sql">SELECT EMployeeID, COUNT(*) AS TotaPedidos, COUNT(ShipRegion) AS FilasNoNulas,
+MIN(ShippedDate) AS FechaMin, MAX(ShippedDate) AS FechaMAX,
+SUM(Freight) PesoTotal, AVG(Freight) AS PesoPromedio
+FROM Orders
+GROUP BY EmployeeID
+
+</code></pre>
+<div class="callout callout-importante">
+<p class="callout-titulo">Importante</p>
+<p>Es muy importante tener en cuenta que cuando utilizamos la cláusula
+GROUP BY, los únicos campos que podemos incluir en el SELECT sin que estén dentro de una función de agregación, son los que vayan especificados en el <strong>GROUP BY</strong>.</p>
+</div>
+<p>La cláusula <code>HAVING</code> se utiliza para filtrar grupos después de aplicar funciones de agregación. Es como usar un <code>WHERE</code> pero en vez de afectar a las filas de la tabla, afecta a los grupos obtenidos.</p>
+<pre><code class="language-sql">SELECT nombre_dept, AVG(sueldo) AS med_sueldo 
+FROM profesor 
+GROUP BY nombre_dept 
+HAVING AVG(sueldo) &gt; 42000;
+</code></pre>
+<p>En este caso, <code>HAVING</code> aplica el filtro después de calcular la media para cada grupo.</p>
+<h1>6.10 Subconsultas anidadas</h1>
+<p>Las consultas válidas en SQL siempre generan una tabla que puede ser usada dentro de otra consulta SQL, fundamentalmente en las cláusulas from y where para comparaciones y comprobaciones entre otras tareas.</p>
+<p>Esta posibilidad de <strong>anidar</strong> varios niveles de consultas permite la estructura de consultas muy sofisticadas y complejas en SQL, es la parte más rica del lenguaje pero también la que más práctica necesita para llegar a ser dominada.</p>
+<h2>6.10.1 Pertenencia a conjuntos</h2>
+<p>La conectiva <code>IN</code> permite comprobar si un valor pertenece a un conjunto devuelto por una subconsulta. Esto es útil para consultas en las que queremos verificar si una tupla cumple ciertas condiciones basadas en otro conjunto de resultados.</p>
+<pre><code class="language-sql">SELECT DISTINCT asignatura_id
+FROM sección
+WHERE semestre = 'Otoño' AND año = 2009
+  AND asignatura_id IN (
+    SELECT asignatura_id
+    FROM sección
+    WHERE semestre = 'Primavera' AND año = 2010
+);
+</code></pre>
+<p>Para encontrar todas las asignaturas que se enseñaron en otoño de 2009, pero no en primavera de 2010, podemos usar <code>NOT IN</code>:</p>
+<pre><code class="language-sql">SELECT DISTINCT asignatura_id
+FROM sección
+WHERE semestre = 'Otoño' AND año = 2009
+  AND asignatura_id NOT IN (
+    SELECT asignatura_id
+    FROM sección
+    WHERE semestre = 'Primavera' AND año = 2010
+);
+</code></pre>
+<p>Podemos usar <code>IN</code> con valores específicos, por ejemplo, para encontrar a los profesores que no son ni &quot;Mozart&quot; ni &quot;Einstein&quot;:</p>
+<pre><code class="language-sql">SELECT DISTINCT nombre
+FROM profesor
+WHERE nombre NOT IN ('Mozart', 'Einstein');
+</code></pre>
+<h2>6.10.2 Comparación de conjuntos</h2>
+<p>SQL permite comparar un valor con los elementos de un conjunto devuelto por una subconsulta. Para esto se usan operadores como <code>&gt; SOME</code> y <code>&gt; ALL</code>.</p>
+<pre><code class="language-sql">SELECT nombre
+FROM profesor
+WHERE sueldo &gt; SOME (
+  SELECT sueldo
+  FROM profesor
+  WHERE nombre_dept = 'Biología'
+);
+</code></pre>
+<p>Aquí, la subconsulta devuelve los sueldos de los profesores del departamento de Biología. La condición <code>&gt; SOME</code> se cumple si el sueldo del profesor es mayor que al menos uno de esos sueldos.</p>
+<p>Si quisiéramos encontrar los profesores cuyo sueldo es mayor que el de <strong>todos</strong> los profesores de Biología, usaríamos <code>&gt; ALL</code>:</p>
+<pre><code class="language-sql">SELECT nombre
+FROM profesor
+WHERE sueldo &gt; ALL (
+  SELECT sueldo
+  FROM profesor
+  WHERE nombre_dept = 'Biología'
+);
+</code></pre>
+<p>El operador <code>EXISTS</code> permite comprobar si una subconsulta devuelve alguna tupla. Esto es útil para verificar si un conjunto no está vacío.</p>
+<pre><code class="language-sql">SELECT asignatura_id
+FROM sección AS S
+WHERE semestre = 'Otoño' AND año = 2009
+  AND EXISTS (
+    SELECT *
+    FROM sección AS T
+    WHERE semestre = 'Primavera' AND año = 2010
+      AND S.asignatura_id = T.asignatura_id
+);
+</code></pre>
+<p>El constructor <code>UNIQUE</code> permite verificar que una subconsulta no contenga tuplas duplicadas.</p>
+<pre><code class="language-sql">SELECT T.asignatura_id
+FROM asignatura AS T
+WHERE UNIQUE (
+  SELECT R.asignatura_id
+  FROM sección AS R
+  WHERE T.asignatura_id = R.asignatura_id
+    AND R.año = 2009
+);
+</code></pre>
+<p>Aquí, <code>UNIQUE</code> garantiza que no haya duplicados en las asignaturas ofrecidas en 2009.</p>
+<h1>6.11 Expresiones de reunión en SQL</h1>
+<h2>6.11.1 Condiciones de reunión</h2>
+<p>La operación de <strong>unión natural</strong> opera con dos relaciones y genera como resultado una relación con los pares de tuplas que tienen los mismos valores en los atributos que aparecen en los esquemas de ambas relaciones. Se utiliza la cláusula <code>NATURAL JOIN</code>.</p>
+<pre><code class="language-sql">select atrib1,...,atribN
+from tabla1 natural join tabla2
+where condición;
+</code></pre>
+<p>La cláusula <code>JOIN ... USING</code> permite indicar el nombre de los atributos a comparar:</p>
+<pre><code class="language-sql">SELECT atrib1,...,atribN
+FROM (r1 natural join r2) join relación using (atrib)
+</code></pre>
+<p>La condición <code>ON</code> permite la reunión de un predicado general sobre relaciones. A diferencia de natural join el resultado contiene los atributos comparados dos veces en la reunión (una por cada tabla).</p>
+<pre><code class="language-sql">select *
+from r1 join r2 on r1.an=r2.an*
+</code></pre>
+<h2>6.11.2 Reunión externa</h2>
+<p>La operación de reunión externa funciona de forma similar a la operación de reunión, creando tuplas en el resultado con valores nulos en los atributos de la relación que sólo aparecen en el esquema de una de las relaciones.</p>
+<ol>
+<li>
+<p><strong>Reunión externa izquierda (left outer join)</strong>: Conserva todas las filas de la tabla a la izquierda de la operación, incluso si no tienen coincidencias en la tabla de la derecha. Los valores de las columnas de la tabla de la derecha se rellenan con <code>null</code> en estas filas.</p>
+<pre><code class="language-sql">select * 
+from estudiante 
+left outer join matricula 
+on estudiante.ID = matricula.ID;
+</code></pre>
+</li>
+<li>
+<p><strong>Reunión externa derecha (right outer join)</strong>: Es similar a la reunión externa izquierda, pero conserva todas las filas de la tabla a la derecha de la operación.</p>
+<pre><code class="language-sql">select * 
+from matricula 
+right outer join estudiante 
+on estudiante.ID = matricula.ID;
+</code></pre>
+</li>
+<li>
+<p><strong>Reunión externa completa (full outer join)</strong>: Combina los resultados de la reunión externa izquierda y derecha, conservando todas las filas de ambas tablas. Las filas que no tienen coincidencias en la otra tabla tendrán valores <code>null</code> en las columnas correspondientes.</p>
+<pre><code class="language-sql">select * 
+from estudiante 
+full outer join matricula 
+on estudiante.ID = matricula.ID;
+</code></pre>
+</li>
+</ol>
+<p>El tipo de reunion por defecto en la <strong>reunión interna.</strong></p>
+<img src="../../../img/bases-de-datos/pasted-image-20241224093618.png" alt="Archivos/imagenes/Pasted image 20241224093618.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="5-structured-query-lanjuaje-sql-tablas-y-vistas.html"><span class="nav-etiqueta">← anterior</span>5. Structured Query Lanjuaje (SQL), Tablas y Vistas</a>
+  <a class="nav-siguiente" href="7-structured-query-languaje-sql-otros-elementos.html"><span class="nav-etiqueta">siguiente →</span>7. Structured Query Languaje (SQL) Otros Elementos</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

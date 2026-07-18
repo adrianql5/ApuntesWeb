@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="6. JSP — apuntes de DAW (tercer curso de Ingeniería Informática).">
+<title>6. JSP · DAW · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">daw</a><span class="miga-sep">/</span><span aria-current="page">6-jsp</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DAW · curso 3</p>
+    <h1>6. JSP · DAW</h1>
+  </header>
+  <div class="prosa">
+<h2>6.1 Introducción a JSP</h2>
+<p><strong>JSP (Java Server Pages)</strong> son páginas HTML con líneas de código adicional que se ejecutan en el servidor para generar contenido dinámico.</p>
+<p>Ideas clave:</p>
+<ul>
+<li>se traducen automáticamente a <strong>servlets</strong>;</li>
+<li>después de traducirse se compilan y se ejecutan como servlets;</li>
+<li>si se modifica la JSP, el contenedor vuelve a traducirla;</li>
+<li>ayudan a separar presentación y lógica de negocio;</li>
+<li>la lógica de negocio debe quedar encapsulada en servlets, JavaBeans o clases del modelo, no mezclada en la vista.</li>
+</ul>
+<img src="../../../img/daw/image-259.png" alt="image-259.png" loading="lazy">
+<img src="../../../img/daw/image-261.png" alt="image-261.png" loading="lazy">
+<img src="../../../img/daw/image-262.png" alt="image-262.png" loading="lazy">
+<h3>Componentes JSP</h3>
+<p>Una JSP se parece a HTML, pero puede contener componentes especiales, muchos delimitados por <code>&lt;% ... %&gt;</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Sintaxis</th>
+<th>Uso</th>
+<th>Traducción al servlet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Comentario JSP</td>
+<td><code>&lt;%-- ... --%&gt;</code></td>
+<td>Comentario que no se envía al cliente.</td>
+<td>No aparece en la respuesta.</td>
+</tr>
+<tr>
+<td>Declaración</td>
+<td><code>&lt;%! ... %&gt;</code></td>
+<td>Define variables y métodos.</td>
+<td>Fuera de <code>_jspService()</code>.</td>
+</tr>
+<tr>
+<td>Expresión</td>
+<td><code>&lt;%= ... %&gt;</code></td>
+<td>Evalúa Java y escribe el resultado.</td>
+<td>Se inserta como salida.</td>
+</tr>
+<tr>
+<td>Scriptlet</td>
+<td><code>&lt;% ... %&gt;</code></td>
+<td>Código Java arbitrario. Puede declarar variables, pero no métodos.</td>
+<td>Dentro de <code>_jspService()</code>.</td>
+</tr>
+<tr>
+<td>Directiva</td>
+<td><code>&lt;%@ ... %&gt;</code></td>
+<td>Instrucciones de compilación/traducción.</td>
+<td>Modifican el servlet resultante.</td>
+</tr>
+<tr>
+<td>Acción JSP</td>
+<td><code>&lt;jsp:accion ... /&gt;</code></td>
+<td>Control de flujo y acceso a JavaBeans.</td>
+<td>Se evalúa en cada petición.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-263.png" alt="image-263.png" loading="lazy">
+<img src="../../../img/daw/image-264.png" alt="image-264.png" loading="lazy">
+<img src="../../../img/daw/image-265.png" alt="image-265.png" loading="lazy">
+<img src="../../../img/daw/image-266.png" alt="image-266.png" loading="lazy">
+<h3>Directivas</h3>
+<p>Las directivas se procesan cuando la página se traduce a servlet. No devuelven contenido, pero afectan a la estructura resultante.</p>
+<table>
+<thead>
+<tr>
+<th>Directiva</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>page</code></td>
+<td>Define características globales de la JSP.</td>
+</tr>
+<tr>
+<td><code>include</code></td>
+<td>Inserta contenido de ficheros externos en tiempo de traducción.</td>
+</tr>
+<tr>
+<td><code>taglib</code></td>
+<td>Declara librerías de etiquetas estándar o propias.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-267.png" alt="image-267.png" loading="lazy">
+<h4>Directiva <code>page</code></h4>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>language</code></td>
+<td>Lenguaje de scripting; Java por defecto.</td>
+</tr>
+<tr>
+<td><code>extends</code></td>
+<td>Superclase del servlet generado.</td>
+</tr>
+<tr>
+<td><code>import</code></td>
+<td>Lista de clases o paquetes importados.</td>
+</tr>
+<tr>
+<td><code>session</code></td>
+<td>Indica si la JSP participa en sesiones HTTP.</td>
+</tr>
+<tr>
+<td><code>buffer</code></td>
+<td>Tamaño del buffer; por defecto 8 KB.</td>
+</tr>
+<tr>
+<td><code>autoFlush</code></td>
+<td>Si el buffer se vacía automáticamente.</td>
+</tr>
+<tr>
+<td><code>isThreadSafe</code></td>
+<td>Si el contenedor puede despachar varios hilos simultáneamente.</td>
+</tr>
+<tr>
+<td><code>info</code></td>
+<td>Texto devuelto por <code>getServletInfo()</code>.</td>
+</tr>
+<tr>
+<td><code>errorPage</code></td>
+<td>URL de la página a usar en caso de error.</td>
+</tr>
+<tr>
+<td><code>isErrorPage</code></td>
+<td>Si es página de error y puede acceder a <code>exception</code>.</td>
+</tr>
+<tr>
+<td><code>contentType</code></td>
+<td>Tipo MIME de la respuesta; por defecto se cita <code>text/html; charset=ISO-8859-1</code>.</td>
+</tr>
+<tr>
+<td><code>pageEncoding</code></td>
+<td>Codificación de la página.</td>
+</tr>
+<tr>
+<td><code>isELIgnored</code></td>
+<td>Si se ignoran expresiones EL.</td>
+</tr>
+</tbody>
+</table>
+<h3>Acciones JSP</h3>
+<p>Las acciones usan sintaxis XML y se reevalúan cada vez que se accede a la página.</p>
+<table>
+<thead>
+<tr>
+<th>Acción</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>jsp:forward</code></td>
+<td>Reenvía <code>request</code> y <code>response</code> a otro recurso.</td>
+</tr>
+<tr>
+<td><code>jsp:include</code></td>
+<td>Incluye otro recurso en la página.</td>
+</tr>
+<tr>
+<td><code>jsp:param</code></td>
+<td>Añade parámetros a <code>forward</code> o <code>include</code>.</td>
+</tr>
+<tr>
+<td><code>jsp:useBean</code></td>
+<td>Localiza o instancia un JavaBean.</td>
+</tr>
+<tr>
+<td><code>jsp:setProperty</code></td>
+<td>Modifica una propiedad de un JavaBean.</td>
+</tr>
+<tr>
+<td><code>jsp:getProperty</code></td>
+<td>Recupera una propiedad de un JavaBean.</td>
+</tr>
+<tr>
+<td><code>jsp:plugin</code></td>
+<td>Incrusta componentes como applets.</td>
+</tr>
+<tr>
+<td><code>jsp:fallback</code></td>
+<td>Mensaje alternativo para <code>jsp:plugin</code>.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-278.png" alt="image-278.png" loading="lazy">
+<p>Comparación de includes:</p>
+<table>
+<thead>
+<tr>
+<th>Directiva <code>include</code></th>
+<th>Acción <code>jsp:include</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Incluye en el momento de traducción.</td>
+<td>Incluye en el momento de la llamada.</td>
+</tr>
+<tr>
+<td>Mejor para páginas estáticas.</td>
+<td>Mejor para páginas dinámicas.</td>
+</tr>
+<tr>
+<td>No permite parámetros.</td>
+<td>Permite parámetros.</td>
+</tr>
+<tr>
+<td>Integra el contenido en el servlet generado.</td>
+<td>Evalúa el recurso al ejecutar la petición.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-281.png" alt="image-281.png" loading="lazy">
+<img src="../../../img/daw/image-279.png" alt="image-279.png" loading="lazy">
+<img src="../../../img/daw/image-282.png" alt="image-282.png" loading="lazy">
+<h2>6.2 Objetos implícitos, atributos y reenvío</h2>
+<p>Los <strong>objetos implícitos</strong> son objetos declarados e inicializados por el contenedor, disponibles dentro de <code>_jspService()</code> sin crearlos manualmente.</p>
+<p>El acceso se organiza alrededor de <code>pageContext</code>, que se obtiene mediante <code>getPageContext()</code> de <code>JspFactory</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Objeto</th>
+<th>Clase</th>
+<th>Uso</th>
+<th>Método desde <code>pageContext</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>out</code></td>
+<td><code>JspWriter</code></td>
+<td>Almacena la respuesta enviada al cliente.</td>
+<td><code>getOut()</code></td>
+</tr>
+<tr>
+<td><code>request</code></td>
+<td><code>HttpServletRequest</code></td>
+<td>Datos enviados por el cliente.</td>
+<td><code>getRequest()</code></td>
+</tr>
+<tr>
+<td><code>response</code></td>
+<td><code>HttpServletResponse</code></td>
+<td>Datos enviados por el servidor.</td>
+<td><code>getResponse()</code></td>
+</tr>
+<tr>
+<td><code>session</code></td>
+<td><code>HttpSession</code></td>
+<td>Identificación del usuario entre páginas.</td>
+<td><code>getSession()</code></td>
+</tr>
+<tr>
+<td><code>application</code></td>
+<td><code>ServletContext</code></td>
+<td>Comunicación con el contenedor y datos globales.</td>
+<td><code>getServletContext()</code></td>
+</tr>
+<tr>
+<td><code>config</code></td>
+<td><code>ServletConfig</code></td>
+<td>Configuración de inicialización.</td>
+<td><code>getServletConfig()</code></td>
+</tr>
+<tr>
+<td><code>exception</code></td>
+<td><code>JspException</code> / excepción</td>
+<td>Información de excepción en páginas de error.</td>
+<td>Disponible si <code>isErrorPage=true</code>.</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td><code>Object</code></td>
+<td>Servlet obtenido de la JSP.</td>
+<td>Referencia al servlet.</td>
+</tr>
+<tr>
+<td><code>pageContext</code></td>
+<td><code>PageContext</code></td>
+<td>Manejo de atributos en <code>page</code>, <code>request</code>, <code>session</code>, <code>application</code>.</td>
+<td><code>getPageContext()</code></td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-268.png" alt="image-268.png" loading="lazy">
+<img src="../../../img/daw/image-271.png" alt="image-271.png" loading="lazy">
+<img src="../../../img/daw/image-274.png" alt="image-274.png" loading="lazy">
+<h3>Atributos</h3>
+<p>Los atributos en JSP son análogos a los de servlets, pero añaden el ámbito <strong>page</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Ámbito</th>
+<th>Servlet</th>
+<th>JSP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aplicación</td>
+<td><code>getServletContext().get/setAttribute()</code></td>
+<td><code>application.get/setAttribute()</code></td>
+</tr>
+<tr>
+<td>Petición</td>
+<td><code>request.get/setAttribute()</code></td>
+<td><code>request.get/setAttribute()</code></td>
+</tr>
+<tr>
+<td>Sesión</td>
+<td><code>request.getSession().get/setAttribute()</code></td>
+<td><code>session.get/setAttribute()</code></td>
+</tr>
+<tr>
+<td>Página</td>
+<td>No existe</td>
+<td><code>pageContext.get/setAttribute()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Constantes de <code>pageContext</code>:</p>
+<ul>
+<li><code>APPLICATION_SCOPE</code>;</li>
+<li><code>PAGE_SCOPE</code>;</li>
+<li><code>REQUEST_SCOPE</code>;</li>
+<li><code>SESSION_SCOPE</code>.</li>
+</ul>
+<p>Métodos útiles:</p>
+<ul>
+<li><code>pageContext.findAttribute(nombre)</code>: busca en <code>page</code>, <code>request</code>, <code>session</code>, <code>application</code>;</li>
+<li><code>getAttributeNamesInScope(scope)</code>: lista atributos de un ámbito.</li>
+</ul>
+<img src="../../../img/daw/image-273.png" alt="image-273.png" loading="lazy">
+<img src="../../../img/daw/image-272.png" alt="image-272.png" loading="lazy">
+<h3>Reenvío de petición</h3>
+<p>Para delegar procesamiento se puede usar <code>RequestDispatcher</code> desde un servlet o acciones JSP desde una JSP.</p>
+<table>
+<thead>
+<tr>
+<th>Operación</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>forward(request, response)</code></td>
+<td>Cede el control a otro recurso con la misma petición y respuesta.</td>
+</tr>
+<tr>
+<td><code>include(request, response)</code></td>
+<td>Inserta la salida de otro recurso sin perder el control.</td>
+</tr>
+<tr>
+<td><code>jsp:forward</code></td>
+<td>Equivalente JSP para reenviar.</td>
+</tr>
+<tr>
+<td><code>jsp:include</code></td>
+<td>Equivalente JSP para incluir.</td>
+</tr>
+</tbody>
+</table>
+<p>Como se reutiliza la misma <code>request</code>, los datos se pueden pasar con <code>request.setAttribute(...)</code> antes del <code>forward</code>.</p>
+<img src="../../../img/daw/image-275.png" alt="image-275.png" loading="lazy">
+<img src="../../../img/daw/image-276.png" alt="image-276.png" loading="lazy">
+<img src="../../../img/daw/image-277.png" alt="image-277.png" loading="lazy">
+<img src="../../../img/daw/image-283.png" alt="image-283.png" loading="lazy">
+<h2>6.3 JavaBeans</h2>
+<p>Los scriptlets tienen dos problemas principales:</p>
+<ul>
+<li>al crecer la JSP, se vuelven largos y difíciles de mantener;</li>
+<li>la funcionalidad queda ligada a una JSP concreta y se reutiliza mal.</li>
+</ul>
+<p>La solución es mover datos y lógica sencilla a <strong>JavaBeans</strong>.</p>
+<p>Ventajas:</p>
+<ul>
+<li>reutilización de código;</li>
+<li>mejor separación entre diseñador y desarrollador;</li>
+<li>JSP más orientada a presentación.</li>
+</ul>
+<p>Un <strong>JavaBean</strong> es una clase Java que mantiene datos mediante propiedades accesibles por getters y setters.</p>
+<p>Convenciones:</p>
+<ul>
+<li>constructor sin argumentos;</li>
+<li>atributos privados;</li>
+<li>getters y setters con nomenclatura estándar;</li>
+<li>implementación de <code>Serializable</code>.</li>
+</ul>
+<img src="../../../img/daw/image-285.png" alt="image-285.png" loading="lazy">
+<img src="../../../img/daw/image-286.png" alt="image-286.png" loading="lazy">
+<h3>Acciones para JavaBeans</h3>
+<table>
+<thead>
+<tr>
+<th>Acción</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>jsp:useBean</code></td>
+<td>Localiza un bean y lo instancia si no existe.</td>
+</tr>
+<tr>
+<td><code>jsp:setProperty</code></td>
+<td>Asigna una propiedad.</td>
+</tr>
+<tr>
+<td><code>jsp:getProperty</code></td>
+<td>Recupera una propiedad.</td>
+</tr>
+</tbody>
+</table>
+<p><code>jsp:useBean</code> también guarda el objeto como atributo en un ámbito.</p>
+<p>Ámbitos habituales:</p>
+<ul>
+<li><code>page</code>;</li>
+<li><code>request</code>;</li>
+<li><code>session</code>;</li>
+<li><code>application</code>.</li>
+</ul>
+<p>Comportamiento de <code>jsp:useBean</code>:</p>
+<ol>
+<li>busca el bean por <code>id</code> en el ámbito indicado;</li>
+<li>si existe, lo reutiliza;</li>
+<li>si no existe, lo instancia;</li>
+<li>lo guarda como atributo;</li>
+<li>si tiene cuerpo, el cuerpo solo se ejecuta cuando el bean se crea en ese momento.</li>
+</ol>
+<img src="../../../img/daw/image-287.png" alt="image-287.png" loading="lazy">
+<img src="../../../img/daw/image-288.png" alt="image-288.png" loading="lazy">
+<img src="../../../img/daw/image-289.png" alt="image-289.png" loading="lazy">
+<img src="../../../img/daw/image-290.png" alt="image-290.png" loading="lazy">
+<h3>Beans creados en servlets</h3>
+<p>Patrón MVC recomendado:</p>
+<ol>
+<li>el servlet crea y rellena el bean;</li>
+<li>lo guarda como atributo en <code>request</code> o <code>session</code>;</li>
+<li>hace <code>forward()</code> a la JSP;</li>
+<li>la JSP solo muestra datos con EL, JSTL o acciones JSP.</li>
+</ol>
+<p>Ejemplo conceptual:</p>
+<pre><code class="language-java">LoginBean bean = new LoginBean();
+bean.setNombre(nombre);
+request.setAttribute(&quot;pwdBean&quot;, bean);
+request.getRequestDispatcher(&quot;welcome.jsp&quot;).forward(request, response);
+</code></pre>
+<p>En JSP puede recuperarse con <code>jsp:useBean</code> indicando el mismo <code>scope</code>, o más modernamente con EL: <code>${pwdBean.nombre}</code>.</p>
+<img src="../../../img/daw/image-291.png" alt="image-291.png" loading="lazy">
+<img src="../../../img/daw/image-292.png" alt="image-292.png" loading="lazy">
+<img src="../../../img/daw/image-293.png" alt="image-293.png" loading="lazy">
+<h3>Referencias polimórficas</h3>
+<p>Si el bean se instancia directamente, basta con <code>class</code>.</p>
+<p>Si se quiere declarar una referencia de un tipo y crear una clase concreta, se combinan:</p>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>Tipo de la referencia visible.</td>
+</tr>
+<tr>
+<td><code>class</code></td>
+<td>Clase concreta que se instancia.</td>
+</tr>
+</tbody>
+</table>
+<p>Esto evita problemas cuando el tipo de referencia es abstracto. Si se intenta instanciar una clase abstracta con <code>class</code>, puede producirse <code>InstantiationException</code>.</p>
+<img src="../../../img/daw/image-294.png" alt="image-294.png" loading="lazy">
+<img src="../../../img/daw/image-295.png" alt="image-295.png" loading="lazy">
+<img src="../../../img/daw/image-296.png" alt="image-296.png" loading="lazy">
+<img src="../../../img/daw/image-297.png" alt="image-297.png" loading="lazy">
+<h3>Formularios y JavaBeans</h3>
+<p>Los datos de formulario se pueden copiar a un bean:</p>
+<table>
+<thead>
+<tr>
+<th>Caso</th>
+<th>Forma</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Campo y propiedad no coinciden</td>
+<td><code>property=&quot;name&quot; param=&quot;userName&quot;</code>.</td>
+</tr>
+<tr>
+<td>Usar expresión Java</td>
+<td><code>value=&quot;&lt;%= request.getParameter(...) %&gt;&quot;</code>.</td>
+</tr>
+<tr>
+<td>Campo y propiedad coinciden</td>
+<td><code>property=&quot;name&quot;</code> sin <code>param</code>.</td>
+</tr>
+<tr>
+<td>Copiar todas las coincidencias</td>
+<td><code>property=&quot;*&quot;</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><code>property=&quot;*&quot;</code> intenta rellenar todas las propiedades para las que exista un parámetro de petición con el mismo nombre.</p>
+<img src="../../../img/daw/image-300.png" alt="image-300.png" loading="lazy">
+<img src="../../../img/daw/image-301.png" alt="image-301.png" loading="lazy">
+<img src="../../../img/daw/image-302.png" alt="image-302.png" loading="lazy">
+<img src="../../../img/daw/image-303.png" alt="image-303.png" loading="lazy">
+<img src="../../../img/daw/image-304.png" alt="image-304.png" loading="lazy">
+<h2>6.4 JSP Expression Language</h2>
+<p><strong>JSP Expression Language (EL)</strong> proporciona una sintaxis compacta para manejar JavaBeans, arrays, listas y mapas almacenados como atributos.</p>
+<p>Para reconocer EL puede usarse:</p>
+<pre><code class="language-jsp">&lt;%@ page isELIgnored=&quot;false&quot; %&gt;
+</code></pre>
+<p>Ventajas:</p>
+<ul>
+<li>sintaxis compacta;</li>
+<li>acceso cómodo a propiedades anidadas;</li>
+<li>acceso a JavaBeans y colecciones;</li>
+<li>acceso a parámetros, cabeceras, cookies y parámetros de inicialización;</li>
+<li>permite comparaciones y cálculos.</li>
+</ul>
+<p>Limitación:</p>
+<ul>
+<li>EL está pensada para <strong>leer</strong> datos, no para instanciar o modificar JavaBeans.</li>
+</ul>
+<h3>Sintaxis y búsqueda por ámbitos</h3>
+<p>Sintaxis:</p>
+<pre><code class="language-jsp">${objeto.propiedad}
+${lista[0]}
+${mapa[&quot;clave&quot;]}
+</code></pre>
+<p>Si <code>objeto</code> no es implícito de EL, se busca como atributo en este orden:</p>
+<ol>
+<li><code>page</code>;</li>
+<li><code>request</code>;</li>
+<li><code>session</code>;</li>
+<li><code>application</code>.</li>
+</ol>
+<p>Para evitar conflictos se puede indicar el ámbito:</p>
+<pre><code class="language-jsp">${pageScope.nombre}
+${requestScope.error}
+${sessionScope.usuario.nombre}
+${applicationScope.valor}
+</code></pre>
+<h3>Objetos implícitos EL</h3>
+<table>
+<thead>
+<tr>
+<th>Objeto EL</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pageScope</code></td>
+<td>Atributos de la página JSP actual.</td>
+</tr>
+<tr>
+<td><code>requestScope</code></td>
+<td>Atributos de la petición actual.</td>
+</tr>
+<tr>
+<td><code>sessionScope</code></td>
+<td>Atributos de la sesión.</td>
+</tr>
+<tr>
+<td><code>applicationScope</code></td>
+<td>Atributos globales de aplicación.</td>
+</tr>
+<tr>
+<td><code>param</code></td>
+<td>Parámetro simple de URL o formulario.</td>
+</tr>
+<tr>
+<td><code>paramValues</code></td>
+<td>Parámetros con varios valores, como <code>select multiple</code>.</td>
+</tr>
+<tr>
+<td><code>header</code></td>
+<td>Cabecera HTTP.</td>
+</tr>
+<tr>
+<td><code>headerValues</code></td>
+<td>Cabeceras HTTP multivalor.</td>
+</tr>
+<tr>
+<td><code>cookie</code></td>
+<td>Cookies del usuario.</td>
+</tr>
+<tr>
+<td><code>initParam</code></td>
+<td>Parámetros globales de inicialización configurados en XML.</td>
+</tr>
+<tr>
+<td><code>pageContext</code></td>
+<td>Acceso a ámbitos, atributos y otros objetos implícitos.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplos:</p>
+<pre><code class="language-jsp">${param.name}
+${paramValues.food[1]}
+${cookie.asignatura.value}
+${initParam.miEmail}
+</code></pre>
+<h3>Operadores</h3>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Operadores</th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Acceso</td>
+<td><code>.</code> y <code>[indice/clave]</code>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Aritméticos</td>
+<td><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code> o <code>div</code>, <code>%</code> o <code>mod</code>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Relacionales</td>
+<td><code>==</code> o <code>eq</code>, <code>!=</code> o <code>ne</code>, <code>&lt;</code> o <code>lt</code>, <code>&gt;</code> o <code>gt</code>, <code>&lt;=</code> o <code>le</code>, <code>&gt;=</code> o <code>ge</code>.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Lógicos</td>
+<td><code>&amp;&amp;</code> o <code>and</code>, `</td>
+<td></td>
+<td><code>o</code>or<code>, </code>!<code>o</code>not`.</td>
+</tr>
+<tr>
+<td>Vacío</td>
+<td><code>empty x</code>: <code>true</code> si <code>x</code> es <code>null</code>, string vacío, array/list/map vacío.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Ternario</td>
+<td><code>x ? y : z</code>.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Uso dentro de MVC:</p>
+<pre><code class="language-java">request.setAttribute(&quot;pwdBean&quot;, bean);
+request.getRequestDispatcher(&quot;welcome.jsp&quot;).forward(request, response);
+</code></pre>
+<pre><code class="language-jsp">&lt;h2&gt;Bienvenido ${pwdBean.nombre}&lt;/h2&gt;
+</code></pre>
+<p>La idea moderna es: <strong>el servlet prepara, la JSP muestra</strong>.</p>
+<h2>6.5 JSTL</h2>
+<p><strong>JSTL (JavaServer Pages Standard Tag Library)</strong> amplía JSP con etiquetas estándar para eliminar scriptlets.</p>
+<p>Para usarla:</p>
+<ul>
+<li>incluir <code>jstl.jar</code> en <code>WEB-INF/lib</code>;</li>
+<li>declarar la librería con <code>taglib</code>.</li>
+</ul>
+<p>Ejemplo:</p>
+<pre><code class="language-jsp">&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
+</code></pre>
+<p>Ventajas:</p>
+<ul>
+<li>permite marcas más claras;</li>
+<li>es más sencilla, robusta y portable;</li>
+<li>permite crear marcas a medida;</li>
+<li>ayuda a que la vista no contenga Java embebido.</li>
+</ul>
+<h3>Librerías JSTL 1.2</h3>
+<table>
+<thead>
+<tr>
+<th>Librería</th>
+<th>URI</th>
+<th>Prefijo</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core</td>
+<td><code>http://java.sun.com/jsp/jstl/core</code></td>
+<td><code>c</code></td>
+<td>Flujo, iteraciones, URLs y operaciones generales.</td>
+</tr>
+<tr>
+<td>Formatting</td>
+<td><code>http://java.sun.com/jsp/jstl/fmt</code></td>
+<td><code>fmt</code></td>
+<td>Internacionalización y fechas/números.</td>
+</tr>
+<tr>
+<td>SQL</td>
+<td><code>http://java.sun.com/jsp/jstl/sql</code></td>
+<td><code>sql</code></td>
+<td>Bases de datos relacionales.</td>
+</tr>
+<tr>
+<td>XML</td>
+<td><code>http://java.sun.com/jsp/jstl/xml</code></td>
+<td><code>x</code></td>
+<td>XML, flujo y transformaciones.</td>
+</tr>
+<tr>
+<td>Functions</td>
+<td><code>http://java.sun.com/jsp/jstl/functions</code></td>
+<td><code>fn</code></td>
+<td>Cadenas y funciones auxiliares.</td>
+</tr>
+</tbody>
+</table>
+<h3>Librería <code>core</code></h3>
+<table>
+<thead>
+<tr>
+<th>Etiqueta</th>
+<th>Atributos principales</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>c:out</code></td>
+<td><code>value</code></td>
+<td>Muestra una expresión.</td>
+</tr>
+<tr>
+<td><code>c:set</code></td>
+<td><code>var</code>, <code>scope</code>, <code>value</code></td>
+<td>Evalúa y guarda valor como atributo.</td>
+</tr>
+<tr>
+<td><code>c:remove</code></td>
+<td><code>var</code></td>
+<td>Elimina un atributo.</td>
+</tr>
+<tr>
+<td><code>c:catch</code></td>
+<td><code>var</code></td>
+<td>Captura excepción en una variable.</td>
+</tr>
+<tr>
+<td><code>c:forEach</code></td>
+<td><code>var</code>, <code>begin</code>, <code>end</code>, <code>items</code></td>
+<td>Itera rango o colección.</td>
+</tr>
+<tr>
+<td><code>c:forTokens</code></td>
+<td><code>var</code>, <code>items</code>, <code>delims</code></td>
+<td>Itera tokens de una cadena.</td>
+</tr>
+<tr>
+<td><code>c:if</code></td>
+<td><code>test</code></td>
+<td>Muestra contenido si la condición es cierta.</td>
+</tr>
+<tr>
+<td><code>c:choose</code></td>
+<td>-</td>
+<td>Condicional múltiple.</td>
+</tr>
+<tr>
+<td><code>c:when</code></td>
+<td><code>test</code></td>
+<td>Rama condicional de <code>choose</code>.</td>
+</tr>
+<tr>
+<td><code>c:otherwise</code></td>
+<td>-</td>
+<td>Rama por defecto.</td>
+</tr>
+<tr>
+<td><code>c:import</code></td>
+<td><code>url</code></td>
+<td>Importa contenido de otro recurso.</td>
+</tr>
+<tr>
+<td><code>c:url</code></td>
+<td><code>value</code>, <code>var</code></td>
+<td>Construye una URL, normalmente segura para contexto/sesión.</td>
+</tr>
+<tr>
+<td><code>c:redirect</code></td>
+<td><code>url</code></td>
+<td>Redirige a otra URL.</td>
+</tr>
+<tr>
+<td><code>c:param</code></td>
+<td><code>name</code>, <code>value</code></td>
+<td>Añade parámetros a <code>c:url</code>, <code>c:redirect</code> o <code>c:import</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplos conceptuales:
+1</p>
+<pre><code class="language-jsp">&lt;c:out value=&quot;${expresion}&quot; /&gt;
+&lt;c:set var=&quot;nombre&quot; scope=&quot;request&quot; value=&quot;${expresion}&quot; /&gt;
+&lt;c:forEach var=&quot;i&quot; items=&quot;${array}&quot;&gt;${i}&lt;/c:forEach&gt;
+&lt;c:if test=&quot;${j gt 0}&quot;&gt;positivo&lt;/c:if&gt;
+&lt;c:url var=&quot;logout&quot; value=&quot;/logout&quot; /&gt;
+</code></pre>
+<p><code>c:out</code> es preferible a imprimir texto sin escapar cuando el valor puede contener caracteres HTML/XML.</p>
+<h3>Otras librerías</h3>
+<p><code>fmt</code>:</p>
+<ul>
+<li>internacionalización: <code>fmt:message</code>, <code>fmt:setLocale</code>, <code>fmt:bundle</code>, <code>fmt:setBundle</code>, <code>fmt:param</code>, <code>fmt:requestEncoding</code>;</li>
+<li>formato: <code>fmt:timeZone</code>, <code>fmt:setTimeZone</code>, <code>fmt:formatNumber</code>, <code>fmt:parseNumber</code>, <code>fmt:parseDate</code>.</li>
+</ul>
+<p><code>sql</code>:</p>
+<ul>
+<li><code>sql:query</code>;</li>
+<li><code>sql:update</code>;</li>
+<li><code>sql:setDataSource</code>;</li>
+<li><code>sql:param</code>;</li>
+<li><code>sql:dateParam</code>.</li>
+</ul>
+<p>Existe para teoría, pero en aplicaciones bien estructuradas el acceso real a datos debe estar en el modelo o capa de servicio.</p>
+<p><code>xml</code>:</p>
+<ul>
+<li>acciones básicas: <code>x:parse</code>, <code>x:out</code>, <code>x:set</code>;</li>
+<li>control de flujo: <code>x:if</code>, <code>x:choose</code>, <code>x:when</code>, <code>x:otherwise</code>, <code>x:forEach</code>;</li>
+<li>transformaciones: <code>x:transform</code>, <code>x:param</code>.</li>
+</ul>
+<p><code>fn</code>:</p>
+<ul>
+<li><code>fn:length</code>, <code>fn:toUpperCase</code>, <code>fn:toLowerCase</code>;</li>
+<li><code>fn:substring</code>, <code>fn:substringAfter</code>, <code>fn:substringBefore</code>;</li>
+<li><code>fn:trim</code>, <code>fn:replace</code>, <code>fn:indexOf</code>;</li>
+<li><code>fn:startsWith</code>, <code>fn:endsWith</code>;</li>
+<li><code>fn:contains</code>, <code>fn:containsIgnoreCase</code>;</li>
+<li><code>fn:split</code>, <code>fn:join</code>, <code>fn:escapeXML</code>.</li>
+</ul>
+<h3>Evolución práctica</h3>
+<p>La evolución recomendada en JSP es:</p>
+<ol>
+<li>scriptlets: mezclan Java y HTML;</li>
+<li>JavaBeans: separan datos;</li>
+<li>EL: lee datos con sintaxis compacta;</li>
+<li>JSTL: añade bucles, condicionales y utilidades sin Java embebido.</li>
+</ol>
+<h2>6.6 Preguntas y plantilla de examen</h2>
+<p>Definiciones breves:</p>
+<table>
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Definición</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JSP</td>
+<td>Página HTML con etiquetas y fragmentos Java que el servidor traduce a servlet para generar contenido dinámico.</td>
+</tr>
+<tr>
+<td>JavaBean</td>
+<td>Clase reutilizable con constructor vacío, atributos privados, getters/setters y normalmente <code>Serializable</code>.</td>
+</tr>
+<tr>
+<td>EL</td>
+<td>Lenguaje de expresiones <code>${...}</code> para leer atributos, beans, colecciones, parámetros, cabeceras, cookies y contexto.</td>
+</tr>
+<tr>
+<td>JSTL</td>
+<td>Librería estándar de etiquetas que sustituye scriptlets con etiquetas para flujo, iteración, formato, XML, SQL y funciones.</td>
+</tr>
+</tbody>
+</table>
+<p>Relación MVC:</p>
+<ul>
+<li>servlet = controlador;</li>
+<li>JSP = vista;</li>
+<li>JavaBean = datos/modelo simple.</li>
+</ul>
+<h3>JSP del ejercicio Servlet/JSP</h3>
+<p>Este bloque encaja con la plantilla del tema <code>5. Servlets</code>.</p>
+<p><code>login.jsp</code> debe demostrar:</p>
+<ul>
+<li>directiva <code>page</code> con <code>contentType</code> y <code>pageEncoding</code>;</li>
+<li>directiva <code>taglib</code> para JSTL core;</li>
+<li>formulario que envía <code>POST</code> a <code>/login</code>;</li>
+<li>lectura de error con EL o JSTL: <code>${error}</code>;</li>
+<li>uso de <code>${pageContext.request.contextPath}</code> para construir rutas.</li>
+</ul>
+<p>Patrón:</p>
+<pre><code class="language-jsp">&lt;c:if test=&quot;${not empty error}&quot;&gt;
+  &lt;p&gt;${error}&lt;/p&gt;
+&lt;/c:if&gt;
+
+&lt;form action=&quot;${pageContext.request.contextPath}/login&quot; method=&quot;post&quot;&gt;
+  &lt;input name=&quot;nombre&quot;&gt;
+  &lt;input name=&quot;pwd&quot; type=&quot;password&quot;&gt;
+&lt;/form&gt;
+</code></pre>
+<p><code>panel.jsp</code> debe demostrar:</p>
+<ul>
+<li>acceso a un bean guardado en sesión: <code>${sessionScope.usuario.nombre}</code>;</li>
+<li>iteración de una lista con <code>c:forEach</code>;</li>
+<li>salida segura con <code>c:out</code>;</li>
+<li>enlace de cierre de sesión.</li>
+</ul>
+<p>Patrón:</p>
+<pre><code class="language-jsp">&lt;h1&gt;Bienvenido ${sessionScope.usuario.nombre}&lt;/h1&gt;
+
+&lt;c:forEach var=&quot;asig&quot; items=&quot;${asignaturas}&quot;&gt;
+  &lt;li&gt;&lt;c:out value=&quot;${asig}&quot; /&gt;&lt;/li&gt;
+&lt;/c:forEach&gt;
+
+&lt;a href=&quot;${pageContext.request.contextPath}/logout&quot;&gt;Cerrar sesión&lt;/a&gt;
+</code></pre>
+<p>Si en examen piden varios servlets, JSP y <code>web.xml</code>, la explicación queda:</p>
+<ul>
+<li>tema 5: servlets, <code>request/session</code>, <code>forward</code>, <code>redirect</code>, <code>web.xml</code>;</li>
+<li>tema 6: JSP, JavaBeans, EL y JSTL como capa de vista.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="5-servlets.html"><span class="nav-etiqueta">← anterior</span>5. Servlets</a>
+  <a class="nav-siguiente" href="glosariomasticado.html"><span class="nav-etiqueta">siguiente →</span>GlosarioMasticado</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

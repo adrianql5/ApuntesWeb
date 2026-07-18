@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="4. Subsistema de Memoria Compartida en Procesadores Multinúcleo (Coherencia caché) — apuntes de AQRCOMP (segundo curso de Ingeniería Informática).">
+<title>4. Subsistema de Memoria Compartida en Procesadores Multinúcleo (Coherencia caché) · AQRCOMP · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">aqrcomp</a><span class="miga-sep">/</span><span aria-current="page">4-subsistema-de-memoria-compartida-en-procesadores-multinucleo-coherencia-cache</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">AQRCOMP · curso 2</p>
+    <h1>4. Subsistema de Memoria Compartida en Procesadores Multinúcleo (Coherencia caché) · AQRCOMP</h1>
+  </header>
+  <div class="prosa">
+<p><a href="https://ocw.uc3m.es/mod/page/view.php?id=2822">https://ocw.uc3m.es/mod/page/view.php?id=2822</a></p>
+<h1>4.1 Introducción</h1>
+<p>En las memorias caché hay dos <strong>tipos de datos:</strong></p>
+<ul>
+<li>Datos <strong>privados:</strong> datos usados por un único procesador</li>
+<li>Datos <strong>compartidos:</strong> datos usados por varios procesadores
+Estos datos pueden <strong>replicarse</strong> en varias cachés, lo que reduce la <strong>contención en el acceso a memoria</strong>, pues cada procesador accede a su copia local.</li>
+</ul>
+<p><strong>Coherencia:</strong> define el <strong>comportamiento</strong> de <strong>lecturas</strong> y <strong>escrituras</strong> en la misma posición de memoria y, por tanto, que todos los procesadores en un sistema multiprocesador tengan <strong>la misma visión</strong> de memoria</p>
+<p><strong>Consistencia:</strong> define el <strong>orden</strong> en que se ejecutan las operaciones de memoria unas respecto a otras y, por tanto, que esas operaciones se realicen en el orden del <strong>programa secuencial</strong>.</p>
+<ul>
+<li>En los <strong>sistemas monoprocesador</strong> el orden en que se actualicen las posiciones de memoria afecta a la memoria principal y a la caché</li>
+<li>En los <strong>sistemas multiprocesador</strong> el orden en que se actualicen las posiciones de memoria afecta a la memoria principal y a la caché de todos los procesadores.</li>
+</ul>
+<h2>4.1.1 Multiprocesadores UMA</h2>
+<p>En los multiprocesadores UMA (<em>Uniform Memory Access</em> o multiprocesadores simétricos <strong>SMP</strong>) todos los procesadores comparten una <strong>única memoria</strong> con la <strong>misma latencia</strong> para todos ellos. Tienen un número de cores pequeño (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7719em;vertical-align:-0.136em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">8</span></span></span></span></eq>)</p>
+<img src="../../../img/aqrcomp/pasted-image-20250527154915.png" alt="Pasted image 20250527154915.png" loading="lazy">
+<img src="../../../img/aqrcomp/pasted-image-20250527155414.png" alt="Pasted image 20250527155414.png" loading="lazy">
+<img src="../../../img/aqrcomp/pasted-image-20250527155427.png" alt="Pasted image 20250527155427.png" loading="lazy">
+<h3>Condiciones para que haya coherencia</h3>
+<p>Un sistema de memoria es <strong>coherente</strong> si cualquier lectura de una dirección devuelve el valor más reciente que se haya escrito para esa dirección</p>
+<ul>
+<li>
+<p><strong>Preservar el orden del programa:</strong> si un procesador <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span></eq> escribe la posición <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span></span></span></span></eq> y luego la lee, el valor devuelto es siempre el valor escrito por <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span></eq>. Se cumple si no hay escrituras por parte de otro procesador entre la escritura y lectura de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span></eq></p>
+</li>
+<li>
+<p><strong>Vista coherente de la memoria:</strong> si una procesador <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Q</span></span></span></span></eq> escribe la posición <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span></span></span></span></eq> y luego otro procesador <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span></eq> la lee, leerá el valor escrito por <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Q</span></span></span></span></eq>. Se cumple si la escritura y lectura están suficientemente separadas y entre los dos accesos no hay ninguna escritura de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span></span></span></span></eq></p>
+</li>
+<li>
+<p><strong>Serialización de escrituras:</strong> dos escrituras de la misma posición por dos procesadores cualesquiera son vistas en ese mismo orden por todos los procesadores.</p>
+</li>
+</ul>
+<h2>4.1.2 Métodos de Actualización de Memoria Principal</h2>
+<ul>
+<li>
+<p><strong>Escritura directa (ED o write_through):</strong> siempre que se modifica una dirección en la caché, se modifica la memoria principal.</p>
+<ul>
+<li>Cada escritura supone <strong>utilización de la red,</strong> por lo que es poco eficiente en sistemas multiprocesador, en los que varios procesos pueden escribir a la vez.</li>
+<li>Se produce <strong>incoherencia entre cachés</strong>, pero no entre caché y memoria</li>
+</ul>
+</li>
+<li>
+<p><strong>Post-escritura (PE o write back):</strong> cuando un procesador modifica una dirección de memoria sólo se escribe en la caché.</p>
+<ul>
+<li>El dato no se transfiere a memoria principal hasta que se eliminan de la caché, por lo que se puede <strong>escribir</strong> varias veces en un bloque de caché <strong>sin acceder a memoria</strong> principal.</li>
+<li>Se produce <strong>incoherencia entre cachés</strong>, y <strong>también entre caché y memoria</strong>.</li>
+</ul>
+</li>
+</ul>
+<p>Entonces, se producirán falta de coherencia tanto usando ED como PE. Posibles soluciones:</p>
+<ul>
+<li><strong>Hardware específico.</strong></li>
+<li>Otras soluciones: declaración de zonas de memoria <strong>no cacheables</strong> o <strong>con escritura inmediata</strong> (para dispositivos de salida)</li>
+<li>Solución estándar: <strong>protocolos de coherencia caché</strong></li>
+</ul>
+<h1>4.2 Protocolos de Coherencia Caché</h1>
+<p>Los <strong>protocolos de coherencia caché</strong> hacen que cada <strong>escritura</strong> sea <strong>visible</strong> a todos los procesadores y <strong>propagan</strong> de forma fiable un nuevo <strong>valor</strong> escrito. Se basan en seguir la pista al <strong>estado</strong> de un bloque (línea) de datos caché compartido.</p>
+<h2>4.2.1 Métodos de Propagación de Escrituras a las Cachés</h2>
+<ul>
+<li>
+<p><strong>Escritura con actualización</strong> (WU o write-update):</p>
+<ul>
+<li>Si el dato es <strong>compartido:</strong> lo actualiza en todas las cachés que lo contengan (actúa como cache <strong>ED</strong>).</li>
+<li>Si el dato es <strong>privado:</strong> no es necesario actualizar en otras cachés (actúa como caché <strong>PE</strong>).</li>
+</ul>
+</li>
+<li>
+<p><strong>Escritura con Invalidación</strong> (WI o write-invalidate): cuando se realiza una escritura, se distribuye una <strong>señal de invalidación</strong> a través del bus y todas las cachés comprobarán si tienen un copia de ese dato. Las que lo tengan, invalidarán la línea que lo contiene.</p>
+<ul>
+<li>Es la solución más <strong>común</strong></li>
+<li>Se usa en los <strong>protocolos de snooping</strong></li>
+</ul>
+</li>
+</ul>
+<h3>Diferencias</h3>
+<ul>
+<li>
+<p>Múltiples escrituras a la <strong>misma palabra</strong> (sin lecturas por el medio):</p>
+<ul>
+<li>WU: una difusión de escritura cada vez</li>
+<li>WI: solo la primera escritura a la palabra genera una invalidación</li>
+</ul>
+</li>
+<li>
+<p>Múltiples escrituras a la <strong>misma línea</strong> (en distintas palabras):</p>
+<ul>
+<li>WU: una difusión de escritura por cada palabra</li>
+<li>WI: solo la primera escritura a cualquier palabra genera una invalidación</li>
+</ul>
+</li>
+<li>
+<p><strong>Retardo</strong> entre escribir una palabra en un procesador y leer el valor escrito en otro:</p>
+<ul>
+<li>WU: es más rápido ya que el dato es actualizado inmediatamente en la caché del lector</li>
+<li>WI: es más lento ya que el lector es invalidado y no puede leer el dato hasta que reciba una copia actualizada</li>
+</ul>
+</li>
+</ul>
+<h2>4.2.2 Tipos de Protocolos</h2>
+<ul>
+<li>
+<p><strong>Snooping o espionaje:</strong> cada caché tiene información sobre el estado de compartición de los bloques que contiene.</p>
+<ul>
+<li>Típico de los sistemas de <strong>memoria compartida</strong> con un <strong>bus común:</strong> los controladores caché espían el bus para determinar si tienen o no una copia del bloque compartido solicitado</li>
+<li>El <strong>tamaño</strong> de la información de coherencia es proporcional al número de <strong>bloques de la caché</strong></li>
+<li>No escalan bien con el <strong>número de cachés</strong> del sistema porque generan mucho <strong>tráfico</strong> en el bus</li>
+</ul>
+</li>
+<li>
+<p><strong>Basados en directorios:</strong> el estado de un bloque de memoria física se mantiene en una única localización, el directorio.</p>
+<ul>
+<li>Típico de sistemas <strong>escalables:</strong> no necesitan que todas las cachés estén comunicadas por un bus común, sólo tiene que haber comunicaciones entre las cachés implicadas</li>
+<li>Información que contiene el directorio:
+<ul>
+<li>Cachés que tienen copia del bloque</li>
+<li>Si ha sido modificado o no</li>
+<li>Por tanto, <strong>el tamaño es proporcional al número de líneas de la MP</strong></li>
+</ul>
+</li>
+<li>Es una solución <strong>centralizada:</strong> el estado de compartición de un bloque está siempre en la misma posición, por lo que el directorio es un <strong>cuello de botella</strong>. Las entradas del directorio pueden estar <strong>distribuidas</strong> en distintas memorias, lo cual mejora este problema, pero <strong>reduce la contención de memoria</strong></li>
+</ul>
+</li>
+</ul>
+<h1>4.3 Protocolos de Snooping</h1>
+<p>La <strong>invalidación</strong> de escrituras es una estrategia que garantiza que un procesador tiene <strong>acceso exclusivo</strong> a un bloque <strong>antes</strong> de realizar una <strong>escritura</strong>. Uso del bus de memoria para invalidación:</p>
+<ul>
+<li>El procesador adquiere el bus y difunde la dirección a invalidar</li>
+<li>Los demás procesadores espían el bus</li>
+<li>Cada procesador comprueba si está la dirección en su caché. Si es así, invalida el bloque que la contiene con el <strong>bit de validez</strong>.
+Así, <strong>no puede haber dos escrituras simultáneas</strong>, pues el uso exclusivo del bus serializa las escrituras.</li>
+</ul>
+<h2>4.3.1 MSI, Protocolo de Invalidación de 3 Estados</h2>
+<p>El protcolo MSI está basado en un <strong>sistema secuencial síncrono</strong> en el que cada bloque de caché tiene un estado que cambia en función de <strong>peticiones</strong> del <strong>procesador</strong> y peticiones del <strong>bus</strong>.</p>
+<h3>Posibles Estados de Cada Bloque de Caché</h3>
+<ul>
+<li>
+<p><strong>Modificado (M):</strong> este es el <strong>único componente</strong> que tiene una <strong>copia válida</strong> del bloque, el resto de cachés y la <strong>memoria</strong> tienen una copia <strong>no actualizada</strong>.</p>
+<ul>
+<li>La caché debe <strong>proporcionar</strong> el bloque si espía en el bus que algún componente lo solicita</li>
+<li>La caché debe <strong>invalidar</strong> el bloque si otra solicita una copia para modificarlo</li>
+</ul>
+</li>
+<li>
+<p><strong>Compartido (S shared):</strong> este bloque está presente en <strong>otras ubicaciones</strong> y <strong>todas</strong> las copias están <strong>actualizadas</strong>.</p>
+<ul>
+<li>La caché debe <strong>invalidar</strong> el bloque si otra lo modifica</li>
+</ul>
+</li>
+<li>
+<p><strong>Inválido (I):</strong> el bloque <strong>no está físicamente</strong> en la caché o su valor ha sido invalidado por haberse producido una <strong>escritura</strong> en <strong>otra caché</strong></p>
+</li>
+</ul>
+<img src="../../../img/aqrcomp/pasted-image-20250601204604.png" alt="Pasted image 20250601204604.png" loading="lazy">
+<h3>Peticiones que puede generar un nodo con caché</h3>
+<ul>
+<li>
+<p>Petición de <strong>lectura de un bloque (PtLec)</strong>: se genera como consecuencia de la <strong>lectura del procesador (PrLec)</strong> de una dirección que <strong>no se encuentra en la caché</strong>.</p>
+<ol>
+<li>El controlador de la caché pone en el bus la dirección que se desea acceder</li>
+<li>El sistema proporcionará el bloque donde se encuentra la dirección solicitada</li>
+</ol>
+</li>
+<li>
+<p>Petición de <strong>acceso exclusivo a un bloque (PtLecEx):</strong> se genera como consecuencia de la <strong>escritura del procesador (PrEsc)</strong> en una dirección cuyo bloque en la caché se encuentra en estado <strong>S</strong> o <strong>I</strong> (incluida la ausencia del bloque).</p>
+<ol>
+<li>El controlador pone en el bus la dirección en la que se quiere escribir</li>
+<li>El resto de las cachés invalidan sus copias</li>
+<li>La memoria invalida su copia</li>
+</ol>
+</li>
+<li>
+<p>Petición de <strong>postescritura (PtEsc):</strong> se genera cuando el controlador de caché <strong>reemplaza</strong> un bloque <strong>M</strong> como consecuencia del acceso a un bloque que no se encuentra en la caché</p>
+<ol>
+<li>El controlador de la caché pone en el bus la dirección del bloque a escribir en memoria y su contenido</li>
+</ol>
+</li>
+<li>
+<p>Paquete de <strong>reconocimiento</strong> con el bloque solicitado por una caché <strong>(RpBloque)</strong>: se genera cuando un nodo <strong>observa</strong> en el bus una <strong>petición</strong> de un bloque (que incluye lectura) si dicho nodo está en su caché en estado <strong>M</strong> (su copia es la única válida en todo el sistema).</p>
+</li>
+</ul>
+<h3>Problemas asociados a la Invalidación</h3>
+<ul>
+<li><strong>Falsa compartición (false sharing):</strong>
+<ul>
+<li>La falsa compartición se produce cuando dos variables sin relación entre ellas se encuentran dentro del mismo bloque caché (línea).</li>
+<li>Todo el bloque se transmite entre procesadores, aunque se esté accediendo a diferentes variables.</li>
+<li>Como consecuencia se producen fallos caché de falsa compartición: un procesador escribe en una línea compartida y la invalida, luego otro procesador lee una palabra diferente de la línea.</li>
+</ul>
+</li>
+<li>Fallos de <strong>compartición verdadera (true sharing):</strong> Un procesador escribe en bloque compartido e invalida y luego otro procesador lee del bloque compartido.</li>
+</ul>
+<p><img src="../../../img/aqrcomp/pasted-image-20250601215225.png" alt="Pasted image 20250601215225.png" loading="lazy">z</p>
+<h2>4.3.2 MESI, Protocolo de Invalidación de 4 Estados</h2>
+<p>En MSI, al escribir a una línea en estado S, se debe invalidar en otras cachés y pasar a M, y podría requerir una escritura a memoria si el protocolo la necesita.<br>
+En MESI, si está en estado E, el procesador puede escribir directamente y cambiar a M sin necesidad de comunicarse con otros procesadores ni escribir en memoria.</p>
+<p><strong>Reduce tráfico de bus</strong>:</p>
+<ul>
+<li>El estado E indica que no hay necesidad de notificar a otras cachés.</li>
+<li>Esto <strong>reduce las transacciones en el bus</strong> y mejora el rendimiento.</li>
+</ul>
+<p>Por eso, en el protocolo MESI, se define el nuevo estado <strong>Exclusivo</strong>.</p>
+<h3>Posibles estados de cada Bloque Cache</h3>
+<ul>
+<li>
+<p><strong>Modificado(M):</strong> esta es la <strong>única caché</strong> que tiene una <strong>copia válida</strong> del bloque y al <strong>memoria</strong> tiene una copia <strong>no actualizada</strong></p>
+<ul>
+<li>La caché debe <strong>proporcionar</strong> el bloque si espía en el bus que algún componente lo solicita.</li>
+<li>La caché debe <strong>invalidar</strong> el bloque si otra solicita una copia exclusiva para modificarlo</li>
+</ul>
+</li>
+<li>
+<p><strong>Exclusivo (E):</strong> esta es la <strong>única caché</strong> que tiene una <strong>copia válida</strong> del bloque y la <strong>memoria</strong> tiene una copia <strong>que sí que está actualizada</strong>.</p>
+<ul>
+<li>La caché debe <strong>invalidar</strong> el bloque si otra solicita una copia para modificarlo</li>
+</ul>
+</li>
+<li>
+<p><strong>Compartido (S shared):</strong> este bloque es válido en <strong>esta caché</strong>, en <strong>al menos otra caché</strong> y en <strong>memoria</strong>.</p>
+<ul>
+<li>La caché debe <strong>invalidar</strong> el bloque si otra solicita una copia exclusiva para modificarlo</li>
+</ul>
+</li>
+<li>
+<p><strong>Inválido (I):</strong> el bloque <strong>no está físicamente</strong> en la caché o su valor ha sido invalidado por haberse producido una <strong>escritura</strong> en <strong>otra caché</strong>.</p>
+</li>
+</ul>
+<img src="../../../img/aqrcomp/pasted-image-20250601204518.png" alt="Pasted image 20250601204518.png" loading="lazy">
+<h2>4.3.4 Problemas de Snooping</h2>
+<p>El <strong>bus</strong> de memoria compartida y el <strong>ancho de banda</strong> que requieren los protocolos de snooping es un <strong>cuello de botella</strong> para <strong>escalar</strong> los SMPs. Posibles soluciones:</p>
+<ul>
+<li>Usar <strong>redes de interconexión punto a punto</strong> con memoria en <strong>bancos</strong>-&gt; tienen mayor ancho de banda</li>
+<li>Usar un <strong>protocolo basado en directorio</strong>
+<img src="../../../img/aqrcomp/pasted-image-20250527175701.png" alt="Pasted image 20250527175701.png" loading="lazy"></li>
+</ul>
+<h2>4.3.4 Intento de Explicación del Nuevo Sistema de Caché que Dora le copió a la UCM y que no explicó en clase (no fui a clase).</h2>
+<img src="../../../img/aqrcomp/pasted-image-20250601210447.png" alt="Pasted image 20250601210447.png" loading="lazy">
+Se puede medio intuir que dada la tabla esta, no podemos distinguir con visto en fucomp acerca de la división de la instrucción para saber en que línea colocar los datos. Pero dada la imagen se puede razonar tal y como puse yo. 
+<img src="../../../img/aqrcomp/pasted-image-20250601210653.png" alt="Pasted image 20250601210653.png" loading="lazy">
+<p>Otro ejemplo: <img src="../../../img/aqrcomp/pasted-image-20250601211047.png" alt="Pasted image 20250601211047.png" loading="lazy"></p>
+<p>Si nos dice que es <strong>totalmente asociativa</strong> supongo que se puede sustituir por cualquier línea, a no ser que especifique algún tipo de algoritmo.</p>
+<h1>4.4 Protocolos Basados en Directorios</h1>
+<p>Los <strong>protocolos basados en directorios</strong> almacenan la información sobre el estado de compartición de cada bloque de memoria en un directorio. Reducen el tráfico a través de la red ya que se hace <strong>envío selectivo de ordenes.</strong> Se usan:</p>
+<ul>
+<li>Si la <strong>difusión es costosa</strong></li>
+<li>Si se necesita mayor <strong>escalabilidad</strong></li>
+<li><strong>Multiprocesadores</strong> con una <strong>red escalable</strong> (como los de la foto anterior). El directorio local sólo almacena información de los bloques de la memoria local.</li>
+<li><strong>Multicores</strong> con <strong>caché externa compartida</strong>. (L3)</li>
+</ul>
+<p>Cada entrada del directorio informa de:</p>
+<ul>
+<li>Qué caches tienen copia del bloque</li>
+<li>Bits de estado del bloque en cada caché</li>
+</ul>
+<img src="../../../img/aqrcomp/pasted-image-20250527180151.png" alt="Pasted image 20250527180151.png" loading="lazy">
+<h3>Transferencias Generadas</h3>
+<ul>
+<li>En los protocolos de <strong>snooping:</strong> las transiciones de un bloque entre estados suponen <strong>difusiones</strong></li>
+<li>En los protocolos <strong>basados en directorio:</strong> las transiciones de un bloque entre estados suponen <strong>transferencias punto a punto</strong>.
+Las transferencias las genera el controlador de coherencia caché de los nodos implicados</li>
+</ul>
+<h2>4.4.1 Estados de un Bloque en Caché y Directorio</h2>
+<ul>
+<li>Cachés: consideramos una implementación MESI</li>
+<li>Directorio:
+<ul>
+<li>Estado <strong>local:</strong> el bloque está actualizado en la memoria y no hay copias en ninguna caché</li>
+<li>Estado <strong>compartido:</strong> el bloque está actualizado en memoria y hay varias copias válidas del bloque en cachés. EL directorio informa de qué caches tienen distintas copias válidas</li>
+<li>Estado <strong>exclusivo:</strong> el bloque puede no estar actualizado en memoria y hay una copia en una caché en M o E. El directorio informa de qué caché tiene la copia</li>
+<li>Algunos estados de transición (pendientes de algún paquete para estabilizar su estado, ...).</li>
+</ul>
+</li>
+</ul>
+<h2>4.4.2 Clasificación del Directorio</h2>
+<ul>
+<li>
+<p>Directorio <strong>centralizado:</strong> una entrada para cada bloque de memoria con información de estado y de caches con copia. El directorio atiende a todas las peticiones, por lo que es un <strong>cuello de botella</strong>.</p>
+</li>
+<li>
+<p>Directorio <strong>distribuido entre módulos de MP:</strong> cada módulo tiene un subdirectorio con la información relativa a sus bloques de memoria. Los subdirectorios atienenden en <strong>paralelo</strong> las peticiones de acceso.</p>
+<ul>
+<li>Directorio de <strong>vector de bits completo</strong></li>
+<li>Directorio de <strong>vector de bits asignado a grupos</strong></li>
+<li>Directorio <strong>limitado</strong></li>
+</ul>
+</li>
+</ul>
+<img src="../../../img/aqrcomp/pasted-image-20250527181041.png" alt="Pasted image 20250527181041.png" loading="lazy">
+<ul>
+<li>Directorio <strong>distribuido entre módulos y cachés:</strong> además de distribuir las filas del directorio en MP, se distribuyen entre las cachés con copia del bloque.
+<ul>
+<li>Directorio <strong>encadenado</strong></li>
+</ul>
+</li>
+</ul>
+<h1>4.5 Conclusiones</h1>
+<p>Los protocolos de <strong>snooping</strong> presentan problemas de <strong>escalabilidad</strong>
+Una alternativa son los protocolos <strong>basados en directorio:</strong></p>
+<ul>
+<li>En SMPs (Symmetric MultiProcesors): directorio centralizado</li>
+<li>Multicore (como Intel Core i7): directorio centralizado</li>
+<li>En DSMs (Distributed Shader Memory): directorio distribuido</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="3-paralelismo-a-nivel-de-instruccion.html"><span class="nav-etiqueta">← anterior</span>3. Paralelismo a Nivel de Instrucción</a>
+  
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

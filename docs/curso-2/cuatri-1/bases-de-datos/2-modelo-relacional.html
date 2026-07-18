@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. MODELO RELACIONAL — apuntes de BASES DE DATOS (segundo curso de Ingeniería Informática).">
+<title>2. MODELO RELACIONAL · BASES DE DATOS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">bases-de-datos</a><span class="miga-sep">/</span><span aria-current="page">2-modelo-relacional</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">BASES DE DATOS · curso 2</p>
+    <h1>2. MODELO RELACIONAL · BASES DE DATOS</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<h1>2.1 Introducción</h1>
+<p>El <strong>Modelo Relacional</strong> es un enfoque para organizar datos utilizando <strong>tablas</strong>. Cada tabla es como una hoja de cálculo con <strong>filas</strong> y <strong>columnas</strong>, donde las columnas representan los <strong>atributos</strong> y las filas son <strong>tuplas</strong> (conjuntos de valores que describen una entidad). Por ejemplo, una tabla llamada <em>profesor</em> puede tener columnas como <em>ID</em>, <em>nombre</em>, <em>departamento</em>, y <em>sueldo</em>, donde cada fila representa un profesor.</p>
+<p>En el contexto del modelo relacional, una <strong>relación</strong> es el nombre técnico para una tabla. Cada relación se puede ver como el resultado de combinar, mediante un <strong>producto cartesiano</strong>, todos los posibles valores de los atributos. Este concepto significa que, aunque en la práctica solo vemos filas específicas, una tabla podría, en teoría, contener todas las combinaciones posibles de los valores de sus atributos.</p>
+<h1>2.2 Estructura de las BD Relacionales</h1>
+<p>Una base de datos relacional consiste en un conjuntos de <strong>tablas</strong>, a cada una de las cuales se le asigna un nombre <strong>único</strong>.
+<img src="../../../img/bases-de-datos/pasted-image-20241223152609.png" alt="Archivos/imagenes/Pasted image 20241223152609.png" loading="lazy"></p>
+<p>Una <strong>Relación</strong> es una <strong>tabla</strong> con filas y columnas resultado del producto cartesiano de conjuntos de elementos de interés.</p>
+<p>Por norma general, una <strong>fila</strong> representa una asociación entre un conjunto de valores. Una relación entre <em>n</em> valores se representa como una <strong>n-tupla</strong> de valores, es decir como una <strong>tupla</strong> de <em>n</em> valores, que se corresponde con una <strong>fila de una tabla</strong>.</p>
+<p>En el <strong>MR</strong>, el término <strong>relación</strong> se utiliza para referirse a una <strong>tabla</strong>, mientras el término <strong>tupla</strong> se utiliza para referirse a una <strong>fila</strong>. El término <strong>atributo</strong> se refiere a una <strong>columna</strong> de la tabla. El <strong>Grado de una Relación</strong> es el número de atributos que forman la relación.</p>
+<p>La <strong>Cardinalidad</strong> es el número de <strong>tuplas</strong> que contiene la relación</p>
+<p>Cada <strong>atributo</strong> tiene un conjunto de valores permitido, llamado <strong>dominio</strong> del atributo. Es necesario que todo dominio sea <strong>atómico</strong>. Es <strong>atómico</strong> si no es compuesto o multivalorado. El <strong>MER</strong> los permite.</p>
+<h1>2.3 Esquema de la BD Relacional</h1>
+<p>La definición de todas las tablas que forman una BD se denomina <strong>esquema de la BD</strong> (<em>el diseño lógico de la BD</em>). El esquema es la definición general, los datos particulares almacenados en un momento se denominan <strong>ejemplar de la BD</strong>. En lenguaje de programación el esquema se corresponde con el concepto de definición de tipos y el concepto de <strong>relación</strong> con el de variable. En general, los esquemas de las relaciones consisten en una lista de los atributos y de sus dominios correspondientes.</p>
+<h1>2.4 Claves</h1>
+<p>Cada <strong>tupla</strong> dentro de una tabla debe ser distinguible de todas las restantes tuplas de esa tabla, por tanto toda tabla deberá tener un <strong>conjunto de atributos</strong> que esté garantizado que tienen <strong>valores diferentes en cada una de las filas de la tabla</strong>. Esta unicidad debe cumplirse para las filas que estuvieron almacenadas en la tabla en el pasado, para las filas que están almacenadas en el presente y para cualquier fila que se pueda almacenar en el futuro.</p>
+<p><strong>Superclave</strong>: es un conjunto de uno o varios atributos que, considerados conjuntamente, permiten identificar de manera unívoca una <strong>tupla</strong> de la relación.</p>
+<p><strong>Claves Candidatas:</strong> son aquellas superclaves mínimas (<em>no se puede eliminar ningún atributo sin perder la condición de superclave</em>).</p>
+<p><strong>Clave primaria:</strong> es una de las claves candidatas, normalmente se escoge la más estable en el tiempo.</p>
+<p>El modelo relacional incorpora <strong>redundancia controlada</strong> para visualizar las relaciones conceptuales entre diferentes tablas. Esta redundancia controlada se plasma incorporando a una tabla atributos denominados <strong>clave externa</strong> que hacen referencia a claves candidatas de otras tablas.</p>
+<p>Los valores de <strong>clave externa</strong> están restringidos a valores que existan previamente en la clave candidata referenciada, generando lo que se conoce como <strong>restriccion de integridad referencial.</strong></p>
+<img src="../../../img/bases-de-datos/pasted-image-20240929191231.png" alt="Archivos/imagenes/Pasted image 20240929191231.png" loading="lazy">
+<h1>2.5 Diagramas de esquema</h1>
+<p>No hay definido un modelo concreto de representación, cualquier forma es válida siempre que deje muy claro cuáles son las <strong>claves externas</strong> y a qué claves candidatas hacen referencia.</p>
+<p>La gran diferencia entre el <strong>MER</strong> y el <strong>MR</strong> es la existencia o no de <strong>redundancia de atributos</strong>. En el <strong>Modelo Relacional</strong> se representa explícitamente una cierta <strong>redundancia controlada</strong> mediante las claves externas y la integridad referencial. En el <strong>Modelo Entidad-Relación</strong>, simplemente <strong>no puede haber redundancia</strong>.</p>
+<img src="../../../img/bases-de-datos/pasted-image-20240929190532.png" alt="Archivos/imagenes/Pasted image 20240929190532.png" loading="lazy">
+<img src="../../../img/bases-de-datos/pasted-image-20241223155153.png" alt="Archivos/imagenes/Pasted image 20241223155153.png" loading="lazy">
+<div class="callout callout-definiciones">
+<p class="callout-titulo">Definiciones</p>
+<p><strong>Relación:</strong> tabla con filas y columnas resultado del producto cartesiano de conjuntos de elementos de interés.</p>
+<p><strong>Atributo:</strong> Cada columna, con nombre diferente de una relación.</p>
+<p><strong>Dominio:</strong> Conjunto de valores permitidos para un atributo.</p>
+<p><strong>Tupla:</strong> Cada fila de una relación.</p>
+<p><strong>Cardinalidad:</strong> Número de tuplas que continue la relación (<em>tabla</em>).</p>
+<p><strong>Base de Datos Relacional:</strong> Colección de relaciones, cada una con un nombre distintivo.</p>
+<p><strong>Esquema de Relación:</strong> Estructura de una relación definida por un conjunto de parejas de atributos y sus correspondientes dominios.</p>
+<p><strong>Esquema de la Base de Datos Relación:</strong> Conjunto de esquemas de relaciones, cada uno con un nombre distintivo.</p>
+<p><strong>Superclave:</strong> Atributo o conjunto de atributos que identifica(n) de forma unívoca cada tupla dentro de una relación.</p>
+<p><strong>Clave Candidata:</strong> Superclave tal que ningún subconjunto propio de la misma es superclave de la relación (<em>superclave mínima</em>).</p>
+<p><strong>Clave Primaria:</strong> Clave candidata seleccionada por el diseñador de la Base.</p>
+<p><strong>Clave Externa:</strong> Atributo o conjunto de atributos dentro de una relación que se corresponde(n) con una clave candidata de alguna relación (incluso la misma) de la Base de Datos.</p>
+<p><strong>Valor Null:</strong> Valor desconocido de un atributo en una tupla de una relación.</p>
+<p><strong>Integridad de Entidad:</strong> En una relación, ningún atributo de una clave candidata puede tomar valor null.</p>
+<p><strong>Integridad Referencial:</strong> Si hay una clave externa en una relación, el valor de dicha clave externa debe corresponder al valor de la clave candidata relacionada en la relación de origen o tomar valor null.</p>
+</div>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-modelo-entidad-relacion.html"><span class="nav-etiqueta">← anterior</span>1. MODELO ENTIDAD RELACIÓN</a>
+  <a class="nav-siguiente" href="3-transformacion-de-mer-a-mr.html"><span class="nav-etiqueta">siguiente →</span>3. Transformación de MER  a MR</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

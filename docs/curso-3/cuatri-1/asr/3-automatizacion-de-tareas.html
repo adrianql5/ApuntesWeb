@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="3. Automatización de Tareas — apuntes de ASR (tercer curso de Ingeniería Informática).">
+<title>3. Automatización de Tareas · ASR · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">asr</a><span class="miga-sep">/</span><span aria-current="page">3-automatizacion-de-tareas</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">ASR · curso 3</p>
+    <h1>3. Automatización de Tareas · ASR</h1>
+  </header>
+  <div class="prosa">
+<p>En Linux, diferenciar el &quot;cuándo&quot; se ejecuta una tarea es clave. Tenemos dos herramientas principales según nuestras necesidades:</p>
+<ol>
+<li><strong><code>at</code> / <code>batch</code>:</strong> Para tareas que se ejecutan <strong>una sola vez</strong> en el futuro (ej: &quot;Apaga el servidor a las 3 de la mañana&quot;).</li>
+<li><strong><code>cron</code>:</strong> Para tareas <strong>repetitivas</strong> (ej: &quot;Haz una copia de seguridad todos los viernes&quot;).</li>
+</ol>
+<h1>3.1 Ejecución Diferida (Una sola vez): <code>at</code> y <code>batch</code></h1>
+<p>Estas herramientas ponen tareas en una cola de espera.</p>
+<h2>Comando <code>at</code> (A una hora fija)</h2>
+<p>Programa un comando para ejecutarse en un momento específico.</p>
+<p><strong>Sintaxis:</strong> <code>at [hora/fecha]</code></p>
+<p><strong>Flujo de trabajo interactivo:</strong></p>
+<ul>
+<li>Escribes <code>at 11:45</code></li>
+<li>El sistema te da un prompt (<code>&gt;at</code>) para que escribas los comandos que quieras</li>
+<li>Pulsas <strong>CTRL+D</strong> para guardar y salir (EOT)</li>
+</ul>
+<p>Si el comando genera texto (ej: un <code>ls</code>), el sistema te enviará un <strong>email</strong> interno con el resultado (a menos que redirijas la salida <code>&gt; archivo</code>). Es <strong>persistente</strong>, se guarda en disco; si reinicias, el trabajo sigue pendiente (si la hora no ha pasado).</p>
+<pre><code class="language-shell">$ at 11:45
+warning: commands will be executed using /bin/sh
+at&gt; ls /tmp &gt; /home/usuario/lista_tmp.txt   # Guarda el listado en un fichero
+at&gt; env DISPLAY=:0 zenity --info --text=&quot;Hola&quot; # Muestra ventana gráfica (requiere variables de entorno)
+at&gt; &lt;CTRL-D&gt;
+job 4 at Wed Nov 16 11:45:00 2025
+</code></pre>
+<h2>Comando <code>batch</code> (Cuando el sistema descanse)</h2>
+<p>Es una variante de <code>at</code>. No le dices &quot;a qué hora&quot;, sino &quot;hazlo cuando puedas&quot;</p>
+<ul>
+<li>Ejecuta el trabajo solo cuando la <strong>carga del sistema</strong> baja de 1.5</li>
+<li>Ideal para tareas pesadas que no quieres que ralenticen el ordenador mientras lo usas</li>
+</ul>
+<h2>Gestión de la cola (<code>atq</code> y <code>atrm</code>)</h2>
+<ul>
+<li>
+<p><strong><code>atq</code> (Queue):</strong> Lista los trabajos pendientes.</p>
+<ul>
+<li>El usuario normal ve los suyos. El root ve los de todos.</li>
+</ul>
+</li>
+<li>
+<p><strong><code>atrm [ID]</code>:</strong> Borra un trabajo específico (usando el número ID que da <code>atq</code>).</p>
+</li>
+</ul>
+<h1>3.2 Ejecución Periódica (Recurrente): <code>cron</code></h1>
+<p><strong>Cron</strong> es el reloj del sistema. Utiliza un demonio (servicio en segundo plano) que comprueba cada minuto si hay algo que hacer.</p>
+<h2>Gestión del fichero: <code>crontab</code></h2>
+<p>Cada usuario tiene su propia tabla de tareas. NO se edita el fichero a mano, se usa el comando:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Comando</strong></th>
+<th><strong>Acción</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>crontab -e</code></td>
+<td><strong>Editar</strong> tu tabla de tareas (abre nano/vim).</td>
+</tr>
+<tr>
+<td><code>crontab -l</code></td>
+<td><strong>Listar</strong> tus tareas programadas.</td>
+</tr>
+<tr>
+<td><code>crontab -r</code></td>
+<td><strong>Remover</strong> (borrar) toda tu tabla de tareas.</td>
+</tr>
+</tbody>
+</table>
+<h2>Sintaxis de una línea de Cron</h2>
+<p>Cada línea en el fichero represent una tarea y tiene <strong>6 campos</strong>: 5 de tiempo y 1 de comando.</p>
+<p><strong>Estructura:</strong> <code>minuto hora día_mes mes día_semana comando</code></p>
+<table>
+<thead>
+<tr>
+<th><strong>Campo</strong></th>
+<th><strong>Valores permitidos</strong></th>
+<th><strong>Notas</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Minuto</strong></td>
+<td><code>0-59</code></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Hora</strong></td>
+<td><code>0-23</code></td>
+<td>Formato 24h.</td>
+</tr>
+<tr>
+<td><strong>Día del mes</strong></td>
+<td><code>1-31</code></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Mes</strong></td>
+<td><code>1-12</code></td>
+<td>(O nombres: jan, feb...)</td>
+</tr>
+<tr>
+<td><strong>Día Semana</strong></td>
+<td><code>0-7</code></td>
+<td><strong>0 y 7 son Domingo</strong>. 1=Lunes, etc.</td>
+</tr>
+<tr>
+<td><strong>Comando</strong></td>
+<td>Ruta comando</td>
+<td>Lo que se ejecutará.</td>
+</tr>
+</tbody>
+</table>
+<h2>Operadores Especiales</h2>
+<ul>
+<li><code>*</code> (Asterisco): <strong>&quot;Todos&quot;</strong>. (Ej: <code>*</code> en horas significa &quot;todas las horas&quot;).</li>
+<li><code>,</code> (Coma): <strong>Listas</strong>. (Ej: <code>1,15</code> = min 1 y min 15).</li>
+<li><code>-</code> (Guion): <strong>Rangos</strong>. (Ej: <code>1-5</code> = de Lunes a Viernes).</li>
+<li><code>/</code> (Barra): <strong>Pasos/Repetición</strong>. (Ej: <code>*/15</code> = Cada 15 unidades).
+<ul>
+<li><code>*/2</code> en horas = A las 0, 2, 4, 6... (cada 2 horas).</li>
+</ul>
+</li>
+</ul>
+<h2>Variables de Entorno en Cron</h2>
+<p>Al principio del fichero puedes definir variables globales:</p>
+<ul>
+<li><code>MAILTO=pepe</code>: Si el comando falla o dice algo, envía el email a &quot;pepe&quot; (si está vacío <code>MAILTO=&quot;&quot;</code>, descarta los emails).</li>
+<li><code>SHELL=/bin/bash</code>: Qué intérprete usar.</li>
+</ul>
+<h2>Ejemplo</h2>
+<pre><code class="language-shell"># Borra temporales de lunes a viernes (1-5) a las 04:30 AM
+30 4 * * 1-5 rm -rf /tmp/*
+
+# Ejecuta un script cada 15 minutos (0, 15, 30, 45)
+# Rango horario: de 00:00 a 08:00 y de 20:00 a 23:00
+*/15 0-8,20-23 * * * /home/usuario/script_noche.sh
+
+# Ejecuta algo el día 1 de cada mes a las 00:00
+0 0 1 * * /root/backup_mensual.sh
+</code></pre>
+<h1>3.3 Cron del Sistema (Directorios)</h1>
+<p>El administrador del sistema (root) tiene una forma alternativa de programar tareas sin pelearse con la sintaxis de los asteriscos.</p>
+<p>Existen directorios especiales en <code>/etc/</code>. Si metes un script ejecutable dentro, el sistema lo lanzará automáticamente según el nombre de la carpeta:</p>
+<ul>
+<li><code>/etc/cron.hourly</code>: Se ejecuta cada hora (en el minuto 17 aprox).</li>
+<li><code>/etc/cron.daily</code>: Se ejecuta una vez al día (normalmente a las 6:25 AM).</li>
+<li><code>/etc/cron.weekly</code>: Una vez a la semana.</li>
+<li><code>/etc/cron.monthly</code>: Una vez al mes.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="2-instalacion-de-software.html"><span class="nav-etiqueta">← anterior</span>2. Instalación de Software</a>
+  <a class="nav-siguiente" href="4-copias-de-seguridad.html"><span class="nav-etiqueta">siguiente →</span>4. Copias de Seguridad</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

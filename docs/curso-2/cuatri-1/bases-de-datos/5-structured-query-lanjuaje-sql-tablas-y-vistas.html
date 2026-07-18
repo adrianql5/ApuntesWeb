@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Structured Query Lanjuaje (SQL), Tablas y Vistas — apuntes de BASES DE DATOS (segundo curso de Ingeniería Informática).">
+<title>5. Structured Query Lanjuaje (SQL), Tablas y Vistas · BASES DE DATOS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">bases-de-datos</a><span class="miga-sep">/</span><span aria-current="page">5-structured-query-lanjuaje-sql-tablas-y-vistas</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">BASES DE DATOS · curso 2</p>
+    <h1>5. Structured Query Lanjuaje (SQL), Tablas y Vistas · BASES DE DATOS</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<p>SQL es el <strong>lenguaje de consulta</strong> de bases de datos más ampliamente utilizado. Aunque se le suele llamar lenguaje de consulta también tiene instrucciones para <strong>crear, modificar y eliminar tablas, insertar modificar y eliminar tuplas y definir restricciones de integridad.</strong></p>
+<h1>5.1 Lenguaje de deficion de datos (LDD)</h1>
+<p>SQL proporciona comandos para la definición y modificación de esquemas de relación y el borrado de relaciones.
+El <strong>LDD</strong> permite la especificación de un conjunto de relaciones y de su información relativa, incluyendo:</p>
+<ul>
+<li><strong>El esquema de cada relación</strong>.</li>
+<li><strong>El dominio de valores asociado a cada atributo</strong>.</li>
+<li><strong>Las restricciones de integridad</strong></li>
+<li><strong>El conjunto de índices que se deben mantener para cada relación</strong></li>
+<li><strong>La información de seguridad y de autorización de cada relación</strong></li>
+<li><strong>La estructura de almacenamiento físico de cada relación en el disco.</strong></li>
+</ul>
+<h1>5.2 Tipos Básicos de Datos</h1>
+<ul>
+<li>
+<p><strong>char(n)</strong>: Cadena de caracteres de longitud fija, donde ( n ) es especificado por el usuario. También se puede utilizar <strong>character</strong>.</p>
+</li>
+<li>
+<p><strong>varchar(n)</strong>: Cadena de caracteres de longitud variable, con una longitud máxima de ( n ) especificada por el usuario. La forma completa <strong>character varying</strong> es equivalente.</p>
+</li>
+<li>
+<p><strong>int</strong>: Número entero, un subconjunto finito de los enteros dependiente de la máquina. <strong>integer</strong> es equivalente.</p>
+</li>
+<li>
+<p><strong>smallint</strong>: Entero pequeño, un subconjunto dependiente de la máquina del tipo de dominio entero.</p>
+</li>
+<li>
+<p><strong>numeric(p, d)</strong>: Número de coma fija con precisión especificada por el usuario. Se compone de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mclose">)</span></span></span></span></eq> dígitos (más el signo), de los cuales <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></eq> pertenecen a la parte decimal. Por ejemplo, <strong>numeric(3,1)</strong> puede almacenar 44.5, pero no 444.5 ni 0.32.</p>
+</li>
+<li>
+<p><strong>real, double precision</strong>: Números de coma flotante, con precisión dependiente de la máquina.</p>
+</li>
+<li>
+<p><strong>float(n)</strong>: Número de coma flotante cuya precisión es, al menos, de ( n ) dígitos.</p>
+</li>
+</ul>
+<p>Todos los tipos incluyen un valor especial llamado <strong>valor null</strong> (nulo), que indica la ausencia de un valor.</p>
+<p><strong>Tipos de datos de fecha y hora:</strong></p>
+<ul>
+<li><strong>date:</strong> fecha del calendario que contiene el año, el mes y el día del mes</li>
+<li><strong>time:</strong> hora del día en horas, minutos y segundos, se puede almacenar también el huso horario con <code>time with timezone</code></li>
+<li><strong>timestamp:</strong> combinación de date y time</li>
+</ul>
+<h1>5.3 Definición de tablas en SQL</h1>
+<p>Las relaciones se definen mediante el comando <code>CREATE TABLE</code></p>
+<pre><code class="language-sql">CREATE TABLE departamento (
+    nombre_dept VARCHAR(20),
+    edificio VARCHAR(15),
+    presupuesto NUMERIC(12,2),
+    PRIMARY KEY (nombre_dept)
+);
+</code></pre>
+<p><strong>Relación Base:</strong> Una tabla con nombre correspondiente a una relación del esquema de la Base de Datos dónde las tuplas están almacenadas físicamente en el Gestor de Bases de Datos.</p>
+<ol>
+<li>
+<p><strong>PRIMARY KEY <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mord mathnormal">m</span><span class="mclose">)</span></span></span></span></eq></strong>:</p>
+<ul>
+<li>Los atributos forman la clave primaria de la relación.</li>
+<li>Los atributos deben ser no nulos y únicos.</li>
+</ul>
+</li>
+<li>
+<p><strong>FOREIGN KEY <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></eq> REFERENCES s</strong>:</p>
+<ul>
+<li>Indica que los valores de los atributos deben corresponder con los de la clave primaria de otra relación.</li>
+<li>Ejemplo: En la tabla <code>asignatura</code>, <code>foreign key (nombre_dept) references departamento</code>.</li>
+<li>Además si el nombre de ambos atributos que se relacionan no coindicen hay que especificarlo: <code>foreign key (nombre_dept) references departamento(nombre)</code></li>
+</ul>
+</li>
+</ol>
+<pre><code class="language-sql">
+CREATE TABLE sección (
+    asignatura_id VARCHAR(8),
+    secc_id VARCHAR(8),
+    semestre VARCHAR(6),
+    año NUMERIC(4,0),
+    edificio VARCHAR(15),
+    número_aula VARCHAR(7),
+    franja_horaria_id VARCHAR(4),
+    PRIMARY KEY (asignatura_id, secc_id, semestre, año),
+    FOREIGN KEY (asignatura_id) REFERENCES asignatura
+);
+
+</code></pre>
+<h1>5.4 Modificación de Tablas</h1>
+<p><strong>Insertar una tupla:</strong></p>
+<pre><code class="language-sql">INSERT INTO profesor (atrib1,...,atribn) VALUES (10211, 'Smith', 'Biología', 66000);
+</code></pre>
+<p><strong>Eliminar todas las tuplas de una tabla:</strong></p>
+<pre><code class="language-sql">DELETE FROM estudiante;
+</code></pre>
+<p><strong>Eliminar relaciones tablas</strong>:</p>
+<pre><code class="language-sql">DROP TABLE profesor;
+</code></pre>
+<p><strong>Modificar la estructura de tablas</strong>:</p>
+<ul>
+<li><strong>Añadir atributos</strong>:</li>
+</ul>
+<pre><code class="language-sql">     ALTER TABLE profesor ADD sueldo int;
+     ```
+
+   - **Eliminar atributos**:
+     ```sql
+     ALTER TABLE profesor DROP sueldo;
+     ```
+
+
+# 5.5 Actualizaciones
+
+**Actualizar todas las tuplas**
+```sql
+UPDATE profesor SET sueldo = sueldo * 1.05;
+</code></pre>
+<h1>5.6 Vistas</h1>
+<p>Son relaciones actuales que contienen el resultado de las consultas para hacer visible al usuario los datos que este puede ver. En SQL las vistas se definen con :</p>
+<pre><code class="language-sql">CREATE VIEW v AS (expresión de consulta);
+</code></pre>
+<p><strong>Vista:</strong> El resultado dinámico de una o más operaciones relacionales sobre las relaciones base (y, opcionalmente, vistas previas) para producir otra relación. Una vista, como relación virtual, no tiene por qué existir físicamente en el Gestor de la Base de Datos, sino que puede producirse cuando se solicite por parte del usuario.</p>
+<p><strong>Razones para usar vistas:</strong></p>
+<ol>
+<li>
+<p><strong>Seguridad:</strong> Algunos datos deben permanecer ocultos para ciertos usuarios. Por ejemplo, un empleado puede necesitar ver el ID, nombre y departamento de un profesor, pero no su sueldo. Esto se logra mediante una consulta SQL que solo devuelve la información permitida.</p>
+</li>
+<li>
+<p><strong>Personalización:</strong> A veces, es útil crear relaciones que sean más intuitivas para los usuarios. Por ejemplo, se podría querer listar todas las secciones de asignaturas de un departamento específico en un semestre determinado. Para ello, se utiliza una consulta SQL que filtra la información necesaria.</p>
+</li>
+</ol>
+<h3>Vistas Materializadas</h3>
+<p>Las <strong>vistas materializadas</strong> son una extensión de las vistas tradicionales en SQL que permiten almacenar los resultados de una consulta en la base de datos. Esto significa que, a diferencia de las vistas normales, que se recalculan cada vez que se accede a ellas, las vistas materializadas guardan un conjunto de datos que se puede consultar directamente.</p>
+<ol>
+<li><strong>Mantenimiento Inmediato:</strong> La vista se actualiza automáticamente cada vez que se modifica una de las tablas que la definen.</li>
+<li><strong>Mantenimiento Perezoso:</strong> La vista se actualiza solo cuando se accede a ella, lo que puede resultar en datos desactualizados hasta que se consulte.</li>
+<li><strong>Actualización Periódica:</strong> Algunas bases de datos permiten que la vista se actualice en intervalos programados, lo que puede llevar a que los datos estén desfasados.</li>
+</ol>
+<ul>
+<li><strong>Rendimiento Mejorado:</strong> Almacenar resultados de consultas complejas o agregaciones puede acelerar significativamente el tiempo de respuesta, especialmente en aplicaciones que requieren respuestas rápidas.</li>
+<li><strong>Reducción de Carga:</strong> Las vistas materializadas permiten evitar la lectura de grandes conjuntos de datos subyacentes, al trabajar con un conjunto de datos más pequeño.</li>
+</ul>
+<p>Si bien las vistas materializadas ofrecen ventajas en términos de rendimiento, también conllevan costos adicionales, como:</p>
+<ul>
+<li><strong>Almacenamiento:</strong> Necesitan espacio adicional en disco para almacenar los resultados.</li>
+<li><strong>Sobrecarga de Actualización:</strong> El mantenimiento de la vista puede requerir recursos y tiempo, especialmente si se actualiza con frecuencia.</li>
+</ul>
+<p>La creación de tablas usando <code>CREATE TABLE ... AS</code> es similar a la creación de vistas (<code>CREATE VIEW</code>). La diferencia principal es que los datos en una tabla son copiados en el momento de la creación, mientras que una vista siempre refleja los resultados actualizados de la consulta que la define. Por ejemplo:</p>
+<pre><code class="language-sql">CREATE VIEW vista_profesores AS
+SELECT * FROM profesor WHERE nombre_dept = 'Música';
+</code></pre>
+<p>Aquí, <code>vista_profesores</code> siempre mostrará los datos actuales de la tabla <code>profesor</code> donde <code>nombre_dept</code> es 'Música', pero no almacena esos datos de forma física como lo hace <code>t1</code>.</p>
+<h1>5.5 Restricciones de Integridad</h1>
+<p>Las <strong>restricciones de integridad</strong> garantizan la consistencia de la base de datos, especialmente durante las actualizaciones de información, evitando que las modificaciones realizadas por usuarios den lugar a una <strong>pérdida de consistencia</strong> de los datos.</p>
+<h2>Restricciones sobre una sola relación</h2>
+<ol>
+<li><strong>Not Null:</strong> prohibe la inserción de valores nulos para ese atributo, las claves primarias reciben esta restricción automáticamente.</li>
+<li><strong>Unique:</strong> indica que esos atributos forman una clave candidata, ningún par de tuplas, puede tener el mismo valor para esos atributos.</li>
+<li><strong>Check(p):</strong> especifica un predicado que deben satisfacer todas las tuplas de una relación.</li>
+</ol>
+<pre><code class="language-sql">CREATE TABLE profesor (
+     ID INT PRIMARY KEY,
+     nombre VARCHAR(100) NOT NULL
+);
+    
+CREATE TABLE departamento (
+    nombre_dept VARCHAR(50) UNIQUE,
+    presupuesto DECIMAL(10, 2)
+);
+    
+CREATE TABLE asignatura (
+    asignatura_id INT PRIMARY KEY,
+    nombre VARCHAR(100),
+    créditos INT CHECK (créditos &gt; 0)
+);
+</code></pre>
+<h2>Integridad referencial</h2>
+<p>Se fuerza a que los valores válidos en las claves externas sean valores que existan en las claves candidatas referenciadas (<em>fundamentalmente para la consistencia interna de la base de datos</em>).</p>
+<pre><code class="language-sql">foreign key (nombre_dept) references departamento(nombre_dept)
+</code></pre>
+<p>SQL permite manejar violaciones de integridad referencial de distintas maneras. Las acciones más comunes son:</p>
+<ul>
+<li>
+<p><strong>Cascade</strong>: Si se borra o actualiza un registro en la tabla referenciada, el cambio se propaga a las tablas que referencian ese registro.</p>
+<pre><code class="language-sql">foreign key (nombre_dept) references departamento on delete cascade on update cascade
+</code></pre>
+</li>
+<li>
+<p><strong>Set null</strong>: Al borrar o actualizar un registro referenciado, los valores de las columnas referenciadas se establecen a <code>null</code>.</p>
+<pre><code class="language-sql">foreign key (nombre_dept) references departamento(nombre_dept) on delete set null
+</code></pre>
+</li>
+<li>
+<p><strong>Set default</strong>: Similar a <code>set null</code>, pero los valores se establecen a un valor predeterminado.</p>
+<pre><code class="language-sql">foreign key (nombre_dept) references departamento(nombre_dept) on delete set default
+</code></pre>
+</li>
+</ul>
+<h3>Ejemplo SQL</h3>
+<pre><code class="language-sql">-- Crear la tabla Categoría
+CREATE TABLE Categoria (
+    id_categoria INT PRIMARY KEY,
+    nombre_categoria VARCHAR(100) NOT NULL
+);
+
+-- Crear la tabla Producto con clave foránea que utiliza ON DELETE SET NULL
+CREATE TABLE Producto (
+    id_producto INT PRIMARY KEY,
+    nombre_producto VARCHAR(100) NOT NULL,
+    id_categoria INT,
+    FOREIGN KEY (id_categoria) REFERENCES Categoria(id_categoria)
+    ON DELETE SET NULL
+    ON UPDATE CASCADE
+);
+
+-- Crear la tabla Proveedor
+CREATE TABLE Proveedor (
+    id_proveedor INT PRIMARY KEY,
+    nombre_proveedor VARCHAR(100) NOT NULL
+);
+
+-- Crear la tabla Pedido con clave foránea que utiliza ON DELETE CASCADE
+CREATE TABLE Pedido (
+    id_pedido INT PRIMARY KEY,
+    id_proveedor INT NOT NULL,
+    FOREIGN KEY (id_proveedor) REFERENCES Proveedor(id_proveedor)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
+
+-- Crear la tabla Cliente
+CREATE TABLE Cliente (
+    id_cliente INT PRIMARY KEY,
+    nombre_cliente VARCHAR(100) NOT NULL,
+    pais_origen VARCHAR(50) DEFAULT 'Desconocido'
+);
+
+-- Crear la tabla Venta con clave foránea que utiliza ON DELETE SET DEFAULT
+CREATE TABLE Venta (
+    id_venta INT PRIMARY KEY,
+    id_cliente INT NOT NULL,
+    FOREIGN KEY (id_cliente) REFERENCES Cliente(id_cliente)
+    ON DELETE SET DEFAULT
+    ON UPDATE CASCADE
+);
+
+</code></pre>
+<h3>Acciones en violaciones</h3>
+<p>Cuando ocurre una violación de una restricción de integridad referencial, el sistema puede rechazar la transacción, revertir los cambios, o realizar alguna de las acciones mencionadas (cascade, set null, etc.). Si no es posible resolver la violación con ninguna de estas acciones, se aborta la transacción.</p>
+<p>Este conjunto de reglas asegura que las relaciones entre las tablas sean coherentes y se mantenga la integridad de los datos.</p>
+<div class="callout callout-definiciones">
+<p class="callout-titulo">Definiciones</p>
+<p><strong>Relación base:</strong> Una tabla con nombre correspondiente a una relación del esquema de la Base de Datos dónde las tuplas están almacenadas físicamente en el Gestor de Bases de Datos.</p>
+<p><strong>Vista:</strong> El resultado dinámico de una o más operaciones relacionales sobre las relaciones base (y, opcionalmente, vistas previas) para producir otra relación. Una vista, com relación virtual, no tiene por qué existir físicamente en el Gestor de la Base de Datos, sino que puede producirse cuando se solicite por parte del usuario.</p>
+</div>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-lenguajes-formales-de-consulta.html"><span class="nav-etiqueta">← anterior</span>4. Lenguajes Formales de Consulta</a>
+  <a class="nav-siguiente" href="6-structured-query-languaje-sql-consultas.html"><span class="nav-etiqueta">siguiente →</span>6. Structured Query Languaje (SQL) Consultas</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

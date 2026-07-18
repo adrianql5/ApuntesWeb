@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Polimorfismo — apuntes de POO (segundo curso de Ingeniería Informática).">
+<title>5. Polimorfismo · POO · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">poo</a><span class="miga-sep">/</span><span aria-current="page">5-polimorfismo</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">POO · curso 2</p>
+    <h1>5. Polimorfismo · POO</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<h1>5.1 Polimorfismo en herencia</h1>
+<p>El <strong>polimorfismo</strong> en herencia es el mecanismo por el cual un objeto se puede <strong>comportar de múltiples formas</strong> en cada momento, en función del <strong>contexto</strong> en el que aparece en el programa. Un objeto se puede comportar como una instancia de:</p>
+<ul>
+<li>La clase a la que <strong>pertenece</strong>, aquella cuyo constructor se invocó a través de <code>new()</code></li>
+<li>Una de las clases que se encuentran en un <strong>nivel superior</strong> a la clase a la que pertenece. Esto incluye <strong>clases abstractas</strong>, pues la restricción impuesta sobre ellas es que no se pueden instanciar (usar <code>new()</code> para invocar sus constructores), pero en este caso el objeto se estaría inicializando usando constructores de otras clases. Que un objeto se comporte como una de sus clases base abstracta sirve para restringir los métodos que puede invocar.</li>
+</ul>
+<img src="../../../img/poo/pasted-image-20250621201844.png" alt="archivos/imagenes/Pasted image 20250621201844.png" loading="lazy">
+<h1>5.2 Upcasting y Downcasting</h1>
+<p>Cuando se hace que un objeto se comporte como una clase distinta a la que pertenece, está forzando un <strong>casting</strong>, un cambio de tipo de dato en él. El casting <strong>no implica una nueva reserva</strong> de memoria: el objeto sigue siendo el mismo, independientemente de los castings que se hagan sobre él. El casting <strong>afecta a la visibilidad</strong> de los atributos y métodos que se pueden invocar desde el objeto.</p>
+<p>Los únicos métodos y atributos accesibles por el objeto al que se le ha hecho casting son:</p>
+<ul>
+<li>Aquellos definidos explícitamente en la clase a la cual se ha realizado el cast</li>
+<li>Aquellos que hereda (y tiene acceso) la clase a la que se hizo el cast</li>
+</ul>
+<img src="../../../img/poo/pasted-image-20250621202415.png" alt="archivos/imagenes/Pasted image 20250621202415.png" loading="lazy">
+<h2>5.2.1 Upcasting</h2>
+<p>En <strong>upcasting</strong> un objeto de una clase derivada se comporta como su clase base en la jerarquía. Cuando se realiza un upcasting no es necesario indicar de forma explícita a qué clase base se realiza el cast, pues sólo hay una.</p>
+<p><code>Animal a = new Perro();</code>  upcasting automático y seguro</p>
+<img src="../../../img/poo/pasted-image-20250621202655.png" alt="archivos/imagenes/Pasted image 20250621202655.png" loading="lazy">
+<p>Es el mecanismo de polimorfismo más <strong>habitual</strong>, ya que el natural pensar que un objeto de una clase derivada se comporta como su clase base. Es una <strong>concepto clave en la POO</strong>, porque facilita la toma de decisiones respecto al diseño del programa: si se necesita usar upcasting, entonces se deberá usar herencia.</p>
+<img src="../../../img/poo/pasted-image-20250621202724.png" alt="archivos/imagenes/Pasted image 20250621202724.png" loading="lazy">
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Si un método está sobrescrito cuando se realiza upcasting, el objeto usará la implementación del método correspondiente a la clase a la que pertenece el objeto, de modo que aunque se comporta como otra clase, no utiliza las implementaciones de los métodos de esa otra clase</p>
+</div>
+<h2>5.2.2 Downcasting</h2>
+<p>En <strong>downcasting</strong> un objeto de una clase base se comporta como una de sus clases derivadas de la jerarquía. Cuando se realiza un downcasting es necesario indicar de forma explícita a qué clase derivada se realiza el cast</p>
+<p><code>ClaseDerivada nombreObjDerivado = (ClaseDerivada) nombreObjBase;</code></p>
+<p>Normalmente, sólo se usa cuando se necesita <strong>deshacer el resultado de un upcasting</strong> anterior, pues <strong>fuerza el comportamiento</strong> de los objetos, ya que normalmente no se puede asegurar que un objeto de una clase base se comporta como una de sus clases derivadas.</p>
+<p>Es una operación no segura (<code>unsafe</code>), ya que puede generar una excepción en tiempo de ejecución ( <code>ClassCastException</code>) pues no se puede garantizar que el objeto disponga de todos los métodos y atributos de la clase a la que se castea.</p>
+<ul>
+<li>En tiempo de diseño, el compilador no comprueba si el cast se realiza correctamente, ni siquiera comprueba si ambas clases pertenecen a la misma jerarquía</li>
+<li>En tiempo de ejecución tiene lugar el casteo, pero sólo se comprueba si el objeto pertenece a la clase derivada a la que se castea. Aunque la clase a la que pertence el objeto soporte los mismos métodos y atributos que la clase derivada, si no lo es, se generará la excepción.</li>
+<li>Por tanto, se debe <strong>comprobar en tiempo de ejecución</strong> que la clase a la que pertenece el objeto es la clase a la que se realiza en casting usando el operador <code>instanceof</code>
+<code>&lt;nombre_objeto&gt; instanceof &lt;nombre_paquete&gt;.&lt;nombre_clase&gt;</code></li>
+</ul>
+<img src="../../../img/poo/pasted-image-20250621203427.png" alt="archivos/imagenes/Pasted image 20250621203427.png" loading="lazy">
+<h1>5.3 Beneficios del Polimorfismo</h1>
+<p>Facilita la <strong>simplificación del código</strong> ya que, como los objetos se pueden manejas como objetos de su clase base, la invocación de los métodos comunes a las clases derivadas se realiza desde una sola clase (la clase base).</p>
+<p>Facilita la <strong>extensibilidad de los programas</strong> ya que incluir nuevas clases que implementen los métodos comunes de las clases base no supondrá modificaciones en el código. Eso no se cumple con <strong>downcasting</strong>, ya que incluir nuevas clases puede implicar cambios en el código, pero serían simplemente extensiones en los métodos en los que ya se manejas las distintas clases derivadas de las clase base.</p>
+<blockquote>
+<p>[!Buenas Prácticas]</p>
+<ul>
+<li>En la medida de lo posible se debe favorecer el uso del polimorfismo pues sus beneficios son muy grandes</li>
+<li>En los conjuntos de datos (como <code>ArrayList</code> o <code>HashMap</code>) se deben usar las clases derivadas para almacenar los objetos.</li>
+</ul>
+</blockquote>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-herencia.html"><span class="nav-etiqueta">← anterior</span>4. Herencia</a>
+  <a class="nav-siguiente" href="6-interfaces.html"><span class="nav-etiqueta">siguiente →</span>6. Interfaces</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="cibertest_grupos_1_2_3_4 — apuntes de CIBER (tercer curso de Ingeniería Informática).">
+<title>cibertest_grupos_1_2_3_4 · CIBER · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">ciber</a><span class="miga-sep">/</span><span aria-current="page">cibertest-grupos-1-2-3-4</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">CIBER · curso 3</p>
+    <h1>cibertest_grupos_1_2_3_4 · CIBER</h1>
+  </header>
+  <div class="prosa">
+<h1>Cibertest - Bloque Criptografía</h1>
+<h2>Grupo 4</h2>
+<ol>
+<li>El tamaño de la firma digital de un documento, ¿depende del tamaño de la función de resumen utilizada? Justifícalo.</li>
+</ol>
+<p>O tamaño da firma dixital dun documento vén determinado polo tamaño da clave do algoritmo de clave pública escollido. Se usamos RSA de 2048 bits, a firma terá un tamaño de 2048 bits.</p>
+<ol start="2">
+<li>Los datos relativos a la seguridad de la conexión (algoritmos de cifrado y compartición de clave) en una conexión web https, ¿están asociados al certificado del servidor web? ¿De qué dependen?</li>
+</ol>
+<p>No, no están asociados al certificados del servidor. Dependen de la negociación TLS, en concreto de la cipher suite acordada entre cliente (ClientHello) y el servidor (ServerHello).)</p>
+<ol start="3">
+<li>¿Qué relación hay entre el tamaño de un fichero cifrado si ciframos con clave pública RSA de 1024 bits y si ciframos con clave pública RSA de 2048 bits en openssl?</li>
+</ol>
+<p>En RSA, o tamaño do ficheiro cifrado resultante é sempre igual ao tamaño da clave utilizada. Os tamaños da clave dos dous algoritmos mencionados son 1024 e 2048 respectivamente, polo que o tamaño do ficheiro no segundo caso será o dobre do primeiro.</p>
+<ol start="4">
+<li>Si cifro un fichero de 16 bytes con AES-256-ECB, ¿qué tamaño tendría el fichero resultante? ¿Por qué?</li>
+</ol>
+<p>O ficheiro resultante terá un tamaño de 32 bytes. Aínda que o tamaño do ficheiro coincide co tamaño de bloque en AES (128 bits ou 16 bytes), engádese por defecto un bloque completo de padding (PKCS#7)</p>
+<ol start="5">
+<li>Explica cómo sería el proceso para compartir un fichero de bckup de 200MB con otra persona de forma que se garantice su integridad, usando openssl</li>
+</ol>
+<p>Se genera un hash del fichero con openssl dgst, se firma el hash también para garantizar autenticidad, y luego el receptor verifica el hash también con dgst y verifica la firma.</p>
+<ol start="6">
+<li>¿Qué sucede si se cifra un bloque homogéneo (todos los caracteres iguales) en el modo de cifrado ECB de AES?</li>
+</ol>
+<p>Para un único bloque homogéneo, no ocurre nada especial: AES en ECB lo cifra normalmente produciendo un único bloque de texto cifrado aparentemente aleatorio. El problema de ECB (patrones visibles, bloques cifrados repetidos) solo se manifiesta cuando hay varios bloques idénticos.</p>
+<ol start="7">
+<li>¿Tenemos que proporcionarle al receptor de un mensaje cifrado el vector de inicialización si usamos AES en modo CBC?</li>
+</ol>
+<p>Si é necesario proporcionarlle o IV ao receptor. No caso de usar OpenSSL, este proceso é transparente, xa que o IV derívase do contrasinal e o salt (e  o salt envíase no ficheiro cifrado). No caso de non usar salt en OpenSSL, o IV derívase exclusivamente a partir do contrasinal.</p>
+<ol start="8">
+<li>¿Qué relación hay entre la función de derivación de clave utilizada para un algoritmo de cifrado simétrico y la contraseña utilizada por el usuario?</li>
+</ol>
+<p>A función de derivación de clave (KDF) úsase para derivar a clave criptográfica que o algoritmo usa para cifrar. Esta clave derívase a partir do contrasinal e o salt. A KDF tamén soluciona o problema do tamaño da clave.</p>
+<ol start="9">
+<li>¿Qué motivos pueden hacer que un certificado sea revocado?</li>
+</ol>
+<p>Por compromiso de la clave privada, por compromiso de la CA, por cese de la actividad, por sustitución del certificado, por emisión incorrecta o por uso indebido.</p>
+<ol start="10">
+<li>Si cifro un fichero de texto con AES-128, y el fichero cifrado lo codifico en base64, ¿el resultado tendrá el mismo tamaño que el fichero cifrado? Explica la respuesta.</li>
+</ol>
+<p>O ficheiro resultante en base64 será máis grande que o ficheiro cifrado orixinal (base 64 xera 4 bytes de texto ASCII por cada 3 bytes de datos binarios). Ademais, se o ficheiro cifrado non é múltiplo de 3, engádense caracteres de recheo ou padding (=) ao final para completar o último bloque de 4 caracteres.</p>
+<hr>
+<h2>Grupo 2</h2>
+<ol>
+<li>Si un navegador nos indica que la conexión es no segura porque el certificado de servidor está autofirmado, e ignoramos el aviso &quot;aceptando los riesgos&quot;: ¿cuáles son los riesgos? ¿Qué dimensión de seguridad se ve afectada?</li>
+</ol>
+<p>El riesgo principal es que el navegador no puede validar la identidad del servidor mediante una CA de confianza. Por tanto, un atacante podría suplantar la página o realizar un ataque de intermediario (MITM) y hacernos creer que estamos conectando con el servidor legítimo. La dimensión de seguridad afectada principalmente es la autenticidad, y como consecuencia también pueden verse comprometidas la confidencialidad e integridad de la comunicación.</p>
+<ol start="2">
+<li>Explica cómo sería el proceso para compartir un fichero de backup de 200MB con otra persona de forma que se garantice su origen (que es nuestro), usando openssl.</li>
+</ol>
+<p>Para garantizar el origen hay que usar una firma digital. Primero se calcula un resumen del fichero, por ejemplo con <code>openssl dgst -sha256</code>, y después se firma ese resumen con la clave privada del emisor. Se envía el fichero junto con la firma. El receptor calcula de nuevo el resumen del fichero recibido y verifica la firma con la clave pública del emisor. Si la verificación es correcta, se garantiza que el fichero procede del emisor y que no se ha modificado. No es necesario cifrar el fichero con AES/RSA si el enunciado solo pide origen/autenticidad y no confidencialidad.</p>
+<ol start="3">
+<li>¿Para qué se usa el vector de inicialización en un cifrado AES en modo CBC? ¿Qué ocurre si es ECB?</li>
+</ol>
+<p>En CBC, el IV se usa como valor inicial para el primer bloque: antes de cifrar, el primer bloque de texto plano se combina con el IV mediante XOR. Los bloques siguientes se combinan con el bloque cifrado anterior. El IV debe estar disponible para descifrar correctamente el primer bloque y normalmente debe ser aleatorio o impredecible, aunque no secreto. En ECB no se usa IV: cada bloque se cifra de forma independiente, por lo que bloques de texto plano iguales producen bloques cifrados iguales y pueden revelar patrones.</p>
+<ol start="4">
+<li>Si cifro un fichero de texto con AES-128, y el fichero cifrado lo codifico en base64, ¿qué ventaja puedo obtener?</li>
+</ol>
+<p>La ventaja de codificar en base64 es convertir el fichero cifrado binario en texto ASCII, lo que facilita copiarlo, pegarlo, enviarlo por correo o transportarlo por sistemas que trabajan mejor con texto. No añade seguridad criptográfica: solo cambia la representación de los datos. Además, aumenta el tamaño aproximadamente un 33%, porque base64 representa cada 3 bytes binarios como 4 caracteres de texto, añadiendo <code>=</code> de relleno si hace falta.</p>
+<ol start="5">
+<li>Si tengo el resumen SHA1 de un documento de texto, y añado 2 caracteres al texto, ¿a cuántos bits del nuevo resumen afectarán estos caracteres?</li>
+</ol>
+<p>SHA1 siempre produce un resumen de 160 bits. Al añadir dos caracteres, por el efecto avalancha, el nuevo resumen será completamente distinto de forma impredecible: potencialmente pueden verse afectados todos los bits, aunque estadísticamente cambiará aproximadamente la mitad. Lo importante es que no solo cambian los bits correspondientes a esos caracteres, sino que el hash completo queda alterado.</p>
+<ol start="6">
+<li>¿Qué relación existe entre la sal utilizada en un cifrado AES en modo CBC y el vector de inicialización?</li>
+</ol>
+<p>La sal y el IV no son lo mismo. La sal se usa junto con la contraseña en la función de derivación de clave para obtener la clave de cifrado y, en OpenSSL, también el IV cuando se cifra con contraseña. La sal se guarda normalmente en la cabecera del fichero cifrado para que el receptor pueda derivar la misma clave y el mismo IV al descifrar. El IV no se almacena dentro de la clave; es un valor necesario para el modo CBC.</p>
+<ol start="7">
+<li>El tamaño de la firma digital de un documento, ¿depende del tamaño de la función de resumen utilizada? Justifícalo.</li>
+</ol>
+<p>No depende normalmente del tamaño de la función de resumen, sino del algoritmo de firma y del tamaño de la clave. Por ejemplo, con RSA de 2048 bits, la firma ocupa 2048 bits, es decir, 256 bytes, aunque se use SHA-256, SHA-512 u otra función hash. El hash influye en el valor firmado y en la seguridad, pero no determina por sí solo el tamaño final de la firma RSA.</p>
+<ol start="8">
+<li>¿Qué contiene el certificado raíz de una autoridad certificadora?</li>
+</ol>
+<p>Un certificado raíz contiene la identidad de la CA, su clave pública, el periodo de validez, número de serie, algoritmo de firma y extensiones como que es una CA (<code>CA:TRUE</code>) y los usos permitidos de la clave. Al ser raíz, normalmente está autofirmado: la propia CA firma su certificado con su clave privada. No contiene la clave privada de la CA; esa clave debe mantenerse secreta. Tampoco contiene los requisitos concretos de una petición de certificado, sino la información necesaria para que los clientes puedan confiar en los certificados emitidos por esa CA.</p>
+<ol start="9">
+<li>Cuando ciframos con AES-192-CBC un fichero de texto: ¿de qué depende el tamaño del fichero cifrado?</li>
+</ol>
+<p>Depende del tamaño del fichero de entrada, del tamaño de bloque de AES y del relleno utilizado. AES siempre cifra en bloques de 16 bytes, también cuando la clave es AES-192. Si el fichero no es múltiplo de 16 bytes, se añade padding hasta completar el bloque. Si ya es múltiplo de 16 bytes y se usa padding PKCS#7, se añade un bloque completo adicional. Si se usa OpenSSL con sal, también puede aparecer una cabecera como <code>Salted__</code> más la sal, que añade bytes al fichero.</p>
+<ol start="10">
+<li>¿De qué depende el tamaño de la clave generada por la función de derivación de clave en el cifrado simétrico en openssl?</li>
+</ol>
+<p>Depende del algoritmo de cifrado elegido y del tamaño de clave que ese algoritmo requiere, no de la longitud de la contraseña introducida por el usuario. Por ejemplo, AES-128 necesita una clave de 128 bits, AES-192 una de 192 bits y AES-256 una de 256 bits. La contraseña, la sal, la KDF y las iteraciones determinan el valor de la clave derivada, pero el tamaño de la clave lo fija el cifrado seleccionado.</p>
+<h2>Grupo 1</h2>
+<ol>
+<li>¿Qué contiene una CRL? ¿Quién debe firmarla?</li>
+</ol>
+<p>Una CRL (Certificate Revocation List) contiene la lista de certificados que han sido revocados antes de su fecha de caducidad. Para cada certificado revocado suele incluir al menos su número de serie, la fecha de revocación y, opcionalmente, el motivo de la revocación. La CRL debe estar firmada por la autoridad certificadora (CA) que emitió esos certificados, o por una entidad autorizada por ella para firmar CRL. Así el cliente puede comprobar que la lista de revocación es auténtica y no ha sido modificada.</p>
+<ol start="2">
+<li>¿Qué debe incluir obligatoriamente el certificado del servidor para que el navegador considere la conexión https segura?</li>
+</ol>
+<p>Debe incluir una identidad válida para el servidor, normalmente en el campo Subject Alternative Name (SAN), que coincida con el nombre de dominio al que accede el navegador. Además, debe estar firmado por una CA de confianza para el navegador, estar dentro de su periodo de validez, no estar revocado y permitir el uso correspondiente para autenticación de servidor. El certificado no contiene por sí solo todos los algoritmos de la conexión: esos se negocian durante el handshake TLS.</p>
+<ol start="3">
+<li>El tamaño de la firma digital de un documento, ¿depende del tamaño del documento? Justifícalo.</li>
+</ol>
+<p>No. Antes de firmar se calcula un resumen o hash del documento, y lo que se firma es ese resumen. Por eso, aunque el documento sea muy grande, la firma no crece con el tamaño del documento. El tamaño de la firma depende principalmente del algoritmo de firma y del tamaño de la clave utilizada. Por ejemplo, con RSA de 2048 bits la firma tendrá 2048 bits, es decir, 256 bytes.</p>
+<ol start="4">
+<li>¿Para qué se usa una función de derivación de clave en el cifrado simétrico en openssl?</li>
+</ol>
+<p>Se usa para obtener la clave criptográfica que necesita el algoritmo de cifrado a partir de la contraseña introducida por el usuario. La contraseña no se utiliza directamente como clave AES: se combina normalmente con una sal y se procesa con una KDF para generar una clave binaria del tamaño adecuado, por ejemplo 128, 192 o 256 bits según se use AES-128, AES-192 o AES-256. En OpenSSL, cuando se cifra con contraseña, la KDF puede derivar también el IV necesario para el modo de cifrado.</p>
+<ol start="5">
+<li>Si tengo el resumen sha256 de un documento de texto, y añado 4 caracteres al texto, ¿a cuántos bits del nuevo resumen afectarían estos caracteres? ¿Por qué?</li>
+</ol>
+<p>SHA-256 siempre produce un resumen de 256 bits. Al añadir 4 caracteres, por el efecto avalancha, el resumen resultante cambia de forma impredecible y potencialmente pueden verse afectados todos los bits del nuevo resumen. Estadísticamente se espera que cambie aproximadamente la mitad de los bits, pero la idea importante es que el cambio no afecta solo a una pequeña parte: el hash completo queda alterado.</p>
+<ol start="6">
+<li>¿Qué tamaño debe tener el vector de inicialización en un método de cifrado AES-256 en modo CBC?</li>
+</ol>
+<p>Debe tener el tamaño de bloque de AES, no el tamaño de la clave. AES tiene bloques de 128 bits, es decir, 16 bytes, tanto si se usa AES-128 como AES-192 o AES-256. Por tanto, en AES-256-CBC el IV debe ser de 16 bytes.</p>
+<ol start="7">
+<li>Cuando ciframos con AES-256 un fichero de texto: ¿de qué depende el tamaño del fichero cifrado?</li>
+</ol>
+<p>Depende del tamaño del fichero original, del tamaño de bloque de AES y del padding utilizado. AES cifra en bloques de 16 bytes, aunque la clave sea de 256 bits. Si el fichero no ocupa un número exacto de bloques, se añade relleno hasta completar el último bloque. Si ya ocupa un número exacto de bloques y se usa padding PKCS#7, se añade un bloque completo adicional. Si se usa OpenSSL con sal, también puede añadirse una cabecera como <code>Salted__</code> más la sal.</p>
+<ol start="8">
+<li>Si cifro un fichero de texto con AES-128, y el cifrado lo codifico en base64, ¿qué sucede si lo abro en un editor de texto sin conocer la clave?</li>
+</ol>
+<p>Veré texto ASCII imprimible, porque base64 convierte los datos binarios cifrados en caracteres de texto. Pero no podré leer el contenido original ni recuperar el mensaje sin la clave. Base64 no descifra ni añade confidencialidad: solo cambia la representación del fichero cifrado para que pueda manejarse como texto.</p>
+<ol start="9">
+<li>¿Qué sucede si se cifran bloques de texto idénticos en el modo de cifrado ECB de AES?</li>
+</ol>
+<p>En ECB, cada bloque se cifra de forma independiente con la misma clave. Por eso, si hay bloques de texto plano idénticos, producirán bloques cifrados idénticos. Esto permite detectar patrones en el mensaje y es la razón por la que ECB no se considera un modo seguro para cifrar datos con estructura o varios bloques repetidos.</p>
+<ol start="10">
+<li>Explica cómo sería el proceso para compartir un fichero de backup de 200MB con otra persona de forma confidencial, usando openssl.</li>
+</ol>
+<p>Para garantizar confidencialidad se debe cifrar el fichero. Como el backup es grande, lo adecuado es usar cifrado simétrico, por ejemplo AES-256-CBC o AES-256-GCM, con una clave o contraseña. Si se usa una contraseña compartida, OpenSSL deriva la clave mediante una KDF usando una sal y cifra el fichero con AES; el receptor, con la misma contraseña y la sal almacenada en el fichero cifrado, deriva la misma clave y descifra el backup. Si no se quiere compartir una contraseña directamente, se puede usar cifrado híbrido: cifrar el backup con AES y cifrar la clave AES con la clave pública del receptor. Así solo el receptor podrá recuperar la clave AES con su clave privada y descifrar el fichero.</p>
+<hr>
+<h2>Grupo 3</h2>
+<ol>
+<li>¿Qué relación hay entre el tamaño de un fichero a cifrar y el tamaño de la clave pública si se usa RSA para el cifrado?</li>
+</ol>
+<p>Con RSA no se puede cifrar directamente un fichero de tamaño arbitrario. El tamaño máximo del bloque que se puede cifrar está limitado por el tamaño de la clave RSA y, además, es algo menor que la clave porque hay que reservar espacio para el padding. Por ejemplo, con padding PKCS#1 v1.5 se reservan 11 bytes, así que con una clave RSA de 1024 bits (128 bytes) solo se pueden cifrar como máximo 117 bytes de datos. Para ficheros grandes se usa cifrado híbrido: el fichero se cifra con AES y RSA se usa para cifrar la clave AES.</p>
+<ol start="2">
+<li>¿Cómo recupera el destinatario de un mensaje cifrado con AES-256 la clave utilizada a partir de la contraseña compartida?</li>
+</ol>
+<p>El destinatario introduce la misma contraseña y aplica la misma función de derivación de clave que se usó al cifrar, con los mismos parámetros y la misma sal. La KDF deriva una clave de 256 bits, que es la que necesita AES-256. En OpenSSL, si el fichero fue cifrado con sal, la sal suele ir almacenada en el propio fichero cifrado, de modo que el receptor puede volver a derivar la misma clave a partir de la contraseña compartida.</p>
+<ol start="3">
+<li>Explica cómo sería el proceso para compartir un fichero de backup de 200MB con otra persona de forma que se garantice su origen (que es nuestro), usando openssl.</li>
+</ol>
+<p>Para garantizar el origen se usa una firma digital. Primero se calcula un resumen del fichero, por ejemplo con SHA-256 usando <code>openssl dgst</code>. Después se firma ese resumen con la clave privada del emisor. Se envía al receptor el fichero junto con la firma, y el receptor verifica la firma usando la clave pública o el certificado del emisor. Si la verificación es correcta, sabe que el fichero procede del poseedor de la clave privada y que no ha sido modificado. No es necesario cifrar el backup si solo se pide garantizar el origen y no la confidencialidad.</p>
+<ol start="4">
+<li>¿Qué contiene un certificado personal en formato PKCS#12?</li>
+</ol>
+<p>Un fichero PKCS#12, normalmente con extensión <code>.p12</code> o <code>.pfx</code>, contiene el certificado personal del usuario y normalmente también su clave privada, protegida con una contraseña. Además, puede incluir certificados de la cadena de certificación, como certificados intermedios o el certificado de la CA, para poder validar el certificado personal. No debe confundirse con un certificado público simple, porque PKCS#12 suele usarse precisamente para transportar certificado y clave privada juntos de forma protegida.</p>
+<ol start="5">
+<li>Si cifro un fichero de 16 bytes con AES-128-CBC, ¿qué tamaño tendría el fichero resultante? ¿Por qué?</li>
+</ol>
+<p>Tendría 32 bytes si se usa el padding habitual de OpenSSL/PKCS#7. AES cifra en bloques de 16 bytes. Aunque el fichero original ya ocupa exactamente un bloque, el padding añade un bloque completo adicional para indicar correctamente el relleno al descifrar. Por eso el resultado son dos bloques: 16 bytes de datos cifrados más 16 bytes correspondientes al bloque de padding.</p>
+<ol start="6">
+<li>El tamaño de la firma digital de un documento, ¿depende del tamaño del algoritmo de clave pública utilizado? Justifícalo.</li>
+</ol>
+<p>Sí, normalmente depende del algoritmo de firma y del tamaño de la clave pública/privada utilizada. En RSA, por ejemplo, la firma tiene el tamaño del módulo RSA: con una clave de 2048 bits, la firma ocupa 2048 bits, es decir, 256 bytes. Lo que se firma suele ser el resumen del documento, pero el tamaño final de la firma no depende del tamaño del documento, sino de la clave y del algoritmo de firma.</p>
+<ol start="7">
+<li>¿Qué sucede si se cifra un solo bloque homogéneo (todos los caracteres iguales) con AES en modo CBC?</li>
+</ol>
+<p>Si solo hay un bloque, CBC lo combina mediante XOR con el IV antes de cifrarlo. Por tanto, aunque el bloque esté formado por caracteres iguales, el resultado será un bloque cifrado aparentemente aleatorio. Si se cifra de nuevo el mismo bloque con la misma clave pero con un IV distinto, el resultado será distinto. El uso del IV evita que un mismo primer bloque produzca siempre el mismo bloque cifrado.</p>
+<ol start="8">
+<li>¿Cómo obtiene el receptor de un mensaje cifrado con AES-CBC el vector de inicialización necesario para descifrar?</li>
+</ol>
+<p>El IV debe estar disponible para el receptor, pero no tiene que ser secreto. Puede enviarse o almacenarse junto al mensaje cifrado, normalmente al principio del fichero o del mensaje. En OpenSSL, cuando se cifra con contraseña y sal, el IV puede derivarse de la contraseña y la sal mediante la KDF; la sal se almacena en el fichero cifrado, y el receptor la usa junto con la contraseña para obtener la misma clave y el mismo IV.</p>
+<ol start="9">
+<li>Si cifro un fichero de texto con AES-128, y el fichero cifrado lo codifico en base64, ¿añado confidencialidad? ¿Por qué?</li>
+</ol>
+<p>No. La confidencialidad la proporciona el cifrado AES, no la codificación base64. Base64 solo transforma datos binarios en texto ASCII para facilitar su transporte o visualización en medios que trabajan con texto. Cualquiera puede decodificar base64 sin clave; lo que seguirá protegiendo el contenido será que los datos decodificados siguen estando cifrados con AES.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-seguridad-en-redes.html"><span class="nav-etiqueta">← anterior</span>4. Seguridad en Redes</a>
+  
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

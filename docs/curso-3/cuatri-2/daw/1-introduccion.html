@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Introducción — apuntes de DAW (tercer curso de Ingeniería Informática).">
+<title>1. Introducción · DAW · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">daw</a><span class="miga-sep">/</span><span aria-current="page">1-introduccion</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DAW · curso 3</p>
+    <h1>1. Introducción · DAW</h1>
+  </header>
+  <div class="prosa">
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Quiero dejar esto de recuerdo para que quede constancia de lo que se sufría esta asignatura de puta mierda.
+<img src="../../../img/daw/image-4.png" alt="image-4.png" loading="lazy"></p>
+</div>
+<h1>1.1 Introducción a la evolución de la computación y la web</h1>
+<h2>Evolución resumida</h2>
+<ul>
+<li><strong>Años 40:</strong> computación centralizada en grandes máquinas.</li>
+<li><strong>Finales de los 50:</strong> varios terminales conectados a un sistema central.</li>
+<li><strong>Años 80:</strong> expansión del ordenador personal.</li>
+<li><strong>Finales de los 80 y primera mitad de los 90:</strong> auge de las <strong>LAN</strong>, que conectan equipos dentro de una red local para compartir recursos.</li>
+<li><strong>Segunda mitad de los 90:</strong> expansión de <strong>Internet</strong> como red basada en estándares.</li>
+<li><strong>2007 en adelante:</strong> la computación se desplaza al móvil.</li>
+</ul>
+<p>La idea clave es que se pasa de sistemas aislados o locales a un entorno global donde se conectan ordenadores, servidores y otros dispositivos.</p>
+<h2>De cliente/servidor a la web</h2>
+<p>Las aplicaciones web siguen un modelo <strong>cliente/servidor</strong>:</p>
+<ul>
+<li><strong>Cliente:</strong> lado del usuario.</li>
+<li><strong>Servidor:</strong> lado donde se aloja y procesa la aplicación.</li>
+</ul>
+<p>En la web, esto se traduce en:</p>
+<ul>
+<li><strong>navegador = frontend</strong>,</li>
+<li><strong>servidor web = backend</strong>,</li>
+<li>intercambio de recursos como <strong>HTML</strong> entre ambos.</li>
+</ul>
+<p>Secuencia básica:</p>
+<ol>
+<li>El usuario abre una web en el navegador.</li>
+<li>El navegador solicita la página al servidor.</li>
+<li>El servidor responde con HTML.</li>
+<li>El navegador lo interpreta y lo muestra.</li>
+</ol>
+<h2>Qué abarcan las tecnologías web</h2>
+<p>Las <strong>tecnologías web</strong> son el conjunto de herramientas, lenguajes, protocolos y estándares que permiten crear y ejecutar servicios en la World Wide Web.</p>
+<p><strong>Frontend</strong></p>
+<ul>
+<li><strong>HTML:</strong> estructura.</li>
+<li><strong>CSS:</strong> presentación visual.</li>
+<li><strong>JavaScript:</strong> interactividad y lógica en el navegador.</li>
+<li><strong>Frameworks:</strong> React, Angular, Vue.</li>
+</ul>
+<p>Ejemplo rápido: HTML define un botón, CSS su aspecto y JavaScript lo que ocurre al pulsarlo.</p>
+<p><strong>Backend</strong></p>
+<ul>
+<li>Se encarga de lógica, seguridad y acceso a datos.</li>
+<li><strong>Lenguajes / plataformas:</strong> Java, PHP, Python, Node.js, .NET.</li>
+<li><strong>Frameworks:</strong> Spring, Django, Laravel, Express.</li>
+</ul>
+<p>Ejemplo: validar usuario y contraseña en un login.</p>
+<p><strong>Bases de datos</strong></p>
+<ul>
+<li><strong>Relacionales:</strong> MySQL, PostgreSQL.</li>
+<li><strong>NoSQL:</strong> MongoDB.</li>
+</ul>
+<p><strong>Protocolos y estándares</strong></p>
+<ul>
+<li><strong>HTTP/HTTPS:</strong> comunicación cliente-servidor.</li>
+<li><strong>REST / GraphQL:</strong> diseño de APIs.</li>
+</ul>
+<p><strong>Servidores web</strong></p>
+<ul>
+<li>Apache</li>
+<li>Nginx</li>
+<li>Tomcat</li>
+</ul>
+<h1>1.2 Evolución de la tecnología web</h1>
+<p><strong>Situación inicial.</strong><br>
+Hasta los primeros años 2000, la interacción del usuario era reducida y se trabajaba principalmente con HTML, CSS y JavaScript básicos. La construcción de aplicaciones web se limitaba a:</p>
+<ul>
+<li>escribir y guardar código en un editor de texto plano,</li>
+<li>abrir localmente los ficheros en un navegador para comprobar su funcionamiento,</li>
+<li>desplegar los ficheros en un servidor web.</li>
+</ul>
+<p><strong>MPA (Multi-Page Application).</strong><br>
+La <strong>MPA</strong> es el modelo tradicional de aplicación web en el que, cada vez que el usuario navega a una nueva ruta, el navegador carga una página HTML distinta desde el servidor.</p>
+<p><strong>Ejemplo:</strong> entrar en una tienda online y que cada sección cargue una página nueva completa.</p>
+<p><strong>Catalizador de 2004: más interacción y aparición de SPA.</strong><br>
+En 2004, con el auge de las redes sociales y el nacimiento de Facebook, aumenta la interacción del usuario. Esto trae dos consecuencias principales:</p>
+<ul>
+<li>uso de tecnologías que no requieren recargar la página completa, como <strong>AJAX</strong>,</li>
+<li>necesidad de reducir ancho de banda y surgimiento de aplicaciones <strong>SPA</strong>.</li>
+</ul>
+<p><strong>SPA (Single Page Application).</strong><br>
+Una <strong>SPA</strong> es una aplicación web que carga una sola página HTML y luego actualiza dinámicamente el contenido mediante JavaScript, sin volver a pedir páginas completas al servidor.</p>
+<p><strong>Ejemplo:</strong> Gmail o Trello, donde la interfaz cambia sin recargar toda la página.</p>
+<p><strong>Comparación entre MPA y SPA.</strong></p>
+<div class="callout callout-importante">
+<p class="callout-titulo">Importante</p>
+<p><img src="../../../img/daw/image-5.png" alt="image-5.png" loading="lazy"></p>
+</div>
+<p><strong>Conceptos asociados:</strong></p>
+<ul>
+<li><strong>SEO (Search Engine Optimization):</strong> conjunto de técnicas para que una página aparezca más arriba en los buscadores de forma orgánica, sin pagar publicidad.</li>
+<li><strong>SSR (Server-Side Rendering):</strong> técnica en la que las páginas se generan en el servidor y se envían al navegador ya renderizadas en HTML completo.</li>
+</ul>
+<h1>1.3 El impacto del móvil en la web</h1>
+<p><strong>Catalizador de 2007: el móvil cambia la web.</strong><br>
+En 2007 Apple presenta su iPhone 3 y la computación doméstica pasa al bolsillo de las personas. Las implicaciones que se remarcan son:</p>
+<ol>
+<li>Nuevos formatos de pantalla incompatibles entre sí, lo que provoca la aparición de soluciones <strong>responsivas</strong>.</li>
+<li>Nuevas versiones de navegadores que van incorporando etiquetas según se estandarizan.</li>
+<li>Nuevas aplicaciones con contenido multimedia, redes sociales y geolocalización.</li>
+<li>Aparición de las <strong>PWA</strong> para competir con apps móviles, gracias a la posibilidad de trabajar sin conexión cacheando recursos.</li>
+</ol>
+<p><strong>PWA (Progressive Web Application).</strong><br>
+Una <strong>PWA</strong> es una aplicación web que usa tecnologías que permiten ofrecer una experiencia similar a una app nativa, pero sin necesidad de instalarla desde una tienda, porque funciona desde el navegador.</p>
+<p><strong>Ejemplos indicados en las diapositivas:</strong></p>
+<ul>
+<li>Spotify web</li>
+<li>Uber móvil web</li>
+<li>Starbucks app web</li>
+</ul>
+<p><strong>Comparación: web normal vs PWA vs app nativa.</strong></p>
+<div class="callout callout-importante">
+<p class="callout-titulo">Importante</p>
+<p><img src="../../../img/daw/image-6.png" alt="image-6.png" loading="lazy"></p>
+</div>
+<p><strong>Nota importante sobre PWA.</strong><br>
+Al instalar una PWA en el PC, se instalan algunos archivos relacionados con el <strong>Service Worker</strong>, la <strong>cache</strong> y otros elementos, pero <strong>nunca ficheros HTML o JS</strong>. Esos archivos se almacenan en carpetas del usuario relativas al navegador.</p>
+<h1>1.4 Mobile-First y consecuencias</h1>
+<p><strong>Catalizador de 2018: Mobile-First Indexing.</strong><br>
+En 2018 Google cambia su algoritmo de posicionamiento hacia una política <strong>Mobile-First Indexing</strong>, debido a que el tráfico móvil superaba al de escritorio.</p>
+<p><strong>Consecuencia principal:</strong> la responsividad deja de ser recomendable y pasa a ser obligatoria.</p>
+<p><strong>Mobile-First Indexing (MFI)</strong> significa usar la versión móvil de una web como referencia principal para indexar y posicionar, en lugar de la versión de escritorio. Además, el mismo código HTML vale para móvil y para escritorio.</p>
+<div class="callout callout-importante">
+<p class="callout-titulo">Importante</p>
+<p><img src="../../../img/daw/image-7.png" alt="image-7.png" loading="lazy"></p>
+</div>
+<p><strong>Consecuencia general de la evolución web.</strong><br>
+La consecuencia de toda esta evolución es que la codificación de una página web se vuelve <strong>extremadamente compleja</strong>. La solución que se destaca es el uso masivo de <strong>JavaScript</strong>, que pasa a ser protagonista del desarrollo de aplicaciones, junto con nuevos frameworks y librerías.</p>
+<h1>1.5 Frameworks, librerías y tecnologías de la asignatura</h1>
+<p><strong>Frameworks y librerías destacados:</strong>
+<img src="../../../img/daw/image-8.png" alt="image-8.png" loading="lazy"></p>
+<p><strong>Tecnologías de la asignatura DAW.</strong></p>
+<p><strong>Frontend:</strong></p>
+<ul>
+<li>HTML</li>
+<li>CSS</li>
+<li>JavaScript</li>
+<li>jQuery</li>
+<li>BootStrap</li>
+</ul>
+<p><strong>Backend:</strong></p>
+<ul>
+<li>Java</li>
+<li>JSP</li>
+</ul>
+<p><strong>Servidor web:</strong></p>
+<ul>
+<li>Apache</li>
+<li>Tomcat</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-html.html"><span class="nav-etiqueta">siguiente →</span>2. HTML</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

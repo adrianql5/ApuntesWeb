@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. MODELO ENTIDAD RELACIÓN — apuntes de BASES DE DATOS (segundo curso de Ingeniería Informática).">
+<title>1. MODELO ENTIDAD RELACIÓN · BASES DE DATOS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">bases-de-datos</a><span class="miga-sep">/</span><span aria-current="page">1-modelo-entidad-relacion</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">BASES DE DATOS · curso 2</p>
+    <h1>1. MODELO ENTIDAD RELACIÓN · BASES DE DATOS</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>. <a href="https://github.com/adrianql5">adrianql5</a></p>
+<p>El <strong>Modelo Entidad Relación</strong> es una técnica de diseño de <strong>arriba a abajo</strong>.</p>
+<h1>1.1 Diseño de una Base de Datos.</h1>
+<p>El proceso de diseño se divide en 4 fases:</p>
+<ul>
+<li>
+<p><strong>Fase Inicial:</strong> el diseñador debe realizar una <strong>caracterización de las necesidades de datos</strong> de los posibles usuarios. Debe relacionarse con expertos y usuarios del dominio para realizar la tarea. Y así obtenemos una <strong>especificación de requisitos</strong> del usuario.</p>
+</li>
+<li>
+<p><strong>Fase de diseño conceptual:</strong> se escoge el modelo de datos y traducimos los requisitos en un <strong>esquema conceptual de base de datos</strong>. Este esquema realizado en esta fase de <strong>diseño conceptual</strong> proporciona una visión general de la empresa. En este esquema representamos: <strong>Conjuntos de Entidades, Conjuntos de Relaciones, Atributos y Restricciones</strong>.</p>
+</li>
+</ul>
+<ul>
+<li>
+<p><strong>Fase de especificación de requisitos funcionales:</strong> se describen los tipos de operaciones o <strong>transacciones</strong> que se llevarán a cabo sobre los datos.</p>
+</li>
+<li>
+<p><strong>Fase final:</strong></p>
+<ul>
+<li>
+<p><strong>Fase de Diseño-Lógico</strong>:  <strong>Traduce el esquema Conceptual en un esquema de Relación</strong>.</p>
+</li>
+<li>
+<p><strong>Fase de Diseño-Físico</strong>, se especifican las características físicas de la base de datos. El esquema físico es fácilmente modificable, sin embargo las del <strong>esquema lógico mas complejo de modificar.</strong></p>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Transacción:</strong> es la descripción de un operación a llevar a cabo sobre los datos almacenados en la BD. Puede implicar tanto la creación, modificación, consulta o eliminación de los datos.</p>
+<p>Se pueden obtener varios diseños completos y sin redundancia. Sin embargo se puede decir que tiene mayor calidad aquel que restrinja al máximo las opciones que no se deberían poder realizar.</p>
+<p><strong>Debemos evitar dos peligros:</strong></p>
+<ul>
+<li><strong>Redundancia:</strong> es importante no repetir información para tener un buen diseño. El mayor problema de la información repetida es que al actualizar la información, puede quedar alguna copia sin actualizar y se podría confundir todo.</li>
+<li><strong>Incompletitud:</strong> ouede hacer que sea muy difícil modela algunos aspectos.s</li>
+</ul>
+<h1>1. 2  Modelo Entidad Relación</h1>
+<p>Emplea 3 conceptos básicos, los conjuntos de entidades, los conjuntos de relaciones y los atributos. Tiene asociada una representación en forma de diagramas.</p>
+<h2>1.2.1 Conjuntos de Entidades</h2>
+<p>Una <strong>entidad</strong> es una cosa/objeto del mundo real distinguible. Esta entidad es identificable de forma <strong>unívoca</strong>. Pueden ser concretas (<em>Personas</em>) o abstractas (<em>Reserva de un vuelo</em>).</p>
+<p>Un <strong>Conjunto de Entidades</strong> es un grupo de objetos con existencia física o conceptual (<em>entidades</em>).</p>
+<p>La <strong>Extensión</strong> de un conjuntos de entidades se refiere a la colección real de entidades que pertenecen al conjunto de entidades en cuestión.</p>
+<img src="../../../img/bases-de-datos/pasted-image-20241223100308.png" alt="Archivos/imagenes/Pasted image 20241223100308.png" loading="lazy">
+<h2>1.2.2 Conjuntos de Relaciones</h2>
+<p>Una <strong>Relación</strong> es una asociación entre varias <strong>entidades</strong>. La relación <em>Tutor</em>, asocia a la entidad <em>profesor</em> con la entidad <em>alumno</em>.</p>
+<p>Un <strong>Conjuntos de Relaciones</strong> es un conjunto de relaciones del mismo tipo (<em>2 entidades mínimo</em>).</p>
+<p>La asociación entre conjuntos de entidades se conoce como <strong>participación</strong>. Los conjuntos de entidades <em>E1, E2 ..., En</em> pariticpan en el conjunto de relaciones <em>R</em>.</p>
+<p>La función que desempeña una entidad en una relación se denomina <strong>rol</strong>. Los roles suelen ser implícitos y no se especifican. Sin embargo, si en una relación intervienen entidades de un <strong>mismo conjunto</strong> desempeñaran diferentes roles. Este caso se denomina <strong>Conjunto de Relaciones Recursivo</strong>.</p>
+<img src="../../../img/bases-de-datos/pasted-image-20241223100445.png" alt="Archivos/imagenes/Pasted image 20241223100445.png" loading="lazy">
+<p>El conjunto de relaciones es <strong>binario</strong> si, involucra a solo 2 conjuntos de entidades. Si involucra a 3 <strong>terciario</strong>, etc. El número de conjuntos de entidades que participan en un conjunto de relaciones es el <strong>grado</strong> de ese conjunto de relaciones.</p>
+<h2>1.2.3 Atributos</h2>
+<p>Son <strong>propiedades</strong> de las entidades y las relaciones de interés para la misión de la base de datos, solo se incorpora a la BD aquellos <strong>atributos</strong> que sean <strong>necesarios</strong>.</p>
+<p>Para cada atributo hay un conjuntos de valores permitidos llamado <strong>dominio</strong>.</p>
+<ul>
+<li>
+<p>**Atributos simples  (<em>DNI</em>)</p>
+</li>
+<li>
+<p><strong>Atributos compuestos</strong> (formados a partir de varios simples) (<em>fecha</em>)</p>
+</li>
+<li>
+<p><strong>Monovalorados</strong> (solo toman un valor)</p>
+</li>
+<li>
+<p><strong>Multivalorados</strong> (pueden tener un conjunto de valores) (<em>teléfono</em>, una persona puede tener varios números de teléfono)</p>
+</li>
+<li>
+<p><strong>Derivados</strong> (su valor se puede obtener a partir del valor de otros atributos o entidades relacionados, el valor de estos atributos <strong>nunca se almacena</strong>).
+Los atributos además pueden tomar valores nulos.</p>
+</li>
+</ul>
+<img src="../../../img/bases-de-datos/pasted-image-20241223100856.png" alt="Archivos/imagenes/Pasted image 20241223100856.png" loading="lazy">
+<h1>1.3 Restricciones</h1>
+<p>Las <strong>restricciones</strong> determinan la semántica de la BD, es decir, su comportamiento. Una base de datos con los mismo conjuntos de entidades y relaciones será diferente si sus restricciones son diferentes.</p>
+<p>La  <strong>multiplicidad</strong> es el rango de Entidades de un Conjunto de Entidades que puedes relacionarse mediante un <strong>Conjunto de Relaciones</strong> , con una Entidad de otro Conjunto de Entidades. El máximo de este rango es la <strong>Cardinalidad</strong> y el mínimo la <strong>Participación</strong>.</p>
+<h2>1.3.1 Correspondencia de cardinalidades</h2>
+<p>Expresa el <strong>número de entidades</strong> a las que otra entidad se puede asociar mediante un conjunto de relaciones.</p>
+<ul>
+<li>
+<p><strong>Uno a uno:</strong> Cada entidad de <em>A</em>  se asocia, a lo sumo con una de <em>B</em> y viceversa.</p>
+</li>
+<li>
+<p><strong>Uno a varios:</strong> cada entidad de <em>A</em> se asocia con cualquier número de entidades de <em>B</em>. Cada entidad de <em>B</em> se puede asociar, a lo sumo, con una de A.</p>
+</li>
+<li>
+<p><strong>Varios a uno:</strong>  cada entidad de <em>A</em> se asocia a lo sumo con una de <em>B</em>. Sin embargo, cada entidad de <em>B</em> se puede asociar con cualquiera de <em>A</em>.</p>
+</li>
+<li>
+<p><strong>Varios a varios:</strong> cada entidad de <em>A</em> se asocia con cualquiera de <em>B</em> y viceversa</p>
+</li>
+</ul>
+<img src="../../../img/bases-de-datos/pasted-image-20240926114823.png" alt="Archivos/imagenes/Pasted image 20240926114823.png" loading="lazy">
+<img src="../../../img/bases-de-datos/pasted-image-20240926114909.png" alt="Archivos/imagenes/Pasted image 20240926114909.png" loading="lazy">
+## 1.3.2 Restricciones de Participación
+Se dice que la **participación** de un conjunto de entidades *E* en un conjunto de relaciones *R* es **total** si cada entidad de *E* participa, al menos en una relación de *R*.
+<p>Si solo <strong>algunas</strong> entidades de <em>E</em> participan en relaciones de <em>R</em>, se dice que la participación del conjunto <em>E</em> en <em>R</em> es <strong>parcial</strong>.</p>
+<h2>1.3.3 Claves</h2>
+<p><strong>Clave Primaria:</strong> Todo conjunto de entidades debe tener un <strong>clave primaria</strong>. Una <strong>clave primaria</strong> es un conjunto mínimo de atributos que tienen valores difrentes para cada entidad en cada conjunto de entidades.
+La clave primaria debe mantener su condición de valores <strong>diferentes</strong> en el pasado, presente y futuro. La estructura de las <strong>claves primarias</strong> de un conjunto d relaciones depende de la <strong>correspondencia de cardinalidad</strong> del conjunto.</p>
+<p><strong>Super Clave:</strong> conjunto de atributos que diferencia a una <strong>entidad</strong> del resto.
+<strong>Clave Candidata:</strong> posible <strong>clave primaria</strong>. Para escoger la <strong>clave primaria</strong> debemos escoger de entre todas las <strong>claves candidatas</strong> la <strong>minimal</strong> (<em>la que esté formada por menor número de atributos</em>).</p>
+<h1>1.4 Atributos Redundantes</h1>
+<p>Cada atributo que describe una propiedad de un conjunto, <strong>está sólo una vez</strong> en el Modelo, y además está en el conjunto de entidades o en el de relaciones al que pertenece. Si hace falta el atributo en otro lugar se obtiene a través de una <strong>relación</strong>.</p>
+<h1>1.5 Diagramas Entidad-Relación</h1>
+<img src="../../../img/bases-de-datos/pasted-image-20240926130215.png" alt="Archivos/imagenes/Pasted image 20240926130215.png" loading="lazy">
+<p>Otro concepto nuevo es el de <strong>conjunto de entidades fuertes o débiles</strong>, las <strong>débiles</strong> necesitan la existencia de un conjunto de entidades <strong>fuertes</strong>. Se dice <strong>conjunto de entidades débiles</strong> a aquel conjunto de entidades que no tiene atributos suficientes que le permitan formar una <strong>clave primaria</strong>. Si tienen clave primaria son <strong>conjuntos de entidades fuertes</strong>.</p>
+<p>La relación que asocia a conjuntos de entidades fuertes y débiles se llama <strong>relación identificadora</strong>.</p>
+<p>Aunque los conjuntos de entidades débiles no tienen clave primaria, hace falta un medio para distinguir entre todas las entidades del conjunto de entidades débiles que dependen de una entidad fuerte concreta. El <strong>discriminador</strong> (<em>clave parcial</em>) de un conjunto de entidades débiles es un conjunto de atributos que permite que se haga esta distinción.</p>
+<img src="../../../img/bases-de-datos/pasted-image-20241223121236.png" alt="Archivos/imagenes/Pasted image 20241223121236.png" loading="lazy">
+<h1>1.6 Modelo Entidad-Relación Extendido</h1>
+<p>Los conjuntos de entidades pueden incluir <strong>subgrupos</strong> de entidades que se diferencian de alguna forma de las demás entidades del conjunto. Las <strong>subclases</strong> tienen las mismas entidades que las superclases pero <strong>agrupadas</strong> en base al cumplimiento de alguna característica. Este proceso de establecimiento de subgrupos dentro del conjunto de entidades se denomina <strong>especialización</strong>.</p>
+<p>Solemos decir que existe una <strong>jerarquía</strong> entre este grupo que engloba a los otros <strong>subgrupos</strong>. Por ejemplo, tenemos al conjunto <em>personas</em> sin embargo lo podemos desglosar en <em>alumnos</em> y <em>profesores</em>.</p>
+<p><strong>Tipos de jerarquías:</strong></p>
+<ul>
+<li><strong>Solapada total:</strong> todas las entidades deben pertenecer a un subconjunto y alguna puede pertenecer a varios.</li>
+<li><strong>Solapada parcial:</strong> algunas entidades pueden no pertenecer a ningún subconjunto y alguna puede pertenecer a varios.</li>
+<li><strong>Disjunta total</strong>: todas las entidades deben pertenecer a un subconjunto y solo puede aparecer en ese subconjunto.</li>
+<li><strong>Disjunta parcial:</strong> algunas entidades pueden no pertenecer a ningún subconjunto pero las que aparecen no pueden estar presentes en subconjuntos diferentes.</li>
+</ul>
+<p>Además existe <strong>herencia de atributos</strong>, los atributos de la superclase son heredados por los de la subclases. Las subclases además <strong>heredan la participación</strong> en los conjuntos de relaciones en los que participa su superclase</p>
+<p>La <strong>generalización</strong> es la relación de contención que existe entre el conjunto de entidades de nivel superior y uno o varios de nivel inferior. Para crear <strong>generalizaciones</strong> los <strong>atributos deben tener un nombre común</strong> y representarse mediante la entidad de nivel superior.</p>
+<p>Se puede entender como el proceso contrario a la <strong>especialización</strong>. En la especialización se &quot;<em>segmenta</em>&quot; una <strong>superclase</strong> y en la generalización se &quot;<em>juntan</em>&quot; varias <strong>subclases</strong> para construir una <strong>superclase</strong>.</p>
+<img src="../../../img/bases-de-datos/pasted-image-20241223103952.png" alt="Archivos/imagenes/Pasted image 20241223103952.png" loading="lazy">
+<p>Además podemos diferenciar entre <strong>jerarquía</strong> y <strong>retículo,</strong> en la jerarquía un conjunto de entidades dado sólo puede estar implicado como conjunto de entidades de nivel inferior en una relación, es decir, tienen <strong>herencia única</strong>.
+<strong>Retículo:</strong> si un conjunto de entidades es de nivel inferior en más de una relación tiene <strong>herencia múltiple</strong> y se denomina retículo.</p>
+<p><strong>Restricciones a las generalizaciones:</strong></p>
+<ul>
+<li>
+<p><strong>Definida por el atributo (o por la condición):</strong> la pertenencia a una subclase se evalúa en función del cumplimiento de una condición, es decir, se evalúan en función del mismo atributo.</p>
+</li>
+<li>
+<p><strong>Definida por el usuario:</strong> las subclases no están restringidas por una condición de pertenencia, si no que el usuario asigna las entidades a un conjunto dado.</p>
+</li>
+<li>
+<p><strong>Restricción de completitud:</strong> especifica si una entidad de la superclave debe pertenecer al menos a unos de los conjuntos (<em>total</em>) o no (<em>parcial</em>).</p>
+</li>
+</ul>
+<p>A mayores contamos con la <strong>Agregación:</strong>
+Las agregaciones generan conjuntos de entidades de nivel conceptual superior, agrupando conjuntos de entidades relacionadas mediante conjuntos de <strong>relaciones</strong> en un concepto único. Su objetivo fundamental es poder establecer conjuntos de relaciones entre conjuntos de relaciones.</p>
+<p>Se puede pensar como relacionar un <strong>conjunto de relaciones con otro</strong> para obtener así atributos de varios conjuntos de entidades, evitando aumentar el grado de las relaciones. Como máximo deberíamos tener relaciones de <strong>grado 3 y después usar la agregación</strong>.</p>
+<div class="callout callout-definiciones">
+<p class="callout-titulo">Definiciones</p>
+<p><strong>Entidad:</strong> Objeto, de un determinado tipo, identificable de forma unívoca.</p>
+<p><strong>Conjunto de Entidades:</strong> Grupo de objetos de un tipo, con las mismas propiedades, que se identifican en la Base de Datos como poseedores de una existencia independiente.</p>
+<p><strong>Relación:</strong> Asociación identificable de forma unívoca que incluye una Entidad de cada uno de los Conjuntos de Entidades participantes.</p>
+<p><strong>Conjuntos de Relaciones:</strong> Grupo de relaciones entre Entidades de Conjuntos de Entidades Participantes.</p>
+<p><strong>Grado de un Conjunto de Relaciones:</strong> número de Conjuntos de Entidades que participan en las Relaciones individuales del Conjunto de Relaciones.</p>
+<p><strong>Atributo:</strong> propiedad de un Conjunto de Entidades que participan en las Relaciones individuales del Conjunto de Relaciones.</p>
+<p><strong>Dominio de Atributo:</strong> Conjunto de valores permitido para el Atributo.</p>
+<p><strong>Multiplicidad:</strong> Rango (<em>número mínimo y número máximo</em>) de Entidades de un Conjunto de Entidades que puede relacionarse, mediante un Conjunto de Relaciones, con una Entidad de otro(s) Conjunto(s) de Entidades.</p>
+<p><strong>Participación:</strong> Determina si todas, o sólo parte de las Entidades de un Conjunto de Entidades que pueden relacionarse, mediante un Conjunto de Relaciones. Es el mínimo rango de la  Multiplicidad.</p>
+<p><strong>Cardinalidad:</strong> Describe el número máximo de Entidades de un Conjunto de Entidades que pueden relacionarse una Entidad de otro(s) Conjunto(s) de Entidades a través de un Conjunto de relaciones. Es el máximos del rango de la Multiplicidad.
+<strong>Correspondencia de Cardinalidades:</strong> Cardinalidades correspondientes a los conjuntos de entidades participantes en un Conjunto de Relaciones.</p>
+<p><strong>Clave Candidata:</strong> conjunto mínimo de atributos que identifican de forma unívoca cada Entidad dentro de un Conjunto de Entidades.</p>
+<p><strong>Clave Primaria:</strong> Clave candidata seleccionada por el diseñador.</p>
+<p><strong>Conjunto de Entidades Fuerte:</strong> Conjunto de Entidades que no depende de ningún otro Conjunto de Entidades.</p>
+<p><strong>Conjunto de Entidades Débil:</strong> Conjunto de Entidades que depende existencialmente de otro Conjunto de Entidades.</p>
+<p><strong>Superclase:</strong> Conjunto de Entidades que incluye uno o más subgrupos diferentes en sus Entidades, los cuáles es preciso representar en el Modelo de datos.</p>
+<p><strong>Subclase:</strong> Subgrupo diferenciado de Entidades de un Conjunto de Entidades, que necesita ser representado en el Modelo de datos.</p>
+<p><strong>Herencia de Atributos en Jerarquías:</strong> Las Subclases de una jerarquía poseen los atributos de su Superclase (sin necesidad de indicarlo explícitamente).</p>
+<p><strong>Restricción de Participación:</strong> Determina si todo miembro de la Superclase debe participar, o no, como miembro de una Subclase.</p>
+<p><strong>Restricción de Disyunción:</strong> Indica si es posible que un miembro de una Superclase puede ser miembro de varias Subclases o sólo puede ser miembro de una Subclase.</p>
+<p><strong>Agregación:</strong> Conjunto de Entidades de nivel conceptual superior compuesto por un Conjunto de Relaciones entre Conjuntos de Entidades.</p>
+</div>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-modelo-relacional.html"><span class="nav-etiqueta">siguiente →</span>2. MODELO RELACIONAL</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

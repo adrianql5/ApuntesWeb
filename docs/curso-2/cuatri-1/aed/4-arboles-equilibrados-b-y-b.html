@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="4. Árboles equilibrados B y B+ — apuntes de AED (segundo curso de Ingeniería Informática).">
+<title>4. Árboles equilibrados B y B+ · AED · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">aed</a><span class="miga-sep">/</span><span aria-current="page">4-arboles-equilibrados-b-y-b</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">AED · curso 2</p>
+    <h1>4. Árboles equilibrados B y B+ · AED</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<p>Un árbol B es una estructura de datos diseñada para minimizar el número de accesos a disco al gestionar grandes volúmenes de datos. Se utiliza en sistemas de bases de datos, sistemas de archivos y otras aplicaciones donde el almacenamiento y recuperación eficiente de datos son cruciales.</p>
+<h1>4.1 ¿Por qué surgen los árboles B?</h1>
+<p>Cuando los datos que queremos almacenar son demasiado grandes para caber en un solo bloque de disco, es necesario acceder a múltiples bloques. Cada acceso al disco es costoso en términos de tiempo, ya que es mucho más lento que la memoria principal. Para minimizar el número de accesos al disco, los árboles B agrupan nodos en <strong>páginas</strong>, que son bloques de tamaño fijo que pueden ser leídos y escritos de una sola vez desde el disco.</p>
+<h1>4.2 Definición de árbol B de orden m:</h1>
+<ul>
+<li>Un <strong>árbol B</strong> está siempre equilibrado, lo que significa que todas las hojas están al mismo nivel. Esto asegura que las operaciones de búsqueda, inserción y eliminación se realicen de manera eficiente.</li>
+<li><strong>Páginas</strong>: La unidad básica de almacenamiento en un árbol B es la página, que agrupa nodos con claves. Cada acceso a disco corresponde a leer o escribir una página completa.</li>
+<li><strong>Número de ramas</strong>:
+<ul>
+<li>Las páginas internas tienen entre <code>m/2</code> y <code>m</code> ramas, donde <code>m</code> es el orden del árbol. La raíz es una excepción y puede tener menos ramas si es la única página en el árbol.</li>
+</ul>
+</li>
+<li><strong>Número de claves</strong>: En una página interna, el número de claves es igual al número de ramas menos uno. Estas claves dividen las ramas de una manera similar a un árbol de búsqueda, es decir, las claves en la rama izquierda son menores y las de la rama derecha son mayores.
+<img src="../../../img/aed/pasted-image-20241022111013.png" alt="archivos/imagenes/Pasted image 20241022111013.png" loading="lazy"></li>
+</ul>
+<h1>4.3 Inserción en un árbol B:</h1>
+<ol>
+<li><strong>Búsqueda de la página adecuada</strong>: Primero se localiza la página hoja donde debe ir la nueva clave.</li>
+<li><strong>Inserción directa</strong>: Si la página no está llena, se inserta la nueva clave.</li>
+<li><strong>División de página</strong>: Si la página está llena, se divide en dos. La clave central (mediana) sube al nivel superior (la página padre), y las dos nuevas páginas se conectan a ella.</li>
+</ol>
+<img src="../../../img/aed/pasted-image-20241022112414.png" alt="archivos/imagenes/Pasted image 20241022112414.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241022112432.png" alt="archivos/imagenes/Pasted image 20241022112432.png" loading="lazy">
+<h1>4.4 Búsqueda en un árbol B:</h1>
+<ul>
+<li>La búsqueda comienza en la raíz y, según el valor de la clave, se decide si se encuentra en la página actual o si hay que descender por alguna de las ramas a una página en un nivel inferior.</li>
+</ul>
+<h1>4.5 Eliminación en un árbol B:</h1>
+<ol>
+<li><strong>Eliminación simple</strong>: Si la página tiene más del mínimo de claves, se elimina directamente.</li>
+<li><strong>Redistribución o fusión</strong>: Si la página tiene el número mínimo de claves, se puede redistribuir claves entre páginas hermanas o fusionar dos páginas hermanas.</li>
+</ol>
+<img src="../../../img/aed/pasted-image-20241022112639.png" alt="archivos/imagenes/Pasted image 20241022112639.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241022112657.png" alt="archivos/imagenes/Pasted image 20241022112657.png" loading="lazy">
+<h1>4.6 Aplicaciones:</h1>
+<p>Los árboles B son especialmente útiles en:</p>
+<ul>
+<li><strong>Bases de datos</strong>: Reducen la altura del árbol y, por tanto, los accesos a disco, lo que optimiza las búsquedas.</li>
+<li><strong>Sistemas de archivos</strong>: Ayudan a gestionar grandes volúmenes de datos almacenados en disco.</li>
+<li><strong>Sistemas de compresión de datos</strong>: Permiten búsquedas rápidas de datos comprimidos utilizando claves.</li>
+</ul>
+<p>En resumen, los árboles B son fundamentales para la eficiencia de las operaciones de búsqueda, inserción y eliminación cuando se trabaja con grandes volúmenes de datos en sistemas de almacenamiento masivo.</p>
+<h1>4.7 Árboles B*</h1>
+<p>Los <strong>árboles B*</strong> son una optimización de los árboles B estándar. Su objetivo es reducir el número de divisiones (o splits) que ocurren durante las inserciones. En lugar de dividir una página inmediatamente cuando se llena, los elementos se redistribuyen entre las páginas hermanas. Este enfoque pospone la división hasta que tanto la página original como sus hermanas están llenas.</p>
+<p><strong>Características clave:</strong></p>
+<ul>
+<li><strong>Redistribución</strong>: Cuando una página se llena, los elementos se pueden mover a una página hermana en lugar de realizar una división inmediata. Esto es útil para equilibrar el árbol sin tener que crear nuevas páginas constantemente.</li>
+<li><strong>Menos divisiones</strong>: Al posponer las divisiones hasta que no haya más espacio en las páginas hermanas, el número total de divisiones se reduce, lo que mejora el rendimiento de las inserciones.</li>
+</ul>
+<p>Este enfoque es útil para reducir el número de accesos a disco, ya que las divisiones requieren más accesos, y por lo tanto, posponerlas puede mejorar el rendimiento general del árbol.</p>
+<hr>
+<h1>4.8 Árboles B+</h1>
+<p>Los <strong>árboles B+</strong> son una variación de los árboles B diseñada para mejorar el rendimiento en recorridos secuenciales y búsquedas rápidas.</p>
+<p><strong>Características clave:</strong></p>
+<ul>
+<li><strong>Elementos solo en hojas</strong>: Todos los elementos reales del árbol están almacenados únicamente en las <strong>páginas hoja</strong>, lo que facilita un recorrido secuencial más eficiente.</li>
+<li><strong>Índices en nodos internos</strong>: Los nodos internos contienen claves que sirven únicamente como índices para guiar las búsquedas, pero no almacenan los datos reales. Estos índices pueden duplicar algunos elementos de las hojas.</li>
+<li><strong>Mejor rendimiento en árboles dinámicos</strong>: Debido a que los elementos reales solo se almacenan en las hojas, el árbol no necesita ser reorganizado tan frecuentemente como un árbol B estándar, lo que mejora el rendimiento en aplicaciones donde los datos cambian con frecuencia.
+<img src="../../../img/aed/pasted-image-20241022115133.png" alt="archivos/imagenes/Pasted image 20241022115133.png" loading="lazy"></li>
+</ul>
+<h4>Ventajas del árbol B+:</h4>
+<ul>
+<li><strong>Recorrido secuencial rápido</strong>: Los elementos en las hojas están enlazados entre sí, permitiendo un recorrido rápido sin necesidad de volver a los niveles superiores del árbol.</li>
+<li><strong>Reorganización minimizada</strong>: Al no mover los elementos reales fuera de las hojas, las inserciones y eliminaciones tienden a ser más simples y menos costosas en términos de reorganización.</li>
+<li><strong>Mayor uso de espacio</strong>: Un árbol B+ ocupa más espacio en memoria que un árbol B debido a los elementos duplicados en los nodos internos, pero este es un coste aceptable a cambio del mejor rendimiento en búsqueda y modificación de datos.</li>
+</ul>
+<hr>
+<h3>Inserciones en árboles B+:</h3>
+<p>La inserción en un árbol B+ es similar a la de un árbol B, pero con una diferencia notable en el caso de que una página hoja se llene:</p>
+<ul>
+<li><strong>División de páginas</strong>: Cuando una página hoja se llena, se divide en dos y el elemento mediana sube a la página padre.</li>
+<li><strong>Elemento duplicado</strong>: El elemento mediana que sube al padre se mantiene en la nueva página hoja derecha. Esto significa que el valor de la mediana aparece en ambas páginas, pero solo en la página hoja es considerado un valor de datos real.
+<img src="../../../img/aed/pasted-image-20241022115201.png" alt="archivos/imagenes/Pasted image 20241022115201.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241022115213.png" alt="archivos/imagenes/Pasted image 20241022115213.png" loading="lazy"></li>
+</ul>
+<hr>
+<h3>Eliminación en árboles B+:</h3>
+<p>La eliminación en los árboles B+ es más simple que en los árboles B porque los datos siempre están en las hojas, lo que evita la necesidad de reorganizar todo el árbol.</p>
+<ul>
+<li><strong>Caso 1</strong>: Si, al eliminar un elemento, la página hoja todavía tiene suficientes elementos (es decir, el mínimo o más), no es necesario realizar más ajustes.</li>
+<li><strong>Caso 2</strong>: Si la página hoja queda con menos elementos que el mínimo, se redistribuyen los elementos con una página hermana o se combinan, y se actualizan los índices en la página padre.</li>
+</ul>
+<p>En resumen, los <strong>árboles B+</strong> son más eficientes para recorridos secuenciales y sistemas que requieren búsquedas rápidas y frecuentes, mientras que los <strong>árboles B*</strong> optimizan el uso del espacio y reducen la frecuencia de las divisiones durante las inserciones.</p>
+<img src="../../../img/aed/pasted-image-20241022115248.png" alt="archivos/imagenes/Pasted image 20241022115248.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241022115304.png" alt="archivos/imagenes/Pasted image 20241022115304.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241022115319.png" alt="archivos/imagenes/Pasted image 20241022115319.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="3-arboles-equilibrados-avl.html"><span class="nav-etiqueta">← anterior</span>3. Árboles Equilibrados AVL</a>
+  <a class="nav-siguiente" href="5-grafos-i.html"><span class="nav-etiqueta">siguiente →</span>5. Grafos I</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

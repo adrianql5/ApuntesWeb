@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="6. Evaluación y Selección de Proyectos — apuntes de XEFE (segundo curso de Ingeniería Informática).">
+<title>6. Evaluación y Selección de Proyectos · XEFE · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">xefe</a><span class="miga-sep">/</span><span aria-current="page">6-evaluacion-y-seleccion-de-proyectos</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">XEFE · curso 2</p>
+    <h1>6. Evaluación y Selección de Proyectos · XEFE</h1>
+  </header>
+  <div class="prosa">
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Lo importante de este tema es saber teorÍa para el test</p>
+<p>Calcular el <strong>VAN</strong> y el <strong>PR</strong></p>
+</div>
+<h1>6.1 Concepto de inversión</h1>
+<p>Invertir es <strong>renunciar a un beneficio inmediato y seguro</strong> (por ejemplo, gastar dinero hoy), con la <strong>esperanza de obtener un beneficio mayor en el futuro</strong>.<br>
+Esto implica una <strong>inmovilización de recursos</strong> durante un tiempo.</p>
+<h4><strong>Características clave:</strong></h4>
+<ul>
+<li><strong>Intercambio temporal</strong>: sacrificio presente vs. beneficio futuro.</li>
+<li><strong>Proceso en el tiempo</strong>: tanto la inversión como sus resultados se distribuyen en el tiempo.</li>
+<li><strong>Riesgo</strong>: el futuro es incierto, así que hay riesgo de no obtener el rendimiento esperado.</li>
+<li><strong>Evaluación de viabilidad</strong>: se compara lo que se da hoy con lo que se espera recibir.</li>
+</ul>
+<h4><strong>Ejemplo:</strong></h4>
+<p>Comprar un edificio por <strong>350.000 € hoy (t=0)</strong> esperando venderlo por <strong>400.000 € en 3 años (t=3)</strong>.</p>
+<h3><strong>Elementos básicos de una inversión</strong></h3>
+<ol>
+<li><strong>Inversor</strong>: quien invierte (persona o empresa).</li>
+<li><strong>Objeto de inversión</strong>: en qué se invierte (activo, negocio, etc.).</li>
+<li><strong>Plazo</strong>: duración (puede ser fija o indefinida).</li>
+<li><strong>Cuantía</strong>: dinero invertido.</li>
+<li><strong>Resultado esperado</strong>: beneficio futuro.</li>
+<li><strong>Riesgo</strong>: probabilidad de que el rendimiento no sea el esperado.</li>
+<li><strong>Binomio rentabilidad-riesgo</strong>: a mayor posible ganancia, mayor riesgo asumido.</li>
+</ol>
+<h3><strong>Tipos de inversión</strong></h3>
+<ol>
+<li><strong>Jurídicas</strong>: según la forma legal o el contrato que las regula.</li>
+<li><strong>Financieras</strong>: colocación de capital en instrumentos financieros (acciones, bonos, etc.).</li>
+<li><strong>Económicas</strong>: inversión en bienes reales o productivos (maquinaria, inmuebles, empresas, etc.).</li>
+</ol>
+<h1>6.2 Dimensión financiera del proceso de inversión</h1>
+<h4><strong>Dimensión temporal</strong></h4>
+<ul>
+<li>
+<p><strong>Desembolso inicial (Q₀)</strong>:</p>
+<ul>
+<li>Incluye la inversión en <strong>activos fijos</strong> (materiales o inmateriales) y en <strong>activos corrientes necesarios</strong> para empezar la actividad.</li>
+<li>Generalmente ocurre en el <strong>momento 0</strong> (inicio del proyecto).</li>
+</ul>
+</li>
+<li>
+<p><strong>Flujos de caja posteriores (Q₁, Q₂, ..., Qₙ)</strong>:</p>
+<ul>
+<li>Representan las <strong>entradas y salidas netas de tesorería</strong> a lo largo del tiempo.</li>
+<li>Solo se contabilizan <strong>cobros y pagos efectivos</strong> (no devengados).</li>
+</ul>
+</li>
+</ul>
+<h3><strong>Flujo neto de caja (FNC)</strong></h3>
+<ul>
+<li>Se calcula para cada periodo <strong>j</strong>:
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span></eqn></section>     Donde:
+<ul>
+<li><strong>Cj</strong> = cobros efectivos del año <strong>j</strong></li>
+<li><strong>Pj</strong> = pagos efectivos del año <strong>j</strong></li>
+</ul>
+</li>
+</ul>
+<h3><strong>Horizonte temporal (HT)</strong></h3>
+<ul>
+<li>Es el periodo durante el cual se analizan los <strong>flujos de caja del proyecto</strong> (desde el momento 0 hasta n).</li>
+<li>Puede <strong>no coincidir con la vida económica real del proyecto</strong>.</li>
+<li>Si el análisis termina antes de la vida útil del proyecto → se incluye el <strong>valor final (Vₙ)</strong> como ingreso adicional al final del HT.</li>
+</ul>
+<h3><strong>Ejemplo práctico</strong></h3>
+<ul>
+<li><strong>Inversión inicial</strong>: 200.000 € (Año 0)</li>
+<li><strong>FNC estimados</strong>:
+<ul>
+<li>Año 1: Cobros 70.000 – Pagos 20.000 = <strong>50.000 €</strong></li>
+<li>Año 2: Cobros 120.000 – Pagos 20.000 = <strong>100.000 €</strong></li>
+<li>Año 3: Cobros 130.000 – Pagos 40.000 = <strong>90.000 €</strong></li>
+<li>Año 4: Cobros 80.000 – Pagos 40.000 = <strong>40.000 €</strong></li>
+</ul>
+</li>
+</ul>
+<h3><strong>Origen de los flujos de caja</strong></h3>
+<ol>
+<li>
+<p><strong>Operativos</strong> (actividad principal del proyecto):</p>
+<ul>
+<li><strong>+ Ingresos por ventas</strong></li>
+<li><strong>– Costes variables</strong></li>
+<li><strong>– Costes fijos</strong></li>
+<li><strong>– Amortización técnica</strong></li>
+<li>= <strong>BAIT (Beneficio antes de intereses e impuestos)</strong></li>
+<li><strong>– Impuestos</strong></li>
+<li>= <strong>BNO (Beneficio Neto Operativo)</strong></li>
+<li><strong>+ Amortización técnica</strong></li>
+<li>= <strong>FNC operativo</strong></li>
+</ul>
+</li>
+<li>
+<p><strong>Extraoperativos</strong> (efectos del capital invertido):</p>
+<ul>
+<li>Ej. ventas de activos, subvenciones, etc.</li>
+</ul>
+</li>
+</ol>
+<h1>6.3 Evaluación de proyectos de inversión</h1>
+<p>El objetivo es determinar <strong>el valor que aporta</strong> una inversión, usando indicadores que ayuden a <strong>decidir si se realiza o no</strong>.</p>
+<h3><strong>¿Qué se entiende por valor?</strong></h3>
+<ul>
+<li><strong>Valor económico/financiero</strong>: rentabilidad, recuperación del capital.</li>
+<li><strong>Valor social</strong>: impacto en la comunidad.</li>
+<li><strong>Valor ambiental</strong>: impacto ecológico o sostenibilidad.</li>
+</ul>
+<h3><strong>Evaluación económica</strong></h3>
+<p>Se busca responder a:</p>
+<ul>
+<li>¿Vale la pena esta inversión?</li>
+<li>Si hay varias opciones, ¿cuál es la mejor?</li>
+</ul>
+<h4><strong>Dos contextos</strong>:</h4>
+<ol>
+<li><strong>Oportunidad única</strong>: decidir si <strong>aceptar o rechazar</strong>.</li>
+<li><strong>Varias alternativas viables</strong>: <strong>comparar y jerarquizar</strong>.</li>
+</ol>
+<h3><strong>Indicadores clave de un proyecto</strong></h3>
+<ol>
+<li><strong>Rentabilidad</strong>: capacidad para generar beneficios.</li>
+<li><strong>Riesgo</strong>: grado de incertidumbre sobre esos beneficios.</li>
+<li><strong>Liquidez</strong>: facilidad para convertir activos en dinero sin pérdidas.</li>
+</ol>
+<blockquote>
+<p><strong>Relaciones comunes:</strong></p>
+</blockquote>
+<ul>
+<li>
+<ul>
+<li>Riesgo → + Rentabilidad</li>
+</ul>
+</li>
+<li>– Liquidez → + Rentabilidad</li>
+<li>– Liquidez → + Riesgo</li>
+</ul>
+<h3><strong>La tasa de descuento y el valor actual</strong></h3>
+<ul>
+<li>El <strong>valor del dinero cambia en el tiempo</strong>: 1 € hoy vale más que 1 € mañana.</li>
+<li>Se compara la inversión con otras opciones del mercado (coste de oportunidad).</li>
+</ul>
+<h4><strong>Fórmula del Valor Actual (VA):</strong></h4>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2963em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.2963em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.2963em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.5904em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></eqn></section><p>Donde <strong>k</strong> = tasa de descuento<br>
+<strong>VAN (Valor Actual Neto)</strong> = VA – Inversión inicial</p>
+<h3><strong>Ejemplo práctico</strong></h3>
+<ul>
+<li>Inversión: 200.000 €</li>
+<li>Flujos futuros durante 4 años: 50.000, 100.000, 90.000, 40.000</li>
+<li>Tasa de descuento: 10%</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Año</th>
+<th>Flujo (€)</th>
+<th>Flujo descontado (€)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>-200.000</td>
+<td>-200.000</td>
+</tr>
+<tr>
+<td>1</td>
+<td>50.000</td>
+<td>45.455</td>
+</tr>
+<tr>
+<td>2</td>
+<td>100.000</td>
+<td>82.645</td>
+</tr>
+<tr>
+<td>3</td>
+<td>90.000</td>
+<td>67.618</td>
+</tr>
+<tr>
+<td>4</td>
+<td>40.000</td>
+<td>27.321</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>VA</strong></td>
+<td><strong>223.038</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><strong>VAN</strong></td>
+<td><strong>23.038</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>En este caso, la inversión es viable:<br>
+Se recuperan los 200.000 €, se gana un 10% anual, y además se obtiene un beneficio neto de <strong>23.038 €</strong>.</p>
+</blockquote>
+<h1>6.4 Valor Actual Neto (VAN)</h1>
+<p>Es el valor actualizado de los beneficios netos futuros de una inversión <strong>menos el desembolso inicial</strong>. Pasos para calcular el VAN</p>
+<ol>
+<li>Actualizar los flujos</li>
+</ol>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord text"><span class="mord textbf">VAN</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.2963em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.2963em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.2963em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.5904em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></eqn></section><p>Donde:</p>
+<ul>
+<li><strong>A</strong> = inversión inicial</li>
+<li><strong>Q₁, Q₂, ..., Qₙ</strong> = flujos netos de caja futuros</li>
+<li><strong>k</strong> = tasa de descuento</li>
+</ul>
+<h3><strong>Pasos para calcular el VAN</strong></h3>
+<p>Pasos para calcular el VAN</p>
+<ol>
+<li>Actualizar los flujos 1. <strong>Actualizar</strong> los flujos netos de caja al momento 0 usando la tasa de descuento (<strong>k</strong>).</li>
+<li><strong>Sumar</strong> los valores actualizados → se obtiene el <strong>Valor Actual (VA)</strong>.</li>
+<li><strong>Restar</strong> la inversión inicial → se obtiene el <strong>VAN</strong>.</li>
+</ol>
+<h3><strong>Interpretación del VAN</strong></h3>
+<ul>
+<li><strong>VAN &gt; 0</strong>: la inversión <strong>genera valor</strong> → <strong>Aceptar</strong></li>
+<li><strong>VAN &lt; 0</strong>: la inversión <strong>destruye valor</strong> → <strong>Rechazar</strong></li>
+<li><strong>VAN = 0</strong>: ni gana ni pierde → <strong>Indiferente</strong></li>
+</ul>
+<h3><strong>Influencia de la tasa de descuento (k)</strong></h3>
+<table>
+<thead>
+<tr>
+<th><strong>Tasa de descuento (k)</strong></th>
+<th>0%</th>
+<th>5%</th>
+<th>10%</th>
+<th>15%</th>
+<th>20%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>VAN (€)</strong></td>
+<td>80.000</td>
+<td>48.975</td>
+<td>23.038</td>
+<td>1.139</td>
+<td>-17.515</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>A mayor tasa de descuento, <strong>menor VAN</strong>: el valor del dinero futuro disminuye.</p>
+</blockquote>
+<h3><strong>Características del VAN</strong></h3>
+<ul>
+<li>Es un <strong>criterio claro y directo</strong> para evaluar inversiones.</li>
+<li>Mide la <strong>rentabilidad absoluta</strong> (en €).</li>
+<li>Es <strong>aditivo</strong>: el VAN de varios proyectos es la suma de sus VAN individuales.</li>
+<li>Requiere una <strong>tasa de descuento externa (k)</strong> → depende del coste de capital o riesgo del proyecto.</li>
+<li>Se puede calcular fácilmente con <strong>Excel</strong> usando:<br>
+<code>=VNA(tasa; flujos) - inversión inicial</code></li>
+</ul>
+<h1>6.5 Tasa Interna de Rentabilidad (TIR)</h1>
+<p>Es la <strong>tasa de descuento (𝑟)</strong> que hace que el <strong>VAN sea igual a cero</strong>, es decir, aquella que iguala el valor presente de los flujos futuros con la inversión inicial.</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.1297em;vertical-align:-0.7693em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7693em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.2963em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.2963em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.5904em;"><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span></span></span></span></span></eqn></section><h3><strong>¿Qué indica la TIR?</strong></h3>
+<ul>
+<li>Es la <strong>rentabilidad anual interna</strong> del proyecto.</li>
+<li>Se expresa como un <strong>porcentaje (%)</strong>, lo que facilita su comparación con la <strong>tasa mínima exigida (k)</strong>.</li>
+<li>Muestra el <strong>rendimiento relativo</strong> del proyecto, sin necesidad de comparar con otro.</li>
+</ul>
+<h3><strong>Criterio de decisión usando la TIR</strong></h3>
+<ul>
+<li><strong>Si TIR &gt; k</strong> → El proyecto es <strong>viable</strong> (rentabilidad superior a la exigida).</li>
+<li><strong>Si TIR &lt; k</strong> → El proyecto es <strong>no viable</strong> (rentabilidad insuficiente).</li>
+<li><strong>Si TIR = k</strong> → El proyecto es <strong>indiferente</strong> (cumple justo con la rentabilidad mínima).</li>
+</ul>
+<blockquote>
+<p>Se puede expresar en forma de rentabilidad neta:</p>
+</blockquote>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5944em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord text"><span class="mord textbf">r</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">neta</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord text"><span class="mord">TIR</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span></span></eqn></section><h3><strong>Ejemplo</strong></h3>
+<p>Proyecto con inversión de <strong>200.000 €</strong> y flujos de caja durante 4 años:</p>
+<table>
+<thead>
+<tr>
+<th>Año</th>
+<th>Flujo (€)</th>
+<th>VAN con 10%</th>
+<th>VAN con 15%</th>
+<th>VAN con 16%</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>-200.000</td>
+<td>-</td>
+<td>-</td>
+<td>-</td>
+</tr>
+<tr>
+<td>1</td>
+<td>50.000</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>100.000</td>
+<td>23.038</td>
+<td>1.139</td>
+<td>-2.829</td>
+</tr>
+<tr>
+<td>3</td>
+<td>90.000</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td>40.000</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>→ TIR ≈ <strong>15,28%</strong></p>
+<h3><strong>Limitaciones de la TIR</strong></h3>
+<ul>
+<li>Es la solución de una <strong>ecuación polinómica</strong>, por lo que:
+<ul>
+<li>Puede tener <strong>múltiples soluciones</strong> reales (varias TIR).</li>
+<li>Puede <strong>no tener solución real</strong> (ninguna TIR válida).</li>
+</ul>
+</li>
+<li>No siempre es fiable si hay <strong>cambios de signo</strong> en los flujos de caja (positivos y negativos de forma intercalada).</li>
+</ul>
+<h4>Ejemplo de inconsistencias:</h4>
+<ol>
+<li>
+<p><strong>Múltiples TIR</strong><br>
+Flujo: -22.000, +15.000, +15.000, +15.000, +15.000, -40.000<br>
+→ Tiene dos TIR: 5,62% y 27,78%</p>
+</li>
+<li>
+<p><strong>Sin TIR válida</strong><br>
+Flujo: -1.000, +3.000, -2.500<br>
+→ TIR = #¡NUM! (Excel no encuentra una solución)</p>
+</li>
+</ol>
+<h1>6.6 Índice de Rentabilidad (IR)</h1>
+<p>Es una <strong>alternativa al VAN</strong> que permite medir la <strong>rentabilidad de una inversión de forma relativa</strong> (por cada euro invertido), en lugar de absoluta como el VAN.</p>
+<h3><strong>Fórmulas</strong></h3>
+<p>Existen dos formas:</p>
+<h4><strong>1. Índice de Rentabilidad Bruto (IRB):</strong></h4>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord text"><span class="mord textbf">IRB</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0463em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">A</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="mord mathnormal">A</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="mord mathnormal">A</span></span></span></span></span></eqn></section><ul>
+<li><strong>VA</strong>: Valor Actual de los flujos de caja futuros</li>
+<li><strong>A</strong>: Importe de la inversión inicial</li>
+</ul>
+<h4><strong>2. Índice de Rentabilidad Neto (IRN):</strong></h4>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6861em;"></span><span class="mord text"><span class="mord textbf">IRN</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0463em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">A</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">1</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mord">​</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span></eqn></section><h3><strong>Criterio de decisión</strong></h3>
+<ul>
+<li><strong>IRB &gt; 1</strong> → Proyecto <strong>viable</strong></li>
+<li><strong>IRN &gt; 0</strong> → Proyecto <strong>viable</strong></li>
+<li>Cuanto <strong>mayor</strong> sea el IR, <strong>más rentable</strong> es el proyecto por cada euro invertido.</li>
+</ul>
+<h3><strong>Ejemplo</strong></h3>
+<p>Inversión inicial: <strong>200.000 €</strong><br>
+Flujos netos de caja en 4 años: 50.000, 100.000, 90.000, 40.000<br>
+Tasa de descuento: (por ejemplo, 10%)<br>
+Resultado de Excel:</p>
+<ul>
+<li><strong>IRB = 111,5%</strong> → Es decir, por cada euro invertido se obtiene 1,115 €.</li>
+<li><strong>IRN = 11,5%</strong> → Equivale a un 11,5% de rentabilidad neta sobre la inversión inicial.</li>
+</ul>
+<h1>6.7 Plazo de Recuperación (PR)</h1>
+<p>Es el <strong>tiempo que tarda un proyecto en recuperar su inversión inicial</strong> gracias a los flujos netos de caja (FNC).<br>
+En otras palabras, el número de años (o periodos) que se necesitan para <strong>amortizar el capital invertido</strong>.</p>
+<h3><strong>¿Cómo se calcula?</strong></h3>
+<p>Se van <strong>sumando los flujos netos de caja año a año</strong>, hasta que esa suma iguale o supere el valor de la inversión inicial.</p>
+<h4>Ejemplo:</h4>
+<table>
+<thead>
+<tr>
+<th>Año</th>
+<th>FNC (€)</th>
+<th>Acumulado (€)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>-200.000</td>
+<td>-200.000</td>
+</tr>
+<tr>
+<td>1</td>
+<td>+50.000</td>
+<td>-150.000</td>
+</tr>
+<tr>
+<td>2</td>
+<td>+100.000</td>
+<td>-50.000</td>
+</tr>
+<tr>
+<td>3</td>
+<td>+90.000</td>
+<td><strong>+40.000</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>+40.000</td>
+<td>+80.000</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Resultado:</strong><br>
+El proyecto recupera los <strong>200.000 € en el año 3</strong>, por tanto:</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7079em;"></span><span class="mord text"><span class="mord textbf">PR = 3 a</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7079em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord textbf">n</span></span><span style="top:-3.0134em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2875em;"><span class="mord textbf">˜</span></span></span></span></span></span></span><span class="mord textbf">os</span></span></span></span></span></span></eqn></section><p>(Fórmula Excel: <code>=CONTAR.SI(rango;&quot;&lt;0&quot;)</code>)</p>
+<h3><strong>Interpretación</strong></h3>
+<ul>
+<li>A menor PR → Mayor <strong>liquidez</strong> (el dinero “vuelve” antes).</li>
+<li>Es muy útil para analizar proyectos cuando:
+<ul>
+<li>Hay <strong>alta incertidumbre</strong>.</li>
+<li>Existen <strong>limitaciones de financiación</strong>.</li>
+<li>Se necesita liquidez en el corto plazo.</li>
+</ul>
+</li>
+</ul>
+<h3><strong>Limitaciones del PR</strong></h3>
+<ol>
+<li>
+<p><strong>No tiene en cuenta</strong> los beneficios <strong>posteriores</strong> al periodo de recuperación.<br>
+→ Ej: Si el proyecto genera mucho dinero después de recuperarse, <strong>eso no se valora</strong>.</p>
+</li>
+<li>
+<p><strong>No considera el valor del dinero en el tiempo</strong>.<br>
+→ Un euro hoy <strong>vale más</strong> que un euro dentro de 3 años.</p>
+</li>
+<li>
+<p><strong>Pondera igual</strong> un flujo al inicio y uno justo al final del PR.</p>
+</li>
+</ol>
+<h3><strong>Ejemplo de Problemas con el PR</strong></h3>
+<h4><strong>Problema 1: Ignora beneficios posteriores</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Proyecto</th>
+<th>Año 0</th>
+<th>Año 1</th>
+<th>Año 2</th>
+<th>Año 3</th>
+<th>Año 4</th>
+<th>VAN (k=10%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>-200k</td>
+<td>80k</td>
+<td>120k</td>
+<td></td>
+<td></td>
+<td>-28.099</td>
+</tr>
+<tr>
+<td>B</td>
+<td>-200k</td>
+<td>80k</td>
+<td>120k</td>
+<td>130k</td>
+<td>150k</td>
+<td>172.024</td>
+</tr>
+</tbody>
+</table>
+<p>→ Ambos tienen el <strong>mismo PR</strong>, pero B genera mucho más valor y tiene <strong>mayor VAN</strong>.</p>
+<h4><strong>Problema 2: No valora cuándo se recibe el dinero</strong></h4>
+<table>
+<thead>
+<tr>
+<th>Proyecto</th>
+<th>Año 0</th>
+<th>Año 1</th>
+<th>Año 2</th>
+<th>Año 3</th>
+<th>Año 4</th>
+<th>VAN (k=10%)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C</td>
+<td>-200k</td>
+<td>20k</td>
+<td>180k</td>
+<td>50k</td>
+<td>50k</td>
+<td>38.659</td>
+</tr>
+<tr>
+<td>D</td>
+<td>-200k</td>
+<td>180k</td>
+<td>20k</td>
+<td>50k</td>
+<td>50k</td>
+<td>51.882</td>
+</tr>
+</tbody>
+</table>
+<p>→ El PR es el <strong>mismo</strong>, pero D recupera antes y genera un <strong>mayor VAN</strong>.</p>
+<h3><strong>Conclusión</strong></h3>
+<p>El PR es una herramienta <strong>útil para evaluar la liquidez</strong>, pero <strong>no debe usarse sola</strong> para decidir.<br>
+Siempre se debe complementar con otros indicadores como <strong>VAN</strong> o <strong>TIR</strong>.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="5-fundamentos-del-calculo-financiero.html"><span class="nav-etiqueta">← anterior</span>5. Fundamentos del Calculo Financiero</a>
+  <a class="nav-siguiente" href="7-fuentes-de-financiacion-de-la-empresa.html"><span class="nav-etiqueta">siguiente →</span>7. Fuentes de Financiación de la Empresa</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

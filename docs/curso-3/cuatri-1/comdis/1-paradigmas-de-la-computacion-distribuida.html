@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Paradigmas de la Computación Distribuida — apuntes de COMDIS (tercer curso de Ingeniería Informática).">
+<title>1. Paradigmas de la Computación Distribuida · COMDIS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">comdis</a><span class="miga-sep">/</span><span aria-current="page">1-paradigmas-de-la-computacion-distribuida</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">COMDIS · curso 3</p>
+    <h1>1. Paradigmas de la Computación Distribuida · COMDIS</h1>
+  </header>
+  <div class="prosa">
+<h1>1.1 ¿Qué es esto y por qué nos importa?</h1>
+<h2>1.1.1 El Concepto de Paradigma</h2>
+<p>Antes de hablar de cables y servidores, definamos el término. Un paradigma es simplemente un <strong>patrón o modelo</strong>. En computación, dada la complejidad enorme de conectar máquinas, usamos estos modelos para no tener que reinventar la rueda cada vez que escribimos software.</p>
+<h2>1.1.2 Aplicación Distribuida vs Convencional</h2>
+<p>Imagina un programa en tu portátil (Word, Calculadora). Eso es convencional. Una <strong>aplicación distribuida</strong> tiene dos características que la hacen especial y difícil:</p>
+<ol>
+<li><strong>Comunicación:</strong> Necesita que dos o más procesos independientes (en máquinas distintas o la misma) intercambien datos.</li>
+<li><strong>Sincronización:</strong> No basta con enviar datos; hay que coordinar <em>cuándo</em> se envían y reciben.</li>
+</ol>
+<p><strong>Concepto Clave: Abstracción</strong> La abstracción es el arte de <strong>esconder los detalles sucios</strong>.</p>
+<ul>
+<li><em>Ejemplo:</em> Cuando conduces, usas el volante (abstracción alta). No inyectas gasolina manualmente en los cilindros (abstracción baja). En sistemas distribuidos, buscamos herramientas que oculten la complejidad de la red al programador.</li>
+</ul>
+<h1>1.2 Los Cimientos (Nivel Bajo)</h1>
+<p>Aquí es donde todo empieza. Es el nivel de abstracción más bajo.</p>
+<h2>El Paso de Mensajes (Message Passing)</h2>
+<p><strong>Concepto Principal:</strong> es el paradigma fundamental. Cualquier cosa que ocurra en Internet, en el fondo, es un mensaje llendo de A a B. Es como pasarse notitas en clase. Tú escribes un papel (petición), se lo das a un compañero y esperas que te devuelva otro papel (respuesta).</p>
+<p><strong>Detalle Técnico:</strong></p>
+<ul>
+<li>Se basa en operaciones de Entrada/Salida (I/O) similares a escribir en un archivo.</li>
+<li><strong>Primitivas básicas:</strong> <code>send</code> (enviar) y <code>receive</code> (recibir)</li>
+<li>Si la conexión es continua (como una llamada telefónica), usamos <code>connect</code> y <code>disconnect</code></li>
+<li><strong>La herramienta real:</strong> esto se implementa habitualmente con <strong>Sockets</strong> a nivel de Sistema operativo.</li>
+</ul>
+<p>Cuando tu navegador pide una web, por debajo está abriendo un socket y pasando mensajes. Un &quot;problema&quot; a tener en cuenta es que los procesos están fuertemente acoplados (ambos deben de estar activos al mismo tiempo para que se produzca la comunicación).</p>
+<img src="../../../img/comdis/pasted-image-20250916092352.png" alt="Pasted image 20250916092352.png" loading="lazy">
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>Una <strong>primitiva</strong> es la operación más básica y elemental que te ofrece un sistema o lenguaje, es un ladrillo indivisibles con el construyes cosas más grandes</p>
+<p>Un <strong>socket</strong> es un <strong>enchufe</strong> de software. Es el punto final (endpoint) de una comunicación bidireccional entre dos programas a través de la red. Imagina que tu ordenador es un bloque de pisos. El <strong>Socket</strong> es la puerta de un apartamento específico (identificado por una IP y un Puerto). Si quieres enviar una carta a otro edificio, necesitas saber la dirección del edificio (IP) y el número de puerta (Puerto) del destinatario.</p>
+<p>Usamos <code>connect</code>/<code>disconnect</code>  cuando necesito fiabilidad absoluta y un canal estable. Antes de enviar datos, debes descolgar el teléfono (<code>connect</code>) y al terminal colgar (<code>disconnect</code>). Garantiza que los datos llegan y en orden (<strong>Servicio orientado a conexión</strong>). No se usa (<strong>servicio no orientado a conexión</strong>) cuando la velocidad es más importante que la fiabilidad, o cuando envías mensajes sueltos. Solo se hace <code>send</code> y <code>receive</code> sin llamar antes. <code>Connect</code> tarda tiempo.</p>
+</div>
+<h1>1.3 Arquitecturas Básicas</h1>
+<p>Una vez sabemos pasar mensajes, ¿cómo organizamos a los participantes?</p>
+<h2>1.3.1 Cliente-Servidor (Client-Server)</h2>
+<p><strong>Concepto Principal:</strong> es el modelo más conocido y <strong>asimétrico</strong>. Hay una clara división de jerarquía. Piensa en un restaurante:</p>
+<ul>
+<li><strong>Servidor (Camarero):</strong> Espera pasivamente a que alguien le llame</li>
+<li><strong>Cliente (Comensal):</strong> Inicia la conversación pidiendo algo (request) y espera la comida (response)</li>
+</ul>
+<p>La arquitectura cliente-servidor es <strong>asimétrica</strong>  puesto que cada nodo que interviene en la arquitectura tiene funciones, objetivos y responsabilidades diferentes. Hay una clase diferencia jerárquica y funcional:</p>
+<ul>
+<li><strong>Cliente (rol activo):</strong> inicia la comunicación y realiza peticiones al servidor</li>
+<li><strong>Servidor (rol pasivo):</strong> espera pasivamente a recibir peticiones de los clientes para poder procesarlas.</li>
+</ul>
+<p>El objetivo que se persigue es proporcionar una arquitectura de red en la que se puedan ofrecer servicios facilitando la sincronización de eventos y permite que los clientes sean <strong>más</strong> ligeros al centralizar los recursos en el servidor.</p>
+<img src="../../../img/comdis/pasted-image-20250916093514.png" alt="Pasted image 20250916093514.png" loading="lazy">
+<h2>1.3.2 Peer-to-Peer (P2P)</h2>
+<p><strong>Concepto Principal:</strong> Arquitectura <strong>simétrica</strong> y descentralizada. Todos los nodos son iguales (&quot;peers&quot;). Es una mesa redonda de trabajo o una comuna. No hay jefes. Si tú tienes un bolígrafo y yo lo necesito, me lo das. Si yo tengo una goma y tú la necesitas, te la doy. A veces actúo como servidor (te doy cosas) y a veces como cliente (te pido cosas).</p>
+<p><strong>Detalle Técnico:</strong></p>
+<ul>
+<li>Ideal para compartir recursos (ficheros, ciclos de CPU) de forma escalable</li>
+<li><strong>Hibridos:</strong> a veces se usa un servidor central solo como directorio (para saber quién tiene qué), como hacía el Napster original, pero la transferencia es directa entre usuarios.</li>
+</ul>
+<p>Se usa en BitTorrent, Videoconferencias, Blockchain, aplicaciones de chat, etc.</p>
+<img src="../../../img/comdis/pasted-image-20250916095357.png" alt="Pasted image 20250916095357.png" loading="lazy">
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p><strong>Descentralizado</strong> significa que <strong>no existe un punto único de fallo ni una autoridad suprema</strong>. En un sistema centralizado, si tiras el servidor central, nadie puede operar.</p>
+<p>En P2P la red es una malla, si desconectas a 100 usuarios, los otros 1000 siguen comunicándose entre ellos.</p>
+</div>
+<h1>1.4 Subiendo de Nivel: Ocultando la Red (Middleware)</h1>
+<p>Aquí intentamos que el programador se olvide de que existen cables de red. Queremos programar como si todo estuviera en mi ordenador&quot;.</p>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>El middleware es una capa de software que actúa como intermediario entre 2 procesos independientes (aplicaciones, hardware, SO ...). Es un mecanismo útil para el desacoplamiento y la abstracción a la hora de desarrollar aplicaciones distribuidas.</p>
+</div>
+<h2>1.4.1 RPC (Remote Procedure Call)</h2>
+<p><strong>Concepto Principal:</strong> Abstracción que permite llamar a una función que está en otro ordenador como si fuera una función local. Imagina que en tu código escribes <code>calcularSuma(5, 10)</code>. Tú no sabes si esas suma la hace tu CPU o superordenador en Japón. RPC se encarga de enviar el 5 y el 10 a Japón esperar, y devolverte 15.</p>
+<p><strong>Detalle Técnico:</strong></p>
+<ul>
+<li>Usa unos componentes llamados <strong>Stubs</strong>. El stub es una pieza de código falsa en tu ordenador que finge ser la función remota, su único trabajo es empaquetas los datos y enviarlos (ya lo veremos más adelante)</li>
+</ul>
+<img src="../../../img/comdis/pasted-image-20250920212328.png" alt="Pasted image 20250920212328.png" loading="lazy">
+<h2>1.4.2 RMI (Remote Method Invocation) y Objetos Distribuidos</h2>
+<p><strong>Concepto Principal:</strong> Es la evolución de RPC para la <strong>Programación Orientada a Objetos</strong></p>
+<p><strong>Diferencia con RPC:</strong> En RPC llamas a funciones (acciones). En RMI, invocas a métodos de un <strong>Objeto</strong> que vive en otra máquina. Puedes pasar objetos enteros como argumentos.</p>
+<img src="../../../img/comdis/pasted-image-20250921121400.png" alt="Pasted image 20250921121400.png" loading="lazy">
+<h2>1.4.3 ORB (Object Request Broker)</h2>
+<p><strong>Concepto Principal:</strong> El traductor universal o intermediario de objetos</p>
+<p>¿Qué pasa si quiero que un objeto escrito en C++ en Windows hable con un objeto escrito en Java en Linux? RMI (de Java) no basta. La solución es <strong>ORB</strong>, que es un middleware (intermediario) que redirige peticiones entre objetos heterogéneas (distintos lenguajes/plataformas). El estándar famoso el <strong>CORBA</strong>.</p>
+<img src="../../../img/comdis/pasted-image-20250921121817.png" alt="Pasted image 20250921121817.png" loading="lazy">
+<h1>1.5 Desacoplamiento: Sistemas de Mensajes (MOM)</h1>
+<p>A veces no queremos respuesta inmediata. A veces queremos &quot;dejar un recado&quot;.</p>
+<p><strong>Concepto Principal:</strong> Message-Oriented Middleware (MOM). Un intermediario gestiona colas de mensajes, permitiendo comunicación <strong>asíncrona</strong>.</p>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p><strong>El desacomplamiento</strong> consiste en eliminar las dependencias rígidas entre dos sistemas. Podemos diferenciar 2 tipos:</p>
+<ul>
+<li><strong>Temporal:</strong> el emisor y el receptor <strong>no necesitan estar conectados a la vez</strong>. Yo envío el mensaje a las 10:00, me desconecto, y tú lo recibes a las 14:00.</li>
+<li><strong>Espacial:</strong> el emisor no necesita saber la dirección IP o identidad exacta del receptor, solo envía el mensaje a un buzón.</li>
+</ul>
+</div>
+<img src="../../../img/comdis/pasted-image-20250920212044.png" alt="Pasted image 20250920212044.png" loading="lazy">
+<h2>1.5.1 Modelo Punto a Punto</h2>
+<p><strong>Funcionamiento:</strong> Un emisor deja un mensaje en una cola. El receptor lo recoge cuando puede. Pensadlo como el correo electrónico.</p>
+<p><strong>Ventaja:</strong> Desacomplamiento total. Si el <strong>receptor</strong> está apagado, el mensaje espera en la cola. No se pierde.</p>
+<h2>1.5.2 Modelo Publica/Suscribe (Publish/Subscribe)</h2>
+<p><strong>Funcionamiento:</strong> Basado en <strong>Eventos</strong>.</p>
+<ul>
+<li>Un proceso (Publisher) dice: &quot;!Ha marcado Rodrygo Ganges!&quot; (Evento)</li>
+<li>El sistema distribuye este mensaje a todos los que se hayan &quot;suscrito&quot; al tema &quot;Fútbol&quot;</li>
+</ul>
+<p>Por ejemplo, notificaciones de Youtube, Feeds de Twitter, Grupos de Whatsapp.</p>
+<img src="../../../img/comdis/pasted-image-20251212152923.png" alt="Pasted image 20251212152923.png" loading="lazy">
+<h1>1.6 Paradigmas Avanzados (Conceptos Futuristas)</h1>
+<p>Estos modelos son más específicos, pero interesantes.</p>
+<h2>1.6.1 Servicios de Red</h2>
+<p>Los servicios se &quot;registran&quot; en un directorio. El cliente busca en el directorio &quot;necesito imprimir&quot;, y el directorio le da la dirección de la impresora disponible. Es autoconfigurable.</p>
+<img src="../../../img/comdis/pasted-image-20250921121700.png" alt="Pasted image 20250921121700.png" loading="lazy">
+<h2>1.6.2 Espacio de Objetos</h2>
+<p>Imagina una <strong>pizarra compartida</strong> en la nube. Los productores escriben datos en la pizarra. Los consumidores leen o toman datos de la pizarra. Es la abstracción más alta: no sabes quien consume tu dato, solo lo dejas ahí. Ejemplo: JavaSpaces</p>
+<img src="../../../img/comdis/pasted-image-20250921122117.png" alt="Pasted image 20250921122117.png" loading="lazy">
+<h2>1.6.3 Agentes Móviles</h2>
+<p>En vez de mover los datos hacia el programa, <strong>movemos el programa</strong> <strong>hacia los datos.</strong> Un &quot;agente&quot; viaja de servidor en servidor realizando tareas.</p>
+<p>Imagina que quieres buscar una foto específica en una base de datos de la NASA de 50 Petabytes.</p>
+<ul>
+<li>
+<p><em>Método tradicional:</em> Te descargas los 50 Petabytes (tardas años) y tu programa busca la foto.</p>
+</li>
+<li>
+<p><em>Método Agente:</em> Envías tu pequeño programa (Agente) de 5KB al servidor de la NASA. El programa se ejecuta allí (localmente ), busca la foto rapidísimo (porque está al lado del disco duro) y solo te envía de vuelta la foto encontrada. Ahorras un ancho de banda inmenso.</p>
+</li>
+</ul>
+<p><strong>El Agente:</strong> Es un programa autónomo. Decide cuándo irse al siguiente nodo del itinerario. Lleva consigo su &quot;equipaje&quot; (el estado actual de su ejecución).</p>
+<img src="../../../img/comdis/pasted-image-20250921122236.png" alt="Pasted image 20250921122236.png" loading="lazy">
+<h2>1.6.4 Paradigma de aplicaciones colaborativas</h2>
+<p>Este paradigma modela cómo trabajamos los humanos en equipo. Los procesos no solo <strong>hablan</strong>, si no que cooperan para manipular un estado compartido en tiempo real.</p>
+<p><strong>Componentes clave:</strong></p>
+<ul>
+<li>Multicasting: Enviar un dato a <em>muchos</em> a la vez (ej: cuando escribes una letra en Google Docs, se envía &quot;a la vez&quot; a todos los que miran el documento).</li>
+<li>Pizarras Virtuales (Whiteboards): Es la memoria compartida visual. Todos pueden leer y escribir</li>
+</ul>
+<p>Si dos personas escriben en la misma línea a la vez, ¿quién gana? Las aplicaciones colaborativas necesitan algoritmos complejos (como Relojes Lógicos, que veremos más adelante) para ordenar estos eventos y que todos vean el mismo documento final.</p>
+<p><strong>Ejemplo Real:</strong> Google Docs, Trello, Slack, Pizarras de Zoom.</p>
+<img src="../../../img/comdis/pasted-image-20250921122510.png" alt="Pasted image 20250921122510.png" loading="lazy">
+<h1>1.7 Resumen y Comparativa</h1>
+<table>
+<thead>
+<tr>
+<th><strong>Nivel de Abstracción</strong></th>
+<th><strong>Paradigma</strong></th>
+<th><strong>¿Qué intercambian?</strong></th>
+<th><strong>Ejemplo Real</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bajo (Cimientos)</strong></td>
+<td>Paso de Mensajes</td>
+<td>Bytes/Datos crudos</td>
+<td>Sockets, TCP/IP</td>
+</tr>
+<tr>
+<td><strong>Medio</strong></td>
+<td>RPC / RMI</td>
+<td>Llamadas a Funciones/Métodos</td>
+<td>Java RMI, gRPC</td>
+</tr>
+<tr>
+<td><strong>Medio</strong></td>
+<td>Mensajería (MOM)</td>
+<td>Mensajes Asíncronos</td>
+<td>RabbitMQ, Kafka</td>
+</tr>
+<tr>
+<td><strong>Alto</strong></td>
+<td>Objetos Distribuidos / ORB</td>
+<td>Objetos complejos</td>
+<td>CORBA</td>
+</tr>
+<tr>
+<td><strong>Muy Alto</strong></td>
+<td>Espacio de Objetos</td>
+<td>Datos en pizarra compartida</td>
+<td>JavaSpaces</td>
+</tr>
+</tbody>
+</table>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-el-api-de-sockets.html"><span class="nav-etiqueta">siguiente →</span>2. El API de Sockets</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

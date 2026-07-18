@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Generación y Optimización de Código — apuntes de COMPINT (tercer curso de Ingeniería Informática).">
+<title>5. Generación y Optimización de Código · COMPINT · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">compint</a><span class="miga-sep">/</span><span aria-current="page">5-generacion-y-optimizacion-de-codigo</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">COMPINT · curso 3</p>
+    <h1>5. Generación y Optimización de Código · COMPINT</h1>
+  </header>
+  <div class="prosa">
+<blockquote>
+<p>![Nota]
+Estos apuntes no están muy bien, sirven para responder los ejercicios típicos que pone el rivera en el examen pero no desglosan los conceptos para poder entender todo bien. Es que estaba quemado ya de currar este cuatri y me dio excesiva pereza la parte del rivera.</p>
+</blockquote>
+<h1>5.1 Bloques básicos</h1>
+<p>Un <strong>bloque básico</strong> es una secuencia de instrucciones que se ejecuta seguida.</p>
+<p>Cumple:</p>
+<pre><code class="language-text">1. Solo se entra por la primera instrucción.
+2. Solo se sale por la última.
+3. No hay saltos a instrucciones intermedias.
+</code></pre>
+<p>Para encontrarlos, buscas <strong>líderes</strong>:</p>
+<pre><code class="language-text">1. La primera instrucción es líder.
+2. Todo destino de salto es líder.
+3. La instrucción justo después de un salto también es líder.
+</code></pre>
+<p>Ejemplo:</p>
+<pre><code class="language-text">1: b = 0
+2: a = c + d
+3: b = a + e
+4: d = a + b
+5: p = d
+6: b = c + d
+7: if (b == 0) goto 13
+8: if (b &gt; 0) goto 2
+9: a = b + c
+10: *r = a
+11: b = d + e
+12: goto 1
+13: *r = *r + a
+14: return
+</code></pre>
+<p>Líderes:</p>
+<pre><code class="language-text">1  → primera instrucción y destino de goto 1
+2  → destino de goto 2
+8  → instrucción después del salto de la línea 7
+9  → instrucción después del salto de la línea 8
+13 → destino del goto 13
+</code></pre>
+<p>Bloques:</p>
+<pre><code class="language-text">B1 = {1}
+B2 = {2,3,4,5,6,7}
+B3 = {8}
+B4 = {9,10,11,12}
+B5 = {13,14}
+</code></pre>
+<h1>5.2 Variables vivas y siguiente uso</h1>
+<p>Una variable está <strong>viva</strong> si su valor se va a usar más adelante.</p>
+<p>El <strong>siguiente uso</strong> es la próxima línea donde se usará.</p>
+<p>Ejemplo:</p>
+<pre><code class="language-text">1: t = a + b
+3: x = t * c
+</code></pre>
+<p>Después de la línea 1:</p>
+<pre><code class="language-text">t está viva
+siguiente uso de t = 3
+</code></pre>
+<p>Tu profesor usa una tabla con dos datos por variable:</p>
+<pre><code class="language-text">v  = viva
+nv = no viva
+número = siguiente uso
+0 = no hay siguiente uso dentro del bloque
+</code></pre>
+<h2>Cómo se hace la tabla</h2>
+<p>Para una instrucción:</p>
+<pre><code class="language-text">x = y op z
+</code></pre>
+<p>vas <strong>de abajo hacia arriba</strong>.</p>
+<p>En cada línea haces:</p>
+<pre><code class="language-text">1. Apuntas el estado actual.
+2. Matas x:
+   x = nv, 0
+
+3. Marcas y y z:
+   y = v, línea actual
+   z = v, línea actual
+</code></pre>
+<p>Para una condición:</p>
+<pre><code class="language-text">if (b == 0) goto 13
+</code></pre>
+<p>solo se usa <code>b</code>, así que:</p>
+<pre><code class="language-text">b = v, línea actual
+</code></pre>
+<h2>Ejemplo</h2>
+<p>Bloque:</p>
+<pre><code class="language-text">2: a = c + d
+3: b = a + e
+4: d = a + b
+5: p = d
+6: b = c + d
+7: if (b == 0) goto 13
+</code></pre>
+<p>Si no te dan más información global, tus apuntes dicen que se suele asumir:</p>
+<pre><code class="language-text">Variables no temporales vivas al salir.
+Temporales no vivas al salir.
+</code></pre>
+<p>Aquí todas parecen variables normales, así que puedes empezar suponiendo vivas al salir:</p>
+<pre><code class="language-text">a b c d e p
+v v v v v v
+0 0 0 0 0 0
+</code></pre>
+<p>Ahora recorres desde abajo.</p>
+<p>Línea 7:</p>
+<pre><code class="language-text">if (b == 0) goto 13
+</code></pre>
+<p>Usa <code>b</code>.</p>
+<pre><code class="language-text">b = v, 7
+</code></pre>
+<p>Línea 6:</p>
+<pre><code class="language-text">b = c + d
+</code></pre>
+<p>Antes de modificar, <code>b</code> estaba viva con uso 7.<br>
+Luego matas <code>b</code>, y marcas <code>c</code> y <code>d</code> con uso 6.</p>
+<p>Línea 5:</p>
+<pre><code class="language-text">p = d
+</code></pre>
+<p>Matas <code>p</code>, marcas <code>d</code> con uso 5.</p>
+<p>Línea 4:</p>
+<pre><code class="language-text">d = a + b
+</code></pre>
+<p>Matas <code>d</code>, marcas <code>a</code> y <code>b</code> con uso 4.</p>
+<p>Y así sucesivamente.</p>
+<p>El formato final sería parecido al de tu profesor:</p>
+<pre><code class="language-text">Salida:
+      a   b   c   d   e   p
+      v   v   v   v   v   v
+      0   0   0   0   0   0
+
+7:
+      a   b   c   d   e   p
+      v   v   v   v   v   v
+      0   7   0   0   0   0
+
+6:
+      a   b   c   d   e   p
+      v   nv  v   v   v   v
+      0   0   6   6   0   0
+
+5:
+      a   b   c   d   e   p
+      v   nv  v   v   v   nv
+      0   0   6   5   0   0
+</code></pre>
+<p>No hace falta memorizar la tabla: memoriza la regla de <strong>matar la definida y marcar los operandos</strong>.</p>
+<h1>5.3 DAG / GDA de un bloque básico</h1>
+<p>Un <strong>DAG</strong> o <strong>GDA</strong> es un grafo que representa los cálculos de un bloque.</p>
+<p>Sirve para:</p>
+<pre><code class="language-text">- detectar subexpresiones comunes
+- eliminar código muerto
+- ver dependencias entre instrucciones
+- reordenar instrucciones si se puede
+</code></pre>
+<p>Cómo se construye:</p>
+<pre><code class="language-text">1. Creas hojas para los valores iniciales de variables.
+2. Cada operación crea un nodo.
+3. Los hijos del nodo son las últimas definiciones de sus operandos.
+4. El nodo se etiqueta con la variable que acaba de definirse.
+</code></pre>
+<p>Ejemplo:</p>
+<pre><code class="language-text">1: a = b + c
+2: d = a - e
+3: x = b + c
+</code></pre>
+<p>DAG:</p>
+<pre><code class="language-text">b0    c0
+ \    /
+  +        etiqueta: a, x
+  |
+  a/x
+
+a/x   e0
+ \    /
+  -        etiqueta: d
+</code></pre>
+<p>La línea 3 no crea un nodo nuevo porque <code>b + c</code> ya estaba calculado. Se reutiliza el mismo nodo.</p>
+<h1>5.4 DAG con punteros</h1>
+<p>Ejemplo:</p>
+<pre><code class="language-text">1: u = a + b
+2: t = b + c
+3: *p = t
+4: a = a * b
+5: t = a + c
+6: a = 2 * t
+7: a = a / u
+</code></pre>
+<h2>Caso A: el compilador sabe que <code>p</code> no apunta a ninguna variable usada</h2>
+<p>Entonces:</p>
+<pre><code class="language-text">*p = t
+</code></pre>
+<p>es una escritura indirecta, pero <strong>no invalida</strong> los nodos de <code>a</code>, <code>b</code>, <code>c</code>, <code>u</code>, <code>t</code>, etc.</p>
+<p>El DAG se puede seguir construyendo normalmente.</p>
+<p>Textualmente:</p>
+<pre><code class="language-text">n1 = a0 + b0        etiqueta: u
+n2 = b0 + c0        etiqueta: t
+
+n3 = *=(p0, n2)     efecto lateral: *p = t
+
+n4 = a0 * b0        etiqueta: a
+n5 = n4 + c0        etiqueta: t
+n6 = 2 * n5         etiqueta: a
+n7 = n6 / n1        etiqueta: a
+</code></pre>
+<p>Lo importante es:</p>
+<pre><code class="language-text">La línea *p = t no destruye el DAG anterior
+porque sabemos que p no toca esas variables.
+</code></pre>
+<h2>Caso B: el compilador NO sabe a qué apunta <code>p</code></h2>
+<p>Entonces <code>*p = t</code> puede modificar cualquier variable.</p>
+<p>Por tanto:</p>
+<pre><code class="language-text">*p = t
+</code></pre>
+<p>se considera una <strong>barrera</strong>.</p>
+<p>En tus apuntes aparece esta idea: una asignación indirecta <code>*=</code>, si no se sabe a qué puede apuntar, elimina los nodos construidos hasta ahora.</p>
+<p>Entonces el DAG se corta en dos partes.</p>
+<p>Primera parte:</p>
+<pre><code class="language-text">n1 = a0 + b0        etiqueta: u
+n2 = b0 + c0        etiqueta: t
+n3 = *=(p0, n2)
+</code></pre>
+<p>Después de <code>*p = t</code>, empiezas casi desde cero:</p>
+<pre><code class="language-text">n4 = a1 * b1        etiqueta: a
+n5 = n4 + c1        etiqueta: t
+n6 = 2 * n5         etiqueta: a
+n7 = n6 / u1        etiqueta: a
+</code></pre>
+<p>Uso <code>a1</code>, <code>b1</code>, <code>c1</code>, <code>u1</code> para indicar “valor nuevo/desconocido después de la escritura indirecta”.</p>
+<blockquote>
+<p>Si no sabemos a qué apunta <code>p</code>, la instrucción <code>*p = t</code> puede modificar cualquier variable accesible, por tanto invalida los nodos anteriores del DAG.</p>
+</blockquote>
+<h1>5.5. DAG con arrays</h1>
+<p>Ejemplo:</p>
+<pre><code class="language-text">1: a = b + c
+2: b = a - d
+3: d = x[k]
+4: x[j] = b
+5: c = x[k]
+6: c = c + d
+7: e = b / c
+</code></pre>
+<p>Regla principal:</p>
+<pre><code class="language-text">Una escritura en un array puede cambiar lecturas posteriores del mismo array.
+</code></pre>
+<p>La línea 3 lee:</p>
+<pre><code class="language-text">d = x[k]
+</code></pre>
+<p>La línea 4 escribe:</p>
+<pre><code class="language-text">x[j] = b
+</code></pre>
+<p>La línea 5 vuelve a leer:</p>
+<pre><code class="language-text">c = x[k]
+</code></pre>
+<p>¿Podemos reutilizar la lectura de la línea 3 para la línea 5?</p>
+<p>No, salvo que sepamos que:</p>
+<pre><code class="language-text">j != k
+</code></pre>
+<p>Porque si <code>j = k</code>, entonces la línea 4 modifica justo <code>x[k]</code>.</p>
+<p>Por tanto:</p>
+<pre><code class="language-text">d = x[k]
+x[j] = b
+c = x[k]
+</code></pre>
+<p>normalmente genera dos lecturas distintas de <code>x[k]</code>.</p>
+<p>Representación:</p>
+<pre><code class="language-text">d = x[k]     → nodo =[](x, k), etiqueta d
+x[j] = b     → nodo []=(x, j, b), modifica x
+c = x[k]     → nuevo nodo =[](x, k), etiqueta c
+</code></pre>
+<h1>5.6 Descriptores de registros y variables</h1>
+<p>Esto se usa con <code>obtenReg</code>.</p>
+<p>Un <strong>descriptor de registro</strong> dice qué variables están actualmente en cada registro.</p>
+<p>Ejemplo:</p>
+<pre><code class="language-text">R1: d
+R2: a, t
+R3: u, v
+</code></pre>
+<p>Significa:</p>
+<pre><code class="language-text">R1 contiene el valor actual de d
+R2 contiene el valor actual de a y t
+R3 contiene el valor actual de u y v
+</code></pre>
+<p>Un <strong>descriptor de variable</strong> dice dónde está el valor actual de cada variable.</p>
+<p>Ejemplo:</p>
+<pre><code class="language-text">a: R2
+d: R1
+t: R2
+u: R3
+v: R3
+</code></pre>
+<h1>5.7 Ejercicio típico: traducir <code>b = v</code></h1>
+<p>Situación:</p>
+<pre><code class="language-text">R1: d
+R2: a, t
+R3: u, v
+</code></pre>
+<p>Queremos traducir:</p>
+<pre><code class="language-text">b = v
+</code></pre>
+<p>Como <code>v</code> ya está en <code>R3</code>, no hace falta generar ningún <code>LD</code>.</p>
+<p>Y como es una copia, no hace falta instrucción máquina. Solo actualizamos descriptores:</p>
+<p>Antes:</p>
+<pre><code class="language-text">R3: u, v
+</code></pre>
+<p>Después:</p>
+<pre><code class="language-text">R3: u, v, b
+</code></pre>
+<p>Y el descriptor de <code>b</code> pasa a ser:</p>
+<pre><code class="language-text">b: R3
+</code></pre>
+<p>Respuesta de examen:</p>
+<pre><code class="language-text">No se genera ninguna instrucción.
+Se actualizan descriptores:
+R3 = {u, v, b}
+b = {R3}
+</code></pre>
+<p>Si al final del bloque <code>b</code> está viva y no está en memoria, entonces más tarde habría que hacer:</p>
+<pre><code class="language-asm">ST b, R3
+</code></pre>
+<p>Pero para la operación <code>b = v</code>, no se emite código.</p>
+<h1>5.8 Qué usa <code>obtenReg</code></h1>
+<blockquote>
+<p>¿Qué usa la función <code>obtenReg</code> para decidir?</p>
+</blockquote>
+<p>Respuesta:</p>
+<pre><code class="language-text">- Los descriptores de registros.
+- Los descriptores de direcciones o variables.
+- La información de vida.
+- La información de siguiente uso.
+- La instrucción concreta que se está traduciendo.
+</code></pre>
+<p>La idea es escoger registros intentando evitar <code>ST</code> innecesarios.</p>
+<p>Si una variable de un registro:</p>
+<pre><code class="language-text">- ya está guardada en memoria,
+- no se va a usar más,
+- o va a ser sobrescrita,
+</code></pre>
+<p>entonces puedo reutilizar ese registro sin almacenar.</p>
+<p>Si no, tengo que hacer un <strong>derrame</strong>:</p>
+<pre><code class="language-asm">ST variable, R
+</code></pre>
+<h1>5.9 Coste de <code>LD R1, *8(R2)</code></h1>
+<h2>Criterio 1: coste Aho / longitud de instrucción</h2>
+<p>Regla:</p>
+<pre><code class="language-text">coste = 1 + coste de los modos de direccionamiento
+</code></pre>
+<ul>
+<li>
+<p>Registro <code>R1</code>: coste adicional 0.</p>
+</li>
+<li>
+<p>Dirección indirecta con desplazamiento <code>*8(R2)</code>: suele contar desplazamiento <code>8</code> y acceso indirecto.</p>
+</li>
+</ul>
+<p>Resultado típico:</p>
+<pre><code class="language-text">Coste = 3
+</code></pre>
+<h2>Criterio 2: accesos a memoria</h2>
+<p>Aquí miras cuántos accesos a memoria provoca.</p>
+<p>Para:</p>
+<pre><code class="language-asm">LD R1, *8(R2)
+</code></pre>
+<p>se accede a una dirección calculada a partir de <code>8 + contenido(R2)</code> y luego se obtiene el contenido indirecto.</p>
+<p>En clase normalmente se razona también como:</p>
+<pre><code class="language-text">Coste = 3
+</code></pre>
+<h1>5.10 Reglas de reensamblado</h1>
+<p>El <strong>reensamblado</strong> es volver del DAG a código de tres direcciones.</p>
+<p>Reglas importantes:</p>
+<pre><code class="language-text">1. Un nodo debe generarse después de sus hijos.
+2. Una escritura en array debe respetar el orden respecto a lecturas/escrituras anteriores del mismo array.
+3. Una lectura de array debe ir después de escrituras anteriores que puedan afectarla.
+4. Una instrucción no debe cruzar una escritura por puntero si puede cambiar su valor.
+5. Si un nodo tiene varias variables vivas adjuntas, hay que generar copias.
+</code></pre>
+<p>Ejemplo:</p>
+<pre><code class="language-text">a = b + c
+d = b + c
+</code></pre>
+<p>DAG:</p>
+<pre><code class="language-text">n1 = b + c, etiquetas {a, d}
+</code></pre>
+<p>Si <code>a</code> y <code>d</code> están vivas al salir, al reensamblar necesitas:</p>
+<pre><code class="language-text">a = b + c
+d = a
+</code></pre>
+<p>o al revés.</p>
+<p>Porque ambas variables necesitan conservar ese valor.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-analisis-semantico.html"><span class="nav-etiqueta">← anterior</span>4. Análisis Semántico</a>
+  
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

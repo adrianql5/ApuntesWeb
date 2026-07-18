@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="7. Structured Query Languaje (SQL) Otros Elementos — apuntes de BASES DE DATOS (segundo curso de Ingeniería Informática).">
+<title>7. Structured Query Languaje (SQL) Otros Elementos · BASES DE DATOS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">bases-de-datos</a><span class="miga-sep">/</span><span aria-current="page">7-structured-query-languaje-sql-otros-elementos</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">BASES DE DATOS · curso 2</p>
+    <h1>7. Structured Query Languaje (SQL) Otros Elementos · BASES DE DATOS</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<h1>7.1 Transacciones</h1>
+<p>En bases de datos, una <strong>transacción</strong> es una secuencia de operaciones SQL que se ejecutan como una unidad de trabajo. Las transacciones garantizan que las operaciones sean <strong>atómicas</strong> (o se completan todas, o ninguna) y preservan la <strong>consistencia</strong> de la base de datos.</p>
+<ol>
+<li>
+<p><strong>Inicio de la Transacción</strong>:
+En SQL, una transacción se inicia automáticamente al ejecutar una sentencia SQL. No es necesario un comando específico para iniciar una transacción; cualquier consulta de actualización (como <code>UPDATE</code>, <code>INSERT</code>, o <code>DELETE</code>) marca implícitamente el comienzo.</p>
+</li>
+<li>
+<p><strong>Finalización de la Transacción</strong>:
+Para finalizar una transacción, SQL ofrece dos comandos principales:</p>
+<ul>
+<li><code>COMMIT</code>: Guarda todos los cambios realizados durante la transacción y los hace permanentes en la base de datos. Se garantiza que todos los cambios sean visibles para otros usuarios.</li>
+<li><code>ROLLBACK</code>: Revierte todos los cambios de la transacción, dejando la base de datos en el estado en el que se encontraba antes de iniciar la transacción. Esto es útil para deshacer operaciones en caso de errores.</li>
+</ul>
+<p>Por ejemplo, si realizas varias operaciones en una aplicación bancaria para transferir fondos entre dos cuentas:</p>
+<pre><code class="language-sql">BEGIN; -- (Iniciado implícitamente al realizar la primera operación)
+UPDATE cuentas SET saldo = saldo - 100 WHERE cuenta_id = 1; -- Restar dinero
+UPDATE cuentas SET saldo = saldo + 100 WHERE cuenta_id = 2; -- Sumar dinero
+COMMIT; -- Guardar los cambios
+</code></pre>
+<p>Si hay algún error entre las actualizaciones (por ejemplo, si se retira dinero pero falla al sumarlo), el <code>ROLLBACK</code> garantiza que la base de datos regrese al estado inicial, evitando inconsistencias.</p>
+</li>
+<li>
+<p><strong>Fallos y Recuperación Automática</strong>:
+Si ocurre un fallo (por ejemplo, una caída de sistema) antes de ejecutar <code>COMMIT</code>, SQL garantiza que los efectos de la transacción incompleta se reviertan automáticamente. Al reiniciar, el sistema restaura la base de datos al estado anterior de la transacción fallida.</p>
+</li>
+</ol>
+<h1>7.2 Extensiones a la creación de tablas</h1>
+<p><strong>Crear una tabla a partir de otra existente</strong>
+La sentencia <code>CREATE TABLE ... LIKE</code> se utiliza para crear una nueva tabla que tiene el mismo esquema (estructura de columnas y tipos de datos) que una tabla existente. Por ejemplo:</p>
+<pre><code class="language-sql">CREATE TABLE temp_profesor LIKE profesor;
+</code></pre>
+<p>En este caso, <code>temp_profesor</code> se crea con la misma estructura que la tabla <code>profesor</code>, pero sin ningún dato.</p>
+<p><strong>Crear una tabla a partir de una consulta</strong></p>
+<p>La sentencia <code>CREATE TABLE ... AS</code> permite crear una nueva tabla y llenarla con los resultados de una consulta. Por ejemplo:</p>
+<pre><code class="language-sql">CREATE TABLE t1 AS
+SELECT * FROM profesor WHERE nombre_dept = 'Música' WITH DATA;
+</code></pre>
+<p>En este caso, <code>t1</code> se crea y se llena con todas las filas de la tabla <code>profesor</code> donde la columna <code>nombre_dept</code> tiene el valor 'Música'. La cláusula <code>WITH DATA</code> indica que la tabla se rellena con los resultados de la consulta. Si omites <code>WITH DATA</code>, según la norma SQL:2003, la tabla se crea vacía:</p>
+<pre><code class="language-sql">CREATE TABLE t2 AS
+SELECT * FROM profesor WHERE nombre_dept = 'Música';
+</code></pre>
+<h1>7.3 Autorización de privilegios</h1>
+<p>La autorización en bases de datos implica asignar diferentes tipos de permisos a los usuarios sobre las partes de la base de datos. Estos permisos se conocen como <strong>privilegios</strong> y se clasifican principalmente en cuatro tipos:</p>
+<ol>
+<li><strong>Autorización de lectura de datos</strong> (SELECT)</li>
+<li><strong>Autorización de inserción de nuevos datos</strong> (INSERT)</li>
+<li><strong>Autorización de actualización de datos</strong> (UPDATE)</li>
+<li><strong>Autorización de borrado de datos</strong> (DELETE)</li>
+</ol>
+<ul>
+<li>
+<p><strong>Lectura</strong>: Un usuario llamado <code>profesor1</code> puede consultar datos de la tabla <code>estudiantes</code>:</p>
+<pre><code class="language-sql">GRANT SELECT ON estudiantes TO profesor1;
+</code></pre>
+</li>
+<li>
+<p><strong>Inserción</strong>: Un usuario llamado <code>secretaria</code> puede agregar nuevos registros a la tabla:</p>
+<pre><code class="language-sql">GRANT INSERT ON estudiantes TO secretaria;
+</code></pre>
+</li>
+<li>
+<p><strong>Actualización</strong>: Un usuario llamado <code>profesor2</code> puede actualizar el correo electrónico de los estudiantes:</p>
+<pre><code class="language-sql">GRANT UPDATE (email) ON estudiantes TO profesor2;
+</code></pre>
+</li>
+<li>
+<p><strong>Borrado</strong>: Un usuario llamado <code>admin</code> puede eliminar registros de la tabla:</p>
+<pre><code class="language-sql">GRANT DELETE ON estudiantes TO admin;
+</code></pre>
+</li>
+</ul>
+<h1>7.4. Revocación de Privilegios</h1>
+<p>Los privilegios se conceden utilizando la sentencia <code>GRANT</code> y se revocan utilizando la sentencia <code>REVOKE</code>. Por ejemplo:</p>
+<ul>
+<li>
+<p>Para conceder múltiples privilegios a un usuario:</p>
+<pre><code class="language-sql">GRANT SELECT, INSERT, UPDATE ON estudiantes TO profesor1;
+</code></pre>
+</li>
+<li>
+<p>Para revocar un privilegio:</p>
+<pre><code class="language-sql">REVOKE UPDATE ON estudiantes FROM profesor2;
+</code></pre>
+</li>
+</ul>
+<h1>7.5 Roles</h1>
+<p>Los <strong>roles</strong> son grupos de privilegios que se pueden asignar a usuarios. Esto es útil cuando varios usuarios requieren los mismos permisos. Por ejemplo, en una universidad, podríamos tener roles como <code>profesor</code>, <code>estudiante</code>, o <code>administrador</code>.</p>
+<ul>
+<li>
+<p><strong>Creación de un rol</strong>:</p>
+<pre><code class="language-sql">CREATE ROLE profesor;
+</code></pre>
+</li>
+<li>
+<p><strong>Concesión de privilegios al rol</strong>:</p>
+<pre><code class="language-sql">GRANT SELECT ON estudiantes TO profesor;
+</code></pre>
+</li>
+<li>
+<p><strong>Asignación de roles a usuarios</strong>:</p>
+<pre><code class="language-sql">GRANT profesor TO profesor1;
+</code></pre>
+</li>
+</ul>
+<p>Cuando un usuario se conecta a la base de datos, tiene todos los privilegios que se le han concedido directamente, así como los que hereda de cualquier rol que se le haya asignado.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="6-structured-query-languaje-sql-consultas.html"><span class="nav-etiqueta">← anterior</span>6. Structured Query Languaje (SQL) Consultas</a>
+  <a class="nav-siguiente" href="8-normalizacion-del-modelo-relacional.html"><span class="nav-etiqueta">siguiente →</span>8. Normalización del Modelo Relacional</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

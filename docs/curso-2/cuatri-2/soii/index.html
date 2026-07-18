@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Apuntes de SOII: 4 temas de teoría con PDF descargable.">
+<title>SOII · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><span aria-current="page">soii</span></nav>
+<main class="principal">
+<section class="encabezado-seccion">
+  <p class="sello">curso 2 · cuatrimestre 2 · 4 temas</p>
+  <h1>SOII</h1>
+  <a class="boton" href="../../../pdf/2-2-soii.pdf" download>Descargar PDF de la asignatura</a>
+</section>
+<section aria-label="Temas">
+  <ol class="lista-notas">
+    <li><a href="1-comunicacion-y-sincronizacion-entre-procesos.html"><span class="nota-numero">1</span><span class="nota-titulo">Comunicación y Sincronización entre Procesos</span></a></li>
+    <li><a href="2-interbloqueos.html"><span class="nota-numero">2</span><span class="nota-titulo">Interbloqueos</span></a></li>
+    <li><a href="3-sistemas-en-tiempo-real.html"><span class="nota-numero">3</span><span class="nota-titulo">Sistemas en Tiempo Real</span></a></li>
+    <li><a href="5-shell-y-scripts.html"><span class="nota-numero">5</span><span class="nota-titulo">Shell y Scripts</span></a></li>
+  </ol>
+</section>
+
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

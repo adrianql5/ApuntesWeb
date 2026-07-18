@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Comunicación y Sincronización entre Procesos — apuntes de SOII (segundo curso de Ingeniería Informática).">
+<title>1. Comunicación y Sincronización entre Procesos · SOII · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">soii</a><span class="miga-sep">/</span><span aria-current="page">1-comunicacion-y-sincronizacion-entre-procesos</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">SOII · curso 2</p>
+    <h1>1. Comunicación y Sincronización entre Procesos · SOII</h1>
+  </header>
+  <div class="prosa">
+<h1>1.1 Comunicación entre Procesos (IPC)</h1>
+<p>En los sistemas con <strong>multiprogramación</strong> existe una necesidad de <strong>comunicación entre procesos</strong> (IPC) de forma bien estructurada sin usar <strong>interrupciones</strong>. Esta comunicación se usa para:</p>
+<ul>
+<li><strong>Transmitir información</strong>.</li>
+<li>Evitar <strong>interferencias</strong> entre procesos.</li>
+<li>Garantizar el orden correcto cuando existen dependencias -&gt; <strong>sincronizarlos</strong></li>
+</ul>
+<p>La comunicación entre <strong>hilos</strong> es prácticamente igual, pero la <strong>transmisión de información</strong> es mucho más <strong>sencilla</strong>, pues comparten espacio de direcciones.</p>
+<h2>1.1.1 Condiciones de Carrera</h2>
+<p>Los procesos que trabajan en conjunto pueden <strong>compartir</strong> cierto <strong>espacio de almacenamiento</strong> en el que pueden leer y escribir datos. Este almacenamiento compartido puede estar en la <strong>memoria principal</strong> (probablemente en el kernel) o en un <strong>archivo</strong>.</p>
+<p>Una <strong>condición de carrera</strong> sucede cuando varios procesos acceden a datos compartidos y el resultado final depende de cuál y cuándo se ejecuta. <strong>Depurar</strong> programas que contienen condiciones de carrera es muy complicado, pues la mayoría de ejecuciones acaba con resultados incorrectos.</p>
+<h3>Ejemplo</h3>
+<p>Si se tiene en el kernel una <strong>cola de impresión</strong> en la que los procesos van escribiendo nombres de archivos cuando necesitan imprimirlos. Existen dos <strong>variables compartidas</strong> almacenadas en un archivo accesible por todos los procesos:</p>
+<ul>
+<li><code>IN</code>, que apunta a la siguiente ranura libre de la cola.</li>
+<li><code>OUT</code>, que apunta al siguiente archivo a escribir.</li>
+</ul>
+<p>Hay un <strong>demonio de impresión</strong> que comprueba de forma periódica si hay archivos en la cola listos para imprimirse y, si los hay, imprime el primero.</p>
+<ul>
+<li>De manera más o menos simultánea, dos procesos (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq> y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span></eq>) intentan poner en la cola un archivo.</li>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq> lee <code>IN</code> y guarda el valor 7 en una variable local</li>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq> pierde la CPU y se comienza a ejecutar <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span></eq></li>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span></eq> lee <code>IN</code> y guarda el valor 7 en una variable local</li>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span></eq> almacena el nombre de un archivo que quiere imprimir en la posición 7 de la cola y actualiza <code>IN</code> a 8</li>
+<li>Se vuelve a ejecutar <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq></li>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq> almacena el nombre de un archivo que quiere imprimir en la posición 7 de la cola y actualiza <code>IN</code> a 8</li>
+<li>Se ejecuta el demonio de paginación, no detecta nada extraño, pero el <strong>archivo de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span></eq> nunca se imprime</strong>.</li>
+</ul>
+<img src="../../../img/soii/pasted-image-20250523112423.png" alt="Pasted image 20250523112423.png" loading="lazy">
+<h1>1.2 Regiones Críticas</h1>
+<p>Para <strong>evitar las carreras críticas</strong> es necesaria una <strong>exclusión mutua</strong>, esto asegura que, si un proceso está utilizando datos compartidos, los demás no podrán acceder a ellos. Una <strong>región crítica</strong> es una parte del programa que accede a memoria compartida.</p>
+<p>Para que varios procesos <strong>cooperen en paralelo</strong> de manera <strong>correcta</strong> y <strong>eficiente</strong> al usar datos compartidos se tienen que cumplir estas <strong>condiciones:</strong></p>
+<ul>
+<li>No puede haber dos procesos en la <strong>región crítica a la vez:</strong> evita las <strong>carreras críticas</strong></li>
+<li>No puede hacerse <strong>suposiciones</strong> acercas de las <strong>velocidades</strong> o el número de <strong>CPUs</strong></li>
+<li>Un proceso no puede <strong>bloquear</strong> a otro <strong>sin</strong> estar en su <strong>región crítica</strong>.</li>
+<li>Ningún proceso debe <strong>esperar indefinidamente</strong> al acceso a la región crítica.</li>
+</ul>
+<img src="../../../img/soii/pasted-image-20250523112935.png" alt="Pasted image 20250523112935.png" loading="lazy">
+<h1>1.3 Exclusión Mutua con Espera Ocupada</h1>
+<p>Todas estas soluciones implican una <strong>espera ocupada</strong>, la espera ocupada es la <strong>evaluación continua de una variable hasta que aparezca cierto valor</strong>, lo cual desperdicia tiempo de CPU.</p>
+<h2>1.3.1 Deshabilitación de Interrupciones (hardware)</h2>
+<p>Consiste en que cada proceso <strong>deshabilite todas las interrupciones</strong> nada más entre a su región crítica y las rehabilite justo después de salir. Así, <strong>no se realizarán cambios de contexto</strong>, por lo que el proceso podrá acceder a la memoria compartida sin que ningún otro proceso intervenga.</p>
+<p>El kernel deshabilita las interrupciones con frecuencia, pero es <strong>peligroso</strong> darle este poder a los procesos de usuario. <strong>No</strong> funciona en sistemas <strong>multicore</strong>, puesto que la deshabilitación solo afecta a la CPU que la ejecutó, permitiendo que las demás continúen trabajando y puedan acceder a la memoria compartida.</p>
+<h2>1.3.2 Variable Candado</h2>
+<p>Consiste en usar una <strong>variable de candado compartida</strong>, de manera que esta valga <code>1</code> cuando algún proceso está en su región crítica y <code>0</code> en caso contrario. Antes de entrar en sus regiones críticas, los procesos <strong>comprobarán el valor del candado</strong>, si es <code>0</code>, entrarán y lo establecerán a <code>1</code>. Si es <code>1</code>, esperarán.</p>
+<p><strong>Viola la condiciones de que no puede haber 2 procesos en la misma región crítica a la vez</strong> puesto que la variable de candado es <strong>compartida</strong> y es vulnerable a <strong>carreras criticas</strong>.</p>
+<h3>Ejemplo</h3>
+<p>El proceso <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq> lee un <code>0</code> en el candado, pero antes de que lo fije a <code>1</code> se realiza un cambio de contexto y el nuevo proceso fija el candado a <code>1</code>. Cuando el proceso <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq> se vuelva a ejecutar, también fijará el candado a  <code>1</code>y por tanto ambos procesos estarán en sus regiones críticas a la vez.</p>
+<h2>1.3.3 Alternancia Estricta</h2>
+<p>Consiste en usar una <strong>variable de turno compartida</strong>, de manera que esta lleve la cuenta de a qué proceso le toca entrar a su región crítica. Al principio, <code>turno</code> vale <code>0</code>. Cuando el proceso <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq> (turno <code>0</code>) desee entrar a su región crítica, verá que el valor de <code>turno</code> es <code>0</code> y entrará. El proceso <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span></eq> (turno <code>1</code>) también descubre que es <code>0</code> y se quedará evaluando <code>turno</code> continuamente hasta que cambie a <code>1</code>. Cuando <code>0</code> salga de la región, establecerá <code>turno</code> a <code>1</code> .</p>
+<p>Sin embargo esto <strong>viola</strong> la condición de que <strong>un proceso no puede bloquear a otro sin estar en su región crítica</strong>. Además los procesos trabajan al <strong>ritmo del más lento</strong>.</p>
+<img src="../../../img/soii/pasted-image-20250523114759.png" alt="Pasted image 20250523114759.png" loading="lazy">
+<h2>1.3.4 Solución de Peterson</h2>
+<p>La implementación presentada es válida para mantener la exclusión mútua de 2 procesos, Se puede realizar para más, pero es mucho más compleja.</p>
+<ul>
+<li>Consiste en usar una <strong>variable de turno compartida</strong> y un <strong>vector de 2 posiciones</strong>, de manera que cada una de sus entradas informa de si el proceso al cual corresponde desea entrar en la región crítica.</li>
+<li>Cuando el proceso <code>0</code> desea entrar a su región crítica, invocará a <code>entrar_region()</code> indicando su interés en el vector y estableciendo <code>turno</code> a <code>0</code>. Como el otro proceso no desea entrar, accederá de inmediato. Si ahora el otro proceso también llama a <code>entrar_region()</code>, se quedará evaluando el vector continuamente hasta que <code>interesado[0]</code> cambie.</li>
+</ul>
+<p>Cumple <strong>todas las condiciones</strong>, pero implica una <strong>espera ocupada</strong>.</p>
+<p>Si el compilador cambie en <code>entrar_region()</code> el <strong>orden</strong> de la escritura en el <strong>vector</strong> y la en la variable <code>turno</code>, ambos procesos podrían estar dentro a la vez. Si ambos procesos invocasen <code>entrar_region()</code> más o menos a la vez, podrían aparecer <strong>carreras críticas</strong> en la variable <code>turno</code>, pero sólo entrará en la región aquel cuyo PID quede almacenado.</p>
+<img src="../../../img/soii/pasted-image-20250523120448.png" alt="Pasted image 20250523120448.png" loading="lazy">
+<h2>1.3.5 Instrucción TSL</h2>
+<p>Consiste en usar una <strong>instrucción atómica</strong> <code>TSL reg, lock</code> (<em>Test and Set Lock</em>), que lee el contenido de la palabra <code>lock</code> de memoria, lo guarda en un registro <code>reg</code> y después almacena un valor distinto de <code>0</code> en la dirección de memoria de <code>lock</code>.</p>
+<p>Se garantiza que las operaciones leer y almacenar la palabra en memoria son <strong>indivisibles</strong>, es decir, ningún procesador puede acceder a la palabra de memoria hasta que termine la instrucción <code>TSL</code>.</p>
+<p>Para conseguir esto, la CPU que ejecuta <code>TSL</code> <strong>bloquea el bus de memoria</strong>, impidiendo que otras CPUs accedan a ella hasta que acabe. Bloquear el bus de memoria es muy <strong>distinto a desactivar interrupciones</strong>, pues sí afecta al resto de procesadores. El <strong>SO</strong> y el <strong>hardware</strong> deben ayudar.</p>
+<img src="../../../img/soii/pasted-image-20250523121813.png" alt="Pasted image 20250523121813.png" loading="lazy">
+<h3>Instrucción XCHG</h3>
+<p>Funciona igual que la solución con <code>TSL</code>, pero usando la <strong>instrucción atómica</strong> <code>XCHG reg,lock</code> (<em>exchange</em>), que intercambia el contenido de la palabra <code>lock</code> de memoria con el registro <code>reg</code>. Es la implementación que usan las CPUs de <strong>Intel</strong>.</p>
+<img src="../../../img/soii/pasted-image-20250523122551.png" alt="Pasted image 20250523122551.png" loading="lazy">
+<h1>1.4 Dormir y Despertar</h1>
+<p>La solución de Peterson y las de <code>TSL</code> y <code>XCHG</code> son correctas, pero requieren una espera ocupada. La espera ocupada no sólo <strong>desperdicia tiempo de CPU</strong>, si no que también puede provocar un <strong>problema de inversión de prioridades:</strong></p>
+<ul>
+<li>Consideremos los procesos, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0813em;">H</span></span></span></span></eq> con prioridad alta y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span></span></span></span></eq> con prioridad baja. El planificador ejecutará <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0813em;">H</span></span></span></span></eq> siempre que esté listo.</li>
+<li>En instante en el que <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span></span></span></span></eq> está en su región critica, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0813em;">H</span></span></span></span></eq> cambia a estado listo. Entonces, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0813em;">H</span></span></span></span></eq> se comienza a ejecutar, pero como <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span></span></span></span></eq> estaba en su región crítica, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0813em;">H</span></span></span></span></eq> se quedará en una espera ocupada indefinidamente, pues <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span></span></span></span></eq> nunca se planeará y por tanto nunca saldrá de la región crítica. (para lograr esto tienes que tener una planificación digna de un profundo subnormal, en la cual tengan prioridades que no decrezcan)</li>
+</ul>
+<p>Ahora hablaremos de una primitiva de comunicación entre proceso que se <strong>bloquean</strong> cuando no pueden acceder a sus regiones críticas en lugar de desperdiciar tiempo de CPU. Se basa en las siguientes syscalls:</p>
+<ul>
+<li><code>sleep</code>: hacer que el proceso llamador se bloquee hasta que otro proceso lo despierte</li>
+<li><code>wakeup(PID)</code>: despierta al proceso de pid <code>PID</code></li>
+</ul>
+<h2>1.4.1 Problema del Productor-Consumidor</h2>
+<p>Este problema se puede <strong>generalizar</strong> para aun número arbitrario de productores y consumidores <strong>sin cambiar el código</strong>.</p>
+<ul>
+<li>Dos procesos comparten un <strong>buffer</strong> común que puede contener <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span></eq> elementos. El <strong>número de elementos</strong> que tiene actualmente se almacena en <code>cuenta</code></li>
+<li>El proceso <strong>productor</strong> coloca información en el buffer y el proceso <strong>consumidor</strong> la saca.</li>
+<li>Antes de introducir elementos en el buffer, el productor leerá <code>cuenta</code> para comprobar si el buffer está lleno. Si <code>cuenta = N</code>, el productor se duerme. En caso contrario, saca un elemento y decrementa <code>cuenta</code>.</li>
+<li>Ambos procesos comprueban si el otro se debe despertar y de ser así, lo despiertan.</li>
+</ul>
+<p>Este método produce <strong>condiciones de carrera</strong> porque el <strong>acceso a</strong> <code>cuenta</code> <strong>no está restringido</strong>:</p>
+<ul>
+<li>EL buffer está vacío y el consumidor acaba de leer <code>cuenta</code> para ver si es <code>0</code></li>
+<li>El planificador le retira la CPU al consumidor y se la cede al productor.</li>
+<li>El productor inserta un elemento en el buffer, incrementa <code>cuenta</code> y observa que ahora es <code>1</code>, por lo que llama a <code>wakeup</code> para el consumidor.</li>
+<li>Como el consumidor no se había dormido, la señal para despertarlo se pierde.</li>
+<li>El planificador le retira la CPU al productor y se la cede al consumidor.</li>
+<li>El consumidor evalúa el valor de <code>cuenta</code>que leyó antes. Como es <code>0</code>, se duerme.</li>
+<li>Tarde o temprano el productor llenará el buffer y se dormirá también. Ambos quedarán dormidos para siempre.</li>
+</ul>
+<p>Para evitar esto, se podría usar un <strong>bit de espera de despertar</strong>, de manera que cuando se envía una señal de despertar a un proceso que no está dormido, se fija ese bit, y la próxima vez que ese proceso se intente dormir, no lo hará y restablecerá el bit. Esto funcionaría para este ejemplo simple, pero si hay más de un consumidor y/o productor un único bit será insuficiente.</p>
+<img src="../../../img/soii/pasted-image-20250523125353.png" alt="Pasted image 20250523125353.png" loading="lazy">
+<h1>1.5 Semáforos</h1>
+<p>Un <strong>semáforo</strong> es una variable entera que se usa para <strong>contar</strong> el número de <strong>señales de despertar</strong> guardadas para uso futuro. Puede tomar valor:</p>
+<ul>
+<li><code>0</code>: no se guardaron señales de despertar</li>
+<li><code>&gt;0</code>: hay pendiente una o más señales de despertar</li>
+</ul>
+<p>Esta solución se basa e las siguientes generalizaciones de <code>sleep</code> y <code>wakeup</code>:</p>
+<ul>
+<li><code>down(semaforo)</code>: comprueba el valor del <code>semaforo</code>
+<ul>
+<li>Si es <code>0</code>: el proceso se pone a dormir sin completar la operación <code>down</code> por el momento.</li>
+<li>Si es <code>&gt;0</code>: disminuye el valor del <code>semaforo</code>(es decir, consume una señal de despertar almacenada) y continúa.</li>
+</ul>
+</li>
+<li><code>up(semaforo)</code>: incrementa el valor del <code>semaforo</code>
+<ul>
+<li>Si algún proceso estaba inactivo en ese <code>semaforo</code>, sin poder completar una operación <code>down</code> anterior, el sistema selecciona uno de ellos al azar y permite que complete la operación <code>down</code>. Así, después de la operación <code>up</code> en un <code>semáforo</code> con procesos dormidos, este seguirá en <code>0</code> pero habra un proceso menos dormido en él.</li>
+</ul>
+</li>
+</ul>
+<p>Ambas operaciones son <strong>atómicas:</strong> una vez que empieza una operación de semáforo, ningún otro proceso podrá acceder a él hasta que acabe.</p>
+<ul>
+<li>Para asegurar esto, se implementan como <strong>syscalls</strong> en las que el SO <strong>deshabilita las interrupciones</strong> brevemente. En este caso las deshabilitación de interrupciones es aceptable pues el manejo del semáforo requiere sólo unas <strong>pocas instrucciones</strong>.</li>
+<li>Si se usan <strong>varias CPUs</strong>, cada semáforo debe estar protegido por una <strong>variable de candado</strong> sobre la cual se usen las instrucciones <code>TSL</code> o <code>XCHG</code>. En este caso las espera activa que implican estas instrucciones es justificable pues la operación de semáforo tarda sólo unos cuantos <strong>microsegundos</strong>.</li>
+</ul>
+<p>La forma natural de <strong>ocultar las interrupciones</strong> a los prcoesos es asociar un semáforo que <strong>inicialmente sea</strong> <code>0</code> a cada dispositivo de E/S, de manera que:</p>
+<ul>
+<li>Justo después de iniciar el dispositivo, el <strong>proceso adminstrativo</strong> realiza un <code>down</code> en su semáforo, bloqueándose inmediatamente.</li>
+<li>Cuando entra la interrupción, el <strong>manejador de itnerrupciones</strong> realiza un <code>up</code> en el semáforo asociado, haciendo que el proceso administrativo despierte.</li>
+</ul>
+<p>Los semáforos tienen dos <strong>usos:</strong></p>
+<ul>
+<li>Los <strong>semáforos binarios</strong> son aquellos que se <strong>inicializan a 1</strong> y se usan para asegurar que sólo un proceso pueda entrar a su región crítica en un momento dado, es decir, para garantizar la <strong>exclusión mútua</strong>. Para usarlos, cada proceso realizará una operación <code>down</code> justo antes de entrar a su región crítica y una <code>up</code> después de salir de ella.</li>
+<li>Los <strong>semáforos de sincronización</strong> se usan para garantizar que ciertas secuencias de eventos ocurran o no.</li>
+</ul>
+<h2>1.5.1 Problema del Productor-Consumidor</h2>
+<p>Se usan 3 semáforos:</p>
+<ul>
+<li><code>llenas</code>: contabiliza el número de ranuras llenas (inicialmente 0). Es un semáforo de <strong>sincronización</strong></li>
+<li><code>vacías</code>: contabiliza el número de ranuras vacías (inicialmente N). Es un semáforo de <strong>sincronización</strong>.</li>
+<li><code>mutex</code>: asegura que el consumidor y productor no tengan acceso al buffer al mismo tiempo. Es un semáforo <strong>binario</strong>.</li>
+</ul>
+<img src="../../../img/soii/pasted-image-20250523131735.png" alt="Pasted image 20250523131735.png" loading="lazy">
+<h1>1.6 Mutexes</h1>
+<p>Un <strong>mutex</strong> es una variable con dos estados: <strong>abierto</strong> (desbloqueado) o <strong>cerrado</strong> (bloqueado). Se puede representar en un único bit, pero en la práctica se suelen representar con un entero con valor:</p>
+<ul>
+<li><code>0</code>: abierto</li>
+<li><code>!=0</code>: cerrado</li>
+</ul>
+<p>Son <strong>versiones simplificadas de los semáforos</strong>, pues no tienen la habilidad de contar, sólo sirve para administrar la <strong>exclusión mutua</strong>. Se implementan con <strong>facilidad</strong> y <strong>eficiencia</strong> es espacio de usuario siempre que esté disponible la instrucción <code>TSL</code> o <code>XCHG</code>, por lo que son especialmente útiles en <strong>paquetes de hilos implementados en espacio de usuario</strong>.</p>
+<p>Cuando un hilo (o proceso) necesita acceder a una región crítica llama a <code>mutex_lock</code>, de manera que si el mutex está abierto (es decir, la región crítica está disponible), puede entrar a la región. En caso contrario, se bloquea hasta que el que está en la región salga y llame a <code>mutex_unlock</code>. Si hay varios hilos bloqueados por el mutex al llamar a <code>mutex_unlock</code>, se selecciona uno de ellos al azar y se permite que entre a la región.
+<img src="../../../img/soii/pasted-image-20250523155858.png" alt="Pasted image 20250523155858.png" loading="lazy"></p>
+<p>El código de <code>mutex_lock</code> es similar al de <code>entrar_region</code> de la solución con <code>TSL</code>, pero tienen una diferencia crucial:</p>
+<ul>
+<li>Cuando <code>entrar_region</code> no puede entrar a la región crítica, continúa evaluando el mutex en una <strong>esperar ocupada</strong>. Si los hilos están a <strong>nivel de usuario</strong>, <strong>no</strong> hay un <strong>reloj</strong> que detenga a los hilos después de cierto tiempo, por lo que un hilo que intente entrar a una región crítica ocupada iterará indefinidamente y nunca adquirirá el acceso, pues nunca se ejecutará el hilo que está en la región crítica.</li>
+<li>Cuando <code>mutex_lock</code> no puede entrar a la región crítica, cede la CPU a otro hilo, por lo que <strong>no hay espera ocupada</strong>.</li>
+</ul>
+<p>Ni <code>mutex_lock</code> ni <code>mutex_unlock</code> requiere syscalls, por lo que los hilos en nivel de usuario se pueden sincronizar completamente en <strong>espacio de usuario</strong>, usando procedimientos de unas <strong>pocas instrucciones</strong>.</p>
+<h2>1.6.1 Mutexes en Pthreads</h2>
+<p><code>pthreads</code> proporciona varias funciones para manejar mutexes:</p>
+<ul>
+<li><code>pthread_mutex_init</code>: crea un mutex</li>
+<li><code>pthread_mutex_destroy</code>: destruye un mutex</li>
+<li><code>pthread_mutex_lock</code>: cierra un mutex</li>
+<li><code>pthread_mutex_trylock</code>: trata de cerrar un mutex, pero si falla no bloquea al llamador, otorgándole la flexibilidad de decidir qué hacer a continuación ( por ejemplo, realizar una espera ocupada).</li>
+<li><code>pthread_mutex_unlock</code>: abre un mutex, liberando exactamente un hilo si hay alguno en espera.</li>
+</ul>
+<p>Pueden tener <strong>atributos</strong>.</p>
+<h3>Variables de condición en Pthreads</h3>
+<p>Sirven para bloquear hilos hasta que se cumpla una determinada <strong>condición</strong>. Las variables de condición están <strong>asociadas a un mutex</strong>, de manera que cuando un hilo cierra el mutex y accede a la región crítica, puede quedar en espera por una variable de condición cuya condición no se cumple, hasta que otro hilo lo señale y pueda continuar.</p>
+<p><code>pthreads</code> proporciona varias funciones para manejar variables de condición:</p>
+<ul>
+<li><code>pthread_cond_init</code>: crea una variable de condición</li>
+<li><code>pthread_cond_destroy</code>: destruye una variable de condición</li>
+<li><code>pthread_cond_wait(&amp;condp,&amp;mutex)</code>: expulsa al hilo del mutex y lo bloquea hasta que algún otro lo despierta. El <strong>bloqueo</strong> del hilo y la <strong>liberación del mutex</strong> se realiza de forma <strong>atómica</strong>.</li>
+<li><code>pthread_cond_signal(&amp;condc)</code>: envía una señal a otro hilo bloqueado en la variable de condición para despertarlo.
+<ul>
+<li>Las variables de condición <strong>no tienen memoria</strong>, se se envía una señal a una variable de condición en la que no hay ningún hilo esperando, se pierde.</li>
+<li>El hilo despertado volverá a competir por el mutex, po rlo que, una vez lo adquiera, debe <strong>comprobar si la condición que lo despertó sigue cumpliéndose</strong>, pues desde que se envió la señal hasta la adquisición del mutex podría dejar de ser cierta.</li>
+</ul>
+</li>
+<li><code>pthread_cond_broadcast</code>: envía una señal a varios hilos para despertarlos</li>
+</ul>
+<img src="../../../img/soii/pasted-image-20250523161845.png" alt="Pasted image 20250523161845.png" loading="lazy">
+<img src="../../../img/soii/pasted-image-20250523162101.png" alt="Pasted image 20250523162101.png" loading="lazy">
+<h1>1.7 Monitores (esto no lo pregunta nide)</h1>
+<p>Aunque los <strong>semáforos</strong> pudieran parecer una manera muy sencilla de realizar la IPC, el programador debe ser extremadamente <strong>cuidadoso</strong> al usarlos. Para facilitar la escritura de programas correctos, se usa una primitiva de sincronización de <strong>mayor nivel</strong>, los monitores.
+Por ejemplo, en la solución al problema del productor-consumidor con semáforos, si se invierte el orden de las operaciones <code>down</code> del productos, llegará un punto en el que tanto el productor como el consumidor quedarán bloqueados de manera indefinida.</p>
+<p>Un <strong>monitor</strong> es una colección de <strong>procedimientos, variables y estructuras de datos</strong> que se agrupan en un tipo especial de <strong>módulo o paquete</strong>. Los procesos pueden llamar a los <strong>procedimientos</strong> del monitor cuando lo deseen, pero no pueden acceder directamente a las <strong>estructuras de datos internas</strong> del monitor desde procedimientos ajenos a este.</p>
+<p>Consiguen implementar <strong>exclusión mutua</strong> gracias a que solo permite que haya <strong>un único proceso activo</strong> en ellos e cada instante.</p>
+<p>Son una <strong>construcción del lenguaje de programación</strong>, por lo que el compilador puede manejar las llamadas a sus procedimientos de manera especial:</p>
+<ul>
+<li>Cuando un proceso llama a un procedimiento de un monitor, sus primeras instrucciones comprobarán si hay algún otro proceso activo en él.
+<ul>
+<li>Si hay otro proceso activo en el monitor: el proceso llamador se suspende hasta que el otro abandone el monitor</li>
+<li>Si no hay otro proceso activo en el monitor: el proceso llamador puede entrar</li>
+</ul>
+</li>
+<li>Es responsabilidad del <strong>compilador</strong> implementar la exclusión mutua en las entradas del monitor, normalmente se usa un <strong>mutex</strong> o <strong>semáforo binario</strong>.</li>
+</ul>
+<p>La <strong>persona que escribe el monitor</strong> no tiene que saber nada de cómo el compilador gestiona la exclusión mútua, sólo tiene que saber que, si convierte las regiones críticas en procedimientos del monitor, está garantizada.
+Entonces, como es el compilador (y no el programador) quien está gestionando la exclusión mutua, <strong>es menos probable que algo salga mal</strong>.</p>
+<p>Se sigue necesitando una forma para que los procesos se bloqueen cuando no puedan continuar, para lo cual los monitores usan <strong>variables de condición:</strong></p>
+<ul>
+<li>Para evitar tener dos procesos activos en el monitor a la vez, se necesita una regla que indique lo que ocurrirá <strong>después</strong> de la operación <code>signal</code>.
+<ul>
+<li>El proceso despertado se ejecuta y el llamador se suspende</li>
+<li>El proceso llamador sale del monitor inmediatamente</li>
+<li>Entonces, la instrucción <code>signal</code> sólo puede aparecer como instrucción final en un procedimiento de monitor.</li>
+<li>El proceso llamador sigue ejecutándose, y hasta que salga del monitor el proceso despertado no podrá continuar.</li>
+</ul>
+</li>
+</ul>
+<p>Aunque <code>wait</code> y  <code>signal</code> se parecen a <code>sleep</code> y <code>wakeup</code> , la exclusión mutua automática en los procedimientos de monitor garantiza que la instrucción <code>wait</code> se pueda completar sin preocuparse de que otro proceso intente realizar un <code>signal</code> antes de que se complete.</p>
+<p>Los monitores son un <strong>concepto de lenguaje de programación</strong>, y muchos lenguajes no los tienen. En realidad estos lenguajes <strong>tampoco</strong> tienen <strong>semáforos</strong> en sí, pero se agregan fácilmente mediante una <strong>biblioteca</strong>.
+Los monitores no funcionan en <strong>sistemas distribuidos</strong> con varias CPUs con su propia <strong>memoria privada</strong> conectadas por una <strong>red de área local</strong>.</p>
+<img src="../../../img/soii/pasted-image-20250523164102.png" alt="Pasted image 20250523164102.png" loading="lazy">
+<img src="../../../img/soii/pasted-image-20250523164113.png" alt="Pasted image 20250523164113.png" loading="lazy">
+<h1>1.8 Pasaje de Mensajes</h1>
+<p>El <strong>pasaje de mensajes</strong> es un método de comunicación de procesos que se basa en las siguientes syscalls:</p>
+<ul>
+<li><code>send(destino, &amp;mensaje)</code>: recibe un mensaje a un destino especificado</li>
+<li><code>receive(origen, &amp;mensaje)</code>: recibe un mensaje de un origen especificado ( o de <strong>cualquier</strong> origen, si se desea)</li>
+</ul>
+<p>Si no hay un mensaje disponible, el llamador se puede <strong>bloquear</strong> hasta que llegue uno o puede regresar de inmediato con un <strong>código de error</strong>.</p>
+<h2>1.8.1 Aspectos de Diseño</h2>
+<p>Se deben <strong>nombrar los procesos</strong> de forma que los especificados como <code>origen</code> y <code>destino</code>  estén <strong>libres de ambigüedad</strong>. Hay que utilizar algún <strong>mecanismo de autenticación</strong> para que los sistemas sepan que se están comunicando con quien esperan y no con un impostor.</p>
+<p>Si los procesos que se están comunicando se encuentran en <strong>distintas máquinas</strong> conectadas por una red, se pueden <strong>perder mensajes en dicha red</strong>. Para protegerse de los mensajes perdidos, el emisor y el receptor puede acordar que, tan pronto como se reciba un mensaje, el receptor enviará un mensaje especial de <strong>acuse de recibo: ACK</strong>.</p>
+<ul>
+<li>Si el emisor no recibe e ACK en un cierto tiempo: <strong>retransmite</strong> el mensaje.</li>
+<li>Si el mensaje, se recibe correctamente, pero se pierde el ACK, el emisor retransmitirá, por lo que el receptor recibirá un <strong>duplicado</strong>.
+<ul>
+<li>Para que el receptor pueda diferenciar un mensaje nuevo de una retransmisión, se colocan <strong>números de secuencia</strong> consecutivos en cada mensaje original. Al recibir un mensaje con el mimso núemrmo de secuencia que otro anterior, el receptor sabrá que es un duplicado que debe ignorar.</li>
+</ul>
+</li>
+</ul>
+<p>Si los procesos que están comunicando se encutnrarn en la <strong>misma maquina</strong>, pueden aparecer problemas de <strong>rendimiento</strong>. <strong>Copiar mensajes</strong> de un proceso a otro es mucho más <strong>lento</strong> que realizar una operación con un semáforo o un mutex. Como alternativa, se puede limitar el <strong>tamaño de los mensajes</strong> al de los <strong>registros</strong> de la máquina para realizar el pasaje usando los registros.</p>
+<h2>1.8.2 Problema del Productor-Consumidor</h2>
+<p>Se supone que todos los mensajes tienen el mismo tamaño, que no hay memoria compartida y que el SO coloca los mensajes enviados pero no recibidos automáticamente en el buffer.</p>
+<ul>
+<li>El consumidor envía <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span></eq> mensajes vacíos al productor.</li>
+<li>Cada vez que el productor tiene un elemento para dar al consumidor, recibe un mensaje vacío y envía de regreso uno lleno.</li>
+</ul>
+<p>El <strong>número total de mensajes</strong> en el sistema permanece <strong>constante</strong> en el tiempo y se pueden almacenar en una <strong>cantidad de memoria conocida</strong> de antemano.</p>
+<ul>
+<li>Si el productor es más rápido: todos los mensajes acabarán llenos y el productor se bloqueará esperando un mensaje vacío.</li>
+<li>Si el consumidor es más rápido: todos los mensajes acabarán vacíos y el consumidor se bloqueará esperando un mensaje lleno.</li>
+</ul>
+<p>Una manera de direccionar los mensajes consiste en asignar a cada proceso una dirección única y <strong>direccionar los mensajes a los procesos</strong>. Otra alternativa es usar un <strong>buzón</strong>, una estructura de datos que se usa como lugar para colocar un determinado número de mensajes (normalmente especificado en su creación).</p>
+<ul>
+<li>El productor y el consumidor crean buzones con el tamaño suficiente como para contener <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span></eq> mensajes:
+<ul>
+<li>El <strong>productor</strong> envía mensajes con los datos actuales al buzón del consumidor</li>
+<li>El <strong>emisor</strong> envía mensajes vacíos al buzón del consumidor.</li>
+</ul>
+</li>
+<li>Cuando un proceso trate de enviar a un buzón que está <strong>lleno</strong>, se <strong>suspende</strong> hasta que se elimine un mensaje de ese buzón.</li>
+<li>El <strong>buzón</strong> de destino de ambos <strong>contiene</strong> los mensajes que se han <strong>enviado</strong> al proceso destino <strong>pero que todavía no se han aceptado</strong>.</li>
+</ul>
+<p>Otra forma de usar los buzones es para eliminar el uso del buffer completamente con la estrategia de <strong>encuentro</strong>:</p>
+<ul>
+<li>Si la operación <code>send</code> termina antes que la <code>receive</code>: el emisor se bloquea hasta que ocurre la operación <code>receive</code>, momento en el cual el mensaje se puede <strong>copiar directamente</strong> del emisor al receptor, <strong>sin buffer de por medio</strong>.</li>
+<li>Si la operación <code>receive</code> termina antes que la <code>send</code>: el receptor se blquea ahsta que ocurre una operación <code>send</code>.</li>
+</ul>
+<p>Es más <strong>fácil de implementar</strong> que un esquema de mensajes con buffer. Pero es <strong>menos flexible</strong> debido a que el emisor y receptor se ven obligados a ejecutarse a paso de bloqueo.</p>
+<img src="../../../img/soii/pasted-image-20250523171015.png" alt="Pasted image 20250523171015.png" loading="lazy">
+<h1>1.9 Barreras</h1>
+<p>Este método de sincronización está destinado a <strong>grupos de procesos</strong>, en vez de las situaciones con dos procesos de tipo productor-consumidor.
+Algunas aplicaciones se dividen en <strong>fases y tienen la regla</strong> de que <strong>ningún proceso puede continuar</strong> a la siguiente fase hasta que <strong>todos</strong> los procesos <strong>estén listos</strong> para hacerlo.</p>
+<p>Para lograr esto, se coloca una <strong>barrera</strong> ejecutando la primitiva <code>barrier</code>, <strong>al final de cada fase</strong>. Cuando un proceso llega ante la barrera, se <strong>bloquea</strong> hasta que todos llegan a ella.</p>
+<img src="../../../img/soii/pasted-image-20250523171334.png" alt="Pasted image 20250523171334.png" loading="lazy">
+<h1>1.10 Problemas clásicos del IPC</h1>
+<h2>1.10.1 Problema de los lectores y escritores</h2>
+<p>El <strong>problema de los lectores y escritores</strong> modela el <strong>acceso a una bd</strong>. En un sistema con muchos procesos que intenta leer y escribir (actualizar) en una bd, puede haber <strong>varios procesos leyendo</strong> la bd a la vez, pero si un proceso la está <strong>actualizando, ningún otro puede acceder</strong> a ella (ni siquiera los lectores).</p>
+<p>Una posible solución es que el <strong>primer lector</strong> en obtener acceso a la bd realizce una operación <code>down</code> en el semáforo <code>bd</code>. Los <strong>siguientes lectores incrementan un contador</strong> <code>cl</code>.</p>
+<p>A medida que los lectores van <strong>saliendo, decrementan</strong> <code>cl</code> y el último realiza un <code>up</code> en la <code>bd</code>, para permitir que un escritor bloqueado (si lo hay) entre.
+Mientras haya un lectores activo, se admitiran los siguientes. Por tanto, siempre que haya un suministro continuo de lectores, todos entrarán nada más lleguen, por lo que un <strong>escritor</strong> que intente entrar estará <strong>suspendido hasta que no haya un lector presente</strong>.</p>
+<p>Para evitar estas esperas en los escritores, se podría hacer que cuando llegue un lector y haya un escritor en espera, el <strong>lector se suspenda detrás del escritor</strong>. Así, cada escritor esperará a que terminen los lectores que estaban activos cuando llegó, pero no esperará a los que llegaron después de él. Así se logra una <strong>menor concurrencia</strong> y, por tanto, un menor rendimiento.</p>
+<img src="../../../img/soii/pasted-image-20250523172125.png" alt="Pasted image 20250523172125.png" loading="lazy">
+<h2>1.10.2 Problema de los Filósofos Comelones</h2>
+<p>El <strong>problema de los filśofos comelones</strong> modela procesos que compiten por el <strong>acceso exclusivo</strong> a un <strong>número limitado de recursos</strong>. Hay <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span></eq> filósofos sentados alrededor de una mesa circular, cada uno delante de un plato, que alternan entre comer y pensar. Para comer, necesitan dos tenedores. Hay un tenedor entre cada par de platos. Cuando un filósofo trata de comer, intenta adquirir sus tenedores izquierdo y derecho, <strong>uno a la vez</strong>, en cualquier <strong>orden</strong>. Si tiene éxito al adquirir ambos, come por un momento, deja los tenedores y después sigue pensando.</p>
+<p>La solución más obvia sería que <code>tomar_tenedor</code> provoque una <strong>espera</strong> hasta que el <strong>tenedor</strong> esté disponible y luego lo tome. Pero esto no funciona, porque si todos los filósofos toman sus tenedores izquierdos a la vez, ninguno podrá tomar el derecho y habrá un <strong>interbloqueo</strong>.</p>
+<img src="../../../img/soii/pasted-image-20250523173232.png" alt="Pasted image 20250523173232.png" loading="lazy">
+<img src="../../../img/soii/pasted-image-20250523173218.png" alt="Pasted image 20250523173218.png" loading="lazy">
+<p>Para evitar el interbloqueo, después de tomar un tenedor se <strong>comprueba si el otro está disponible</strong>. Si no lo está, el filósofo regresa el tenedor que había tomado, <strong>espera</strong> cierto tiempo y repite todo el proceso. Pero tampoco funciona, si todos los filósofos comienzan el algoritmo a la vez y toman sus tenedores izquierdos, verían que los derechos están ocupados, así que dejarían los izquierdos, esperarían, volverían a tomar todos a la vez los derechos, y así consecutivamente, entrando en <strong>inanición</strong>.</p>
+<p>Para evitar la inanición se puede hacer que la <strong>espera</strong> tenga una <strong>duración aleatoria</strong>. Así la probabilidad de bloqueo prolongado es muy baja. Aunque sea poco probable, <strong>puede fallar</strong>, por lo que no sirve para aplicaciones que requieren seguridad total.</p>
+<p>Para evitar el interbloqueo y la inanición se protegen las instrucciones que van después de la llamada a <code>pensar</code> mediante un <strong>semáforo binario</strong>. Antes de empezar a adquirir tenedores, el filósofos debe realizar un <code>down</code> sobre el. Esto tiene un error de rendimiento, porque <strong>no permite la concurrencia</strong>.</p>
+<p>Para conseguir el máximo paralelismo posible se usa un <strong>array</strong> <code>estado</code> para llevar registro de si cada filósofo está comiendo, pensando o hambriento. Un filósofo sólo se puede mover al estado de <strong>comer si ningún vecino está comiendo</strong>. Para ello se usa un array de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span></eq> semáforos de manera que los filósofos hambrientos puedan bloquearse si los tenedores que necesitan están ocupados.</p>
+<img src="../../../img/soii/pasted-image-20250523174120.png" alt="Pasted image 20250523174120.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-interbloqueos.html"><span class="nav-etiqueta">siguiente →</span>2. Interbloqueos</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

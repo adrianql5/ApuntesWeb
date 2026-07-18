@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. Clases y tipos de datos — apuntes de POO (segundo curso de Ingeniería Informática).">
+<title>2. Clases y tipos de datos · POO · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">poo</a><span class="miga-sep">/</span><span aria-current="page">2-clases-y-tipos-de-datos</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">POO · curso 2</p>
+    <h1>2. Clases y tipos de datos · POO</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<h1>2.1 Tipos de Datos Primitivos</h1>
+<ul>
+<li>Tienen un tamaño <strong>fijo</strong></li>
+<li>Tienen una <strong>correspondencia directa</strong> con los tipos de datos que es posible representar en un computador</li>
+<li>En el momento de sus declaración se realiza automáticamente la <strong>reserva de memoria</strong> para la variable</li>
+<li><strong>NO TIENEN MÉTODOS</strong>
+<img src="../../../img/poo/pasted-image-20250617154813.png" alt="archivos/imagenes/Pasted image 20250617154813.png" loading="lazy"></li>
+</ul>
+<h2>2.1.1 Wrappers</h2>
+<p>Los tipos de datos primitivos <strong>no son clases</strong>, puesto que no encapsulan ni datos ni métodos que acceden y modifican dichos datos, sino que están directamente vinculados a los <strong>valores de las variables</strong>.</p>
+<p><strong>Para hacer consistente el esquema de tipos de datos de Java</strong> con programación orientada o objetos de cada tipo de datos primitivos se han definido <strong>wrappers</strong>, que proporcionar <strong>métodos</strong> que facilitan operaciones comunes sobre los datos</p>
+<p>Los métodos de los wrappers de los tipos primitivos permiten <strong>obtener</strong> el valor del dato; <strong>convertir</strong> el dato a una cadena de texto y viceversa; o <strong>convertir</strong> el dato a otros tipos de datos primitivos.</p>
+<pre><code class="language-Java">Integer a = new Integer(10);
+System.out.println(&quot;Valor de a en decimales: &quot; + a.doubleValue());
+Integer b = new Integer(&quot;18&quot;);
+System.out.println(&quot;Valor de b: &quot; +b);
+</code></pre>
+<p>Esto nos daría como salida 10.0 y 18.</p>
+<h3>Cosas que una vez sepas lo que es el aliasing te serán útiles</h3>
+<h4>El aliasing de los wrappers</h4>
+<p><strong>Aliasing</strong> ocurre cuando dos o más referencias apuntan al mismo objeto en memoria. En Java, los wrappers (como <code>Integer</code>, <code>Double</code>, <code>Character</code>, etc.) son objetos, por lo tanto es posible que dos variables apunten al mismo objeto wrapper.</p>
+<pre><code class="language-java">Integer a = new Integer(5);
+Integer b = a; // b y a apuntan al mismo objeto
+b = 10;        // Ahora b apunta a un nuevo objeto, a sigue apuntando al original
+</code></pre>
+<p>En este ejemplo, al principio, <strong><code>a</code> y <code>b</code> apuntan al mismo objeto</strong> (<code>Integer(5)</code>), por lo que hay aliasing.</p>
+<p><strong>Nota:</strong></p>
+<ul>
+<li>Los wrappers en Java son <strong>inmutables</strong>, es decir, no puedes cambiar el valor interno después de la creación.</li>
+<li>Sin embargo, puedes cambiar a qué objeto apunta la referencia, pero no el contenido del objeto en sí.</li>
+<li>El aliasing ocurre entre referencias, no entre los valores internos.</li>
+</ul>
+<pre><code class="language-java">Integer x = Integer.valueOf(100);
+Integer y = x;         // Alias: x y y apuntan al mismo objeto Integer
+System.out.println(x == y); // true
+
+y = Integer.valueOf(200); // Ahora y apunta a otro objeto
+System.out.println(x == y); // false
+</code></pre>
+<ul>
+<li><strong>Sí, puede haber aliasing entre wrappers en Java.</strong></li>
+<li>Pero, dado que los wrappers son inmutables, el valor interno no puede cambiar a través del alias, solo la referencia puede cambiar de objeto.</li>
+</ul>
+<h4>La macabra integer pool</h4>
+<p>En Java, existe una especie de <strong>&quot;pool&quot; de objetos Integer</strong> para valores en el rango de <strong>-128 a 127</strong> (inclusive). Este mecanismo es similar al <strong>String pool</strong> pero aplicado a ciertos wrappers numéricos como <code>Integer</code>, <code>Short</code>, <code>Byte</code>, <code>Character</code> y <code>Long</code>.</p>
+<p>Cuando se crea un <code>Integer</code> <strong>Java reutiliza objetos existentes para valores entre -128 y 127</strong>. Si usamos el operador <code>==</code> para comparar dos <code>Integer</code> dentro de ese rango,  dará <code>true</code> si ambos provienen del pool. <code>==</code> <strong>COMPARA LAS REFERENCIAS NO EL VALOR</strong>.</p>
+<pre><code class="language-java">Integer a = 100;
+Integer b = 100;
+System.out.println(a == b); // true (ambos usan el pool)
+
+Integer c = 128;
+Integer d = 128;
+System.out.println(c == d); // false (no usan el pool, son objetos distintos)
+</code></pre>
+<p>El <strong>Integer pool</strong> mejora el rendimiento y reduce el uso de memoria para valores pequeños que son muy usados.</p>
+<p><strong>Respuesta corta:</strong><br>
+Sí, en el rango de -128 a 127 los <code>Integer</code> se comportan como el &quot;String pool&quot;: se reutilizan los objetos para ahorrar memoria y acelerar comparaciones.</p>
+<h3>Autoboxing &amp; Unboxing</h3>
+<p>El uso de wrappers proporciona a Java gran <strong>versatilidad</strong> en el manejo de datos, pero genera código <strong>difícil de entender</strong>.  El uso de <strong>autoboxing y unboxing</strong> resuelve este problema, ya que permite tratar un wrapper como si fuese un tipo de dato primitivo, y viceversa; pudiendo elegir en cada momento el comportamiento que se desee.</p>
+<ul>
+<li>
+<p><strong>Autoboxing:</strong> convierte un <strong>tipo primitivo</strong> a  un objeto de la correspondiente clase <strong>wrapper</strong>. Lo usamos cuando:</p>
+<ul>
+<li>Un método tiene como argumento un wrapper recibe un valor de <strong>tipo primitivo</strong></li>
+<li>A un <strong>tipo primitivo</strong> se le asigna un objeto de un wrapper</li>
+</ul>
+</li>
+<li>
+<p><strong>Unboxing:</strong> convierte un objeto de una clase <strong>wrapper</strong> al <strong>tipo primitivo</strong> correspondiente. Se usa cuando:</p>
+<ul>
+<li>Un método que tiene como argumento un <strong>tipo primitivo</strong> recibe un objeto un <strong>wrapper</strong>.</li>
+<li>A un <strong>tipo primitivo</strong> se le asigna un objeto de un <strong>wrapper</strong>.</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-Java">Integer a = 10; //autoboxing
+int a = new Integer(10)//unboxing
+</code></pre>
+<blockquote>
+<p>[!Buenas Prácticas]</p>
+<ul>
+<li>Normalmente, es <strong>preferible</strong> usar <strong>tipos primitivos</strong> porque simplifican el código</li>
+<li>Es mejor usar <strong>wrappers</strong> para <strong>convertir entre tipos primitivos</strong>, sobre todo cuando en esa conversión se manejan <strong>cadenas de texto</strong>.</li>
+</ul>
+</blockquote>
+<h1>2.2 Referencias</h1>
+<p>En Java los <strong>nombres de los objetos son referencias</strong> a la posición de memoria que está reservada para eellos.</p>
+<ul>
+<li>Cuando se asigna un <strong>objeto</strong> <code>A</code> otro <strong>objeto</strong> <code>B</code>, en realidad <strong>no se realiza una copia</strong> de la memoria que ocupa <code>A</code> en la posición de memoria que ocupa <code>B</code>.</li>
+<li>Se está realizando una <strong>asignación de la referencia del objeto <code>A</code> a la referencia al objeto <code>B</code></strong> , lo que es decir, ambas referencias apuntan a la misma posición de memoria.</li>
+<li>La memoria del objeto <code>A</code> ya <strong>no está disponible</strong>
+<img src="../../../img/poo/pasted-image-20241011180308.png" alt="archivos/imagenes/Pasted image 20241011180308.png" loading="lazy">
+<img src="../../../img/poo/pasted-image-20241011180401.png" alt="archivos/imagenes/Pasted image 20241011180401.png" loading="lazy"></li>
+</ul>
+<h2>2.2.1 Aliasing</h2>
+<ul>
+<li>El <strong>aliasing</strong> es la asignación de referencias entre dos objetos.</li>
+<li>Es una de las principales característas de la mayoría de los lenguajes orientados a objetos</li>
+<li><strong>Evita la encapsulación</strong> de datos pues permite modificar el valor de atributos desde métodos de fuera de sus clases. Por tanto, los programas son mucho más difíciles de mantener, ya que los atributos de tipo objeto se pueden modificar sin ningún tipo de control de su clase</li>
+</ul>
+<p>Otro ejemplo:</p>
+<pre><code class="language-Java">public static void main (String[] args){
+	Jugador jugador = new Jugador(&quot;Luis&quot;, Valor.EJERCITO_AZUL, mapa);
+	ArrayList &lt;Pais&gt; paises = jugador.getPaises(); //aliasing
+	paises.remove(0)
+}
+</code></pre>
+<h3>Cómo y cuándo evitar el aliasing</h3>
+<p>Es muy <strong>difícil desarrollar</strong> programas en los que nunca se use el aliasing, además <strong>evitarlo</strong> <strong>reduce el rendimiento</strong>, por lo que se debe seleccionar muy bien cuándo se evitará, pues no siempre es adecuado hacerlo.</p>
+<p>El aliasing sólo se puede vitar si se introduce manualmente código que genere una <strong>nueva referencia del mismo objeto</strong>. Este código tiene que:</p>
+<ul>
+<li><strong>Reservar</strong> memoria para el objeto</li>
+<li><strong>Copiar</strong> los <strong>atributos</strong> del objeto (si son objetos a su vez, se debe generar una nueva referencia para ellos también)</li>
+</ul>
+<p><strong>Método clone:</strong>
+El método <code>clone</code> genera una <strong>copia exacta</strong> de un objeto y la almacena en una <strong>posición diferente</strong> de la que ocupa el objeto original. El programador debe implementar el método para cada clase de cuyos objetos se desea realizar copias profundas.</p>
+<ul>
+<li><strong>Copia profunda:</strong> se reserva memoria para todos los atributos del objeto, incluso todo los <strong>elementos de un conjunto de datos</strong></li>
+</ul>
+<pre><code class="language-Java">@Override
+public Object clone(){
+	try{
+		super.clone();
+	}
+	catch(CloneNotSupportedException exc){
+		System.out.println(exc.getMessage());
+	}
+	Jugador jugador = new Jugador(nombre, color, (Mapa) mapa.clone());
+	ArrayList&lt;Pais&gt; paisesClonados = new ArrayList&lt;&gt;();
+
+	for(int i; i&lt;paises.size();i++){
+		paisesCLonados.add((Pais) paises.get(i).clone)
+	}
+
+	return jugador
+}
+</code></pre>
+<h1>2.3 Máquina Virtual de Java</h1>
+<p>Java es un lenguaje interpretado cuya ejecución corre a cargo de lo que se denomina <strong>máquina virtual de Java</strong>.
+<img src="../../../img/poo/pasted-image-20241011185647.png" alt="archivos/imagenes/Pasted image 20241011185647.png" loading="lazy"></p>
+<h1>2.4 Almacenamiento</h1>
+<h2>2.4.1 Almacenamiento de datos</h2>
+<p>Dependiendo del <strong>tipo de dato</strong> y del <strong>lugar</strong> del programa en el que se definen, los datos se almacenan en zonas de memoria diferentes.</p>
+<h3>Pila</h3>
+<p>Almacena datos relativos a la <strong>ejecución de un método</strong>, cuando este finaliza se <strong>eliminan automáticamente</strong> de memoria. Los datos que se almacenan en la pila siempre deben tener <strong>tamaño conocido</strong> (<em>el compilador necesita conocer con antelación cuánta memoria se va a reservar en la pila para mover el stack pointer al tope</em>):</p>
+<ul>
+<li>El <strong>código</strong> correspondiente a los métodos (<em>call stack</em>)</li>
+<li>Todos los <strong>tipos primitivos</strong> usados durante la ejecución de los métodos
+<ul>
+<li>Variables <strong>locales</strong></li>
+<li>Valores de los <strong>argumentos</strong></li>
+<li>Valores de <strong>retorno</strong></li>
+<li>Resultados <strong>parciales</strong></li>
+</ul>
+</li>
+<li>Las <strong>referencias a objetos en el programa</strong></li>
+</ul>
+<h3>Montón (Heap)</h3>
+<p>Zona de la memoria en la que el procesador no necesita conocer qué <strong>cantidad de datos</strong> se va a reservar ni cuánto <strong>tiempo</strong> van a estar disponibles</p>
+<ul>
+<li><strong>Objetos creados a lo largo de la ejecución del programa</strong> -&gt; <strong>incluyendo sus atributos aunque sean primitivos</strong> (incluyen a los wrappers, strings y arrays)</li>
+</ul>
+<img src="../../../img/poo/pasted-image-20241011190805.png" alt="archivos/imagenes/Pasted image 20241011190805.png" loading="lazy">
+<h2>2.4.2 Almacenamiento de Métodos</h2>
+<p>Una clase no ocupa memoria. Las instrucciones de los métodos se cargan en memoria (en la pila) cuando se <strong>crea un objeto</strong> de la clase a la que pertenecen.</p>
+<h1>2.5 Recolector de Basura</h1>
+<p>Se encarga de buscar en la memoria del programa  para <strong>identificar qué objetos se encuentra en uso y cuales no, y eliminar los objetos que no se usen mas</strong>.</p>
+<ul>
+<li>Corre en segundo plano tras el lanzamiento del programa</li>
+<li><strong>Impacto directo en el rendimiento de un programa</strong> porque la eliminación de los que no se usan facilita el acceso a objetos que se están utilizandos.</li>
+<li>Realiza una gestión <strong>más eficiente de la memoria</strong> (<em>evitandonos tener que hacer frees como en C</em>)</li>
+</ul>
+<h2>2.5.1 Proceso Básico de Marcado y Borrado</h2>
+<ol>
+<li><strong>Marcado:</strong> Se identifican qué zonas de la memoria están siendo usadas y cuáles no, lo cuál puede ser <strong>muy ineficiente</strong> si se deben analizar todos los objetos en el sistema</li>
+</ol>
+<img src="../../../img/poo/pasted-image-20250617214556.png" alt="archivos/imagenes/Pasted image 20250617214556.png" loading="lazy">
+<ol start="2">
+<li><strong>Borrado normal (<em>op1</em>):</strong> se eliminan de memoria los objetos que no tienen referencias asignadas durante más tiempo y mantiene una <strong>lista</strong> de posibles referencias a la parte de la <strong>memoria</strong> que puede ser utilizada.
+<img src="../../../img/poo/pasted-image-20250617214621.png" alt="archivos/imagenes/Pasted image 20250617214621.png" loading="lazy"></li>
+</ol>
+<ul>
+<li><strong>Borrado con compactación (<em>op1</em>):</strong> para mejorar rendimiento, además de borrar los objeto no referenciados, se compacta la memoria, moviendo los objetos referenciados a posiciones de memoria consecutivas.</li>
+</ul>
+<img src="../../../img/poo/pasted-image-20250617214635.png" alt="archivos/imagenes/Pasted image 20250617214635.png" loading="lazy">
+<p>Sin embargo las operaciones de marcado y compactación <strong>son muy ineficientes</strong>, por lo que debemos cambiar el esquema de gestión de memoria.</p>
+<h2>2.5.2 Estructura</h2>
+<p>En la mayoría de los programas, el uso y la eliminación de los objetos <strong>no sigue un comportamiento uniforme</strong> a lo largo del tiempo:</p>
+<ul>
+<li>El tiempo de supervivencia de los objetos es pequeño</li>
+<li>A medida que pasa el tiempo, cada vez se mantienen en memoria menos objetos
+Dividimos la memoria en varias partes, llamadas <strong>generaciones</strong>, para facilitar la gestión de la vida de los objetos.
+<img src="../../../img/poo/pasted-image-20241011193122.png" alt="archivos/imagenes/Pasted image 20241011193122.png" loading="lazy"></li>
+<li><strong>Young generation:</strong> donde se almacenan los objetos recién creados, a los que se les asigna una fecha. Está formada por el <strong>eden</strong> <strong>space</strong> y el <strong>survivor space</strong> (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord">0</span></span></span></span></eq> Y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord">1</span></span></span></span></eq>).
+<ul>
+<li>Cuando se llena se lanza una recolección de basura menor donde todos los threads se paran (<strong>RB MINOR</strong>). Es muy rápida y puede ser optimizada si se tienen que eliminar muchos objetos.</li>
+<li>Los objetos que hayan sobrevivido hasta llegar a la <strong>edad umbral</strong> se trasladan a la generación vieja.</li>
+</ul>
+</li>
+<li><strong>Old generation:</strong> almacena los objetos de larga duración
+<ul>
+<li>De manera muchos menos frecuente se lanza una recolección de basura mayor donde todos los threads se paran (<strong>RB MAYOR</strong>). Es mucho más lenta que la menor porque involucra a todos los objetos vivos.</li>
+</ul>
+</li>
+<li><strong>Permanent generation:</strong> almacena las clases y métodos usados durante la ejecución del programa
+<ul>
+<li>Se llena en tiempo de ejecución con metadatos sobre las clases que se utilizan durante la ejecución del programa (<strong>carga dinámica</strong>)</li>
+<li>En versiones posteriores se sustituye por el <strong>metaspace</strong></li>
+</ul>
+</li>
+</ul>
+<h2>2.5.3  Funcionamiento del método Avanzado</h2>
+<ol>
+<li>
+<p>Al inicio del programa la <strong>generación joven</strong> está vacía. Cualquier <strong>objeto recién</strong> creado  siempre se almacena inicialmente en el <strong>eden</strong>.</p>
+</li>
+<li>
+<p>Cuando el <strong>eden se llena</strong>, se lanza una <strong>recolección de basura menor</strong> en la que se eliminan objetos que no ser van a usar (<em>con referencia null</em>).</p>
+</li>
+<li>
+<p>En la <strong>RB minor</strong>, todos los objetos que son usados (<em>referenciados</em>) se mueven al espacio <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord">0</span></span></span></span></eq>, mientras que los objetos no usados (<em>no referenciados</em>) se eliminan del espacio <strong>eden</strong>.</p>
+</li>
+<li>
+<p>En la siguiente <strong>RB minor</strong>, los objetos usados del <strong>eden</strong> se mueven al espacio <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord">1</span></span></span></span></eq>, y los objetos del espacio <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord">0</span></span></span></span></eq> se mueven al espacio <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord">1</span></span></span></span></eq> aumentando su edad, y se eliminan del <strong>espacio</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord">0</span></span></span></span></eq> los no usados.</p>
+</li>
+<li>
+<p>En la siguiente <strong>RB minor</strong>, todos los objetos usados del <strong>eden</strong> se mueven al espacio <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord">0</span></span></span></span></eq>, mientras que los usados del espacio <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord">1</span></span></span></span></eq> se mueven al espacio <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord">0</span></span></span></span></eq> aumentando su edad, y se eliminan del espacio <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mord">1</span></span></span></span></eq> los objetos no usados</p>
+</li>
+<li>
+<p>En cada <strong>RB minor</strong> se comprueba si los objetos usados superan una determinada edad (8 en las imágenes) en cuyo caso <strong>son promocionados</strong> a la generación antigua, aumentando su edad</p>
+</li>
+</ol>
+<img src="../../../img/poo/pasted-image-20250618172733.png" alt="archivos/imagenes/Pasted image 20250618172733.png" loading="lazy">
+<h2>2.5.4 Gestión Avanzada de Referencias</h2>
+<p><strong>Eliminar una referencia no elimina al objeto de la memoria, simplemente hace que deje de apuntar al objeto. Esto deja al objeto sin dueño, y por tanto puede ser eliminado por el recolector de basura.</strong></p>
+<pre><code class="language-java">MiObjeto obj = new MiObjeto();
+obj = null; // Aquí, la referencia 'obj' deja de apuntar al objeto
+
+MiObjeto obj = new MiObjeto();
+obj = new MiObjeto(); // Ahora 'obj' apunta a un nuevo objeto, la referencia anterior se pierde
+
+void miMetodo() {
+    MiObjeto local = new MiObjeto();
+    // ... aquí 'local' existe
+} // Al salir del método, 'local' desaparece automáticamente
+
+List&lt;MiObjeto&gt; lista = new ArrayList&lt;&gt;();
+lista.add(new MiObjeto());
+lista.remove(0); // Se pierde la referencia desde la lista
+
+</code></pre>
+<p>Existen <strong>4 tipos de referencias</strong> que se diferencian entre sí en <strong>cómo las maneja el recolector de basura</strong>. Son heredados de la clase <code>Reference</code></p>
+<ul>
+<li>
+<p><strong>Referencias fuertes:</strong></p>
+<ul>
+<li>Son el tipo de referencia por <strong>defecto</strong> en Java.  Se crean automáticamente cuando se instancia un objeto, es decir, cuando haces algo como <code>Object obj = new Object()</code>.</li>
+<li>El recolector de basura <strong>elimina</strong> el objeto cuando no hay <strong>ninguna referencia fuerte</strong> apuntando a él (apunta a <code>null</code>).</li>
+</ul>
+</li>
+<li>
+<p><strong>Referencias débiles :</strong></p>
+<ul>
+<li>Se <strong>crean</strong> usando la clase <strong><code>WeakReference</code></strong> poniendo como <strong>argumento</strong> la referencia fuerte a la que apunta (al objeto al que apunta)</li>
+<li>Aunque se haya creado una referencia débil, el recolector de basura puede eliminar aun así la referencia fuerte a la que apunta</li>
+<li>Si sólo quedan referencias débiles a un objeto, el recolector de basura puede eliminar ese objeto.</li>
+<li>El <strong>acceso</strong> a la referencia fuerte no está asegurado, podría devolver <code>null</code>: se realiza con <code>get</code></li>
+<li>El recolector de basura las <strong>elimina</strong> de memoria cuando no apuntan a una referencia fuerte o su referencia fuerte es <code>null</code>
+<img src="../../../img/poo/pasted-image-20241011195624.png" alt="archivos/imagenes/Pasted image 20241011195624.png" loading="lazy"></li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li><strong>Referencias suaves:</strong>
+<ul>
+<li>Se crean usando la clase <strong><code>SoftReference</code></strong> poniendo como <strong>argumento</strong> la referencia fuerte a la que apunta (al objeto al que apunta).</li>
+<li>El <strong>acceso</strong> a la referencia fuerte está asegurado, aunque se elimine</li>
+<li>El recolector de basura elimina los objetos referenciados únicamente por referencias suaves sólo cuando el sistema necesita liberar memoria.</li>
+</ul>
+</li>
+</ol>
+<img src="../../../img/poo/pasted-image-20250618174634.png" alt="archivos/imagenes/Pasted image 20250618174634.png" loading="lazy">
+<ol start="3">
+<li><strong>Referencias fantasmas:</strong></li>
+</ol>
+<ul>
+<li>Se crean usando la clase <code>PhantomReference</code>, pasando el objeto y una <code>ReferenceQueue</code></li>
+<li>El método <code>get()</code> siempre devuelve <code>null</code>.</li>
+<li>Sirven para ser notificados cuando el objeto está a punto de ser recogido por el GC, permitiendo realizar tareas de limpieza.</li>
+<li>El objeto referenciado se pone en la cola antes de ser eliminado, pero nunca se puede acceder a él a través de la referencia fantasma.</li>
+<li>El <strong>acceso</strong> a la referencia fuerte está asegurado, aunque se elimine, se realiza a través de la cola con <code>poll</code>. <code>get</code> siempre devuelve <code>null</code>, las referencias fantasmas están pensadas para acceder a la memoria cuando las referencias fuertes no están disponibles
+<img src="../../../img/poo/pasted-image-20241011200850.png" alt="archivos/imagenes/Pasted image 20241011200850.png" loading="lazy"></li>
+</ul>
+<h3>Usos principales:</h3>
+<ul>
+<li><strong>Referencias débiles:</strong> para acceder dinámicamente a la referencia fuerte de un objeto hasta que este ya no esté disponible, evitando crear referencias indiscriminadas (aliasing).</li>
+<li><strong>Referencias suaves y fantasmas:</strong> para hacer <strong>cachés en memoria,</strong> de manera que se pueda acceder a referencias fuertes que ya no están disponibles en memoria.</li>
+</ul>
+<h1>2.6 Clase String</h1>
+<p>Los objetos que son cadenas de texto se puzeden crear de dos formas diferentes:</p>
+<ul>
+<li><strong>Directamente:</strong> asignando una cadena de texto al objeto, en cuyo caso se almacenan en una zona del montón llamada <strong>String Pool</strong>, de modo que <strong>cada vez que se asigna la misma cadena de texto, se apunta a la dirección que la contiene</strong></li>
+<li><strong>Indirectamente:</strong> el objeto se crea usando un constructor de string, en cuyo caso se almacenan en el montón, pero <strong>fuera del String Pool</strong>, aunque tenga el mismo valor que una cadena previa.</li>
+</ul>
+<img src="../../../img/poo/pasted-image-20241011202907.png" alt="archivos/imagenes/Pasted image 20241011202907.png" loading="lazy">
+<p><strong>String</strong> es una clase de Java, pero <strong>no se comporta</strong> como el resto de las clases en lo que respecta a la asignación entre objetos cuando se usan directamente cadenas de texto. Una cadena de texto es <strong>un objeto inmutable</strong>, es decir, una vez se ha reservado memoria y se le asigna un valor dado, no se puede modificar
+El uso indiscriminado de cadenas de texto puede <strong>disminuir mucho el rendimiento.</strong></p>
+<p>Si se van a realizar múltiples modificaciones sobre una cadena de texto, no se debería de utilizar la clase string. Se debería usar la clase StringBuffer si se vana usar múltiples operaciones sobre cadenas de texto, ya que no se reserva espacio de memoria cada vez que se genera una cadena de texto.</p>
+<img src="../../../img/poo/pasted-image-20250618180239.png" alt="archivos/imagenes/Pasted image 20250618180239.png" loading="lazy">
+<h1>2.7 Método Equals</h1>
+<ul>
+<li>Dos objetos son iguales si ocupan la <strong>misma posición de memoria</strong>. Esto es una condición muy <strong>restrictiva</strong>, ya que podrían existir dos objetos con los mismo atributos en posiciones de memoria distintas.</li>
+</ul>
+<pre><code class="language-java">Coche coche1 = new Coche();
+Coche coche2 = coche1; // coche1 y coche2 apuntan al mismo objeto
+System.out.println(coche1.equals(coche2)); // true
+</code></pre>
+<ul>
+<li>Dos objetos son iguales si son del <strong>mismo tipo</strong> y si los valores de todos sus <strong>atributos</strong> también son <strong>iguales</strong>. Eso obliga a que los dos objetos tengan los mismos valores de los atributos en el momento de la comparación y que los atributos sean inmutables.</li>
+</ul>
+<p><code>equals</code> es un método que indica si un objeto (el argumento) es igual a otro (desde el que se invoca). Todas las clases lo tienen, pues es heredado de la clase <code>Object</code></p>
+<ul>
+<li>La implementación heredada sigue la primera opción, ya que lo único que se conoce de cualquier objeto es su referencia.</li>
+<li>Se debe <strong>reimplementar</strong> comparando atributos inmutables, de modo que dos objetos son iguales si estos atributos tienen el mismo valor.</li>
+</ul>
+<pre><code class="language-java">@Override
+public boolean equals(Object obj) {
+    if (this == obj) {
+        return true; // Mismo objeto en memoria
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+        return false; // Distinto tipo de objeto o null
+    }
+    Coche coche = (Coche) obj;
+    return this.matricula.equals(coche.matricula);
+}
+</code></pre>
+<blockquote>
+<p>[! Buenas Prácticas]</p>
+<ul>
+<li>Todos los objetos que realicen comparaciones deben tener reimplementado el método `equals</li>
+<li>Los atributos <strong>inmutables</strong> pueden ser <strong>tipos primitvos, wrappers y strings</strong>.</li>
+</ul>
+</blockquote>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-encapsulacion.html"><span class="nav-etiqueta">← anterior</span>1. Encapsulación</a>
+  <a class="nav-siguiente" href="3-conjuntos-de-datos.html"><span class="nav-etiqueta">siguiente →</span>3. Conjuntos de datos</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

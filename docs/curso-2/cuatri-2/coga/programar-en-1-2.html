@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Programar en 1.2 — apuntes de COGA (segundo curso de Ingeniería Informática).">
+<title>Programar en 1.2 · COGA · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">coga</a><span class="miga-sep">/</span><span aria-current="page">programar-en-1-2</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">COGA · curso 2</p>
+    <h1>Programar en 1.2 · COGA</h1>
+  </header>
+  <div class="prosa">
+<h1>1 Crear una Ventana</h1>
+<pre><code class="language-c++">#include &lt;windows.h&gt;
+#include &lt;glut.h&gt;
+#include &lt;gl.h&gt;
+#include &lt;glu.h&gt;
+
+const int W_WIDTH = 500;	// Ancho de la ventana
+const int W_HEIGHT = 500;	// Alto de la ventana
+
+void myDibujo() {
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT); //borramos ambos buffers
+
+	glBegin(GL_POINTS); //Indicamos que vamos a dibujar puntos
+	glColor3f(0.0, 1.0, 0.0); //Indicamos el color del punto
+	glVertex3d(0.5, 0.5,0.5); 
+
+	glFlush(); //limpia la pantalla (forzamos la impresion del dibujo por pantalla mejor dicho)
+	glSwapBUffers();//al usar double buffer debemos forzar el intercambio
+}
+
+
+void iniciar() {
+	glClearColor(1, 0, 0, 1); //le decimos que limpie la pantalla de rojo
+	glClearDepth(1.0); //especificamos el valor de limpieza del z-buffer
+}
+
+int main(int argc, char** argv) {
+
+	glutInit(&amp;argc, argv);//con esto iniciamos glut
+
+	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);//Indicamos que vamos a usar RGBA y un buffer doble
+
+	glutInitWindowSize(W_WIDTH, W_HEIGHT); //indicamos las dimensiones de nuestra ventana
+	glutInitWindowPosition(100, 100); //indicamos la posicion de la ventana
+	glutCreateWindow(&quot;FUCK USC&quot;); //creamos nuestra ventana y le ponemmos un titulo descriptivo
+
+	iniciar();
+
+	glutDisplayFunc(myDibujo); //le indicamos que funcion debe usar para dibujar en pantalla
+
+	glutMainLoop(); //esto es un bucle infinito que crea glut para que se muestre todo el rato la imagen en pantalla
+
+	return 0;
+}
+</code></pre>
+<p><strong>Comentarios:</strong></p>
+<ul>
+<li>Usamos un buffer doble-&gt; implica que se va dibujando en un buffer la imagen y después se intercambia con el otro buffer.
+<img src="https://docs.oracle.com/javase/tutorial/figures/extra/fullscreen/doubleBuffering.gif" alt="Double Buffering and Page Flipping (The Java™ Tutorials &gt; Bonus &gt;  Full-Screen Exclusive Mode API)"></li>
+<li>RGBA-&gt; red green blue y a es para la intensidad</li>
+<li>Usamos el z-buffer-&gt; que almacena información sobre que objetos están más alejados de la cámara, le damos como valor por defecto 1.0 al borrado de este buffer, si ponemos 0.0 no se verá casi ningún objeto.
+<img src="../../../img/coga/pasted-image-20250228223346.png" alt="Pasted image 20250228223346.png" loading="lazy"></li>
+</ul>
+<h1>2 Modelado</h1>
+<h2>2.1 Primitivas</h2>
+<p>Una <strong>primitiva</strong> es la interpretación de un conjunto ordenado de vértices que se conectan de manera distinta en función del tipo de primitiva.</p>
+<p>Para especificar un vértice se usa <code>glVertex</code>, que puede tomar de 2 a 4 parámetros de cualquier tipo numérico (2D con <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.044em;">z</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></eq> si se especifican 2 parámetros, 3D si se especifican 3 y coordenadas homogéneas si se especifican 4).</p>
+<p>Para delimitar los vértices se usa <code>glBegin(MACRO)</code> y <code>glEnd()</code>.</p>
+<img src="../../../img/coga/pasted-image-20250228224206.png" alt="Pasted image 20250228224206.png" loading="lazy">
+>[!Nota]
+>Si se introduce un número incorrecto de vértices, se ignorarán los últimos sobrantes
+<p>Por defecto, un punto se dibuja como un píxel en la pantalla y una línea como un segmento de un píxel de grosor.</p>
+<ul>
+<li>El tamaño de los puntos se puede cambiar con <code>glPointSize(tamaño)</code> y el grosor de las líneas con <code>glLineWidth(grosor)</code>.</li>
+<li>El color de los puntos se puede cambiar con <code>glColor3f(R,G,B)</code></li>
+</ul>
+<img src="../../../img/coga/pasted-image-20250429184615.png" alt="Pasted image 20250429184615.png" loading="lazy">
+<pre><code class="language-c++">#include &lt;windows.h&gt;
+#include &lt;glut.h&gt;
+#include &lt;gl.h&gt;
+#include &lt;glu.h&gt;
+
+
+
+void myDibujo() {
+	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+	glBegin(GL_LINES); //Indicamos que vamos a dibujar puntos
+	glColor3f(1.0f, 0.0f, 0.0f); //Indicamos el color del punto
+	glVertex3f(0.0f, 0.0f,0.0f);
+	glVertex3f(0.0f, 5.0f,0.0f);
+	glEnd(); //Le decimos que hemos acabado
+
+	//No es necesario poner todo el rato glEnd y GLbegin si vais a usar un mismo tipo de figura, pero es util para entender vuestro c�digo
+	
+	glFlush();
+	glutSwapBuffers(); 
+}
+
+</code></pre>
+<h2>2.2 Listas de visualización</h2>
+<p>Una <strong>lista de visualización</strong> es un índice que nos permite renderizar un conjunto de vértices previamente almacenados simplemente invocándola.</p>
+<ul>
+<li><code>glGenLists(rango)</code>: obtiene idenficadores válidos para listas de visualización, donde <code>rango</code> es el número de índices contiguos deseados</li>
+<li><code>glNewList(lista,modo)</code>: define una nueva lista de visualización con el identificador <code>lista</code> y <code>modo</code> <code>GL_COMPILE</code> o <code>GL_COMPILE_AND_EXECUTE</code>.</li>
+<li><code>glEndList()</code>: finaliza la definición de la lista de visualización.</li>
+<li><code>glCallList(lista)</code>: invoca la lista de visualización con identificador <code>lista</code>.</li>
+</ul>
+<pre><code class="language-c++">#include &lt;GL/glut.h&gt;
+
+GLuint miLista; //declaro la lista
+
+void crearDisplayList() {
+    miLista = glGenLists(1);  // Generar un id 
+    glNewList(miLista, GL_COMPILE);  // Inicia la lista en modo COMPILE -&gt; se guarda pero no se ejecuta
+        glColor3f(1.0, 0.0, 0.0);  // Color rojo
+        glBegin(GL_TRIANGLES);  // Dibujar un triángulo
+            glVertex2f(-0.5, -0.5);
+            glVertex2f(0.5, -0.5);
+            glVertex2f(0.0, 0.5);
+        glEnd();
+    glEndList();  // Finalizar la lista
+}
+
+void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
+    glCallList(miLista);  // Llamar a la lista para dibujar el triángulo
+    glFlush();
+}
+
+int main(int argc, char** argv) {
+    glutInit(&amp;argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    glutInitWindowSize(500, 500);
+    glutCreateWindow(&quot;Display Lists en OpenGL&quot;);
+    
+    crearDisplayList();  // Crear la Display List
+
+    glutDisplayFunc(display);
+    glutMainLoop();
+
+    return 0;
+}
+</code></pre>
+<h2>2.3 Formas Básicas de GLUT</h2>
+<ul>
+<li>Cono-&gt; <code>glutSolidCone()</code></li>
+<li>Toro-&gt; <code>glutSolidTorus()</code></li>
+<li>Dodecaedro-&gt; <code>glutSolidDodecahedron()</code></li>
+<li>Octaedro-&gt; <code>glutSolidOctahedron()</code></li>
+<li>Icosaedro-&gt; <code>glutSolidIcosahedron()</code></li>
+<li>Tetera-&gt; `glutSolidTeapot().</li>
+</ul>
+<p>También existe la versión <code>Wire</code> en vez de <code>Solid</code></p>
+<h1>3 Transformaciones</h1>
+<p><code>glMatrixMode(GL_MODELVIEW)</code>: para especificar que se desea trabajar con la matriz de transformación de modelo.
+<code>glLoadIdentity(void)</code>: reemplaza la matriz actual por la identidad 4x4</p>
+<p>Hay dos posibles métodos para colocar los valores apropiados en la matriz de transformación:</p>
+<ul>
+<li>Como la matriz se almacena como un <strong>array de 16 elementos</strong>, estos se pueden establecer <strong>manualmente</strong>. <code>glLoadMatrix(array)</code> para carga el <code>array</code> en la matriz activa.</li>
+</ul>
+<img src="../../../img/coga/pasted-image-20250429205116.png" alt="Pasted image 20250429205116.png" loading="lazy">
+- La otra alternativa a estas funciones es usar las funciones de **transformación** (`glTranslatef`, `glRotatef`, `glScalef`). Las matrices $T$, $R$ y $S$ que generan estas funciones se van multiplicando sobre la matriz activa. El productos de matrices **no es conmutativo**, así que hay que tener cuidado con el orden en el que se usan estas funciones: **la primera función en aplicarse será la última en escribirse en el código**.
+	- Los movimientos que depende unos de otros se pueden heredar consecutivamente. Para ello, se almacenan versiones de la matriz de transformación en una **pila**, de manera que **la actual será la que está más arriba**.
+	- `glPushMatrix()`: almacena en la pila una copia de la matriz activa en la segunda posición de la pila
+	- `glPopMatrix()`: elimina de la pila la matriz que está en la primera posición.
+<img src="../../../img/coga/pasted-image-20250429210038.png" alt="Pasted image 20250429210038.png" loading="lazy">
+<img src="../../../img/coga/pasted-image-20250429210148.png" alt="Pasted image 20250429210148.png" loading="lazy">
+<img src="../../../img/coga/pasted-image-20250429210228.png" alt="Pasted image 20250429210228.png" loading="lazy">
+<h1>4 Visión</h1>
+<p>En OpenGL 1.2 el trabajo sobre la cámara (la view matrix y projection matrix) se reúne en la <strong>matriz de proyección</strong> <code>GL_PROJECTION</code>.</p>
+<ul>
+<li>
+<p><code>glMatrixMode(GL_PROJECTION)</code>: para especificar que se desea trabajar con la matriz de proyección.</p>
+</li>
+<li>
+<p><code>glLoadIdentity(void)</code>: reemplaza la matriz actual por la identidad 4x4</p>
+</li>
+<li>
+<p><code>gluLookAt(eye_x, eye_y, eye_z, at_x, at_y, at_z, up_x, up_y, up_z)</code>: para determinar <strong>dónde y cómo está dispuesta la cámara</strong>.</p>
+<ul>
+<li><code>eye</code> indica el punto dónde está la cámara (por defecto(0,0,0))</li>
+<li><code>at</code> indica el punto hacia el que mira la cámara (por defecto (0,0,-1))</li>
+<li><code>up</code> indica el vector de orientación de la cámara (por defecto (0,1,0))</li>
+</ul>
+</li>
+<li>
+<p><code>glOrtho3D(left, right, top, down, near, far)</code>: para realizar una <strong>proyección ortográfica</strong></p>
+<ul>
+<li>Los  parámetros delimitan el frustrum, que tiene forma de cubo (por defecto (-1,1,-1,1,-1,1)).</li>
+<li>Una vez definido el frustrum, se pueden generar las diferentes proyecciones multivista moviendo la cámara.</li>
+</ul>
+</li>
+</ul>
+<img src="../../../img/coga/pasted-image-20250429212153.png" alt="Pasted image 20250429212153.png" loading="lazy">
+<ul>
+<li><code>gluPerspective(fovy, aspect, near, far)</code>: para realizar una <strong>proyección perspectiva</strong>
+<ul>
+<li><code>fovy</code> es el ángulo de de apertura del frustrum, normalmente 45 o 60</li>
+<li><code>aspect</code> es la razón de aspecto (alto/ancho del PP), normalmente 1:1, 4:2, 16:9...</li>
+<li><code>near</code> determina la distancia desde la cámara hasta el PP.</li>
+<li><code>far</code> determina la distancia desde la cámara hasta el fondo del frustrum</li>
+</ul>
+</li>
+</ul>
+<img src="../../../img/coga/pasted-image-20250429212233.png" alt="Pasted image 20250429212233.png" loading="lazy">
+<img src="../../../img/coga/pasted-image-20250429212203.png" alt="Pasted image 20250429212203.png" loading="lazy">
+<h1>5 Iluminación (crazy shi)</h1>
+<p>Para iluminar una escena en OpenGl hacen falta varios <strong>procesos</strong>:</p>
+<ul>
+<li>Iluminar la escena</li>
+<li>Indicar cómo es el <strong>modelo de iluminación</strong></li>
+<li>Indicar las <strong>propiedades de los materiales</strong>.</li>
+</ul>
+<p>Las habilitaciones necesarias para llevar a cabo estos procesos se realizan mediante la función <code>glEnable</code> (normalmente antes del <code>glutMainLoop</code>):</p>
+<ul>
+<li><code>glEnable(GL_DEPTH_TEST)</code>: habilita el <strong>buffer de profundidad</strong>, aumenta la velocidad.</li>
+<li><code>glEnable(GL_CULL_FACE)</code>: habilita la <strong>ocultación de caras traseras</strong>, aumenta la velocidad.</li>
+<li><code>glEnable(GL_LIGHTING)</code>: habilita los <strong>cálculos de iluminación</strong>.</li>
+<li><code>glEnable(GL_LIGHTX)</code>: habilita una <strong>luz concreta</strong> (la número X).</li>
+<li><code>glEnable(GL_COLOR_MATERIAL)</code>: habilita el <strong>seguimiento del color</strong>.
+<ul>
+<li><code>glColorMaterial(face,Mode)</code>: indica la cara sobre la que se hace el seguimiento y para qué luces se lleva a cabo. Cada objeto reflejará estas luces según la definición previa de su color.</li>
+</ul>
+</li>
+<li><code>glShadelModel(GL_FLAT/GL_SMOOTH)</code>: habilitar el <strong>modelo de sombreado</strong>.</li>
+</ul>
+<h2>5.1 Tipos de Luces</h2>
+<h3>Luces Básicas</h3>
+<p>Modelo de iluminación general (sin poner luces) que define una <strong>luz ambiente básica</strong> y especifica cómo se realiza la iluminación de la escena en cuanto a si las luces afecta a las dos <strong>caras</strong> de un objeto. Propiedades (por defecto):</p>
+<ul>
+<li><code>glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambiente)</code>, valores de la componente ambiente base</li>
+<li><code>glLightModelfv(GL_LIGHT_MODEL_TWO_SIDE, TRUE)</code>, indica que las luces afectan a amabas caras de un material.</li>
+<li><code>glLightModelfv(GL_LIGHT_MODEL_LOCAL_VIEWER, TRUE)</code>, coloca el modo de cálculo con el observador local, si no, todos los cálculos se hacen como si el observador estuviese situado sobre el eje Z.</li>
+</ul>
+<h3>Luces Direccionales</h3>
+<p>Están situadas en el <strong>infinito</strong> y <strong>no tienen atenuación</strong>. La dirección por defecto es (0,0,1,0).</p>
+<pre><code>float direccion[4]={1,1,1,0}
+glLightfv(GL_LIGHT0, GL_POSITION, direccion)
+</code></pre>
+<img src="../../../img/coga/pasted-image-20250429213822.png" alt="Pasted image 20250429213822.png" loading="lazy">
+<h3>Luces Locales</h3>
+<p>Se definen como las direccionales, pero el cuarto elemento del vector vale 1.</p>
+<pre><code>float posicion[4] = {1,1,1,1}
+float direccion[4] = {1,1,1,1}
+glLightfv(GL_LIGHT_0, GL_POSITION, posicion)
+glLightfv(GL_LIGHT_0, GL_DIRECTION, direccion)
+</code></pre>
+<img src="../../../img/coga/pasted-image-20250429214039.png" alt="Pasted image 20250429214039.png" loading="lazy">
+<h3>Focos de luz</h3>
+<p>Se definen als locales pero con una determinada <strong>apertura</strong>.
+<code>glLightf(GL_LIGHT_0, GL_SPOT_CUTOFF, angulo)</code>, angulo entre 0 y 180.
+<img src="../../../img/coga/pasted-image-20250429214152.png" alt="Pasted image 20250429214152.png" loading="lazy"></p>
+<h2>5.2 Propiedades de la Luz</h2>
+<p>Para especificar las propiedades de la luz:</p>
+<ul>
+<li><code>glLightf(Luz, Parámetro, Valor)</code> (escalar)</li>
+<li><code>glLightfv(Luz, Parámetro, PunteroAVector)</code> (vector)
+<img src="../../../img/coga/pasted-image-20250429214417.png" alt="Pasted image 20250429214417.png" loading="lazy"></li>
+</ul>
+<h2>5.6 Propiedades de los Materiales</h2>
+<p>El modelo de iluminación de Opengl aproxima el <strong>color</strong> de un material en función de la luz que <strong>indice</strong> sobre él y la que es capaz de <strong>reflejar</strong>.</p>
+<p>Las propiedades sobre los <strong>colores</strong>, indican cómo influye cada una de las propiedades de un rayo de luz sobre el objeto.</p>
+<ul>
+<li><code>GL_AMBIENT</code>: comportamiento respecto al componente <strong>ambiente</strong> de la luz</li>
+<li><code>GL_DIFFUSE</code>: Comportamiento respecto al componente <strong>difuso</strong> de la luz.
+<ul>
+<li>Ambas determinan el color del material y suelen tener valores aproximados sino iguales</li>
+</ul>
+</li>
+<li><code>GL_SPECULAR</code>: comportamiento respecto al componente <strong>especular</strong> de la luz.
+<ul>
+<li>Se suele definir blanca o del color de la luz, de manera que los reflejos del material se degradan desde el color base de la luz incidente hasta el color definido en esta propiedad.</li>
+</ul>
+</li>
+</ul>
+<p>Las propiedades sobre la capacidad de <strong>reflexión</strong>:</p>
+<ul>
+<li><code>GL_SHININESS</code>: concentración de los puntos que van a <strong>reflejar</strong> la luz. Puede ser uno sólo o toda la superficie del objeto. Cuanto mayor, mas metálico ([0,128]) por defecto 0</li>
+<li><code>GL_EMISSION</code>: capacidad de simular la <strong>emisión</strong> de luz sin ser propiamente una fuente. Se especifican los colores de la luz que emite. Se usa para simular estrellas, lámparas o simulares.</li>
+</ul>
+<p>Para especificar las propiedades del material en cada polígono:</p>
+<ul>
+<li><code>void glMaterial{if}{v}(Cara, parámetro, punteroAVector)</code></li>
+</ul>
+<p><img src="../../../img/coga/pasted-image-20250429215449.png" alt="Pasted image 20250429215449.png" loading="lazy"><img src="../../../img/coga/pasted-image-20250429215513.png" alt="Pasted image 20250429215513.png" loading="lazy"></p>
+<h2>5.7 Cálculo del color en cada Vértice</h2>
+<img src="../../../img/coga/pasted-image-20250429215831.png" alt="Pasted image 20250429215831.png" loading="lazy">
+<h2>5.8 Sombreado Plano</h2>
+<p><strong>Cada cara</strong> tiene una <strong>única normal</strong> y cada uno de los puntos que la forman tiene el <strong>mismo color</strong>. La normal de cada cara se puede <strong>calcular</strong> a partir de los vértices o se puede <strong>especificar</strong> para un conjunto de ellos. Es el modelo de iluminación más <strong>simple y eficiente</strong>.
+<code>glShadelModel(GL_FLAT)</code></p>
+<h2>5.9 Sombreados de Interpolación</h2>
+<h3>Gourard Shading</h3>
+<p><strong>Cada vértices</strong> tiene su <strong>propia normal</strong>y el color de cada punto de las caras se calcula mediante <strong>interpolación bilineal de los colores de de sus vértices</strong>. La normal de cada vértice se calcula por defecto como la <strong>media de las normales de las caras</strong> (calculadas a partir de los vértices que las forman) de las que forma parte ese vértice. También se puede <strong>especificar para cada vértice</strong>. Da un efecto de sombreado suave más <strong>realista</strong> para superficies <strong>curvas</strong>.
+<code>glEnable(GL_SMOOTH)</code>
+<code>glShadeModel(GL_SMOOTH)</code>
+<img src="../../../img/coga/pasted-image-20250429220704.png" alt="Pasted image 20250429220704.png" loading="lazy">
+<img src="../../../img/coga/pasted-image-20250429220711.png" alt="Pasted image 20250429220711.png" loading="lazy"></p>
+<h3>Phong Shading</h3>
+<p><strong>Cada vértice</strong> tiene su <strong>propio normal</strong> y la <strong>normal de cada punto de las caras</strong> se calcula mediante <strong>interpolación bilineal</strong>. Es la más <strong>realista</strong> de todas, pero consume más <strong>recursos</strong>. OpenGL <strong>no la implementa</strong> directamente, es <strong>responsabilidad del programador</strong> interpolar las normales y asociarlas a todos los puntos</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="7-otras-tecnicas.html"><span class="nav-etiqueta">← anterior</span>7. Otras Técnicas</a>
+  <a class="nav-siguiente" href="programar-en-3-3.html"><span class="nav-etiqueta">siguiente →</span>Programar en 3.3</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

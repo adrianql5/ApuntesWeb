@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="3. Objetos Distribuidos — apuntes de COMDIS (tercer curso de Ingeniería Informática).">
+<title>3. Objetos Distribuidos · COMDIS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">comdis</a><span class="miga-sep">/</span><span aria-current="page">3-objetos-distribuidos</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">COMDIS · curso 3</p>
+    <h1>3. Objetos Distribuidos · COMDIS</h1>
+  </header>
+  <div class="prosa">
+<h1>3.1 Evolución del Paradigma: Del Mensaje al Objeto</h1>
+<p>Para entender dónde estamos, primero debemos contrastar este nuevo modelo con lo que ya conoces (Sockets/Paso de Mensajes).</p>
+<h2>3.1.1 Paso de Mensajes (Nivel Bajo)</h2>
+<ul>
+<li><strong>Enfoque:</strong> Orientado a <strong>datos</strong>.</li>
+<li><strong>Funcionamiento:</strong> Simula una conversación humana. Un proceso envía un mensaje formateado y espera que el otro lo interprete.</li>
+<li><strong>Acoplamiento:</strong> Alto. Los procesos deben estar activos y sincronizados; si el enlace cae, la colaboración falla.</li>
+<li><strong>Limitación:</strong> En aplicaciones complejas con miles de interacciones, interpretar mensajes y mantener protocolos se vuelve una tarea &quot;inabordable&quot;.</li>
+</ul>
+<img src="../../../img/comdis/pasted-image-20251212153753.png" alt="Pasted image 20251212153753.png" loading="lazy">
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p><strong>Orientado a datos</strong> es como mandar una carta o formulario. El énfasis está en el <strong>contenido</strong> del mensaje. Los procesos intercambian paquetes de datos con un formato acordado y el receptor debe abrir el paquete, leer los datos y decidir qué hacer con ellos. Es menos intuitivo porque te obliga a pensar en protocolos de comunicación en lugar de en la lógica del programa.</p>
+</div>
+<h2>3.1.2 Objetos Distribuidos (Nivel Alto)</h2>
+<ul>
+<li><strong>Enfoque:</strong> Orientado a <strong>acciones</strong>.</li>
+<li><strong>Abstracción:</strong> Trata los recursos de la red como objetos encapsulados. Los datos pasan a un segundo plano (son meros parámetros).</li>
+<li><strong>Ventaja:</strong> Es más natural para el desarrollo de software moderno (POO), aunque conceptualmente sea menos intuitivo para los humanos que &quot;enviar un mensaje&quot;.</li>
+</ul>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p><strong>Orientado a acciones</strong> es como dar una orden directa. El énfasis está en <strong>invocar una operación</strong> (un verbo, una acción). No piensas en &quot;enviar datos&quot;, sino en ejecutar una función específica (método) sobre un objeto, pasando los datos simplemente como argumentos. Aunque ocurre red por debajo, para ti como programador es &quot;pedir que se haga algo&quot;.</p>
+</div>
+<img src="../../../img/comdis/pasted-image-20251212153710.png" alt="Pasted image 20251212153710.png" loading="lazy">
+<h1>3.2 Conceptos Fundamentales</h1>
+<p>Antes de escribir código, debemos definir rigurosamente la terminología arquitectónica.</p>
+<h2>3.2.1 Tipos de Objetos y Alcance</h2>
+<p>La distinción fundamental no es física (ordenadores distintos), sino lógica (espacios de memoria distintos).</p>
+<ul>
+<li><strong>Objeto Local:</strong> Es un objeto convencional. Sus métodos solo pueden ser invocados por referencias que residen en la misma <strong>Máquina Virtual (JVM)</strong>. La llamada es directa a través de la pila de ejecución (stack).</li>
+<li><strong>Objeto Distribuido (Remoto):</strong> Es un objeto que reside en una JVM distinta (ya sea en el mismo ordenador o en otro conectado por red). Para invocarlo, el cliente debe utilizar mecanismos de red, ya que no tiene acceso directo a su memoria.</li>
+</ul>
+<h2>3.2.2 La Arquitectura de Intermediarios (Proxies)</h2>
+<p>Dado que el cliente no puede acceder físicamente a la memoria del servidor, necesitamos una arquitectura que cree la <strong>ilusión de localidad</strong> (transparencia de red).</p>
+<ul>
+<li><strong>Objeto Servidor (Implementación):</strong> La instancia real de la clase que ejecuta la lógica del negocio. Reside en la memoria (Heap) del servidor.</li>
+<li><strong>Referencia Remota:</strong> Un identificador único que permite localizar al objeto específico dentro de un servidor específico en la red.</li>
+<li><strong>RMI Registry (Registro):</strong> Un servicio de nombres (similar a una guía telefónica o DNS) donde el servidor registra (publica) sus objetos remotos asociados a un nombre, y el cliente los busca para obtener su referencia.</li>
+</ul>
+<div class="callout callout-info">
+<p class="callout-titulo">**Exportar un objeto** significa indicar a la JVM que ese objeto estará disponible para recibir llamadas externas. Esto implica abrir un puerto TCP y dejar un hilo de ejecución a la escucha de peticiones para ese objeto.</p>
+</div>
+<h3>El Mecanismo de Stub y Skeleton</h3>
+<p>La comunicación sigue el patrón <em>Proxy</em>. El flujo <strong>real</strong> de una invocación remota es:</p>
+<ol>
+<li><strong>Cliente:</strong> Invoca un método sobre el <strong>Stub</strong> (creyendo que es el objeto real).</li>
+<li><strong>Stub (Proxy del Cliente):</strong>
+<ul>
+<li>Realiza el <strong>Marshalling</strong> (serialización): convierte los argumentos del método en un flujo de bytes compatible con la red.</li>
+<li>Envía la petición a través de la red usando el sistema de transporte.</li>
+</ul>
+</li>
+<li><strong>Red:</strong> Los bytes viajan del cliente al servidor.</li>
+<li><strong>Skeleton (Dispatcher del Servidor):</strong>
+<ul>
+<li>Recibe la petición de red.</li>
+<li>Realiza el <strong>Unmarshalling</strong> (deserialización): reconstruye los argumentos originales a partir de los bytes recibidos.</li>
+<li>Identifica qué método se quiere llamar.</li>
+</ul>
+</li>
+<li><strong>Invocación Real:</strong> El Skeleton llama al método en el <strong>Objeto Servidor</strong> real.</li>
+<li><strong>Retorno:</strong> El Objeto Servidor devuelve el resultado al Skeleton, quien lo empaqueta (<strong>Marshalling</strong>) y lo envía de vuelta al Stub (que hará el <strong>Unmarshalling</strong> final para el cliente).</li>
+</ol>
+<div class="callout callout-note">
+<p class="callout-titulo">Nota Técnica En versiones modernas de Java (post-1.2), los _Skeletons_ explícitos ya no se generan manualmente. La JVM utiliza **Reflexión (Reflection)** y Proxies dinámicos para manejar este proceso, pero el concepto teórico de &quot;Skeleton&quot; como la pieza que desempaqueta en el lado servidor sigue siendo válido para entender la arquitectura.</p>
+</div>
+<div class="callout callout-info">
+<p class="callout-titulo">Analogía: El Empresario y el Intérprete Imagina que quieres hablar con un empresario japonés (el **Objeto Servidor**) pero tú solo hablas español.</p>
+<ul>
+<li>
+<p><strong>El Stub (Tu intérprete):</strong> Está contigo. Tú le hablas en español. Él &quot;empaqueta&quot; (traduce) tu mensaje y lo envía por teléfono. Para ti, hablar con el intérprete es como hablar con el empresario.</p>
+</li>
+<li>
+<p><strong>La Red:</strong> La línea telefónica.</p>
+</li>
+<li>
+<p><strong>El Skeleton (El secretario del empresario):</strong> Está en Japón. Recibe el mensaje, lo &quot;desempaqueta&quot; (traduce al japonés) y se lo dice al empresario. Luego toma la respuesta del empresario, la traduce y te la envía de vuelta.</p>
+</li>
+</ul>
+<p>El <strong>Soporte de Ejecución (Runtime)</strong> sería la compañía telefónica que garantiza que la señal llegue de un lado a otro</p>
+</div>
+<img src="../../../img/comdis/pasted-image-20251212153832.png" alt="Pasted image 20251212153832.png" loading="lazy">
+<h1>3.3 De RPC a RMI: El salto Tecnológico</h1>
+<h2>3.1 Remote Procedure Call (RPC)</h2>
+<p>RMI no nació de la nada. Su ancestro es <strong>RPC</strong>, popularizado en los años 80.</p>
+<ul>
+<li>En RPC, un proceso llama a un <strong>procedimiento</strong> (función C) en otro proceso</li>
+<li>Utiliza herramientas como <code>rpcgen</code> para crear los stubs automáticamente.</li>
+</ul>
+<img src="../../../img/comdis/pasted-image-20251212153852.png" alt="Pasted image 20251212153852.png" loading="lazy">
+<img src="../../../img/comdis/pasted-image-20251212153934.png" alt="Pasted image 20251212153934.png" loading="lazy">
+<h2>3.2 Java RMI (Remote Method Invocation)</h2>
+<p>RMI es la evolución <strong>Orientada a Objetos de RPC</strong>, exclusiva para el ecosistema Java</p>
+<ul>
+<li>Permite pasar objetos completos como parámetros o valores de retorno, no solo tipos de datos primitivos.</li>
+<li>Utiliza un <strong>Registro RMI</strong> (<code>rmiregistry</code>) para la localización de servicios.</li>
+</ul>
+<h1>3.4 Implementación en Java RMI</h1>
+<p>Para construir una aplicación distribuida, Java RMI impone una metodología estricta basada en interfaces.</p>
+<h2>3.4.1 La interfaz Remota</h2>
+<p>Es el contrato entre cliente y servidor. Define qué se puede hacer, pero no cómo.</p>
+<ul>
+<li>Debe extender <code>java.rmi.Remote</code></li>
+<li><strong>Regla de Oro:</strong> todos los métodos deben declara que lanzan <code>java.rmi.RemoteException</code></li>
+</ul>
+<blockquote>
+<p><strong>¿Por qué RemoteException?</strong> Porque en sistemas distribuidos, las cosas fallan. La red puede caerse, el servidor puede no existir, o el stub puede perderse. Java obliga al programador a manejar estos fallos explícitamente.</p>
+</blockquote>
+<pre><code class="language-java">public interface SomeInterface extends java.rmi.Remote {
+    public String someMethod1() throws java.rmi.RemoteException;
+}
+</code></pre>
+<h2>3.4.2 La Implementación del Servidor</h2>
+<p>Es la clase que hace el trabajo real.</p>
+<ul>
+<li>Debe implementar la interfaz remota definida anteriormente</li>
+<li>Generalmente hereda de <code>UnicastRemoteObject</code>. Esto facilita que el objeto sea &quot;exportable&quot; a la red.</li>
+<li>Debe tener un constructor que lance <code>RemoteException</code> (porque la clase padre lo hace).</li>
+</ul>
+<h2>3.4.3 Generación de Stubs y Skeletons</h2>
+<p>Una vez compiladas las clases, se usa el compilador RMI para generar los proxies:</p>
+<ul>
+<li>Comando: <code>rmic NOmbreDeLaImplementacion</code></li>
+<li>Resultado: Generado dos archivos: <code>_Stub.class</code> y <code>_Skel.class</code>
+<ul>
+<li><strong>Importante:</strong> El archivo <code>_Stub.class</code> debe copiarse manualmente a la máquina del cliente (o descargarse dinámicamente) para que este sepa cómo comunicarse.</li>
+</ul>
+</li>
+</ul>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>A día de hoy se generan de forma automática a no ser que uses una versión inferior a java 5 (que debe ser la puta mierda que usa el profesor, el pavo no actualiza su asignatura desde 2008).</p>
+</div>
+<img src="../../../img/comdis/pasted-image-20251212154109.png" alt="Pasted image 20251212154109.png" loading="lazy">
+<h1>3.5 El Registro y la Puesta en Marcha</h1>
+<h2>3.5.1 El RMI Registry</h2>
+<p>Es un servicio simple que se ejecuta por defecto en el puerto TCP 1099. Actúa como un mapa de <code>String</code> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> <code>Objeto</code>.</p>
+<ul>
+<li>Se puede iniciar desde consola: <code>rmiregistry</code></li>
+<li>O desde código Java: <code>LocateRegistry.createRegistry(puerto)</code></li>
+</ul>
+<h2>3.5.2 Lógica del Servidor (Publicación)</h2>
+<p>El servidor debe instanciar el objeto y &quot;publicarlo&quot; usando la clase <code>Naming</code>.</p>
+<ul>
+<li><strong>URL RMI:</strong> <code>rmi://host:port/nombre_servicio</code>.</li>
+<li><strong>Métodos Clave:</strong>
+<ul>
+<li><code>bind(url,objeto)</code>: registra el objeto. Falla si ya existe ese nombre</li>
+<li><code>rebind(url,objeto)</code>: registra o sobreescribe si ya existe (más seguro/común)</li>
+</ul>
+</li>
+</ul>
+<h2>3.5.3 Lógica del Cliente (Búsqueda)</h2>
+<p>El cliente necesita localizar el objeto para obtener una referencia.</p>
+<ul>
+<li>Construye la URL de búsqueda</li>
+<li>Usa <code>Naming.lookup(url)</code>.</li>
+</ul>
+<blockquote>
+<p><strong>Advertencia Crítica:</strong> <code>Naming.lookup</code> devuelve un objeto tipo <code>Remote</code>. Debes hacer un <strong>cast</strong> a la <strong>Interfaz Remota</strong>, NUNCA a la clase de implementación del servidor. El cliente no conoce la implementación, solo la interfaz.</p>
+</blockquote>
+<h1>3.6 Ejemplo Completo</h1>
+<h2>Paso 1: La Interfaz Remota</h2>
+<p>Define el contrato. Debe extender <code>Remote</code> y lanzar <code>RemoteException</code>.</p>
+<pre><code class="language-java">import java.rmi.Remote;
+import java.rmi.RemoteException;
+
+// Interfaz compartida por Cliente y Servidor
+public interface Calculadora extends Remote {
+    // Método que queremos invocar remotamente
+    public int sumar(int a, int b) throws RemoteException;
+}
+</code></pre>
+<h2>Paso 2: El Servidor (Implementación y Publicación)</h2>
+<p>Implementa la lógica y se registra en el <code>rmiregistry</code>.</p>
+<pre><code class="language-Java">import java.rmi.server.UnicastRemoteObject;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+
+// La implementación real
+public class ServidorCalculadora extends UnicastRemoteObject implements Calculadora {
+
+    protected ServidorCalculadora() throws RemoteException {
+        super(); // Necesario para exportar el objeto
+    }
+
+    @Override
+    public int sumar(int a, int b) throws RemoteException {
+        System.out.println(&quot;Me han pedido sumar: &quot; + a + &quot; + &quot; + b);
+        return a + b;
+    }
+
+    public static void main(String[] args) {
+        try {
+            // 1. Iniciar el registro RMI en el puerto 1099 (para no usar consola)
+            LocateRegistry.createRegistry(1099);
+
+            // 2. Crear el objeto
+            ServidorCalculadora objetoRemoto = new ServidorCalculadora();
+
+            // 3. Registrarlo con un nombre (&quot;Naming.rebind&quot;)
+            Naming.rebind(&quot;rmi://localhost:1099/MiCalculadora&quot;, objetoRemoto);
+            
+            System.out.println(&quot;Servidor listo y esperando...&quot;);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+<h2>Paso 3: El Cliente</h2>
+<p>Busca el objeto y lo usa.</p>
+<pre><code class="language-java">import java.rmi.Naming;
+
+public class ClienteCalculadora {
+    public static void main(String[] args) {
+        try {
+            // 1. Buscar el objeto en el registro (Lookup)
+            // OJO: Hacemos casting a la INTERFAZ, no a la clase del servidor
+            Calculadora calc = (Calculadora) Naming.lookup(&quot;rmi://localhost:1099/MiCalculadora&quot;);
+
+            // 2. Usar el objeto como si fuera local
+            int resultado = calc.sumar(5, 10);
+            
+            System.out.println(&quot;El resultado de la suma remota es: &quot; + resultado);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+<h1>3.7 Algoritmo de Desarrollo Paso a Paso</h1>
+<p>Para no perderte en la práctica, sigue este &quot;algoritmo&quot; riguroso extraído del profesor (gilipollez histórica, programa con lógica y pista, no vas a hacerte el código sin haber hecho antes la interfaz ):</p>
+<ol>
+<li><strong>Definir Interfaz:</strong> Crear <code>Interfaz.java</code> (extiende <code>Remote</code>) y compilar.</li>
+<li><strong>Implementar:</strong> Crear <code>Impl.java</code> (implementa <code>Interfaz</code>, extiende <code>UnicastRemoteObject</code>) y compilar.</li>
+<li><strong>Generar Proxies:</strong> Ejecutar <code>rmic Impl</code>. Obtendrás el Stub y el Skeleton.</li>
+<li><strong>Desarrollar Servidor:</strong> Crear <code>Server.java</code> que instancia <code>Impl</code> y hace <code>Naming.rebind</code>.</li>
+<li><strong>Desarrollar Cliente:</strong> Crear <code>Client.java</code> que hace <code>Naming.lookup</code> y usa la interfaz.</li>
+<li><strong>Despliegue de Ficheros:</strong>
+<ul>
+<li><strong>Servidor:</strong> Necesita <code>Interfaz.class</code>, <code>Impl.class</code>, <code>Server.class</code>, <code>Skeleton.class</code>.</li>
+<li><strong>Cliente:</strong> Necesita <code>Interfaz.class</code>, <code>Client.class</code>, <code>Stub.class</code>.</li>
+</ul>
+</li>
+</ol>
+<div class="callout callout-important">
+<p class="callout-titulo">Important</p>
+<p><strong>Java RMI</strong> es por naturaleza multihilo. Cuando recibe una petición de un cliente, por ejemplo si un cliente <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq> invoca a un método remoto <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq>, el entorno de ejecución de Java RMI creará un hilo para ejecutar ese método remoto. Si al mismo tiempo otro cliente <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span></eq> le manda otra petición, creará otro hilo. Ambos hilos pueden ejecutar el mismo código del objeto remoto <strong>en paralelo</strong>.</p>
+<p>Para que funcione <strong>todo el código debe ser Thread Safe</strong>.</p>
+</div>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="2-el-api-de-sockets.html"><span class="nav-etiqueta">← anterior</span>2. El API de Sockets</a>
+  <a class="nav-siguiente" href="4-rmi-avanzado.html"><span class="nav-etiqueta">siguiente →</span>4. RMI Avanzado</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

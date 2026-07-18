@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="6. Grafos II — apuntes de AED (segundo curso de Ingeniería Informática).">
+<title>6. Grafos II · AED · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">aed</a><span class="miga-sep">/</span><span aria-current="page">6-grafos-ii</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">AED · curso 2</p>
+    <h1>6. Grafos II · AED</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<p>En este tema, nos adentramos en algunos de los algoritmos fundamentales en teoría de grafos. A continuación se explican los principales conceptos y métodos para manipular y analizar grafos, en particular en contextos donde el grafo es dirigido, ponderado o acíclico.</p>
+<h1>6.1 Ordenación Topológica</h1>
+<p><strong>Concepto de GDA (Grado Dirigido Acíclico):</strong><br>
+Un GDA es un grafo dirigido que no contiene ciclos, es decir, no existen caminos que partan de un vértice y regresen a él mismo. En la matriz de caminos de un GDA, los valores en la diagonal siempre son ceros, indicando la ausencia de ciclos. Estos grafos son útiles para representar estructuras donde ciertos elementos deben preceder a otros, como las expresiones aritméticas o las ordenaciones parciales.</p>
+<img src="../../../img/aed/pasted-image-20241110130331.png" alt="archivos/imagenes/Pasted image 20241110130331.png" loading="lazy">
+<p><strong>Ordenación Parcial:</strong><br>
+Se trata de una relación que, además de no ser reflexiva (un elemento no se relaciona consigo mismo), es transitiva: si A se relaciona con B y B con C, entonces A se relaciona con C.</p>
+<p><strong>Definición de Ordenación Topológica:</strong><br>
+La ordenación topológica es una disposición lineal de los vértices de un grafo dirigido acíclico, de tal forma que si existe un camino de un vértice a otro, el vértice de origen aparece antes que el de destino en el orden.</p>
+<p><strong>Algoritmo para la Ordenación Topológica:</strong></p>
+<ol>
+<li>Se buscan los nodos con <strong>grado entrante cero</strong> y se colocan en una cola.</li>
+<li><strong>Extraemos el vértice de la cola</strong> y lo añadimos a la ordenación.</li>
+<li><strong>Eliminamos los arcos</strong> que parten del vértice procesado y recalculamos los grados entrantes de los vértices restantes.</li>
+<li>Repetimos hasta que la cola esté vacía.</li>
+</ol>
+<img src="../../../img/aed/pasted-image-20241110130410.png" alt="archivos/imagenes/Pasted image 20241110130410.png" loading="lazy">
+<h1>6.2 Cálculo de la Matriz de Caminos: Algoritmo de Warshall</h1>
+<p>El <strong>Algoritmo de Warshall</strong> permite calcular la matriz de caminos sin realizar multiplicaciones. Para cada iteración, la matriz de caminos se actualiza basándose en la información de la matriz anterior. La fórmula de actualización es:
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop">min</span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2083em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span><span class="mclose">))]</span></span></span></span></span></eqn></section>
+Esto significa que el elemento <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span><span class="mclose">)</span></span></span></span></eq> en la matriz se establece en 1 si ya había un camino previo o si existe un camino indirecto a través de un vértice intermedio.</p>
+<img src="../../../img/aed/pasted-image-20241110130607.png" alt="archivos/imagenes/Pasted image 20241110130607.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241110130551.png" alt="archivos/imagenes/Pasted image 20241110130551.png" loading="lazy">
+<h1>6.3 Camino Más Corto entre dos Vértices: Algoritmo de Dijkstra</h1>
+<p>El <strong>Algoritmo de Dijkstra</strong> se usa para encontrar el camino de menor longitud desde un vértice de origen hasta todos los demás vértices en un grafo ponderado. Este es un algoritmo voraz que selecciona, en cada paso, el vértice con el camino mínimo actual y ajusta los caminos de los vértices adyacentes si es necesario. Utiliza:</p>
+<ul>
+<li><strong>C:</strong> Conjunto de vértices candidatos.</li>
+<li><strong>S:</strong> Conjunto de vértices ya procesados.</li>
+<li><strong>D:</strong> Vector de distancias mínimas desde el vértice origen.</li>
+<li><strong>A:</strong> Matriz de pesos del grafo.</li>
+<li><strong>P:</strong> Vector de predecesores inmediatos.</li>
+</ul>
+<p>Para realizar el algoritmo, se parte de un vértice origen, y a partir de él se establece en <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span></span></span></span></eq> el peso de los arcos con sus vértices adyacentes, poniendo en <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span></eq> (<em>en el campo que corresponda a estos vértices</em>) el número del vértice inicial. Se marca el vértice original como ya estudiado (<em>se añade a <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span></eq></em>), y se selecciona el vértice con el que se estableció el camino más corto de todos los caminos establecidos hasta este punto.</p>
+<p>Se repiten estos pasos sobreescribiendo solo el valor de aquellos caminos que tuvieran una longitud mayor a la obtenida por medio del vértice de estudio actual. Como se ve, tiene la desventaja de que si queremos saber el camino mínimo entre cualquier par de vértices, tenemos que realizar el algoritmo partiendo de todos los vértices del grafo y luego comparar.</p>
+<img src="../../../img/aed/pasted-image-20241110130652.png" alt="archivos/imagenes/Pasted image 20241110130652.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241110130714.png" alt="archivos/imagenes/Pasted image 20241110130714.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241110130732.png" alt="archivos/imagenes/Pasted image 20241110130732.png" loading="lazy">
+<h1>6.4 Camino más corto entre cualquier par de vértices: Algoritmo de Floyd</h1>
+<p>Para evitar el problema anterior, se implementó el <strong>algoritmo de Floyd</strong>. Este algoritmo, en vez de un vector como en el caso anterior, devuelve una matriz <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span></span></span></span></eq> donde cada campo <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">i</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span><span class="mclose">)</span></span></span></span></eq> contiene el coste mínimo de los caminos que van desde <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></eq> hasta <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span></span></span></span></eq>. Para realizarel algoritmo, se siguen los mismos pasos que con el <strong>Algoritmo de Wharsall</strong> para encontrar las distintas matrices de caminos de las diferentes longitudes.</p>
+<p>En este caso:</p>
+<ul>
+<li>La matriz <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> muestra los caminos más cortos entre cualquier par de vértices con longitud 1.</li>
+<li>La matriz <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> muestra los caminos más cortos entre cualquier par de vértices con <strong>longitud 2 o inferior</strong>, y así sucesivamente.</li>
+</ul>
+<p>Por tanto, la matriz <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>, siendo <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></eq> el número de nodos, nos mostrará los caminos más cortos entre cualquier par de vértices, independientemente de la longitud del camino.</p>
+<img src="../../../img/aed/pasted-image-20241110132055.png" alt="archivos/imagenes/Pasted image 20241110132055.png" loading="lazy">
+<h1>6.5 Control de flujo</h1>
+<p>El control de flujo supone la forma de controlar la cantidad de objetos o elementos que se transportan de un lugar a otro. Algunos ejemplos son:</p>
+<ul>
+<li>Flujo de mercancías entre el lugar donde se producen y donde se reciben.</li>
+<li>Flujo de personas que realizan un desplazamiento entre dos puntos señalados.</li>
+<li>Flujo de agua por medio de un sistema de tuberías.</li>
+</ul>
+<p>Muchas veces, lo que se pretende es maximizar el flujo, es decir, transportar la mayor cantidad posible de elementos desde el punto de partida (<em>fuente <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">s</span></span></span></span></eq></em>) hasta un punto final (<em>sumidero <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span></span></span></span></eq></em>). Para este tipo de problemas, un <strong>grafo valorado</strong> es la estructura perfecta. En muchos casos, incluso un grafo dirigido valorado, dependiendo de las especificaciones concretas.</p>
+<p>Para resolver estos problemas de maximización de flujo, se emplea el <strong>Algoritmo de Ford-Fulkerson</strong>, que busca caminos entre el nodo fuente y el sumidero en los que se pueda incrementar el flujo todavía más, para obtener en el sumidero la mayor cantidad de elementos posibles.</p>
+<img src="../../../img/aed/pasted-image-20241110132251.png" alt="archivos/imagenes/Pasted image 20241110132251.png" loading="lazy">
+<h1>6.6 Árbol de expansión de coste mínimo</h1>
+<p>A veces, a partir de un grafo no dirigido, se pretenden modelar relaciones simétricas entre elementos. En esta situación, tenemos varias definiciones importantes:</p>
+<ul>
+<li><strong>Red conectada</strong>: Red (grafo que representa las relaciones entre elementos) en la que desde un vértice se puede llegar a cualquier otro por medio de un camino.</li>
+<li><strong>Árbol</strong>: Red que es subconjunto de la red original, siendo también una red conectada, con <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></eq> nodos y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></eq> vértices, y a la que, si se le añade un arco más, se forma un ciclo.</li>
+<li><strong>Árbol de expansión</strong>: Árbol que contiene todos los vértices de la red original.</li>
+<li><strong>Árbol de expansión de coste mínimo</strong>: Árbol de expansión en el cual el peso de sus arcos suma el menor valor posible.</li>
+</ul>
+<p>Buscar un árbol de expansión es una forma de saber si una red es conectada. Los árboles de expansión de coste mínimo tienen muchas aplicaciones:</p>
+<ul>
+<li>Diseño de redes de telecomunicaciones, para encontrar la forma más barata o corta de conectar todos los nodos.</li>
+<li>Diseño del menor número de caminos que unan todos los pueblos de una localidad de la forma más corta posible.</li>
+</ul>
+<p>Para encontrar estos árboles de expansión existen dos algoritmos: el <strong>Algoritmo de Prim</strong> y el <strong>Algoritmo de Kruskal</strong>.</p>
+<h2>6.6.1 Algoritmo de Prim</h2>
+<p>Es un <strong>algoritmo voraz</strong>, ya que en cada paso se añade el arco más corto disponible al árbol (mejor solución en cada paso). Se parte de un vértice inicial y se añade el vértice adyacente cuyo arco entre ambos tenga el menor peso. A continuación, entre los vértices ya conectados, se busca el arco de menor peso que conecte sus vértices adyacentes que no hayan sido conectados todavía. Estos pasos se repiten hasta haber conectado todos los vértices.</p>
+<img src="../../../img/aed/pasted-image-20241110132337.png" alt="archivos/imagenes/Pasted image 20241110132337.png" loading="lazy">
+<h2>6.6.2 Algoritmo de Kruskal</h2>
+<p>Se parte del conjunto de vértices del grafo y se selecciona el arco de menor peso, uniendo dos vértices y reduciendo en uno el número de componentes conexas. A continuación, se selecciona el siguiente arco de menor peso que también conecte vértices de dos componentes conexas distintas, reduciendo otra vez el número total en uno. Si no se respetara esta condición, se producirían ciclos. El algoritmo finaliza cuando solo queda una componente conexa.</p>
+<img src="../../../img/aed/pasted-image-20241110132356.png" alt="archivos/imagenes/Pasted image 20241110132356.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="5-grafos-i.html"><span class="nav-etiqueta">← anterior</span>5. Grafos I</a>
+  <a class="nav-siguiente" href="7-tablas-hash.html"><span class="nav-etiqueta">siguiente →</span>7. Tablas Hash</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

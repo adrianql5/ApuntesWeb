@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. El API de Sockets — apuntes de COMDIS (tercer curso de Ingeniería Informática).">
+<title>2. El API de Sockets · COMDIS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">comdis</a><span class="miga-sep">/</span><span aria-current="page">2-el-api-de-sockets</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">COMDIS · curso 3</p>
+    <h1>2. El API de Sockets · COMDIS</h1>
+  </header>
+  <div class="prosa">
+<h1>2.1 Introducción</h1>
+<p>Antes de profundizar en el código y los protocolos, es vital situar este tema en el mapa de la asignatura. En la jerarquía de abstracción de la comunicación distribuida, nos encontramos en el <strong>Nivel 0: Paso de Mensajes</strong>.</p>
+<ul>
+<li>
+<p><strong>Baja Abstracción (Sockets):</strong> Trabajamos directamente con el transporte de bytes entre procesos. Tú defines <em>cómo</em> se envían los datos, <em>cuándo</em> se leen y <em>qué</em> estructura tienen. Es la base de la pirámide.</p>
+</li>
+<li>
+<p><strong>Arquitecturas Básicas:</strong> Utilizando sockets, construimos los paradigmas <strong>Cliente-Servidor</strong> (centralizado) y <strong>P2P</strong> (descentralizado).</p>
+</li>
+<li>
+<p><strong>Alta Abstracción (Futuros temas):</strong> Mecanismos como RPC (Remote Procedure Call), RMI (Remote Method Invocation) o los ORB (Object Request Brokers) son &quot;capas de azúcar sintáctico&quot; y gestión automática que se construyen <strong>sobre</strong> el API de Sockets. Entender sockets es entender la &quot;fontanería&quot; que hace posible todo lo demás</p>
+</li>
+</ul>
+<h1>2.2 Conceptos Fundamentales</h1>
+<p>El <strong>API de Sockets</strong> es la interfaz de programación estándar para la comunicación entre procesos (IPC - <em>Inter-Process Communication</em>).</p>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>API significa Application Programming Interface. Imagina que el SO es una fortaleza cerrada que controla el hardware ( la tarjeta de red) . Tú, como programador no puedes tocar los cables ni los voltajes directamente. El API de sockets es el conjunto de funciones estandarizadas que el SO te ofrece para pedirle servicios de red.</p>
+</div>
+<p>Un <strong>Socket</strong> se define conceptualmente como un <strong>punto final (endpoint) de comunicación</strong>. Es una abstracción que permite a un proceso enviar y recibir mensajes hacia/desde otro proceso, ya sea en la misma máquina o a través de una red.</p>
+<img src="../../../img/comdis/pasted-image-20251212153151.png" alt="Pasted image 20251212153151.png" loading="lazy">
+<p>Los sockets operan sobre la pila de protocolos <strong>TCP/IP</strong>, que es independiente del fabricante y soporta desde redes locales (LAN) hasta  redes globales (WAN) como internet.</p>
+<p>Para que dos procesos se comuniquen, necesitamos identificar de forma única quién habla con quién. Esto se logra mediante una <strong>asociación</strong>, que es una tupla de 5 elementos:</p>
+<ul>
+<li><strong>Protocolo:</strong> TCP o UDP.</li>
+<li><strong>Dirección IP Local (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">32</span></span></span></span></eq> bits):</strong> Identifica la máquina origen.</li>
+<li><strong>Puerto Local (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">16</span></span></span></span></eq> bits):</strong> Identifica el proceso origen dentro de la máquina.</li>
+<li><strong>Dirección IP Remota (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">32</span></span></span></span></eq> bits):</strong> Identifica la máquina destino.</li>
+<li><strong>Puerto Remoto (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">16</span></span></span></span></eq> bits):</strong> Identifica el proceso destino.</li>
+</ul>
+<h1>2.3 Protocolos de Transporte: UDP vs TCP</h1>
+<p>El API de Sockets nos permite elegir cómo queremos transportar nuestros datos. Esta elección define la fiabilidad y el rendimiento de nuestra aplicación distribuida.</p>
+<h2>2.3.1 UDP (User Datagram Protocol)</h2>
+<p>Es un protocolo <strong>no orientado a conexión</strong>. Se basa en el envío de <strong>mensajes</strong> discretos (datagramas).</p>
+<p><strong>Características:</strong></p>
+<ul>
+<li><strong>No fiable:</strong> no garantiza que los datos lleguen, ni que lleguen en orden</li>
+<li><strong>Límites de mensaje:</strong> se respetan las fronteras. Si envías 1 paquete de 500 bytes, el receptor recibe 1 paquete de 500 bytes</li>
+<li><strong>Sin QoS (Quality of Service):</strong> no garantiza ancho de banda ni latencia</li>
+<li><strong>Simplicidad:</strong> al tener menos sobrecarga de control, es muy rápido</li>
+</ul>
+<p><strong>Uso ideal:</strong> aplicaciones donde la velocidad prima sobre la exactitud, como videoconferencias o telefonía IP ( si se pierde un frame de video, no importa, pero no podemos esperar a retransmitirlo).</p>
+<img src="../../../img/comdis/pasted-image-20251212153251.png" alt="Pasted image 20251212153251.png" loading="lazy">
+<h2>2.3.2 TCP (Transmission Control Protocol)</h2>
+<p>Es un protocolo <strong>orientado a conexión</strong>. Antes de enviar datos, se establece un canal virtual entre emisor y receptor.</p>
+<p><strong>Características:</strong></p>
+<ul>
+<li><strong>Fiabilidad Total:</strong> Garantiza la entrega correcta y el orden secuencial de los paquetes. Si algo se pierde, se retransmite automáticamente.</li>
+<li><strong>Stream (Flujo de Bytes):</strong> No hay fronteras de mensaje. Si envías 3 paquetes de 10 bytes, el receptor podría leer 30 bytes de golpe o 15 y 15. Es como una tubería de agua.</li>
+<li><strong>Bidireccional:</strong> Ambos lados pueden leer y escribir simultáneamente.</li>
+</ul>
+<p><strong>Uso ideal:</strong> Aplicaciones que requieren integridad de datos total: Web (HTTP), Correo (SMTP), Transferencia de archivos (FTP), Telnet .</p>
+<img src="../../../img/comdis/pasted-image-20251212153307.png" alt="Pasted image 20251212153307.png" loading="lazy">
+<h1>2.4 Implementación en Java: Sockets Orientados a Conexión (TCP)</h1>
+<p>En el modelo <strong>Stream</strong> (flujo) , la comunicación es exclusiva entre dos procesos conectados. Un socket stream no sirve para hacer &quot;broadcast&quot; a muchos procesos a la vez.</p>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p><strong>Stream (Tubo/TCP):</strong> Es un <strong>flujo continuo de bytes</strong> sin fronteras internas.</p>
+<ul>
+<li>Si tú envías &quot;HOLA&quot; y luego &quot;MUNDO&quot; por un stream, el receptor ve simplemente un chorro de bytes: <code>H</code> <code>O</code> <code>L</code> <code>A</code> <code>M</code> <code>U</code> <code>N</code> <code>D</code> <code>O</code>.</li>
+<li>El receptor no sabe si lo enviaste todo junto o en dos partes.</li>
+<li><strong>Garantía:</strong> Es una conexión fiable, ordenada y bidireccional, similar a las tuberías (pipes) de Unix.</li>
+</ul>
+</div>
+<img src="../../../img/comdis/pasted-image-20251212153424.png" alt="Pasted image 20251212153424.png" loading="lazy">
+<h2>2.4.1 Arquitectura Cliente-Servidor en TCP</h2>
+<p>El servidor debe estar activo antes que el cliente. El proceso se basa en dos tipos de sockets en el lado del servidor:</p>
+<ul>
+<li><strong>Socket de Conexión (<code>ServerSocket</code>):</strong> solo se encarga de esperar clientes en un puerto (hacer <code>listen</code>)</li>
+<li><strong>Socket de Datos (<code>Socket</code>):</strong> cuando llega un cliente, el <code>ServerSocket</code> lo acepta y <strong>crea un nuevo socket</strong> dedicado exclusivamente a hablar con ese cliente. Esto permite al servidor seguir aceptando nuevos clientes en el socket de conexión original.</li>
+</ul>
+<img src="../../../img/comdis/pasted-image-20251212153523.png" alt="Pasted image 20251212153523.png" loading="lazy">
+<h2>2.4.2 Diagrama de Flujo y Primitivas</h2>
+<ul>
+<li><strong>Servidor:</strong> Crea el socket (<code>socket()</code> ), lo ata a un puerto (<code>bind()</code>), y se pone a escuchar (<code>listen()</code>)</li>
+<li><strong>Servidor:</strong> llama a <code>accept()</code>. Esta es una <strong>operación bloqueante</strong>. El proceso servidor se duerme hasta que alguien llame a la puerta.</li>
+<li><strong>Cliente:</strong> crea su socket y solicita conexión (<code>connect()</code>) a la IP/Puerto del servidor</li>
+<li><strong>Handshake:</strong> se establece la conexión. El método <code>accept()</code> del servidor despierta y devuelve un nuevo objeto socket para la comunicación.</li>
+<li><strong>Intercambio:</strong> ambos usan flujos de entrada/salida (<code>InputStream/OutputStream</code>) para <code>read()</code> y <code>write()</code></li>
+<li><strong>Cierre:</strong> se usa <code>close()</code> para terminar la conexión</li>
+</ul>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>Todas estas operaciones que aparecen entre paréntesis son proporcionadas por Unix, si haces en un terminal <code>man funcion</code>, te pone la info. Son funciones de la API de sockets.</p>
+</div>
+<h2>2.4.3 Código Java Esencial (TCP)</h2>
+<p>En Java, usamos <code>java.net.ServerSocket</code> y <code>java.net.Socket</code>.</p>
+<p><strong>Servidor:</strong></p>
+<pre><code class="language-java">ServerSocket serverSocket = new ServerSocket(puerto); // Puerto de escucha
+Socket incoming = serverSocket.accept(); // BLOQUEANTE: Espera cliente
+// Una vez aquí, tenemos conexión. Obtenemos los streams:
+DataInputStream in = new DataInputStream(incoming.getInputStream());
+DataOutputStream out = new DataOutputStream(incoming.getOutputStream());
+// Leer y Escribir
+out.writeByte(5);
+System.out.println(in.readByte());
+</code></pre>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>Java encapsula la complejidad de las llamadas al sistema originales de Unix. Cuando haces <code>ServerSocket servidor = new ServerSocket(8080);</code>. Por debajo ocurren 3 cosas:</p>
+<ul>
+<li><code>socket()</code>: pide al SO que cree un descriptor de archivo para un nuevo socket</li>
+<li><code>bind(8080)</code>: se vincula este socket a la dirección IP local y al puerto 8080.</li>
+<li><code>listen()</code>: se marca el socket como pasiva, indicando que esté preparado para encolar conexiones entrantes</li>
+</ul>
+</div>
+<p><strong>Cliente:</strong></p>
+<pre><code class="language-java">Socket socket = new Socket(&quot;direccion_servidor&quot;, puerto asignado en servidor); // Intenta conectar
+// Si no hay excepción, estamos conectados.
+</code></pre>
+<h2>2.4.4 Código Java Multihilo (TCP)</h2>
+<p>El problema es que mientras el servidor habla con el &quot;Cliente A&quot;, el &quot;Cliente B&quot; tiene que esperar en la cola. Si el Cliente A tarda 1 hora, el Cliente B se aburre y se va.</p>
+<p>Para solucionar esto, usamos <strong>Hilos (Threads)</strong>. El objetivo es que el hilo principal (<code>main</code>) solo se dedique a recibir gente en la puerta, y delegue la conversación a hilos trabajadores. De todas formas los hilos los explicaré al final de este pdf.</p>
+<p><strong>Estrategia: &quot;El Conserje y los Botones&quot;</strong></p>
+<ol>
+<li><strong>Hilo Principal (El Conserje):</strong> Su único trabajo es estar en el bucle <code>accept()</code>.</li>
+<li><strong>Hilos Trabajadores (Los Botones):</strong> Cuando llega un cliente, el conserje crea un nuevo hilo, le pasa el socket del cliente y vuelve a la puerta a esperar al siguiente.</li>
+</ol>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Los hilos se explican con más detalle al final del tema</p>
+</div>
+<p><strong>Servidor:</strong></p>
+<pre><code class="language-java">import java.net.*;
+import java.io.*;
+
+public class ServidorMultihilo {
+    public static void main(String[] args) {
+        try {
+            // 1. Constructor: Hace socket() + bind() + listen()
+            ServerSocket serverSocket = new ServerSocket(8189);
+            System.out.println(&quot;Servidor iniciado. Esperando clientes...&quot;);
+
+            while (true) {
+                // 2. accept(): BLOQUEANTE. Espera a un cliente.
+                // Cuando llega alguien, retorna un socket DEDICADO a ese cliente.
+                Socket socketCliente = serverSocket.accept(); 
+                
+                // 3. MULTIHILO: En lugar de atenderlo aquí, creamos un hilo.
+                System.out.println(&quot;Cliente conectado. Creando hilo para atenderlo.&quot;);
+                
+                // Creamos una instancia de nuestro &quot;Manejador&quot; (ver abajo)
+                ManejadorCliente tarea = new ManejadorCliente(socketCliente);
+                Thread hilo = new Thread(tarea);
+                
+                // 4. Arrancar el hilo. 
+                // Esto libera al 'main' para volver arriba al 'accept()' inmediatamente.
+                hilo.start(); 
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+<p><strong>Cliente:</strong></p>
+<pre><code class="language-java">// Implementamos Runnable para que pueda ser ejecutado por un Thread
+class ManejadorCliente implements Runnable {
+    private Socket miSocket; // Referencia al socket exclusivo de ESTE cliente
+
+    public ManejadorCliente(Socket s) {
+        this.miSocket = s;
+    }
+
+    @Override
+    public void run() {
+        try {
+            // Aquí va toda la lógica de read/write que antes tenías en el main
+            // [cite: 510-511]
+            DataInputStream in = new DataInputStream(miSocket.getInputStream());
+            DataOutputStream out = new DataOutputStream(miSocket.getOutputStream());
+
+            // Ejemplo: Eco
+            String mensaje = in.readUTF(); // Bloquea solo a ESTE hilo
+            System.out.println(&quot;Recibido: &quot; + mensaje);
+            
+            // Simular proceso lento (ej. consulta a base de datos)
+            Thread.sleep(2000); 
+            
+            out.writeUTF(&quot;Eco: &quot; + mensaje);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                // IMPORTANTE: Cerrar el socket del cliente al terminar
+                miSocket.close(); 
+            } catch (IOException e) { e.printStackTrace(); }
+        }
+    }
+}
+</code></pre>
+<h1>2.5 Implementación en Java: Sockets No Orientados a Conexión (UDP)</h1>
+<p>En el modelo <strong>Datagrama</strong>, no hay conexión persistente. Cada paquete es independiente y lleva consigo la dirección del destino. Son como cartas, envías una, luego otra.</p>
+<h2>2.5.1 Clases Clave</h2>
+<ul>
+<li><code>DatagramSocket</code>: es el buzón, sirve tanto para enviar como para recibir. Se liga a un puerto local (<code>bind</code>)</li>
+<li><code>DatagramPacket</code>: es la carta. Contiene los datos (array de bytes) y, si es para enviar, la dirección IP y puerto del destinatario.</li>
+</ul>
+<h2>2.5.2 Flujo de Comunicación</h2>
+<p>Al contrario que en TCP, aquí no hay <code>accept</code> ni <code>connect</code> (en el sentido estricto de establecimiento de sesión).</p>
+<ul>
+<li><strong>Receptor(Servidor):</strong> crea socket en puerto conocido. Llama a <code>receive()</code>. Se bloquea hasta que llega un paquete.</li>
+<li><strong>Emisor(Cliente):</strong> crea paquete con datos+dirección destino. Llama a <code>send()</code></li>
+<li><strong>Receptor:</strong> <code>receive()</code> rellena el paquete con los datos y la dirección de quien lo envío (util para responder)</li>
+</ul>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p><code>receive()</code> usa por debajo la funcion de Unix <code>recvfrom</code></p>
+</div>
+<p><strong>Peligro de Concurrencia:</strong> En UDP, si múltiples procesos envían datos al mismo socket receptor simultáneamente, los mensajes se intercalan en la cola de recepción sin orden predecible. El receptor debe gestionar esta &quot;mezcla&quot;.</p>
+<h2>2.5.3 Código Java Esencial (UDP)</h2>
+<p><strong>Receptor:</strong></p>
+<pre><code class="language-java">DatagramSocket ds = new DatagramSocket(2345); // Escuchar en puerto 2345
+byte[] buffer = new byte[1024];
+DatagramPacket dp = new DatagramPacket(buffer, buffer.length);
+ds.receive(dp); // BLOQUEANTE
+// Datos recibidos en buffer. Info del remitente en dp.getAddress()
+</code></pre>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p><code>DatagramSocket ds = new DatagramSocket(2345);</code> por debajo llama a <code>socket()</code> y a <code>bind()</code>, no usa ni <code>listen()</code> ni <code>accept()</code></p>
+<p><strong>Diagrama Mental de la Diferencia</strong></p>
+<ul>
+<li><strong>Constructor TCP (<code>ServerSocket</code>):</strong> &quot;Contrato una línea telefónica (<code>socket</code>), me asignan el número (<code>bind</code>) y me siento a esperar que suene para descolgar (<code>listen</code> + <code>accept</code>).&quot;</li>
+<li><strong>Constructor UDP (<code>DatagramSocket</code>):</strong> &quot;Instalo un buzón en la calle (<code>socket</code>) y le pinto mi número de casa (<code>bind</code>). Ya está. El cartero puede tirar cartas dentro cuando quiera.&quot;</li>
+</ul>
+</div>
+<p><strong>Emisor:</strong></p>
+<pre><code class="language-java">DatagramSocket ds = new DatagramSocket(); // Puerto aleatorio disponible
+InetAddress receiverHost = InetAddress.getByName(&quot;localhost&quot;);
+byte[] data = &quot;Hola&quot;.getBytes();
+DatagramPacket dp = new DatagramPacket(data, data.length, receiverHost, 2345);
+ds.send(dp); // Envío &quot;fuego y olvido&quot;
+</code></pre>
+<p><strong>Constructores de <code>DatagramPacket</code>:</strong></p>
+<pre><code class="language-java">DatagramPacket(byte[] data, int length, InetAddress receiver, int port);
+
+DatagramPacket(byte[] data, int length);
+</code></pre>
+<p>El primero sirve para enviar una paquete UDP, el parámetro data almacena el contenido del mensaje, <code>length</code> indica el tamaño del mensaje y la dirección y el puerto se corresponden con los datos del receptor del mensaje.</p>
+<p>El segundo sirve para recibir paquetes UDP, data es la variable que almacena el mensaje recibido y length indica el tamaño máximo del mensaje a recibir.</p>
+<h1>2.6 Técnicas Avanzadas y Robustez</h1>
+<h2>2.6.1 Gestión de Bloqueos (Timeouts)</h2>
+<p>Por defecto, leer de un socket (<code>read</code> o <code>receive</code>) congela el programa eternamente si no llegan datos. Para evitar &quot;cuelgues&quot; indefinidos en sistemas distribuidos reales, debemos programar un <strong>Timeout</strong>.</p>
+<ul>
+<li>Método: <code>socket.setSoTimeout(int milisegundos)</code>.</li>
+<li>Si expira el tiempo, se lanza una excepción <code>InterruptedIOException</code>, permitiendo al programa recuperar el control .</li>
+</ul>
+<h2>2.6.2 Multidifusión (Multicast)</h2>
+<p>La multidifusión permite enviar un solo paquete y que sea recibido por un grupo de ordenadores, optimizando el ancho de banda. Se basa en <strong>UDP</strong>.</p>
+<p><strong>Funcionamiento:</strong></p>
+<ul>
+<li>El emisor envía a una IP de clase D.</li>
+<li>Los receptores deben unirse explícitamente al grupo usando <code>joinGroup()</code> sobre un <code>MulticastSocket</code>.</li>
+<li>Los routers con capacidad multicast replican los paquetes solo hacia las redes donde hay miembros del grupo.</li>
+<li>El <strong>TTL (Time To Live)</strong> controla cuántos saltos de router puede atravesar el paquete, limitando su alcance (local vs internet)</li>
+</ul>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>Una IP de Clase D es una dirección lógica de 32 bits que comienza por <code>1110</code>, utilizada para identificar un <strong>grupo de interés</strong> compartido en lugar de una máquina física específica. Direcciones que empiezan en un rango entre [224-239].</p>
+</div>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p><strong>Broadcast:</strong> difusión a todos los dispositivos de una red
+<strong>Multicast:</strong> difusión a todos los dispositivos de una subred</p>
+</div>
+<h1>2.7 Hilos en Java</h1>
+<p>Un <strong>hilo</strong> es una secuencia de control dentro de un proceso que ejecuta instrucciones de manera independiente.</p>
+<ul>
+<li>Los procesos son <em>entidades pesadas</em>: requieren llamadas al sistema y cambios de contexto costosos.</li>
+<li>Los hilos son <em>entidades ligeras</em>: comparten el espacio de memoria del proceso y su cambio de contexto es menos costoso.</li>
+</ul>
+<h2>2.7.1 Creación de Hilos</h2>
+<p>En Java, existen dos formas principales de definir un hilo. En ambos casos, el código que ejecuta el hilo se define dentro del método <code>run()</code>, pero el hilo se lanza llamando a <code>start()</code>.</p>
+<h3>Heredando de la clase <code>Thread</code></h3>
+<p>Se crea una clase hija de <code>Thread</code> y se sobrescribe el método <code>run()</code></p>
+<pre><code class="language-java">public class MiHilo extends Thread {
+    public void run() {
+        // Código del hilo
+    }
+}
+// Uso:
+Thread hilo = new MiHilo();
+hilo.start(); 
+</code></pre>
+<h3>Implementando la interfaz <code>Runnable</code></h3>
+<p>Útil si tu clase ya hereda de otra. Se implementa <code>Runnable</code> y se pasa la instancia al constructor de <code>Thread</code>.</p>
+<pre><code class="language-java">public class MiTarea implements Runnable {
+    public void run() {
+        // Código
+    }
+}
+// Uso:
+MiTarea tarea = new MiTarea();
+Thread hilo = new Thread(tarea);
+hilo.start(); 
+</code></pre>
+<h2>2.7.2 Ciclo de Vida y Estados</h2>
+<p>La Java Virtual Machine (JVM) gestiona los hilos a través de varios estados:</p>
+<ol>
+<li><strong>Creado (New):</strong> El objeto existe, pero no se ha llamado a <code>start()</code>.</li>
+<li><strong>Ejecutable (Runnable):</strong> Listo para correr cuando la JVM lo decida.</li>
+<li><strong>En Ejecución (Running):</strong> Usando la CPU actualmente.
+<ul>
+<li>Puede ceder paso con <code>yield()</code>.</li>
+</ul>
+</li>
+<li><strong>Bloqueado (Blocked):</strong> Inactivo esperando un evento (E/S, fin de <code>sleep</code>, <code>notify</code>, etc.) .</li>
+<li><strong>Finalizado (Terminated):</strong> Terminó el método <code>run()</code>.</li>
+</ol>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>Si haces <code>hilo.start()</code> sobre un hilo que ya esta corriendo se lanza una excepción, si quieres lanzar dos veces el mismo hilo, sus referencias han de ser diferentes.</p>
+</div>
+<h2>2.7.3 Sincronización (Sección Crítica)</h2>
+<p>Para evitar conflictos cuando varios hilos acceden a recursos compartidos, Java usa <strong>cerrojos (locks)</strong> mediante la palabra clave <code>synchronized</code>. Solo un hilo puede estar dentro de un bloque sincronizado a la vez.</p>
+<p><strong>Formas de uso:</strong></p>
+<ol>
+<li><strong>Bloque Sincronizado:</strong> Protege un fragmento de código usando un objeto como cerrojo.</li>
+</ol>
+<pre><code class="language-java">synchronized(objetoCerrojo) {
+    // Sección crítica
+}
+</code></pre>
+<ol start="2">
+<li><strong>Método Sincronizado:</strong> Todo el método es crítico; el cerrojo es el propio objeto (<code>this</code>) . Por lo que no se puede usar ningún otro método del código mientras esté ocupado este.</li>
+</ol>
+<pre><code class="language-java">public synchronized void metodo() { ... }
+</code></pre>
+<h2>2.7.4 Coordinación de Hilos (Wait y Notify)</h2>
+<p>Para problemas como el <strong>Productor-Consumidor</strong>, los hilos deben comunicarse. Se usan métodos de la clase <code>Object</code> dentro de bloques <code>synchronized</code>.</p>
+<ul>
+<li><strong><code>wait()</code></strong>: El hilo suelta el cerrojo y se duerme hasta ser avisado. Si se interrumpe, lanza <code>InterruptedException</code>.</li>
+<li><strong><code>notify()</code></strong>: Despierta a un hilo aleatorio que esté esperando en ese objeto.</li>
+<li><strong><code>notifyAll()</code></strong>: Despierta a <strong>todos</strong> los hilos esperando (más seguro para evitar bloqueos indefinidos).</li>
+</ul>
+<blockquote>
+<p><strong>Patrón de uso robusto:</strong> Siempre usa <code>wait()</code> dentro de un bucle <code>while</code> que verifique la condición, no un <code>if</code>, para re-comprobar al despertar.</p>
+</blockquote>
+<h2>2.7.5 Métodos Útiles de la Clase Thread</h2>
+<ul>
+<li><strong><code>start()</code></strong>: Inicia la ejecución del hilo.</li>
+<li><strong><code>sleep(long ms)</code></strong>: Pausa el hilo actual el tiempo indicado.</li>
+<li><strong><code>join()</code></strong>: Hace que el hilo actual espere hasta que el hilo al que se llama termine (ej. el <code>main</code> espera a los trabajadores).</li>
+<li><strong><code>currentThread()</code></strong>: Devuelve la referencia al hilo que está ejecutando esa línea de código.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-paradigmas-de-la-computacion-distribuida.html"><span class="nav-etiqueta">← anterior</span>1. Paradigmas de la Computación Distribuida</a>
+  <a class="nav-siguiente" href="3-objetos-distribuidos.html"><span class="nav-etiqueta">siguiente →</span>3. Objetos Distribuidos</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

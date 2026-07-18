@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Grafos I — apuntes de AED (segundo curso de Ingeniería Informática).">
+<title>5. Grafos I · AED · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">aed</a><span class="miga-sep">/</span><span aria-current="page">5-grafos-i</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">AED · curso 2</p>
+    <h1>5. Grafos I · AED</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<h1>5.1 Grafos I</h1>
+<p>Los <strong>grafos</strong> son estructuras de datos que representan relaciones arbitrarias entre objetos, a diferencia de los árboles que suelen reflejar jerarquías. Un grafo está compuesto por:</p>
+<ul>
+<li><strong>Vértices o nodos (V)</strong>: Son los puntos que representan los objetos.</li>
+<li><strong>Arcos o aristas (A)</strong>: Conjunto de conexiones entre pares de nodos.</li>
+</ul>
+<h3>Tipos de grafos</h3>
+<ul>
+<li><strong>Grafo dirigido (dígrafo)</strong>: Los arcos tienen una dirección, conectando un nodo de origen con otro de destino, pero no necesariamente en sentido inverso.</li>
+<li><strong>Grafo no dirigido</strong>: Los arcos son bidireccionales, conectando dos nodos de manera simétrica.</li>
+<li><strong>Grafo valorado</strong>: Los arcos tienen un peso asociado, que podría representar una distancia, coste, o cualquier otro valor.</li>
+</ul>
+<h3>Propiedades importantes</h3>
+<ul>
+<li><strong>Nodos adyacentes</strong>: En un grafo no dirigido, dos nodos son adyacentes si están conectados por un arco. En un grafo dirigido, solo el primer nodo es adyacente del segundo.</li>
+<li><strong>Grado de un nodo</strong>: Número de arcos que inciden en un nodo. En dígrafos, se distingue entre grado entrante (arcos que llegan al nodo) y grado saliente (arcos que parten del nodo).</li>
+<li><strong>Camino</strong>: Secuencia de nodos conectados por arcos. Un camino tiene una longitud que se define como el número de arcos que lo componen.</li>
+<li><strong>Bucle</strong>: Arco que conecta un nodo consigo mismo.</li>
+<li><strong>Grafo conexo</strong>: Grafo donde existe un camino entre cualquier par de nodos.</li>
+<li><strong>Fuertemente conexo</strong>: En dígrafos, si existe un camino en ambas direcciones entre cualquier par de nodos.</li>
+<li><strong>Grafo completo</strong>: Grafo en el que existe un arco entre cada par de nodos.</li>
+</ul>
+<h3>Aplicaciones de los grafos</h3>
+<p>Los grafos tienen muchas aplicaciones prácticas, como:</p>
+<ul>
+<li>Redes de alcantarillado.</li>
+<li>Redes de comunicaciones.</li>
+<li>Circuitos eléctricos.</li>
+<li>Diagramas de flujo de algoritmos.</li>
+</ul>
+<h1>5.2 Representación de Grafos</h1>
+<p>Los grafos se pueden representar de diferentes maneras, dependiendo de la operación a realizar:</p>
+<h3>Matriz de adyacencia</h3>
+<ul>
+<li>Es una matriz cuadrada de tamaño <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></eq>, donde <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></eq> es el número de nodos.</li>
+<li>Cada posición <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">i</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span></span></span></span></eq> en la matriz indica si existe un arco entre los nodos <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></eq> y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span></span></span></span></eq> (1 si existe, 0 si no).</li>
+<li>En grafos no dirigidos, la matriz es simétrica. En los dígrafos, no necesariamente.</li>
+<li>En grafos valorados, los elementos de la matriz representan el peso del arco.</li>
+</ul>
+<p><strong>Ventajas</strong>:</p>
+<ul>
+<li>Muy eficiente para obtener el coste o peso asociado a un arco.</li>
+<li>Comprobación de adyacencia entre dos nodos es directa.</li>
+</ul>
+<p><strong>Desventajas</strong>:</p>
+<ul>
+<li>No permite eliminar nodos fácilmente, ya que implicaría modificar toda la matriz.</li>
+<li>Poco eficiente en grafos dispersos, ya que muchas posiciones estarán llenas de ceros.
+<img src="../../../img/aed/pasted-image-20241027191347.png" alt="archivos/imagenes/Pasted image 20241027191347.png" loading="lazy"></li>
+</ul>
+<h3>Lista de adyacencia</h3>
+<ul>
+<li>Cada nodo tiene asociada una lista enlazada que contiene los nodos con los que es adyacente.</li>
+</ul>
+<p><strong>Ventajas</strong>:</p>
+<ul>
+<li>Ocupa menos espacio en memoria para grafos con pocos arcos.</li>
+</ul>
+<p><strong>Desventajas</strong>:</p>
+<ul>
+<li>Más compleja de manejar por el uso de punteros.</li>
+<li>Ineficiente para encontrar todos los arcos que llegan a un nodo.
+<img src="../../../img/aed/pasted-image-20241027191306.png" alt="archivos/imagenes/Pasted image 20241027191306.png" loading="lazy"></li>
+</ul>
+<h1>5.3 Recorridos en Grafos</h1>
+<h3>Recorrido en anchura (BFS - Breadth-First Search)</h3>
+<ul>
+<li>Se comienza desde un nodo y se visitan todos sus nodos adyacentes. Luego se continúa con los adyacentes de esos nodos, y así sucesivamente.</li>
+<li>Utiliza una <strong>cola</strong> para almacenar los nodos a visitar.
+<img src="../../../img/aed/pasted-image-20241027184251.png" alt="archivos/imagenes/Pasted image 20241027184251.png" loading="lazy"></li>
+</ul>
+<h3>Recorrido en profundidad (DFS - Depth-First Search)</h3>
+<ul>
+<li>A partir de un nodo, se recorre cada vértice adyacente hasta no encontrar más nodos no visitados.</li>
+<li>Puede implementarse de manera <strong>recursiva</strong> o utilizando una <strong>pila</strong> como estructura auxiliar.
+<img src="../../../img/aed/pasted-image-20241027190004.png" alt="archivos/imagenes/Pasted image 20241027190004.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241027190032.png" alt="archivos/imagenes/Pasted image 20241027190032.png" loading="lazy"></li>
+</ul>
+<h1>5.4 Componentes conexas</h1>
+<h3>Componentes conexas en un grafo no dirigido</h3>
+<ol>
+<li>Se realiza un recorrido desde cualquier vértice, almacenando los nodos visitados.</li>
+<li>Si todos los vértices fueron visitados, el grafo es conexo.</li>
+<li>Si no, los vértices visitados forman una componente conexa. Se repite el proceso con un vértice no visitado.
+<img src="../../../img/aed/pasted-image-20241027190122.png" alt="archivos/imagenes/Pasted image 20241027190122.png" loading="lazy"></li>
+</ol>
+<h3>Componentes fuertemente conexas en un dígrafo</h3>
+<ol>
+<li>Se obtiene el conjunto de descendientes de un nodo. <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></eq></li>
+<li>Se obtiene el conjunto de sus ascendientes. <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">A</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></eq></li>
+<li>Si la intersección de ambos conjuntos incluye todos los nodos, el dígrafo es fuertemente conexo.
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∩</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">A</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⟹</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord text"><span class="mord">G es fuertemente conexo</span></span></span></span></span></span></eqn></section>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">G</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel"><span class="mrel"><span class="mord vbox"><span class="thinbox"><span class="rlap"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="inner"><span class="mord"><span class="mrel"></span></span></span><span class="fix"></span></span></span></span></span><span class="mspace nobreak"></span><span class="mrel">=</span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∩</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">A</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⟹</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord text"><span class="mord">G no es fuertemente conexo</span></span></span></span></span></span></eqn></section></li>
+</ol>
+<img src="../../../img/aed/pasted-image-20241027190143.png" alt="archivos/imagenes/Pasted image 20241027190143.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241027190733.png" alt="archivos/imagenes/Pasted image 20241027190733.png" loading="lazy">
+## Matriz de caminos
+- Se obtiene multiplicando la matriz de adyacencia por sí misma repetidamente. La matriz resultante indica la existencia de caminos de diferente longitud entre nodos.
+<img src="../../../img/aed/pasted-image-20241027190815.png" alt="archivos/imagenes/Pasted image 20241027190815.png" loading="lazy">
+- En un grafo fuertemente conexo, todas las entradas de la matriz de caminos tienen un 1 excepto la diagonal principal.
+<h1>5.5 Puntos de articulación</h1>
+<p>Un <strong>punto de articulación</strong> es un nodo que, si se elimina junto con sus arcos, divide una componente conexa en dos o más componentes.</p>
+<h3>Algoritmo para encontrar puntos de articulación</h3>
+<ol>
+<li>Se realiza un recorrido en profundidad, numerando los nodos.
+<img src="../../../img/aed/pasted-image-20241027190947.png" alt="archivos/imagenes/Pasted image 20241027190947.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241027191024.png" alt="archivos/imagenes/Pasted image 20241027191024.png" loading="lazy"></li>
+<li>Para cada nodo <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span></span></span></span></eq>, se calcula <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mord mathnormal" style="margin-right:0.0572em;">aj</span><span class="mord mathnormal">o</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mclose">)</span></span></span></span></eq>, que es el mínimo de:
+<ul>
+<li>Su número <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mord mathnormal">u</span><span class="mord mathnormal">m</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mclose">)</span></span></span></span></eq>.</li>
+<li>El menor número de los vértices alcanzados por aristas hacia atrás.</li>
+<li>El menor valor de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mord mathnormal" style="margin-right:0.0572em;">aj</span><span class="mord mathnormal">o</span></span></span></span></eq> entre sus descendientes.
+<img src="../../../img/aed/pasted-image-20241027191108.png" alt="archivos/imagenes/Pasted image 20241027191108.png" loading="lazy"></li>
+</ul>
+</li>
+<li>Un nodo es punto de articulación si:
+<ul>
+<li>Es la raíz del recorrido y tiene al menos dos hijos.</li>
+<li>Tiene un hijo <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">u</span></span></span></span></eq> tal que <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mord mathnormal">u</span><span class="mord mathnormal">m</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mord mathnormal" style="margin-right:0.0572em;">aj</span><span class="mord mathnormal">o</span><span class="mopen">(</span><span class="mord mathnormal">u</span><span class="mclose">)</span></span></span></span></eq>.</li>
+</ul>
+</li>
+</ol>
+<img src="../../../img/aed/pasted-image-20241027191148.png" alt="archivos/imagenes/Pasted image 20241027191148.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241027191223.png" alt="archivos/imagenes/Pasted image 20241027191223.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-arboles-equilibrados-b-y-b.html"><span class="nav-etiqueta">← anterior</span>4. Árboles equilibrados B y B+</a>
+  <a class="nav-siguiente" href="6-grafos-ii.html"><span class="nav-etiqueta">siguiente →</span>6. Grafos II</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

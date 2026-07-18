@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="3. Modelado Estructural — apuntes de DESOFT (segundo curso de Ingeniería Informática).">
+<title>3. Modelado Estructural · DESOFT · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">desoft</a><span class="miga-sep">/</span><span aria-current="page">3-modelado-estructural</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DESOFT · curso 2</p>
+    <h1>3. Modelado Estructural · DESOFT</h1>
+  </header>
+  <div class="prosa">
+<p>(<em>diagramas de clases</em>)</p>
+<p>Una <strong>clase</strong> es una descripción de un conjunto de objetos que comparten atributos, operaciones, relaciones y semántica. Son <strong>abstracciones</strong> independientes del lenguaje de programación capaces de implementar <strong>interfaces</strong>.</p>
+<p>Los objetos de una misma clase tienen los mismos tipos de <strong>estado</strong> y <strong>comportamiento</strong>. Las clases <strong>colaboran</strong> entre si para satisfacer necesidades. Hay 3 tipos de <strong>relaciones:</strong></p>
+<ul>
+<li><strong>Dependencia:</strong> los cambios en la planificación de un elemento pueden afectar a otro, indica utilización.
+<img src="../../../img/desoft/pasted-image-20250225130055.png" alt="Pasted image 20250225130055.png" loading="lazy"></li>
+<li><strong>Generalización:</strong> relación padre hijo.
+<img src="../../../img/desoft/pasted-image-20250225130134.png" alt="Pasted image 20250225130134.png" loading="lazy"></li>
+<li><strong>Asociación:</strong> relación estructural. Se usa para vincular clases. Ademas tenemos adornos:
+<ul>
+<li><strong>Nombre:</strong> etiqueta que describe la relación</li>
+<li><strong>Rol:</strong> papel que juega cada clase relacionada</li>
+<li><strong>Multiplicidad:</strong> nº de instancias participantes</li>
+<li><strong>Agregación:</strong> es como lo de entidad débil - entidad fuerte de BDI (<em>asociación todo-partes</em>).</li>
+<li><strong>Composición:</strong> igual que en POO.</li>
+</ul>
+</li>
+</ul>
+<img src="../../../img/desoft/pasted-image-20250225130542.png" alt="Pasted image 20250225130542.png" loading="lazy">
+<img src="../../../img/desoft/pasted-image-20250225131001.png" alt="Pasted image 20250225131001.png" loading="lazy">
+Son la base para diagramas de paquetes, componentes y despliegue. Pueden contener **paquetes**.
+<img src="../../../img/desoft/pasted-image-20250225130831.png" alt="Pasted image 20250225130831.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="2-modelado-de-casos-de-uso.html"><span class="nav-etiqueta">← anterior</span>2. Modelado de Casos de Uso</a>
+  <a class="nav-siguiente" href="4-modelado-de-comportamiento.html"><span class="nav-etiqueta">siguiente →</span>4. Modelado de Comportamiento</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

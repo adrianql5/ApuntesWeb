@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="3. Árboles Equilibrados AVL — apuntes de AED (segundo curso de Ingeniería Informática).">
+<title>3. Árboles Equilibrados AVL · AED · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">aed</a><span class="miga-sep">/</span><span aria-current="page">3-arboles-equilibrados-avl</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">AED · curso 2</p>
+    <h1>3. Árboles Equilibrados AVL · AED</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<p>Con <strong>árboles desbalanceados</strong> se pierda le eficiencia de búsqueda, acercándose a la de una lista, es decir <em>O(n)</em> para la búsqueda. SIn embargo, con árboles equilibrados se consigue una eficiencia de <em>O log(n)</em> en la búsqueda, inserción o eliminación.</p>
+<p>Aquellos árboles que se mantiene siempre equilibrados debido a constantes reordenaciones se conocen como <strong>árboles AVL</strong>.</p>
+<p>En este tipo de árboles, cada nodo cuenta con un campo llamado <strong>factor de equilibrio</strong>, que almacena <em>la diferencia entre la altura del subárbol derecho y la altura del subárbol izquierdo</em> para dicho nodo. Un árbol será equilibrado mientras el valor absoluto de todos los factores de carga sea <strong>menor que 2</strong>.</p>
+<img src="../../../img/aed/pasted-image-20241002193941.png" alt="archivos/imagenes/Pasted image 20241002193941.png" loading="lazy">
+<h1>3.1 Inserción</h1>
+<p>Se pueden dar varios casos en la inserción:</p>
+<ul>
+<li>Si las ramas <strong>izquierda y derecha tienen misma altura</strong>, da igual donde se inserte, que al insertar solo se producirá un nuevo <strong>factor de equilibrio de 1 o -1</strong>, con lo que el árbol sigue estando equilibrado.</li>
+<li>Si las ramas <strong>izquierda y derecha difieren en su altura en 1 unidad</strong>:</li>
+</ul>
+<p>a) SI el factor de equilibrio era <strong>-1</strong> se inserta por la <strong>derecha</strong>, o si el factor de equilibrio era <strong>1</strong> se inserta por la <strong>izquierda</strong>, el nuevo factor de equilibrio pasa a ser <strong>0</strong>, por lo que se mejora el equilibrio del árbol y no hay ningún problema.</p>
+<p>b) Si el factor de equilibrio era <strong>-1</strong> y se inserta por la <strong>izquierda</strong>, o si el nuevo factor de equilibrio era 1 y se inserta por la derecha, el nuevo factor de equilibrio pasa a ser <strong>-2 o 2</strong> respectivamente, desequilibrando el árbol, y siendo necesaria una reesrtucturación.</p>
+<h2>Reestructuración</h2>
+<p>Tras una inserción, el nodo insertado pasa a ser <strong>un nodo hoja</strong>, por lo que su factor de equilibrio es 0. Posteriormente vamos subiendo por el árbol <strong>recalculando los factores de equilibrio</strong> hasta encontrar uno que cuyo valor absoluto sea 2, a partir del cual habrá que reestructurar el árbol. Así hasta llegar al nodo raíz.</p>
+<p><strong>4 tipos de rotaciones, I-&gt; Izquierda  D-&gt; Derecha:</strong></p>
+<ul>
+<li>
+<p><strong>Rotación simple II:</strong> Se produce cuando un nodo tiene <strong>factor -2</strong> y su hijo izquierdo <strong>factor -1</strong>. Se rota hacia la <strong>derecha</strong>, dejando el nodo con factor <strong>-1</strong> como <strong>nuevo padre</strong>, el nodo con factor <strong>-2</strong> como <strong>hijo derecho</strong>, y el nodo que origino el desequilibrio como <strong>hijo izquierdo</strong>.</p>
+</li>
+<li>
+<p><strong>Rotación simple DD:</strong> Se produce cuando un nodo tiene <strong>factor 2</strong> y su hijo derecho es <strong>factor -1</strong>. Es lo contrario al caso anterior: Rotación a la izquierda, nodo con <strong>factor 1</strong> como <strong>padre</strong>, nodo con <strong>factor 2</strong> como <strong>hijo izquierdo</strong>, y nodo que originó el desequilibrio como <strong>hijo derecho</strong>.
+<img src="../../../img/aed/pasted-image-20241002200930.png" alt="archivos/imagenes/Pasted image 20241002200930.png" loading="lazy"></p>
+</li>
+<li>
+<p><strong>Rotación compuesta DI:</strong> se produce cuando un nodo tiene <strong>factor 2</strong> y su <strong>hijo derecho</strong>, <strong>factor -1</strong>. Se rota el hijo con factor a la derecha y se sube el nodo que originó el desequilibrio a su posición, y se tiene una <strong>rotación simple DD</strong>.
+<img src="../../../img/aed/pasted-image-20241002201001.png" alt="Archivos/imagenes/Pasted image 20241002201001.png" loading="lazy"></p>
+</li>
+<li>
+<p><strong>Rotación compuesta ID:</strong> se produce cuando un nodo tiene <strong>factor -2</strong> y su <strong>hijo izquierdo</strong>, <strong>factor 1</strong>. Se rota el hijo con factor <strong>1</strong> a la izquierda y se pone el nodo que causó el desequilibrio en su posición, teniendo una <strong>rotación simple II</strong>
+<img src="../../../img/aed/pasted-image-20241002201031.png" alt="archivos/imagenes/Pasted image 20241002201031.png" loading="lazy"></p>
+</li>
+</ul>
+<img src="../../../img/aed/pasted-image-20241002201120.png" alt="archivos/imagenes/Pasted image 20241002201120.png" loading="lazy">
+<h2>Rotaciones Complicadas</h2>
+<img src="../../../img/aed/pasted-image-20241003202659.png" alt="archivos/imagenes/Pasted image 20241003202659.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241003202732.png" alt="archivos/imagenes/Pasted image 20241003202732.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241003202813.png" alt="archivos/imagenes/Pasted image 20241003202813.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241003202924.png" alt="archivos/imagenes/Pasted image 20241003202924.png" loading="lazy">
+<h1>3.2Eliminación</h1>
+<p>Se sigue el <strong>mismo algoritmo que en ABB</strong>, pero <strong>incluyendo las reestructuraciones necesarias</strong>:</p>
+<ul>
+<li>Si el nodo es <strong>hoja</strong>, se suprime</li>
+<li>Si solo tiene <strong>un descendiente</strong>, se sustituye por su descendiente y se elimina.</li>
+<li>Si tiene <strong>2 subárboles</strong>, se busca el nodo más a la derecha del <strong>subárbol derecho</strong>, o el nodo más a la izquierda del subárbol derecho, se sustituye, se elimina y se comprueba si hace falta reestructurar.</li>
+</ul>
+<img src="../../../img/aed/pasted-image-20241002202845.png" alt="archivos/imagenes/Pasted image 20241002202845.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20241002202854.png" alt="archivos/imagenes/Pasted image 20241002202854.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="2-estructuras-para-busqueda.html"><span class="nav-etiqueta">← anterior</span>2. ESTRUCTURAS PARA BÚSQUEDA</a>
+  <a class="nav-siguiente" href="4-arboles-equilibrados-b-y-b.html"><span class="nav-etiqueta">siguiente →</span>4. Árboles equilibrados B y B+</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

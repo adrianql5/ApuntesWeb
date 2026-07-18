@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="7. Sistemas de Mensajes — apuntes de COMDIS (tercer curso de Ingeniería Informática).">
+<title>7. Sistemas de Mensajes · COMDIS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">comdis</a><span class="miga-sep">/</span><span aria-current="page">7-sistemas-de-mensajes</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">COMDIS · curso 3</p>
+    <h1>7. Sistemas de Mensajes · COMDIS</h1>
+  </header>
+  <div class="prosa">
+<h1>7.1 Introducción y Contexto Histórico</h1>
+<p>Para comprender la importancia de RabbitMQ, primero debemos entender el problema que resuelve: la <strong>interconectividad en sistemas heterogéneos</strong>.</p>
+<h2>7.1.1 La era de los Mainframes y la Conexión Punto a Punto</h2>
+<ul>
+<li><strong>Años 60:</strong> La computación estaba dominada por <em>Mainframes</em> para operaciones críticas. Las opciones de entrada eran reducidas y la interconectividad entre sistemas era prácticamente inexistente. El procesamiento paralelo tal como lo conocemos hoy no era posible.</li>
+<li><strong>Años 70:</strong> Se introduce el acceso mediante terminales y el acceso concurrente, permitiendo cierta comunicación entre mainframes a través de redes primitivas.</li>
+<li><strong>Años 80:</strong> La llegada del PC y las interfaces gráficas incrementó la necesidad de acceder a los datos centralizados en los mainframes.</li>
+</ul>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>Un Mainframe es una computadora de alto rendimiento, gran tamaño y centralizada, diseñada para procesar inmensos volúmenes de datos y transacciones críticas (banca, censos, aerolíneas).</p>
+</div>
+<p><strong>El problema de la escalabilidad (&quot;Spaghetti Integration&quot;):</strong> Conectar fuentes y destinos no era sencillo. Cada par de sistemas requería adaptadores específicos para hardware, protocolos y formatos de datos.</p>
+<ul>
+<li>A mayor número de sistemas, mayor número de adaptadores y versiones.</li>
+<li>Esto resultaba en una arquitectura <strong>no escalable</strong> y extremadamente difícil de mantener.</li>
+</ul>
+<h2>7.1.2 La Solución: Mensajería Empresarial</h2>
+<p>Como respuesta a este caos de conexiones directas, surge la <strong>mensajería empresarial</strong>.</p>
+<ul>
+<li><strong>Objetivo:</strong> Transferir información entre sistemas heterogéneos mediante el envío de mensajes, eliminando el acoplamiento directo.</li>
+<li><strong>Evolución tecnológica:</strong> Se pasó de las Llamadas a Procedimientos Remotos (RPC) (que actúan como middleware tipo COM o CORBA) a los <strong>Sistemas MOM (Message-Oriented Middleware)</strong>.</li>
+</ul>
+<h1>7.2 Fundamentos de los Sistemas de Mensajes (MOM)</h1>
+<p>Un sistema de mensajes es un método de comunicación entre componentes de software o aplicaciones que abstrae la complejidad de la red.</p>
+<p><strong>Características Clave:</strong>
+La principal ventaja de usar MOM (como RabbitMQ) frente a una conexión directa (como HTTP REST síncrono) reside e el <strong>desacoplamiento:</strong></p>
+<ul>
+<li><strong>Desacomplamiento Temporal (Asincronía):</strong> Emisor y receptor no necesitan estar disponibles al mismo tiempo. El emisor envía el mensaje y sigue trabajando; el receptor lo procesará cuando pueda.</li>
+<li><strong>Desacomplamiento Estructural (Weak Coupling):</strong> Emisor y receptor no necesitan saber nada el uno del otro (ni IP, ni tipo de servidor). Solo necesitan conocer el <strong>formato del mensaje</strong> y el <strong>destino</strong> lógico.</li>
+<li><strong>Conexión Única:</strong> Solo es necesaria la conexión al MOM, no una conexión mallada entre todos los servicios.</li>
+</ul>
+<img src="../../../img/comdis/pasted-image-20251212154927.png" alt="Pasted image 20251212154927.png" loading="lazy">
+<h1>7.3 RabbitMQ: Arquitectura y Protocolos AMQP</h1>
+<p><strong>RabbitMQ</strong> es un middleware de mensajería (Message Broker) concebido en 2007. Aunque soporta múltiples protocolos (STOMP, HTTP), su estándar nativo y más potente es <strong>AMQP 0-9-1</strong>.</p>
+<h2>7.3.1 ¿Qué es AMQP?</h2>
+<p>El <em>Advanced Message Queuing Protocol</em> es un protocolo asíncrono que garantiza el envío fiable de mensajes. Su función es almacenar mensajes en colas seguras hasta que el receptor se conecte o cumpla los criterios para recibirlo.</p>
+<h2>7.3.2 Componentes de la Arquitectura AMQP</h2>
+<p>En un sistema RabbitMQ, la comunicación no es directa de &quot;A&quot; a &quot;B&quot;. Fluye a través de componentes específicos:</p>
+<ul>
+<li><strong>Mensajes:</strong> La unidad de datos. Contiene dos partes:
+<ul>
+<li><strong>Contenido (Payload):</strong> los datos en sí (array de bytes)</li>
+<li><strong>Clave (Routing Key):</strong> un valor que permite al sistema saber a qué cola debe dirigirse el mensaje.</li>
+</ul>
+</li>
+<li><strong>Productor (Producer):</strong> El software que crea y envía el mensaje. Nota: En términos de código, &quot;producir&quot; significa &quot;enviar&quot;.</li>
+<li><strong>Intercambiador (Exchange): Este es el componente crítico</strong>. Es el &quot;cartero&quot; o router. Recibe los mensajes del productor y decide a qué cola enviarlos basándose en reglas (bindigns) y en la clave del mensaje.</li>
+<li><strong>Cola (Queue):</strong> Un buffer o buzón que vive dentro de RabbitMQ. Almacena los mensajes de forma segura hasta su consumo.</li>
+<li><strong>Consumidor (Consumer):</strong> El software que esperar recibir y procesar los mensajes desde la cola</li>
+</ul>
+<blockquote>
+<p><strong>Importante:</strong> El productor <strong>nunca</strong> envía mensajes directamente a la cola. Siempre los envía al Exchange.</p>
+</blockquote>
+<h1>7.4 Tipos de Exchange (Estrategias de Enrutamiento)</h1>
+<p>El comportamiento del sistema depende totalmente del tipo de <em>Exchange</em> que configuremos. Tenemos 5 estrategias fundamentales.</p>
+<h2>7.4.1 Fanout (Difusión)</h2>
+<ul>
+<li><strong>Lógica:</strong> El mensaje se envía a <strong>todas</strong> las colas conectadas al exchange, ignorando la clave del mensaje.</li>
+<li><strong>Uso:</strong> Ideal para patrones &quot;Publish/Subscribe&quot; donde varios sistemas deben reaccionar al mismo evento.</li>
+<li><strong>Diagrama conceptual:</strong> Un mensaje entra y se clona hacia la Cola 1 y la Cola 2 simultáneamente.</li>
+</ul>
+<img src="../../../img/comdis/pasted-image-20251211161649.png" alt="Pasted image 20251211161649.png" loading="lazy">
+<h2>7.4.2 Direct (Directo)</h2>
+<ul>
+<li><strong>Lógica:</strong> El mensaje va a una cola específica si la <strong>Clave del Mensaje (Routing Key)</strong> coincide <strong>exactamente</strong> con la <strong>Clave de Conexión (Binding Key)</strong> de la cola.</li>
+<li><strong>Ejemplo:</strong> Si el mensaje tiene clave <code>abc</code> y la Cola 1 está atada con <code>abc</code>, el mensaje entra. Si la Cola 2 espera <code>def</code>, el mensaje <code>abc</code> se descarta para esa cola.</li>
+</ul>
+<img src="../../../img/comdis/pasted-image-20251211161830.png" alt="Pasted image 20251211161830.png" loading="lazy">
+<h2>7.4.3 Topic (Tema)</h2>
+<ul>
+<li><strong>Lógica:</strong> Similar al Directo, pero permite coincidencias <strong>parciales</strong> usando comodines (wildcards).</li>
+<li><strong>Ejemplo:</strong> Un mensaje con clave <code>a.b.c</code> podría entrar en una cola que escuche <code>a.*</code> o <code>*.b.*</code>.</li>
+<li><strong>Diagrama conceptual:</strong> Permite enrutamiento complejo basado en patrones.</li>
+</ul>
+<img src="../../../img/comdis/pasted-image-20251211161938.png" alt="Pasted image 20251211161938.png" loading="lazy">
+<h2>7.4.4 Header (Cabecera)</h2>
+<ul>
+<li><strong>Lógica:</strong> Ignora la clave de enrutamiento. En su lugar, inspecciona los <strong>metadatos (headers)</strong> del mensaje para decidir el destino.</li>
+</ul>
+<img src="../../../img/comdis/pasted-image-20251211162106.png" alt="Pasted image 20251211162106.png" loading="lazy">
+<h2>7.4.5 Default (Nameless)</h2>
+<ul>
+<li><strong>Lógica:</strong> Es un Exchange predeterminado. Compara la clave del mensaje directamente con el <strong>nombre de la cola</strong>. Si el mensaje tiene clave <code>cola1</code>, se entrega a la cola llamada <code>cola1</code>.</li>
+<li><strong>Nota:</strong> Es el comportamiento por defecto si no se especifica exchange.</li>
+</ul>
+<img src="../../../img/comdis/pasted-image-20251211162157.png" alt="Pasted image 20251211162157.png" loading="lazy">
+<h1>7.5 Programación con RabbitMQ</h1>
+<h2>7.5.1 Conceptos Fundamentales de Arquitectura</h2>
+<ul>
+<li><strong>Productor (Producer):</strong> Es el programa que <em>envía</em> los mensajes.</li>
+<li><strong>Consumidor (Consumer):</strong> Es el programa que <em>espera y recibe</em> los mensajes.</li>
+<li><strong>Cola (Queue):</strong> Un gran &quot;buffer&quot; o buzón que vive dentro de RabbitMQ donde se almacenan los mensajes.</li>
+</ul>
+<p><strong>La tubería: Conexión vs Canal</strong>
+Esta distinción es crítica para entender el código:</p>
+<ul>
+<li><strong>Conexión (<code>Connection</code>):</strong> Es la conexión TCP/IP real entre tu aplicación y el broker RabbitMQ. Es pesada y costosa de establecer (autenticación, handshake).</li>
+<li><strong>Canal (<code>Channel</code>):</strong> Es una conexión virtual dentro de la conexión TCP. La mayoría de las tareas de la API (enviar, recibir, declarar colas) se realizan a través del canal.</li>
+</ul>
+<blockquote>
+<p><strong>Analogía:</strong> La <em>Conexión</em> es la autopista (cable) que llega al servidor. Los <em>Canales</em> son los carriles individuales por donde viajan los coches (mensajes). Se usa una sola conexión y múltiples canales para ser eficientes.</p>
+</blockquote>
+<h2>7.5.2 Desarrollo del Productor</h2>
+<p>El objetivo del productor es conectarse y dejar un mensaje en una cola.</p>
+<p><strong>Paso 1: Configurar la Conexión</strong>
+Usamos una <code>ConnectionFactory</code> para definir los parámetros del productor.</p>
+<pre><code class="language-java">ConnectionFactory factory = new ConnectionFactory();
+factory.setHost(&quot;localhost&quot;); // Apunta al servidor local
+// Si el servidor es remoto, usarías factory.setHost(&quot;192.168.1.50&quot;);
+</code></pre>
+<p><strong>Paso 2: Crear Conexión y Canal (Try-with-resources)</strong>
+Se recomienda usar la estructura <code>try (...)</code> de Java para que la conexión y el canal se cierren automáticamente al terminar, liberando recursos.</p>
+<pre><code class="language-java">try (Connection connection = factory.newConnection();
+     Channel channel = connection.createChannel()) {
+</code></pre>
+<p><strong>Paso 3: Declarar la Cola (Idempotencia)</strong>
+Antes de enviar nada, debemos asegurarnos de que el destino existe.</p>
+<pre><code class="language-java">channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+
+// queueDeclare(queue, durable, exclusive, autoDelete, arguments)
+
+// 1. queue (String): El nombre de la cola (ej: &quot;mi_cola&quot;).
+// 2. durable (boolean): false = Si RabbitMQ se reinicia, la cola (y sus mensajes) DESAPARECEN. 
+//                       true = La cola se guarda en disco y sobrevive al reinicio.
+// 3. exclusive (boolean): false = Otros conexiones/canales pueden acceder a esta cola.
+//                         true = Solo ESTA conexión puede usarla (útil para colas temporales privadas).
+// 4. autoDelete (boolean): false = La cola se queda ahí aunque no haya nadie escuchando.
+//                          true = La cola se borra sola cuando el último consumidor se desconecta.
+// 5. arguments (Map): null = Sin configuración extra (se usa para TTL, longitud máxima, etc.).
+</code></pre>
+<blockquote>
+<p><strong>Concepto Clave (Idempotencia):</strong> Esta operación es <em>idempotente</em>. Significa que si la cola ya existe, no hace nada; si no existe, la crea. Esto evita errores si ejecutas el programa múltiples veces.</p>
+</blockquote>
+<p><strong>Paso 4: Publicar el Mensaje</strong>
+Finalmente, enviamos el mensaje convertido a bytes</p>
+<pre><code class="language-java">String message = &quot;Hello World!&quot;;
+channel.basicPublish(&quot;&quot;, QUEUE_NAME, null, message.getBytes());
+
+//basicPublish(exchange, routingKey, metadatos, body)
+</code></pre>
+<ul>
+<li>El primer parámetro <code>&quot;&quot;</code> indica que usamos el <strong>Exchange por Defecto</strong>.</li>
+<li>El segundo parámetro usa el nombre de la cola como <strong>Routing Key</strong> (clave de enrutamiento).</li>
+</ul>
+<h2>7.5.3 Desarrollo del Consumidor (<code>Recv.java</code>)</h2>
+<p>El consumidor se mantiene a la escucha (listening) para procesar mensajes entrantes.</p>
+<p><strong>Paso 1: Configuración Simétrica</strong>
+Al igual que el Productor, el Consumidor debe abrir conexión, canal y <strong>declarar la cola</strong>.</p>
+<pre><code class="language-java">channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+</code></pre>
+<blockquote>
+<p><strong>¿Por qué repetirlo?</strong> Porque en sistemas distribuidos no sabemos quién arranca primero. Si iniciamos el Consumidor antes que el Productor y la cola no existe, el programa fallaría. Declararla en ambos lados garantiza que el &quot;buzón&quot; exista siempre.</p>
+</blockquote>
+<p><strong>Paso 2: Callback de Entrega (Asincronía)</strong>
+El servidor envía mensajes de forma asíncrona (push) al cliente. No usamos un bucle <code>while</code> tradicional, sino un <strong>Callback</strong> (una función que se dispara al ocurrir un evento).</p>
+<p>Definimos el objeto <code>DeliverCallback</code> que almacenará la lógica de &quot;qué hacer cuando llegue un mensaje&quot;:</p>
+<pre><code class="language-java">DeliverCallback deliverCallback = (consumerTag, delivery) -&gt; {
+    String message = new String(delivery.getBody(), &quot;UTF-8&quot;);
+    System.out.println(&quot;Recibido: &quot; + message);
+};
+</code></pre>
+<p><strong>Paso 3: Iniciar el Consumo</strong>
+Le indicamos al canal que empiece a consumir mensajes de la cola específica usando el callback definido.</p>
+<pre><code class="language-java">channel.basicConsume(QUEUE_NAME, true, deliverCallback, consumerTag -&gt; { });
+
+// basicConsume(queue, autoAck, deliverCallback, cancelCallback)
+
+// 1. queue (String): De qué cola quieres leer.
+// 2. autoAck (boolean): true = &quot;Modo disparo y olvido&quot;. RabbitMQ borra el mensaje en cuanto te lo envía, 
+//                       sin esperar a que le digas que lo procesaste bien. (Rápido pero arriesgado).
+//                       false = Tienes que enviar un 'ack' manual después de procesar.
+// 3. deliverCallback: La función (lambda) que se ejecuta CADA VEZ que llega un mensaje.
+// 4. cancelCallback: La función que se ejecuta si el servidor cancela al consumidor (raro, por ejemplo si la cola se borra).
+
+</code></pre>
+<h2>7.5.4 Estrategias de Enrutamiento (Exchanges)</h2>
+<p>El verdadero poder de RabbitMQ no es solo guardar mensajes, sino <strong>decidir a quién entregarlos</strong>. Esta decisión la toma el <strong>Exchange</strong> (Intercambiador). El Productor envía al Exchange, y el Exchange reparte a las Colas según el algoritmo elegido.</p>
+<h3>Default (Sin nombre)</h3>
+<ul>
+<li><strong>Funcionamiento:</strong> Es el comportamiento básico que vimos en el código anterior.</li>
+<li><strong>Lógica:</strong> Compara la clave del mensaje directamente con el <strong>nombre de la cola</strong>.</li>
+<li><strong>Código:</strong> <code>channel.basicPublish(&quot;&quot;, &quot;nombre_cola&quot;, ...)</code></li>
+</ul>
+<h3>Fanout (Difusión)</h3>
+<p><strong>Concepto:</strong> &quot;El Megáfono&quot;. El productor grita, y todos los que estén conectados escuchan.. <strong>Caso de uso:</strong> Un marcador deportivo. Si hay gol, actualizas la Web, la App y la TV a la vez.</p>
+<p><strong>Productor:</strong> no le importa quién escucha. Envía al exchange &quot;deportes&quot;.</p>
+<pre><code class="language-java">// 1. Declaramos el exchange de tipo FANOUT
+channel.exchangeDeclare(&quot;exchange_deportes&quot;, &quot;fanout&quot;);
+
+// 2. Publicamos.
+// FÍJATE: RoutingKey está vacía (&quot;&quot;) porque Fanout la ignora.
+String mensaje = &quot;GOL DEL EQUIPO LOCAL&quot;;
+channel.basicPublish(&quot;exchange_deportes&quot;, &quot;&quot;, null, mensaje.getBytes());
+</code></pre>
+<p><strong>Consumidor:</strong> aquí cambia la cosa. El consumidor crea una cola temporal y <strong>la conecta</strong> al exchange.</p>
+<pre><code class="language-java">channel.exchangeDeclare(&quot;exchange_deportes&quot;, &quot;fanout&quot;);
+
+// Creamos una cola aleatoria, exclusiva y temporal (se borra al desconectar)
+String nombreCola = channel.queueDeclare().getQueue();
+
+// BINDING: &quot;Conecta mi cola temporal al exchange de deportes&quot;
+channel.queueBind(nombreCola, &quot;exchange_deportes&quot;, &quot;&quot;);
+
+// Consumimos
+channel.basicConsume(nombreCola, true, deliverCallback, consumerTag -&gt; {});
+</code></pre>
+<h3>Direct (Directo)</h3>
+<p><strong>Concepto:</strong> &quot;El Cartero Exacto&quot;. El mensaje lleva una etiqueta y solo entra en la cola que espera esa etiqueta exacta. <strong>Caso de uso:</strong> Sistema de Logs. Un consumidor guarda en disco solo los &quot;errores&quot;, otro imprime en pantalla &quot;info&quot; y &quot;errores&quot;.</p>
+<p><strong>Productor:</strong> Pone una etiqueta específica (<code>routingKey</code>) al mensaje.</p>
+<pre><code class="language-java">// 1. Tipo DIRECT
+channel.exchangeDeclare(&quot;exchange_logs&quot;, &quot;direct&quot;);
+
+// 2. Enviamos un error grave
+String mensaje = &quot;Fallo crítico en base de datos&quot;;
+String severidad = &quot;error&quot;; // Esta es la Routing Key
+channel.basicPublish(&quot;exchange_logs&quot;, severidad, null, mensaje.getBytes());
+</code></pre>
+<p><strong>Consumidor:</strong> solo quiere recibir lo que venga con la etiqueta &quot;error&quot;</p>
+<pre><code class="language-java">channel.exchangeDeclare(&quot;exchange_logs&quot;, &quot;direct&quot;);
+String nombreCola = channel.queueDeclare().getQueue();
+
+// BINDING: &quot;Solo envíame mensajes si la routing key es EXACTAMENTE 'error'&quot;
+channel.queueBind(nombreCola, &quot;exchange_logs&quot;, &quot;error&quot;); 
+
+channel.basicConsume(nombreCola, true, deliverCallback, consumerTag -&gt; {});
+</code></pre>
+<h3>Topic (Tema)</h3>
+<p><strong>Concepto:</strong> &quot;El Patrón Inteligente&quot;. Permite filtrar por partes usando comodines (<code>*</code> para una palabra, <code>#</code> para varias). <strong>Caso de uso:</strong> Noticias. Categorías como <code>deportes.futbol.madrid</code> o <code>politica.internacional.usa</code>.</p>
+<p><strong>Productor:</strong> Usa claves jerárquicas separadas por puntos.</p>
+<pre><code class="language-java">channel.exchangeDeclare(&quot;exchange_noticias&quot;, &quot;topic&quot;);
+
+String mensaje = &quot;El Madrid gana la liga&quot;;
+// Clave: Categoría.Subcategoría.Equipo
+channel.basicPublish(&quot;exchange_noticias&quot;, &quot;deportes.futbol.madrid&quot;, null, mensaje.getBytes());
+</code></pre>
+<p><strong>Consumidor A (Fanático del fútbol en general):</strong> Quiere todo lo que sea fútbol, no importa el equipo.</p>
+<pre><code class="language-java">// BINDING: El asterisco (*) sustituye a UNA palabra (el equipo)
+// Recibirá: deportes.futbol.madrid, deportes.futbol.barca
+channel.queueBind(nombreCola, &quot;exchange_noticias&quot;, &quot;deportes.futbol.*&quot;);
+</code></pre>
+<p><strong>Consumidor B (Periodista de Deportes):</strong> Quiere absolutamente todo lo que empiece por &quot;deportes&quot;.</p>
+<pre><code class="language-java">// BINDING: La almohadilla (#) sustituye a CUALQUIER cantidad de palabras
+// Recibirá: deportes.futbol.madrid, deportes.tenis, deportes.waterpolo.femenino
+channel.queueBind(nombreCola, &quot;exchange_noticias&quot;, &quot;deportes.#&quot;);
+</code></pre>
+<h3>Header (Cabecera)</h3>
+<p><strong>Concepto:</strong> &quot;Enrutamiento por Metadatos&quot;. Ignora la routing key y mira las propiedades del mensaje. Es menos común en cursos introductorios pero muy potente. <strong>Caso de uso:</strong> Procesar archivos. Si el mensaje es XML va a un lado, si es JSON a otro.</p>
+<p><strong>Productor:</strong> Configura un mapa de propiedades.</p>
+<pre><code class="language-java">channel.exchangeDeclare(&quot;exchange_archivos&quot;, &quot;headers&quot;);
+
+Map&lt;String, Object&gt; cabeceras = new HashMap&lt;&gt;();
+cabeceras.put(&quot;formato&quot;, &quot;pdf&quot;);
+cabeceras.put(&quot;tipo&quot;, &quot;informe&quot;);
+
+AMQP.BasicProperties props = new AMQP.BasicProperties.Builder()
+        .headers(cabeceras)
+        .build();
+
+channel.basicPublish(&quot;exchange_archivos&quot;, &quot;&quot;, props, mensaje.getBytes());
+</code></pre>
+<p><strong>Consumidor:</strong> Dice &quot;Dame mensajes que tengan estas cabeceras&quot;.</p>
+<pre><code class="language-java">Map&lt;String, Object&gt; bindingArgs = new HashMap&lt;&gt;();
+bindingArgs.put(&quot;x-match&quot;, &quot;all&quot;); // Deben coincidir TODAS las reglas
+bindingArgs.put(&quot;formato&quot;, &quot;pdf&quot;);
+
+channel.queueBind(nombreCola, &quot;exchange_archivos&quot;, &quot;&quot;, bindingArgs);
+</code></pre>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="6-arquitecturas-orientadas-a-servicios-y-servicios-web.html"><span class="nav-etiqueta">← anterior</span>6. Arquitecturas Orientadas a Servicios y Servicios Web</a>
+  <a class="nav-siguiente" href="8-agentes.html"><span class="nav-etiqueta">siguiente →</span>8. Agentes</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

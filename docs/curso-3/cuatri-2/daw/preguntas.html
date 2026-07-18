@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Preguntas — apuntes de DAW (tercer curso de Ingeniería Informática).">
+<title>Preguntas · DAW · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">daw</a><span class="miga-sep">/</span><span aria-current="page">preguntas</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DAW · curso 3</p>
+    <h1>Preguntas · DAW</h1>
+  </header>
+  <div class="prosa">
+<blockquote>
+<p>Recopilación basada en los PDFs proporcionados por el usuario.<br>
+Cuando el documento trae respuesta, se incluye.<br>
+Cuando no aparece una respuesta explícita, se indica: <strong>Respuesta en documento: no aparece</strong>.<br>
+No se han inventado respuestas fuera del contenido de los documentos.</p>
+</blockquote>
+<hr>
+<h1>Parcial DAW 2026</h1>
+<h2>1. ¿Qué significa SPA y MPA? Completa la tabla.</h2>
+<p><strong>Respuesta en documento:</strong> sí aparece tabla.</p>
+<table>
+<thead>
+<tr>
+<th>Característica</th>
+<th>MPA</th>
+<th>SPA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Navegación</td>
+<td>Página completa se recarga</td>
+<td>Sin recarga, solo cambia el contenido</td>
+</tr>
+<tr>
+<td>SEO</td>
+<td>Muy bueno</td>
+<td>Requiere SSR o trucos</td>
+</tr>
+<tr>
+<td>Velocidad inicial</td>
+<td>Alta</td>
+<td>A veces lenta, mucho JS</td>
+</tr>
+<tr>
+<td>Experiencia de usuario</td>
+<td>Más tradicional</td>
+<td>Más fluida, tipo app</td>
+</tr>
+<tr>
+<td>Complejidad</td>
+<td>Baja</td>
+<td>Mayor: estado, ruteo, API…</td>
+</tr>
+<tr>
+<td>Carga del servidor</td>
+<td>Alta</td>
+<td>Más baja</td>
+</tr>
+<tr>
+<td>Comunicación</td>
+<td>Peticiones HTTP tradicionales</td>
+<td>AJAX, APIs: REST, GraphQL</td>
+</tr>
+<tr>
+<td>Ventajas</td>
+<td>Mejor SEO, fácil escalabilidad en contenido</td>
+<td>Tipo app, menos ancho de banda tras carga inicial</td>
+</tr>
+<tr>
+<td>Desventajas</td>
+<td>Experiencia menos fluida, más ancho de banda</td>
+<td>SEO difícil, carga inicial lenta, más JS</td>
+</tr>
+<tr>
+<td>Casos de uso</td>
+<td>Blogs, e-commerce, periódicos, sitios corporativos</td>
+<td>Dashboards, Gmail, Trello, apps móviles/web</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>2. ¿Cuáles son las 3 características de HTML?</h2>
+<p>Las tres propiedades principales indicadas son:</p>
+<ol>
+<li><strong>Universalidad</strong>:</li>
+<li><strong>Lenguaje de marcas</strong>: permite organizar el contenido usando etiquetas adecuadas para indicar su función.</li>
+<li><strong>Hipertexto</strong>: permite crear enlaces entre documentos o secciones.</li>
+</ol>
+<hr>
+<h2>3. ¿Cómo se indica la versión HTML de un documento? Pon como se indica que un documento es HTML5.</h2>
+<p>La versión de HTML de un documento se indica mediante la declaración <strong>DOCTYPE</strong>, que se coloca al principio del archivo, antes de la etiqueta <code>&lt;html&gt;</code>.</p>
+<p>En HTML5 se simplificó y se indica así:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+</code></pre>
+<hr>
+<h2>4. Explica los posicionamientos absoluto, fijo y relativo.</h2>
+<p><em>Puesto un 0,6 en el parcial</em></p>
+<p>Posicionamiento <strong>absoluto</strong>: es aquel que se sale del flujo y se posiciona respecto al elemento padre (siempre que esté no tenga position:static, en cuyo caso se posicionará respecto al ancestro que no cumpla esta condición).</p>
+<pre><code>[A] [B] [C]
+
+	|
+	V
+	
+[A] [C]
+			[B]
+</code></pre>
+<p>Posicionamiento <strong>fijo</strong>: es aquel que se sale del flujo de forma que se posiciona respecto a la pantalla/viewport y es visible en todo momento aunque haya scroll.</p>
+<p>Posicionamiento <strong>relativo</strong>: es aquel que <strong>NO</strong> se sale del flujo, se posiciona a partir del sitio que debería ocupar en el flujo</p>
+<pre><code>[A] [B] [C]
+
+	|
+	V
+	
+[A] [ ] [C]
+			B
+</code></pre>
+<hr>
+<h2>5. Explica cuál es el cometido de CSS y por qué se introdujo por el W3C. ¿Cómo es la sintaxis de CSS? Nombra sus componentes y pon un ejemplo.</h2>
+<p>CSS significa <strong>Cascading Style Sheets</strong> y se introdujo en HTML 4.0 y fue propuesto por W3C para separar contenidos y formato de una web.
+Su cometido principal es definir el aspecto de los elementos HTML: colores, tamaños, márgenes, bordes, fuentes, distribución en pantalla, posicionamiento, etc.</p>
+<p>CSS tiene un <strong>selector</strong> y un conjunto de reglas/declaraciones.
+El selector → determina qué elementos serán afectados.
+La declaración → uno o más pares propiedad/valor separados por ;.</p>
+<pre><code class="language-css">div p {
+  color: lime;
+}
+</code></pre>
+<hr>
+<h2>7. Explica los dos grandes grupos de etiquetas que existen en HTML.</h2>
+<p>Existen <strong>2 tipos de etiquetas</strong>:</p>
+<ul>
+<li><strong>Etiquetas de bloque</strong></li>
+<li><strong>Etiquetas de línea</strong></li>
+</ul>
+<h3>🔹 Etiquetas de bloque</h3>
+<ul>
+<li>Ocupan toda la línea</li>
+<li>Provocan salto de línea antes y después</li>
+<li>Ej: <code>h1</code>, <code>p</code>, listas</li>
+</ul>
+<h3>🔹 Etiquetas de línea</h3>
+<ul>
+<li>No ocupan toda la línea</li>
+<li>No provocan salto de línea</li>
+<li>Se adaptan al contenido</li>
+<li>Ej: <code>a</code>, <code>img</code>, <code>strong</code></li>
+</ul>
+<hr>
+<h2>9. ¿Qué aporta HTML 4.0?</h2>
+<p>HTML 4.0 aporta la separación entre <strong>contenido/estructura</strong> y <strong>formato</strong>, mediante CSS.</p>
+<hr>
+<h2>11. ¿Qué significa la etiqueta <code>&lt;meta name=&quot;robots&quot; content=&quot;noindex, nofollow&quot;&gt;</code>?</h2>
+<p>Directiva para los robots de los motores de búsqueda e indica que la página <strong>no debe ser indexada ni mostrada en los resultados de búsqueda</strong> (<code>noindex</code>) y que, además, <strong>no deben seguirse los enlaces</strong> que contiene esa página (<code>nofollow</code>). En conjunto, sirve para evitar que esa página aparezca en buscadores y para impedir que los rastreadores continúen navegando a través de sus enlaces.</p>
+<hr>
+<h2>13. ¿Para qué se utiliza <code>@import</code>?</h2>
+<p><code>@import</code> sirve para importar otro archivo CSS externo y aplicar sus estilos al documento actual.</p>
+<p>Ejemplos dados:</p>
+<pre><code class="language-css">@import url(&quot;estilos.css&quot;);
+</code></pre>
+<p>O:</p>
+<pre><code class="language-css">@import &quot;estilos.css&quot;;
+</code></pre>
+<hr>
+<h2>14. ¿Qué hace la propiedad <code>box-sizing</code> y qué valores puede tomar?</h2>
+<p>La propiedad <code>box-sizing</code> indica <strong>cómo se calcula el tamaño total de una caja</strong> en CSS.</p>
+<ul>
+<li><code>content-box</code>: <code>width</code> y <code>height</code> solo incluyen el contenido. El <code>padding</code> y el <code>border</code> se suman aparte.</li>
+<li><code>border-box</code>: <code>width</code> y <code>height</code> incluyen contenido, <code>padding</code> y <code>border</code>.</li>
+</ul>
+<hr>
+<h2>15. ¿De qué librería es esta regla y cómo afecta a la renderización?</h2>
+<pre><code class="language-html">&lt;p class=&quot;col-sm-8&quot;&gt;
+</code></pre>
+<p>La librería/framework es <strong>Bootstrap</strong>. Usa un sistema responsivo de <strong>12 columnas</strong>.</p>
+<p>La clase <code>col-sm-8</code> indica que, en pantallas de tamaño <strong>small (<code>sm</code>) o superior</strong>, ese elemento ocupará <strong>8 columnas de las 12 disponibles</strong>. Es decir, ocupará aproximadamente <strong>dos tercios del ancho</strong> de la fila.</p>
+<p>En pantallas más pequeñas que <code>sm</code>, si no se especifica otra clase, el elemento suele colocarse ocupando todo el ancho disponible, apilándose con otros elementos.</p>
+<hr>
+<h2>16. Diferencia entre <code>HTMLCollection</code> y <code>NodeList</code>.</h2>
+<ul>
+<li>Se puede acceder a los elementos de 𝐇𝐓𝐌𝐋𝐂𝐨𝐥𝐥𝐞𝐜𝐭𝐢𝐨𝐧 por su nombre, 𝐢𝐝 o índice, pero a los de 𝐍𝐨𝐝𝐞𝐋𝐢𝐬𝐭 sólo se puede acceder por su índice.</li>
+<li>Sólo el objeto 𝐍𝐨𝐝𝐞𝐋𝐢𝐬𝐭 puede contener nodos de atributo y nodos de texto.</li>
+<li>𝐇𝐓𝐌𝐋𝐂𝐨𝐥𝐥𝐞𝐜𝐭𝐢𝐨𝐧 es viva y 𝐍𝐨𝐝𝐞𝐋𝐢𝐬𝐭 es estática, es decir, el primero reconocerá automáticamente un nuevo elemento añadido al DOM mientras que el otro no</li>
+</ul>
+<hr>
+<h2>17. Define aplicación web.</h2>
+<p>Una aplicación web es un conjunto de páginas web generadas en respuesta a peticiones del usuario, típicamente mediante formularios, y necesita tecnologías de front-end y back-end.</p>
+<p>También aparece una respuesta de examen: software que se ejecuta en un navegador web y ofrece funcionalidades similares a una aplicación de escritorio, accediéndose por internet sin instalación local.</p>
+<hr>
+<h2>18. Definición de servlet.</h2>
+<p>Un servlet es un programa escrito en Java que se ejecuta en el contenedor web de un servidor de aplicaciones y es invocado por un cliente mediante HTTP.</p>
+<hr>
+<h2>19. Definición de JSP: siglas y qué son.</h2>
+<p>JSP significa <strong>Java Server Pages</strong>. Son páginas HTML con líneas de código adicional que se ejecutan en el servidor para generar contenido dinámico. Se traducen automáticamente a servlets.</p>
+<hr>
+<h2>20. Definición de JavaBean.</h2>
+<p>Un JavaBean es una clase Java que mantiene datos llamados propiedades, cuyos valores se recuperan/asignan mediante getters y setters.</p>
+<p>Debe tener:</p>
+<ul>
+<li>constructor sin argumentos,</li>
+<li>getters/setters para atributos privados,</li>
+<li>implementación de <code>Serializable</code>.</li>
+</ul>
+<hr>
+<h2>21. ¿Qué significa que una etiqueta sea de línea en HTML?</h2>
+<p>Una etiqueta de línea, o inline, no inicia una nueva línea de texto. Se coloca dentro de una línea existente y no crea salto de línea adicional.</p>
+<p>Ejemplos indicados:</p>
+<ul>
+<li><code>&lt;span&gt;</code></li>
+<li><code>&lt;strong&gt;</code></li>
+<li><code>&lt;a&gt;</code></li>
+</ul>
+<hr>
+<h2>22. ¿Qué es W3C? ¿Quién lo creó y para qué?</h2>
+<p>El <strong>W3C</strong>, World Wide Web Consortium, es una organización internacional que establece estándares y pautas para el desarrollo web.</p>
+<p>Fue creado por <strong>Tim Berners-Lee</strong> en 1994 para promover la interoperabilidad y el crecimiento ordenado de la World Wide Web.</p>
+<hr>
+<h2>25. Diferencias y similitudes entre Mocha, JScript y VBScript.</h2>
+<p><strong>Respuesta en documento:</strong> sí aparece.</p>
+<p>Mocha aparece como el nombre original de JavaScript. JScript y VBScript se presentan como versiones desarrolladas por Microsoft para Internet Explorer.</p>
+<p>VBScript es incompatible con navegadores diferentes a Internet Explorer y tiene sintaxis basada en Visual Basic.</p>
+<hr>
+<h2>26. Explica el funcionamiento de <code>addEventListener</code>. ¿Cuál es el significado de los parámetros de <code>addEventListener</code>?</h2>
+<p><code>addEventListener</code> sirve para asociar un evento a un elemento HTML. Permite detectar y responder a acciones del usuario como:</p>
+<ul>
+<li><code>click</code></li>
+<li><code>mouseover</code></li>
+<li><code>keydown</code></li>
+<li><code>submit</code></li>
+</ul>
+<p>Sintaxis:</p>
+<pre><code class="language-js">element.addEventListener(event, callback, useCapture);
+</code></pre>
+<p>Parámetros:</p>
+<ul>
+<li><code>event</code>: cadena con el tipo de evento.</li>
+<li><code>callback</code>: función que se ejecuta cuando ocurre el evento.</li>
+<li><code>useCapture</code>: booleano opcional que indica si se usa captura en lugar de bubbling.</li>
+</ul>
+<hr>
+<h2>28. ¿Qué es Java EE?  Escribe tres tecnologías que incluye Java EE.</h2>
+<p>Java EE aparece como la especificación usada para el desarrollo web, construida sobre Java SE/JDK, que describe cómo los servidores pueden interactuar con tecnologías web Java.</p>
+<p>En los apuntes de servlets aparecen como APIs de Java EE:</p>
+<ul>
+<li>Servlets.</li>
+<li>JSP.</li>
+<li>JSF.</li>
+<li>JPA.</li>
+<li>EJB.</li>
+</ul>
+<hr>
+<h2>30. ¿Qué papel juegan <code>HttpServletRequest</code> y <code>HttpServletResponse</code> en un servlet?</h2>
+<p><code>HttpServletRequest</code> representa la solicitud HTTP recibida por el servidor e incluye parámetros, cabeceras y cuerpo de la solicitud.</p>
+<p><code>HttpServletResponse</code> representa la respuesta enviada al cliente y permite configurar cabeceras, escribir el cuerpo de la respuesta o redirigir.</p>
+<hr>
+<h2>31. ¿Qué es un JSP y para qué sirve?</h2>
+<p>Un JSP es una página HTML con código adicional Java que se ejecuta en el servidor para generar contenido dinámico. Sirve para crear páginas dinámicas y separar la presentación de parte de la lógica Java.</p>
+<hr>
+<h2>32. ¿Para qué sirve la directiva <code>@page</code>?</h2>
+<p><code>@page</code> define características aplicables a toda la página JSP, como:</p>
+<ul>
+<li>lenguaje,</li>
+<li>imports,</li>
+<li>sesión,</li>
+<li>buffer,</li>
+<li><code>contentType</code>,</li>
+<li><code>pageEncoding</code>,</li>
+<li>si se ignora EL.</li>
+</ul>
+<hr>
+<h2>33. ¿Para qué sirve la directiva <code>@taglib</code>?</h2>
+<p><code>@taglib</code> sirve para utilizar elementos definidos en librerías estándar o propias, asociando una URI de librería a un prefijo.</p>
+<hr>
+<h2>35. ¿Qué implicaciones tuvo la aparición del iPhone 3 y el Mobile-First Indexing de Google en el front-end?</h2>
+<p><strong>Respuesta en documento:</strong> sí aparece.</p>
+<p>El iPhone impulsó la navegación web desde dispositivos móviles, haciendo necesario crear aplicaciones web compatibles y optimizadas para móvil.</p>
+<p>Mobile-First Indexing hizo que Google indexase y clasificase sitios según su versión móvil, impulsando enfoques de diseño mobile-first.</p>
+<hr>
+<h2>37. Diferencias en renderizado entre <code>display: block</code>, <code>display: inline</code> y <code>display: inline-block</code>.</h2>
+<p><code>display: block</code> hace que el elemento ocupe toda la línea disponible y empiece en una línea nueva; permite modificar <code>width</code>, <code>height</code>, márgenes y padding.</p>
+<p><code>display: inline</code> hace que el elemento se coloque en la misma línea que el texto u otros elementos, ocupando solo lo necesario; no permite controlar bien <code>width</code> y <code>height</code>.</p>
+<p><code>display: inline-block</code> combina ambos: se coloca en línea como un <code>inline</code>, pero permite definir <code>width</code>, <code>height</code>, márgenes y padding como un bloque.</p>
+<hr>
+<h2>38. Diferencias entre <code>&lt;head&gt;</code> y <code>&lt;header&gt;</code>, <code>&lt;foot&gt;</code> y <code>&lt;footer&gt;</code>.</h2>
+<p><code>&lt;head&gt;</code> contiene información interna del documento que no se muestra directamente en la página, como el título, metadatos, enlaces a CSS o scripts.
+<code>&lt;header&gt;</code> es una etiqueta visible del cuerpo de la página y representa una cabecera de contenido, como el encabezado de una web, una sección o un artículo.</p>
+<p>La etiqueta <code>&lt;foot&gt;</code> no es una etiqueta HTML estándar; la correcta es <code>&lt;footer&gt;</code>, que representa el pie de página o pie de una sección, normalmente con información como autoría, contacto, copyright o enlaces relacionados.</p>
+<hr>
+<h2>39. ¿Qué es un lenguaje de marcas? Nombra dos ejemplos.</h2>
+<p>Un lenguaje de marcas es un lenguaje que utiliza etiquetas para estructurar, describir o dar significado al contenido de un documento. No es un lenguaje de programación, porque no ejecuta instrucciones lógicas, sino que marca partes del texto o de los datos. Dos ejemplos son <strong>HTML</strong>, usado para estructurar páginas web, y <strong>XML</strong>, usado para representar y transportar datos estructurados.</p>
+<hr>
+<h2>40. Relaciona conceptos: HTML, CSS, WHOIS, Hipertexto, Mosaic.</h2>
+<ul>
+<li>HTML → Tim Berners-Lee.</li>
+<li>CSS → HTML 4.0.</li>
+<li>WHOIS → nombres de dominio.</li>
+<li>Hipertexto → Ted Nelson.</li>
+<li>Mosaic → Marc Andreessen.</li>
+</ul>
+<hr>
+<h2>41. ¿Qué framework se utiliza en <code>&lt;div class=&quot;col-sm-4&quot;&gt;</code>? ¿Qué tamaño máximo puede alcanzar esa cifra en Bootstrap? ¿Qué propiedad de CSS usa Bootstrap para ese layout? ¿Para qué sirve el sistema de columnas de Bootstrap?</h2>
+<pre><code class="language-html">&lt;div class=&quot;col-sm-4&quot;&gt;
+</code></pre>
+<p>pertenece al framework <strong>Bootstrap</strong>.</p>
+<p>Bootstrap utiliza un sistema de rejilla responsive basado en <strong>12 columnas</strong>, por lo que la cifra máxima habitual es <strong>12</strong>. En este caso, <code>col-sm-4</code> indica que el elemento ocupará <strong>4 columnas de 12</strong> en pantallas de tamaño <code>sm</code> o superior.</p>
+<p>Bootstrap usa principalmente <strong>Flexbox</strong>, es decir, la propiedad CSS:</p>
+<pre><code class="language-css">display: flex;
+</code></pre>
+<p>Este sistema sirve para generar páginas <strong>responsivas</strong>, adaptando la distribución de los elementos según el tamaño de pantalla. En pantallas <code>sm</code> o superiores se crean columnas; en pantallas más pequeñas, los elementos suelen colocarse unos debajo de otros.</p>
+<hr>
+<h2>45. ¿Para qué sirve la etiqueta <code>&lt;div&gt;</code>?</h2>
+<p><code>&lt;div&gt;</code> es una etiqueta de bloque que sirve para agrupar conjuntos de etiquetas.</p>
+<hr>
+<h2>46. ¿Qué dos atributos son los más usados en <code>&lt;div&gt;</code> y en qué se diferencian?</h2>
+<p>Los dos atributos más usados son <code>id</code> y <code>class</code>.</p>
+<ul>
+<li><code>id</code>: identifica una etiqueta concreta y no debe repetirse en el mismo documento.</li>
+<li><code>class</code>: identifica conjuntos de etiquetas y puede aplicarse a varias etiquetas.</li>
+</ul>
+<hr>
+<h2>47. ¿Qué son <code>request</code> y <code>response</code> y para qué sirven?</h2>
+<p><code>request</code> y <code>response</code> son instancias de <code>HttpServletRequest</code> y <code>HttpServletResponse</code>. Encapsulan la información asociada a la petición y a la respuesta de una conexión HTTP.</p>
+<p>Permiten obtener parámetros enviados por formulario y establecer una respuesta.</p>
+<hr>
+<h2>49. ¿Qué atributo hay que añadir en un formulario para verificar que el email es válido?</h2>
+<p>Puede usarse:</p>
+<pre><code class="language-html">&lt;input type=&quot;email&quot;&gt;
+</code></pre>
+<p>O un <code>pattern</code> como:</p>
+<pre><code class="language-html">pattern=&quot;[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2, 4}$&quot;
+</code></pre>
+<hr>
+<h2>50. ¿Cómo hacer que todos los campos del formulario sean obligatorios?</h2>
+<p>Con el atributo:</p>
+<pre><code class="language-html">&lt;input type=&quot;text&quot; name=&quot;nombre&quot; required&gt;
+</code></pre>
+<hr>
+<h2>51. ¿Qué método de intercambio utilizan los formularios y qué implicaciones tiene?</h2>
+<p>Los formularios usan principalmente <code>GET</code> y <code>POST</code>: <code>GET</code> envía los datos en la URL y se usa para consultas; <code>POST</code> los envía en el cuerpo de la petición y se usa para enviar/modificar datos de forma más segura y con mayor tamaño.</p>
+<pre><code class="language-html">&lt;form action=&quot;procesar&quot; method=&quot;get&quot;&gt;
+</code></pre>
+<pre><code class="language-html">&lt;form action=&quot;procesar&quot; method=&quot;post&quot;&gt;
+</code></pre>
+<hr>
+<h2>52. ¿Qué debemos teclear para construir el fichero <code>.war</code>?</h2>
+<pre><code class="language-bash">jar -cf etseDAW.war /
+</code></pre>
+<p>El documento también indica que <code>c</code> crea un nuevo archivo JAR y <code>f</code> fija el nombre del fichero que se crea.</p>
+<hr>
+<h2>53. ¿Qué debemos teclear en el navegador para invocar el servlet del ejemplo?</h2>
+<pre><code class="language-text">https://193.144.75.11:8080/etseDAW/nombreDelServlet
+</code></pre>
+<hr>
+<h2>54. ¿Qué restricción tiene el campo del formulario ID y por qué?</h2>
+<hr>
+<hr>
+<h2>56. Indica los dos lenguajes de marcas más usados en desarrollo web.</h2>
+<p>HTML y XML</p>
+<hr>
+<h2>61. Definición de servlet, JavaBean y JSP.</h2>
+<p>JavaBean: clase Java que mantiene datos o propiedades, sigue convenciones de codificación y recupera/asigna valores mediante getters y setters.</p>
+<p>JSP: páginas HTML con líneas de código adicional ejecutadas en servidor para generar contenido dinámico.</p>
+<p>Servlet: en el fragmento de Junio 2024 no aparece la definición escrita, pero sí aparece en DAW_6: programa Java que se ejecuta en un contenedor web y es invocado por HTTP.</p>
+<hr>
+<h2>62. ¿Quién creó HTML y en qué contexto?</h2>
+<ul>
+<li>HTML → Tim Berners-Lee.</li>
+</ul>
+<p>Pero no el contexto completo.</p>
+<hr>
+<h2>65. ¿Cómo indicar la codificación que se quiere usar en una página?</h2>
+<p><strong>Respuesta en documento:</strong> sí aparece para HTML5.</p>
+<pre><code class="language-html">&lt;meta charset=&quot;UTF-8&quot;&gt;
+</code></pre>
+<hr>
+<h2>67. ¿Cómo se usa <code>@import</code>?</h2>
+<pre><code class="language-css">@import url(&quot;estilos.css&quot;);
+</code></pre>
+<p>O:</p>
+<pre><code class="language-css">@import &quot;estilos.css&quot;;
+</code></pre>
+<hr>
+<h2>69. ¿Qué son <code>id</code>, <code>class</code> y <code>name</code> de una etiqueta?</h2>
+<p><strong>Respuesta en documento:</strong> aparece parcialmente.</p>
+<p>Para <code>id</code> y <code>class</code> sí aparece:</p>
+<ul>
+<li><code>id</code>: identifica una etiqueta concreta, sin repetirse.</li>
+<li><code>class</code>: identifica conjuntos de etiquetas, puede repetirse en varios elementos.</li>
+</ul>
+<p>Sobre <code>name</code>, no aparece respuesta desarrollada en los fragmentos localizados.</p>
+<hr>
+<h2>70. Definición de JSP, EL y JSTL.</h2>
+<p>JSP: páginas HTML con código adicional ejecutado en servidor para contenido dinámico.</p>
+<p>EL: Expression Language proporciona una sintaxis compacta para manejar JavaBeans, arrays, listas y mapas almacenados como atributos.</p>
+<p>JSTL: JavaServer Standard Tag Library amplía la funcionalidad de JavaBeans con etiquetas estándar que permiten eliminar scriptlets de JSP.</p>
+<hr>
+<h2>71. ¿Cómo indicar que se quieren usar EL y JSTL?</h2>
+<p>Para EL:</p>
+<pre><code class="language-jsp">&lt;%@ page isELIgnored=&quot;false&quot; %&gt;
+</code></pre>
+<p>Para JSTL:</p>
+<pre><code class="language-jsp">&lt;%@ taglib uri=&quot;http://java.sun.com/jsp/jstl/core&quot; prefix=&quot;c&quot; %&gt;
+</code></pre>
+<hr>
+<h1>Lo más repetido en exámenes</h1>
+<p>Estas son las preguntas teóricas más repetidas o más probables según los documentos:</p>
+<ol>
+<li><strong>HTML</strong>: siglas, características, HTML5, <code>DOCTYPE</code>, etiquetas de línea/bloque.</li>
+<li><strong>CSS</strong>: siglas, función, regla CSS, <code>@import</code>, <code>box-sizing</code>, Bootstrap.</li>
+<li><strong>Aplicación web</strong>: definición.</li>
+<li><strong>Servlet/JSP/JavaBean</strong>: definiciones.</li>
+<li><strong>Java EE</strong>: qué es y tecnologías.</li>
+<li><strong>Request/response</strong>: papel en servlets.</li>
+<li><strong>JSP/EL/JSTL</strong>: definición y directivas.</li>
+<li><strong>addEventListener</strong>: funcionamiento y parámetros.</li>
+<li><strong>web.xml / estructura de despliegue</strong>.</li>
+<li><strong>SPA vs MPA</strong>.</li>
+</ol>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="glosariomasticado.html"><span class="nav-etiqueta">← anterior</span>GlosarioMasticado</a>
+  
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

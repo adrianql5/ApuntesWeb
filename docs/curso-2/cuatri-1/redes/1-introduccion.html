@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Introducción — apuntes de REDES (segundo curso de Ingeniería Informática).">
+<title>1. Introducción · REDES · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">redes</a><span class="miga-sep">/</span><span aria-current="page">1-introduccion</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">REDES · curso 2</p>
+    <h1>1. Introducción · REDES</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>. <a href="https://github.com/adrianql5">adrianql5</a></p>
+<h1>1.1 Elementos de Internet</h1>
+<h2>IPs</h2>
+<p>En Internet, cada dispositivo se identifica mediante una dirección <em>IP</em>.</p>
+<ul>
+<li><strong>IPv4</strong> está formada por 4 bytes (32 bits) separados por puntos (<code>.</code>), por ejemplo, <code>192.168.0.1</code>.</li>
+<li><strong>IPv6</strong> está formada por 16 bytes (128 bits) separados por dos puntos (<code>:</code>), por ejemplo, <code>2001:0db8:85a3:0000:0000:8a2e:0370:7334</code>.</li>
+</ul>
+<p>No todas las <strong>IPv4</strong> tienen una <strong>IPv6</strong> asociada. IPv4 y IPv6 son sistemas de direccionamiento diferentes. Sin embargo, existen mecanismos de transición, como las direcciones IPv4-mapeadas en IPv6, que permiten la coexistencia.</p>
+<p>Las direcciones IPv4 son <strong>limitadas</strong>, por lo que para paliar esta restricción, se emplean direcciones privadas y la técnica de <strong>NAT</strong> (Network Address Translation), que permite la traducción de direcciones privadas a públicas. Otra solución es la migración a <strong>IPv6</strong>, que ofrece un rango de direcciones <strong>muchísimo mayor</strong>.</p>
+<h2>Puertos</h2>
+<p>En un ordenador, cada aplicación se identifica mediante un <strong>número de puerto</strong>. Este número de puerto es un entero de 16 bits.</p>
+<h2>Sockets</h2>
+<p>Interfaz entre una <strong>app</strong> y la <strong>capa de transporte</strong>. Los sockets se contruyen con <strong>IP y puerto</strong>. Las direcciones IP serían como la dirección de un edificio, y los puertos indican el piso y letra. Los sockets son los buzones, y se identifican por el número de socket. Para  2 procesos situados en diferentes ordenadores necesitamos saber:</p>
+<ul>
+<li>La dirección <strong>IP</strong>  del <em>ordenador en el cual se ejecuta el proceso</em></li>
+<li>EL <strong>puerto que tiene asignado el proceso dentro del ordenador</strong></li>
+</ul>
+<h2>Servidor y Cliente</h2>
+<p>El servidor es el conjunto de programa y computador que proporciona un servicio, el cliente es lo mismo solo que es el que solicita el servicio del servidor.</p>
+<h2>Hosts (estaciones/hospedadores)</h2>
+<p>Son los sistemas terminales, el origen o el destino de las transmisiones. Incluyen a cualquier dispositivo capaz de conectarse a Internet.</p>
+<h2>Enlaces</h2>
+<p>Son los medios físicos por los que se realizan las transmisiones. Cables o transmisiones de radio.</p>
+<h2>Routers (rutadores o encaminadores)</h2>
+<p>Dispositivos que interconectan los enlaces. Los datos llegan al router por uno de los enlaces y este los reenvía a través de otros. Así tenemos una ruta entre origen y destino</p>
+<img src="../../../img/redes/pasted-image-20240926205653.png" alt="archivos/imagenes/Pasted image 20240926205653.png" loading="lazy">
+<h2>Protocolos</h2>
+<p>Internet funciona porque todos sus componentes ejecutan los mismos protocolos, es decir, siguen las mismas reglas y el mismo formato para las comunicaciones. Distinguimos 2 tipos de protocolos:</p>
+<ul>
+<li><strong>Protocolos básicos</strong>: necesarios para que funcione Internet (<em>TCP/IP</em>)</li>
+<li><strong>Protocolos de aplicación:</strong> necesarios para que funcionen ciertas apps. Como <em>HTTP</em> (<em>web</em>), <strong>SMTP</strong> (<em>correo</em>), etc.</li>
+</ul>
+<img src="../../../img/redes/pasted-image-20241108204812.png" alt="archivos/imagenes/Pasted image 20241108204812.png" loading="lazy">
+<h2>Proveedores de Internet (ISP)</h2>
+<p>Internet está operado por <em>numerosas compañías</em>. En el caso de Internet, distinguimos los siguientes proveedores de servicios de Internet (<strong>ISP</strong>):</p>
+<ul>
+<li><strong>Proveedores de baja escala (residenciales):</strong> Son los que proporcionan acceso a Internet a los usuarios. El usuario hace <strong>contrato</strong> con ellos y luego parte del dinero se distribuye entre los demás proveedores.</li>
+<li><strong>Proveedores de alta escala (nacionales o internacionales):</strong> Proporcionan los troncales que interconectan a los proveedores de baja escala y también las líneas de larga distancia.</li>
+</ul>
+<h1>1.2 Servicios orientado a Conexión y sin Conexión</h1>
+<p>Los servicios orientados a conexión y sin conexión en redes se refieren a cómo se maneja la comunicación entre dos dispositivos. Cada uno tiene características que lo hacen más adecuado para diferentes tipos de aplicaciones.</p>
+<h2>1.2.1 Servicio Orientado a Conexión</h2>
+<p>El protocolo <strong>TCP (Transmission Control Protocol)</strong> es el principal responsable de proporcionar un servicio confiable y orientado a conexión en Internet. Este servicio sigue tres fases:</p>
+<h4>Fases</h4>
+<ol>
+<li><strong>Establecimiento de la conexión</strong>: Antes de transmitir datos, el cliente solicita al servidor establecer una conexión. Esta conexión se realiza mediante el famoso <em>handshake</em> de tres pasos (<em>SYN, SYN-ACK, ACK</em>).</li>
+<li><strong>Transmisión de datos</strong>: Una vez establecida la conexión, los datos se transmiten de manera confiable entre cliente y servidor.</li>
+<li><strong>Desconexión</strong>: Cuando la comunicación finaliza, ambos extremos cierran la conexión y liberan los recursos asignados.</li>
+</ol>
+<p>A pesar de que hablamos de una <em>conexión</em>, esta conexión es a nivel de <strong>software</strong>, no de hardware, y afecta únicamente a los hosts implicados. Los routers intermedios no son conscientes de esta <em>conexión</em>. Esto significa que el <em>estado</em> de la conexión solo se mantiene en los dispositivos que están enviando y recibiendo datos.</p>
+<h4>Características</h4>
+<ol>
+<li>
+<p><strong>Segmentación</strong>: Si los datos enviados por la aplicación son grandes, <strong>TCP</strong> los divide en fragmentos más pequeños llamados <em>segmentos</em>. Estos segmentos se envían por separado y luego se reensamblan en el destino.</p>
+</li>
+<li>
+<p><strong>Transferencia confiable</strong>: TCP asegura que todos los datos lleguen sin errores y en el orden correcto. Para lograr esto, el receptor envía <strong>confirmaciones (ACKs)</strong> de los paquetes recibidos. Si el emisor no recibe una confirmación, asume que el paquete se perdió o llegó con errores, y lo retransmite.</p>
+</li>
+<li>
+<p><strong>Control de Flujo</strong>: Este mecanismo asegura que el emisor no envíe más datos de los que el receptor puede manejar. Si el receptor es lento o tiene poca memoria, puede reducir la cantidad de datos que el emisor envía.</p>
+</li>
+<li>
+<p><strong>Control de congestión</strong>: TCP ajusta la cantidad de datos que envía en función de la capacidad de la red. Si detecta que la red está congestionada (es decir, muchos paquetes se pierden), reduce su tasa de envío para evitar saturar los enlaces y routers.</p>
+</li>
+</ol>
+<h2>1.2.2 Servicio Sin Conexión</h2>
+<p>El protocolo <strong>UDP (User Datagram Protocol)</strong> ofrece un servicio <strong>sin conexión</strong>. Aquí, el emisor envía los paquetes de datos <strong>sin necesidad de establecer una conexión</strong> con el receptor. No hay fase de conexión, ni confirmaciones,. lo que implica que:</p>
+<ol>
+<li><strong>No hay garantías de entrega</strong>: El emisor no sabe si los datos llegaron correctamente al destino, ya que no hay mecanismos para confirmarlo.</li>
+<li><strong>No hay control de flujo ni congestión</strong>: El emisor envía datos tan rápido como lo desee, sin considerar la capacidad del receptor o el estado de la red. Esto lo hace menos confiable, pero mucho más rápido que TCP.</li>
+</ol>
+<h4>Características de UDP</h4>
+<ul>
+<li><strong>Simplicidad y rapidez</strong>: UDP no se preocupa por establecer una conexión ni por la retransmisión de paquetes perdidos, lo que lo hace más rápido.</li>
+<li><strong>Menos fiabilidad</strong>: No garantiza que los datos lleguen en el orden correcto o que lleguen sin errores.</li>
+</ul>
+<h4>Ejemplos de uso de UDP</h4>
+<p>UDP es ideal para aplicaciones donde la <strong>velocidad</strong> es más importante que la fiabilidad, como:</p>
+<ul>
+<li><strong>Videoconferencias</strong>: Donde perder algunos paquetes de datos no afecta gravemente a la calidad de la llamada.</li>
+<li><strong>Juegos en línea</strong>: La prioridad es la rapidez en la transmisión, y no necesariamente que todos los paquetes lleguen.</li>
+<li><strong>Streaming de medios</strong>: Donde pequeños fallos o retrasos no son críticos.</li>
+</ul>
+<h4>Resumen</h4>
+<ul>
+<li><strong>TCP</strong>: Es ideal cuando la <strong>fiabilidad</strong> es crucial, pero es más lento debido al control de flujo, la retransmisión de datos y la gestión de conexiones.</li>
+<li><strong>UDP</strong>: Es preferido para aplicaciones que requieren <strong>rapidez</strong> y pueden tolerar la pérdida de algunos datos, como las videollamadas o juegos en tiempo real.</li>
+</ul>
+<h1>1.3 Redes de Conmutación de Circuitos (CC)</h1>
+<p>En una red de este tipo, antes de transmitir los datos hay una fase de conexión en la que se <strong>reservan los recursos hardware</strong> que se usaran. Estos quedan reservados y no pueden ser utilizados por otra transmisión. Durante la <strong>fase de conexión</strong> se establece la <strong>ruta</strong>. La <strong>transmisión</strong> finaliza con una fase de <strong>desconexión</strong> que libera a todos los recursos.</p>
+<img src="../../../img/redes/pasted-image-20240928200143.png" alt="../BASES DE DATOS/Archivos/imagenes/Pasted image 20240928200143.png" loading="lazy">
+<p>Tenemos los siguientes circuitos conmutados:</p>
+<ul>
+<li><strong>Sin multiplexado:</strong> por cada enlace solo se puede realizar <strong>una transmisión</strong> de cada vez.</li>
+<li><strong>Con multiplexado:</strong> la capacidad de enlace <strong>se reparte</strong> entre varias transmisiones, dividiendo en varias ranuras el <strong>tiempo</strong> o la <strong>frecuencia</strong>. Cada ranura queda reservada a una determinada transmisión y las demás no las pueden usar.</li>
+</ul>
+<h2>1.3.1 Multiplexado por División en Frecuencia (DFM).</h2>
+<img src="../../../img/redes/pasted-image-20240928201433.png" alt="archivos/imagenes/Pasted image 20240928201433.png" loading="lazy">
+<p>Por un <strong>mismo enlace</strong> se pueden enviar varias transmisiones si <strong>modulamos</strong> a una frecuencia distinta cada una de ellas. Por ejemplo las transmisiones por radio.
+En los <strong>receptores</strong>, las distintas <strong>frecuencias</strong> se pueden separar mediante <strong>filtros</strong>:</p>
+<img src="../../../img/redes/pasted-image-20240928201049.png" alt="archivos/imagenes/Pasted image 20240928201049.png" loading="lazy">
+<h2>1.3.2 Multiplexado por división en tiempo (TDM)</h2>
+<img src="../../../img/redes/pasted-image-20240928201459.png" alt="archivos/imagenes/Pasted image 20240928201459.png" loading="lazy">
+<p>Se asigna <strong>periódicamente</strong> una <strong>ranura de tiempo</strong> a cada transmisión. Una vez completado un ciclo (<em>marco</em>) se comienza de nuevo.</p>
+<img src="../../../img/redes/pasted-image-20240928201224.png" alt="archivos/imagenes/Pasted image 20240928201224.png" loading="lazy">
+<p>Las <strong>redes de conmutación de circuitos</strong> son <strong>derrochadoras</strong> puesto que reservan recursos aunque no los vayan a usar.</p>
+<h1>1.4 Redes de conmutación de paquetes (CP)</h1>
+<p><strong>No se reservan recursos</strong> para la transmisión, todos se comparten y asignan bajo demanda. Estas redes trabajan con <strong>paquetes</strong>, que son bloques de datos de longitud determinada. Si el mensaje es más grande, se <strong>segmenta</strong> en varios paquetes. Cada paquete además de datos, contiene una <strong>cabecera</strong> con <strong>información de control</strong> para que el paquete pueda llegar al destino. Hay también paquetes que llevan <strong>solo información de control</strong>, como los <strong>paquetes de confirmación</strong>.</p>
+<p>Los <strong>routers</strong> funcionan como <strong>conmutadores de paquetes</strong>, usualmente operando mediante almacenamiento y reenvío. Cuando el paquete llega al router, se procesa y almacena en la <strong>cola de salida</strong> hasta que le llega el turno para pasar al enlace (<em>siguiente router</em>). <strong>Si la cola se llena, se descarta el paquete</strong>.</p>
+<img src="../../../img/redes/pasted-image-20240928202058.png" alt="archivos/imagenes/Pasted image 20240928202058.png" loading="lazy">
+<h2>1.4.1 Retardo</h2>
+<p>Componentes del <strong>retardo:</strong></p>
+<ul>
+<li><strong>Retardo de procesamiento (router):</strong> examinar la cabecera y dirigir el paquete a la salida.</li>
+<li><strong>Retardo de espera en cola(router):</strong> proporcional a lo cargada que esté la red</li>
+<li><strong>Retardo de transmisión (router/host):</strong> tiempo que pasa entre que el host escribe en el enlace el primer bit del paquete hasta el último</li>
+<li><strong>Retardo de propagación(enlace):</strong> depende del tipo y longitud del enlace.</li>
+</ul>
+<p>El retardo total se puede calcular como:</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">Retardo_total</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">Retardo_procesamiento</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">Retardo_esperaEnCola</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">Retardo_transmision</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">Retardo_propagacionEnlace</span></span></span></span></span></span></eqn></section><p>Donde el <strong>retardo de transmisión</strong> del router/host se calcula como:
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">Retardo_trans</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0463em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0077em;">R</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">L</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></eqn></section></p>
+<ul>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span></span></span></span></eq>: tamaño del paquete (bits).</li>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span></span></span></span></eq>: velocidad de transmisión del router/host (bits por segundo).</li>
+</ul>
+<p>Y el <strong>retardo de propagación</strong> del enlace se calcula como:</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0044em;vertical-align:-0.31em;"></span><span class="mord text"><span class="mord">Retardo_prop</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0574em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.2222em;">V</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></eqn></section><ul>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">d</span></span></span></span></eq>: distancia del enlace (metros).</li>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">V</span></span></span></span></eq>: velocidad de propagación en el enlace (metros por segundo).</li>
+</ul>
+<blockquote>
+<p>[! Info]
+El <strong>ancho de banda</strong> (<em>BW</em>)es una medida de la capacidad de transmisión de datos en una red o en un medio de comunicación. Básicamente, representa la <strong>cantidad de datos que pueden enviarse o recibirse en un determinado período de tiempo</strong>, generalmente medido en bits por segundo (bps) o sus múltiplos, como megabits por segundo (Mbps) o gigabits por segundo (Gbps).</p>
+<p>En una red de 100 Mbps, el ancho de banda máximo es de 100 megabits por segundo. Si se supera este límite, habrá congestión, y los datos pueden retrasarse o perderse. Se puede pensar como <strong>número de bits</strong> que caben en el enlace.
+**Capacidad de enlace= retardo * BW **</p>
+</blockquote>
+<h2>1.4.2 Comparación de CC contra CP</h2>
+<p>Pregunta. Sea una red compartida por varios usuarios cada uno de los cuales
+transmite un 10 % del tiempo.
+(<em>a</em>) Si la red funciona en modo de <strong>CC</strong> con 10 canales (<em>ranuras de tiempo o</em> <em>frecuencias</em>), ¿cuántos usuarios podrá haber simultáneamente?
+(<em>b</em>) ¿Y si la red funciona en modo de <strong>CP</strong>?
+Respuesta. En la red de <strong>CC</strong> hay 10 canales, por lo tanto sólo puede haber 10 usuarios simultáneamente. Se supone que la red tiene recursos para que cada uno de estos 10 usuarios transmita el 100 % del tiempo, aunque al final sólo lo haga el 10 % del mismo.
+Si la misma red (con la misma capacidad de routers y enlaces) se pone a trabajar en modo de CP, teóricamente podrı́a soportar 10 × 10 = 100 usuarios simultáneamente. Sin embargo, esto es en teorı́a, porque en la práctica los retardos serı́an muy altos. En la práctica (<em>con cálculos de la teorı́a de colas)</em> podrı́a haber 35 usuarios con retardos prácticamente despreciables.</p>
+<h2>1.4.3 Segmentación</h2>
+<p>Razones para la <strong>segmentación:</strong></p>
+<ul>
+<li><strong>Menor tiempo de transmisión</strong></li>
+<li>Una <strong>transmisión</strong> no satura la red con mensajes enormes, sino que da oportunidad a otras transmisiones para que <strong>intercalen</strong> sus paquetes.</li>
+<li>En caso de <strong>errores</strong> en un paquete, solo hay que transmitir el paquete con errores.</li>
+</ul>
+<img src="../../../img/redes/pasted-image-20241002092759.png" alt="archivos/imagenes/Pasted image 20241002092759.png" loading="lazy">
+<h2>1.4.4 Redes de Datagramas</h2>
+<p>En las <strong>redes de datagramas</strong> cada paquete se maneja de forma independiente. No se establece ninguna conexión antes de que los datos sean enviados.</p>
+<p><strong>Cada paquete</strong> tiene en su <strong>cabecera</strong> la dirección <strong>IP de destino</strong>. Cuando llega a un router, este leer la dirección y decir por qué camino enviarlo, colocándolo en en la <strong>cola de salida más adecuada</strong>.  Esto se conoce como <strong>encaminamiento</strong> y se usa una <strong>tabla de rutas</strong> para decidir a qué cola se debe enviar el paquete. Estas tablas se actualizan continuamente para reflejar los cambios en la red. Los routers además <strong>no almacenan ninguna información</strong> sobre los paquetes anteriores, por lo que paquetes de <strong>la misma transmisión</strong> pueden seguir rutas <strong>diferentes</strong> y podrían llegar al destino desordenados.</p>
+<img src="../../../img/redes/pasted-image-20240928204914.png" alt="archivos/imagenes/Pasted image 20240928204914.png" loading="lazy">
+<p>Si se cae un enlace de la red, los paquetes pueden ser <strong>redirigidos</strong> por otras rutas, sin embargo, no hay garantía de que los paquetes lleguen en el <strong>orden correcto</strong> o que todos lleguen. Son ideales para redes <strong>grandes y heterogéneas</strong> como <strong>Internet</strong>, donde es difícil planificar una ruta fija debido a la complejidad de la red.</p>
+<h2>1.4.5 Redes de Circuitos Virtuales</h2>
+<p>En las <strong>redes de circuitos virtuales</strong>, se establece una <strong>conexión lógica</strong> entre el emisor y el receptor antes de que los paquetes se transmitan. Esta conexión no es física, sino una <strong>ruta planificada</strong> que se sigue durante la transmisión.</p>
+<p>Se necesita <strong>una solicitud de conexión</strong> por parte del <strong>host origen</strong> antes de comenzar a enviar datos, tras esto, la red <strong>planifica una ruta</strong> hacia el destino y asigna <strong>un número de circuito virtual</strong> a esa ruta. Los paquetes van a llevar ese <strong>número de circuito virtual en la cabecera</strong>, y los routers usarán ese número para dirigir a los paquetes, por lo que todos los paquetes de la <strong>misma transmisión</strong> seguirán el mismo camino (<em>a diferencia de la red de datagramas que iban todos a su bola</em>). Finalmente se produce la <strong>solicitud de desconexión</strong> y se liberan los recursos asociados a esa transmisión.</p>
+<img src="../../../img/redes/pasted-image-20240929132100.png" alt="archivos/imagenes/Pasted image 20240929132100.png" loading="lazy">
+<p>El número de <strong>circuito virtual</strong> puede cambiar de una enlace a otro, lo que permite <strong>reutilizar números de circuitos virtuales</strong> en diferentes enlaces, lo que ahorra espacio en las cabeceras de los paquetes y nos evita <strong>tener que mantener una tabla global</strong> con todos los circuitos virtuales de la red. Cada routes solo necesita saber qué números de circuito son válidos en los enlaces locales.</p>
+<img src="../../../img/redes/pasted-image-20240929132525.png" alt="archivos/imagenes/Pasted image 20240929132525.png" loading="lazy">
+<img src="../../../img/redes/pasted-image-20240929133447.png" alt="archivos/imagenes/Pasted image 20240929133447.png" loading="lazy">
+<p>Ofrece una <strong>ruta fija</strong> para todos los paquetes, por lo que <strong>llegan en orden y no se pierden</strong>. Es más fiable para ciertas aplicaciones. Sin embargo, no es tan flexible como las redes de datagramas. Si algún enlace en la ruta falla, <strong>toda la transmisión se ve afectada</strong>. Son más adecuadas para redes más <strong>pequeñas y controladas</strong> donde se requiere mayor fiabilidad y velocidad en las transmisiones.</p>
+<h2>1.4.6 Comparación</h2>
+<table>
+<thead>
+<tr>
+<th>Característica</th>
+<th>Redes de Datagramas</th>
+<th>Redes de Circuitos Virtuales</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Encaminamiento</strong></td>
+<td>Independiente para cada paquete</td>
+<td>Fijo, basado en el circuito virtual</td>
+</tr>
+<tr>
+<td><strong>Almacenamiento en routers</strong></td>
+<td>No se almacena información de paquetes anteriores</td>
+<td>Se mantienen tablas de circuitos virtuales</td>
+</tr>
+<tr>
+<td><strong>Rutas</strong></td>
+<td>Pueden variar para cada paquete</td>
+<td>Fija para toda la transmisión</td>
+</tr>
+<tr>
+<td><strong>Orden de llegada</strong></td>
+<td>Los paquetes pueden llegar desordenados</td>
+<td>Los paquetes llegan en orden</td>
+</tr>
+<tr>
+<td><strong>Fiabilidad</strong></td>
+<td>Menos fiable</td>
+<td>Más fiable</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-nota">
+<p class="callout-titulo">**A partir de aquí no suele caer nada más de este tema.** Ir al 1.8</p>
+</div>
+<h1>1.5 Redes de difusión</h1>
+<p>Todos los <strong>host</strong> reciben las transmisiones pero solo la procesa el <strong>destinatario</strong>. La <strong>wifi</strong> es un ejemplo.
+Internet es una red de <strong>datagramas</strong>, así los especifica <strong>IP</strong> (<em>TCP/IP</em>). Sin embargo algunas capas de internet funcionan con otro tipo de tecnología: <strong>conmutación de circuitos, circuitos virtuales o difusión</strong>.</p>
+<img src="../../../img/redes/pasted-image-20240929133820.png" alt="archivos/imagenes/Pasted image 20240929133820.png" loading="lazy">
+<h1>1.6 Acceso a Internet</h1>
+<p>EL accesos <strong>residencial a Internet</strong> se puede hacer de 4 formas:</p>
+<ul>
+<li><strong>Módem telefónico</strong></li>
+<li><strong>ADSL</strong>(<em>línea digital asimétrica del suscriptor</em>)</li>
+<li><strong>Cable HFC</strong> (<em>híbrido fibra-coaxial)</em></li>
+<li><strong>FTTH</strong> (<em>fibra hasta el domicilio</em>)
+El <strong>acceso empresarial</strong> se suele hacer mediante redes locales <em>Ethernet, Wifi</em>.</li>
+</ul>
+<h2>1.6.1 Módem Telefónico</h2>
+<p>Usa la <strong>línea telefónica</strong> como si la transmisión a Internet fuese una llamada de voz normal. Primero llama al número telefónico del <strong>ISP</strong>(<em>Internet Service Provider</em>) y una vez establece la conexión convierte la señal digital en una analógica modulada. Esto se llama <strong>modulación</strong>:</p>
+<img src="../../../img/redes/pasted-image-20240929134602.png" alt="archivos/imagenes/Pasted image 20240929134602.png" loading="lazy">
+<p>EL <strong>receptor</strong> realiza la operación contraria, <strong>demodulación</strong>. <strong>Módem</strong>: <strong>modular-demodular</strong>.
+El problema es que las señales de voz que usa el sistema telefónico tienen <strong>ancho de banda de frecuencia estrecha</strong>. Como este ancho de banda solo puede conseguirse una velocidad de 50 kbps mediante modulación, era muy lento. Se conectaba el ordenador a la línea telefónica y las ondas transportaban la información.</p>
+<h2>1.6.2 ADSL</h2>
+<p><strong>Línea digital asimétrica del suscriptor</strong>. Trata de <strong>aprovechar todo el ancho de banda</strong> en frecuencias del cable que conecta nuestra casa con la <strong>central telefónica</strong>. Hay que tener en cuenta que en las llamadas la capacidad de este cable es desaprovechada (<em>solo usamos los primeros 4KHz del ancho de banda aprox de 1MHz</em>):</p>
+<img src="../../../img/redes/pasted-image-20240929135241.png" alt="archivos/imagenes/Pasted image 20240929135241.png" loading="lazy">
+<p>Usa <strong>multiplexión por división en frecuencia</strong>, dividiendo el ancho de banda en 3 canales. EL primero transmite la voz telefónica, el segundo para el envío de Internet (<em>subida</em>) y el tercero para la recepción(<em>bajada</em>). El de <strong>bajada es el de mayor velocidad</strong>, porque el usuario <strong>descarga más de lo que sube</strong>.</p>
+<img src="../../../img/redes/pasted-image-20240929135437.png" alt="archivos/imagenes/Pasted image 20240929135437.png" loading="lazy">
+<p>Se pueden transmitir hasta 10 Mbps. Permite usar <strong>teléfono y conexión a Internet por separado</strong>.</p>
+<img src="../../../img/redes/pasted-image-20240929135551.png" alt="archivos/imagenes/Pasted image 20240929135551.png" loading="lazy">
+<h2>1.6.3 Cable HFC (híbrido y coaxial)</h2>
+<img src="../../../img/redes/pasted-image-20240929135754.png" alt="archivos/imagenes/Pasted image 20240929135754.png" loading="lazy">
+<p>La <strong>cabecera final</strong> es equivalente a la central telefónica, está centraliza todas las transmisiones de abonados que desde aquí pasan a Internet a través de un router. De aquí los <strong>troncales de fibra</strong> conectan a los nodos de fibra que a su vez mediante cable coaxial para dar servicios de <strong>TV, Teléfono e Internet</strong>.
+Las troncales se hacen a partir de fibra porque necesitan mucha capacidad, el resto de <strong>línea coaxial</strong> (<em>barato y fácil de instalar</em>). Todos los cables son multiplexados (<em>TDM y FDM</em>).</p>
+<h2>1.6.4 FTTH</h2>
+<p><strong>Fiber to home</strong>:</p>
+<ul>
+<li>Fibra para distribución de servicios avanzados: <em>Triple Play</em></li>
+<li><strong>OLT</strong> (Optical Line Terminal): punto final que viene del ISP</li>
+<li><strong>ODN</strong> (Optical Distribution Network): desde el OLT a los usuarios</li>
+<li><strong>ONT</strong> (Optical Network Termination): conversión de señales ópticas ↔ eléctricas</li>
+</ul>
+<img src="../../../img/redes/pasted-image-20240929140504.png" alt="archivos/imagenes/Pasted image 20240929140504.png" loading="lazy">
+<h2>1.6.5 Acceso Empresarial</h2>
+<p>Mediante una <strong>LAN</strong> conectada aun router y a un <strong>ISP</strong> con enlace dedicado</p>
+<h4>Red de la USC</h4>
+<ul>
+<li>Tres nodos troncales en <strong>Santiago</strong> y uno en <strong>Lugo</strong> unidos a través de <strong>RedIRIS Nova</strong> y el <strong>CESGA</strong>:
+-Nodos troncales de Santiago unidos con enlaces dobles de 40 GE
+-Enlaces dobles desde los nodos troncales a los nodos de distribución de 10 GE
+-Enlaces a 10 GE entre los nodos de distribución y los nodos de acceso (conmutadores a 100 Mbps o 1 Gbps)</li>
+<li>Acceso a Internet mediante un nodo en el Cesga que
+enlaza con RedIris (gestiona la red pública)</li>
+</ul>
+<img src="../../../img/redes/pasted-image-20240929142123.png" alt="archivos/imagenes/Pasted image 20240929142123.png" loading="lazy">
+<h1>1.7 Medios de Transmisión</h1>
+<p>Distinguimos entre:</p>
+<ul>
+<li><strong>Medios Guiados</strong>: <strong>Cable de par trenzado</strong>, <strong>Cable Coaxial</strong> y <strong>Fibra Óptica</strong>.</li>
+<li><strong>Medios no Guiados</strong>: <strong>Atmósfera y espacio</strong>,<strong>canales de radio terrestre</strong> y <strong>canales de radio vía satélite</strong>.</li>
+</ul>
+<h2>1.7.1 Cable de Par Trenzado</h2>
+<p>El <strong>par trenzado</strong> (<em>TP</em>) es el cable de tupo telefónico, Consta de 2 hilos de <strong>cobre trenzado</strong>, es decir, dispuestos en espiral y enrollados entre sí. En enrollado <strong>disminuye alfo de pérdidas</strong> de energía por radiación e interferencias. Dentro de un conducto de plástico pueden disponerse <strong>cientos</strong> de estos pares. Tenemos 2 tipos:</p>
+<p>En el <strong>apantallado</strong> (<em>STP</em>), que es de mayor calidad, el par esta recubierto de una película de metal con el objetivo de disminuir perdidas
+El par <strong>sin apantallar</strong> (<em>UTP</em>), carece de este recubrimientos. Las categoría 1 y 2 son las de peor calidad y se usan en telefonía, y las de categoría 3 se usan en redes locales de 10Mbps y la de categoría 5 en las de 100Mbps.</p>
+<img src="../../../img/redes/pasted-image-20241108205115.png" alt="archivos/imagenes/Pasted image 20241108205115.png" loading="lazy">
+<h2>1.7.2 Cable Coaxial</h2>
+<p>El cable <strong>coaxial</strong> esta formador por dos conductores: uno central sólido y otro exterior formador por una <strong>malla de hilos finos</strong> que recubre al primero.
+Entre ambos hay plástico, la ventaja de esta disposición es que la radiación queda atrapada entre ambos y no escapa al espacio, <strong>evitando pérdidas</strong>.</p>
+<img src="../../../img/redes/pasted-image-20240929151338.png" alt="archivos/imagenes/Pasted image 20240929151338.png" loading="lazy">
+<img src="../../../img/redes/pasted-image-20241108205153.png" alt="archivos/imagenes/Pasted image 20241108205153.png" loading="lazy">
+<p>Hay 2 calidades, el de <strong>50 ohmios</strong> que se utiliza para transmitir señales digitales en banda base (<em>sin modular</em>) en algunas redes locales. Y también el de <strong>75 ohmios</strong> de mejor calidad, se utiliza en banda ancha (<em>con modulación</em>) en las redes de <strong>cable CGH</strong> y permite cientos de canales de <strong>TV, teléfono e Internet</strong>.</p>
+<h2>1.5.3 Fibra Óptica</h2>
+<p>En vez de trasmitir señales eléctricas, <strong>transmite luz</strong>, evitando pérdidas por radiación. Las fibras se hacer a partir de vidrio o plástico transparente y ultrapuro.
+Tienen baja <strong>atenuación</strong>, por lo que pueden usarse hasta distancias de 100km <strong>sin repetidores</strong>. Son finas como un cabello, por lo que dentro de un conducto de pueden alojar miles</p>
+<img src="../../../img/redes/pasted-image-20240929151648.png" alt="archivos/imagenes/Pasted image 20240929151648.png" loading="lazy">
+<img src="../../../img/redes/pasted-image-20241108205225.png" alt="archivos/imagenes/Pasted image 20241108205225.png" loading="lazy">
+<p><strong>Precio elevado</strong>, <strong>Capacidad de Transmisión Mayor que cualquier Cable</strong>.</p>
+<h5>Fibra Multimodo</h5>
+<ul>
+<li>La luz se propaga rebotando en las paredes del núcleo</li>
+<li>Utilizada para redes de conexión locales, centros de datos de edificio a edificio y para FTTH.</li>
+</ul>
+<h5>Fibra Monomodo</h5>
+<ul>
+<li>Se propaga en línea recta =⇒ mayor distancia</li>
+<li>Más costosa</li>
+</ul>
+<h5>Designación OC-n</h5>
+<p>Velocidad de enlace n × 51,8 Mbps</p>
+<div class="callout callout-nota">
+<p class="callout-titulo">**No creo q pregunte esto pero está bien pa entender el concepto en general de los siguientes temas.**</p>
+</div>
+<h1>1.8 Arquitectura en Capas</h1>
+<p>La <strong>arquitectura en capas</strong> se utiliza para facilitar el diseño de los protocolos de comunicación. Consiste en dividir la comunicación en <strong>tareas independientes</strong> y poner cada una de ellas en una capa. Las <strong>capas superiores</strong> utilizan los servicios de las inferiores. La arquitectura en capas permite <strong>conectar computadores</strong> y sistemas muy diferentes con la única condición de que respeten las especificaciones de cada capa.
+<strong>Cada capa es independiente de las demás</strong>.  <strong>Aunque las transmisiones son en vertical, los protocolos pueden diseñarse como si fuesen horizontales</strong>. Cada capa puede ignorar el contenido de las capas contiguas, añadiendo instrucciones para el destinatario de cada capa.</p>
+<img src="../../../img/redes/pasted-image-20241108205352.png" alt="archivos/imagenes/Pasted image 20241108205352.png" loading="lazy">
+<p>En la <strong>Capa de Aplicación</strong>, se localizan los procesos que se comunican entre sí mediante mensajes. Por ejemplo si queremos comunicar 2 procesos (<em>un servidor con un cliente</em>). Para que se pueda realizar hay que acordar un <strong>protocolo</strong>: formato para los mensajes y unas reglas. Los datos se llaman <strong>mensajes</strong>.</p>
+<p>La <strong>Capa de Transporte</strong> aparece ante la situación de que los procesos a comunicar están en <strong>diferentes computadores</strong> y que existe algún tipo de conexión entre estos. La <strong>Capa de Transporte</strong> prepara los mensajes para que puedan transmitirse fuera del computadores. Los datos se dividen en <strong>segmentos</strong> (en TCP) o permanecen como mensajes (en UDP).</p>
+<p>La <strong>capa de Red</strong> aparece si los ordenadores <strong>no están directamente conectados</strong>, si no que forman parte de una red. Esta se encarga de buscar las rutas y llevar los paquetes desde <strong>Host origen</strong> hasta el <strong>Host destino</strong>.  Los segmentos o mensajes se encapsulan en <strong>paquetes</strong> o <strong>datagramas</strong>.</p>
+<p>La <strong>Capa de Enlace</strong> se encarga de los <strong>detalles de bajo nivel</strong> de la transmisión de cada bloque de datos (<em>paquete</em>) de un extremo a otro de un <strong>enlace</strong>. En este enlace se puede usar cualquier tipo de tecnología de red : <em>datagramas, circuitos virtuales, etc.</em> El enlace puede ser de <strong>cable</strong> o de <strong>ondas</strong> de radio y puede ser de <strong>punto a punto</strong>(<em>un emisor y un receptor</em>) o de <strong>difusión</strong>(<em>múltiples transmisiones</em>). Se encarga de comenzar la transmisión cuando el enlace está libre, de  ir almacenando los datos en la memoria cuando van llegando, de detectar colisiones en enlaces de difusión, etc.  Los paquetes o datagramas se convierten en <strong>tramas</strong> (frames).</p>
+<p>La <strong>Capa Física</strong> trabaja a nivel de bits: convierte los bits <strong>0 y 1</strong> en <strong>pulsos</strong>, señales eléctricas. Conforma el pulso dándole la correspondiente forma, tensión y duración. También define las características mecánicas y físicas del medio de transmisión.</p>
+<img src="../../../img/redes/pasted-image-20241108205808.png" alt="archivos/imagenes/Pasted image 20241108205808.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-capa-de-aplicacion.html"><span class="nav-etiqueta">siguiente →</span>2. Capa de Aplicación</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

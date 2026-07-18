@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Programación de Scripts — apuntes de ASR (tercer curso de Ingeniería Informática).">
+<title>5. Programación de Scripts · ASR · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">asr</a><span class="miga-sep">/</span><span aria-current="page">5-programacion-de-scripts</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">ASR · curso 3</p>
+    <h1>5. Programación de Scripts · ASR</h1>
+  </header>
+  <div class="prosa">
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Este tema originalmente habla también del shell y programar con bash, yo no explico porque no entra en el examen. Aunque es bastante importante saber como usar cada herramienta. En SOI se suele explicar (pero de forma muy precaria), si os interesa los apuntes originales de la asignatura lo explica bastante bien. Los temas tratados son:</p>
+<ul>
+<li>Línea de comandos: El interprete de comandos (shell), variables de shell, expansiones del shell, redirección de la entrada/salida, orden de evaluación y ficheros de inicialización de bash</li>
+<li>Scritps de administración: programación shell-script, entrada/salida, tests, estructura if...then...else, expresiones, control de flujo y funciones</li>
+</ul>
+<p>De todas formas, yo seguramente hable de algunos temas recogidos aquí con tal de aclarar cosa que considero poco obvias.</p>
+</div>
+<h1>5.1 Expresiones regulares</h1>
+<p>Las <strong>expresiones regulares</strong> permiten reconocer en texto una serie de cadenas de caracteres que siguen un patrón:</p>
+<ul>
+<li>Los ficheros de configuración y logs de Unix son normalmente ficheros de texto.</li>
+<li>Muchos comandos de procesamiento y búsqueda de texto como <code>grep</code>, <code>egrep</code>, <code>sed</code>, <code>awk</code> o <code>vi</code> usan expresiones regulares</li>
+</ul>
+<p>No hay que confundir las expresiones regulares con los comodines, que son utilizados por el shell para referenciar ficheros. Se pueden usar con ficheros o con cualquier otro de tipo de entrada, como la entrada estándar, pipes, etc. Para evitar confusiones conviene escribir las expresiones regulares entre comillas, simples o dobles.</p>
+<p>Se distinguen las expresiones regulares básicas y las extendidas, más completas.</p>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<ul>
+<li>
+<p><strong>Los comodines (Wildcards/Globbing):</strong> Son caracteres especiales (como <code>*</code> o <code>?</code>) interpretados por la <strong>Shell</strong> (antes de ejecutar el comando) para coincidir con <strong>nombres de ficheros y directorios</strong>.</p>
+</li>
+<li>
+<p><strong>Las expresiones regulares (Regex):</strong> Son patrones interpretados por el <strong>comando o programa</strong> (como <code>grep</code>) para buscar coincidencias dentro del <strong>contenido del texto</strong>.</p>
+</li>
+<li>
+<p><strong>La entrada estándar (stdin):</strong> Es el flujo de datos de entrada predeterminado de un programa (Descriptor de fichero 0). Si no se especifica un archivo, comandos como <code>grep</code> leerán lo que escribas en el teclado o lo que le llegue desde otro comando.</p>
+</li>
+<li>
+<p><strong>Los pipes (tuberías <code>|</code>):</strong> Son el mecanismo que conecta la salida estándar (stdout) de un comando con la entrada estándar (stdin) del siguiente, permitiendo filtrar con expresiones regulares datos generados &quot;al vuelo&quot;.</p>
+</li>
+</ul>
+</div>
+<h2>5.1.1 Comandos <code>egrep</code> y <code>sed -r</code></h2>
+<p>Estos comandos permiten utilizar <strong>Expresiones Regulares Extendidas (ERE)</strong>, lo que simplifica la escritura de patrones complejos (como grupos <code>()</code> o alternancias <code>|</code>) sin necesidad de &quot;escapar&quot; tantos caracteres con la barra invertida <code>\</code>.</p>
+<p><strong>El comando <code>egrep:</code></strong> busca parones en ficheros de texto.</p>
+<ul>
+<li>Lee el texto línea por línea. Si encuentra el patrón en una línea, imprime la línea completa en la salida estándar (pantalla). Si no, la descarta.</li>
+<li><strong>Diferencia clave:</strong> <code>egrep</code> es equivalente a ejecutar <code>grep -E</code>. Interpreta los metacaracteres extendidos (<code>?</code>, <code>+</code>, <code>{}</code>, <code>|</code>, <code>()</code>) directamente.</li>
+</ul>
+<pre><code class="language-Shell">egrep [opciones] 'patrón' archivo
+</code></pre>
+<p><strong>El comando<code>sed -r:</code></strong> Es un editor de flujo de texto. Aunque tiene muchas funciones, su uso más frecuente con expresiones regulares es para <strong>sustituir</strong> texto.</p>
+<ul>
+<li><strong>Opción <code>-r</code>:</strong> Habilita las expresiones regulares extendidas (en versiones modernas se usa <code>-E</code>, pero <code>-r</code> es el clásico en GNU/Linux).</li>
+<li><strong>Sintaxis de sustitución:</strong> <code>s</code> (substituye), <code>patrón</code> (lo que busco), <code>reemplazo</code> (lo nuevo) y <code>g</code> (global - todas las veces que aparezca en la línea).</li>
+</ul>
+<pre><code class="language-bash">sed -r 's/patrón/sustitución/g' archivo
+</code></pre>
+<div class="callout callout-nota">
+<p class="callout-titulo">**Caracteres especiales en el reemplazo (`&amp;` y `\1`):**</p>
+<p>Cuando usamos expresiones regulares en <code>sed</code>, la parte del &quot;reemplazo&quot; permite reciclar texto que hemos encontrado en la parte del &quot;patrón&quot;:</p>
+<ol>
+<li><strong>Los paréntesis <code>(...)</code></strong>: En el patrón de búsqueda <code>(.*)\.foo</code>, los paréntesis sirven para <strong>capturar</strong> y guardar en memoria una parte del texto (en este caso, todo lo que haya antes del punto).</li>
+<li><strong><code>\1</code> (Retroreferencia)</strong>: Recupera el contenido guardado en el <strong>primer</strong> par de paréntesis.</li>
+</ol>
+<ul>
+<li>Si tuviéramos más paréntesis, usaríamos <code>\2</code>, <code>\3</code>, etc.</li>
+<li><em>En el ejemplo:</em> <code>\1</code> contiene solo el nombre del archivo (sin la extensión).</li>
+</ul>
+<ol start="3">
+<li><strong><code>&amp;</code> (Coincidencia completa)</strong>: Es una variable especial que contiene <strong>todo el texto</strong> que coincidió con el patrón de búsqueda completo.</li>
+</ol>
+<ul>
+<li><em>En el ejemplo:</em> <code>&amp;</code> contiene el nombre del archivo original completo (nombre + extensión).</li>
+</ul>
+</div>
+<p>Ambos comandos siguen la filosofía Unix:</p>
+<ul>
+<li><strong>Entrada:</strong> Pueden leer de un fichero o de la <strong>entrada estándar (stdin)</strong> a través de una tubería (<code>|</code>).</li>
+<li><strong>Uso de Comillas:</strong> Es vital proteger la expresión regular para que la Shell no la interprete antes de tiempo.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>Tipo de Comillas</strong></th>
+<th><strong>Descripción</strong></th>
+<th><strong>Ejemplo</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Simples <code>'...'</code></strong></td>
+<td><strong>Recomendado.</strong> Todo lo de adentro es literal. La shell no toca nada.</td>
+<td><code>grep '$USER'</code> (Busca la palabra literal &quot;$USER&quot;)</td>
+</tr>
+<tr>
+<td><strong>Dobles <code>&quot;...&quot;</code></strong></td>
+<td>Permite a la shell expandir variables antes de ejecutar el comando.</td>
+<td><code>grep &quot;$USER&quot;\</code> (Busca tu nombre de usuario actual, ej: &quot;juan&quot;)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ejemplos:</strong></p>
+<pre><code class="language-shell"># Busca la palabra error O la palabra warning
+egrep 'error|warning' /var/log/syslog
+</code></pre>
+<pre><code class="language-shell"># Cambia '2023' por '2024' en todas las apariciones
+sed -r 's/2023/2024/g' config.txt
+</code></pre>
+<pre><code class="language-shell">IP=&quot;192.168.1.1&quot;
+
+# INCORRECTO: Busca la palabra literal $IP
+egrep '$IP' conexiones.log 
+
+# CORRECTO: La shell cambia $IP por 192.168.1.1 antes de buscar
+egrep &quot;$IP&quot; conexiones.log
+</code></pre>
+<p><strong>Importante</strong>: no debemos confundir las expresiones regulares con los comodines para la sustitución de nombres de ficheros (glob). Por ejemplo, el asterisco * como comodín indica cualquier cadena en nombres de fichero, mientras que como expresión regular es repetición.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Característica</strong></th>
+<th><strong>Comodines (Globbing)</strong></th>
+<th><strong>Expresiones Regulares (Regex)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Quién lo interpreta</strong></td>
+<td>La Shell (bash, zsh, sh)</td>
+<td>La herramienta (grep, sed, awk, vim)</td>
+</tr>
+<tr>
+<td><strong>Objetivo</strong></td>
+<td>Encontrar archivos en el disco</td>
+<td>Encontrar texto dentro de archivos/flujos</td>
+</tr>
+<tr>
+<td><strong>Ejemplo <code>*</code></strong></td>
+<td><code>*.txt</code> (Todos los archivos acabados en .txt)</td>
+<td><code>a*</code> (La letra 'a' cero o más veces)</td>
+</tr>
+<tr>
+<td><strong>Cuándo ocurre</strong></td>
+<td>Antes de que el comando se ejecute</td>
+<td>Mientras el comando se ejecuta</td>
+</tr>
+</tbody>
+</table>
+<p>Si no especificamos fichero, egrep y sed usan la entrada estándar. Las comillas dobles permiten utilizar variables y comandos dentro de las expresiones regulares.</p>
+<h2>5.1.2 Expresiones regulares extendidas</h2>
+<p>Los sistemas UNIX actuales admiten extensiones a las expresiones regulares básicas (BRE). Para usar estas extensiones, generalmente necesitamos herramientas que las soporten explícitamente (como <code>egrep</code>, <code>grep -E</code> o <code>sed -r</code>).</p>
+<p>La regla de oro es: <strong>La mayoría de los caracteres son literales</strong>, es decir, concuerdan consigo mismos.</p>
+<ul>
+<li><strong>Ejemplo:</strong> La regex <code>casa</code> busca exactamente la secuencia &quot;c&quot;, &quot;a&quot;, &quot;s&quot;, &quot;a&quot;.</li>
+</ul>
+<p>La excepción son los <strong>metacaracteres</strong>, símbolos con significado especial que definen el patrón.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Símbolo</strong></th>
+<th><strong>Función</strong></th>
+<th><strong>Significado</strong></th>
+<th><strong>Ejemplo</strong></th>
+<th><strong>Coincide con...</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>.</code></strong></td>
+<td>Comodín</td>
+<td>Cualquier carácter (excepto salto de línea).</td>
+<td><code>a.c</code></td>
+<td>&quot;abc&quot;, &quot;axc&quot;, &quot;a@c&quot;</td>
+</tr>
+<tr>
+<td><strong><code>[ ]</code></strong></td>
+<td>Clase</td>
+<td>Cualquiera de los caracteres dentro.</td>
+<td><code>[abc]</code></td>
+<td>&quot;a&quot;, &quot;b&quot;, &quot;c&quot;</td>
+</tr>
+<tr>
+<td><strong><code>[^ ]</code></strong></td>
+<td>Negación</td>
+<td>Cualquier carácter <strong>que no esté</strong> dentro.</td>
+<td><code>[^abc]</code></td>
+<td>&quot;d&quot;, &quot;z&quot;, &quot;1&quot; (pero no a, b o c)</td>
+</tr>
+<tr>
+<td><strong><code>^</code></strong></td>
+<td>Ancla</td>
+<td>Inicio de línea.</td>
+<td><code>^abc</code></td>
+<td>Líneas que empiezan por &quot;abc&quot;</td>
+</tr>
+<tr>
+<td><strong><code>$</code></strong></td>
+<td>Ancla</td>
+<td>Final de línea.</td>
+<td><code>abc$</code></td>
+<td>Líneas que terminan en &quot;abc&quot;</td>
+</tr>
+<tr>
+<td><strong><code>\</code></strong></td>
+<td>Escape</td>
+<td>Quita el significado especial al siguiente carácter.</td>
+<td><code>\.</code></td>
+<td>Un punto literal &quot;.&quot;</td>
+</tr>
+<tr>
+<td><strong><code>|</code></strong></td>
+<td>Lógica</td>
+<td>Operador OR (alternancia).</td>
+<td><code>gato|perro</code></td>
+<td>&quot;gato&quot;, &quot;perro&quot;</td>
+</tr>
+<tr>
+<td><strong><code>( )</code></strong></td>
+<td>Grupo</td>
+<td>Agrupa patrones y permite capturarlos.</td>
+<td><code>(ab)+</code></td>
+<td>&quot;ab&quot;, &quot;abab&quot;, &quot;ababab&quot;</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Cuantificadores de repetición:</strong> Estos afectan al carácter o grupo que tienen <strong>inmediatamente a su izquierda</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>Símbolo</strong></th>
+<th><strong>Significado</strong></th>
+<th><strong>Mnemotecnia</strong></th>
+<th><strong>Ejemplo a...</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>*</code></strong></td>
+<td><strong>0</strong> o más veces.</td>
+<td>&quot;El opcional múltiple&quot;</td>
+<td><code>a*</code> (vacío, a, aa, aaa...)</td>
+</tr>
+<tr>
+<td><strong><code>+</code></strong></td>
+<td><strong>1</strong> o más veces.</td>
+<td>&quot;El obligatorio&quot;</td>
+<td><code>a+</code> (a, aa, aaa...)</td>
+</tr>
+<tr>
+<td><strong><code>?</code></strong></td>
+<td><strong>0</strong> o <strong>1</strong> vez.</td>
+<td>&quot;El opcional único&quot;</td>
+<td><code>a?</code> (vacío o a)</td>
+</tr>
+<tr>
+<td><strong><code>{n}</code></strong></td>
+<td>Exactamente <em>n</em> veces.</td>
+<td>Exacto</td>
+<td><code>a{3}</code> (aaa)</td>
+</tr>
+<tr>
+<td><strong><code>{n,}</code></strong></td>
+<td>Al menos <em>n</em> veces.</td>
+<td>Mínimo</td>
+<td><code>a{2,}</code> (aa, aaa...)</td>
+</tr>
+<tr>
+<td><strong><code>{n,m}</code></strong></td>
+<td>Entre <em>n</em> y <em>m</em> veces.</td>
+<td>Rango</td>
+<td><code>a{2,4}</code> (aa, aaa, aaaa)</td>
+</tr>
+</tbody>
+</table>
+<p>Dentro de una clase de caracteres (corchetes), la mayoría de metacaracteres <strong>pierden su significado especial</strong> y se vuelven literales.</p>
+<ul>
+<li><code>[a.]c</code> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> Busca una 'a' o un punto literal '.', seguido de 'c'. (Aquí el punto no es &quot;cualquier carácter&quot;).</li>
+</ul>
+<p>Si quieres buscar literalmente un corchete, un guion o un circunflejo dentro de una clase, su posición importa:</p>
+<ol>
+<li><strong>El guion <code>-</code>:</strong> Ponlo al final de la lista. <code>[a-z-]</code> (letras o un guion).</li>
+<li><strong>El cierre <code>]</code>:</strong> Ponlo al principio de la lista. <code>[]abc]</code> (un corchete cerrado, a, b, o c).</li>
+<li><strong>El circunflejo <code>^</code>:</strong> Ponlo en cualquier sitio <strong>menos al principio</strong> (si va al principio niega). <code>[a^b]</code> (a, circunflejo, o b).</li>
+</ol>
+<p><strong>Ejemplos:</strong></p>
+<ul>
+<li><code>a..c</code>: Una 'a', dos caracteres cualquiera, una 'c'. (Ej: <em>azxc</em>, <em>a12c</em>).</li>
+<li><code>[a-z]</code>: Cualquier letra minúscula.</li>
+<li><code>ab*c</code>: Una 'a', cero o muchas 'b', una 'c'. (Ej: <em>ac</em>, <em>abc</em>, <em>abbbc</em>).</li>
+<li><code>ab+c</code>: Una 'a', una o muchas 'b', una 'c'. (Ej: <em>abc</em>, <em>abbc</em>). <strong>No coincide con <em>ac</em></strong>.</li>
+<li><code>.*</code>: Cualquier cadena de texto (muy común).</li>
+<li><code>^#.*\.$</code>: Línea que es un comentario (empieza por <code>#</code>) y termina en un punto literal.</li>
+<li><code>(a|b)c</code>: Puede ser <em>ac</em> o <em>bc</em>.</li>
+<li><code>x(abc)*x</code>: Una 'x', seguida de la secuencia &quot;abc&quot; repetida 0 o más veces, y otra 'x'. (Ej: <em>xx</em>, <em>xabcx</em>, <em>xabcabcx</em>).</li>
+</ul>
+<h3>Conceptos avanzados:</h3>
+<p><strong>Etiquetado y Retroreferencias (Backreferences):</strong>
+Lo que pongas entre paréntesis <code>( )</code> se guarda en memoria temporalmente. Puedes &quot;pegar&quot; lo que se encontró usando <code>\1</code> (para el primer paréntesis), <code>\2</code> (para el segundo), etc.</p>
+<p><strong>Ejemplo de detección:</strong></p>
+<ul>
+<li>Patrón: <code>(.)oo\1</code></li>
+<li>Explicación: Busca cualquier carácter (grupo 1), seguido de &quot;oo&quot;, seguido de <strong>lo mismo que se encontró en el grupo 1</strong>.</li>
+<li>Coincide con: <code>moom</code>, <code>noon</code>.</li>
+<li>No coincide con: <code>moon</code> (porque la 'n' final no es igual a la 'm' inicial).</li>
+</ul>
+<p><strong>Ejemplo de sustitución con <code>sed</code>:</strong> Podemos reordenar el texto usando las referencias.</p>
+<pre><code class="language-shell"># Intercambiar el orden de dos caracteres
+sed -r &quot;s/(.)(.)/\2\1/g&quot;
+# Si la entrada es &quot;ab&quot;, el grupo 1 captura 'a', el grupo 2 captura 'b'.
+# La salida \2\1 imprime primero 'b' y luego 'a' -&gt; &quot;ba&quot;.
+</code></pre>
+<p><strong>El carácter <code>&amp;</code> en <code>sed</code>:</strong>
+En la parte de sustitución, el símbolo <code>&amp;</code> representa <strong>toda la cadena que coincidió con el patrón</strong>.</p>
+<pre><code class="language-shell">sed -r &quot;s/hola/[&amp;]/g&quot; 
+# Si encuentra &quot;hola&quot;, lo sustituye por &quot;[hola]&quot;.
+</code></pre>
+<p><strong>Concordancia Codiciosa (Greedy Matching):</strong>
+Las expresiones regulares son &quot;codiciosas&quot; por naturaleza: intentan abarcar la <strong>mayor cantidad de texto posible</strong> que cumpla el patrón.</p>
+<ul>
+<li>Texto: <code>yyyaxaxayyy</code></li>
+<li>Patrón: <code>a(.*)a</code> (una 'a', lo que sea, y otra 'a')</li>
+<li>Resultado: Detectará <code>axaxa</code> entero.</li>
+<li><em>Nota:</em> No se detendrá en la segunda 'a' (axa), sino que irá hasta la última posible.</li>
+</ul>
+<h3>Porrazos</h3>
+<p><strong>Ejemplo 1:</strong></p>
+<pre><code class="language-shell"> #concuerda con direcciones de e-mail
+ \w+@\w+\.\w+((\.\w+)*)? 
+</code></pre>
+<p><code>\w</code> (word character) es un atajo para no tener que escribir <code>[a-zA-Z0-9_]</code>.</p>
+<ul>
+<li><strong><code>\w</code></strong> = Cualquier letra (a-z), número (0-9) o guion bajo (_).</li>
+<li><strong><code>\w+</code></strong> = Una o más letras/números seguidos.</li>
+</ul>
+<p>El concepto avanzado aquí es la <strong>Agrupación Anidada</strong> para estructuras repetitivas.</p>
+<ul>
+<li><strong>El problema:</strong> Un dominio puede tener una extensión (<code>.com</code>), dos (<code>.co.uk</code>), tres (<code>.pntic.mec.es</code>), etc. No sabemos cuántas.</li>
+<li><strong>La solución avanzada:</strong> <code>((\.\w+)*)?</code>
+<ol>
+<li><strong>Grupo interno <code>(\.\w+)</code></strong>: Define la unidad mínima que se repite (un punto seguido de texto).</li>
+<li><strong>Cuantificador interno <code>*</code></strong>: Dice &quot;esta unidad puede aparecer 0, 1 o mil veces&quot;.</li>
+<li><strong>Grupo externo con <code>?</code></strong>: Dice &quot;y todo este lío de repeticiones es, en sí mismo, opcional&quot;.</li>
+</ol>
+</li>
+</ul>
+<p><strong>Ejemplo 2:</strong></p>
+<pre><code class="language-shell"># concuerda con fechas en el formato dd-mm-yyyy (años entre el 1900 y 2099)
+(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[012])-(19|20)[0-9]{2} 
+</code></pre>
+<p>Este es el ejemplo más importante para un administrador de sistemas. <strong>Las expresiones regulares NO saben matemáticas</strong>. No saben que 32 es mayor que 31. Solo ven caracteres.</p>
+<p>Para validar un rango numérico (como los días del 1 al 31), tenemos que <strong>descomponer el número en patrones de texto</strong> usando el operador <strong>OR (<code>|</code>)</strong>.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Caso</strong></th>
+<th><strong>Regex</strong></th>
+<th><strong>Explicación</strong></th>
+<th><strong>Números que cubre</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A</strong></td>
+<td><code>0[1-9]</code></td>
+<td>Empieza por 0, sigue un dígito del 1 al 9.</td>
+<td>01, 02... 09</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td><code>[12][0-9]</code></td>
+<td>Empieza por 1 o 2, sigue cualquier dígito.</td>
+<td>10, 11... 29</td>
+</tr>
+<tr>
+<td><strong>C</strong></td>
+<td><code>3[01]</code></td>
+<td>Empieza por 3, sigue un 0 o un 1.</td>
+<td>30, 31</td>
+</tr>
+<tr>
+<td>Desglose del AÑO `(19</td>
+<td>20)[0-9]{2}`:</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>(19|20)</code>: Restringimos el siglo. Solo aceptamos 19 o 20.</li>
+<li><code>[0-9]{2}</code>: Aceptamos cualquier combinación para los dos últimos dígitos.</li>
+<li><strong>Resultado:</strong> Valida desde 1900 hasta 2099.</li>
+</ul>
+<p><strong>Ejemplo 3:</strong></p>
+<pre><code class="language-shell">concuerda con números en punto flotante (con o sin exponente)
+[-+]?([0-9]*\.)?[0-9]+([eE][-+]?[0-9]+)?
+</code></pre>
+<ul>
+<li>
+<p><strong>El Signo Opcional:</strong> <code>[-+]?</code></p>
+</li>
+<li>
+<p><strong>La parte decimal (El truco del asterisco):</strong> <code>([0-9]*\.)?</code></p>
+<ul>
+<li>Aquí hay algo curioso: <code>[0-9]*</code> (asterisco, no más). Esto significa &quot;cero o más dígitos&quot;.</li>
+<li><strong>¿Por qué?</strong> Para permitir escribir <code>.5</code> (sin el cero delante). Si pusiéramos <code>+</code>, obligaríamos a escribir <code>0.5</code>.</li>
+<li>Todo el grupo es opcional <code>?</code> porque un entero (50) no lleva punto.</li>
+</ul>
+</li>
+<li>
+<p><strong>La parte obligatoria:</strong> <code>[0-9]+</code></p>
+<ul>
+<li>Al menos debe haber un dígito en algún lado.</li>
+</ul>
+</li>
+<li>
+<p><strong>Notación Científica (Exponente):</strong> <code>([eE][-+]?[0-9]+)?</code></p>
+<ul>
+<li>Acepta <code>e</code> o <code>E</code>.</li>
+<li>Acepta un signo opcional para el exponente (<code>e-5</code>).</li>
+<li>Obliga a que haya dígitos detrás de la 'e' (no vale <code>10e</code>).</li>
+</ul>
+</li>
+</ul>
+<h1>5.2 Procesamiento de textos</h1>
+<p>En UNIX/Linux, estos comandos se conocen como <strong>filtros</strong>. Su filosofía es recibir datos por la <strong>entrada estándar</strong> (stdin) o de un fichero, procesarlos, y enviar el resultado a la <strong>salida estándar</strong> (stdout).</p>
+<p><strong>Flujo típico:</strong> <code>entrada</code> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> <code>filtro</code> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> <code>salida</code></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">La potencia de las tuberías</p>
+<p>Estos comandos brillan cuando se combinan.</p>
+<p>Ejemplo: sort &lt; fichero.txt | head -3 &gt; top3.txt (Ordena el fichero y guarda las 3 primeras líneas en uno nuevo).</p>
+</div>
+<table>
+<thead>
+<tr>
+<th><strong>Comando</strong></th>
+<th><strong>Función Principal</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>head / tail</strong></td>
+<td>Muestra el principio o final de un fichero.</td>
+</tr>
+<tr>
+<td><strong>tac / rev</strong></td>
+<td>Invierte el fichero (por líneas o por caracteres).</td>
+</tr>
+<tr>
+<td><strong>wc</strong></td>
+<td>Cuenta líneas, palabras y bytes (<em>Word Count</em>).</td>
+</tr>
+<tr>
+<td><strong>sort</strong></td>
+<td>Ordena las líneas (alfabética o numéricamente).</td>
+</tr>
+<tr>
+<td><strong>uniq</strong></td>
+<td>Elimina líneas repetidas <strong>consecutivas</strong>.</td>
+</tr>
+<tr>
+<td><strong>tr</strong></td>
+<td>Traduce o elimina caracteres (solo desde stdin).</td>
+</tr>
+<tr>
+<td><strong>cut</strong></td>
+<td>Corta y extrae columnas (campos) de texto.</td>
+</tr>
+<tr>
+<td><strong>paste</strong></td>
+<td>Pega ficheros lado a lado (concatena líneas).</td>
+</tr>
+<tr>
+<td><strong>join</strong></td>
+<td>Cruce de bases de datos (SQL JOIN) en ficheros de texto.</td>
+</tr>
+<tr>
+<td><strong>split</strong></td>
+<td>Divide un fichero grande en trozos pequeños.</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Para el final no hay que saberse ninguna opción</p>
+</div>
+<h2>5.2.1 Visualización Parcial (<code>head</code>, <code>tail</code>, <code>tac</code>, <code>rev</code>)</h2>
+<h3><code>head</code> y <code>tail</code></h3>
+<p>Muestran las primeras o últimas líneas. Son fundamentales para ver logs o cabeceras de archivos.</p>
+<pre><code class="language-shell"> head [opciones] fichero
+</code></pre>
+<table>
+<thead>
+<tr>
+<th><strong>Opción</strong></th>
+<th><strong>Descripción</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-n X</code></td>
+<td>Muestra X líneas (por defecto son 10).</td>
+</tr>
+<tr>
+<td><code>-f</code></td>
+<td><em>(Solo tail)</em> <strong>Follow</strong>. Se queda esperando nuevos datos (ideal para logs en tiempo real).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ejemplos:</strong></p>
+<pre><code class="language-shell"># Muestra las 2 primeras líneas con cabecera (-v)
+$ head -n 2 -v quijote.txt 
+==&gt; quijote.txt &lt;==
+En un lugar de la Mancha, de cuyo nombre
+no quiero acordarme, no ha mucho tiempo
+
+# Muestra las 2 últimas líneas
+$ tail -n 2 quijote.txt 
+astillero, adarga antigua, rocín flaco y 
+galgo corredor.
+</code></pre>
+<h3><code>tac</code> y <code>rev</code></h3>
+<ul>
+<li><strong><code>tac</code></strong>: Es <code>cat</code> al revés. Imprime la última línea primero, luego la penúltima...</li>
+<li><strong><code>rev</code></strong>: Invierte el orden de los caracteres de cada línea (efecto espejo).</li>
+</ul>
+<pre><code class="language-bash">$ cat archivo.txt
+Hola
+Mundo
+
+$ tac archivo.txt   |   $ rev archivo.txt
+Mundo               |   aloH
+Hola                |   odnuM
+</code></pre>
+<h2>5.2.2 Estadísticas y Ordenación (<code>wc</code>, <code>sort</code>, <code>uniq</code>)</h2>
+<h3><code>wc</code> (Word Count)</h3>
+<p>Cuenta elementos en el fichero. Si no se ponen opciones, muestra: líneas, palabras y bytes.</p>
+<ul>
+<li><strong>Opciones:</strong> <code>-l</code> (líneas), <code>-w</code> (palabras), <code>-c</code> (bytes/caracteres).</li>
+</ul>
+<pre><code class="language-bash">$ wc -l quijote.txt
+5 quijote.txt
+</code></pre>
+<h3><code>sort</code></h3>
+<p>Ordena las líneas. <strong>Importante:</strong> Por defecto ordena alfabéticamente (ASCII), donde 10 va antes que 2.</p>
+<pre><code class="language-bash">sort [opciones] fichero`    
+</code></pre>
+<table>
+<thead>
+<tr>
+<th><strong>Opción</strong></th>
+<th><strong>Descripción</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-n</code></td>
+<td>Orden numérico (para que 2 vaya antes que 10).</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>Orden inverso (Reverse).</td>
+</tr>
+<tr>
+<td><code>-f</code></td>
+<td>Ignorar mayúsculas/minúsculas (Case insensitive).</td>
+</tr>
+<tr>
+<td><code>-k N</code></td>
+<td>Ordenar por la columna número N.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-shell"># Ordenar ignorando mayúsculas (-f) por la segunda columna (-k 2)
+$ sort -f -k 2 nombres.txt
+luis Andión
+Adriana Gómez
+</code></pre>
+<h3><code>uniq</code></h3>
+<p>Filtra líneas repetidas.</p>
+<div class="callout callout-warning">
+<p class="callout-titulo">¡Cuidado!</p>
+<p>uniq solo detecta duplicados si son adyacentes (están juntos). Por eso SIEMPRE se suele usar sort antes que uniq.</p>
+<p>Uso típico: sort fichero | uniq</p>
+</div>
+<ul>
+<li><strong>Opciones:</strong> <code>-c</code> (cuenta las repeticiones), <code>-u</code> (muestra solo las únicas), <code>-d</code> (muestra solo las repetidas).</li>
+</ul>
+<pre><code class="language-bash">$ sort nombres.txt | uniq -c
+   1 Enrique Pena
+   2 Celia Fernández  &lt;-- Aparecía 2 veces
+</code></pre>
+<h2>5.2.3 Manipulación de Contenido (<code>tr</code>, <code>cut</code>)</h2>
+<h3><code>tr</code> (Translate)</h3>
+<p>Sustituye o elimina caracteres.</p>
+<ul>
+<li><strong>Nota:</strong> <code>tr</code> <strong>NO</strong> acepta nombres de archivo como argumento. Funciona solo con la entrada estándar (<code>&lt;</code> o <code>|</code>).</li>
+</ul>
+<pre><code class="language-bash"># Cambiar minúsculas a mayúsculas
+$ tr 'a-z' 'A-Z' &lt; quijote.txt
+
+# Eliminar (-d) espacios en blanco
+$ tr -d ' ' &lt; quijote.txt
+
+# Sustituir múltiples caracteres (a-&gt;p, u-&gt;k)
+$ tr 'au' 'pk' &lt; quijote.txt
+# &quot;En un lugar&quot; se convierte en &quot;En kn lkgpr&quot;
+</code></pre>
+<h3><code>cut</code></h3>
+<p>Corta columnas verticales de un fichero.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Opción</strong></th>
+<th><strong>Descripción</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-c 1-5</code></td>
+<td>Corta por posición de carácter (del 1 al 5).</td>
+</tr>
+<tr>
+<td><code>-d 'x'</code></td>
+<td>Define el delimitador (separador) como 'x' (por defecto es tabulador).</td>
+</tr>
+<tr>
+<td><code>-f N</code></td>
+<td>Elige el campo (field) número N.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash"># Fichero: Luis Andión (separado por espacio)
+# Queremos solo el nombre (campo 1) usando el espacio como separador
+$ cut -d ' ' -f 1 nombres-ord.txt
+Luis
+Adriana
+</code></pre>
+<h2>5.2.4 Gestión de múltiples ficheros (<code>paste</code>, <code>join</code>, <code>split</code>)</h2>
+<h4><code>paste</code> (Concatenación horizontal)</h4>
+<p>Pega líneas de dos ficheros una al lado de la otra.</p>
+<pre><code class="language-bash">$ paste nombres.txt apellidos.txt
+Luis    Andión
+Adriana Gómez
+</code></pre>
+<h4><code>join</code> (Cruce relacional)</h4>
+<p>Combina dos ficheros basándose en un <strong>campo común</strong> (como una ID o clave).</p>
+<div class="callout callout-warning">
+<p class="callout-titulo">Requisito Obligatorio</p>
+<p>Para que join funcione, ambos ficheros deben estar ordenados previamente por el campo que se va a usar para unir.</p>
+</div>
+<pre><code class="language-bash"># Unir fichero1 y fichero2 usando el campo 2 (-j 2) como clave
+$ join -j 2 nombres1.txt nombres2.txt
+Andión Luis Pedro  &lt;-- (Clave común) (Resto f1) (Resto f2)
+</code></pre>
+<h4><code>split</code></h4>
+<p>Divide un archivo grande en trozos pequeños.</p>
+<pre><code class="language-shell">split [opciones] fichero [prefijo_salida]
+</code></pre>
+<ul>
+<li><strong>Opciones:</strong> <code>-l N</code> (cada N líneas), <code>-b N</code> (cada N bytes), <code>-d</code> (usar sufijos numéricos 00, 01... en vez de aa, ab...).</li>
+</ul>
+<pre><code class="language-bash"># Dividir quijote.txt en archivos de 2 líneas cada uno
+$ split -l 2 -d quijote.txt quij_
+# Genera: quij_00, quij_01, quij_02...
+</code></pre>
+<h1>5.3 <code>awk</code></h1>
+<p><code>awk</code> es, posiblemente, la herramienta más potente que existe. A diferencia de <code>cut</code> o <code>grep</code>, <strong><code>awk</code> es un lenguaje de programación completo</strong> diseñado para procesar datos estructurados (columnas).</p>
+<p><strong>AWK</strong> (Aho, Weinberger y Kernighan) está diseñado para procesar texto organizado en tablas (filas y columnas), como los logs del sistema, <code>/etc/passwd</code> o la salida de comandos como <code>ls -l</code>.</p>
+<ul>
+<li><strong>Filosofía:</strong> Lee la entrada <strong>línea a línea</strong>.</li>
+<li><strong>Automático:</strong> Divide cada línea en <strong>campos</strong> (columnas) automáticamente sin que tengas que decírselo.</li>
+<li><strong>Sintaxis:</strong> Muy similar al lenguaje C.</li>
+</ul>
+<h2>5.3.1 Estructura de un programa <code>awk</code></h2>
+<p>Un script de <code>awk</code> tiene forma de &quot;sándwich&quot;. Tiene tres partes, aunque no es obligatorio usarlas todas:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Sección</strong></th>
+<th><strong>Sintaxis</strong></th>
+<th><strong>¿Cuándo se ejecuta?</strong></th>
+<th><strong>Uso típico</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1. Cabecera</strong></td>
+<td><code>BEGIN { ... }</code></td>
+<td><strong>Una sola vez</strong>, ANTES de leer la primera línea.</td>
+<td>Inicializar variables, definir separadores (<code>FS</code>), imprimir títulos.</td>
+</tr>
+<tr>
+<td><strong>2. Cuerpo</strong></td>
+<td><code>/patrón/ { ... }</code></td>
+<td><strong>Una vez por cada línea</strong> del fichero.</td>
+<td>Filtrar datos, cálculos, imprimir columnas.</td>
+</tr>
+<tr>
+<td><strong>3. Cierre</strong></td>
+<td><code>END { ... }</code></td>
+<td><strong>Una sola vez</strong>, DESPUÉS de leer la última línea.</td>
+<td>Imprimir totales, promedios o mensajes de despedida.</td>
+</tr>
+</tbody>
+</table>
+<p>Lo más habitual es usarlo directamente en la terminal con comillas simples <code>'...'</code> para proteger el código del shell.</p>
+<pre><code class="language-shell">awk 'BEGIN { setup }  /filtro/ { accion }  END { conclusion }' fichero
+</code></pre>
+<h2>5.3.2 Manejo de Campos</h2>
+<p>Cuando <code>awk</code> lee una línea, la trocea automáticamente basándose en los espacios o tabuladores (por defecto).</p>
+<ul>
+<li><strong><code>$0</code></strong>: La línea completa (sin trocear).</li>
+<li><strong><code>$1</code></strong>: El primer campo (columna 1).</li>
+<li><strong><code>$2</code></strong>: El segundo campo.</li>
+<li><strong><code>$N</code></strong>: El enésimo campo.</li>
+</ul>
+<div class="callout callout-tip">
+<p class="callout-titulo">**Visualización** Imagina la frase: `Hola mundo linux`</p>
+<ul>
+<li>
+<p><code>$0</code> = &quot;Hola mundo linux&quot;</p>
+</li>
+<li>
+<p><code>$1</code> = &quot;Hola&quot;</p>
+</li>
+<li>
+<p><code>$2</code> = &quot;mundo&quot;</p>
+</li>
+</ul>
+</div>
+<p><strong>Ejemplo básico:</strong></p>
+<pre><code class="language-shell"># Imprime la columna 1 y la 3
+echo &quot;uno dos tres cuatro&quot; | awk '{ print $1, $3 }'
+# Salida: uno tres
+</code></pre>
+<h2>5.3.3 Variables de Control</h2>
+<p><code>awk</code> tiene variables internas que controlan cómo lee y escribe los datos. Las más importantes para un administrador son:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Variable</strong></th>
+<th><strong>Significado</strong></th>
+<th><strong>Descripción</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>FS</code></strong></td>
+<td><em>Field Separator</em></td>
+<td>Qué carácter separa las columnas en la <strong>entrada</strong>. (Defecto: espacio).</td>
+</tr>
+<tr>
+<td><strong><code>OFS</code></strong></td>
+<td><em>Output Field Separator</em></td>
+<td>Qué carácter separará las columnas en la <strong>salida</strong> (al hacer <code>print</code>).</td>
+</tr>
+<tr>
+<td><strong><code>NR</code></strong></td>
+<td><em>Number of Records</em></td>
+<td>Número de línea actual (contador de líneas procesadas).</td>
+</tr>
+<tr>
+<td><strong><code>NF</code></strong></td>
+<td><em>Number of Fields</em></td>
+<td>Número total de columnas que tiene la línea actual.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Ejemplo vital: Leer <code>/etc/passwd</code></strong> Como este archivo usa dos puntos (<code>:</code>) y no espacios, debemos cambiar el <code>FS</code>.</p>
+<pre><code class="language-shell"># Cambiamos el separador de entrada (FS) a &quot;:&quot;
+# Cambiamos el separador de salida (OFS) a una flecha &quot;-&gt;&quot;
+awk 'BEGIN { FS=&quot;:&quot;; OFS=&quot;-&gt;&quot; } { print $1, $6 }' /etc/passwd
+
+# Salida:
+# root-&gt;/root
+# daemon-&gt;/usr/sbin
+</code></pre>
+<h2>5.3.4 Filtrado (El &quot;cerebro&quot; del cuerpo)</h2>
+<p>En la parte central del script, puedes decidir a qué líneas aplicas las acciones.</p>
+<ol>
+<li><strong>Sin filtro:</strong> <code>{ print $1 }</code> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> Afecta a TODAS las líneas.</li>
+<li><strong>Con Regex:</strong> <code>/Error/ { print $0 }</code> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> Solo líneas que contengan &quot;Error&quot;.</li>
+<li><strong>Con Lógica:</strong> <code>$3 &gt; 500 { print $1 }</code> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> Solo si el valor de la columna 3 es mayor de 500.</li>
+</ol>
+<pre><code class="language-shell">df -h | awk '
+  # Si la línea empieza por &quot;/dev/sd&quot; (es un disco físico)...
+  /^\/dev\/sd/ { 
+      # Imprime nombre de partición ($1) y porcentaje ($5)
+      print &quot;Partición:&quot;, $1, &quot;Ocupación:&quot;, $5 
+  }'
+</code></pre>
+<h2>5.3.5 Programación Avanzada (Variables y Operaciones)</h2>
+<p>Al ser un lenguaje similar a C, puedes usar variables, sumas, condicionales (<code>if</code>) y formato avanzado (<code>printf</code>).</p>
+<p><strong>Ejemplo Completo: Sumar el tamaño de archivos</strong> Queremos sumar el tamaño (columna 5 de <code>ls -l</code>) de todos los archivos y mostrar el total al final.</p>
+<pre><code class="language-bash">ls -l | awk '
+  BEGIN { 
+      suma = 0;   # Inicializamos variable (opcional, en awk empiezan en 0)
+      print &quot;--- Iniciando Suma ---&quot;
+  }
+  
+  # Cuerpo: Se ejecuta para CADA archivo
+  { 
+      suma = suma + $5;              # Acumulamos el tamaño
+      printf(&quot;Archivo: %s - %d bytes\n&quot;, $9, $5); # printf tipo C
+  }
+  
+  END { 
+      print &quot;----------------------&quot;;
+      print &quot;Total bytes:&quot;, suma; 
+  }
+'
+</code></pre>
+<h2>5.3.6 Formas de Ejecución</h2>
+<p>Tienes 3 formas de correr <code>awk</code>, igual que <code>bash</code> o <code>python</code>:</p>
+<ol>
+<li><strong>Línea de comandos (One-liner):</strong> Para cosas rápidas.</li>
+</ol>
+<pre><code class="language-shell">   awk '{print $1}' fichero.txt
+</code></pre>
+<ol start="2">
+<li><strong>Fichero de script (<code>-f</code>):</strong> Cuando el código es largo.</li>
+</ol>
+<pre><code class="language-shell">awk -f mi_programa.awk datos.txt
+</code></pre>
+<ol start="3">
+<li><strong>Ejecutable (Shebang):</strong>
+<ul>
+<li>Creas un fichero con la primera línea: <code>#!/usr/bin/awk -f</code></li>
+<li>Le das permisos: <code>chmod +x script.awk</code></li>
+<li>Ejecutas: <code>./script.awk datos.txt</code></li>
+</ul>
+</li>
+</ol>
+<h1>5.4 Pyhton</h1>
+<p>Python es un lenguaje de <strong>tipado dinámico</strong>: no declaras el tipo de variable (como <code>int a;</code> en C), sino que el valor asignado define el tipo.</p>
+<h2>5.4.1 Tipos de Datos y Operadores</h2>
+<h3>Tipos Básicos</h3>
+<ul>
+<li><strong>Enteros (<code>int</code>):</strong> Precisión ilimitada (puedes guardar números gigantes).</li>
+<li><strong>Flotantes (<code>float</code>):</strong> Equivalente al <code>double</code> de C.</li>
+<li><strong>Cadenas (<code>str</code>):</strong> Se delimitan por comillas simples <code>' '</code> o dobles <code>&quot; &quot;</code>.</li>
+<li><strong>Booleanos (<code>bool</code>):</strong> <code>True</code> o <code>False</code> (Ojo, la primera letra va en mayúscula).</li>
+</ul>
+<p><strong>Entrada y Salida:</strong></p>
+<ul>
+<li><code>input()</code>: Siempre devuelve un <strong>string</strong>. Si quieres números, debes convertirlo (cast).</li>
+<li><code>print()</code>: Imprime cualquier cosa.</li>
+</ul>
+<pre><code class="language-python"># Conversión de tipos (Casting)
+a = int(input(&quot;Dame un número: &quot;))  # De str a int
+b = str(10.5)                       # De float a str
+</code></pre>
+<h3>Operadores</h3>
+<p>Python tiene una sintaxis muy limpia para operaciones matemáticas y lógicas.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Tipo</strong></th>
+<th><strong>Operadores</strong></th>
+<th><strong>Notas</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Aritméticos</strong></td>
+<td><code>+</code>, <code>-</code>, <code>*</code>, <code>/</code></td>
+<td>La división <code>/</code> siempre devuelve float.</td>
+</tr>
+<tr>
+<td><strong>División Entera</strong></td>
+<td><code>//</code></td>
+<td>Devuelve solo la parte entera.</td>
+</tr>
+<tr>
+<td><strong>Resto (Módulo)</strong></td>
+<td><code>%</code></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Potencia</strong></td>
+<td><code>**</code></td>
+<td><code>2 ** 3</code> es 8.</td>
+</tr>
+<tr>
+<td><strong>Bit a Bit</strong></td>
+<td><code>|</code> (OR), <code>&amp;</code> (AND), <code>^</code> (XOR), <code>~</code> (NOT), <code>&lt;&lt;</code>, <code>&gt;&gt;</code></td>
+<td>Operaciones binarias a bajo nivel.</td>
+</tr>
+<tr>
+<td><strong>Lógicos</strong></td>
+<td><code>and</code>, <code>or</code>, <code>not</code></td>
+<td>Se usan palabras en inglés, no <code>&amp;&amp;</code> o `</td>
+</tr>
+</tbody>
+</table>
+<h2>5.4.2 Estructuras de Datos (Colecciones)</h2>
+<p>Esta es la parte más importante para manejar datos. Se dividen en cuatro grandes grupos:</p>
+<h3>Listas (<code>list</code>)</h3>
+<p>Secuencias ordenadas y <strong>mutables</strong> (se pueden cambiar).</p>
+<ul>
+<li><strong>Definición:</strong> Corchetes <code>[]</code></li>
+<li><strong>Slicing (Troceado):</strong> <code>lista[inicio:fin]</code>. (El <code>fin</code> no se incluye).</li>
+<li><strong>Índices negativos:</strong> <code>-1</code> es el último elemento.</li>
+</ul>
+<pre><code class="language-python">frutas = ['naranjas', 'uvas', 123]
+frutas.append('peras')      # Añadir al final
+frutas.pop()                # Sacar el último
+frutas[0:2]                 # Elementos 0 y 1 (el 2 no entra)
+</code></pre>
+<h3>Tuplas (<code>tuple</code>)</h3>
+<p>Secuencias ordenadas e <strong>inmutables</strong> (una vez creadas, no se tocan). Son más rápidas y seguras que las listas.</p>
+<ul>
+<li><strong>Definición:</strong> Paréntesis <code>()</code> (o a veces sin nada, separadas por comas).</li>
+</ul>
+<h3>Conjuntos (<code>set</code>)</h3>
+<p>Colecciones desordenadas de elementos <strong>únicos</strong> (no admite duplicados). Ideales para operaciones matemáticas de conjuntos.</p>
+<ul>
+<li><strong>Definición:</strong> <code>set()</code> o llaves <code>{}</code> con valores sueltos.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>Operación</strong></th>
+<th><strong>Símbolo</strong></th>
+<th><strong>Descripción</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unión</td>
+<td><code>a | b</code></td>
+<td>Elementos en A o en B (o en ambos).</td>
+</tr>
+<tr>
+<td>Intersección</td>
+<td><code>a &amp; b</code></td>
+<td>Elementos que están en A y también en B.</td>
+</tr>
+<tr>
+<td>Diferencia</td>
+<td><code>a - b</code></td>
+<td>Elementos de A quitando los que estén en B.</td>
+</tr>
+</tbody>
+</table>
+<h3>Diccionarios (<code>dict</code>)</h3>
+<p>Colecciones de pares <strong>Clave-Valor</strong>. Funcionan como una base de datos rápida o una tabla hash.</p>
+<ul>
+<li><strong>Definición:</strong> Llaves <code>{ clave: valor }</code>.</li>
+</ul>
+<pre><code class="language-python">user = {'nombre': 'Ana', 'edad': 19}
+print(user['nombre'])     # Acceder: Ana
+user['edad'] = 20         # Modificar
+</code></pre>
+<h2>5.4.3 El problema de las Referencias (Vital)</h2>
+<p>En Python, las variables son &quot;etiquetas&quot; que apuntan a objetos en memoria.</p>
+<ul>
+<li><strong>Tipos Simples (int, str):</strong> Si copias <code>b = a</code> y cambias <code>a</code>, <code>b</code> <strong>NO</strong> cambia. (Se crea un nuevo objeto).</li>
+<li><strong>Colecciones (listas, dict):</strong> Si copias <code>b = a</code>, ambas apuntan a la <strong>misma lista</strong>. Si tocas <code>a</code>, <strong>cambias <code>b</code></strong>.</li>
+</ul>
+<p>¿Cómo copiar de verdad?</p>
+<p>Para tener listas independientes, hay que clonarlas explícitamente:</p>
+<pre><code class="language-python">lista_a = [1, 2, 3]
+lista_b = lista_a[:]  # El slicing [:] crea una copia nueva
+</code></pre>
+<h2>5.4.4 Control de Flujo y Funciones</h2>
+<h3>Bucles y Condicionales</h3>
+<ul>
+<li><strong><code>if / elif / else</code></strong>: Importante la indentación (tabulaciones).</li>
+<li><strong><code>for</code></strong>: Itera sobre colecciones directamente.</li>
+<li><strong><code>range(start, stop, step)</code></strong>: Genera secuencias numéricas.</li>
+</ul>
+<h3>Funciones (<code>def</code>)</h3>
+<p>Python permite argumentos con valores por defecto y argumentos arbitrarios:</p>
+<ul>
+<li><strong><code>*args</code></strong>: Recibe una tupla de argumentos extra (sin nombre).</li>
+<li><strong><code>**kwargs</code></strong>: Recibe un diccionario de argumentos extra (con nombre clave=valor).</li>
+</ul>
+<h3>Estructura del Script (<code>if __name__ == &quot;__main__&quot;:</code>)</h3>
+<p>Este bloque es crucial en scripts reutilizables.</p>
+<ul>
+<li>
+<p><strong>Sin esto:</strong> Si importas el fichero desde otro script, se ejecutaría todo el código.</p>
+</li>
+<li>
+<p><strong>Con esto:</strong> El código dentro del <code>if</code> solo se ejecuta si lanzas el script directamente (<code>python script.py</code>), pero no si lo importas (<code>import script</code>).</p>
+</li>
+</ul>
+<h2>5.4.5 Programación Orientada a Objetos (POO)</h2>
+<p>Python permite definir clases para encapsular datos y funciones.</p>
+<ul>
+<li><strong>Constructor:</strong> <code>__init__(self, ...)</code> se ejecuta al crear el objeto.</li>
+<li><strong><code>self</code></strong>: Referencia al propio objeto (como <code>this</code> en Java/C++). Debe ser el primer argumento de cada método.</li>
+<li><strong>Privacidad:</strong> Si una variable empieza por <code>__</code> (doble guion bajo), es privada y no se puede acceder desde fuera fácilmente.</li>
+<li><strong>Herencia Múltiple:</strong> Una clase puede heredar de varias &quot;madres&quot;: <code>class Hija(Madre1, Madre2)</code>.</li>
+</ul>
+<pre><code class="language-python">class Servidor:
+    def __init__(self, ip):
+        self.ip = ip           # Atributo público
+        self.__estado = &quot;OFF&quot;  # Atributo privado
+
+    def encender(self):
+        self.__estado = &quot;ON&quot;
+</code></pre>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-copias-de-seguridad.html"><span class="nav-etiqueta">← anterior</span>4. Copias de Seguridad</a>
+  <a class="nav-siguiente" href="6-actividades-administrativas-basicas.html"><span class="nav-etiqueta">siguiente →</span>6. Actividades Administrativas Básicas</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="4. Sistema de Archivos — apuntes de SISTEMAS OPERATIVOS (segundo curso de Ingeniería Informática).">
+<title>4. Sistema de Archivos · SISTEMAS OPERATIVOS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">sistemas-operativos</a><span class="miga-sep">/</span><span aria-current="page">4-sistema-de-archivos</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">SISTEMAS OPERATIVOS · curso 2</p>
+    <h1>4. Sistema de Archivos · SISTEMAS OPERATIVOS</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<h1><strong>El Sistema de Archivos – La Calma Después de la Tormenta</strong></h1>
+<p>Una de las principales tareas del SO es crear y administrar abstracciones del disco del sistema.</p>
+<h1><strong>4.1. Consideraciones generales</strong></h1>
+<p>Todos los sistemas necesitan almacenar y recuperar información a largo plazo de manera que se cumplan los siguientes requisitos:</p>
+<ul>
+<li>Los procesos pueden almacenar cierta cantidad de información en su espacio de direcciones, pero de manera muy limitada.</li>
+<li>Debe ser posible almacenar una <strong>cantidad muy grande</strong> de información → si usásemos el espacio de direcciones, el tamaño estaría limitado.</li>
+<li>La información almacenada debe <strong>sobrevivir a la terminación del proceso</strong> que la utilice → si usásemos el espacio de direcciones, al terminar el proceso se perdería la información.</li>
+<li><strong>Varios procesos</strong> deben poder acceder concurrentemente a la información → si usásemos el espacio de direcciones, sólo un proceso podría acceder a la información.</li>
+</ul>
+<p>Como los espacios de direcciones no son viables para almacenar información a largo plazo, se usan <strong>dispositivos físicos</strong> como discos magnéticos. Por ahora, entenderemos el disco como una secuencia lineal de bloques de tamaño fijo que admiten únicamente dos operaciones, leer y escribir. Esto plantea varios problemas: ¿cómo se busca información? ¿cómo se sabe qué bloques están libres?...</p>
+<p>El ARCHIVO es una <strong>abstracción</strong> que realiza el SO de los <strong>dispositivos físicos</strong> de almacenamiento. Son <strong>unidades lógicas de información creadas por los procesos</strong>. Los <strong>procesos</strong> pueden <strong>leer</strong> los archivos existentes y crear otros si es necesario. La información que se almacena en los archivos debe ser <strong>persistente</strong>, es decir, sobrevivir a la terminación de los procesos. Un archivo debe <strong>desaparecer</strong> solo cuando un <strong>proceso autorizado</strong>  (por ejemplo, su dueño) lo elimina.</p>
+<p>Los archivos son administrados por una parte del SO denominada SISTEMA DE ARCHIVOS.</p>
+<ul>
+<li>Desde el <strong>punto de vista del usuario</strong>, lo más importante del sistema de archivos es su <strong>apariencia</strong> (cómo se estructuran los archivos, cómo se llaman, cómo se opera con ellos, etc.).</li>
+<li>Desde el <strong>punto de vista del diseñador del SO</strong>, lo más importante del sistema de archivos son <strong>detalles sobre su implementación</strong> (listas enlazadas, mapas de bits, etc.).</li>
+</ul>
+<h1><strong>4.1.1. Comparación entre disco físico y disco lógico.</strong></h1>
+<p>Un <strong>disco físico</strong> es un dispositivo periférico <strong>de E/S</strong> para el <strong>almacenamiento permanente de dato</strong>s. Se trata de un dispositivo modo bloque, que <strong>contiene un array de bloques de tamaño fijo</strong>. Cada uno de estos bloques posee un número identificativo denominado <strong>número de bloque físico</strong>.</p>
+<p>Un <strong>disco lógico</strong> es una <strong>abstracción del hardware</strong> que el sistema operativo ve como una s<strong>ecuencia lineal de bloques de tamaño fijo accesibles aleatoriamente</strong>. Cada bloque de un disco lógico tiene asignado un número identificativo denominado <strong>número de bloque lógico</strong>. El driver o manejador del disco entre otras tareas se encarga de traducir los números de bloques lógicos a números de bloques físicos.</p>
+<p>Normalmente, el disco físico se divide en varias PARTICIONES contiguas independientes, de manera que cada una de ellas puede actuar como disco lógico. Es responsabilidad del administrador del sistema decidir qué va a contener en cada una de ellas. Permiten que convivan varios SOs en un único disco, de manera que a cada uno de ellos se le asigna una partición. La <strong>partición activa</strong> será aquella en la que se busca el SO en el momento del arranque de la máquina.</p>
+<p>Cada <strong>sistema de archivos</strong> se encuentra <strong>contenido por completo en un disco lógico</strong> y un <strong>disco lógico</strong> puede <strong>contener un único sistema de archivos.</strong> Algunos discos lógicos, en vez de contener un sistema de archivos, son usados como el área de <strong>swapping</strong> de la memoria principal (en otros sistemas se usa una partición dedicada para esto).</p>
+<p>En los sistemas modernos, <strong>varios discos físicos</strong> o <strong>particiones de distintos discos pueden</strong> combinarse en un <strong>único disco lógico</strong> para que soporte sistemas de archivos más grandes.</p>
+<h1><strong>4.1.2. Montaje de Sistemas de Archivos.</strong></h1>
+<p>Aunque la jerarquía de archivos de UNIX parece monolítica, se puede tener varios subárboles independientes, <strong>cada uno de los cuales puede contener un sistema de archivos completo</strong>. Un sistema de archivos se configura para ser el sistema de archivos raíz, y para que su <strong>directorio raíz</strong> sea el directorio raíz del sistema. Los otros sistemas de archivos son adjuntados a la nueva estructura montando cada nuevo sistema de archivos dentro de un directorio del árbol ya existente, al</p>
+<p><img src="../../../img/sistemas-operativos/page-75-figure-4.jpeg" alt="" loading="lazy"></p>
+<p>que se le denominará <strong>directorio de montaje</strong> o punto de montaje.</p>
+<p>El montaje de sistemas de archivos permite <strong>ocultar al usuario</strong> los detalles de la organización del almacenamiento, pues el espacio de <strong>nombres de archivos será homogéneo,</strong> es decir, no habrá que especificar la unidad del disco como parte del nombre del archivo.</p>
+<p>Normalmente los sistemas de archivos que usa el sistema no están cambiando frecuentemente. Entonces el núcleo usará una TABLA DE MONTAJE (normalmente en <em>etc/mtab</em>) para identificar los sitemas de ficheros que debe montar al arrancar la</p>
+<table>
+<thead>
+<tr>
+<th># device</th>
+<th>directory</th>
+<th>type</th>
+<th>options</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>/dev/hda1</td>
+<td>/</td>
+<td>ext2</td>
+<td>defaults</td>
+</tr>
+<tr>
+<td>/dev/hda2</td>
+<td>/usr</td>
+<td>ext2</td>
+<td>defaults</td>
+</tr>
+<tr>
+<td>/dev/hda3</td>
+<td>none</td>
+<td>swap</td>
+<td>SW</td>
+</tr>
+<tr>
+<td>/dev/sda1</td>
+<td>/dosc</td>
+<td>msdos</td>
+<td>defaults</td>
+</tr>
+<tr>
+<td>/proc</td>
+<td>/proc</td>
+<td>proc</td>
+<td>none</td>
+</tr>
+</tbody>
+</table>
+<p>máquina. Cada una de las lñineas de esa tabla conteine la infomación sobre uno de los sistemas a montar: dispositivo que se monta, directorio de montaje, tipo de sistema de archivos montado y opciones de montaje.</p>
+<h1><strong>4.1.2. Llamadas al sistema y comandos asociados</strong></h1>
+<p>La llamada al sistema mount permite montar un sistema de archivos desde un programa.</p>
+<p>resultado = mount(dispositivo,dir,flags);</p>
+<p>donde <em>dispositivo</em> es la ruta de acceso del archivo del dispositivo del disco donde se encuentra el sistema de archivos que se va a montar, <em>dir</em> es la ruta de acceso del directorio sobre el que se va a montar el sistema de archivos, y <em>flags</em> es una máscara de bits que permite especificar diferentes opciones. Si la llamada se ejecuta con éxito en resultado se almacena el valor 0. En caso contrario, se almacena el valor -1. Cuando un sistema de archivos deja de ser utilizado, puede ser desmontado.</p>
+<p>resultado = umount(dispositivo);</p>
+<p>donde <em>dispositivo</em> es la ruta de acceso del archivo del dispositivo que da acceso al sistema de archivos que se desea desmontar. Las llamadas mount y umount no actualizan el archivo <em>/etc/mtab</em>, que contiene la tabla de montaje. Por lo tanto, si se decide montar un sistema de archivos desde un programa, habrá que actualizar también desde dicho programa el archivo <em>/etc/mtab</em>.</p>
+<p>Por ejemplo, la llamada al sistema mount(&quot;/dev/hda2&quot;,&quot;/usr&quot;,0); monta la partición 2 del disco duro sobre el directorio <em>/usr</em>, el sistema se monta en modo lectura/escritura. La llamada al sistema umount(&quot;/dev/hda2&quot;); desmonta la partición 2 del disco duro.</p>
+<h1><strong>4.1.3. Archivos desde el punto de vista del usuario.</strong></h1>
+<h4><strong>4.1.3.1 Máscara de Modo.</strong></h4>
+<p>Cada archivo en un sistema tiene asociada una máscara de 16 bits conocida como <strong>máscara de modo</strong>, la cual define sus permisos y tipo. Esta máscara se organiza en diferentes secciones: los bits más altos identifican el tipo de archivo, seguidos por los permisos del propietario, los permisos del grupo y, finalmente, los <strong>permisos</strong> para otros usuarios. Además, existen bits especiales como el S_ISVTX (<em>sticky bit</em>), que permite compartir segmentos de código en memoria, el S_ISGID, que cambia el ID de grupo al ejecutar, y el S_ISUID, que cambia el ID de usuario al ejecutar. La</p>
+<p><img src="../../../img/sistemas-operativos/page-76-figure-5.jpeg" alt="" loading="lazy"></p>
+<p>máscara puede modificarse mediante llamadas al sistema como chmod.</p>
+<h4><strong>4.1.3.1 Llamadas al sistema para operar con archivos</strong></h4>
+<p>(, , ) → abre un archivo para lectura, escritura o ambos y devuelve su descriptor de archivo. Se puede hacer que, si el archivo no existe, lo cree.</p>
+<p>() → cierra un archivo.</p>
+<p>(, , ) → lee datos de un archivo.</p>
+<p>(, , ) → escribe datos en un archivo.</p>
+<p>(, , ℎ) → desplaza el puntero de un archivo.</p>
+<p>(, ) → obtiene información sobre un archivo.</p>
+<p>ℎ(, ) → cambia la máscara de modo de un archivo.</p>
+<p>(_, _) → renombra un archivo</p>
+<h4><strong>4.1.3.1 Directorios.</strong></h4>
+<p>Los DIRECTORIOS o carpetas son los contenedores de los archivos, que se usan para agrupar archivos relacionados de manera natural. Muchas veces, los directorios serán archivos a su vez. El sistema de archivos se organiza en una jerarquía en forma de árbol de directorios.</p>
+<p>Cuando el sistema de archivos está organizado como un <strong>árbol de directorios</strong>, se necesita cierta forma de especificar los nombres de los archivos. Por lo general se utilizan dos métodos distintos. En el primer método, cada archivo recibe un <strong>nombre de ruta absoluto</strong>  que consiste en la ruta desde el directorio raíz al archivo. Sin importar cuál carácter se utilice, si el primer carácter del nombre de la ruta es el separador, entonces la ruta es absoluta. El otro tipo de nombre es el <strong>nombre de ruta relativa</strong>. Éste se utiliza en conjunto con el concepto del <strong>directorio de trabajo</strong> (también llamado directorio actual).</p>
+<p>La mayoría de los sistemas operativos que proporcionan un sistema de directorios jerárquico tienen dos entradas especiales en cada</p>
+<p>directorio: &quot;.&quot; y &quot;..&quot;, que por lo general se pronuncian &quot;punto&quot; y &quot;puntopunto&quot;. Punto se refiere al directorio actual; puntopunto se refiere a su padre (excepto en el directorio raíz, donde se refiere a sí mismo).</p>
+<h1><strong>4.2. Identificadores de usuario y grupo</strong></h1>
+<p>Puesto que UNIX es un sistema multiusuario, el sistema operativo asocia a cada proceso dos identificadores enteros positivos de usuario y dos identificadores enteros positivos de grupo. Los identificadores de usuario son el identificador de usuario real, <em>uid</em>, y el identificador de usuario efectivo, <em>euid</em>. Mientras que, para el grupo se tiene el identificador del grupo real, <em>gid</em>, y el identificador de grupo efectivo, <em>egid</em>.</p>
+<p>El <strong>uid</strong> identifica al usuario que es responsable de la ejecución del proceso y el <em>gid</em> identifica al grupo al cual pertenece dicho usuario. El <strong>euid</strong> se utiliza, principalmente, para determinar el propietario de los ficheros recién creados, para permitir el acceso a los ficheros de otros usuarios y para comprobar los permisos para enviar señales a otros procesos. El uso del <em>egid</em> es similar al del <em>euid</em> pero desde el punto de vista del grupo.</p>
+<p>Usualmente, el <em>uid</em> y el euid van a coincidir, pero si un usuario U1 ejecuta un programa P que pertenece a otro usuario U2 y que tiene activo el bit S_ISUID entonces el proceso asociado a la ejecución de P por parte de U1 va a cambiar su <em>euid</em> y va a tomar el valor del <em>uid</em> del usuario U2. Es decir, a efectos de comprobación de permisos sobre P, U1 va a tener los mismos permisos que tiene el usuario U2. Para el identificador de grupo efectivo <em>egid</em> se aplica la misma norma.</p>
+<p>Las llamadas al sistema getuid, geteuid, getgid y getegid permiten determinar qué valores toman los identificadores <em>uid</em>, <em>euid</em>, <em>gid</em> y <em>egid</em>, respectivamente. Su sintaxis es similar a la de la llamada al sistema getpid. Para cambiar los valores que toman estos identificadores, es posible utilizar las llamadas al sistema setuid y setgid.</p>
+<h4>salida = setuid(param);</h4>
+<p>Cuando un archivo ejecutable tiene el bit <em>S_ISUID</em> activado, cualquier usuario que lo ejecute obtiene temporalmente los privilegios del propietario del archivo durante la ejecución del programa. Esto es útil para permitir que un programa realice tareas que requieren privilegios específicos, incluso si el usuario que lo ejecuta no tiene esos privilegios normalmente. Lo mismo pasa con <em>S_ISGID</em>.</p>
+<p>La llamada al sistema setuid permite asignar el valor par al <em>euid</em> y al <em>uid</em> del proceso que invoca a la llamada. Se distinguen dos casos. En el primero, el identificador de usuario efectivo del proceso que efectúa la llamada es el del superusuario. En este caso <em>uid = parametro</em> y <em>euid = parametro</em>. En el segundo caso, el identificador del usuario efectivo del proceso que efectúa la llamada no es el del superusuario. En este caso <em>euid = parametro</em>  si se cumple que el valor del parámetro <em>parametro</em> coincide con el valor del <em>uid</em> del proceso, o, esta llamada se está invocando dentro de la ejecución de un programa que tiene su bit S_ISUID activado y el valor del parámetro <em>par</em> coincide con el valor del <em>uid</em> del propietario del programa. Si la llamada se ejecuta con éxito entonces salida vale 0. Si se produce un error salida vale –1.</p>
+<p>Supóngase que, en un cierto directorio, se tienen tres archivos. Primero, el programa ejecutable <em>ejemident</em>, cuyo código es el indicado en el programa de la figura 4.6., que pertenece al usuario USUARIO1, este fichero tiene la siguiente máscara simbólica de permisos <em>– rws rwx rwx</em>, es decir, todos los usuarios pueden leer, escribir y ejecutar este archivo, además su bit S_ISUID se encuentra activado. Segundo, el fichero de texto <em>fichero1.txt</em> que pertenece al usuario USUARIO1, este fichero tiene los siguientes permisos <em>– rw- --- ---</em>, es decir, únicamente el propietario del fichero puede leer y escribir en dicho fichero. Por último, el fichero de texto <em>fichero2.txt</em> que pertenece al usuario USUARIO2, este fichero tiene los siguientes permisos <em>– rw- --- ---</em> , es decir, únicamente el propietario del fichero puede leer y escribir en dicho fichero.</p>
+<p>Supónganse además que USUARIO1 tiene uid = 501 y que USUARIO2 tiene uid = 503. Se van a considerar tres casos. En el primer caso, el USUARIO1 ejecuta <em>ejemident</em> y se obtiene la traza de la figura 4.7. en pantalla. En el segundo caso, el USUARIO2 ejecuta el archivo <em>ejemident</em> y se obtiene la traza de la figura 4.8. en pantalla. En el tercer y último caso, el USUARIO2 ejecuta el archivo <em>ejemident</em>, se supone que ahora que su bit S_ISUID no está activado, es decir, su máscara simbólica es <em>– rwx rwx rwx</em>, y se obtiene la traza de la figura 4.9. en pantalla.</p>
+<p>En el caso 2 como IS_UID está activado, si el USUARIO2 ejecuta ese archivo adquiere temporalmente los permisos del propietario del archivo (USUARIO1).</p>
+<h1><strong>4.3. Implementación del sistema de archivos</strong></h1>
+<p>A continuación, se presentan distintas opciones de distribución de los bloques de un archivo para poder mantener un registro acerca de qué bloques del disco pertenecen a qué archivo.</p>
+<h1><strong>4.3.1. Asignación de Lista Enlazada</strong></h1>
+<p>Se mantiene cada archivo como <strong>una lista enlazada de bloques del disco,</strong> de manera que la primera palabra de cada bloque se usa como apuntar al siguiente. El último bloque del archivo tiene el apuntados a un valor no válido como 0 para indicar el fin de la cadena. A diferencia de lo que sucede en la asignación contigua, permite usar todos los bloques del disco, por lo que <strong>no</strong> se pierde espacio debido a la <strong>fragmentación externa. Para localizar un archivo</strong> sólo hace falta almacenar <strong>la dirección de disco de su primer bloque</strong>, el resto se pueden encontrar a partir de ella. Sin embargo, <strong>el acceso aleatorio es muy lento,</strong></p>
+<p><img src="../../../img/sistemas-operativos/page-79-figure-5.jpeg" alt="" loading="lazy"></p>
+<p>pues para llegar al bloque <em>k</em> de un archivo, se tendrá que comenzar desde el primero y leer los <em>k-1</em> siguientes desde el disco. En muchos sistemas, el tamaño de página es múltiplo del tamaño del bloque, por lo que para leer una sola página del disco habría que acceder a 2 bloques.</p>
+<h4><strong>4.3.2. Usando una Tabla FAT.</strong></h4>
+<p>Versión de lista enlazada que soluciona sus problemas. Se mantiene en memoria en todo momento <strong>una tabla FAT</strong> (tabla de asignación de archivos) con <strong>tantas entradas como bloques tenga el disco</strong> de manera que en</p>
+<p>cada una de ellas se almacena el apuntador al siguiente bloque del archivo. La última entrada del archivo tiene en el apuntador un valor no válido como −1 para indicar el fin de la cadena.</p>
+<p>El <strong>acceso aleatorio es más rápido</strong> porque, aunque haya que seguir la cadena hasta llegar al bloque deseado, ahora los punteros están en memoria principal, que es más rápida. La cantidad de datos que se pueden almacenar en un bloque es potencia de .</p>
+<p>Toda la tabla tiene que estar en memoria todo el tiempo para que funcione, y su tamaño es proporcional al del disco, por lo que la idea escala muy mal con el tamaño del disco. Se usa en Windows.</p>
+<p>Un disco de n bloques implica n entradas.</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal">am</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal">ab</span><span class="mord mathnormal" style="margin-right:0.1389em;">F</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2408em;vertical-align:-0.8804em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal">am</span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.0359em;">q</span><span class="mord mathnormal">u</span><span class="mord mathnormal">e</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal">am</span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="mord mathnormal">i</span><span class="mord mathnormal">sc</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8804em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></eqn></section><p><img src="../../../img/sistemas-operativos/page-80-figure-5.jpeg" alt="" loading="lazy"></p>
+<h1><strong>4.3.3. Asignación con Nodos-i.</strong></h1>
+<p>Nuestro último método para llevar un registro de qué bloques pertenecen a cuál archivo es asociar con cada archivo una estructura de datos conocida como <strong>nodo-i (nodo-índice)</strong>, la cual lista los atributos y las direcciones de disco de los bloques del archivo. En la figura 4.12. se muestra un ejemplo simple. Dado el nodo-i, entonces es posible encontrar todos los bloques del archivo. La gran ventaja de este esquema, en comparación con los archivos vinculados que utilizan una tabla en memoria, es que el nodo-i necesita estar en memoria sólo cuando está abierto el archivo correspondiente. Si cada nodo-i ocupa <em>n</em> bytes y puede haber un máximo de <em>k</em> archivos abiertos a la vez, la memoria total ocupada por el arreglo que contiene los nodos-i para los archivos abiertos es de sólo <em>kn</em> bytes. Sólo hay que reservar este espacio por adelantado.</p>
+<p>Por lo general, este arreglo es mucho más pequeño que el espacio ocupado por la tabla de archivos descrita en la sección anterior. La razón es simple: la tabla para contener la lista enlazada de todos los bloques de disco es proporcional en tamaño al disco en sí. Si el disco tiene <em>n</em> bloques, la tabla necesita <em>n</em> entradas. A medida que aumenta el tamaño de los discos, esta tabla aumenta linealmente con ellos. En contraste, el esquema del nodo-i requiere un arreglo en memoria cuyo tamaño sea proporcional al número máximo de archivos que pueden estar abiertos a la vez.</p>
+<p><img src="../../../img/sistemas-operativos/page-80-figure-9.jpeg" alt="" loading="lazy"></p>
+<p><img src="../../../img/sistemas-operativos/page-80-figure-10.jpeg" alt="" loading="lazy"></p>
+<p>Un problema con los nodos-i es que, si cada uno tiene espacio para un número fijo de direcciones de disco, ¿qué ocurre cuando un archivo crece más allá de este límite? Una solución es reservar la última dirección de disco no para un bloque de datos, sino para la dirección de un bloque que contenga más direcciones de bloques de disco, como se muestra en la figura 4-13. Algo aún más avanzado sería que dos o más de esos</p>
+<p>bloques contuvieran direcciones de disco o incluso bloques de disco apuntando a otros bloques de disco llenos de direcciones.</p>
+<p><img src="../../../img/sistemas-operativos/page-81-picture-1.jpeg" alt="" loading="lazy"></p>
+<h1><strong>4.4 Administración y optimización de sistemas de archivos 4.4.1 Tamaño de bloque</strong></h1>
+<p>Existen dos maneras de almacenar un archivode bytes en el disco:</p>
+<ul>
+<li>Asignarle bytes consecutivos → provoca fragmentación externa y, si crece, habría que moverlo a otro lugar del disco, lo cual es muy costoso.</li>
+<li>Dividir el archivo en varios bloques de un determinado tamaño no necesariamente consecutivos.</li>
+</ul>
+<p>Por tanto, casi todos los sistemas escogen la segunda alternativa. Para poder implementarla, hay que decidir cuál será el tamaño de estos bloques. Tendría sentido escoger un tamaño múltiplo del de sector, pista o cilindro del disco, pero estos valores dependen del dispositivo, lo cual es inconveniente.</p>
+<ul>
+<li>Si el tamaño de bloque es demasiado grande → el último bloque de cada archivo quedará mayormente vacío, aparece fragmentación interna.</li>
+<li>Si el tamaño de bloque es demasiado pequeño → la mayoría de archivos ocuparán muchos bloques, así que para leerlos se necesitarán muchas búsquedas y retrasos rotacionales.</li>
+</ul>
+<p><img src="../../../img/sistemas-operativos/page-81-figure-9.jpeg" alt="" loading="lazy"></p>
+<p><strong>FIGURA 4.13.</strong> La curva punteada (escala del lado izquierdo) da la velocidad de datos del disco. La curva sólida(escala del lado derecho) da la eficiencia del espacio de disco. Todos los archivos son en promedio de 4 KB.</p>
+<h4><strong>Observaciones de la imagen:</strong></h4>
+<h4><strong>-Velocidad de datos del disco</strong> (<em>curva punteada)</em></h4>
+<p>La velocidad de datos aumenta casi de forma lineal con el tamaño del bloque (hasta que las transferencias tardan tanto que el tiempo de transferencia empieza a ser importante)</p>
+<h4><strong>-Eficiencia del espacio en disco</strong> <em>(curva continua)</em></h4>
+<p>Cuanto más se aumenta el tamaño del bloque más disminuye la utilización del espacio. En realidad, pocos archivos son un múltiplo exacto del tamaño de bloque del disco, por lo que siempre se desperdicia espacio en el último bloque de un archivo.</p>
+<p>Las curvas se cruzan en los 64 KB, pero aun así ninguno de los dos valores es bueno. Históricamente se</p>
+<p>hacían bloques de 1KB a 4KB, pero con discos de 1 TB donde no importa tanto el espacio desperdiciado se podría utilizar un tamaño de bloque de 64 KN</p>
+<h4><strong>Resumiendo:</strong></h4>
+<p>Un tamaño de bloque grande --&gt; <strong>Desperdiciar espacio</strong></p>
+<ul>
+<li>Los archivos pequeños desperdician una gran cantidad de espacio en disco.</li>
+<li>El desperdicio de espacio al final de cada pequeño archivo no es muy importante, debido a que el disco se llena por una cantidad de archivos grandes y la cantidad de espacio ocupado por los pequeños archivos es insignificante.</li>
+</ul>
+<p>Un tamaño de bloque pequeño --&gt; <strong>Desperdiciar tiempo</strong></p>
+<ul>
+<li>La mayoría de archivos abarcarán varios bloques y por ende, necesitan varias búsquedas y retrasos rotacionales para leerlos, lo cual reduce rendimiento</li>
+<li>La acción de leer un archivo que consistía en de muchos bloques pequeños será lenta.</li>
+</ul>
+<p><strong>Ejemplo:</strong> Disco con 1 MB por pista, un tiempo de rotación de 8.33 mseg y un tiempo de búsqueda promedio de 5 mserg. El tiempo en milisegundos para leer un bloque de k bytes es entonces la suma de los tiempos de búsqueda, el retraso rotacional y de transferencia.</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">4.165</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mord">/1000000</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">8.33</span></span></span></span></span></eqn></section><h2><strong>4.4.2 Registro de Bloques Libres</strong></h2>
+<p>Existen dos métodos utilizados ampliamente para llevar registro de los bloques libres del disco:</p>
+<p><strong>Lista enlazada</strong> de bloques libres del disco, en la que cada entrada es el identificador de un bloque de disco que no está ocupado.</p>
+<ul>
+<li>Las entradas <strong>no</strong> están <strong>ordenadas</strong>.</li>
+<li>Se divide en <strong>secciones</strong> del <strong>tamaño de un bloque</strong>, de manera que la última entrada de cada una de ellas es un apuntador a la siguiente. Sólo la primera sección de la lista estará en memoria principal, para más rápido acceso. El resto se almacenan en el disco. Al crear un archivo, se tomarán los bloques libres necesarios de la sección que está en memoria. Si no hay suficientes, se lee una nueva desde el disco. Al borrar un archivo, se agregarán los bloques que quedaron libres a la sección que está en memoria. Si no tiene espacio suficiente, se escribirán en una del disco.</li>
+<li>Su <strong>tamaño cambia</strong> con el tiempo en función de la cantidad de bloques libres que haya en el disco en un momento dado.</li>
+</ul>
+<p><strong>Mapa de bits</strong>, vector de tantos bits como bloques hay en el disco de manera que en cada bit se almacena un 0 o un 1 en función de si el bloque correspondiente está ocupado o no.</p>
+<ul>
+<li>Se almacena en su totalidad en memoria principal.</li>
+<li>Su tamaño es constante, ocupa tantos bits como bloques tenga el disco.</li>
+</ul>
+<p>Por lo general, e<strong>l mapa de bits ocupa menos espacio que la lista</strong>. Sólo si el disco está casi lleno (es decir, hay pocos bloques libes) la lista ocupará menos espacio. Para que la lista sea más corta, las entradas pueden representar <strong>series de bloques libres</strong> consecutivos en lugar de bloques individuales. En cada entrada se almacenaría el identificador del primer bloque de la serie y el número de bloques libres consecutivos que la forman. Si el disco está muy fragmentado, esta alternativa sería menos eficiente en términos de espacio, pues las entradas serían más anchas y no se reduciría mucho su cantidad.</p>
+<p><img src="../../../img/sistemas-operativos/page-83-figure-0.jpeg" alt="" loading="lazy"></p>
+<p><strong>FIGURA 4.13.</strong> (a) Almacenamiento de la lista de bloques libres en una lista enlazada. (b) Un mapa de bits.</p>
+<h1><strong>4.5 Cosas importantes de este Tema</strong></h1>
+<p>Saber bien lo del IS_UID y seteuid. Saber de qué depende el tamaño de las tablas FAT y los inodos y como calcularlos.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="3-memoria.html"><span class="nav-etiqueta">← anterior</span>3. Memoria</a>
+  <a class="nav-siguiente" href="5-entrada-salida.html"><span class="nav-etiqueta">siguiente →</span>5. Entrada-Salida</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

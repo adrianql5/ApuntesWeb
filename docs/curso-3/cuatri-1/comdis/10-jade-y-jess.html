@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="10. Jade y Jess — apuntes de COMDIS (tercer curso de Ingeniería Informática).">
+<title>10. Jade y Jess · COMDIS · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">comdis</a><span class="miga-sep">/</span><span aria-current="page">10-jade-y-jess</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">COMDIS · curso 3</p>
+    <h1>10. Jade y Jess · COMDIS</h1>
+  </header>
+  <div class="prosa">
+<h1>10.1 Introducción y Arquitectura Conceptual</h1>
+<p>El objetivo es comprender cómo dotar a un agente de software de capacidad de <strong>razonamiento declarativo</strong>. Mientras que JADE proporciona la infraestructura para la comunicación y el ciclo de vida del agente, Jess actúa como el &quot;cerebro&quot; lógico.</p>
+<h2>10.1.1 El Modelo de Agente Relacional</h2>
+<p>Podemos visualizar el agente integrado mediante un modelo cibernético clásico:</p>
+<ul>
+<li><strong>Entorno (environment):</strong> el mundo externo donde vive el agente</li>
+<li><strong>Sensores (Sensors):</strong> mecanismos que reciben <strong>perceptos</strong> (entradas, como mensajes ACL)</li>
+<li><strong>Agente (Agent):</strong> La entidad computacional. Aquí es donde ocurre la integración:
+<ul>
+<li><strong>JADE:</strong> Gestiona la interacción con el entorno (envío/recepción de mensajes)</li>
+<li><strong>Jess:</strong> Implementa el módulo de decisión de forma declarativa (reglas lógicas).</li>
+</ul>
+</li>
+<li><strong>Actuadores (Actuators):</strong> mecanismos que ejecutan <strong>acciones</strong> sobre el entorno (ej. enviar una respuesta)</li>
+</ul>
+<h2>10.1.2 ¿Por qué integrar Jess?</h2>
+<p>Jess en un motor de reglas ligero y rápido escrito en Java. Permite construir software que &quot;razona&quot; usando conocimiento suministrado en forma de reglas declarativas, en lugar de código imperativo (if-then-else anidados).</p>
+<ul>
+<li>
+<p><strong>Programación normal (Java/JADE sin Jess):</strong> Es como dar órdenes a un soldado. Tienes que decirle paso a paso: <em>&quot;Si ves un enemigo, levanta el arma. Si está a menos de 50 metros, dispara. Si no, espera&quot;</em>. Si la situación cambia y no prevista en tus instrucciones, el soldado se bloquea.</p>
+</li>
+<li>
+<p><strong>Motor de Inferencia (Jess):</strong> Es el estratega. Tú no le dices qué hacer paso a paso. Tú le das <strong>Reglas</strong> (&quot;Los enemigos cercanos son peligrosos&quot;) y <strong>Hechos</strong> (&quot;Hay un tanque a 20 metros&quot;). El estratega <em>deduce</em> por sí mismo: &quot;Debo atacar&quot;.</p>
+</li>
+</ul>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Es como usar un sistema experto de los de IA pero con agentes</p>
+</div>
+<h1>10.2 Desafíos Técnicos de la Integración</h1>
+<p>Integrar un motor de inferencia en un agente JADE no es trivial debido a la naturaleza de la concurrencia en ambos sistemas.</p>
+<h2>10.2.1 El Modelo de Hilos</h2>
+<ul>
+<li>
+<p><strong>JADE:</strong> Un agente JADE es, por principio, <strong>monohilo (single-threaded)</strong>. Esto simplifica la gestión del estado pero impone restricciones de bloqueo.</p>
+</li>
+<li>
+<p><strong>Jess (Clase Rete):</strong> Para embeber Jess, instanciamos la clase <code>jess.Rete</code>. El método estándar de ejecución es <code>Rete.run()</code>.</p>
+</li>
+<li>
+<p><strong>El Problema:</strong> El método <code>Rete.run()</code> ejecuta reglas consecutivamente y <strong>bloquea el hilo de llamada</strong> hasta que no quedan más reglas por disparar.</p>
+</li>
+</ul>
+<blockquote>
+<p><strong>Advertencia Crítica:</strong> Si ejecutamos <code>Rete.run()</code> sin control dentro de un agente JADE, bloquearemos al agente completo. Si el razonamiento tarda mucho, el agente dejará de percibir mensajes y atender otras tareas.</p>
+</blockquote>
+<h2>10.2.2 Solución: Ejecución Intercalada</h2>
+<p>Para evitar el bloqueo total, utilizamos una variante del método <code>run</code> que acepta un límite de ciclos: <code>jess.run(int maxCycles)</code>. Esto permite que el agente razone &quot;un poco&quot;, atienda otras tareas (como leer mensajes), y vuelva a razonar</p>
+<h1>10.3 Implementación: El <code>JessBehaviour</code></h1>
+<p>La arquitectura recomendada encapsula el motor Jess dentro de un comportamiento cíclico de JADE (<code>CyclicBehaviour</code>).</p>
+<h2>10.3.1 Estructura del Comportamiento</h2>
+<p>El <code>JessBehaviour</code> debe gestionar la carga del motor y su ciclo de ejecución.</p>
+<ol>
+<li>
+<p><strong>Inicialización (Constructor):</strong></p>
+<ul>
+<li>Se crea la instancia de <code>jess.Rete</code>.</li>
+<li>Se carga el archivo de reglas (<code>.clp</code>) usando un <code>FileReader</code> y el parser <code>jess.Jesp</code> .</li>
+</ul>
+</li>
+<li>
+<p><strong>Ciclo de Ejecución (Método <code>action()</code>):</strong></p>
+<ul>
+<li>Se define una constante <code>MAX_JESS_PASSES</code> (ej. 1) para limitar el tiempo de CPU dedicado a razonar en cada vuelta.</li>
+<li>Se invoca <code>jess.run(MAX_JESS_PASSES)</code>.</li>
+<li><strong>Gestión de inactividad:</strong> Se compara el número de pases ejecutados con el máximo permitido. Si <code>ejecutados &lt; maximo</code>, significa que el motor se detuvo porque <strong>no hay más reglas aplicables</strong>. En este caso, debemos bloquear el comportamiento (<code>block()</code>) para no consumir CPU inútilmente.</li>
+</ul>
+</li>
+</ol>
+<pre><code class="language-java">import jade.core.Agent;
+import jade.core.behaviours.CyclicBehaviour;
+import jade.lang.acl.ACLMessage;
+import jess.*; // Importamos la librería de Jess
+
+public class AgenteJess extends Agent {
+    
+    // El motor de inferencia (El cerebro)
+    private Rete motor;
+
+    protected void setup() {
+        motor = new Rete();
+        try {
+            // Cargar las reglas desde un fichero .clp
+            motor.batch(&quot;mis_reglas.clp&quot;);
+            motor.reset(); // Llevar los hechos al estado inicial
+        } catch (JessException e) { e.printStackTrace(); }
+
+        // Añadimos el &quot;Puente&quot; entre JADE y JESS
+        addBehaviour(new PuenteJadeJess());
+    }
+
+    private class PuenteJadeJess extends CyclicBehaviour {
+        public void action() {
+            try {
+                boolean actividad = false;
+
+                // 1. RECEPCIÓN: Traducir Mensajes JADE -&gt; Hechos JESS
+                ACLMessage msg = myAgent.receive();
+                if (msg != null) {
+                    // Convertimos el mensaje en un hecho para que Jess lo vea
+                    // Ejemplo: (mensaje (contenido &quot;fuego&quot;) (emisor &quot;sensor1&quot;))
+                    String hecho = &quot;(mensaje (contenido &quot; + msg.getContent() + &quot;))&quot;;
+                    motor.assertString(hecho);
+                    actividad = true;
+                }
+
+                // 2. RAZONAMIENTO: Ejecutar JESS paso a paso
+                // ¡¡OJO AL EXAMEN!!: Usamos run(1), NO run().
+                // Esto dispara MÁXIMO 1 regla. Si hay 100 pendientes, las hará en los siguientes ciclos.
+                int reglasDisparadas = motor.run(1);
+                
+                if (reglasDisparadas &gt; 0) {
+                    actividad = true;
+                }
+
+                // 3. COLABORACIÓN
+                // Solo nos bloqueamos si NO hay mensajes Y Jess NO tiene reglas por disparar.
+                if (!actividad) {
+                    block();
+                }
+
+            } catch (JessException e) { e.printStackTrace(); }
+        }
+    }
+}
+</code></pre>
+<h2>10.3.2 Inserción de Hechos (Facts)</h2>
+<p>Para que el motor razone, necesita datos. Debemos proveer métodos para insertar hechos y despertar al comportamiento si estaba dormido.</p>
+<p><strong>Ejemplo de método auxiliar <code>addFact</code>:</strong></p>
+<pre><code class="language-java">boolean addFact(String jessFact) {
+    try {
+        jess.assertString(jessFact); // Insertar hecho en Jess [cite: 164]
+    } catch (JessException je) { return false; }
+
+    if (!isRunnable()) restart(); // Si el comportamiento estaba bloqueado, despertarlo [cite: 174]
+    return true;
+}
+</code></pre>
+<blockquote>
+<p>Nota: Es fundamental llamar a <code>restart()</code> (o un mecanismo equivalente para desbloquear) después de insertar un hecho, ya que nuevas premisas podrían activar nuevas reglas.</p>
+</blockquote>
+<h1>10.4 Intercambio de Información: De JADE a Jess</h1>
+<p>El flujo de información desde el entorno hacia el motor de reglas suele ocurrir a través de mensajes ACL.</p>
+<h2>10.4.1 Estrategia Básica: Traducción Manual</h2>
+<p>Se puede implementar un comportamiento (ej. <code>MsgListening</code>) que reciba mensajes ACL, extraiga su contenido y construya una cadena de texto (String) con formato de hecho Jess para inyectarlo mediante <code>addFact</code>.</p>
+<h2>10.4.2 Estrategia Avanzada: Shadow Facts (Java Beans)</h2>
+<p>Jess permite mapear objetos Java directamente a &quot;Shadow Facts&quot; en su memoria de trabajo, evitando la traducción manual a String.</p>
+<ul>
+<li>Se define un <code>deftemplate</code> en Jess apuntando a la clase Java: <code>(deftemplate ACLMessage (declare (from-class ACLMessage)))</code>.</li>
+<li>Se añade el objeto con <code>Rete.add(objeto)</code>.</li>
+</ul>
+<p><strong>El Problema de <code>ACLMessage</code>:</strong> La clase <code>ACLMessage</code> de JADE no cumple estrictamente con el estándar JavaBeans necesario para Jess. Específicamente, el campo <code>content</code> es un <code>StringBuffer</code>, pero sus métodos get/set trabajan con <code>String</code> . Esto hace que Jess falle al intentar inspeccionar el objeto automáticamente.</p>
+<p><strong>Solución:</strong> Crear una clase envoltorio o extendida, por ejemplo <code>MyACLMessage</code>, que corrija los accesos a los campos para ser compatible con la introspección de Java Beans .</p>
+<h1>10.5 Intercambio de Información: De Jess a JADE (Acciones)</h1>
+<p>Una vez que Jess ha razonado, el agente debe actuar (generalmente enviando un mensaje). Existen tres niveles de integración:</p>
+<h2>10.5.1 Post-procesamiento (Nivel Bajo)</h2>
+<p>El agente verifica la memoria de trabajo de Jess después de cada ejecución para ver si hay &quot;hechos de salida&quot; y actúa en consecuencia. Esto es pasivo y poco eficiente.</p>
+<h2>10.5.2 <code>Userfunction</code> (Nivel Medio - Recomendado)</h2>
+<p>Se crea una clase Java que implementa la interfaz <code>jess.Userfunction</code> (ej. <code>JessSend</code>). Esta clase actúa como un puente.</p>
+<ol>
+<li><strong>Implementación:</strong> El método <code>call</code> de la clase Java recibe argumentos desde Jess, construye un <code>ACLMessage</code> y usa <code>myAgent.send()</code> para enviarlo .</li>
+<li><strong>Registro:</strong> Se registra la función en el motor: <code>jess.addUserfunction(new JessSend(myAgent))</code>.</li>
+<li><strong>Uso:</strong> En el código Jess (reglas), se llama directamente: <code>(send ...)</code>.</li>
+</ol>
+<h2>10.5.3 Acceso Directo al Agente (Nivel Alto)</h2>
+<p>Se puede insertar el propio objeto <code>Agent</code> dentro del motor Jess usando <code>Rete.add(Agent)</code>. Esto permite invocar cualquier método público del agente (incluyendo <code>send</code>) directamente desde el código de las reglas usando la sintaxis de reflexión de Jess.</p>
+<h1>10.6 Conclusión de la Asignatura</h1>
+<p>Una vez más se demuestra que el grado presenta una dejadez considerable por parte de las &quot;vacas sagradas&quot; de la facultad. Y es que no puede ser:  estas personas son reconocidísimas en sus ámbitos, publican 300 artículos, acuden a congresos internacionales...  pero cuando llega el momento de pensar en sus alumnos y proporcionarles una bibliografía de calidad con la cual puedan aprender los conceptos de forma intuitiva, te sueltan un PDF de 2001 robado de otra universidad o presentaciones sin orden lógico alguno, llenas de palabras sueltas y esquemas incomprensibles.</p>
+<p>Eso sí, si te quejas, la alternativa que te ofrecen es el libro de turno de 1990 escrito en alemán por un médico francés.  Y apáñate tú para conseguirlo y entenderlo.</p>
+<p><strong>La situación es insostenible.</strong> Es frecuente encontrarse con:</p>
+<ul>
+<li>Documentación completamente desactualizada</li>
+<li>Materiales de dudosa procedencia sin adaptar al contexto actual</li>
+<li>Presentaciones caóticas sin estructura pedagógica</li>
+<li>Bibliografía obsoleta, inaccesible o en idiomas que nadie domina</li>
+</ul>
+<p><strong>¿Tan difícil es hacer las cosas bien?</strong> Otras carreras universitarias lo consiguen. No se pide la perfección, pero sí un mínimo de coherencia y actualización en los materiales docentes.</p>
+<p>Considero que el grado debería aprender de otras titulaciones y mejorar urgentemente este aspecto. Con la jubilación progresiva de las viejas vacas sagradas de la universidad, espero sinceramente que esta situación mejore con el tiempo y que la nueva generación de profesorado traiga una renovación real en la calidad docente, no solo en la investigadora.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="9-ontologias.html"><span class="nav-etiqueta">← anterior</span>9. Ontologías</a>
+  <a class="nav-siguiente" href="resumen-comdis.html"><span class="nav-etiqueta">siguiente →</span>Resumen COMDIS</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

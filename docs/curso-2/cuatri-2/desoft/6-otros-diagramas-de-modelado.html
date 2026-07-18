@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="6. Otros Diagramas de Modelado — apuntes de DESOFT (segundo curso de Ingeniería Informática).">
+<title>6. Otros Diagramas de Modelado · DESOFT · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">desoft</a><span class="miga-sep">/</span><span aria-current="page">6-otros-diagramas-de-modelado</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DESOFT · curso 2</p>
+    <h1>6. Otros Diagramas de Modelado · DESOFT</h1>
+  </header>
+  <div class="prosa">
+<h1>5.1 Diagrama de Objetos</h1>
+<h3>¿Qué es?</h3>
+<p>Representa una <strong>fotografía estática</strong> de los objetos (instancias de clases) en un momento específico del tiempo.</p>
+<h3>Propósito</h3>
+<ul>
+<li>Mostrar cómo están relacionados los objetos en <strong>una situación concreta</strong>.</li>
+<li>Ver <strong>configuraciones ejemplo</strong> del sistema.</li>
+</ul>
+<h3>Detalles clave</h3>
+<ul>
+<li>No muestra clases, sino <strong>especificaciones de instancias</strong>.</li>
+<li>Puede incluir objetos de clases abstractas o atributos incompletos (porque es una <strong>especificación</strong>, no una ejecución real).</li>
+</ul>
+<img src="../../../img/desoft/pasted-image-20250404132035.png" alt="Pasted image 20250404132035.png" loading="lazy">
+<h1>6.2 Diagrama de Paquetes</h1>
+<h3>¿Qué es?</h3>
+<p>Representa cómo se <strong>organiza y agrupa</strong> un sistema en paquetes lógicos.</p>
+<h3>Propósito</h3>
+<ul>
+<li>Agrupar clases, interfaces y otros elementos.</li>
+<li>Mostrar <strong>dependencias entre paquetes</strong>, lo que ayuda a gestionar la complejidad.</li>
+</ul>
+<h3>Detalles clave</h3>
+<ul>
+<li>Los paquetes pueden contener <strong>otros paquetes</strong>.</li>
+<li>Hay un <strong>paquete raíz</strong> que abarca todo el sistema.</li>
+<li>Las dependencias indican que <strong>algún elemento interno depende de otro</strong> (no todos).</li>
+<li>Permite controlar <strong>visibilidad y encapsulamiento</strong>.</li>
+</ul>
+<h3>Analogía</h3>
+<p>Como carpetas dentro de otras carpetas en tu computadora, organizadas por temas (funcionalidad, módulo, etc.).</p>
+<img src="../../../img/desoft/pasted-image-20250404132601.png" alt="Pasted image 20250404132601.png" loading="lazy">
+<h1>6.3 Diagrama de Componentes</h1>
+<h3>¿Qué es?</h3>
+<p>Representa los <strong>componentes físicos</strong> de un sistema de software y sus <strong>dependencias</strong>.</p>
+<h3>Propósito</h3>
+<ul>
+<li>Mostrar cómo el sistema está dividido en <strong>módulos reutilizables</strong>.</li>
+<li>Refleja los elementos que <strong>pueden ser compilados, desplegados o reemplazados</strong>.</li>
+</ul>
+<h3>Detalles clave</h3>
+<ul>
+<li>Cada componente tiene nombre y puede tener <strong>estereotipos</strong> como <code>&lt;&lt;executable&gt;&gt;</code>, <code>&lt;&lt;library&gt;&gt;</code>, <code>&lt;&lt;document&gt;&gt;</code>, etc.</li>
+<li>Indica relaciones entre <strong>interfaces ofrecidas y requeridas</strong>.</li>
+</ul>
+<h3>Analogía</h3>
+<p>Como las piezas de LEGO de un sistema: cada una hace algo y puede ser reemplazada o ensamblada con otras.</p>
+<img src="../../../img/desoft/pasted-image-20250404132806.png" alt="Pasted image 20250404132806.png" loading="lazy">
+<h1>6.4 Diagrama de Despliegue</h1>
+<h3>¿Qué es?</h3>
+<p>Muestra la <strong>arquitectura física</strong> de un sistema: hardware y software durante la ejecución.</p>
+<h3>Propósito</h3>
+<ul>
+<li>Modelar la <strong>infraestructura de ejecución</strong>.</li>
+<li>Visualizar dónde y cómo se <strong>despliegan los componentes</strong> del sistema.</li>
+</ul>
+<h3>Detalles clave</h3>
+<ul>
+<li>Incluye <strong>nodos</strong> (máquinas físicas o virtuales).</li>
+<li>Muestra <strong>componentes de software</strong> ejecutándose en esos nodos.</li>
+<li>Ayuda en decisiones de <strong>distribución, rendimiento y escalabilidad</strong>.</li>
+</ul>
+<h3>Analogía</h3>
+<p>Como un plano de red de servidores, con los programas que corren en cada uno.</p>
+<img src="../../../img/desoft/pasted-image-20250404133026.png" alt="Pasted image 20250404133026.png" loading="lazy">
+<h1>6.5 Diagrama de Estados</h1>
+<h3>¿Qué es?</h3>
+<p>Describe cómo <strong>cambia el estado de un objeto</strong> a lo largo del tiempo en respuesta a eventos.</p>
+<h3>Propósito</h3>
+<ul>
+<li>Entender el <strong>comportamiento de un objeto</strong> durante su ciclo de vida.</li>
+<li>Identificar <strong>eventos, condiciones y transiciones</strong>.</li>
+</ul>
+<h3>Detalles clave</h3>
+<ul>
+<li>Se enfoca en un solo objeto (como <code>Pedido</code>, <code>Semáforo</code>, <code>Conexión</code>).</li>
+<li>Puede haber <strong>superestados</strong> que agrupan estados similares.</li>
+</ul>
+<h3>Analogía</h3>
+<p>Como los estados de una puerta: <em>abierta</em>, <em>cerrada</em>, <em>bloqueada</em> y cómo cambia según acciones (eventos) como <em>cerrar()</em>, <em>bloquear()</em>.</p>
+<img src="../../../img/desoft/pasted-image-20250404133046.png" alt="Pasted image 20250404133046.png" loading="lazy">
+<h1>6.6 Diagrama de Actividades</h1>
+<h3>¿Qué es?</h3>
+<p>Muestra el <strong>flujo de trabajo o procesos</strong> en el sistema, incluso con actividades concurrentes.</p>
+<h3>Propósito</h3>
+<ul>
+<li>Representar <strong>procesos de negocio</strong>, lógica de un método o <strong>tareas paralelas</strong>.</li>
+<li>Modelar decisiones, ramificaciones, sincronizaciones, ciclos.</li>
+</ul>
+<h3>Detalles clave</h3>
+<ul>
+<li>Hereda ideas de los <strong>diagramas de flujo</strong>, <strong>estados</strong> y <strong>redes de Petri</strong>.</li>
+<li>Se usa mucho en <strong>procesos de negocio</strong>, <strong>tareas automatizadas</strong> o <strong>casos de uso complejos</strong>.</li>
+</ul>
+<h3>Analogía</h3>
+<p>Como una receta de cocina con pasos en secuencia y en paralelo (ej. mientras hierve el agua, vas picando los ingredientes).</p>
+<hr>
+<table>
+<thead>
+<tr>
+<th>Tipo de diagrama</th>
+<th>Enfocado en...</th>
+<th>Ideal para...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Obxectos</td>
+<td>Instancias en un momento específico</td>
+<td>Mostrar configuración de objetos</td>
+</tr>
+<tr>
+<td>Paquetes</td>
+<td>Organización y dependencias lógicas</td>
+<td>Modularizar el sistema</td>
+</tr>
+<tr>
+<td>Compoñentes</td>
+<td>Elementos físicos del software</td>
+<td>Ver arquitectura modular y reutilizable</td>
+</tr>
+<tr>
+<td>Despregue</td>
+<td>Infraestructura de ejecución</td>
+<td>Modelar hardware y distribución</td>
+</tr>
+<tr>
+<td>Estados</td>
+<td>Ciclo de vida de un objeto</td>
+<td>Mostrar cómo responde a eventos</td>
+</tr>
+<tr>
+<td>Actividades</td>
+<td>Flujo de trabajo y procesos</td>
+<td>Representar lógica compleja o concurrente</td>
+</tr>
+</tbody>
+</table>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="5-modelado-estructural-avanzado.html"><span class="nav-etiqueta">← anterior</span>5. Modelado Estructural Avanzado</a>
+  <a class="nav-siguiente" href="7-patrones-de-diseno.html"><span class="nav-etiqueta">siguiente →</span>7. Patrones de Diseño</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

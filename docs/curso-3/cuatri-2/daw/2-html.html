@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. HTML — apuntes de DAW (tercer curso de Ingeniería Informática).">
+<title>2. HTML · DAW · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">daw</a><span class="miga-sep">/</span><span aria-current="page">2-html</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DAW · curso 3</p>
+    <h1>2. HTML · DAW</h1>
+  </header>
+  <div class="prosa">
+<h2>2.1 Web, frontend, backend y publicación</h2>
+<p>La <strong>Web</strong> es un conjunto de documentos residentes en diferentes máquinas y relacionados mediante <strong>hiperenlaces</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Idea clave</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Frontend</strong></td>
+<td>Todo aquello con lo que el usuario interactúa. Incluye la página y lo que interpreta el navegador.</td>
+</tr>
+<tr>
+<td><strong>Página web</strong></td>
+<td>Documento que contiene el contenido a mostrar.</td>
+</tr>
+<tr>
+<td><strong>HTML</strong></td>
+<td>Lenguaje que estructura contenidos, enlaza páginas, muestra multimedia y permite visualizar la página en un navegador.</td>
+</tr>
+<tr>
+<td><strong>Navegador</strong></td>
+<td>Programa cliente que interpreta HTML.</td>
+</tr>
+<tr>
+<td><strong>Motor de renderizado</strong></td>
+<td>Parte del navegador que toma HTML, XML, imágenes y CSS para crear la representación visual.</td>
+</tr>
+<tr>
+<td><strong>Backend</strong></td>
+<td>Parte del sistema que atiende peticiones y sirve recursos desde el servidor.</td>
+</tr>
+<tr>
+<td><strong>Servidor web</strong></td>
+<td>Programa que recibe peticiones del cliente y sirve contenido estático: HTML, CSS, JavaScript e imágenes.</td>
+</tr>
+<tr>
+<td><strong>Motor HTTP</strong></td>
+<td>Recibe solicitudes HTTP/HTTPS, las interpreta, determina rutas, gestiona cabeceras, métodos y estados, y envía la respuesta.</td>
+</tr>
+</tbody>
+</table>
+<p>HTML significa <strong>HyperText Markup Language</strong>. Fue propuesto en 1989 y combina:</p>
+<ul>
+<li><strong>universalidad</strong>: un estándar común para todos;</li>
+<li><strong>lenguaje de marcas</strong>: formato definido mediante etiquetas, concepto asociado a Tunnicliffe en 1967;</li>
+<li><strong>hipertexto</strong>: documentos enlazados mediante links, concepto asociado a Ted Nelson en 1965.</li>
+</ul>
+<h3>Navegadores y servidores</h3>
+<ul>
+<li>Antes de 1993 los navegadores tenían poca funcionalidad.</li>
+<li>En 1993 Marc Andreessen desarrolla <strong>Mosaic</strong> en la NCSA.</li>
+<li>En 1994 aparece <strong>Netscape</strong>, con extensiones HTML propias como texto coloreado e imágenes.</li>
+<li>Microsoft responde con <strong>Internet Explorer</strong>, dando lugar a la guerra de navegadores.</li>
+<li>El <strong>W3C</strong>, impulsado por Tim Berners-Lee, busca ordenar el ecosistema y establecer estándares.</li>
+</ul>
+<img src="../../../img/daw/image-9.png" alt="image-9.png" loading="lazy">
+<img src="../../../img/daw/image-10.png" alt="image-10.png" loading="lazy">
+<h3>Publicación de una página</h3>
+<p>Para publicar una web se necesita subir el código a un <strong>servidor propio</strong> o contratar un <strong>hosting</strong>.</p>
+<p>Una URL se interpreta como:</p>
+<p><code>protocolo://nombredelsitioweb/rutahastalaraiz/ficherohtml</code></p>
+<p>Ejemplo: <code>http://www.lawebdepepe.com/index.html</code>.</p>
+<p>Instituciones y registros asociados:</p>
+<ul>
+<li><strong>ICANN</strong>: Internet Corporation for Assigned Names and Numbers. Coordina a nivel global el sistema de nombres de dominio e IP para que Internet funcione de forma única y ordenada.</li>
+<li><strong>WHOIS</strong>: directorio con información técnica y de contacto de propietarios de dominios. Permite consultar quién registró un dominio y ver datos asociados, como registrador, fechas, servidores DNS y contactos, cuando están disponibles.</li>
+<li><strong>DNRD</strong>: Domain Name Registration Data. Es el conjunto de datos de registro de un dominio, como titular, registrador, estado, fechas y datos técnicos. WHOIS es una forma de consultar esos datos.</li>
+</ul>
+<h2>2.2 Historia, estandarización y versiones</h2>
+<h3>Hitos principales</h3>
+<table>
+<thead>
+<tr>
+<th>Fecha</th>
+<th>Hito</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1989</strong></td>
+<td>Tim Berners-Lee y Robert Cailliau presentan en el CERN la propuesta WorldWideWeb.</td>
+</tr>
+<tr>
+<td><strong>1991</strong></td>
+<td>Se publica <code>HTML Tags</code>, primer documento formal de HTML, con 22 etiquetas.</td>
+</tr>
+<tr>
+<td><strong>1993</strong></td>
+<td>El IETF intenta convertir HTML en estándar, pero la propuesta no fructifica.</td>
+</tr>
+<tr>
+<td><strong>1996</strong></td>
+<td>El W3C pasa a publicar los estándares HTML.</td>
+</tr>
+<tr>
+<td><strong>2004</strong></td>
+<td>Apple, Mozilla y Opera crean WHATWG para relanzar la estandarización.</td>
+</tr>
+<tr>
+<td><strong>Enero 2008</strong></td>
+<td>Primer <code>Working Draft</code> de HTML 5.0.</td>
+</tr>
+<tr>
+<td><strong>Diciembre 2012</strong></td>
+<td>Primera <code>Candidate Recommendation</code> de HTML 5.0.</td>
+</tr>
+<tr>
+<td><strong>Julio 2014</strong></td>
+<td>El W3C discute los <strong>Web Components</strong>, que permiten etiquetas personalizadas.</td>
+</tr>
+</tbody>
+</table>
+<h3>Evolución de versiones</h3>
+<table>
+<thead>
+<tr>
+<th>Versión</th>
+<th>Rasgos principales</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>HTML 1.0 / 2.0</strong></td>
+<td>Texto plano con hiperenlaces; sin adornos.</td>
+</tr>
+<tr>
+<td><strong>HTML 3.0</strong></td>
+<td>Etiquetas propietarias, colores, imágenes y guerra de navegadores.</td>
+</tr>
+<tr>
+<td><strong>HTML 3.2</strong></td>
+<td>Estandariza algunas extensiones propietarias y elimina otras.</td>
+</tr>
+<tr>
+<td><strong>HTML 4.0</strong></td>
+<td>Separa contenido, estructura y formato mediante CSS.</td>
+</tr>
+<tr>
+<td><strong>HTML 4.01</strong></td>
+<td>Exige que todo elemento de línea esté dentro de un elemento de bloque.</td>
+</tr>
+<tr>
+<td><strong>XHTML 1.0</strong></td>
+<td>Busca estructura XML; toda etiqueta abierta debe cerrarse.</td>
+</tr>
+<tr>
+<td><strong>HTML 5.0</strong></td>
+<td>Reduce compatibilidad con versiones obsoletas, facilita nuevos navegadores e incorpora nuevas etiquetas, atributos, APIs y recursos nativos.</td>
+</tr>
+</tbody>
+</table>
+<p>Tipos de versiones:</p>
+<ul>
+<li><strong>estricta</strong>: solo admite etiquetas aprobadas;</li>
+<li><strong>transitoria</strong>: permite etiquetas no aprobadas;</li>
+<li><strong>conjunto de marcos</strong>: permite etiquetas no aprobadas y marcos, actualmente desaconsejados por el W3C.</li>
+</ul>
+<h2>2.3 Documento HTML: estructura, sintaxis y metadatos</h2>
+<h3>Estructura mínima</h3>
+<p>La estructura base de un documento HTML es:</p>
+<ul>
+<li><code>&lt;!DOCTYPE html&gt;</code>: declara el tipo de documento;</li>
+<li><code>html</code>: raíz del documento; debe incluir <code>lang</code> para declarar el idioma;</li>
+<li><code>head</code>: metadatos, título, CSS, scripts y recursos no visibles como contenido principal;</li>
+<li><code>title</code>: título de la pestaña, requerido y relevante para SEO;</li>
+<li><code>body</code>: parte visible de la página.</li>
+</ul>
+<p>En HTML5 la estructura se simplifica así:</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;es&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;utf-8&quot;&gt;
+  &lt;title&gt;Mi página&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  Contenido visible
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3>DOCTYPE y validación</h3>
+<p><code>&lt;!DOCTYPE ...&gt;</code> indica al navegador qué tipo de documento HTML está interpretando. En HTML5 se usa <code>&lt;!DOCTYPE html&gt;</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Familia</th>
+<th>Tipo</th>
+<th>Declaración</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HTML 4.01</td>
+<td>Estricta</td>
+<td><code>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01//EN&quot; &quot;http://www.w3.org/TR/html4/strict.dtd&quot;&gt;</code></td>
+</tr>
+<tr>
+<td>HTML 4.01</td>
+<td>Transitoria</td>
+<td><code>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Transitional//EN&quot; &quot;http://www.w3.org/TR/html4/loose.dtd&quot;&gt;</code></td>
+</tr>
+<tr>
+<td>HTML 4.01</td>
+<td>Marcos</td>
+<td><code>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.01 Frameset//EN&quot; &quot;http://www.w3.org/TR/html4/frameset.dtd&quot;&gt;</code></td>
+</tr>
+<tr>
+<td>XHTML 1.0</td>
+<td>Estricta</td>
+<td><code>&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Strict//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd&quot;&gt;</code></td>
+</tr>
+<tr>
+<td>XHTML 1.0</td>
+<td>Transitoria</td>
+<td><code>&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;</code></td>
+</tr>
+<tr>
+<td>XHTML 1.0</td>
+<td>Marcos</td>
+<td><code>&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Frameset//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd&quot;&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>El W3C permite validar páginas en <code>http://validator.w3.org</code>.</p>
+<h3>Codificación</h3>
+<p>HTML pretende ser texto universal, por eso debe declararse el conjunto de caracteres en <code>head</code>.</p>
+<ul>
+<li>Forma clásica: <code>&lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;</code>.</li>
+<li>Forma HTML5: <code>&lt;meta charset=&quot;utf-8&quot;&gt;</code>.</li>
+</ul>
+<h3>Elementos, atributos y comentarios</h3>
+<p>Un elemento HTML tiene la forma:</p>
+<p><code>&lt;etiqueta atributo=&quot;valor&quot;&gt;contenido&lt;/etiqueta&gt;</code></p>
+<p>Reglas prácticas:</p>
+<ul>
+<li>Todos los elementos pueden tener atributos, normalmente para añadir información o modificar su comportamiento.</li>
+<li>HTML no distingue mayúsculas/minúsculas en etiquetas ni atributos, pero se recomienda usar minúsculas.</li>
+<li>En XHTML las minúsculas y el cierre de etiquetas son obligatorios.</li>
+<li>Los valores de atributos pueden ir sin comillas, pero se recomienda usar <code>&quot;...&quot;</code>; también pueden usarse comillas simples si el valor contiene comillas dobles.</li>
+<li>Los atributos siempre van en la etiqueta de apertura y suelen ser pares <code>nombre=&quot;valor&quot;</code>, aunque algunos son booleanos.</li>
+<li>Los <strong>elementos vacíos</strong> no tienen contenido ni etiqueta de cierre.</li>
+<li><code>&lt;tag/&gt;</code> es estilo XHTML; <code>&lt;tag&gt;</code> como elemento vacío es la forma flexible habitual en HTML5.</li>
+<li>Los comentarios se escriben con <code>&lt;!-- comentario --&gt;</code>; pueden ser multilínea o aparecer en medio de una línea, y no se muestran en la página.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>Identifica un elemento único. Se usa en anclajes, CSS, JavaScript y asociación con <code>label</code>.</td>
+</tr>
+<tr>
+<td><code>class</code></td>
+<td>Agrupa elementos. Puede repetirse y un elemento puede tener varias clases separadas por espacios.</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>Nombra datos, sobre todo en formularios. No tiene que ser único; en <code>radio</code> agrupa opciones excluyentes.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>Añade información emergente al pasar el ratón sobre el elemento.</td>
+</tr>
+<tr>
+<td><code>lang</code></td>
+<td>Declara el idioma del documento, útil para navegadores, lectores y buscadores.</td>
+</tr>
+</tbody>
+</table>
+<p>Tipos de elemento:</p>
+<ul>
+<li><strong>documento</strong>: estructuran la página (<code>html</code>, <code>head</code>, <code>body</code>);</li>
+<li><strong>bloque</strong>: generan salto de línea y un rectángulo personalizable (tienen ancho y alto) (<code>h1</code>, <code>p</code>, <code>div</code>);</li>
+<li><strong>línea</strong>: no generan salto de línea y ocupan solo lo necesario para mostrar su contenido (<code>a</code>, <code>img</code>, <code>span</code>);</li>
+<li><strong>vacíos</strong>: sin contenido ni cierre (<code>img</code>, <code>br</code>, <code>meta</code>, según sintaxis HTML).</li>
+</ul>
+<h2>2.4 SEO y robots</h2>
+<p>Las diapositivas indican que hay más de 2 billones de páginas web y que se crean miles cada día. Para favorecer las visitas:</p>
+<ul>
+<li>usar palabras clave en <code>title</code>;</li>
+<li>usar palabras clave en encabezados como <code>h1</code>;</li>
+<li>usar texto alternativo <code>alt</code> en imágenes;</li>
+<li>añadir <code>&lt;meta name=&quot;keywords&quot; content=&quot;...&quot;/&gt;</code>;</li>
+<li>añadir <code>&lt;meta name=&quot;description&quot; content=&quot;...&quot;/&gt;</code>;</li>
+<li>enviar el sitio web a un motor de búsqueda.</li>
+</ul>
+<h3>Directivas para robots</h3>
+<p>Se indican con una metaetiqueta como:</p>
+<p><code>&lt;meta name=&quot;robots&quot; content=&quot;noindex, nofollow&quot; /&gt;</code></p>
+<table>
+<thead>
+<tr>
+<th>Directiva</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>all</code></td>
+<td>Sin restricciones; es el valor predeterminado.</td>
+</tr>
+<tr>
+<td><code>noindex</code></td>
+<td>No muestra la página ni enlace en caché en resultados.</td>
+</tr>
+<tr>
+<td><code>nofollow</code></td>
+<td>No sigue los enlaces de la página.</td>
+</tr>
+<tr>
+<td><code>none</code></td>
+<td>Equivale a <code>noindex, nofollow</code>.</td>
+</tr>
+<tr>
+<td><code>noarchive</code></td>
+<td>No muestra enlace en caché.</td>
+</tr>
+<tr>
+<td><code>nosnippet</code></td>
+<td>No muestra fragmento de la página.</td>
+</tr>
+<tr>
+<td><code>noodp</code></td>
+<td>No usa metadatos de Open Directory para títulos o fragmentos.</td>
+</tr>
+<tr>
+<td><code>notranslate</code></td>
+<td>No ofrece traducción en resultados.</td>
+</tr>
+<tr>
+<td><code>noimageindex</code></td>
+<td>No indexa imágenes de la página.</td>
+</tr>
+<tr>
+<td><code>unavailable_after</code></td>
+<td>No muestra la página después de la fecha indicada en formato RFC 850.</td>
+</tr>
+</tbody>
+</table>
+<p>Robots citados: <strong>Googlebot</strong> y <strong>MSNBot</strong>.</p>
+<img src="../../../img/daw/image-12.png" alt="image-12.png" loading="lazy">
+<img src="../../../img/daw/image-13.png" alt="image-13.png" loading="lazy">
+<h2>2.5 Etiquetas de estructura, <code>head</code> y formato</h2>
+<h3><code>head</code></h3>
+<table>
+<thead>
+<tr>
+<th>Etiqueta</th>
+<th>Función principal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>head</code></td>
+<td>Contenedor de metadatos; va entre <code>html</code> y <code>body</code>.</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td>Título del documento en la pestaña; requerido.</td>
+</tr>
+<tr>
+<td><code>style</code></td>
+<td>Estilos definidos dentro de la página.</td>
+</tr>
+<tr>
+<td><code>link</code></td>
+<td>Relaciona el documento con recursos externos; también se usa para favicon, normalmente tras <code>title</code>.</td>
+</tr>
+<tr>
+<td><code>meta</code></td>
+<td>Define metadatos: <code>charset</code>; <code>content</code>; <code>http-equiv</code> como cabecera HTTP; <code>name</code> para <code>keywords</code>, <code>description</code>, <code>author</code>, <code>viewport</code> y robots.</td>
+</tr>
+<tr>
+<td><code>script</code></td>
+<td>JavaScript del lado cliente.</td>
+</tr>
+<tr>
+<td><code>base</code></td>
+<td>URL base o <code>target</code> de las URLs relativas; debe tener <code>href</code> y/o <code>target</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><code>viewport</code> representa el área visible de la web y cambia según el dispositivo.</p>
+<h3>Semántica y estructura</h3>
+<p><code>div</code> y <code>span</code> son contenedores genéricos: <code>div</code> de bloque y <code>span</code> de línea. En HTML5 se prefieren etiquetas semánticas cuando describen mejor el contenido.</p>
+<table>
+<thead>
+<tr>
+<th>Etiqueta</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>header</code></td>
+<td>Cabecera de documento o sección: encabezados, logo/icono, autoría.</td>
+</tr>
+<tr>
+<td><code>nav</code></td>
+<td>Conjunto de enlaces de navegación.</td>
+</tr>
+<tr>
+<td><code>main</code></td>
+<td>Contenido principal del documento, normalmente único.</td>
+</tr>
+<tr>
+<td><code>section</code></td>
+<td>Grupo temático: capítulos, introducción, contacto, etc.</td>
+</tr>
+<tr>
+<td><code>article</code></td>
+<td>Contenido independiente y reutilizable; si contiene imágenes puede usar <code>figure</code>.</td>
+</tr>
+<tr>
+<td><code>aside</code></td>
+<td>Contenido relacionado indirectamente, como barra lateral.</td>
+</tr>
+<tr>
+<td><code>footer</code></td>
+<td>Pie con autoría, copyright, sitemap, vuelta arriba o documentos relacionados.</td>
+</tr>
+<tr>
+<td><code>figure</code></td>
+<td>Agrupa contenido visual o ilustrativo.</td>
+</tr>
+<tr>
+<td><code>figcaption</code></td>
+<td>Pie descriptivo de <code>figure</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3>Formato y texto</h3>
+<table>
+<thead>
+<tr>
+<th>Etiqueta</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>h1</code> ... <code>h6</code></td>
+<td>Encabezados jerárquicos; los buscadores los usan para indexar estructura y contenido.</td>
+</tr>
+<tr>
+<td><code>p</code></td>
+<td>Párrafo.</td>
+</tr>
+<tr>
+<td><code>hr</code></td>
+<td>Separador horizontal.</td>
+</tr>
+<tr>
+<td><code>br</code></td>
+<td>Salto de línea dentro de un bloque; no sustituye a <code>p</code>.</td>
+</tr>
+<tr>
+<td><code>b</code></td>
+<td>Negrita visual.</td>
+</tr>
+<tr>
+<td><code>strong</code></td>
+<td>Texto importante, normalmente en negrita.</td>
+</tr>
+<tr>
+<td><code>i</code></td>
+<td>Itálica visual.</td>
+</tr>
+<tr>
+<td><code>em</code></td>
+<td>Énfasis, normalmente en itálica.</td>
+</tr>
+<tr>
+<td><code>mark</code></td>
+<td>Texto resaltado.</td>
+</tr>
+<tr>
+<td><code>small</code></td>
+<td>Texto pequeño.</td>
+</tr>
+<tr>
+<td><code>del</code></td>
+<td>Texto borrado, normalmente tachado.</td>
+</tr>
+<tr>
+<td><code>ins</code></td>
+<td>Texto insertado, normalmente subrayado.</td>
+</tr>
+<tr>
+<td><code>sub</code></td>
+<td>Subíndice.</td>
+</tr>
+<tr>
+<td><code>sup</code></td>
+<td>Superíndice.</td>
+</tr>
+<tr>
+<td><code>pre</code></td>
+<td>Texto preformateado; conserva espacios y saltos.</td>
+</tr>
+<tr>
+<td><code>blockquote</code></td>
+<td>Cita extensa separada del texto.</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>Cita breve en línea.</td>
+</tr>
+<tr>
+<td><code>abbr</code></td>
+<td>Abreviatura.</td>
+</tr>
+<tr>
+<td><code>address</code></td>
+<td>Información de contacto, normalmente en itálica y bloque aparte.</td>
+</tr>
+<tr>
+<td><code>cite</code></td>
+<td>Título de una obra, normalmente en itálica.</td>
+</tr>
+<tr>
+<td><code>bdo</code></td>
+<td>Cambia la dirección del texto con <code>dir=&quot;rtl&quot;</code> o <code>dir=&quot;ltr&quot;</code>.</td>
+</tr>
+<tr>
+<td><code>button</code></td>
+<td>Botón clicable; puede estar <code>disabled</code> y usar <code>type=&quot;button&quot;</code>, <code>submit</code> o <code>reset</code>.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-23.png" alt="image-23.png" loading="lazy">
+<img src="../../../img/daw/image-22.png" alt="image-22.png" loading="lazy">
+<h2>2.6 Enlaces, listas, imágenes y tablas</h2>
+<h3>Enlaces</h3>
+<p>La etiqueta <code>a</code> crea hiperenlaces. Su destino se indica con <code>href</code>, que puede apuntar a una página, archivo, correo o ancla interna.</p>
+<table>
+<thead>
+<tr>
+<th>Caso</th>
+<th>Forma</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Enlace externo</td>
+<td>URL de otro sitio.</td>
+</tr>
+<tr>
+<td>Enlace interno</td>
+<td>Página del mismo sitio.</td>
+</tr>
+<tr>
+<td>Ancla interna</td>
+<td><code>href=&quot;#id&quot;</code> apunta al elemento con ese <code>id</code>.</td>
+</tr>
+<tr>
+<td>Imagen como enlace</td>
+<td>Se coloca <code>img</code> dentro de <code>a</code>.</td>
+</tr>
+<tr>
+<td>Botón como enlace</td>
+<td>Puede usarse <code>onclick=document.location=&quot;link&quot;</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>El atributo <code>target</code> controla dónde se abre el enlace:</p>
+<ul>
+<li><code>_self</code>: misma ventana o pestaña, valor por defecto;</li>
+<li><code>_blank</code>: nueva ventana o pestaña;</li>
+<li><code>_parent</code>: frame padre;</li>
+<li><code>_top</code>: ventana completa.</li>
+</ul>
+<img src="../../../img/daw/image-21.png" alt="image-21.png" loading="lazy">
+<h3>Listas</h3>
+<table>
+<thead>
+<tr>
+<th>Etiqueta</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ul</code></td>
+<td>Lista no ordenada.</td>
+</tr>
+<tr>
+<td><code>ol</code></td>
+<td>Lista ordenada. <code>type</code> puede ser <code>1</code>, <code>A</code>, <code>a</code>, <code>I</code>, <code>i</code>; <code>start</code> indica el número inicial.</td>
+</tr>
+<tr>
+<td><code>li</code></td>
+<td>Elemento de <code>ul</code> u <code>ol</code>.</td>
+</tr>
+<tr>
+<td><code>dl</code></td>
+<td>Lista de definición.</td>
+</tr>
+<tr>
+<td><code>dt</code></td>
+<td>Término a definir.</td>
+</tr>
+<tr>
+<td><code>dd</code></td>
+<td>Definición del término.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-20.png" alt="image-20.png" loading="lazy">
+<img src="../../../img/daw/image-19.png" alt="image-19.png" loading="lazy">
+<img src="../../../img/daw/image-18.png" alt="image-18.png" loading="lazy">
+<h3>Imágenes</h3>
+<p><code>img</code> define un espacio para contener imágenes. Sus atributos clave son:</p>
+<ul>
+<li><code>src</code>: ruta de la imagen; puede ser absoluta o relativa;</li>
+<li><code>alt</code>: texto alternativo si no carga o para lectores de pantalla;</li>
+<li><code>width</code> y <code>height</code>: tamaño de la imagen;</li>
+<li><code>style</code>: alternativa para controlar tamaño mediante estilos;</li>
+<li><code>loading</code>: <code>eager</code> carga inmediatamente y <code>lazy</code> retrasa la carga hasta que la imagen sea necesaria.</li>
+</ul>
+<img src="../../../img/daw/image-17.png" alt="image-17.png" loading="lazy">
+<p>Formatos citados:</p>
+<table>
+<thead>
+<tr>
+<th>Formato</th>
+<th>Tipo</th>
+<th>Uso recomendado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JPEG/JPG</td>
+<td>Con pérdida</td>
+<td>Fotografías.</td>
+</tr>
+<tr>
+<td>PNG</td>
+<td>Sin pérdida</td>
+<td>Transparencia alta.</td>
+</tr>
+<tr>
+<td>GIF</td>
+<td>Sin pérdida + animación</td>
+<td>256 colores; compatibilidad antigua.</td>
+</tr>
+<tr>
+<td>SVG</td>
+<td>Vectorial</td>
+<td>Iconos y gráficos escalables.</td>
+</tr>
+<tr>
+<td>ICO</td>
+<td>Bitmap</td>
+<td>Favicons.</td>
+</tr>
+<tr>
+<td>BMP</td>
+<td>Bitmap</td>
+<td>Soportado, pero poco eficiente.</td>
+</tr>
+<tr>
+<td>WebP</td>
+<td>Compresión con/sin pérdida, alfa y animación</td>
+<td>Logos, UI, iconos simples y animaciones.</td>
+</tr>
+<tr>
+<td>AVIF</td>
+<td>Compresión superior a WebP, alfa y animación</td>
+<td>Fotos, animaciones y mejor relación calidad/tamaño.</td>
+</tr>
+</tbody>
+</table>
+<p>Notas:</p>
+<ul>
+<li>Para fotos: <strong>AVIF</strong>.</li>
+<li>Para logos, UI e iconos simples: <strong>WebP o PNG</strong>.</li>
+<li>Para animaciones: <strong>WebP o AVIF</strong>; GIF solo si se necesita compatibilidad total antigua.</li>
+<li>Para compatibilidad total con dispositivos antiguos: <strong>JPEG + PNG</strong>.</li>
+<li><strong>AOMedia</strong> es un consorcio tecnológico formado por empresas como Google, Apple, Mozilla, Netflix, Amazon, Microsoft y Cisco, entre otras.</li>
+</ul>
+<h4>Mapa de imagen y <code>picture</code></h4>
+<table>
+<thead>
+<tr>
+<th>Etiqueta/atributo</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>map</code></td>
+<td>Define un mapa de imagen; se identifica con <code>name</code>.</td>
+</tr>
+<tr>
+<td><code>area</code></td>
+<td>Define zonas clicables dentro del mapa.</td>
+</tr>
+<tr>
+<td><code>shape</code></td>
+<td>Forma del área: <code>rect</code>, <code>circle</code>, <code>poly</code> o <code>default</code>.</td>
+</tr>
+<tr>
+<td><code>coords</code></td>
+<td>Coordenadas de la zona.</td>
+</tr>
+<tr>
+<td><code>usemap=&quot;#nombre&quot;</code></td>
+<td>Relaciona la imagen con el mapa.</td>
+</tr>
+<tr>
+<td><code>picture</code></td>
+<td>Permite mostrar imágenes diferentes según dispositivo o tamaño.</td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td>Dentro de <code>picture</code>, aporta alternativas con <code>srcset</code> y condiciones <code>media</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3>Tablas</h3>
+<table>
+<thead>
+<tr>
+<th>Etiqueta/atributo</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>table</code></td>
+<td>Tabla de datos; no debe usarse para maquetar.</td>
+</tr>
+<tr>
+<td><code>tr</code></td>
+<td>Fila.</td>
+</tr>
+<tr>
+<td><code>td</code></td>
+<td>Celda de datos.</td>
+</tr>
+<tr>
+<td><code>th</code></td>
+<td>Celda de cabecera; al principio de <code>tr</code> crea cabeceras de fila.</td>
+</tr>
+<tr>
+<td><code>caption</code></td>
+<td>Título o contexto de la tabla.</td>
+</tr>
+<tr>
+<td><code>colgroup</code></td>
+<td>Conjunto de grupos de columnas.</td>
+</tr>
+<tr>
+<td><code>col</code></td>
+<td>Grupo de columnas; <code>span</code> indica cuántas columnas abarca.</td>
+</tr>
+<tr>
+<td><code>thead</code></td>
+<td>Cabecera de tabla.</td>
+</tr>
+<tr>
+<td><code>tbody</code></td>
+<td>Cuerpo de tabla.</td>
+</tr>
+<tr>
+<td><code>tfoot</code></td>
+<td>Pie de tabla.</td>
+</tr>
+<tr>
+<td><code>colspan</code></td>
+<td>Número de columnas que abarca una celda.</td>
+</tr>
+<tr>
+<td><code>rowspan</code></td>
+<td>Número de filas que abarca una celda.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-16.png" alt="image-16.png" loading="lazy">
+<h2>2.7 HTML5: simplificación, multimedia y nuevas etiquetas</h2>
+<p>HTML5 simplifica la sintaxis:</p>
+<ul>
+<li>doctype: <code>&lt;!DOCTYPE html&gt;</code>;</li>
+<li>codificación: <code>&lt;meta charset=&quot;utf-8&quot;&gt;</code>;</li>
+<li>más flexibilidad en mayúsculas/minúsculas y comillas: <code>id=&quot;daw&quot;</code>, <code>id=daw</code>, <code>ID=&quot;daw&quot;</code>;</li>
+<li>nuevas etiquetas semánticas: <code>header</code>, <code>footer</code>, <code>section</code>, <code>article</code>, <code>aside</code>, <code>nav</code>, <code>figure</code>, <code>figcaption</code>;</li>
+<li>más recursos nativos: <code>audio</code>, <code>video</code>, <code>track</code>, <code>canvas</code>, <code>iframe</code>;</li>
+<li>nuevos atributos, nuevos atributos de formulario, APIs nativas, menos necesidad de plugins y mejor acceso al DOM desde JavaScript.</li>
+</ul>
+<h3>Multimedia</h3>
+<table>
+<thead>
+<tr>
+<th>Etiqueta</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>audio</code></td>
+<td>Inserta sonido reproducible.</td>
+</tr>
+<tr>
+<td><code>video</code></td>
+<td>Inserta vídeo reproducible.</td>
+</tr>
+<tr>
+<td><code>source</code></td>
+<td>Ofrece varias fuentes del mismo recurso para mejorar compatibilidad.</td>
+</tr>
+<tr>
+<td><code>track</code></td>
+<td>Añade subtítulos o pistas de texto, importante para accesibilidad.</td>
+</tr>
+<tr>
+<td><code>canvas</code></td>
+<td>Superficie de dibujo controlada con JavaScript.</td>
+</tr>
+<tr>
+<td><code>iframe</code></td>
+<td>Incrusta otra página o recurso externo.</td>
+</tr>
+</tbody>
+</table>
+<p>La etiqueta <code>video</code> admite:</p>
+<ul>
+<li><code>controls</code>: controles de reproducción, pausa y volumen;</li>
+<li><code>autoplay</code>: arranque automático al cargar;</li>
+<li><code>muted</code>: sonido silenciado al arrancar.</li>
+</ul>
+<p>Formatos de vídeo citados:</p>
+<table>
+<thead>
+<tr>
+<th>Formato/códec</th>
+<th>Soporte indicado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MP4 / H.264</td>
+<td>Muy alto.</td>
+</tr>
+<tr>
+<td>WebM / VP8-VP9</td>
+<td>Alto.</td>
+</tr>
+<tr>
+<td>Ogg / Theora</td>
+<td>Bueno.</td>
+</tr>
+<tr>
+<td>MP4 / H.265</td>
+<td>Parcial.</td>
+</tr>
+<tr>
+<td>AV1</td>
+<td>Amplio pero parcial.</td>
+</tr>
+<tr>
+<td>AVI, WMV, FLV</td>
+<td>Nulo en HTML5 moderno.</td>
+</tr>
+</tbody>
+</table>
+<h3>Otras etiquetas HTML5</h3>
+<table>
+<thead>
+<tr>
+<th>Etiqueta</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>details</code></td>
+<td>Bloque desplegable que el usuario puede abrir/cerrar.</td>
+</tr>
+<tr>
+<td><code>summary</code></td>
+<td>Texto visible que controla <code>details</code>.</td>
+</tr>
+<tr>
+<td><code>mark</code></td>
+<td>Resalta texto relevante.</td>
+</tr>
+<tr>
+<td><code>meter</code></td>
+<td>Medida dentro de un rango conocido.</td>
+</tr>
+<tr>
+<td><code>time</code></td>
+<td>Semántica para fechas y horas.</td>
+</tr>
+<tr>
+<td><code>progress</code></td>
+<td>Progreso de una tarea.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-15.png" alt="image-15.png" loading="lazy">
+<h2>2.8 Formularios</h2>
+<p>Los formularios HTML permiten aplicaciones interactivas al recopilar información del usuario.</p>
+<p>Tienen dos partes:</p>
+<ul>
+<li><strong>acción con la información</strong>: etiqueta <code>form</code>;</li>
+<li><strong>estructura de entrada</strong>: <code>input</code>, <code>textarea</code>, <code>select</code>, <code>datalist</code>, <code>fieldset</code>, etc.</li>
+</ul>
+<pre><code class="language-html">&lt;form action=&quot;#&quot; method=&quot;post&quot;&gt;
+  &lt;label for=&quot;nombre&quot;&gt;Nombre:&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;nombre&quot; name=&quot;nombre&quot; required&gt;
+
+  &lt;br&gt;&lt;br&gt;
+
+  &lt;label for=&quot;email&quot;&gt;Correo electrónico:&lt;/label&gt;
+  &lt;input type=&quot;email&quot; id=&quot;email&quot; name=&quot;email&quot; required&gt;
+
+  &lt;br&gt;&lt;br&gt;
+
+  &lt;label for=&quot;mensaje&quot;&gt;Mensaje:&lt;/label&gt;
+  &lt;textarea id=&quot;mensaje&quot; name=&quot;mensaje&quot; rows=&quot;4&quot;&gt;&lt;/textarea&gt;
+
+  &lt;br&gt;&lt;br&gt;
+
+  &lt;button type=&quot;submit&quot;&gt;Enviar&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+<h3><code>form</code></h3>
+<p><code>form</code> define un formulario y funciona como contenedor de controles.</p>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code></td>
+<td>Nombre del formulario.</td>
+</tr>
+<tr>
+<td><code>action</code></td>
+<td>Recurso o programa del servidor que recibe los datos.</td>
+</tr>
+<tr>
+<td><code>method</code></td>
+<td>Método HTTP usado para enviar datos: <code>get</code> o <code>post</code>.</td>
+</tr>
+<tr>
+<td><code>autocomplete</code></td>
+<td>Activa o desactiva autocompletado.</td>
+</tr>
+<tr>
+<td><code>novalidate</code></td>
+<td>Evita la validación al enviar.</td>
+</tr>
+</tbody>
+</table>
+<p><code>GET</code> es el método por defecto: añade datos a la URL en pares nombre/valor, tiene límite práctico de longitud, no debe usarse para datos sensibles y permite guardar el resultado como marcador. <code>POST</code> coloca los datos en la petición HTTP, no tiene la misma limitación de longitud y no permite guardar el resultado como marcador.</p>
+<h3>Controles <code>input</code></h3>
+<p><code>input</code> crea elementos gráficos para capturar información.</p>
+<p>Reglas generales:</p>
+<ul>
+<li><code>name</code> es obligatorio si se quiere enviar el valor al servidor;</li>
+<li><code>value</code> almacena el valor inicial;</li>
+<li><code>type</code> determina el control;</li>
+<li>algunos controles tienen eventos asociados como <code>onBlur</code>, <code>onFocus</code>, <code>onClick</code>, <code>onChange</code>, <code>onSelect</code>, <code>onKeyDown</code>, <code>onKeyPress</code> y <code>onKeyUp</code>.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><code>type</code></th>
+<th>Uso</th>
+<th>Eventos citados</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>button</code></td>
+<td>Botón estándar para acción específica, normalmente JavaScript.</td>
+<td><code>onBlur</code>, <code>onFocus</code>, <code>onClick</code></td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td>Texto breve en una línea: nombres, títulos, búsquedas o usuario.</td>
+<td><code>onBlur</code>, <code>onFocus</code>, <code>onClick</code>, <code>onChange</code>, <code>onSelect</code></td>
+</tr>
+<tr>
+<td><code>password</code></td>
+<td>Texto no legible visualmente para accesos o autenticación.</td>
+<td><code>onBlur</code>, <code>onFocus</code>, <code>onClick</code>, <code>onChange</code>, <code>onSelect</code></td>
+</tr>
+<tr>
+<td><code>hidden</code></td>
+<td>Campo oculto con datos útiles para el servidor, como identificadores o tokens.</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>submit</code></td>
+<td>Botón de envío.</td>
+<td><code>onBlur</code>, <code>onFocus</code>, <code>onClick</code></td>
+</tr>
+<tr>
+<td><code>reset</code></td>
+<td>Restaura valores iniciales del formulario.</td>
+<td><code>onBlur</code>, <code>onFocus</code>, <code>onClick</code></td>
+</tr>
+<tr>
+<td><code>file</code></td>
+<td>Selección de archivo local para subir documentos, imágenes o adjuntos.</td>
+<td><code>onBlur</code>, <code>onFocus</code>, <code>onClick</code>, <code>onChange</code></td>
+</tr>
+<tr>
+<td><code>checkbox</code></td>
+<td>Selección múltiple.</td>
+<td><code>onBlur</code>, <code>onFocus</code>, <code>onClick</code></td>
+</tr>
+<tr>
+<td><code>radio</code></td>
+<td>Selección exclusiva; varias opciones comparten <code>name</code>.</td>
+<td><code>onBlur</code>, <code>onFocus</code>, <code>onClick</code></td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td>Botón de imagen; envía coordenadas <code>coord.x</code> y <code>coord.y</code>.</td>
+<td><code>onBlur</code>, <code>onFocus</code>, <code>onClick</code></td>
+</tr>
+<tr>
+<td><code>range</code></td>
+<td>Selector gráfico dentro de un rango: edad, volumen, porcentaje o escala.</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>Selección de día: cumpleaños, reservas o citas.</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>week</code></td>
+<td>Selección de semana: planificación o turnos.</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>month</code></td>
+<td>Selección de mes: informes, periodos o filtros.</td>
+<td>-</td>
+</tr>
+<tr>
+<td><code>color</code></td>
+<td>Paleta de selección de color para temas o personalización.</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplos:</p>
+<img src="../../../img/daw/image-24.png" alt="image-24.png" loading="lazy">
+<img src="../../../img/daw/image-25.png" alt="image-25.png" loading="lazy">
+<img src="../../../img/daw/image-26.png" alt="image-26.png" loading="lazy">
+<img src="../../../img/daw/image-27.png" alt="image-27.png" loading="lazy">
+<img src="../../../img/daw/image-28.png" alt="image-28.png" loading="lazy">
+<img src="../../../img/daw/image-29.png" alt="image-29.png" loading="lazy">
+<img src="../../../img/daw/image-30.png" alt="image-30.png" loading="lazy">
+<img src="../../../img/daw/image-31.png" alt="image-31.png" loading="lazy">
+<img src="../../../img/daw/image-32.png" alt="image-32.png" loading="lazy">
+<img src="../../../img/daw/image-33.png" alt="image-33.png" loading="lazy">
+<h3>Otros controles de formulario</h3>
+<table>
+<thead>
+<tr>
+<th>Etiqueta</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>textarea</code></td>
+<td>Texto multilínea; eventos <code>onKeyDown</code>, <code>onKeyPress</code>, <code>onKeyUp</code>.</td>
+</tr>
+<tr>
+<td><code>select</code></td>
+<td>Lista desplegable seleccionable con teclado o ratón; <code>multiple</code> permite varias opciones.</td>
+</tr>
+<tr>
+<td><code>option</code></td>
+<td>Opción de <code>select</code> o <code>datalist</code>; <code>selected</code> marca una opción preseleccionada.</td>
+</tr>
+<tr>
+<td><code>datalist</code></td>
+<td>Lista de valores sugeridos para un <code>input</code>; el <code>input</code> la referencia mediante <code>list</code>.</td>
+</tr>
+<tr>
+<td><code>fieldset</code></td>
+<td>Agrupa controles relacionados.</td>
+</tr>
+<tr>
+<td><code>legend</code></td>
+<td>Título de un <code>fieldset</code>.</td>
+</tr>
+<tr>
+<td><code>label</code></td>
+<td>Texto asociado a un control; <code>for</code> debe coincidir con el <code>id</code> del input.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-34.png" alt="image-34.png" loading="lazy">
+<img src="../../../img/daw/image-36.png" alt="image-36.png" loading="lazy">
+<img src="../../../img/daw/image-37.png" alt="image-37.png" loading="lazy">
+<img src="../../../img/daw/image-38.png" alt="image-38.png" loading="lazy">
+<img src="../../../img/daw/image-39.png" alt="image-39.png" loading="lazy">
+<img src="../../../img/daw/image-40.png" alt="image-40.png" loading="lazy">
+<img src="../../../img/daw/image-41.png" alt="image-41.png" loading="lazy">
+<img src="../../../img/daw/image-42.png" alt="image-42.png" loading="lazy">
+<img src="../../../img/daw/image-43.png" alt="image-43.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-introduccion.html"><span class="nav-etiqueta">← anterior</span>1. Introducción</a>
+  <a class="nav-siguiente" href="3-css-y-diseno-responsivo.html"><span class="nav-etiqueta">siguiente →</span>3. CSS y Diseño Responsivo</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

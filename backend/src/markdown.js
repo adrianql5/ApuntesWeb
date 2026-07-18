@@ -1,3 +1,5 @@
+import { existsSync } from 'node:fs';
+import { join, basename } from 'node:path';
 import MarkdownIt from 'markdown-it';
 import texmath from 'markdown-it-texmath';
 import katex from 'katex';
@@ -99,6 +101,33 @@ function preTransformar(texto, ctx) {
 }
 
 // ---------------------------------------------------------------------------
+// Imágenes markdown estándar ![](ruta/relativa.jpeg): reescribe el src contra
+// la carpeta de la nota o, en su defecto, el índice de imágenes de la bóveda.
+// (Las notas de SISTEMAS OPERATIVOS usan esta sintaxis en vez de wikilinks.)
+// ---------------------------------------------------------------------------
+function pluginImagenesRelativas(md) {
+  const porDefecto = md.renderer.rules.image ??
+    ((tokens, idx, opciones, env, self) => self.renderToken(tokens, idx, opciones));
+  md.renderer.rules.image = (tokens, idx, opciones, env, self) => {
+    const ctx = env?.ctx;
+    const token = tokens[idx];
+    const src = token.attrGet('src');
+    if (ctx && src && !/^([a-z][a-z0-9+.-]*:|\/)/i.test(src)) {
+      const limpio = decodeURIComponent(src);
+      let abs = ctx.dirBase && existsSync(join(ctx.dirBase, limpio)) ? join(ctx.dirBase, limpio) : null;
+      abs ??= resolverImagen(basename(limpio), ctx.asignatura, ctx.vault);
+      if (abs) {
+        token.attrSet('src', `${ctx.rel}img/${ctx.registrarImagen(abs)}`);
+        token.attrSet('loading', 'lazy');
+      } else {
+        ctx.sinResolver.push(limpio);
+      }
+    }
+    return porDefecto(tokens, idx, opciones, env, self);
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Renderer
 // ---------------------------------------------------------------------------
 export function crearMarkdown() {
@@ -109,6 +138,7 @@ export function crearMarkdown() {
     katexOptions: { throwOnError: false, strict: false, output: 'html' },
   });
   md.use(pluginCallouts);
+  md.use(pluginImagenesRelativas);
   return md;
 }
 
@@ -123,6 +153,6 @@ export function crearMarkdown() {
  */
 export function renderNota(md, texto, ctx) {
   ctx.sinResolver = [];
-  const html = md.render(preTransformar(texto, ctx));
+  const html = md.render(preTransformar(texto, ctx), { ctx });
   return { html, sinResolver: ctx.sinResolver };
 }

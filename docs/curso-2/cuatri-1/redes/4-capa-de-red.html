@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="4. Capa de Red — apuntes de REDES (segundo curso de Ingeniería Informática).">
+<title>4. Capa de Red · REDES · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">redes</a><span class="miga-sep">/</span><span aria-current="page">4-capa-de-red</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">REDES · curso 2</p>
+    <h1>4. Capa de Red · REDES</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Tema jodido.</p>
+</div>
+<h1>4.1 Introducción</h1>
+<p>La <strong>capa de red</strong> en el modelo de Internet es la encargada de transportar los datos desde un host de origen hasta un host de destino, controlando el <strong>encaminamiento y el reenvío de paquetes</strong> a través de la red.  Se implementa tanto en los dispositivos <strong>terminales</strong> como en los <strong>routers</strong>.</p>
+<div class="callout callout-recordatorio">
+<p class="callout-titulo">Recordatorio</p>
+<p><img src="../../../img/redes/pasted-image-20241108205726.png" alt="archivos/imagenes/Pasted image 20241108205726.png" loading="lazy"></p>
+</div>
+<h3><strong>Host Origen, Host Destino y Router</strong></h3>
+<p>El <strong>host origen</strong> es el qué <strong>recibe el paquete</strong> de la capa de transporte, que encapsula los datos de la aplicación. Se encarga de <strong>encapsular el paquete en un datagrama IP</strong> que contiene la información necesaria para su entrega, como la dirección de origen y destino. <strong>Entrega el datagrama en la capa de enlace</strong>.</p>
+<p>El <strong>host destino</strong> desencapsula el <strong>datagrama</strong> y entrega el segmento a la <strong>capa de transporte</strong>.</p>
+<p>Los <strong>routers</strong> juegan un papel crucial en la capa de red. Aunque no interactúan directamente con las capas de transporte o aplicación (excepto para control o gestión de red), manejan el <strong>reenvío y el encaminamiento de los datagramas</strong> basándose en la dirección IP de destino y en su <strong>tabla de reenvío</strong>.</p>
+<h3><strong>Reenvío, Encaminamiento y Tablas de reenvío</strong></h3>
+<p>El <strong>reenvío</strong> se produce cuando un router recibe un <strong>datagrama</strong>, utiliza la dirección de destino en la <strong>cabecera</strong> del datagrama y consulta en su <strong>tabla de reenvío</strong> para decidir la <strong>interfaz de salida adecuada</strong>. El <strong>encaminamiento</strong> es el proceso de determinar la <strong>mejor ruta</strong> para los paquetes que se envían de un emisor a un receptor. Este proceso es dinámico y utiliza <strong>algoritmos de encaminamiento</strong> que construyen y actualizan las <strong>tablas de reenvío</strong> en cada router. Las <strong>tablas de reenvío</strong> almacenan la información necesaria para el reenvío de paquetes, indicando la interfaz de salida correcta para cada destino. Los valores en estas tablas son determinados por los protocolos y algoritmos de encaminamiento.</p>
+<h3>**Control de Errores</h3>
+<p><strong>Suma de comprobación de la cabecera</strong> para detectar errores en la cabecera de un paquete IP, se utiliza una <strong>suma de comprobación</strong> que verifica la integridad de los datos. Si la suma de comprobación no coincide en el receptor, el paquete se descarta.</p>
+<p><strong>Seguridad</strong>: Originalmente, IP no tenía mecanismos de seguridad. Sin embargo, con el tiempo se han añadido tecnologías como IPsec, que permite la <strong>autenticación y cifrado</strong> del tráfico IP, transformando el servicio de conexión sin estado en uno con una capa de seguridad añadida.</p>
+<p>La <strong>capa de red</strong> permite la transmisión de paquetes entre hosts a través de routers, usando técnicas de <strong>encapsulación, reenvío y encaminamiento</strong>. La red IP es no fiable y sin estado, proporcionando un servicio de <strong>mejor esfuerzo</strong>. Gracias a protocolos auxiliares como <strong>ICMP, DHCP y NAT</strong>, y mecanismos de control de errores y congestión, la capa de red es capaz de mantener la integridad y eficiencia del flujo de paquetes en redes de gran escala como Internet.</p>
+<h1>4.2 Redes de Conmutación de Paquetes</h1>
+<p>Las <strong>redes de conmutación de paquetes</strong> permiten transmitir datos dividiéndolos en <strong>paquetes pequeños</strong>. Estos paquetes viajan a través de la red de manera independiente, siguiendo rutas que pueden variar de un paquete a otro. El término &quot;conmutación de paquetes&quot; se refiere al proceso de enviar estos paquetes a través de varios nodos (por ejemplo, routers) que los redirigen hasta su destino.</p>
+<img src="../../../img/redes/pasted-image-20241107162613.png" alt="archivos/imagenes/Pasted image 20241107162613.png" loading="lazy">
+<h2>4.2.1 Redes de Datagramas:</h2>
+<p>Una <strong>red de datagramas</strong> es un tipo de red de conmutación de paquetes donde los paquetes se envían de <strong>manera independiente</strong>, sin necesidad de establecer una ruta fija entre el origen y el destino antes de la transmisión. Cada paquete incluye la <strong>dirección IP del destino en su cabecera</strong>, lo que permite que los routers encaminen los paquetes de manera independiente según su propia <strong>tabla de enrutamiento</strong>.</p>
+<p>En Internet, la capa de red se basa en el <strong>Protocolo de Internet (IP)</strong>, el cual utiliza este modelo de <strong>datagramas</strong>. Cada paquete contiene información suficiente en su <strong>cabecera</strong> (como la dirección IP de destino) para que los routers puedan determinar a dónde debe enviarse el paquete siguiente. Los <strong>routers</strong> en una red de datagramas no mantienen información sobre el estado de las conexiones previas o el tráfico pasado. Cada paquete es tratado como una entidad independiente, y el router no sabe nada sobre los paquetes que llegaron antes o después.</p>
+<p>El servicio proporcionado por las redes de datagramas es de <strong>mejor esfuerzo</strong> (<em>best effort</em>). Esto implica que <strong>no se garantiza la entrega de los paquetes, su orden ni el tiempo en que llegarán</strong> al destino. Los paquetes pueden llegar desordenados, con retraso o incluso perderse durante la transmisión debido a problemas como congestión en la red.</p>
+<p>Los routers toman decisiones de encaminamiento en función de la dirección IP de destino contenida en la cabecera de cada paquete. Estas decisiones se toman consultando las <strong>tablas de reenvío</strong> de los routers, las cuales pueden actualizarse dinámicamente mediante protocolos de enrutamiento (como <strong>OSPF</strong> o <strong>BGP</strong>). La red de datagramas IP permite que diferentes tipos de redes de enlace de datos (Ethernet, Wi-Fi, 4G, etc.) se conecten entre sí, lo que facilita la <strong>interconexión de redes heterogéneas</strong>.</p>
+<img src="../../../img/redes/pasted-image-20241107162749.png" alt="archivos/imagenes/Pasted image 20241107162749.png" loading="lazy">
+<h2>4.2.2 Redes de Circuitos Virtuales:</h2>
+<p>En contraste con las redes de datagramas, las <strong>redes de circuitos virtuales</strong> requieren la <strong>planificación de una ruta fija</strong> antes de que los datos puedan ser enviados. Este proceso implica la creación de un <strong>circuito virtual</strong> (CV), que es una ruta preestablecida que todos los paquetes siguen durante la comunicación.</p>
+<p>Antes de que los paquetes de datos sean enviados, se establece una conexión en la que los routers <strong>planifican una ruta fija</strong> para todo el flujo de paquetes entre el origen y el destino. Los paquetes de datos, una vez la ruta esté establecida, incluyen un <strong>identificador de circuito virtual (VCI)</strong> en la cabecera, que los routers utilizan para reencaminar los paquetes. A diferencia de las redes de datagramas, los routers en una red de circuitos virtuales mantienen <strong>información de estado</strong> acerca de las rutas y las conexiones activas. Cada router tiene una <strong>tabla de circuitos virtuales</strong> que almacena los identificadores de los circuitos virtuales y las interfaces de salida correspondientes.</p>
+<p>La creación de un circuito virtual se inicia cuando el emisor, A, envía una <strong>petición de llamada</strong> al receptor, B. Esta solicitud llega primero al nodo 1 a través de la interfaz 2. En este punto, el nodo 1 asigna un <strong>identificador de circuito virtual (VCI)</strong>, que en este caso es 5, y reenvía la solicitud a través de su interfaz 1 hacia el siguiente nodo. Este proceso es similar al enrutamiento de datagramas, donde cada nodo debe saber cómo redirigir la solicitud hasta el destino final, B.
+A medida que la solicitud avanza:
+- El nodo 2 recibe la solicitud, le asigna un VCI de 9 y la reenvía por su interfaz 0.
+- El nodo 3 recibe la solicitud, le asigna un VCI de 7 y la envía por su interfaz 3.
+- Finalmente, el receptor B recibe la solicitud y asigna un VCI de 4, que usará para identificar los paquetes provenientes de A.</p>
+<p>Una vez que B acepta la conexión, envía una <strong>respuesta de Llamada aceptada</strong> de regreso a través del mismo camino pero en sentido inverso. Esta respuesta llega al nodo 3 con VCI 4 en la interfaz 3, permitiéndole completar su entrada en la tabla de circuitos. Del mismo modo, los nodos 2 y 1 actualizan sus tablas con los VCIs de salida correspondientes.</p>
+<p>Finalmente, el nodo 1 envía una <strong>confirmación de aceptación (ACK)</strong> de vuelta a A, que la recibe con el VCI 5. Desde este momento, A usará el VCI 5 para identificar y enviar el resto de paquetes hacia B, estableciendo así el circuito virtual completo.</p>
+<p>Una vez que la conexión ha sido establecida, los paquetes subsiguientes llevan el identificador del circuito (VCI). Los routers no necesitan volver a determinar la ruta, ya que esta ha sido preestablecida, y pueden utilizar el <strong>VCI</strong> para encontrar la interfaz de salida correcta.</p>
+<img src="../../../img/redes/pasted-image-20241107162941.png" alt="archivos/imagenes/Pasted image 20241107162941.png" loading="lazy">
+<h2><strong>Resumen Comparativo:</strong></h2>
+<table>
+<thead>
+<tr>
+<th>Característica</th>
+<th><strong>Redes de Datagramas</strong></th>
+<th><strong>Redes de Circuitos Virtuales</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Establecimiento de Ruta</strong></td>
+<td>Dinámico, cada paquete tiene su propia ruta.</td>
+<td>Estática, se establece una ruta fija.</td>
+</tr>
+<tr>
+<td><strong>Estado de los Routers</strong></td>
+<td>Sin estado, no mantienen información de paquetes previos.</td>
+<td>Con estado, mantienen información de las conexiones.</td>
+</tr>
+<tr>
+<td><strong>Identificador de Ruta</strong></td>
+<td>Basado en la dirección IP de destino.</td>
+<td>Basado en un identificador de circuito virtual (VCI).</td>
+</tr>
+<tr>
+<td><strong>Confiabilidad</strong></td>
+<td>No fiable, no se garantiza la entrega, orden o tiempo.</td>
+<td>Más fiable, pero depende de la ruta establecida.</td>
+</tr>
+<tr>
+<td><strong>Ejemplo</strong></td>
+<td>Enrutamiento de un paquete en Internet.</td>
+<td>Conexión telefónica en una red de conmutación de circuitos.</td>
+</tr>
+</tbody>
+</table>
+<p>Ambos modelos tienen aplicaciones diferentes según las necesidades de la red. Las <strong>redes de datagramas</strong> son más flexibles y escalables, lo que las hace ideales para Internet, mientras que las <strong>redes de circuitos virtuales</strong> proporcionan una calidad de servicio más consistente y son más adecuadas para aplicaciones que requieren un flujo continuo de datos, como las videollamadas o las comunicaciones en tiempo real.</p>
+<h1>4. 3 Algoritmos de Encaminamiento</h1>
+<p>Los <strong>algoritmos de enrutamiento</strong> son fundamentales para determinar el camino más eficiente que deben seguir los paquetes de datos desde un origen hasta un destino en una red. Estos algoritmos se basan en el concepto de <strong>grafos</strong>, donde los <strong>routers</strong> son los <strong>nodos</strong> y los <strong>enlaces</strong> entre ellos son las <strong>aristas</strong>. El coste de un enlace puede ser determinado por diversos factores, como la distancia, la velocidad, el nivel de congestión o incluso el coste económico del enlace.</p>
+<h2>4.3.1 Clasificación de los algoritmos de enrutamiento</h2>
+<ol>
+<li><strong>Algoritmos globales (de estado de los enlaces, EE)</strong>:
+Estos algoritmos requieren que cada nodo tenga <strong>conocimiento completo</strong> sobre la topología de la red, es decir, que conozca todos los enlaces y sus costos.
+Cada router utiliza esta información para calcular de manera <strong>independiente</strong> su <strong>tabla de enrutamiento</strong>, determinando el camino más corto hacia cada destino. El término &quot;estado de los enlaces&quot; hace referencia al hecho de que los nodos conocen el <strong>estado de todos los enlaces</strong>. Esto implica que el algoritmo realiza un proceso similar al de resolver un problema de <strong>camino mínimo en un grafo ponderado</strong>.</li>
+</ol>
+<p><strong>Ejemplo de algoritmo global</strong>: <strong>OSPF (Open Shortest Path First)</strong>, que se utiliza en redes de área extensa (WAN) y utiliza el algoritmo de <strong>Dijkstra</strong> para encontrar la ruta más corta.</p>
+<ol start="2">
+<li><strong>Algoritmos descentralizados (de vector de distancias, VD)</strong>:
+En estos algoritmos, cada nodo <strong>no tiene conocimiento completo</strong> de la topología de la red. En cambio, <strong>colabora</strong> con los nodos vecinos intercambiando información de distancias. Inicialmente, cada nodo conoce únicamente las distancias a sus nodos vecinos. A través de un proceso iterativo, los nodos comparten y actualizan esta información hasta que todos los nodos tienen conocimiento de las distancias a otros nodos de la red.Este tipo de algoritmo se denomina <strong>vector de distancias</strong> porque cada nodo mantiene un vector con las distancias a los nodos vecinos.</li>
+</ol>
+<p><strong>Ejemplo de algoritmo de vector de distancias</strong>: <strong>RIP (Routing Information Protocol)</strong>, que envía mensajes periódicos a los vecinos para actualizar la información de enrutamiento.</p>
+<ol start="3">
+<li><strong>Algoritmos estáticos y dinámicos</strong>:
+<strong>Estáticos</strong>: Solo se actualizan cuando cambia la topología de la red (por ejemplo, si se agregan o eliminan nodos o enlaces) o si se realizan cambios manuales en los parámetros.
+<strong>Dinámicos</strong>: Se ejecutan de forma periódica y automática para adaptarse a cambios en la red, como modificaciones en la carga o el estado de los enlaces. Los algoritmos dinámicos son más comunes en Internet, ya que permiten adaptarse de forma continua a las variaciones en la red.</li>
+</ol>
+<p><strong>Ejemplo de algoritmo dinámico</strong>: <strong>BGP (Border Gateway Protocol)</strong>, que es utilizado para el enrutamiento entre diferentes sistemas autónomos (AS) en Internet.</p>
+<ol start="4">
+<li><strong>Algoritmos sensibles a la carga e insensibles a la carga</strong>:
+<strong>Sensibles a la carga</strong>: El coste de los enlaces cambia dinámicamente en función de la carga o congestión de la red. Esto permite que el algoritmo adapte los caminos de enrutamiento según el tráfico.
+<strong>Insensibles a la carga</strong>: El coste de los enlaces es constante y no cambia con la congestión de la red. La mayoría de los algoritmos de enrutamiento actuales en Internet son insensibles a la carga.
+<strong>Problemas de oscilación</strong>: Si un algoritmo es sensible a la carga, pueden ocurrir oscilaciones de enrutamiento, donde los caminos más cortos cambian de forma continua. Un enlace muy congestionado podría tener un coste elevado y ser evitado, pero luego, al liberar la congestión, se vuelve atractivo nuevamente, lo que puede generar fluctuaciones en el enrutamiento.</li>
+</ol>
+<div class="callout callout-nota">
+<p class="callout-titulo">De los algoritmos sudar btt. **Saltar al 4.4**</p>
+</div>
+<h2>4.3.2 Algortimo de Dijkstra</h2>
+<p>El <strong>algoritmo de Dijkstra</strong> es un algoritmo de búsqueda de caminos mínimos, utilizado principalmente en redes de computadoras y grafos para encontrar el camino más corto desde un nodo de origen a todos los demás nodos en un grafo ponderado (con costes en los arcos o enlaces).</p>
+<p>El enfoque de <strong>&quot;Forward Search&quot;</strong> del algoritmo de Dijkstra se basa en mantener dos listas: <strong>Confirmado</strong> y <strong>Provisional</strong>, para calcular la tabla de rutas de un nodo a partir de los paquetes de estado de enlace (LSP) recibidos. Cada nodo N quiere calcular su tabla de enrutamiento considerando los enlaces con otros nodos y sus costes.  Tiene una complejidad de O(n²)</p>
+<h3>Inicialización:</h3>
+<ol>
+<li>
+<p><strong>Lista Confirmada</strong>: Es la lista de nodos cuyo camino mínimo ya se ha encontrado. Se inicia con una entrada para el nodo de partida N con un coste de 0, indicando que el coste para llegar a sí mismo es cero. La entrada tiene el formato <code>(N, 0, -)</code>:</p>
+<ul>
+<li><code>(M, 5, L)</code>-&gt; <strong>N llega a M con coste 5 a través de L.</strong></li>
+<li><code>-</code> significa que no hay siguiente salto porque es el nodo de partida.</li>
+</ul>
+</li>
+<li>
+<p><strong>Lista Provisional</strong>: Es la lista de nodos que aún no han sido definitivamente asignados, pero cuyas distancias son conocidas parcialmente. Inicialmente está vacía.</p>
+</li>
+</ol>
+<h3>Pasos del algoritmo:</h3>
+<ol>
+<li>
+<p><strong>Seleccionar el Nodo S</strong>: El algoritmo toma el último nodo añadido a la lista <strong>Confirmado</strong>. Este nodo S es el nodo del que se calcularán las distancias hacia sus nodos vecinos.</p>
+</li>
+<li>
+<p><strong>Examinar los Vecinos de S</strong>:</p>
+<ul>
+<li>Para cada vecino V de S (según el LSP de S), el algoritmo calcula el coste para alcanzar V como la <strong>suma del coste de N a S</strong> (que es el coste ya conocido en <strong>Confirmado</strong>) y el <strong>coste de S a V</strong> (que se obtiene del LSP de S).</li>
+<li>Si V no está en ninguna de las listas (ni <strong>Confirmado</strong> ni <strong>Provisional</strong>), se añade a la lista <strong>Provisional</strong> con la entrada <code>(V, Coste, S)</code>, donde <code>Coste</code> es la suma de las distancias y <code>S</code> es el siguiente salto.</li>
+<li>Si V ya está en la lista <strong>Provisional</strong>, pero el nuevo coste calculado es menor que el coste previamente almacenado en esa lista, se reemplaza la entrada con el nuevo coste y el siguiente salto correspondiente, que es el nodo S.</li>
+</ul>
+</li>
+<li>
+<p><strong>Actualizar la Lista Confirmado</strong>:</p>
+<ul>
+<li>Si la lista <strong>Provisional</strong> está vacía, el algoritmo termina, ya que no hay más nodos por explorar.</li>
+<li>Si no está vacía, se selecciona el nodo de <strong>Provisional</strong> con el menor coste y se mueve a <strong>Confirmado</strong>, marcando ese nodo como definitivamente alcanzado con el coste mínimo.</li>
+</ul>
+</li>
+<li>
+<p><strong>Repetir el Proceso</strong>:</p>
+<ul>
+<li>El proceso se repite desde el paso 1, pero ahora se toma el siguiente nodo con el menor coste en la lista <strong>Provisional</strong>. Este nodo se convierte en el nuevo nodo <strong>S</strong> y se repite el proceso de exploración y actualización.</li>
+</ul>
+</li>
+</ol>
+<img src="../../../img/redes/pasted-image-20241107165115.png" alt="archivos/imagenes/Pasted image 20241107165115.png" loading="lazy">
+<h2>4.3.3 Algoritmo de Vector de Distancias (VD)</h2>
+<p>El <strong>encaminamiento de vector de distancias</strong> es un método descentralizado de enrutamiento, donde cada nodo en una red colabora con sus vecinos para determinar la distancia mínima hacia todos los demás nodos. Este método se basa en la propagación gradual de la información de distancias, permitiendo que cada nodo descubra rutas óptimas hacia todos los destinos mediante <strong>iteraciones sucesivas</strong>.</p>
+<h3>Funcionamiento del Algoritmo</h3>
+<ol>
+<li>
+<p><strong>Inicialización</strong>:</p>
+<ul>
+<li>Cada nodo conoce inicialmente solo el <strong>coste directo</strong> hacia sus vecinos inmediatos. Estos costes directos se almacenan en una <strong>tabla de distancias</strong>, donde cada entrada indica el nodo vecino y el coste del enlace hacia él.</li>
+<li>No tiene información sobre nodos más alejados en la red.</li>
+</ul>
+</li>
+<li>
+<p><strong>Intercambio de Información</strong>:</p>
+<ul>
+<li>Cada nodo comunica periódicamente a sus vecinos lo que sabe hasta ese momento sobre las distancias mínimas hacia los otros nodos.</li>
+<li>La información compartida es esencialmente el vector de distancias del nodo que envía el mensaje, es decir, sus estimaciones actuales de distancia hacia cada destino posible.</li>
+<li>Al recibir la información de un vecino, cada nodo calcula nuevas rutas y actualiza sus distancias si encuentra valores menores.</li>
+</ul>
+</li>
+<li>
+<p><strong>Actualización de Distancias</strong>:</p>
+<ul>
+<li>Para un nodo <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></eq> con un vecino <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.044em;">z</span></span></span></span></eq>, cuyo enlace tiene coste <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.044em;">z</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></eq>:
+<ul>
+<li>Si <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.044em;">z</span></span></span></span></eq> informa de que su distancia a otro nodo <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span></span></span></eq> es <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.044em;">z</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.0359em;">y</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></eq>, el nodo <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></eq> puede calcular su distancia a <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span></span></span></eq> a través de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.044em;">z</span></span></span></span></eq> como:
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.0359em;">y</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.044em;">z</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.044em;">z</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.044em;">z</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.0359em;">y</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span></eqn></section></li>
+<li>Esto significa que la distancia de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></eq> a <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span></span></span></eq> a través de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.044em;">z</span></span></span></span></eq> es la suma del coste del enlace de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></eq> a <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.044em;">z</span></span></span></span></eq> y la distancia de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.044em;">z</span></span></span></span></eq> a <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span></span></span></eq> reportada por <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.044em;">z</span></span></span></span></eq>.</li>
+<li>Si el valor <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">x</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight" style="margin-right:0.0359em;">y</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.044em;">z</span><span class="mclose">)</span></span></span></span></eq> es menor que la distancia almacenada actualmente en la tabla de distancias de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></eq> hacia <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span></span></span></eq>, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></eq> actualiza su distancia mínima hacia <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span></span></span></eq> y marca a <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.044em;">z</span></span></span></span></eq> como el <strong>siguiente salto</strong> hacia <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span></span></span></eq>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Iteración y Convergencia</strong>:</p>
+<ul>
+<li>Este proceso continúa iterativamente: cada nodo sigue intercambiando información con sus vecinos y recalculando rutas hasta que ya no se producen cambios en las tablas de distancias de los nodos.</li>
+<li>En ese momento, el algoritmo <strong>converge</strong>, y cada nodo ha encontrado el camino más corto hacia todos los otros nodos de la red.</li>
+</ul>
+</li>
+</ol>
+<img src="../../../img/redes/pasted-image-20241107171800.png" alt="archivos/imagenes/Pasted image 20241107171800.png" loading="lazy">
+<img src="../../../img/redes/pasted-image-20241107171852.png" alt="archivos/imagenes/Pasted image 20241107171852.png" loading="lazy">
+<p>El problema es que si un <strong>nodo</strong> calcula mal sus <strong>distancias</strong> jode a todos los demás, por lo que es poco robusto.</p>
+<h2>4.3.4 Encaminamiento Jerárquico</h2>
+<p>El <strong>ruteo jerárquico</strong> es una estrategia de enrutamiento utilizada en redes grandes, como Internet, para organizar y simplificar la gestión de los datos y mejorar la eficiencia del enrutamiento. En este enfoque, la red completa se divide en <strong>sistemas autónomos (SA)</strong>, que son zonas o regiones bajo un control administrativo común. Cada sistema autónomo (SA) puede pertenecer, por ejemplo, a una empresa o a una organización, y opera su propia red interna. Los routers <strong>solo conocen el encaminamiento en su región</strong>. Los routers pasarela frontera: centralizan el tráfico de salida del SA.</p>
+<p>Hay dos niveles de encaminamiento:</p>
+<ul>
+<li><strong>Intradominio</strong>: cada SA puede elegir algoritmo</li>
+<li><strong>Interdominio</strong>: común para todos los SA</li>
+</ul>
+<img src="../../../img/redes/pasted-image-20241107172236.png" alt="archivos/imagenes/Pasted image 20241107172236.png" loading="lazy">
+<h1>4.4 Encaminamiento en Internet (Protocolos de Rutado)</h1>
+<p>El encaminamiento en Internet se basa en protocolos de rutado, que <strong>permiten a los routers decidir el mejor camino para enviar paquetes de datos a su destino</strong>. Internet se divide en diferentes sistemas autónomos (SA), que son redes administradas de forma independiente. Estos sistemas usan distintos protocolos de rutado para decidir cómo enviar datos tanto dentro del <strong>SA</strong> (<em>rutado intra-autónomo</em>) como entre <strong>SAs</strong> (<em>rutado inter-autónomo</em>).</p>
+<h2>4.4.1 RIP (Routing Information Protocol):</h2>
+<p>Usa el rutado intra-autónomo, basado en <strong>vector de distancias</strong> (VD). <strong>Funciona sobre</strong> UDP (puerto 520).  En este protocolo, cada router <strong>mantiene una tabla con las distancias a otros routers de la red</strong>. <strong>RIP</strong> intercambia información solo entre routers vecinos, con el costo de cada enlace establecido en 1, y puede enviar paquetes a través de un <strong>máximo de 15 saltos</strong>. Si un router desea información sobre una ruta, envía un mensaje de petición a sus vecinos y recibe como respuesta una lista de redes destino con su distancia.</p>
+<ul>
+<li>
+<p><strong>Mensajes de petición RIP</strong>: solicitan información</p>
+</li>
+<li>
+<p><strong>Mensajes de respuesta RIP</strong>: envían una lista de hasta 25 redes internas al SA (estos también se envían de forma automática cada 30. En caso de que no se reciba respuesta en 180 segundos, se considera caído).</p>
+ <img src="../../../img/redes/pasted-image-20241107181500.png" alt="archivos/imagenes/Pasted image 20241107181500.png" loading="lazy">
+</li>
+</ul>
+<h2>4.4.2 OSPF (Open Shortest Path First):</h2>
+<p>Protocolo de enrutamiento intra-autónomo basado en el <strong>estado de enlace</strong> (EE) para intradominios. <strong>Funciona sobre</strong> su propio protocolo de red, utilizando el puerto 89.</p>
+<p><strong>OSPF</strong> es un protocolo <strong>avanzado en comparación con RIP</strong>, diseñado para reemplazarlo en redes de mayor complejidad. Utiliza un algoritmo basado en el estado de enlace, <strong>difundiendo información sobre la red a todos los nodos</strong> cuando ocurren cambios significativos, y actualizándose automáticamente cada 30 minutos. Cada router mantiene un mapa completo de la red, lo que permite <strong>calcular el camino más corto mediante el algoritmo de Dijkstra</strong>. Los mensajes <strong>OSPF</strong> incluyen mensajes <strong>HELLO</strong> enviados periódicamente a cada vecino para verificar su conectividad, y permite también consultar a un vecino para obtener la información de estado completa. Los costos de cada enlace son definidos por el administrador de la red.</p>
+<p><strong>OSPF</strong> es más seguro que RIP, ya que utiliza un <strong>protocolo de transporte propio</strong> en el que todos los mensajes están autenticados, permitiendo solo la comunicación entre routers autenticados. Siempre se elige el camino más corto disponible, y en caso de varios caminos con el mismo costo, OSPF puede repartir el tráfico entre ellos.</p>
+<p><strong>OSPF</strong> permite la subdivisión del Sistema Autónomo (SA) en áreas jerárquicas, lo que mejora la organización. Cada área ejecuta OSPF internamente, y las comunicaciones entre áreas se gestionan mediante routers de frontera de área (ABR), que encaminan el tráfico hacia fuera del área. Estos ABRs están conectados entre sí en una <strong>área troncal</strong>. Para enrutar fuera del SA, OSPF también utiliza un router de frontera del SA (ASBR).</p>
+<img src="../../../img/redes/pasted-image-20241113172544.png" alt="archivos/imagenes/Pasted image 20241113172544.png" loading="lazy">
+<h2>4.4.3 BGP (Border Gateway Protocol):</h2>
+<p>Protocolo de enrutamiento inter-autónomo, <strong>basado en vector de rutas</strong>. <strong>Funciona sobre</strong> TCP (puerto 179).</p>
+<p><strong>BGP</strong> es el <strong>protocolo estándar en Internet</strong> para la <strong>comunicación entre sistemas autónomos</strong> (SAs) en su versión BGP4. Está diseñado para el <strong>enrutamiento entre dominios y permite a los routers frontera</strong> (routers pasarela) <strong>intercambiar rutas completas</strong> entre SAs. A diferencia de los protocolos de enrutamiento por distancia, BGP utiliza un vector de rutas, donde cada router comparte la ruta completa a cada destino, permitiendo la aplicación de políticas de enrutamiento específicas. En BGP, se usa <strong>E-BGP</strong> para la comunicación entre routers de diferentes SAs y <strong>I-BGP</strong> para la comunicación entre routers dentro del mismo SA.</p>
+<p><strong>Identificación de SAs</strong>: Cada SA en BGP se identifica mediante un número de sistema autónomo (ASN) único, facilitando el control y la organización de las rutas.</p>
+<p><strong>Ejemplo</strong>: Supongamos que un mensaje BGP describe cómo llegar a la red <code>128.19.4.0/24</code>. La ruta podría ser algo como <code>SA1/SA2/SA3/SA4</code>, lo que indica el camino exacto que el paquete debe seguir al atravesar distintos SAs.</p>
+<p><strong>Políticas de Enrutamiento</strong>: BGP permite a los administradores de cada SA definir políticas de enrutamiento específicas, como evitar redirigir el tráfico a través de ciertos proveedores o filtrar rutas hacia determinados destinos. Esto permite un control granular sobre el flujo de tráfico entre SAs.</p>
+<img src="../../../img/redes/pasted-image-20241107181934.png" alt="archivos/imagenes/Pasted image 20241107181934.png" loading="lazy">
+## 4.4.4 Resumen
+- **RIP**: Protocolo de enrutamiento sencillo que intercambia solo la distancia a redes vecinas y está limitado a un máximo de 15 saltos.
+- **OSPF**: Protocolo de estado de enlace que utiliza un mapa completo de la red, actualizando la información periódicamente y calculando el camino más corto con el algoritmo de Dijkstra. Permite balanceo de carga entre rutas de igual costo y organización jerárquica mediante áreas.
+- **BGP**: Protocolo de enrutamiento inter-autónomo que intercambia rutas completas entre SAs, permitiendo la aplicación de políticas de enrutamiento detalladas y el control granular de rutas según las necesidades de cada operador.
+<p>Este sistema asegura que dentro de cada SA se determine la ruta óptima de forma eficiente, mientras que entre SAs los paquetes siguen rutas específicas optimizadas y controladas por cada operador en función de sus políticas de enrutamiento.</p>
+<h1>4.5 Protocolo de Internet (IP)</h1>
+<p>Define el formato de las <strong>direcciones IP</strong>, los campos de los <strong>datagramas</strong>, y <strong>cómo los routers procesan estos datagramas</strong>. Los routers leen estos campos para dirigir el tráfico a su destino correcto. Fue diseñado para conectar redes diferentes. La fiabilidad recae sobre las capas superiores (<em>TCP</em>).</p>
+<h2>4.5.1 Direccionamiento IPv4</h2>
+<p>Las direcciones <strong>IPv4</strong> son números de 4 bytes (32 bits) que se expresan en un formato de cuatro números decimales separados por puntos, donde cada número representa 1 byte (8 bits). Un ejemplo de dirección IPv4 es <code>192.168.1.1</code>. Cada dispositivo conectado a Internet (hosts, routers, etc.) tiene <strong>una dirección IP por cada</strong> <strong>interfaz</strong> (<em>punto de conexión a la red</em>). Por ejemplo, en Linux, una interfaz de tarjeta Ethernet puede llamarse <code>eth0</code>, una conexión serie <code>ppp0</code>, una conexión USB <code>usb0</code>, y una conexión inalámbrica <code>wlan0</code>.</p>
+<img src="../../../img/redes/pasted-image-20241108215013.png" alt="archivos/imagenes/Pasted image 20241108215013.png" loading="lazy">
+<h3>Direcciones IP</h3>
+<p>Una dirección IP tiene dos partes:</p>
+<ul>
+<li><strong>Parte de red</strong>: Identifica la red en la que está el dispositivo.</li>
+<li><strong>Parte de host</strong>: Identifica el dispositivo específico en esa red.</li>
+</ul>
+<p><strong>Clases de Dirección IP</strong>:
+Antiguamente las direcciones IP se agrupaban en clases, según los primeros bits de la dirección:</p>
+<ul>
+<li><strong>Clase A</strong>: Comienza con <code>0</code>. Tiene una gran cantidad de hosts por red, ideal para organizaciones grandes.</li>
+<li><strong>Clase B</strong>: Comienza con <code>10</code>. Es adecuada para empresas grandes y medianas. Ejemplo: <code>172.16.0.0</code>.</li>
+<li><strong>Clase C</strong>: Comienza con <code>110</code>. Se utiliza para pequeñas redes. Ejemplo: <code>192.168.0.0</code>.</li>
+<li><strong>Clase D</strong>: Comienza con <code>1110</code>, destinada para <strong>multicast</strong> (envío de datos a varios dispositivos).</li>
+<li><strong>Clase E</strong>: Comienza con <code>1111</code>, reservada para usos futuros.</li>
+</ul>
+<img src="../../../img/redes/pasted-image-20241108215124.png" alt="archivos/imagenes/Pasted image 20241108215124.png" loading="lazy">
+<p>Algunas direcciones reservadas por el IANA:</p>
+<ul>
+<li><strong>0.0.0.0</strong> → Esta red. Usada para arrancar sistemas sin disco (como en el protocolo DHCP) y en el encaminamiento por defecto.</li>
+<li><strong>127.0.0.0 – 127.255.255.255</strong> → La propia estación (<em>dirección de loopback</em>). Comúnmente se usa la <strong>127.0.0.1</strong>.</li>
+<li><strong>240.0.0.0 – 255.255.255.254</strong> → Reservadas para uso futuro.</li>
+<li><strong>255.255.255.255</strong> → Difusión a toda la red (usada en el protocolo DHCP).</li>
+</ul>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>En cada red, existe una <strong>dirección de broadcast</strong> que se utiliza para enviar mensajes a <strong>todos los dispositivos de la red al mismo tiempo</strong>. Por ejemplo, si un router necesita enviar una actualización de red o un dispositivo quiere buscar otros dispositivos conectados, puede enviar un mensaje a la dirección de broadcast y todos los equipos dentro de esa red lo recibirán.
+Para calcularla basta con poner todos los bits de la parte de host a 1. Son las direcciones que terminan por <strong>255</strong>. Las direcciones que acaban en <strong>0</strong> también son especiales porque <strong>permiten identificar a la red.</strong></p>
+</div>
+<h2>4.5.2 Subredes</h2>
+<p><strong>Subredes</strong> son divisiones más pequeñas dentro de una red. Crear subredes permite dividir un bloque grande de direcciones IP en varias redes más pequeñas, cada una con su propio rango de direcciones. Las subredes son útiles para mejorar el rendimiento, la organización y la seguridad en una red. Para subdividir una red en varias subredes usamos <strong>máscaras</strong>.</p>
+<p>Las <strong>subredes</strong> nos permiten <strong>ahorrarnos IPs</strong> porque las asignan de forma más eficiente, adaptándose a la cantidad de dispositivos en cada parte de la red. Además las redes grandes pueden <strong>ser difíciles de gestionar</strong> por lo que dividirla en subredes ayuda a segmentar el tráfico y tener mayor control. Al aislar cada subred se obtiene <strong>mayor seguridad</strong> limitando la comunicación entre dispositivos de diferentes subredes.</p>
+<div class="callout callout-importante">
+<p class="callout-titulo">Importante</p>
+<p><strong>La dirección base y la de broadcast están reservadas.</strong></p>
+</div>
+<h3><strong>Máscara de subred</strong></h3>
+<p>La máscara de subred se utiliza para <strong>dividir una red IP en subredes más pequeñas</strong>, usando parte del campo de la dirección de <strong>red</strong> para identificar la subred. Una máscara de subred es un <strong>conjunto de 32 bits</strong>, donde los primeros <code>n</code> bits (<em>los más significativos</em>) están en 1 para indicar la porción de red y subred, y los restantes <code>32 - n</code> bits están en 0 para <strong>identificar los hosts</strong> dentro de esa subred.</p>
+<ul>
+<li><strong>Formato</strong>: Las máscaras se representan en notación de longitud de prefijo (por ejemplo, <code>/27</code>) o en formato decimal (por ejemplo, <code>255.255.255.224</code>).</li>
+<li><strong>Ejemplo de máscara /27</strong>:
+<ul>
+<li><code>/27</code> significa que los primeros 27 bits están en 1 y los últimos 5 en 0.</li>
+<li>En formato binario: <code>11111111.11111111.11111111.11100000</code>, equivalente en decimal a <code>255.255.255.224</code>.</li>
+</ul>
+</li>
+</ul>
+<p>Consideremos una  <code>192.168.17.0</code> con una máscara de subred <code>/27</code> (o <code>255.255.255.224</code>):</p>
+<p>Los primeros 24 bits (<code>192.168.17</code>) representan la red principal. Los siguientes 3 bits indican la subred específica dentro de esta red. Los últimos 5 bits identifican el host o estación dentro de esa subred.</p>
+<p><strong>Número de subredes</strong>: Como tenemos 3 bits para la subred, se pueden crear <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">8</span></span></span></span></eq> subredes.
+<strong>Número de hosts por subred</strong>: Con 5 bits para hosts, cada subred puede tener <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span></span></span></span></eq> estaciones (se resta 2 porque no se pueden usar las direcciones de subred y de difusión).
+<strong>Total de direcciones posibles</strong>: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.0833em;"></span><span class="mord">8</span><span class="mord text"><span class="mord"> subredes</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">30</span><span class="mord text"><span class="mord"> hosts</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord">240</span><span class="mord text"><span class="mord"> direcciones</span></span></span></span></span></eq>.</p>
+<img src="../../../img/redes/pasted-image-20241113172957.png" alt="archivos/imagenes/Pasted image 20241113172957.png" loading="lazy">
+<img src="../../../img/redes/pasted-image-20241113175935.png" alt="archivos/imagenes/Pasted image 20241113175935.png" loading="lazy">
+<h3><strong>Redes sin clase, direcciones CIDR (Classless Inter-Domain Routing)</strong></h3>
+<p>En 1993, el sistema tradicional de direcciones IP basado en clases (A, B, C) fue reemplazado por <strong>CIDR (Classless Inter-Domain Routing)</strong>. Este cambio permitió dividir las direcciones IP en redes y hosts con mayor flexibilidad, lo cual ayudó a mejorar la administración de redes y el uso eficiente de las direcciones IP.</p>
+<p>En CIDR, una dirección IP <strong>no está restringida a una clase fija</strong>. En su lugar, la división entre la parte de <strong>red</strong> y la parte de <strong>host</strong> de la dirección IP puede ubicarse en cualquier posición. Esto se indica mediante la <strong>máscara</strong> en notación <code>/x</code>, donde <code>x</code> es el número de bits dedicados a la red.</p>
+<p>Dirección CIDR: <code>193.144.48.0/20</code>
+Esto indica que los primeros 20 bits representan la <strong>red</strong>, y el resto de los bits, los <strong>hosts</strong>.</p>
+<p>En binario: <code>1100 0001 1001 0000 0011 0000 0000 0000</code></p>
+<ul>
+<li><strong>Parte de red</strong>: Primeros 20 bits → <code>193.144.48.0</code></li>
+<li><strong>Parte de host</strong>: Últimos 12 bits → identifican dispositivos dentro de la red <code>193.144.48.0/20</code></li>
+</ul>
+<h3><strong>Diferencia Redes con Clase y CIDR</strong></h3>
+<p>La diferencia entre el esquema tradicional de clases de red y las redes sin clase (o CIDR, <strong>Classless Inter-Domain Routing</strong>) radica en cómo se asignan y manejan los rangos de direcciones IP y la flexibilidad para dividir y agrupar las redes.</p>
+<h4><strong>Redes con Clase (Clases A, B, C)</strong></h4>
+<p>En el esquema de redes con clase:
+Las direcciones IP se dividen en clases (A, B, C, D y E), y cada clase tiene un rango de direcciones IP fijo y una longitud de prefijo predeterminada:</p>
+<ul>
+<li><strong>Clase A</strong>: Prefijo /8 (los primeros 8 bits identifican la red), cubriendo un rango de IPs muy amplio.</li>
+<li><strong>Clase B</strong>: Prefijo /16 (los primeros 16 bits identifican la red).</li>
+<li><strong>Clase C</strong>: Prefijo /24 (los primeros 24 bits identifican la red).</li>
+</ul>
+<p>La máscara de subred era implícita para cada clase y no se podía cambiar. Esto significa que una red de clase C, por ejemplo, siempre tendría una máscara de <code>255.255.255.0</code> (/24), lo que permite un máximo de 254 hosts por red.
+El esquema es <strong>rígido</strong> y puede llevar a desperdicio de direcciones IP. Por ejemplo, si una organización necesitaba más de 254 hosts, no podía usar clase C y tendría que usar una clase B, que proporcionaba 65,534 direcciones, mucho más de lo necesario.</p>
+<h4><strong>Redes Sin Clase (CIDR)</strong></h4>
+<p><strong>CIDR</strong> fue introducido para superar las limitaciones del esquema de clases y permitir una asignación más flexible y eficiente de las direcciones IP.</p>
+<p>En CIDR, <strong>no se utilizan las clases tradicionales</strong> (A, B, C) para determinar el tamaño de la red. En cambio, se usa una notación de prefijo (por ejemplo, <code>/18</code>, <code>/24</code>, <code>/12</code>, etc.), que indica cuántos bits de la dirección IP identifican la red.</p>
+<p>Con CIDR, puedes tener una <strong>máscara de subred de cualquier longitud</strong>, independientemente de la &quot;clase&quot; de la dirección IP. Esto permite subdividir redes grandes o combinar redes pequeñas sin las restricciones de las clases:
+Por ejemplo, <code>192.168.1.0/26</code> define una red que usa 26 bits para la porción de red y 6 bits para hosts, lo que permite tener 4 subredes dentro de lo que tradicionalmente sería una red de clase C.</p>
+<p>CIDR permite crear subredes más pequeñas o &quot;superredes&quot; para asignar solo el número exacto de direcciones IP necesario, reduciendo el desperdicio de direcciones. También permite la <strong>agregación de rutas</strong> en la tabla de enrutamiento, simplificando la gestión de redes en Internet.</p>
+<h3><strong>Tablas de Reenvío</strong></h3>
+<h4>Tabla de Reenvío de un Host</h4>
+<p>La tabla de reenvío es la estructura que un host utiliza para determinar cómo enviar paquetes a su destino. Ejemplo para el host <code>200.1.3.3</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Red destino</th>
+<th>Gateway</th>
+<th>Interfaz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>127.0.0.0/8</code></td>
+<td>*</td>
+<td><code>lo</code></td>
+</tr>
+<tr>
+<td><code>200.1.3.0/24</code></td>
+<td>*</td>
+<td><code>eth0</code></td>
+</tr>
+<tr>
+<td><code>0.0.0.0/0</code> (por defecto)</td>
+<td><code>200.1.3.1</code></td>
+<td><code>eth0</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>127.0.0.0/8</strong> → Dirección de <strong>loopback</strong> (interfaz <code>lo</code>), utilizada para <strong>pruebas locales</strong> en el host.</li>
+<li><strong>200.1.3.0/24</strong> → Red local, por lo que los paquetes pueden salir directamente por la interfaz <code>eth0</code>.</li>
+<li><strong>0.0.0.0/0</strong> (por defecto) → Cualquier otra dirección de destino se envía a través de <code>200.1.3.1</code> usando <code>eth0</code>.</li>
+</ul>
+<p>Para consultar la tabla de rutas en Linux, usa el comando:</p>
+<pre><code class="language-bash">route [-n]
+</code></pre>
+<h4><strong>Tabla de Reenvío de un Router</strong></h4>
+<p>La tabla de reenvío en un router incluye información detallada sobre las redes conectadas, interfaces y gateways.</p>
+<table>
+<thead>
+<tr>
+<th>Destino</th>
+<th>Interfaz</th>
+<th>Gateway</th>
+<th>Métrica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>194.24.0.0/21</code></td>
+<td><code>inti</code></td>
+<td>*</td>
+<td><code>i</code> saltos</td>
+</tr>
+<tr>
+<td><code>194.24.8.0/22</code></td>
+<td><code>intj</code></td>
+<td>*</td>
+<td><code>j</code> saltos</td>
+</tr>
+<tr>
+<td><code>194.24.16.0/20</code></td>
+<td><code>intk</code></td>
+<td>*</td>
+<td><code>k</code> saltos</td>
+</tr>
+<tr>
+<td><code>0.0.0.0/0</code> (por defecto)</td>
+<td><code>intx</code></td>
+<td>*</td>
+<td><code>x</code> saltos</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>[! Info]
+El <strong>gateway</strong> (o puerta de enlace) es la dirección de un dispositivo de red que sirve de punto de acceso para enviar datos a otras redes. En una tabla de reenvío de un router, el gateway indica hacia dónde debe dirigirse el tráfico que no pertenece a la red local. Es especialmente útil cuando el tráfico necesita salir de la red local hacia redes más amplias, como internet o redes externas. El gateway está marcado con <code>*</code>, lo cual indica que para las rutas especificadas no es necesario un gateway intermedio, ya que el tráfico puede enviarse directamente a través de la interfaz correspondiente.
+Por ejemplo el router de casa.</p>
+</blockquote>
+<h3><strong>Reenvío de un paquete: coincidencia del prefijo más largo</strong></h3>
+<img src="../../../img/redes/pasted-image-20241113214248.png" alt="archivos/imagenes/Pasted image 20241113214248.png" loading="lazy">
+<h3><strong>Agregación de rutas</strong></h3>
+<p>Es un proceso que realizan los routers por el cual toman un <strong>grupo de direcciones de redes contiguas</strong> (bloque CIDR) y las resumen en una sola dirección de red común a todas esas redes.</p>
+<p>La ventaja principal es la <strong>optimización del enrutamiento</strong> en grandes redes corporativas, ya que los routers tienen que <strong>mantener menos entradas en sus tablas de enrutamiento</strong> y en consecuencia ganan estabilidad. Si un router tiene conectadas 10 redes contiguas, solo publicará el resumen de la ruta CIDR a sus vecinos.</p>
+<p>Para obtener la dirección IP <strong>base de agregación de rutas</strong> de debemos comprobar que sean redes contiguas y, a continuación, <strong>hacer la operación AND sobre las direcciones base de esas redes</strong>. Para obtener la dirección de broadcast debemos poner todos los bits que tenían comunes al hacer la operación AND a 1.</p>
+<p>En la imagen podemos ver que en la tabla de reenvío del <strong>router B</strong> tendríamos una entrada para A, B, C ,D y E, lo que pasa es que C, D y E van a ser consecutivas y reenviarse por la misma interfaz, así que se agrupan en <strong>una única entrada</strong> y cuando llegue un paquete de cualquiera de esas redes van a ser reenviadas por al <strong>interfaz RB2</strong> y cuando llegue al <strong>router C</strong> ya se decidirá a donde va cada paquete.</p>
+<img src="../../../img/redes/pasted-image-20241230113908.png" alt="archivos/imagenes/Pasted image 20241230113908.png" loading="lazy">
+<h2>4.5.3 Datagrama IP</h2>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Saber diferencias datagrama IPv4 e IPv6</p>
+</div>
+<img src="../../../img/redes/pasted-image-20241107185211.png" alt="archivos/imagenes/Pasted image 20241107185211.png" loading="lazy">
+<p><strong>Versión (4 bits)</strong>: Indica la versión del protocolo IP utilizado. Normalmente es IPv4 (valor 4) o IPv6 (valor 6).
+<strong>Longitud de Cabecera (lg. cab.) (4 bits)</strong>: Muestra la longitud de la cabecera en múltiplos de 4 bytes. Esto permite determinar dónde comienza la sección de datos.
+<strong>Tipo de Servicio (8 bits)</strong>: Define la prioridad y calidad del servicio del paquete, permitiendo especificar si debe ser tratado con baja latencia, alta fiabilidad, etc.
+<strong>Longitud Total (16 bits)</strong>: Es la longitud total del paquete IP, incluida la cabecera y los datos. Permite al receptor saber cuándo termina el paquete.
+<strong>Identificador (16 bits)</strong>: Usado para identificar de forma única un fragmento de un datagrama IP. Es útil cuando un paquete debe dividirse en fragmentos para atravesar una red con un tamaño de unidad de transmisión más pequeño.
+<strong>Indicadores (indicad.) (3 bits)</strong>: Indican si el paquete puede ser fragmentado y si es el último fragmento de un conjunto de fragmentos.</p>
+<p><strong>Desplazamiento de Fragmento (despl. fragmento) (13 bits)</strong>: Indica la posición de un fragmento dentro del datagrama original, facilitando la reconstrucción del paquete en el receptor.</p>
+<p><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">Desplazamiento (en unidades de 8 bytes)</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.355em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">Posici</span><span class="mord accent mtight"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="mord mtight">o</span></span><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord mtight">ˊ</span></span></span></span></span></span></span><span class="mord mtight">n del inicio del fragmento (en bytes)</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></eq></p>
+<p><strong>Tiempo de Vida (8 bits)</strong>: Controla el tiempo de vida del paquete, especificando el <strong>número máximo de saltos</strong> (routers) que puede atravesar. Se decrementa en cada router, y cuando llega a cero, el paquete es descartado.</p>
+<p><strong>Protocolo (8 bits)</strong>: Indica el protocolo de la capa superior que se encuentra en los datos del paquete (por ejemplo, TCP o UDP). Esto ayuda a dirigir el paquete al protocolo adecuado.
+<strong>Suma de Comprobación de Cabecera (16 bits)</strong>: Campo de verificación para la cabecera IP. Permite comprobar la integridad de la cabecera, detectando errores en la transmisión.
+<strong>Dirección IP Origen (32 bits)</strong>: La dirección IP del dispositivo que envió el paquete. Permite al receptor saber de dónde proviene el paquete.
+<strong>Dirección IP Destino (32 bits)</strong>: La dirección IP del destinatario previsto del paquete, necesaria para la entrega del mismo.
+<strong>Opciones (variable)</strong>: Este campo es opcional y se utiliza para habilitar características avanzadas, como pruebas de conectividad y enrutamiento específico. Si no se utiliza, la longitud del campo es cero.
+<strong>Datos (variable)</strong>: Contiene la carga útil del paquete IP, que puede ser información de una aplicación o de un protocolo de nivel superior, como TCP o UDP.</p>
+<h2>4.5.4 Fragmentación de Datagramas</h2>
+<p>La fragmentación de datagramas es un proceso que permite que los datagramas IP puedan atravesar diferentes tipos de redes, cada una con su propio límite de tamaño de paquete permitido, conocido como <strong>MTU</strong> (<em>Maximum Transmission Unit</em>). Por ejemplo, Ethernet tiene un <strong>MTU máximo de 1500 bytes</strong>, mientras que algunas redes de área extensa solo admiten paquetes de 576 bytes. Cuando un datagrama excede el tamaño permitido por la red, <strong>se fragmenta en partes más pequeñas</strong>.</p>
+<p><strong>Los routers son responsables de fragmentar los datagramas cuando es necesario</strong>, según las restricciones de <strong>MTU</strong> de la red. Los fragmentos no se reensamblan durante el trayecto, sino que se espera hasta que los fragmentos lleguen al destino final. En ese momento, la <strong>capa de red del host receptor se encarga de reensamblar los fragmentos</strong> y entregarlos a la capa de transporte. Los <strong>host</strong> también pueden fragmentar, pensad en el ejemplo de conectar a un ordenador con un router y que el ordenador le manda datos al router y el cable usado es una mierda, debe segmentar IP en el host y no solo en router.</p>
+<p>Para minimizar la <strong>fragmentación</strong>, los protocolos TCP y UDP tienden a generar segmentos de <strong>tamaño más pequeño</strong>. Esto permite que las cabeceras de IP y TCP (alrededor de 20 bytes cada una) se incluyan dentro de los límites de tamaño de las redes comunes, evitando la fragmentación innecesaria.</p>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p><strong>TCP</strong> cuando de detecta que se sobrepasa el <strong>MSS</strong> se lo pasa a IP por lo que ya segmenta antes, aunque si el <strong>MSS</strong> más la cabecera IP es mayor que el <strong>MTU</strong> de alguna de las redes por las que el router va a reenviar el paquete, lo segmenta aún más.
+<strong>UDP</strong> directamente no lo segmenta y se pasa del <strong>MTU</strong> de la red por la que se va a reenviar se segmenta en el router.</p>
+<p><strong>Fragmentar-&gt;capa de red</strong>
+<strong>Segmentar-&gt;capa de transporte</strong></p>
+</div>
+<p>En cada red existe un valor de MTU que se aplica a los datagramas que se envían. Si un datagrama excede el MTU de la red, este se fragmenta en unidades más pequeñas. A cada fragmento se le añaden <strong>cabeceras de IP</strong>. Durante la fragmentación, se utiliza el identificador <strong>MF</strong> (<em>More Fragments</em>) en cada fragmento para indicar que quedan más partes de ese datagrama, a excepción del último fragmento, cuyo bit <strong>MF</strong> se establece en <strong>0</strong>. Además, si el bit <strong>DF</strong> (<em>Don't Fragment</em>) está activado en el datagrama original, este no será fragmentado y <strong>será descartado si no cabe en la red</strong>.</p>
+<p><strong>IMPORTANTE</strong>:
+<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">Desplazamiento (en unidades de 8 bytes)</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.355em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">Posici</span><span class="mord accent mtight"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6944em;"><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="mord mtight">o</span></span><span style="top:-2.7em;"><span class="pstrut" style="height:2.7em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord mtight">ˊ</span></span></span></span></span></span></span><span class="mord mtight">n del inicio del fragmento (en bytes)</span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></eq></p>
+<p>Este proceso de fragmentación y reensamblaje garantiza que los datagramas puedan adaptarse a diferentes redes con diferentes capacidades de transmisión, permitiendo la comunicación entre sistemas que podrían estar conectados por redes con MTU variables.</p>
+<img src="../../../img/redes/pasted-image-20241113215319.png" alt="archivos/imagenes/Pasted image 20241113215319.png" loading="lazy">
+<img src="../../../img/redes/pasted-image-20241113215403.png" alt="archivos/imagenes/Pasted image 20241113215403.png" loading="lazy">
+<h2>4.5.5 Seguridad en IPv4</h2>
+<p>El rastreo de paquetes es una técnica que permite a un atacante interceptar y <strong>analizar los paquetes que se transmiten a través de una red</strong>. Este ataque es pasivo, ya que el atacante <strong>no modifica el contenido de los paquetes</strong>, solo los observa y captura.</p>
+<ul>
+<li><strong>Solución</strong>: El <strong>cifrado</strong> de los datos garantiza que, aunque un atacante logre capturar los paquetes, no podrá leer su contenido. Usando protocolos como <strong>TLS</strong> o <strong>IPsec</strong>, los datos se cifran y solo las partes autorizadas pueden acceder a la información original.</li>
+</ul>
+<p><strong>La modificación de paquetes</strong>, en este ataque, un atacante altera el contenido de los paquetes que se transmiten en la red. El receptor del <strong>paquete modificado cree que el paquete proviene del remitente legítimo</strong>, lo que puede dar lugar a acciones no deseadas o maliciosas.</p>
+<ul>
+<li><strong>Solución</strong>: Los <strong>mecanismos de integridad de datos</strong> como <strong>HMAC</strong> o <strong>sumas de comprobación</strong> aseguran que los paquetes no se hayan modificado durante el tránsito. El receptor puede verificar que el contenido del paquete es auténtico y no ha sido alterado.</li>
+</ul>
+<p>El <strong>spoofing</strong> es un ataque en el que un atacante <strong>falsifica la dirección IP de origen de un paquete</strong>, haciéndolo parecer como si proviniera de una fuente legítima. Esto puede permitir al atacante evadir medidas de seguridad o realizar ataques como la <strong>denegación de servicio</strong> (DoS).</p>
+<ul>
+<li><strong>Solución</strong>: La implementación de <strong>mecanismos de autenticación del origen</strong>, como <strong>autenticación mutua</strong> en <strong>IPsec</strong> o protocolos de validación de IP, garantiza que las direcciones de origen de los paquetes sean verificadas y auténticas, evitando suplantaciones.</li>
+</ul>
+<h3><strong>IPSec</strong></h3>
+<p><strong>IPSec</strong> (Internet Protocol Security) es <strong>un conjunto de protocolos de seguridad</strong> utilizado para proteger las comunicaciones de red a nivel de IP. Se usa comúnmente para proporcionar seguridad en <strong>redes privadas virtuales</strong> (VPNs) y otras comunicaciones de red. IPSec puede ser usado en conjunto con IP para crear una red segura entre dos entidades. IPSec proporciona un servicio de seguridad que permite <strong>establecer una conexión segura entre dos entidades</strong>, lo que garantiza que los datos enviados a través de la red estén protegidos.</p>
+<p><strong>Servicios Proporcionados por IPSec:</strong></p>
+<p><strong>Definición de Algoritmos y Claves</strong>: Las entidades que se comunican acuerdan los algoritmos de cifrado y las claves necesarias para asegurar la comunicación. Esto puede incluir algoritmos como <strong>AES</strong> para cifrado y <strong>SHA</strong> para la integridad de los datos.</p>
+<p><strong>Cifrado de Paquetes</strong>: IPSec cifra los datos antes de enviarlos a través de la red, asegurando que, aunque los datos sean interceptados, no puedan ser leídos sin las claves adecuadas.</p>
+<p><strong>Integridad de los Datos</strong>: Para evitar la modificación de los paquetes, IPSec implementa mecanismos de verificación de integridad. Esto asegura que los datos no han sido alterados durante la transmisión.</p>
+<p><strong>Autenticación del Origen</strong>: IPSec también proporciona mecanismos de autenticación que verifican que los paquetes provienen de la fuente legítima y no de un atacante que esté suplantando la identidad del remitente.</p>
+<h2>4.5.6 Direccionamiento IPv6</h2>
+<p>IPv6 es la versión más reciente del protocolo de Internet que reemplaza al antiguo IPv4. La transición de IPv4 a IPv6 responde principalmente al <strong>agotamiento de direcciones IP disponibles en IPv4</strong> (debido a su límite de 32 bits) y a la necesidad de un sistema más eficiente y escalable para manejar el creciente número de dispositivos conectados a Internet.</p>
+<p>En IPv4, las direcciones IP son de 32 bits, lo que da como resultado alrededor de <strong>4.3 mil millones de direcciones posibles</strong>. Sin embargo, con el rápido crecimiento de dispositivos conectados, estas direcciones se agotaron. En cambio, <strong>IPv6 utiliza direcciones de 128 bits</strong>, lo que da como resultado una cantidad prácticamente ilimitada de direcciones (aproximadamente 340 sextillones de direcciones).</p>
+<p>Las direcciones IPv6 tienen 8 bloques de 16 bits en hexadecimal, separados por dos puntos. Ejemplo:</p>
+<pre><code>47CD:1234:4422:AC02:0022:1234:A456:0124
+</code></pre>
+<p>Los bloques consecutivos de ceros se representan como <code>::</code> una sola vez por dirección:</p>
+<pre><code>47CD:0000:0000:0000:0000:0000:A456:0124 ⇒ 47CD::A456:0124
+</code></pre>
+<p>Las direcciones IPv4 se representan en IPv6 para facilitar la transición, con <code>::FFFF:</code> seguido de la dirección IPv4. Ejemplo:</p>
+<pre><code>::FFFF:193.144.84.77
+</code></pre>
+<p>En IPv6, las máscaras indican la parte de la dirección que define la red. Ejemplo:</p>
+<ul>
+<li>Dirección: <code>3ffe:ffff:100:1:2:3:4:5/48</code></li>
+<li>Red derivada con máscara <code>/48</code>: <code>3ffe:ffff:0100:0000:0000:0000:0000:0000</code></li>
+</ul>
+<p><strong>Tipos de direcciones de IPv6:</strong></p>
+<ul>
+<li><strong>Unicast</strong>: Identifica un único host.</li>
+<li><strong>Multicast</strong>: Identifica un grupo de hosts (empiezan con <code>FF</code>).</li>
+<li><strong>Anycast</strong>: Envía el paquete al host más cercano en la red.</li>
+</ul>
+<p>IPv6 mejora la flexibilidad y eficiencia en comparación con IPv4.</p>
+<h2>4.5.7 Formato del datagrama IPv6</h2>
+<img src="../../../img/redes/pasted-image-20241107192018.png" alt="archivos/imagenes/Pasted image 20241107192018.png" loading="lazy">
+<p><strong>Versión (4 bits)</strong>: Indica la versión del protocolo IP. Para IPv6, este valor es 6.
+<strong>Clase de Tráfico (8 bits)</strong>: Define la prioridad y clase de tráfico del paquete, permitiendo especificar si debe ser tratado con baja latencia, alta prioridad, etc.
+<strong>Etiqueta de Flujo (Flow Label) (20 bits)</strong>: Utilizado para identificar flujos de paquetes que requieren un manejo especial (como los de una misma conexión o flujo de datos). Ayuda a los routers a procesar los paquetes más eficientemente.
+<strong>Longitud de Datos (Payload Length) (16 bits)</strong>: Especifica la longitud de los datos contenidos en el paquete, excluyendo la cabecera.
+<strong>Siguiente Cabecera (Next Header) (8 bits)</strong>: Indica el tipo de cabecera que sigue a esta cabecera IPv6. Puede ser un protocolo de capa superior (como TCP o UDP) o una cabecera de extensión de IPv6.
+<strong>Límite de Saltos (Hop Limit) (8 bits)</strong>: Similar al &quot;Tiempo de Vida&quot; (TTL) en IPv4, especifica el número máximo de saltos que el paquete puede realizar antes de ser descartado. Se decrementa en cada router que atraviesa.
+<strong>Dirección IPv6 Origen (128 bits)</strong>: Contiene la dirección IP del dispositivo que envió el paquete, permitiendo que el destinatario sepa de dónde proviene.
+<strong>Dirección IPv6 Destino (128 bits)</strong>: Contiene la dirección IP del dispositivo de destino, necesaria para la entrega del paquete.
+<strong>Datos (variable)</strong>: Contiene la carga útil del paquete, que incluye la información de la aplicación o de un protocolo de nivel superior.</p>
+<p>La cabecera IPv6 tiene un <strong>tamaño fijo de 40 bytes y es más simple que la de IPv4</strong>, eliminando algunos campos y facilitando el procesamiento. Esta estructura fue diseñada para mejorar la eficiencia y el enrutamiento en redes IPv6.</p>
+<p>En IPv6, se ha eliminado la <strong>fragmentación en los routers</strong>. En IPv4, los routers fragmentan los paquetes si son demasiado grandes para la red siguiente. En IPv6, los routers <strong>no fragmentan los paquetes</strong>, y si un paquete es demasiado grande, se descarta y se envía un mensaje <strong>ICMP</strong> (&quot;paquete demasiado grande&quot;) al emisor, quien debe reenviar el paquete en fragmentos más pequeños. La <strong>fragmentación y reensamblado</strong> se realiza <strong>únicamente en el host de origen</strong> y no en los routers intermedios, lo que mejora la eficiencia en el procesamiento de paquetes.</p>
+<p>Se elimina también la <strong>suma de comprobación</strong> dejándole a las capas superiores la tarea de comprobarlo. Y los paquetes <strong>ya no se numeran</strong>.</p>
+<h2>4.5.8 Transición de IPv4 a IPv6</h2>
+<p>La transición de IPv4 a IPv6 es un proceso gradual en el cual ambos protocolos coexistirán durante un tiempo. Una de las técnicas más comunes para facilitar esta transición es el <strong>tunneling</strong>. Esta técnica permite que los paquetes IPv6 puedan atravesar redes que solo soportan IPv4 mediante la encapsulación.</p>
+<p>Consiste en <strong>encapsular</strong> los paquetes IPv6 dentro de paquetes IPv4. Para ello <strong>se añaden cabeceras IPv4</strong> con las direcciones de los routers que no soportan IPv6. Cuando llegan a zonas de <strong>IPv6</strong> se <strong>eliminan dichas cabeceras</strong>.</p>
+<img src="../../../img/redes/pasted-image-20241113220741.png" alt="archivos/imagenes/Pasted image 20241113220741.png" loading="lazy">
+<h1>4.6 VPN (Redes Privadas Virtuales)</h1>
+<p>Es una red utilizada por una organización que utiliza la red <strong>pública</strong> para comunicarse de forma segura, en vez de tener que crear una propia red, lo que es muy costoso.</p>
+<p>Se usan sistemas de <strong>encriptación</strong> y <strong>autenticación</strong>.</p>
+<ul>
+<li><strong>IPSec</strong>: protocolo de seguridad de IP para soportar comunicaciones seguras e implementar VPNs</li>
+<li>También se pueden implementar mediante <strong>túneles IP</strong></li>
+</ul>
+<img src="../../../img/redes/pasted-image-20241113222103.png" alt="archivos/imagenes/Pasted image 20241113222103.png" loading="lazy">
+### Túneles IP
+- El **paquete original se encapsula dentro de un nuevo paquete IP** que puede ser transportado por la red subyacente.
+- El **paquete encapsulado se envía a través de una red intermedia**, que **no entiende el contenido, pero si la cabecera que lo encapsula**.
+- En el extremo del túnel, **el encabezado se elimina**, y el paquete original se entrega al destino final.
+<img src="../../../img/redes/pasted-image-20241230154927.png" alt="archivos/imagenes/Pasted image 20241230154927.png" loading="lazy">
+<h1>4.7 ICMP (Internet Control Message Protocol)</h1>
+<p>ICMP es un protocolo de control que <strong>funciona sobre IP</strong> y permite a <strong>hosts y routers informar sobre errores o problemas de la red</strong>. Aunque opera en la capa de red, no transporta datos de usuario, sino que envía mensajes para mantener el estado y la integridad de la red. <strong>Su entrega no está garantizada</strong>, ya que se encapsula en un datagrama IP.</p>
+<p>Cada mensaje ICMP incluye:</p>
+<ul>
+<li><strong>Tipo y Código</strong>: Definen la naturaleza del mensaje (por ejemplo, solicitud de eco, destino inaccesible, tiempo excedido).</li>
+<li><strong>8 primeros bytes del datagrama original</strong>: Ayudan a identificar el paquete que causó el error.</li>
+</ul>
+<img src="../../../img/redes/pasted-image-20241113222249.png" alt="archivos/imagenes/Pasted image 20241113222249.png" loading="lazy">
+<p><strong>Destino inalcanzable</strong><br>
+Lo envía un nodo a la estación origen cuando no puede alcanzar el destino o cuando el datagrama no puede fragmentarse y no puede atravesar una red (tipo ICMP 3).</p>
+<p><strong>Tiempo excedido</strong><br>
+Cuando un nodo destruye un datagrama porque su contador llegó a 0 lo manda a la estación origen (tipo ICMP 11).</p>
+<p><strong>Ralentizar fuente</strong><br>
+Para limitar el número de datagramas que las estaciones introducen en la red y evitar la congestión (tipo ICMP 4).</p>
+<p><strong>Solicitud de eco y Respuesta de eco</strong><br>
+Se utilizan para ver si un destino es alcanzable y se encuentra activo (uso en ping) (tipos ICMP 8 y 0).</p>
+<p><strong>Problema de parámetro</strong><br>
+Indica que se ha detectado un valor ilegal en un campo de la cabecera (tipo ICMP 12).</p>
+<p><strong>Redirigir</strong><br>
+Se utiliza cuando un nodo se da cuenta de que hay un mejor camino para enviar el datagrama.</p>
+<p><strong>Marca de tiempo y Respuesta a marca de tiempo</strong><br>
+Para medir el retardo de la red</p>
+<p><strong>Petición de máscara de dirección y Respuesta de máscara de dirección</strong><br>
+Empleadas cuando se usan subredes, permiten a un computador conocer la máscara de subred</p>
+<h1>4.8 DHCP (Dynamic Host Configuration Protocol)</h1>
+<p>DHCP es un protocolo que <strong>permite asignar direcciones IP a los hosts de forma automática y dinámica</strong>, ideal para redes donde <strong>no hay suficientes IPs para todos los dispositivos</strong>, como en redes de ISPs o redes inalámbricas.</p>
+<p><strong>Estáticamente:</strong> las direcciones las asigna el administrador del equipo.
+<strong>Dinámicamente:</strong> con DHCP.</p>
+<p>Cuando un dispositivo <strong>se conecta a la red, el proceso DHCP se realiza en cuatro pasos</strong>:</p>
+<ol>
+<li>
+<p><strong>Descubrimiento (DHCPDISCOVER)</strong>: El host envía un mensaje <strong>broadcast</strong> con una IP de origen en ceros y la IP de destino en 255.255.255.255, <strong>buscando un servidor DHCP disponible</strong>.</p>
+</li>
+<li>
+<p><strong>Oferta (DHCPOFFER)</strong>: El servidor DHCP responde con <strong>una dirección IP, su máscara de red, el tiempo de concesión de la IP, el gateway predeterminado y los servidores DNS disponibles</strong>.</p>
+</li>
+<li>
+<p><strong>Solicitud (DHCPREQUEST)</strong>: El cliente <strong>selecciona una de las ofertas</strong> (<em>si recibió varias</em>) y responde indicando la IP que desea aceptar.</p>
+</li>
+<li>
+<p><strong>Confirmación (DHCPACK)</strong>: El servidor DHCP envía una confirmación (ACK) al cliente, estableciendo la asignación de la IP para el tiempo acordado.</p>
+</li>
+</ol>
+<h1>4.9 NAT (Network Address Translation)</h1>
+<p><strong>NAT</strong> es un sistema que permite que varios dispositivos dentro de una red privada <strong>usen una misma IP pública válida para conectarse al exterior</strong>. Utiliza direcciones especiales para redes privadas, que los routers de Internet ignoran. Estas son:</p>
+<ul>
+<li><strong>Clase A</strong>: 10.0.0.0/8</li>
+<li><strong>Clase B</strong>: 172.16.0.0/12</li>
+<li><strong>Clase C</strong>: 192.168.0.0/16</li>
+</ul>
+<p>Un servidor NAT tiene dos interfaces con direcciones IP distintas:</p>
+<ul>
+<li><strong>IP pública</strong>: Para conectar al exterior.</li>
+<li><strong>IP privada</strong>: Para conectar a la red interna.</li>
+</ul>
+<p>Los dispositivos de la red privada configuran la IP privada del NAT como su <strong>gateway</strong>, y este modifica los <strong>datos de origen</strong> (IP y puerto) de cada paquete antes de enviarlo al exterior. También mantiene una <strong>tabla de redirección</strong> para asociar cada paquete de respuesta con el dispositivo interno correspondiente.</p>
+<img src="../../../img/redes/pasted-image-20241230164029.png" alt="archivos/imagenes/Pasted image 20241230164029.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="3-capa-de-transporte.html"><span class="nav-etiqueta">← anterior</span>3. Capa de Transporte</a>
+  <a class="nav-siguiente" href="5-capa-de-enlace.html"><span class="nav-etiqueta">siguiente →</span>5. Capa de Enlace</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

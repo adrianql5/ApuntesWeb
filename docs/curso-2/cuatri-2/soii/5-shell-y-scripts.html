@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Shell y Scripts — apuntes de SOII (segundo curso de Ingeniería Informática).">
+<title>5. Shell y Scripts · SOII · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">soii</a><span class="miga-sep">/</span><span aria-current="page">5-shell-y-scripts</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">SOII · curso 2</p>
+    <h1>5. Shell y Scripts · SOII</h1>
+  </header>
+  <div class="prosa">
+<h1>5.1 Introducción</h1>
+<p>El <strong>shell</strong> o intérprete de comandos es la <strong>interfaz</strong> del usuario con el SO, se encarga de traducir <strong>líneas de comandos</strong> en <strong>solicitudes de acción del SO</strong>.
+La <strong>programación shell-script</strong> es una <strong>secuencia de comandos</strong> de shell que sirve para la administración del sistema, programación de tareas repetitivas,...</p>
+<p>En <strong>unix</strong> el shell <strong>no forma parte del kernel</strong>. Hay varios shells para unix:</p>
+<ul>
+<li>sh, csh, tcsh, ksh, powershell, etc.</li>
+<li>bash: shell por defecto en Linux. Tiene todas las características de sh e incluye características avanzadas.
+La sintaxis es muy parecida entre shells. sh tiene compatibilidad hacia delante</li>
+</ul>
+<h2>5.1.1 Funcionamiento del Shell</h2>
+<p>El shell es un proceso <strong>iterativo</strong> que ejecuta comandos de 2 tipos:</p>
+<ul>
+<li>Comandos <strong>internos</strong> al shell: se ejecutan en el <strong>mismo proceso</strong> y su código son <strong>funciones</strong> del código del shell. <code>cd</code>, <code>bg</code>, <code>alias</code>, <code>pwd</code>, <code>echo</code>, <code>eval</code>, ...</li>
+<li>Comandos <strong>externos</strong> al shell: inician un <strong>nuevo proceso</strong> y cambian su imagen por la del archivo ejecutable, su código es <strong>independiente</strong> del shell (está en los directorios indicados en la variable de entorno <code>$PATH</code>). <code>cp</code>, <code>cat</code>, <code>grep</code>, <code>mkdir</code>,...</li>
+</ul>
+<p><code>type comando</code>: averigua el tipo de un comando</p>
+<img src="../../../img/soii/pasted-image-20250524125653.png" alt="Pasted image 20250524125653.png" loading="lazy">
+<h1>5.2 Línea de comandos</h1>
+<p>Los comandos suelen tener 3 componentes: <code>comando [opciones] [paŕametros]</code>.
+Se pueden ejecutar de 2 maneras:</p>
+<ul>
+<li>Ejecución <strong>en primer plano:</strong> el shell espera (waitpid) a que termine el comando antes de aceptar uno nuevo.
+<ul>
+<li><code>ctrl + z</code>: finaliza el comando</li>
+<li><code>ctrl + c</code>: pausa el comando</li>
+</ul>
+</li>
+<li>Ejecución en <strong>segundo plano:</strong> (<code>comando &amp;</code>)el shell no espera a que termine el comando antes de aceptar uno nuevo.
+<ul>
+<li><code>jobs</code>: permite ver la lista de comandos en segundo plano</li>
+<li><code>fg PID</code> , <code>bg PID</code>: permiten mover un comando a primer plano o a segundo plano</li>
+</ul>
+</li>
+</ul>
+<p>Los comandos tienen un código de salida que se almacena en <code>$?</code>:</p>
+<ul>
+<li>
+<p>Si es igual a <code>0</code>, el comando terminó bien</p>
+</li>
+<li>
+<p>Si no es igual a <code>0</code>, el comando terminó con error</p>
+</li>
+<li>
+<p><code>comando1 &amp;&amp; comando2</code>: el segundo comando solo se ejecuta si el <code>$?</code> del primero es <code>0</code></p>
+</li>
+<li>
+<p><code>comando1 || comando2</code>: el segundo comando solo se ejecuta si el <code>$?</code> del primero es distinto de <code>0</code></p>
+</li>
+<li>
+<p><code>history</code>: devuelve una lista de comandos que se pueden volver a ejecutar con :</p>
+<ul>
+<li>flechas</li>
+<li>!numero: si lo ejecutas te escribe el comando que se corresponde con ese numero en el historia</li>
+<li><code>ctrl + r</code> permite hacer una búsqueda inversa</li>
+<li><code>fc i j</code> permite repetir varios</li>
+</ul>
+</li>
+<li>
+<p><code>man [comando]</code>: manual</p>
+</li>
+<li>
+<p><code>comando help </code>: manual de comandos internos (solo funciona en bash)</p>
+</li>
+<li>
+<p><code>info comando</code>: manual más flexible o completo en hipertexto</p>
+</li>
+<li>
+<p><code>echo</code>: para mostrar una línea de texto</p>
+</li>
+<li>
+<p><code>cat/head/tail/grep/find/sort fichero</code> sirven para el procesamiento de texto</p>
+</li>
+</ul>
+<h2>5.2.1 Expansión de Ficheros</h2>
+<p>Los <strong>comodines</strong> son caracteres especiales que sustituyen a otro/s para especificar varios ficheros como parámetro.</p>
+<ul>
+<li><code>*</code> cualquier cadena (incluso vacía)</li>
+<li><code>?</code> cualquier caracter</li>
+<li><code>[x,x,x,...]</code> uno de los indicados</li>
+<li><code>[!x,x,x,...]</code> o <code>[^x,x,x,...]</code> cualquier caracter excepto los indicados</li>
+</ul>
+<h2>5.2.2 Otras Expansiones</h2>
+<ul>
+<li>Expansión de <strong>llaves</strong> (<code>...{x,x,x}...</code>) para generación de strings (echo a{1,2,3}b --&gt; a1b a2b a3b)</li>
+<li>Expansión de <strong>tilde</strong> para el directorio raíz de usuario (<code>$HOME</code>)</li>
+<li>Expansión <strong>aritmética</strong> (<code>$((expresion))</code> o <code>$[expresion]</code>) para evaluar expresiones (echo $[(4+11)/3])</li>
+</ul>
+<h2>5.2.3 Variables de Shell</h2>
+<p>Se puede <strong>crear</strong> variables desde la línea de comandos con:</p>
+<ul>
+<li><code>nombre='algo'</code> (sin espacios entre el =)</li>
+<li><code>read nombre [Enter]</code> (read para el primer \n que encuentre, sólo lee la primera linea)</li>
+</ul>
+<p>Se pueden <strong>combinar</strong> texto y variables: <code> '... $nombre ... '</code> (no usar &quot;&quot;)</p>
+<ul>
+<li>
+<p><strong>Variables locales:</strong> visibles sólo desde el shell actual</p>
+</li>
+<li>
+<p><strong>Variables de entorno:</strong> <code>export NOMBRE</code> para que sean visibles en todos los shells hijo</p>
+</li>
+<li>
+<p><code>...$nombre...</code> para accede al contenido de una variable</p>
+</li>
+<li>
+<p><code>nombre=</code> vaciar una variable</p>
+</li>
+<li>
+<p><code>printenv</code> lista las variables</p>
+</li>
+</ul>
+<img src="../../../img/soii/pasted-image-20250524170107.png" alt="Pasted image 20250524170107.png" loading="lazy">
+<h2>5.2.4 Caracteres Especiales</h2>
+<p>Son caracteres que el shell trata de forma especial:</p>
+<ul>
+<li><code>&amp;, *, ?, [],[!], $, ;, &lt;, &gt;, &lt;&lt;, &gt;&gt; , \</code></li>
+<li><code>'...'</code>  ignora todos los caracteres especiales</li>
+<li><code>&quot;...&quot;</code> ignora todos los caracteres especiales excepto <code>$,\,'</code> (y la tilde torcida)</li>
+<li><code>\</code> ignora el caracter especial que le sigue.</li>
+</ul>
+<h2>5.2.5 Redirección de Entrada y Salida</h2>
+<p>Toda la E/S se realiza a través de ficheros. Cada proceso tiene asociado 3 <strong>ficheros de E/S</strong>:
+<img src="../../../img/soii/pasted-image-20250524170716.png" alt="Pasted image 20250524170716.png" loading="lazy"></p>
+<p>Podemos <strong>redireccionar</strong> la E/S usando:</p>
+<ul>
+<li><code>&gt;</code> cambia el fichero stdout</li>
+<li><code>&lt;</code> cambia el fichero stdin</li>
+<li><code>&lt;&lt;,&gt;&gt;</code> igual pero si el fichero objeto ya existe no se borra y se añade al final</li>
+<li><code>|</code> stdout del primero = stdin del segundo.</li>
+<li>Si se añade un 2 antes de estos símbolos se redireccionará al error estándar</li>
+</ul>
+<h1>5.2 Script</h1>
+<p>Un <strong>script</strong> o programa shell es u <strong>fichereo de texto</strong> conteniendo una secuencia de <strong>comandos</strong> de shell externos e internos que se ejecutan <strong>línea a línea</strong>.
+<code>#!/bin/bash</code> (shebang) indica el <strong>intérprete de comandos a usar por el script</strong>, es recomendable usarlo al principio, pero no es obligatorio. En <code>/etc/shells</code> hay una lista con la ruta completa de los shells disponibles</p>
+<p>Se pueden ejecutar (siempre que tengan permisos con):</p>
+<ul>
+<li>`./script.sh</li>
+<li><code>bash script.sh</code></li>
+</ul>
+<h2>5.3.1 Parámetros y Variables</h2>
+<p>Los <strong>argumentos</strong> de los scripts se pasan por la línea de comandos <code>./script.sh [parametros]</code></p>
+<ul>
+<li><code>$0</code> nombre del script</li>
+<li><code>$1-$9</code> parámetros del 1 al 9</li>
+<li><code>${10},...</code> parámetros por encima del 9</li>
+<li><code>$#</code> número de parámetros</li>
+<li><code>$*</code> y <code>$@</code> todos los parámetros</li>
+</ul>
+<p>Se pueden leer parámetros de un fichero o el teclado con <code>read</code>. Se puede usar variables de entorno directamente dentro del script.</p>
+<ul>
+<li><code>$?</code> código de salida del comando anterior</li>
+<li><code>$$</code> PID del script actual</li>
+<li><code>nombre=$(comando)</code> asigna la salida de un comando a una variable</li>
+</ul>
+<h2>5.3.2 Control de Flujo</h2>
+<pre><code class="language-bash">for variable in lista
+do
+	bloque de comandos usando $variable
+done
+
+for ((a=0; a&lt;5; a++))
+do
+	sufijo=&quot;0$a&quot;
+	touch servidor_${sufijo}.data
+done
+
+while comando 
+do
+	bloque de comandos
+done
+
+until comando
+do 
+	bloque de comandos
+done
+</code></pre>
+<ul>
+<li><code>break</code>: para salir de un lazo</li>
+<li><code>break n</code>: para salir de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></eq> lazos</li>
+<li><code>continue</code>: para saltar a la siguiente iteración de un lazo</li>
+</ul>
+<pre><code class="language-bash">if comando1
+then
+	ejecuta otros comandos
+elif comando2
+then
+	ejecuta otros comandos
+else
+	ejecuta otros comandos
+fi
+
+case valro in
+	patron1)
+		bloque de comandos
+		;;
+	patron2)
+		bloque de comandos
+		;;
+	*)
+		bloque de comandos por defecto
+		;;
+esac
+</code></pre>
+<ul>
+<li><code>test expresion o [expresion]</code> devuelve 0 como código de salida si la <code>expresion</code> es verdadera y 1 si es falsa
+<ul>
+<li><code>-d</code> comprueba si el parámetro es un direcotrio</li>
+<li><code>-e</code> se ejecuta con todo (significa existe1)</li>
+<li><code>-f</code> comprueba si el parámetro es un fichero regular</li>
+<li><code>=, !=</code> comparación entre strings</li>
+<li><code>-eq, -gt</code> comparación entre enteros</li>
+<li><code>!, -a, -o</code>: not, and y or</li>
+<li><code>\(... \)</code> agrupacion de expresiones</li>
+</ul>
+</li>
+</ul>
+<h2>5.3.3 Funciones</h2>
+<p>Podemos organizar el código de un script definiendo funciones:</p>
+<ul>
+<li>Hay que definirla antes e usarla</li>
+<li>Los parámetros se almacenan por orden en las variables $n</li>
+<li>el código de salida de la función se especifica con: <code>return codigo</code></li>
+</ul>
+<pre><code class="language-bash">nombreDeLaFuncion(){
+	comandos
+}
+</code></pre>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="3-sistemas-en-tiempo-real.html"><span class="nav-etiqueta">← anterior</span>3. Sistemas en Tiempo Real</a>
+  
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

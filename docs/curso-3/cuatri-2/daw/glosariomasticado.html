@@ -1,0 +1,2712 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="GlosarioMasticado — apuntes de DAW (tercer curso de Ingeniería Informática).">
+<title>GlosarioMasticado · DAW · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">daw</a><span class="miga-sep">/</span><span aria-current="page">glosariomasticado</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DAW · curso 3</p>
+    <h1>GlosarioMasticado · DAW</h1>
+  </header>
+  <div class="prosa">
+<h1>1. HTML</h1>
+<p>HTML sirve para definir la <strong>estructura</strong> de una página web.</p>
+<h2>1.1. Estructura básica del documento</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;!DOCTYPE html&gt;</code></td>
+<td>Indica que el documento usa HTML5.</td>
+<td><code>&lt;!DOCTYPE html&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;html&gt;</code></td>
+<td>Raíz del documento.</td>
+<td><code>&lt;html&gt;...&lt;/html&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;head&gt;</code></td>
+<td>Contiene metadatos, título, CSS, scripts.</td>
+<td><code>&lt;head&gt;...&lt;/head&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;body&gt;</code></td>
+<td>Contiene lo visible de la página.</td>
+<td><code>&lt;body&gt;...&lt;/body&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;meta&gt;</code></td>
+<td>Define metadatos, como codificación.</td>
+<td><code>&lt;meta charset=&quot;UTF-8&quot;&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;title&gt;</code></td>
+<td>Título de la pestaña del navegador.</td>
+<td><code>&lt;title&gt;Mi página&lt;/title&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;link&gt;</code></td>
+<td>Enlaza recursos externos, normalmente CSS.</td>
+<td><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;style.css&quot;&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;script&gt;</code></td>
+<td>Inserta o enlaza JavaScript.</td>
+<td><code>&lt;script src=&quot;codigo.js&quot;&gt;&lt;/script&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;style&gt;</code></td>
+<td>CSS interno dentro del HTML.</td>
+<td><code>&lt;style&gt;p { color: red; }&lt;/style&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>1.2. Texto y formato</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;h1&gt;</code> a <code>&lt;h6&gt;</code></td>
+<td>Encabezados, de mayor a menor importancia.</td>
+<td><code>&lt;h1&gt;Título&lt;/h1&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;p&gt;</code></td>
+<td>Párrafo.</td>
+<td><code>&lt;p&gt;Texto&lt;/p&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;br&gt;</code></td>
+<td>Salto de línea. Es elemento vacío.</td>
+<td><code>Hola&lt;br&gt;Adiós</code></td>
+</tr>
+<tr>
+<td><code>&lt;strong&gt;</code></td>
+<td>Texto importante, normalmente en negrita.</td>
+<td><code>&lt;strong&gt;Importante&lt;/strong&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;b&gt;</code></td>
+<td>Negrita visual, sin tanta carga semántica.</td>
+<td><code>&lt;b&gt;Texto&lt;/b&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;em&gt;</code></td>
+<td>Énfasis semántico, normalmente cursiva.</td>
+<td><code>&lt;em&gt;Atención&lt;/em&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;i&gt;</code></td>
+<td>Cursiva visual o término especial.</td>
+<td><code>&lt;i&gt;status quo&lt;/i&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;mark&gt;</code></td>
+<td>Texto resaltado.</td>
+<td><code>&lt;mark&gt;clave&lt;/mark&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;blockquote&gt;</code></td>
+<td>Cita larga.</td>
+<td><code>&lt;blockquote&gt;Texto citado&lt;/blockquote&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;q&gt;</code></td>
+<td>Cita corta en línea.</td>
+<td><code>&lt;q&gt;Hola&lt;/q&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;pre&gt;</code></td>
+<td>Texto preformateado, respeta espacios y saltos.</td>
+<td><code>&lt;pre&gt;línea 1\nlínea 2&lt;/pre&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;time&gt;</code></td>
+<td>Fecha u hora semántica.</td>
+<td><code>&lt;time datetime=&quot;2026-05-17&quot;&gt;17 mayo&lt;/time&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Diferencia importante:</p>
+<pre><code class="language-html">&lt;b&gt;negrita visual&lt;/b&gt;
+&lt;strong&gt;importancia semántica&lt;/strong&gt;
+
+&lt;i&gt;cursiva visual&lt;/i&gt;
+&lt;em&gt;énfasis semántico&lt;/em&gt;
+</code></pre>
+<hr>
+<h2>1.3. Contenedores y estructura semántica</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;div&gt;</code></td>
+<td>Contenedor genérico de bloque.</td>
+<td><code>&lt;div class=&quot;caja&quot;&gt;...&lt;/div&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;span&gt;</code></td>
+<td>Contenedor genérico en línea.</td>
+<td><code>&lt;span&gt;texto&lt;/span&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;header&gt;</code></td>
+<td>Cabecera de página o sección.</td>
+<td><code>&lt;header&gt;...&lt;/header&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;footer&gt;</code></td>
+<td>Pie de página o sección.</td>
+<td><code>&lt;footer&gt;...&lt;/footer&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;main&gt;</code></td>
+<td>Contenido principal.</td>
+<td><code>&lt;main&gt;...&lt;/main&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;section&gt;</code></td>
+<td>Sección temática.</td>
+<td><code>&lt;section&gt;Noticias&lt;/section&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;article&gt;</code></td>
+<td>Contenido independiente.</td>
+<td><code>&lt;article&gt;Post&lt;/article&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;aside&gt;</code></td>
+<td>Contenido lateral o complementario.</td>
+<td><code>&lt;aside&gt;Publicidad&lt;/aside&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;nav&gt;</code></td>
+<td>Zona de navegación.</td>
+<td><code>&lt;nav&gt;&lt;a href=&quot;#&quot;&gt;Inicio&lt;/a&gt;&lt;/nav&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Idea rápida:</p>
+<pre><code class="language-html">&lt;div&gt;
+</code></pre>
+<p>sirve para agrupar sin significado semántico especial.</p>
+<pre><code class="language-html">&lt;section&gt;, &lt;article&gt;, &lt;nav&gt;, &lt;main&gt;
+</code></pre>
+<p>aportan significado a la estructura.</p>
+<hr>
+<h2>1.4. Listas</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;ul&gt;</code></td>
+<td>Lista desordenada.</td>
+<td><code>&lt;ul&gt;&lt;li&gt;Uno&lt;/li&gt;&lt;/ul&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;ol&gt;</code></td>
+<td>Lista ordenada.</td>
+<td><code>&lt;ol&gt;&lt;li&gt;Uno&lt;/li&gt;&lt;/ol&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;li&gt;</code></td>
+<td>Elemento de lista.</td>
+<td><code>&lt;li&gt;Elemento&lt;/li&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;dl&gt;</code></td>
+<td>Lista de definición.</td>
+<td><code>&lt;dl&gt;...&lt;/dl&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;dt&gt;</code></td>
+<td>Término.</td>
+<td><code>&lt;dt&gt;HTML&lt;/dt&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;dd&gt;</code></td>
+<td>Definición.</td>
+<td><code>&lt;dd&gt;Lenguaje de marcado&lt;/dd&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-html">&lt;dl&gt;
+  &lt;dt&gt;HTML&lt;/dt&gt;
+  &lt;dd&gt;Lenguaje para estructurar páginas web.&lt;/dd&gt;
+&lt;/dl&gt;
+</code></pre>
+<hr>
+<h2>1.5. Enlaces e imágenes</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;a&gt;</code></td>
+<td>Enlace.</td>
+<td><code>&lt;a href=&quot;pagina.html&quot;&gt;Ir&lt;/a&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;img&gt;</code></td>
+<td>Imagen. Elemento vacío.</td>
+<td><code>&lt;img src=&quot;foto.jpg&quot; alt=&quot;Foto&quot;&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;picture&gt;</code></td>
+<td>Imágenes adaptativas.</td>
+<td><code>&lt;picture&gt;...&lt;/picture&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;source&gt;</code></td>
+<td>Fuente alternativa para imagen, audio o video.</td>
+<td><code>&lt;source src=&quot;video.mp4&quot; type=&quot;video/mp4&quot;&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;iframe&gt;</code></td>
+<td>Inserta otra página dentro.</td>
+<td><code>&lt;iframe src=&quot;pagina.html&quot;&gt;&lt;/iframe&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo de imagen:</p>
+<pre><code class="language-html">&lt;img src=&quot;logo.png&quot; alt=&quot;Logo de la empresa&quot;&gt;
+</code></pre>
+<p><code>alt</code> es importante porque ofrece texto alternativo si la imagen no carga o para accesibilidad.</p>
+<hr>
+<h2>1.6. Formularios</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;form&gt;</code></td>
+<td>Formulario.</td>
+<td><code>&lt;form action=&quot;login&quot; method=&quot;post&quot;&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;input&gt;</code></td>
+<td>Campo de entrada.</td>
+<td><code>&lt;input type=&quot;text&quot; name=&quot;usuario&quot;&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;label&gt;</code></td>
+<td>Etiqueta asociada a un campo.</td>
+<td><code>&lt;label for=&quot;email&quot;&gt;Email&lt;/label&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;textarea&gt;</code></td>
+<td>Campo de texto largo.</td>
+<td><code>&lt;textarea name=&quot;mensaje&quot;&gt;&lt;/textarea&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;select&gt;</code></td>
+<td>Lista desplegable.</td>
+<td><code>&lt;select name=&quot;ciudad&quot;&gt;...&lt;/select&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;datalist&gt;</code></td>
+<td>Opciones sugeridas para un input.</td>
+<td><code>&lt;datalist id=&quot;opciones&quot;&gt;...&lt;/datalist&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;fieldset&gt;</code></td>
+<td>Agrupa campos.</td>
+<td><code>&lt;fieldset&gt;...&lt;/fieldset&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;legend&gt;</code></td>
+<td>Título de un fieldset.</td>
+<td><code>&lt;legend&gt;Datos personales&lt;/legend&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;button&gt;</code></td>
+<td>Botón.</td>
+<td><code>&lt;button type=&quot;submit&quot;&gt;Enviar&lt;/button&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-html">&lt;form action=&quot;RegistroServlet&quot; method=&quot;post&quot;&gt;
+  &lt;label for=&quot;nombre&quot;&gt;Nombre:&lt;/label&gt;
+  &lt;input type=&quot;text&quot; id=&quot;nombre&quot; name=&quot;nombre&quot;&gt;
+
+  &lt;input type=&quot;hidden&quot; name=&quot;accion&quot; value=&quot;registro&quot;&gt;
+
+  &lt;button type=&quot;submit&quot;&gt;Enviar&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+<p>Campos importantes:</p>
+<pre><code class="language-html">&lt;input type=&quot;submit&quot;&gt;
+</code></pre>
+<p>envía el formulario.</p>
+<pre><code class="language-html">&lt;input type=&quot;button&quot;&gt;
+</code></pre>
+<p>no hace nada por sí solo; necesita JavaScript.</p>
+<pre><code class="language-html">&lt;input type=&quot;hidden&quot;&gt;
+</code></pre>
+<p>envía datos ocultos al usuario, pero visibles/modificables desde el navegador.</p>
+<hr>
+<h2>1.7. Tablas</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;table&gt;</code></td>
+<td>Tabla.</td>
+<td><code>&lt;table&gt;...&lt;/table&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;caption&gt;</code></td>
+<td>Título de tabla.</td>
+<td><code>&lt;caption&gt;Usuarios&lt;/caption&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;tr&gt;</code></td>
+<td>Fila.</td>
+<td><code>&lt;tr&gt;...&lt;/tr&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;th&gt;</code></td>
+<td>Celda de cabecera.</td>
+<td><code>&lt;th&gt;Nombre&lt;/th&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;td&gt;</code></td>
+<td>Celda normal.</td>
+<td><code>&lt;td&gt;Ana&lt;/td&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-html">&lt;table&gt;
+  &lt;caption&gt;Usuarios&lt;/caption&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Nombre&lt;/th&gt;
+    &lt;th&gt;Edad&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Ana&lt;/td&gt;
+    &lt;td&gt;24&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+</code></pre>
+<hr>
+<h2>1.8. Multimedia</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;audio&gt;</code></td>
+<td>Audio.</td>
+<td><code>&lt;audio controls&gt;...&lt;/audio&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;video&gt;</code></td>
+<td>Video.</td>
+<td><code>&lt;video controls&gt;...&lt;/video&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;source&gt;</code></td>
+<td>Fuente de audio/video.</td>
+<td><code>&lt;source src=&quot;audio.mp3&quot; type=&quot;audio/mpeg&quot;&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;track&gt;</code></td>
+<td>Subtítulos.</td>
+<td><code>&lt;track src=&quot;sub.vtt&quot; kind=&quot;subtitles&quot;&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;canvas&gt;</code></td>
+<td>Área para dibujar con JavaScript.</td>
+<td><code>&lt;canvas id=&quot;lienzo&quot;&gt;&lt;/canvas&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-html">&lt;video controls&gt;
+  &lt;source src=&quot;video.mp4&quot; type=&quot;video/mp4&quot;&gt;
+  Tu navegador no soporta video.
+&lt;/video&gt;
+</code></pre>
+<hr>
+<h1>2. CSS</h1>
+<p>CSS sirve para definir el <strong>aspecto visual</strong> de los elementos HTML.</p>
+<hr>
+<h2>2.1. Selectores básicos</h2>
+<table>
+<thead>
+<tr>
+<th>Selector</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>p</code></td>
+<td>Selecciona etiquetas <code>&lt;p&gt;</code>.</td>
+<td><code>p { color: red; }</code></td>
+</tr>
+<tr>
+<td><code>.clase</code></td>
+<td>Selecciona elementos con clase.</td>
+<td><code>.caja { border: 1px solid; }</code></td>
+</tr>
+<tr>
+<td><code>#id</code></td>
+<td>Selecciona elemento con id.</td>
+<td><code>#menu { background: black; }</code></td>
+</tr>
+<tr>
+<td><code>p.clase1.clase2</code></td>
+<td><code>&lt;p&gt;</code> con ambas clases.</td>
+<td><code>p.activo.rojo { color: red; }</code></td>
+</tr>
+<tr>
+<td><code>a[href*=&quot;usc&quot;]</code></td>
+<td>Atributo que contiene texto.</td>
+<td><code>a[href*=&quot;usc&quot;] { color: blue; }</code></td>
+</tr>
+</tbody>
+</table>
+<p>Importante:</p>
+<pre><code class="language-css">p.clase1.clase2
+</code></pre>
+<p>no exige que tenga solo esas dos clases. Exige que tenga <strong>al menos</strong> esas dos.</p>
+<hr>
+<h2>2.2. Texto y fuentes</h2>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>color</code></td>
+<td>Color del texto.</td>
+<td><code>color: red;</code></td>
+</tr>
+<tr>
+<td><code>font-family</code></td>
+<td>Fuente.</td>
+<td><code>font-family: Arial, sans-serif;</code></td>
+</tr>
+<tr>
+<td><code>font-size</code></td>
+<td>Tamaño.</td>
+<td><code>font-size: 20px;</code></td>
+</tr>
+<tr>
+<td><code>font-style</code></td>
+<td>Cursiva.</td>
+<td><code>font-style: italic;</code></td>
+</tr>
+<tr>
+<td><code>font-weight</code></td>
+<td>Grosor.</td>
+<td><code>font-weight: bold;</code></td>
+</tr>
+<tr>
+<td><code>line-height</code></td>
+<td>Altura de línea.</td>
+<td><code>line-height: 1.5;</code></td>
+</tr>
+<tr>
+<td><code>text-align</code></td>
+<td>Alineación.</td>
+<td><code>text-align: center;</code></td>
+</tr>
+<tr>
+<td><code>text-decoration</code></td>
+<td>Subrayado, tachado.</td>
+<td><code>text-decoration: underline;</code></td>
+</tr>
+<tr>
+<td><code>text-transform</code></td>
+<td>Mayúsculas/minúsculas.</td>
+<td><code>text-transform: uppercase;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-css">h1 {
+  font-family: Georgia, serif;
+  font-size: 32px;
+  text-align: center;
+}
+</code></pre>
+<hr>
+<h2>2.3. Modelo de caja</h2>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>width</code></td>
+<td>Ancho.</td>
+<td><code>width: 200px;</code></td>
+</tr>
+<tr>
+<td><code>height</code></td>
+<td>Alto.</td>
+<td><code>height: 100px;</code></td>
+</tr>
+<tr>
+<td><code>margin</code></td>
+<td>Espacio exterior.</td>
+<td><code>margin: 20px;</code></td>
+</tr>
+<tr>
+<td><code>padding</code></td>
+<td>Espacio interior.</td>
+<td><code>padding: 10px;</code></td>
+</tr>
+<tr>
+<td><code>border</code></td>
+<td>Borde.</td>
+<td><code>border: 2px solid black;</code></td>
+</tr>
+<tr>
+<td><code>border-radius</code></td>
+<td>Bordes redondeados.</td>
+<td><code>border-radius: 8px;</code></td>
+</tr>
+<tr>
+<td><code>box-sizing</code></td>
+<td>Cómo se calcula el tamaño.</td>
+<td><code>box-sizing: border-box;</code></td>
+</tr>
+<tr>
+<td><code>box-shadow</code></td>
+<td>Sombra.</td>
+<td><code>box-shadow: 0 4px 8px gray;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-css">.caja {
+  width: 200px;
+  padding: 20px;
+  border: 4px solid black;
+  box-sizing: border-box;
+}
+</code></pre>
+<p><code>box-sizing: border-box</code> hace que el ancho incluya padding y borde.</p>
+<hr>
+<h2>2.4. Fondos</h2>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>background</code></td>
+<td>Fondo abreviado.</td>
+<td><code>background: red;</code></td>
+</tr>
+<tr>
+<td><code>background-color</code></td>
+<td>Color de fondo.</td>
+<td><code>background-color: yellow;</code></td>
+</tr>
+<tr>
+<td><code>background-image</code></td>
+<td>Imagen de fondo.</td>
+<td><code>background-image: url(&quot;fondo.jpg&quot;);</code></td>
+</tr>
+<tr>
+<td><code>background-position</code></td>
+<td>Posición.</td>
+<td><code>background-position: center;</code></td>
+</tr>
+<tr>
+<td><code>background-repeat</code></td>
+<td>Repetición.</td>
+<td><code>background-repeat: no-repeat;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-css">body {
+  background-color: #f5f5f5;
+}
+</code></pre>
+<hr>
+<h2>2.5. Display y flujo</h2>
+<table>
+<thead>
+<tr>
+<th>Propiedad/valor</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>display: block</code></td>
+<td>Elemento ocupa línea completa.</td>
+<td><code>display: block;</code></td>
+</tr>
+<tr>
+<td><code>display: inline</code></td>
+<td>Elemento fluye en línea.</td>
+<td><code>display: inline;</code></td>
+</tr>
+<tr>
+<td><code>display: inline-block</code></td>
+<td>En línea, pero permite ancho/alto.</td>
+<td><code>display: inline-block;</code></td>
+</tr>
+<tr>
+<td><code>display: flex</code></td>
+<td>Activa flexbox.</td>
+<td><code>display: flex;</code></td>
+</tr>
+<tr>
+<td><code>display: grid</code></td>
+<td>Activa grid.</td>
+<td><code>display: grid;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-css">.contenedor {
+  display: flex;
+}
+</code></pre>
+<hr>
+<h2>2.6. Float y clear</h2>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>float</code></td>
+<td>Hace flotar a izquierda/derecha.</td>
+<td><code>float: left;</code></td>
+</tr>
+<tr>
+<td><code>clear</code></td>
+<td>Evita colocarse junto a flotantes.</td>
+<td><code>clear: both;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-css">img {
+  float: left;
+  margin-right: 10px;
+}
+
+h2 {
+  clear: both;
+}
+</code></pre>
+<p><code>clear: both</code> significa que el elemento baja por debajo de floats anteriores.</p>
+<hr>
+<h2>2.7. Position</h2>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>static</code></td>
+<td>Valor normal. No acepta <code>top</code>, <code>left</code>, etc.</td>
+</tr>
+<tr>
+<td><code>relative</code></td>
+<td>Se mueve respecto a su posición original.</td>
+</tr>
+<tr>
+<td><code>absolute</code></td>
+<td>Sale del flujo y se posiciona respecto al ancestro posicionado más cercano.</td>
+</tr>
+<tr>
+<td><code>fixed</code></td>
+<td>Se posiciona respecto a la ventana.</td>
+</tr>
+<tr>
+<td><code>sticky</code></td>
+<td>Mezcla relative y fixed según scroll.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-css">.contenedor {
+  position: relative;
+}
+
+.hijo {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+</code></pre>
+<p>Importante:</p>
+<pre><code class="language-css">right: 200px;
+</code></pre>
+<p>con <code>position: relative</code> mueve el elemento hacia la <strong>izquierda</strong>, no hacia la derecha.</p>
+<hr>
+<h2>2.8. Flexbox</h2>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>display: flex</code></td>
+<td>Activa flexbox.</td>
+</tr>
+<tr>
+<td><code>flex-direction</code></td>
+<td>Dirección: fila o columna.</td>
+</tr>
+<tr>
+<td><code>flex-wrap</code></td>
+<td>Permite saltar línea.</td>
+</tr>
+<tr>
+<td><code>flex-flow</code></td>
+<td>Abreviatura de direction + wrap.</td>
+</tr>
+<tr>
+<td><code>justify-content</code></td>
+<td>Alinea en eje principal.</td>
+</tr>
+<tr>
+<td><code>align-items</code></td>
+<td>Alinea en eje cruzado.</td>
+</tr>
+<tr>
+<td><code>align-content</code></td>
+<td>Alinea varias líneas.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-css">.contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</code></pre>
+<p>Chuleta:</p>
+<pre><code class="language-txt">justify-content → eje principal
+align-items     → eje cruzado
+</code></pre>
+<hr>
+<h2>2.9. Grid</h2>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>display: grid</code></td>
+<td>Activa grid.</td>
+</tr>
+<tr>
+<td><code>grid-template-columns</code></td>
+<td>Define columnas.</td>
+</tr>
+<tr>
+<td><code>grid-template-rows</code></td>
+<td>Define filas.</td>
+</tr>
+<tr>
+<td><code>grid-template-areas</code></td>
+<td>Define áreas.</td>
+</tr>
+<tr>
+<td><code>grid-area</code></td>
+<td>Asigna un elemento a un área.</td>
+</tr>
+<tr>
+<td><code>grid-column</code></td>
+<td>Posición en columnas.</td>
+</tr>
+<tr>
+<td><code>grid-row</code></td>
+<td>Posición en filas.</td>
+</tr>
+<tr>
+<td><code>gap</code> / <code>grid-gap</code></td>
+<td>Separación entre celdas.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-css">.layout {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  grid-template-areas:
+    &quot;header header&quot;
+    &quot;aside main&quot;
+    &quot;footer footer&quot;;
+}
+
+header {
+  grid-area: header;
+}
+</code></pre>
+<hr>
+<h1>3. JavaScript DOM</h1>
+<p>JavaScript permite interactuar con el DOM, crear elementos, modificar texto, estilos y eventos.</p>
+<hr>
+<h2>3.1. Selección de elementos</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Qué devuelve</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getElementById()</code></td>
+<td>Un elemento.</td>
+<td><code>document.getElementById(&quot;caja&quot;)</code></td>
+</tr>
+<tr>
+<td><code>getElementsByClassName()</code></td>
+<td>HTMLCollection.</td>
+<td><code>document.getElementsByClassName(&quot;item&quot;)</code></td>
+</tr>
+<tr>
+<td><code>getElementsByTagName()</code></td>
+<td>HTMLCollection.</td>
+<td><code>document.getElementsByTagName(&quot;p&quot;)</code></td>
+</tr>
+<tr>
+<td><code>getElementsByName()</code></td>
+<td>NodeList.</td>
+<td><code>document.getElementsByName(&quot;usuario&quot;)</code></td>
+</tr>
+<tr>
+<td><code>querySelector()</code></td>
+<td>Primer elemento que coincide.</td>
+<td><code>document.querySelector(&quot;.caja&quot;)</code></td>
+</tr>
+<tr>
+<td><code>querySelectorAll()</code></td>
+<td>NodeList con todos.</td>
+<td><code>document.querySelectorAll(&quot;p&quot;)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">const titulo = document.querySelector(&quot;h1&quot;);
+titulo.textContent = &quot;Hola&quot;;
+</code></pre>
+<p>Confuso:</p>
+<pre><code class="language-js">querySelectorAll(&quot;p&quot;)
+</code></pre>
+<p>devuelve una <code>NodeList</code>, pero solo con los <code>&lt;p&gt;</code> encontrados. No mete nodos texto.</p>
+<pre><code class="language-js">elemento.childNodes
+</code></pre>
+<p>sí puede incluir nodos texto, comentarios y saltos de línea.</p>
+<hr>
+<h2>3.2. Crear, añadir y borrar nodos</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>createElement()</code></td>
+<td>Crea un elemento.</td>
+<td><code>document.createElement(&quot;p&quot;)</code></td>
+</tr>
+<tr>
+<td><code>createTextNode()</code></td>
+<td>Crea nodo de texto.</td>
+<td><code>document.createTextNode(&quot;Hola&quot;)</code></td>
+</tr>
+<tr>
+<td><code>appendChild()</code></td>
+<td>Añade un nodo hijo.</td>
+<td><code>padre.appendChild(hijo)</code></td>
+</tr>
+<tr>
+<td><code>removeChild()</code></td>
+<td>Elimina un hijo.</td>
+<td><code>padre.removeChild(hijo)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">const p = document.createElement(&quot;p&quot;);
+p.textContent = &quot;ETSE USC&quot;;
+
+const caja = document.getElementById(&quot;miCaja&quot;);
+caja.appendChild(p);
+</code></pre>
+<p>Borrar:</p>
+<pre><code class="language-js">const p = document.querySelector(&quot;#miCaja p&quot;);
+
+if (p !== null) {
+  p.parentNode.removeChild(p);
+}
+</code></pre>
+<hr>
+<h2>3.3. Contenido HTML y texto</h2>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>textContent</code></td>
+<td>Texto plano.</td>
+<td><code>p.textContent = &quot;Hola&quot;;</code></td>
+</tr>
+<tr>
+<td><code>innerHTML</code></td>
+<td>HTML interno.</td>
+<td><code>div.innerHTML = &quot;&lt;b&gt;Hola&lt;/b&gt;&quot;;</code></td>
+</tr>
+<tr>
+<td><code>nodeValue</code></td>
+<td>Valor de un nodo.</td>
+<td><code>texto.nodeValue</code></td>
+</tr>
+</tbody>
+</table>
+<p>Diferencia:</p>
+<pre><code class="language-js">elemento.textContent = &quot;&lt;b&gt;Hola&lt;/b&gt;&quot;;
+</code></pre>
+<p>muestra literalmente <code>&lt;b&gt;Hola&lt;/b&gt;</code>.</p>
+<pre><code class="language-js">elemento.innerHTML = &quot;&lt;b&gt;Hola&lt;/b&gt;&quot;;
+</code></pre>
+<p>crea negrita real.</p>
+<hr>
+<h2>3.4. Atributos</h2>
+<table>
+<thead>
+<tr>
+<th>Método/propiedad</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getAttribute()</code></td>
+<td>Lee atributo.</td>
+<td><code>a.getAttribute(&quot;href&quot;)</code></td>
+</tr>
+<tr>
+<td><code>setAttribute()</code></td>
+<td>Cambia atributo.</td>
+<td><code>img.setAttribute(&quot;src&quot;, &quot;foto.jpg&quot;)</code></td>
+</tr>
+<tr>
+<td><code>removeAttribute()</code></td>
+<td>Elimina atributo.</td>
+<td><code>input.removeAttribute(&quot;disabled&quot;)</code></td>
+</tr>
+<tr>
+<td><code>hasAttribute()</code></td>
+<td>Comprueba si existe.</td>
+<td><code>el.hasAttribute(&quot;id&quot;)</code></td>
+</tr>
+<tr>
+<td><code>getAttributeNode()</code></td>
+<td>Devuelve nodo atributo.</td>
+<td><code>el.getAttributeNode(&quot;class&quot;)</code></td>
+</tr>
+<tr>
+<td><code>attributes</code></td>
+<td>Lista de atributos.</td>
+<td><code>el.attributes</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">const enlace = document.querySelector(&quot;a&quot;);
+
+if (enlace.hasAttribute(&quot;href&quot;)) {
+  console.log(enlace.getAttribute(&quot;href&quot;));
+}
+</code></pre>
+<p>Confuso:</p>
+<pre><code class="language-js">elemento.attributes
+</code></pre>
+<p>devuelve un <code>NamedNodeMap</code>, no un array normal.</p>
+<hr>
+<h2>3.5. Nodos y navegación DOM</h2>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>childNodes</code></td>
+<td>Hijos incluyendo texto y comentarios.</td>
+</tr>
+<tr>
+<td><code>children</code></td>
+<td>Solo elementos hijos.</td>
+</tr>
+<tr>
+<td><code>firstChild</code></td>
+<td>Primer nodo hijo.</td>
+</tr>
+<tr>
+<td><code>firstElementChild</code></td>
+<td>Primer elemento hijo.</td>
+</tr>
+<tr>
+<td><code>lastChild</code></td>
+<td>Último nodo hijo.</td>
+</tr>
+<tr>
+<td><code>parentNode</code></td>
+<td>Padre.</td>
+</tr>
+<tr>
+<td><code>nextSibling</code></td>
+<td>Siguiente nodo hermano.</td>
+</tr>
+<tr>
+<td><code>previousSibling</code></td>
+<td>Nodo hermano anterior.</td>
+</tr>
+<tr>
+<td><code>nodeName</code></td>
+<td>Nombre del nodo.</td>
+</tr>
+<tr>
+<td><code>nodeType</code></td>
+<td>Tipo de nodo.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">const lista = document.querySelector(&quot;ul&quot;);
+
+console.log(lista.children);      // solo li
+console.log(lista.childNodes);    // puede incluir textos/saltos de línea
+</code></pre>
+<p>Tipos frecuentes de <code>nodeType</code>:</p>
+<pre><code class="language-txt">1 → nodo elemento
+2 → nodo atributo
+3 → nodo texto
+</code></pre>
+<hr>
+<h2>3.6. Estilos desde JavaScript</h2>
+<table>
+<thead>
+<tr>
+<th>Propiedad/método</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>style</code></td>
+<td>Modifica estilos inline.</td>
+<td><code>el.style.color = &quot;red&quot;</code></td>
+</tr>
+<tr>
+<td><code>getComputedStyle()</code></td>
+<td>Lee estilo final calculado.</td>
+<td><code>getComputedStyle(el)</code></td>
+</tr>
+<tr>
+<td><code>getPropertyValue()</code></td>
+<td>Lee propiedad CSS.</td>
+<td><code>estilos.getPropertyValue(&quot;background-color&quot;)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">const caja = document.querySelector(&quot;.caja&quot;);
+
+caja.style.backgroundColor = &quot;red&quot;;
+
+const estilos = window.getComputedStyle(caja);
+console.log(estilos.getPropertyValue(&quot;background-color&quot;));
+</code></pre>
+<p>Importante:</p>
+<pre><code class="language-js">getComputedStyle()
+</code></pre>
+<p>sirve para leer, no para modificar.</p>
+<pre><code class="language-js">elemento.style
+</code></pre>
+<p>sirve para modificar estilos inline.</p>
+<hr>
+<h2>3.7. Eventos</h2>
+<table>
+<thead>
+<tr>
+<th>Método/propiedad</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>addEventListener()</code></td>
+<td>Escucha eventos.</td>
+<td><code>btn.addEventListener(&quot;click&quot;, f)</code></td>
+</tr>
+<tr>
+<td><code>e.type</code></td>
+<td>Tipo de evento.</td>
+<td><code>&quot;click&quot;</code></td>
+</tr>
+<tr>
+<td><code>e.target</code></td>
+<td>Elemento donde ocurrió.</td>
+<td><code>e.target</code></td>
+</tr>
+<tr>
+<td><code>e.preventDefault()</code></td>
+<td>Cancela acción por defecto.</td>
+<td>Formulario no se envía.</td>
+</tr>
+<tr>
+<td><code>this</code></td>
+<td>Elemento que ejecuta el listener.</td>
+<td><code>this.style.color = &quot;red&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">const boton = document.querySelector(&quot;button&quot;);
+
+boton.addEventListener(&quot;click&quot;, function(e) {
+  console.log(e.type);
+  console.log(e.target);
+});
+</code></pre>
+<p>Bubbling y capturing:</p>
+<pre><code class="language-js">elemento.addEventListener(&quot;click&quot;, funcion, false);
+</code></pre>
+<p>bubbling, por defecto.</p>
+<pre><code class="language-js">elemento.addEventListener(&quot;click&quot;, funcion, true);
+</code></pre>
+<p>capturing.</p>
+<hr>
+<h2>3.8. Funciones y argumentos</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>function()</code></td>
+<td>Función tradicional.</td>
+<td><code>function saludar() {}</code></td>
+</tr>
+<tr>
+<td>Arrow function</td>
+<td>Función compacta.</td>
+<td><code>const f = () =&gt; {}</code></td>
+</tr>
+<tr>
+<td><code>arguments</code></td>
+<td>Lista de argumentos en función tradicional.</td>
+<td><code>arguments[0]</code></td>
+</tr>
+<tr>
+<td><code>arguments.length</code></td>
+<td>Número de argumentos.</td>
+<td><code>arguments.length</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">function sumar() {
+  console.log(arguments.length);
+}
+
+sumar(1, 2, 3);
+</code></pre>
+<p>Arrow function no tiene su propio <code>arguments</code>.</p>
+<hr>
+<h2>3.9. Conversión de tipos</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>parseInt()</code></td>
+<td>Convierte a entero.</td>
+<td><code>parseInt(&quot;12&quot;)</code></td>
+</tr>
+<tr>
+<td><code>parseFloat()</code></td>
+<td>Convierte a decimal.</td>
+<td><code>parseFloat(&quot;12.5&quot;)</code></td>
+</tr>
+<tr>
+<td><code>toString()</code></td>
+<td>Convierte a texto.</td>
+<td><code>(123).toString()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">const n = parseFloat(&quot;4.5&quot;);
+console.log(n + 1);
+</code></pre>
+<hr>
+<h1>4. Expresiones regulares</h1>
+<p>Sirven para buscar patrones en texto.</p>
+<hr>
+<h2>4.1. Métodos principales</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>test()</code></td>
+<td>Devuelve <code>true</code> o <code>false</code>.</td>
+<td><code>/a/.test(&quot;casa&quot;)</code></td>
+</tr>
+<tr>
+<td><code>exec()</code></td>
+<td>Devuelve coincidencia detallada.</td>
+<td><code>/a/.exec(&quot;casa&quot;)</code></td>
+</tr>
+<tr>
+<td><code>match()</code></td>
+<td>Busca coincidencias desde string.</td>
+<td><code>&quot;casa&quot;.match(/a/g)</code></td>
+</tr>
+<tr>
+<td><code>matchAll()</code></td>
+<td>Todas las coincidencias con grupos.</td>
+<td><code>&quot;Ana:20&quot;.matchAll(/(\w+):(\d+)/g)</code></td>
+</tr>
+<tr>
+<td><code>replace()</code></td>
+<td>Reemplaza primera o según regex.</td>
+<td><code>&quot;hola&quot;.replace(&quot;h&quot;,&quot;H&quot;)</code></td>
+</tr>
+<tr>
+<td><code>replaceAll()</code></td>
+<td>Reemplaza todas.</td>
+<td><code>&quot;aaa&quot;.replaceAll(&quot;a&quot;,&quot;b&quot;)</code></td>
+</tr>
+<tr>
+<td><code>search()</code></td>
+<td>Devuelve posición.</td>
+<td><code>&quot;hola&quot;.search(/o/)</code></td>
+</tr>
+<tr>
+<td><code>split()</code></td>
+<td>Divide texto.</td>
+<td><code>&quot;a,b&quot;.split(&quot;,&quot;)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">const regex = /^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,}$/;
+
+console.log(regex.test(&quot;a@b.com&quot;));
+</code></pre>
+<hr>
+<h2>4.2. Flags</h2>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Nombre</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>g</code></td>
+<td>global</td>
+<td>Busca todas las coincidencias.</td>
+</tr>
+<tr>
+<td><code>i</code></td>
+<td>ignoreCase</td>
+<td>Ignora mayúsculas/minúsculas.</td>
+</tr>
+<tr>
+<td><code>m</code></td>
+<td>multiline</td>
+<td><code>^</code> y <code>$</code> funcionan por líneas.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">const texto = &quot;Hola hola&quot;;
+
+console.log(texto.match(/hola/gi));
+</code></pre>
+<hr>
+<h2>4.3. <code>match()</code> vs <code>matchAll()</code></h2>
+<pre><code class="language-js">&quot;Hola mundo&quot;.match(/(Hola) mundo/);
+</code></pre>
+<p>devuelve:</p>
+<pre><code class="language-js">[&quot;Hola mundo&quot;, &quot;Hola&quot;]
+</code></pre>
+<p>porque no hay <code>g</code>.</p>
+<p>Con <code>g</code>:</p>
+<pre><code class="language-js">&quot;Hola mundo Hola tierra&quot;.match(/(Hola) \w+/g);
+</code></pre>
+<p>devuelve:</p>
+<pre><code class="language-js">[&quot;Hola mundo&quot;, &quot;Hola tierra&quot;]
+</code></pre>
+<p>sin grupos.</p>
+<p>Con <code>matchAll()</code>:</p>
+<pre><code class="language-js">const r = &quot;Hola mundo Hola tierra&quot;.matchAll(/(Hola) \w+/g);
+</code></pre>
+<p>puedes obtener todas las coincidencias y sus grupos.</p>
+<hr>
+<h1>5. jQuery</h1>
+<p>jQuery simplifica selección, eventos, estilos, animaciones y DOM.</p>
+<hr>
+<h2>5.1. Selección y objeto jQuery</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$()</code></td>
+<td>Selecciona o crea elementos.</td>
+<td><code>$(&quot;p&quot;)</code></td>
+</tr>
+<tr>
+<td><code>$(this)</code></td>
+<td>Elemento actual como objeto jQuery.</td>
+<td><code>$(this).css(&quot;color&quot;,&quot;red&quot;)</code></td>
+</tr>
+<tr>
+<td><code>.ready()</code></td>
+<td>Ejecuta al cargar DOM.</td>
+<td><code>$(document).ready(function(){})</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">$(document).ready(function() {
+  $(&quot;p&quot;).text(&quot;Hola&quot;);
+});
+</code></pre>
+<hr>
+<h2>5.2. Contenido y valores</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.text()</code></td>
+<td>Lee/cambia texto.</td>
+<td><code>$(&quot;p&quot;).text(&quot;Hola&quot;)</code></td>
+</tr>
+<tr>
+<td><code>.html()</code></td>
+<td>Lee/cambia HTML.</td>
+<td><code>$(&quot;div&quot;).html(&quot;&lt;b&gt;Hola&lt;/b&gt;&quot;)</code></td>
+</tr>
+<tr>
+<td><code>.val()</code></td>
+<td>Valor de input.</td>
+<td><code>$(&quot;input&quot;).val()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">const valor = $(&quot;#nombre&quot;).val();
+</code></pre>
+<hr>
+<h2>5.3. Estilos y clases</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.css()</code></td>
+<td>Lee/cambia CSS.</td>
+<td><code>$(&quot;p&quot;).css(&quot;color&quot;,&quot;red&quot;)</code></td>
+</tr>
+<tr>
+<td><code>.addClass()</code></td>
+<td>Añade clase.</td>
+<td><code>$(&quot;p&quot;).addClass(&quot;activo&quot;)</code></td>
+</tr>
+<tr>
+<td><code>.removeClass()</code></td>
+<td>Quita clase.</td>
+<td><code>$(&quot;p&quot;).removeClass(&quot;activo&quot;)</code></td>
+</tr>
+<tr>
+<td><code>.toggleClass()</code></td>
+<td>Alterna clase.</td>
+<td><code>$(&quot;p&quot;).toggleClass(&quot;activo&quot;)</code></td>
+</tr>
+<tr>
+<td><code>.attr()</code></td>
+<td>Lee/cambia atributo.</td>
+<td><code>$(&quot;img&quot;).attr(&quot;src&quot;,&quot;a.png&quot;)</code></td>
+</tr>
+<tr>
+<td><code>.removeAttr()</code></td>
+<td>Elimina atributo.</td>
+<td><code>$(&quot;input&quot;).removeAttr(&quot;disabled&quot;)</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">$(&quot;div&quot;).css({
+  backgroundColor: &quot;red&quot;,
+  width: &quot;100px&quot;
+});
+</code></pre>
+<hr>
+<h2>5.4. DOM</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.append()</code></td>
+<td>Añade al final.</td>
+<td><code>$(&quot;ul&quot;).append(&quot;&lt;li&gt;Nuevo&lt;/li&gt;&quot;)</code></td>
+</tr>
+<tr>
+<td><code>.prepend()</code></td>
+<td>Añade al principio.</td>
+<td><code>$(&quot;ul&quot;).prepend(&quot;&lt;li&gt;Primero&lt;/li&gt;&quot;)</code></td>
+</tr>
+<tr>
+<td><code>.after()</code></td>
+<td>Inserta después.</td>
+<td><code>$(&quot;p&quot;).after(&quot;&lt;hr&gt;&quot;)</code></td>
+</tr>
+<tr>
+<td><code>.before()</code></td>
+<td>Inserta antes.</td>
+<td><code>$(&quot;p&quot;).before(&quot;&lt;hr&gt;&quot;)</code></td>
+</tr>
+<tr>
+<td><code>.remove()</code></td>
+<td>Elimina elemento.</td>
+<td><code>$(&quot;p&quot;).remove()</code></td>
+</tr>
+<tr>
+<td><code>.empty()</code></td>
+<td>Vacía contenido.</td>
+<td><code>$(&quot;div&quot;).empty()</code></td>
+</tr>
+<tr>
+<td><code>.clone()</code></td>
+<td>Clona elemento.</td>
+<td><code>$(&quot;p&quot;).clone()</code></td>
+</tr>
+<tr>
+<td><code>.unwrap()</code></td>
+<td>Quita padre.</td>
+<td><code>$(&quot;span&quot;).unwrap()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">$(&quot;#miCaja&quot;).append(&quot;&lt;p&gt;ETSE USC&lt;/p&gt;&quot;);
+</code></pre>
+<hr>
+<h2>5.5. Recorrido DOM</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.parent()</code></td>
+<td>Padre directo.</td>
+</tr>
+<tr>
+<td><code>.parents()</code></td>
+<td>Todos los ancestros.</td>
+</tr>
+<tr>
+<td><code>.children()</code></td>
+<td>Hijos directos.</td>
+</tr>
+<tr>
+<td><code>.find()</code></td>
+<td>Descendientes que coinciden.</td>
+</tr>
+<tr>
+<td><code>.closest()</code></td>
+<td>Ancestro más cercano que coincide.</td>
+</tr>
+<tr>
+<td><code>.siblings()</code></td>
+<td>Hermanos.</td>
+</tr>
+<tr>
+<td><code>.next()</code></td>
+<td>Siguiente hermano.</td>
+</tr>
+<tr>
+<td><code>.prev()</code></td>
+<td>Hermano anterior.</td>
+</tr>
+<tr>
+<td><code>.eq()</code></td>
+<td>Elemento por índice.</td>
+</tr>
+<tr>
+<td><code>.filter()</code></td>
+<td>Filtra colección.</td>
+</tr>
+<tr>
+<td><code>.not()</code></td>
+<td>Excluye.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">$(&quot;ul&quot;).find(&quot;li&quot;).eq(0).css(&quot;color&quot;, &quot;red&quot;);
+</code></pre>
+<hr>
+<h2>5.6. Eventos jQuery</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.on()</code></td>
+<td>Asigna eventos.</td>
+<td><code>$(&quot;p&quot;).on(&quot;click&quot;, f)</code></td>
+</tr>
+<tr>
+<td><code>.preventDefault()</code></td>
+<td>Cancela acción.</td>
+<td><code>e.preventDefault()</code></td>
+</tr>
+<tr>
+<td><code>.stopPropagation()</code></td>
+<td>Para propagación.</td>
+<td><code>e.stopPropagation()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo con varios eventos:</p>
+<pre><code class="language-js">$(&quot;h2&quot;).on(&quot;click mouseover&quot;, function(e) {
+  console.log(e.type);
+});
+</code></pre>
+<p>En jQuery puedes poner varios eventos separados por espacios.</p>
+<hr>
+<h2>5.7. Animaciones y efectos</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.hide()</code></td>
+<td>Oculta.</td>
+</tr>
+<tr>
+<td><code>.show()</code></td>
+<td>Muestra.</td>
+</tr>
+<tr>
+<td><code>.toggle()</code></td>
+<td>Alterna visible/oculto.</td>
+</tr>
+<tr>
+<td><code>.fadeIn()</code></td>
+<td>Aparece con fundido.</td>
+</tr>
+<tr>
+<td><code>.fadeOut()</code></td>
+<td>Desaparece con fundido.</td>
+</tr>
+<tr>
+<td><code>.fadeToggle()</code></td>
+<td>Alterna fundido.</td>
+</tr>
+<tr>
+<td><code>.slideDown()</code></td>
+<td>Despliega.</td>
+</tr>
+<tr>
+<td><code>.slideUp()</code></td>
+<td>Pliega.</td>
+</tr>
+<tr>
+<td><code>.slideToggle()</code></td>
+<td>Alterna.</td>
+</tr>
+<tr>
+<td><code>.animate()</code></td>
+<td>Animación personalizada.</td>
+</tr>
+<tr>
+<td><code>.delay()</code></td>
+<td>Retraso.</td>
+</tr>
+<tr>
+<td><code>.stop()</code></td>
+<td>Para animaciones.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">$(&quot;#caja&quot;).fadeOut(1000);
+</code></pre>
+<hr>
+<h1>6. Eventos</h1>
+<p>Eventos comunes del navegador.</p>
+<table>
+<thead>
+<tr>
+<th>Evento</th>
+<th>Cuándo ocurre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>click</code></td>
+<td>Click.</td>
+</tr>
+<tr>
+<td><code>dblclick</code></td>
+<td>Doble click.</td>
+</tr>
+<tr>
+<td><code>mouseover</code></td>
+<td>Ratón entra encima.</td>
+</tr>
+<tr>
+<td><code>mouseout</code></td>
+<td>Ratón sale.</td>
+</tr>
+<tr>
+<td><code>mousemove</code></td>
+<td>Ratón se mueve.</td>
+</tr>
+<tr>
+<td><code>mousedown</code></td>
+<td>Botón del ratón pulsado.</td>
+</tr>
+<tr>
+<td><code>mouseup</code></td>
+<td>Botón soltado.</td>
+</tr>
+<tr>
+<td><code>keydown</code></td>
+<td>Tecla presionada.</td>
+</tr>
+<tr>
+<td><code>keypress</code></td>
+<td>Tecla imprimible. Antiguo.</td>
+</tr>
+<tr>
+<td><code>keyup</code></td>
+<td>Tecla soltada.</td>
+</tr>
+<tr>
+<td><code>input</code></td>
+<td>Cambia valor mientras se escribe.</td>
+</tr>
+<tr>
+<td><code>change</code></td>
+<td>Cambia valor y se confirma.</td>
+</tr>
+<tr>
+<td><code>submit</code></td>
+<td>Envío de formulario.</td>
+</tr>
+<tr>
+<td><code>focus</code></td>
+<td>Elemento recibe foco.</td>
+</tr>
+<tr>
+<td><code>blur</code></td>
+<td>Elemento pierde foco.</td>
+</tr>
+<tr>
+<td><code>load</code></td>
+<td>Recurso cargado.</td>
+</tr>
+<tr>
+<td><code>resize</code></td>
+<td>Cambia tamaño ventana.</td>
+</tr>
+<tr>
+<td><code>scroll</code></td>
+<td>Scroll.</td>
+</tr>
+<tr>
+<td><code>select</code></td>
+<td>Selección de texto.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-js">form.addEventListener(&quot;submit&quot;, function(e) {
+  e.preventDefault();
+  console.log(&quot;Formulario validado&quot;);
+});
+</code></pre>
+<hr>
+<h1>7. Servlets</h1>
+<p>Un servlet es una clase Java que responde a peticiones HTTP.</p>
+<hr>
+<h2>7.1. Clases y objetos principales</h2>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HttpServlet</code></td>
+<td>Clase base de los servlets.</td>
+</tr>
+<tr>
+<td><code>HttpServletRequest</code></td>
+<td>Petición recibida.</td>
+</tr>
+<tr>
+<td><code>HttpServletResponse</code></td>
+<td>Respuesta enviada.</td>
+</tr>
+<tr>
+<td><code>HttpSession</code></td>
+<td>Sesión del usuario.</td>
+</tr>
+<tr>
+<td><code>Cookie</code></td>
+<td>Cookie HTTP.</td>
+</tr>
+<tr>
+<td><code>RequestDispatcher</code></td>
+<td>Hace <code>forward</code> o <code>include</code>.</td>
+</tr>
+<tr>
+<td><code>ServletContext</code></td>
+<td>Contexto global de la app.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-java">public class LoginServlet extends HttpServlet {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+    }
+}
+</code></pre>
+<hr>
+<h2>7.2. Métodos HTTP</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>doGet()</code></td>
+<td>Peticiones GET.</td>
+</tr>
+<tr>
+<td><code>doPost()</code></td>
+<td>Peticiones POST.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-java">protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+
+    String usuario = request.getParameter(&quot;usuario&quot;);
+}
+</code></pre>
+<hr>
+<h2>7.3. Request</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>getParameter()</code></td>
+<td>Lee dato de formulario/URL.</td>
+<td><code>request.getParameter(&quot;nombre&quot;)</code></td>
+</tr>
+<tr>
+<td><code>setAttribute()</code></td>
+<td>Guarda dato en request.</td>
+<td><code>request.setAttribute(&quot;msg&quot;,&quot;OK&quot;)</code></td>
+</tr>
+<tr>
+<td><code>getAttribute()</code></td>
+<td>Lee atributo.</td>
+<td><code>request.getAttribute(&quot;msg&quot;)</code></td>
+</tr>
+<tr>
+<td><code>getCookies()</code></td>
+<td>Lee cookies.</td>
+<td><code>request.getCookies()</code></td>
+</tr>
+<tr>
+<td><code>getSession()</code></td>
+<td>Obtiene sesión.</td>
+<td><code>request.getSession()</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-java">String nombre = request.getParameter(&quot;nombre&quot;);
+request.setAttribute(&quot;nombre&quot;, nombre);
+</code></pre>
+<hr>
+<h2>7.4. Response</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sendRedirect()</code></td>
+<td>Redirige y cambia URL.</td>
+</tr>
+<tr>
+<td><code>sendError()</code></td>
+<td>Envía error HTTP.</td>
+</tr>
+<tr>
+<td><code>addCookie()</code></td>
+<td>Añade cookie.</td>
+</tr>
+<tr>
+<td><code>setContentType()</code></td>
+<td>Tipo de respuesta.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-java">response.sendRedirect(request.getContextPath() + &quot;/home.jsp&quot;);
+</code></pre>
+<hr>
+<h2>7.5. Forward, include y redirect</h2>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Cambia URL</th>
+<th>Misma request</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>forward()</code></td>
+<td>No</td>
+<td>Sí</td>
+<td>Servlet pasa a JSP.</td>
+</tr>
+<tr>
+<td><code>include()</code></td>
+<td>No</td>
+<td>Sí</td>
+<td>Incluir otro recurso y volver.</td>
+</tr>
+<tr>
+<td><code>sendRedirect()</code></td>
+<td>Sí</td>
+<td>No</td>
+<td>Nueva petición del navegador.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-java">RequestDispatcher rd = request.getRequestDispatcher(&quot;/vista.jsp&quot;);
+rd.forward(request, response);
+</code></pre>
+<hr>
+<h2>7.6. Sesión y cookies</h2>
+<p>Crear sesión:</p>
+<pre><code class="language-java">HttpSession session = request.getSession();
+session.setAttribute(&quot;usuario&quot;, usuario);
+</code></pre>
+<p>Leer sesión:</p>
+<pre><code class="language-java">Usuario u = (Usuario) session.getAttribute(&quot;usuario&quot;);
+</code></pre>
+<p>Crear cookie:</p>
+<pre><code class="language-java">Cookie c = new Cookie(&quot;tema&quot;, &quot;oscuro&quot;);
+c.setMaxAge(60 * 60 * 24);
+response.addCookie(c);
+</code></pre>
+<p>Leer cookies:</p>
+<pre><code class="language-java">Cookie[] cookies = request.getCookies();
+</code></pre>
+<hr>
+<h2>7.7. <code>web.xml</code></h2>
+<p>Elementos comunes:</p>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;web-app&gt;</code></td>
+<td>Raíz del descriptor.</td>
+</tr>
+<tr>
+<td><code>&lt;servlet&gt;</code></td>
+<td>Declara servlet.</td>
+</tr>
+<tr>
+<td><code>&lt;servlet-name&gt;</code></td>
+<td>Nombre lógico.</td>
+</tr>
+<tr>
+<td><code>&lt;servlet-class&gt;</code></td>
+<td>Clase Java del servlet.</td>
+</tr>
+<tr>
+<td><code>&lt;servlet-mapping&gt;</code></td>
+<td>Mapeo URL.</td>
+</tr>
+<tr>
+<td><code>&lt;url-pattern&gt;</code></td>
+<td>Ruta del servlet.</td>
+</tr>
+<tr>
+<td><code>&lt;welcome-file-list&gt;</code></td>
+<td>Página inicial.</td>
+</tr>
+<tr>
+<td><code>&lt;welcome-file&gt;</code></td>
+<td>Archivo de bienvenida.</td>
+</tr>
+<tr>
+<td><code>&lt;context-param&gt;</code></td>
+<td>Parámetro global.</td>
+</tr>
+<tr>
+<td><code>&lt;init-param&gt;</code></td>
+<td>Parámetro de servlet.</td>
+</tr>
+<tr>
+<td><code>&lt;session-config&gt;</code></td>
+<td>Configuración sesión.</td>
+</tr>
+<tr>
+<td><code>&lt;session-timeout&gt;</code></td>
+<td>Minutos de inactividad.</td>
+</tr>
+<tr>
+<td><code>&lt;error-page&gt;</code></td>
+<td>Página de error.</td>
+</tr>
+<tr>
+<td><code>&lt;error-code&gt;</code></td>
+<td>Código HTTP.</td>
+</tr>
+<tr>
+<td><code>&lt;location&gt;</code></td>
+<td>Página destino.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-xml">&lt;servlet&gt;
+  &lt;servlet-name&gt;Login&lt;/servlet-name&gt;
+  &lt;servlet-class&gt;daw.LoginServlet&lt;/servlet-class&gt;
+&lt;/servlet&gt;
+
+&lt;servlet-mapping&gt;
+  &lt;servlet-name&gt;Login&lt;/servlet-name&gt;
+  &lt;url-pattern&gt;/login&lt;/url-pattern&gt;
+&lt;/servlet-mapping&gt;
+</code></pre>
+<hr>
+<h1>8. JSP</h1>
+<p>JSP permite mezclar HTML con contenido dinámico generado en servidor.</p>
+<hr>
+<h2>8.1. Directivas JSP</h2>
+<table>
+<thead>
+<tr>
+<th>Directiva</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;%@ page %&gt;</code></td>
+<td>Configura la página.</td>
+<td><code>&lt;%@ page contentType=&quot;text/html; charset=UTF-8&quot; %&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;%@ taglib %&gt;</code></td>
+<td>Declara librerías, como JSTL.</td>
+<td><code>&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;...&quot; %&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;%@ include %&gt;</code></td>
+<td>Incluye archivo en tiempo de traducción.</td>
+<td><code>&lt;%@ include file=&quot;header.jsp&quot; %&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-jsp">&lt;%@ page contentType=&quot;text/html; charset=UTF-8&quot; %&gt;
+&lt;%@ page import=&quot;daw.Usuario&quot; %&gt;
+</code></pre>
+<hr>
+<h2>8.2. Scriptlets y sintaxis clásica</h2>
+<table>
+<thead>
+<tr>
+<th>Sintaxis</th>
+<th>Nombre</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;% ... %&gt;</code></td>
+<td>Scriptlet</td>
+<td>Código Java.</td>
+</tr>
+<tr>
+<td><code>&lt;%= ... %&gt;</code></td>
+<td>Expresión</td>
+<td>Imprime valor.</td>
+</tr>
+<tr>
+<td><code>&lt;%! ... %&gt;</code></td>
+<td>Declaración</td>
+<td>Declara método o atributo.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo scriptlet:</p>
+<pre><code class="language-jsp">&lt;%
+String nombre = request.getParameter(&quot;nombre&quot;);
+%&gt;
+
+&lt;p&gt;Nombre: &lt;%= nombre %&gt;&lt;/p&gt;
+</code></pre>
+<p>Declaración:</p>
+<pre><code class="language-jsp">&lt;%!
+public String saludar(String nombre) {
+    return &quot;Hola &quot; + nombre;
+}
+%&gt;
+
+&lt;p&gt;&lt;%= saludar(&quot;Ana&quot;) %&gt;&lt;/p&gt;
+</code></pre>
+<p>Hoy se recomienda evitar scriptlets si se puede, pero en exámenes suelen pedirlos.</p>
+<hr>
+<h2>8.3. Acciones JSP</h2>
+<table>
+<thead>
+<tr>
+<th>Acción</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;jsp:include page=&quot;&quot;&gt;</code></td>
+<td>Incluye otra JSP en ejecución.</td>
+</tr>
+<tr>
+<td><code>&lt;jsp:forward page=&quot;&quot;&gt;</code></td>
+<td>Pasa control a otra JSP/servlet.</td>
+</tr>
+<tr>
+<td><code>&lt;jsp:useBean&gt;</code></td>
+<td>Crea o recupera bean.</td>
+</tr>
+<tr>
+<td><code>&lt;jsp:setProperty&gt;</code></td>
+<td>Asigna propiedad.</td>
+</tr>
+<tr>
+<td><code>&lt;jsp:getProperty&gt;</code></td>
+<td>Imprime propiedad.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo bean:</p>
+<pre><code class="language-jsp">&lt;jsp:useBean id=&quot;usuario&quot; class=&quot;daw.Usuario&quot; scope=&quot;request&quot; /&gt;
+&lt;jsp:setProperty name=&quot;usuario&quot; property=&quot;nombre&quot; value=&quot;Ana&quot; /&gt;
+
+&lt;p&gt;
+  &lt;jsp:getProperty name=&quot;usuario&quot; property=&quot;nombre&quot; /&gt;
+&lt;/p&gt;
+</code></pre>
+<p>Con formulario:</p>
+<pre><code class="language-jsp">&lt;jsp:useBean id=&quot;usuario&quot; class=&quot;daw.Usuario&quot; scope=&quot;request&quot; /&gt;
+&lt;jsp:setProperty name=&quot;usuario&quot; property=&quot;*&quot; /&gt;
+</code></pre>
+<p>Esto rellena propiedades si los <code>name</code> del formulario coinciden con los setters.</p>
+<hr>
+<h2>8.4. Objetos implícitos JSP clásicos</h2>
+<table>
+<thead>
+<tr>
+<th>Objeto</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>request</code></td>
+<td>Petición HTTP.</td>
+</tr>
+<tr>
+<td><code>response</code></td>
+<td>Respuesta HTTP.</td>
+</tr>
+<tr>
+<td><code>session</code></td>
+<td>Sesión del usuario.</td>
+</tr>
+<tr>
+<td><code>application</code></td>
+<td>Contexto global.</td>
+</tr>
+<tr>
+<td><code>out</code></td>
+<td>Escribir salida.</td>
+</tr>
+<tr>
+<td><code>pageContext</code></td>
+<td>Contexto de página.</td>
+</tr>
+<tr>
+<td><code>config</code></td>
+<td>Configuración del servlet/JSP.</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>La página actual.</td>
+</tr>
+<tr>
+<td><code>exception</code></td>
+<td>Excepción, solo en páginas de error.</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-jsp">&lt;%
+String nombre = request.getParameter(&quot;nombre&quot;);
+session.setAttribute(&quot;usuario&quot;, nombre);
+%&gt;
+</code></pre>
+<hr>
+<h1>9. EL</h1>
+<p>EL significa <strong>Expression Language</strong>. Sirve para acceder a datos de forma limpia con <code>${...}</code>.</p>
+<hr>
+<h2>9.1. Acceso básico</h2>
+<p>Servlet:</p>
+<pre><code class="language-java">request.setAttribute(&quot;usuario&quot;, usuario);
+</code></pre>
+<p>JSP:</p>
+<pre><code class="language-jsp">&lt;p&gt;${usuario.nombre}&lt;/p&gt;
+</code></pre>
+<p>Eso llama internamente a:</p>
+<pre><code class="language-java">usuario.getNombre()
+</code></pre>
+<hr>
+<h2>9.2. Objetos implícitos comunes de EL</h2>
+<table>
+<thead>
+<tr>
+<th>Objeto</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pageScope</code></td>
+<td>Atributos de página.</td>
+<td><code>${pageScope.dato}</code></td>
+</tr>
+<tr>
+<td><code>requestScope</code></td>
+<td>Atributos de request.</td>
+<td><code>${requestScope.usuario.nombre}</code></td>
+</tr>
+<tr>
+<td><code>sessionScope</code></td>
+<td>Atributos de sesión.</td>
+<td><code>${sessionScope.usuario.nombre}</code></td>
+</tr>
+<tr>
+<td><code>applicationScope</code></td>
+<td>Atributos globales.</td>
+<td><code>${applicationScope.contador}</code></td>
+</tr>
+<tr>
+<td><code>param</code></td>
+<td>Parámetros simples.</td>
+<td><code>${param.nombre}</code></td>
+</tr>
+<tr>
+<td><code>paramValues</code></td>
+<td>Parámetros múltiples.</td>
+<td><code>${paramValues.aficion[0]}</code></td>
+</tr>
+<tr>
+<td><code>header</code></td>
+<td>Cabeceras HTTP.</td>
+<td><code>${header[&quot;User-Agent&quot;]}</code></td>
+</tr>
+<tr>
+<td><code>headerValues</code></td>
+<td>Cabeceras múltiples.</td>
+<td><code>${headerValues.accept[0]}</code></td>
+</tr>
+<tr>
+<td><code>cookie</code></td>
+<td>Cookies.</td>
+<td><code>${cookie.userID.value}</code></td>
+</tr>
+<tr>
+<td><code>initParam</code></td>
+<td>Parámetros de contexto.</td>
+<td><code>${initParam.modo}</code></td>
+</tr>
+<tr>
+<td><code>pageContext</code></td>
+<td>Contexto JSP.</td>
+<td><code>${pageContext.request.contextPath}</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplos:</p>
+<pre><code class="language-jsp">${param.nombre}
+</code></pre>
+<p>lee un parámetro de formulario o URL.</p>
+<pre><code class="language-jsp">${requestScope.usuario.nombre}
+</code></pre>
+<p>lee un atributo de request.</p>
+<pre><code class="language-jsp">${sessionScope.usuario.nombre}
+</code></pre>
+<p>lee un atributo de sesión.</p>
+<pre><code class="language-jsp">${cookie.tema.value}
+</code></pre>
+<p>lee una cookie.</p>
+<pre><code class="language-jsp">${pageContext.request.contextPath}
+</code></pre>
+<p>obtiene la ruta base de la aplicación.</p>
+<hr>
+<h2>9.3. Scopes</h2>
+<table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>Duración</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>pageScope</code></td>
+<td>Solo JSP actual.</td>
+<td>Variable local.</td>
+</tr>
+<tr>
+<td><code>requestScope</code></td>
+<td>Una petición.</td>
+<td>Datos de servlet a JSP.</td>
+</tr>
+<tr>
+<td><code>sessionScope</code></td>
+<td>Varias peticiones del usuario.</td>
+<td>Usuario logueado.</td>
+</tr>
+<tr>
+<td><code>applicationScope</code></td>
+<td>Toda la aplicación.</td>
+<td>Contador global.</td>
+</tr>
+</tbody>
+</table>
+<p>Si escribes:</p>
+<pre><code class="language-jsp">${usuario}
+</code></pre>
+<p>EL busca en este orden:</p>
+<pre><code class="language-txt">pageScope → requestScope → sessionScope → applicationScope
+</code></pre>
+<hr>
+<h2>9.4. HashMap en EL</h2>
+<p>Si tienes:</p>
+<pre><code class="language-java">HashMap&lt;String, String&gt; h = new HashMap&lt;&gt;();
+h.put(&quot;nombre&quot;, &quot;Ana&quot;);
+request.setAttribute(&quot;datos&quot;, h);
+</code></pre>
+<p>Puedes hacer:</p>
+<pre><code class="language-jsp">${datos.nombre}
+</code></pre>
+<p>o:</p>
+<pre><code class="language-jsp">${datos[&quot;nombre&quot;]}
+</code></pre>
+<p>Si la clave tiene espacios o caracteres raros, mejor corchetes:</p>
+<pre><code class="language-jsp">${datos[&quot;nombre completo&quot;]}
+</code></pre>
+<hr>
+<h1>10. JSTL</h1>
+<p>JSTL permite usar etiquetas en JSP para condiciones, bucles y salida.</p>
+<p>Primero se declara:</p>
+<pre><code class="language-jsp">&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;http://java.sun.com/jsp/jstl/core&quot; %&gt;
+</code></pre>
+<p>o en Jakarta:</p>
+<pre><code class="language-jsp">&lt;%@ taglib prefix=&quot;c&quot; uri=&quot;jakarta.tags.core&quot; %&gt;
+</code></pre>
+<hr>
+<h2>10.1. Salida y variables</h2>
+<table>
+<thead>
+<tr>
+<th>Etiqueta</th>
+<th>Uso</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;c:out&gt;</code></td>
+<td>Imprime valor escapado.</td>
+<td><code>&lt;c:out value=&quot;${usuario.nombre}&quot; /&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;c:set&gt;</code></td>
+<td>Crea/asigna variable.</td>
+<td><code>&lt;c:set var=&quot;x&quot; value=&quot;10&quot; /&gt;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplo:</p>
+<pre><code class="language-jsp">&lt;c:set var=&quot;saludo&quot; value=&quot;Hola&quot; /&gt;
+&lt;p&gt;&lt;c:out value=&quot;${saludo}&quot; /&gt;&lt;/p&gt;
+</code></pre>
+<hr>
+<h2>10.2. Condicional simple</h2>
+<pre><code class="language-jsp">&lt;c:if test=&quot;${edad &gt;= 18}&quot;&gt;
+  &lt;p&gt;Mayor de edad&lt;/p&gt;
+&lt;/c:if&gt;
+</code></pre>
+<hr>
+<h2>10.3. Condicional múltiple</h2>
+<pre><code class="language-jsp">&lt;c:choose&gt;
+  &lt;c:when test=&quot;${nota &gt;= 9}&quot;&gt;
+    &lt;p&gt;Sobresaliente&lt;/p&gt;
+  &lt;/c:when&gt;
+
+  &lt;c:when test=&quot;${nota &gt;= 5}&quot;&gt;
+    &lt;p&gt;Aprobado&lt;/p&gt;
+  &lt;/c:when&gt;
+
+  &lt;c:otherwise&gt;
+    &lt;p&gt;Suspenso&lt;/p&gt;
+  &lt;/c:otherwise&gt;
+&lt;/c:choose&gt;
+</code></pre>
+<p>Equivale a:</p>
+<pre><code class="language-java">if (...) {
+} else if (...) {
+} else {
+}
+</code></pre>
+<hr>
+<h2>10.4. Bucles</h2>
+<p>Bucle numérico:</p>
+<pre><code class="language-jsp">&lt;c:forEach var=&quot;i&quot; begin=&quot;1&quot; end=&quot;5&quot;&gt;
+  &lt;p&gt;${i}&lt;/p&gt;
+&lt;/c:forEach&gt;
+</code></pre>
+<p>Bucle sobre lista:</p>
+<pre><code class="language-jsp">&lt;c:forEach var=&quot;usuario&quot; items=&quot;${usuarios}&quot;&gt;
+  &lt;p&gt;${usuario.nombre}&lt;/p&gt;
+&lt;/c:forEach&gt;
+</code></pre>
+<p>Con HashMap:</p>
+<pre><code class="language-jsp">&lt;c:forEach var=&quot;entrada&quot; items=&quot;${datos}&quot;&gt;
+  &lt;p&gt;${entrada.key}: ${entrada.value}&lt;/p&gt;
+&lt;/c:forEach&gt;
+</code></pre>
+<hr>
+<h1>11. Java básico para Servlets/JSP</h1>
+<hr>
+<h2>11.1. List</h2>
+<pre><code class="language-java">List&lt;String&gt; lista = new ArrayList&lt;&gt;();
+lista.add(&quot;Ana&quot;);
+lista.add(&quot;Luis&quot;);
+
+String primero = lista.get(0);
+</code></pre>
+<p>Uso típico: lista ordenada de elementos.</p>
+<hr>
+<h2>11.2. ArrayList</h2>
+<pre><code class="language-java">ArrayList&lt;Usuario&gt; usuarios = new ArrayList&lt;&gt;();
+usuarios.add(usuario);
+</code></pre>
+<p>Permite repetidos.</p>
+<hr>
+<h2>11.3. Vector</h2>
+<pre><code class="language-java">Vector&lt;String&gt; v = new Vector&lt;&gt;();
+v.add(&quot;A&quot;);
+v.get(0);
+</code></pre>
+<p>Parecido a <code>ArrayList</code>, pero sincronizado. Es más antiguo.</p>
+<hr>
+<h2>11.4. HashMap</h2>
+<pre><code class="language-java">HashMap&lt;String, Usuario&gt; h = new HashMap&lt;&gt;();
+
+h.put(&quot;u1&quot;, usuario);
+Usuario u = h.get(&quot;u1&quot;);
+</code></pre>
+<p>Usa pares clave-valor.</p>
+<p>Importante:</p>
+<pre><code class="language-java">h.put(&quot;u1&quot;, usuario1);
+h.put(&quot;u1&quot;, usuario2);
+</code></pre>
+<p>no crea duplicado. Sustituye el valor anterior.</p>
+<hr>
+<h1>12. Mini chuleta final</h1>
+<h2>HTML</h2>
+<pre><code class="language-html">&lt;form action=&quot;Servlet&quot; method=&quot;post&quot;&gt;
+  &lt;input type=&quot;text&quot; name=&quot;nombre&quot;&gt;
+  &lt;button type=&quot;submit&quot;&gt;Enviar&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+<h2>CSS</h2>
+<pre><code class="language-css">.caja {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</code></pre>
+<h2>JavaScript</h2>
+<pre><code class="language-js">const p = document.querySelector(&quot;p&quot;);
+p.textContent = &quot;Hola&quot;;
+</code></pre>
+<h2>Evento</h2>
+<pre><code class="language-js">boton.addEventListener(&quot;click&quot;, function(e) {
+  e.preventDefault();
+});
+</code></pre>
+<h2>jQuery</h2>
+<pre><code class="language-js">$(&quot;p&quot;).on(&quot;click&quot;, function() {
+  $(this).css(&quot;color&quot;, &quot;red&quot;);
+});
+</code></pre>
+<h2>Servlet</h2>
+<pre><code class="language-java">String nombre = request.getParameter(&quot;nombre&quot;);
+request.setAttribute(&quot;nombre&quot;, nombre);
+request.getRequestDispatcher(&quot;/vista.jsp&quot;).forward(request, response);
+</code></pre>
+<h2>JSP scriptlet</h2>
+<pre><code class="language-jsp">&lt;%
+String nombre = (String) request.getAttribute(&quot;nombre&quot;);
+%&gt;
+&lt;p&gt;&lt;%= nombre %&gt;&lt;/p&gt;
+</code></pre>
+<h2>JSP con EL</h2>
+<pre><code class="language-jsp">&lt;p&gt;${requestScope.nombre}&lt;/p&gt;
+</code></pre>
+<h2>JSTL</h2>
+<pre><code class="language-jsp">&lt;c:if test=&quot;${not empty nombre}&quot;&gt;
+  &lt;p&gt;${nombre}&lt;/p&gt;
+&lt;/c:if&gt;
+</code></pre>
+<h2>JavaBean</h2>
+<pre><code class="language-jsp">&lt;jsp:useBean id=&quot;usuario&quot; class=&quot;daw.Usuario&quot; scope=&quot;request&quot; /&gt;
+&lt;jsp:getProperty name=&quot;usuario&quot; property=&quot;nombre&quot; /&gt;
+</code></pre>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="6-jsp.html"><span class="nav-etiqueta">← anterior</span>6. JSP</a>
+  <a class="nav-siguiente" href="preguntas.html"><span class="nav-etiqueta">siguiente →</span>Preguntas</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

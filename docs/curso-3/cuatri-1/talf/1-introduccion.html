@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Introducción — apuntes de TALF (tercer curso de Ingeniería Informática).">
+<title>1. Introducción · TALF · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">talf</a><span class="miga-sep">/</span><span aria-current="page">1-introduccion</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">TALF · curso 3</p>
+    <h1>1. Introducción · TALF</h1>
+  </header>
+  <div class="prosa">
+<div class="callout callout-nota">
+<p class="callout-titulo">NOTA</p>
+<p>Esta asignatura es una locura la puta mierda apuntes que tiene, menos mal que en prácticas nos salvan. Me molaría reestructurar todo para que tuviese un orden un poco más lógico, pero me da pereza.</p>
+</div>
+<h1>1.1 Definición general</h1>
+<h1>1.1 Definición General: ¿De qué va esto?</h1>
+<h2>Definición Formal</h2>
+<p>La <strong>Teoría de Autómatas y Lenguajes Formales</strong> estudia modelos matemáticos para representar procesos de cálculo. Su objetivo es entender qué problemas pueden resolver los ordenadores y con qué eficiencia. Aborda dos preguntas clave:</p>
+<ul>
+<li><strong>Decidibilidad:</strong> ¿Qué puede hacer un ordenador?</li>
+<li><strong>Complejidad:</strong> ¿Con qué eficiencia puede hacerlo?</li>
+</ul>
+<h2>Nota del Tutor (El concepto real)</h2>
+<p>Piensa en esta asignatura como el <strong>&quot;Diseño de Máquinas que leen cosas&quot;</strong>. Todo se reduce a un esquema básico:</p>
+<ol>
+<li><strong>Input:</strong> Le das una cadena de texto a la máquina.</li>
+<li><strong>Proceso:</strong> La máquina (el autómata) procesa símbolo a símbolo.</li>
+<li><strong>Output:</strong> La máquina responde <strong>SÍ</strong> (Aceptado/Válido) o <strong>NO</strong> (Rechazado/Inválido).</li>
+</ol>
+<h1>1.2 El Ecosistema de la Teoría de Autómatas</h1>
+<h2>1.1 El &quot;Trío Sagrado&quot;: Lenguaje, Gramática y Máquina</h2>
+<p>Imagina que quieres preparar un plato específico. Necesitas tres elementos distintos pero conectados. Aquí veremos qué es cada uno y dónde se usan en la vida real:</p>
+<h3>1. El Lenguaje (El Plato Final)</h3>
+<p>Es el concepto abstracto. Es el <strong>conjunto de cadenas (palabras)</strong> que queremos aceptar como válidas.</p>
+<ul>
+<li><strong>Definición:</strong> El objetivo final.</li>
+<li><strong>Ejemplo:</strong> &quot;El conjunto de todos los emails válidos&quot; o &quot;Todo el código C++ que funciona&quot;.</li>
+</ul>
+<h3>2. La Gramática (La Receta) [Sintaxis]</h3>
+<p>Son las <strong>reglas generativas</strong>. Te dicen cómo construir una cadena válida paso a paso. Es el ente &quot;constructor&quot;.</p>
+<ul>
+<li><strong>Función:</strong> Definir la estructura correcta.</li>
+<li><strong>Uso real:</strong> <strong>Compiladores</strong>. Cuando VS Code te marca un error en rojo, es porque tu código rompió las reglas de la gramática del lenguaje.</li>
+</ul>
+<h3>3. El Autómata (El Crítico de Comida) [Reconocedor]</h3>
+<p>Es la <strong>máquina que verifica</strong>. Le das una cadena y te dice &quot;Sí, pertenece al lenguaje&quot; o &quot;No, rechazada&quot;. Es el motor de búsqueda.</p>
+<ul>
+<li><strong>Función:</strong> Buscar patrones y validar.</li>
+<li><strong>Uso real:</strong> <strong>Ctrl+F</strong> en Word, validación de formularios web o el comando <code>grep</code> en Linux (usando Expresiones Regulares para búsquedas compactas).</li>
+</ul>
+<div class="callout callout-importante">
+<p class="callout-titulo">La Relación Fundamental:</p>
+<p>Para cada tipo de Lenguaje, existe una Gramática que lo genera y una Máquina que lo reconoce. Son tres caras de la misma moneda.</p>
+</div>
+<h1>1.3 El &quot;Diccionario&quot; de la Asignatura</h1>
+<p><strong>Peligro de Examen:</strong> Confundir estos términos es la causa #1 de suspensos</p>
+<table>
+<thead>
+<tr>
+<th><strong>Concepto</strong></th>
+<th><strong>Símbolo</strong></th>
+<th><strong>Definición Formal</strong></th>
+<th><strong>Analogía Práctica</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Alfabeto</strong></td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Σ</span></span></span></span></eq></td>
+<td>Conjunto finito y no vacío de símbolos (ej: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">1</span><span class="mclose">}</span></span></span></span></eq>).</td>
+<td>Las <strong>piezas de Lego</strong> disponibles.</td>
+</tr>
+<tr>
+<td><strong>Palabra</strong></td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0269em;">w</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span></span></span></eq></td>
+<td>Secuencia finita de símbolos del alfabeto.</td>
+<td>Una <strong>torre</strong> construida con esas piezas.</td>
+</tr>
+<tr>
+<td><strong>Longitud</strong></td>
+<td>|w|</td>
+<td>Número de símbolos de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0269em;">w</span></span></span></span></eq>.</td>
+<td>La <strong>altura</strong> de esa torre (nº de piezas).</td>
+</tr>
+<tr>
+<td><strong>Lenguaje</strong></td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span></span></span></span></eq></td>
+<td>Conjunto de palabras (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8193em;vertical-align:-0.136em;"></span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⊆</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6887em;"></span><span class="mord"><span class="mord">Σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span></eq>).</td>
+<td>La <strong>foto de la colección</strong> de torres válidas.</td>
+</tr>
+</tbody>
+</table>
+<h1>1.4 Conceptos Críticos y Operaciones</h1>
+<h2>1.4.1 El error más común: Cadena Vacía vs. Lenguaje Vacío</h2>
+<p>Es fundamental distinguir entre &quot;tener una caja vacía&quot; y &quot;tener una caja con una hoja en blanco dentro&quot;.</p>
+<ol>
+<li>
+<p><strong>Cadena Vacía (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">ε</span></span></span></span></eq> o <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">λ</span></span></span></span></eq>):</strong></p>
+<ul>
+<li>Es una palabra que existe, pero <strong>no tiene símbolos</strong>.</li>
+<li>Su longitud es 0 (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">∣</span><span class="mord mathnormal">ε</span><span class="mord">∣</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></eq>).</li>
+<li><em>Analogía:</em> Un string vacío en programación <code>&quot;&quot;</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Lenguaje Vacío (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8056em;vertical-align:-0.0556em;"></span><span class="mord">∅</span></span></span></span></eq>):</strong></p>
+<ul>
+<li>Es un conjunto que <strong>no contiene ninguna palabra</strong> (ni siquiera la vacía).</li>
+<li><em>Analogía:</em> Una carpeta de archivos vacía.</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>Regla de oro:</strong></p>
+<ul>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord mathnormal">ε</span><span class="mclose">}</span></span></span></span></eq> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> Un lenguaje que contiene una palabra (la vacía). <strong>NO está vacío.</strong></li>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8056em;vertical-align:-0.0556em;"></span><span class="mord">∅</span></span></span></span></eq> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">→</span></span></span></span></eq> Un lenguaje sin palabras. <strong>ESTÁ vacío.</strong></li>
+</ul>
+</blockquote>
+<h2>1.4.2 Operaciones Básicas</h2>
+<p>Al igual que sumamos números, aquí operamos con palabras y lenguajes.</p>
+<p><strong>Sobre Palabras (Cadenas):</strong></p>
+<ul>
+<li><strong>Concatenación (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">x</span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span></span></span></eq>):</strong> Pegar <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span></span></span></eq> detrás de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></eq>. <strong>OJO:</strong> El orden importa (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">ab</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel"><span class="mrel"><span class="mord vbox"><span class="thinbox"><span class="rlap"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="inner"><span class="mord"><span class="mrel"></span></span></span><span class="fix"></span></span></span></span></span><span class="mspace nobreak"></span><span class="mrel">=</span></span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">ba</span></span></span></span></eq>).</li>
+<li><strong>Potencia (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8247em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8247em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span></span></span></span></span></span></span></span></eq>):</strong> Repetir la cadena <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></eq> veces. (Ej: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">aaa</span></span></span></span></eq>).</li>
+<li><strong>Reflexión / Inversa (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0077em;">R</span></span></span></span></span></span></span></span></span></span></span></eq> o <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></span></eq>):</strong> Leerla al revés (de derecha a izquierda).</li>
+</ul>
+<p><strong>Sobre Lenguajes (Conjuntos):</strong></p>
+<ul>
+<li><strong>Concatenación (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>):</strong> Combina <em>cada</em> palabra del primer lenguaje con <em>cada</em> palabra del segundo.</li>
+<li><strong>Cierre de Kleene / Estrella (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6887em;"></span><span class="mord"><span class="mord mathnormal">L</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span></eq>):</strong> La operación más importante.
+<ul>
+<li>Representa repetir palabras del lenguaje <strong>cero o más veces</strong>.</li>
+<li><strong>Siempre</strong> incluye la cadena vacía <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">ε</span></span></span></span></eq>.</li>
+<li><strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6887em;"></span><span class="mord"><span class="mord">Σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span></eq></strong>: Significa &quot;El conjunto de <strong>todas</strong> las palabras posibles que se pueden formar con el alfabeto&quot;.</li>
+</ul>
+</li>
+</ul>
+<h2>1.4.3 Determinismo</h2>
+<p>El determinismo es <strong>previsibilidad absoluta</strong>. En un sistema determinista, si conoces el estado actual y la entrada que llega, sabes con certeza matemática qué va a pasar después. No hay dudas, no hay elecciones.</p>
+<p>El no determinismo es la capacidad de <strong>elegir</strong> o <strong>explorar múltiples futuros a la vez</strong>. Ante una misma situación, la máquina puede tener varias opciones válidas de movimiento (o ninguna).</p>
+<h1>1.5 La Jerarquía de Chomsky: Las &quot;Muñecas Rusas&quot;</h1>
+<p>Aquí es donde entra el lío de los nombres. No son categorías aisladas, son <strong>niveles de complejidad</strong> concéntricos.</p>
+<ul>
+<li><strong>Regla de Oro:</strong> Cada nivel <strong>incluye</strong> a todos los anteriores (es un subconjunto estricto).</li>
+<li><em>Ejemplo:</em> Todo lo que es Regular (Nivel 3) es TAMBIÉN Independiente del Contexto (Nivel 2), Sensible al Contexto (Nivel 1) y Rec. Enumerable (Nivel 0).</li>
+</ul>
+<p>Vamos del más simple (restrictivo) al más potente (libre).</p>
+<h3>Nivel 3: Lo Regular (Sin Memoria)</h3>
+<p>Aquí la máquina es muy tonta. No tiene memoria auxiliar, solo sabe &quot;en qué estado está ahora mismo&quot;.</p>
+<ul>
+<li><strong>Lenguaje:</strong> Regular.</li>
+<li><strong>Gramática:</strong> Regular (Lineal por la derecha o izquierda). Reglas muy rígidas (Lineal por la derecha o izquierda). Reglas muy rígidas (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span></eq> o <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">a</span></span></span></span></eq>).</li>
+<li><strong>Máquina:</strong> <strong>Autómata Finito (AFD / AFN)</strong>.
+<ul>
+<li><strong>¿Determinismo?</strong> <strong>EQUIVALENTE</strong>. Da igual si es determinista o no, tienen la misma potencia.</li>
+<li><strong>Ejemplo Real:</strong> Validar un email, buscar con <code>Ctrl+F</code>.</li>
+<li><strong>Ejemplo Matemático:</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6887em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span></eq> (cualquier número de 'a'), o números de dos cifras.</li>
+<li><strong>Limitación:</strong> No sabe contar indefinidamente (no distingue <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></eq>).</li>
+</ul>
+</li>
+</ul>
+<h3>Nivel 2: Independiente del Contexto (Memoria de Pila)</h3>
+<p>Aquí añadimos una memoria tipo &quot;pila&quot; (LIFO - Last In, First Out). Podemos guardar cosas, pero solo podemos leer la que está arriba del todo.</p>
+<ul>
+<li><strong>Lenguaje:</strong> Independiente del Contexto (LIC).</li>
+<li><strong>Gramática:</strong> Independiente del Contexto (GIC). Reglas tipo <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span></span></span></span></eq> (una variable cambia por cualquier cosa).</li>
+<li><strong>Máquina:</strong> <strong>Autómata con Pila (AP)</strong>.
+<ul>
+<li><strong>Determinismo:</strong> Aquí <strong>NO</strong> son equivalentes.
+<ul>
+<li>El <strong>AP No Determinista</strong> es el &quot;jefe&quot; del Nivel 2. Reconoce <strong>toda</strong> la clase de los <strong>Lenguajes Independientes del Contexto (LIC)</strong>.</li>
+<li>El <strong>AP Determinista</strong> es menos potente (reconoce un subconjunto menor).Reconoce un <strong>subconjunto estricto</strong>: los <strong>Lenguajes Independientes del Contexto Deterministas</strong>.</li>
+</ul>
+</li>
+<li><strong>Ejemplo Real:</strong> La sintaxis de lenguajes de programación (Java, C, Python), HTML (etiquetas que se abren y cierran).</li>
+<li><strong>Ejemplo Matemático:</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></eq> (mismo número de a's que de b's).</li>
+<li><strong>Limitación:</strong> No puede comparar tres cosas a la vez (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></eq>).</li>
+</ul>
+</li>
+</ul>
+<h3>Nivel 1: Sensible al Contexto (Memoria Acotada)</h3>
+<p>Aquí la memoria es una cinta, podemos movernos y reescribir, pero <strong>no podemos usar más espacio del que ocupa la palabra de entrada</strong>.</p>
+<ul>
+<li><strong>Lenguaje:</strong> Sensible al Contexto.</li>
+<li><strong>Gramática:</strong> Sensible al Contexto (GSC). Reglas donde importa qué hay a los lados (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">x</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">x</span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span></span></span></span></eq>).</li>
+<li><strong>Máquina:</strong> <strong>Autómata Linealmente Acotado (ALA/LBA)</strong>.
+<ul>
+<li><strong>Concepto clave:</strong> Es una MT con cinta limitada por muros a izquierda y derecha.</li>
+<li><strong>Ejemplo Real:</strong> El lenguaje natural (la concordancia gramatical compleja en español o inglés).</li>
+<li><strong>Ejemplo Matemático:</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></eq> (tres conteos coordinados).</li>
+</ul>
+</li>
+</ul>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<ul>
+<li><strong>ALA No Determinista:</strong> Reconoce los <strong>Lenguajes Sensibles al Contexto</strong> (Tipo 1 de Chomsky). Esta es la definición estándar que se suele usar.</li>
+<li><strong>ALA Determinista:</strong> Reconoce los <strong>Lenguajes Sensibles al Contexto Deterministas</strong> (más limitados que los no deterministas).</li>
+</ul>
+</div>
+<h3>Nivel 0: Recursivamente Enumerable (El poder total)</h3>
+<p>Aquí no hay límites. Memoria infinita. Si existe un algoritmo para calcularlo, está aquí.</p>
+<ul>
+<li><strong>Lenguaje:</strong> Recursivamente Enumerable.</li>
+<li><strong>Gramática:</strong> Irrestricta (Sin restricciones).</li>
+<li><strong>Máquina:</strong> <strong>Máquina de Turing (MT)</strong>.
+<ul>
+<li><strong>¿Determinismo?</strong> <strong>EQUIVALENTE</strong>. El no determinismo no añade potencia, solo velocidad teórica (P vs NP).</li>
+<li><strong>El Gran Peligro:</strong> La máquina podría <strong>no detenerse nunca</strong> (bucle infinito) si la palabra no es válida.</li>
+</ul>
+</li>
+</ul>
+<p>Dentro del Nivel 0, existe una subdivisión vital para aprobar las preguntas de Verdadero/Falso.</p>
+<table>
+<thead>
+<tr>
+<th><strong>Tipo de Lenguaje</strong></th>
+<th><strong>¿Qué hace la máquina si la palabra es VÁLIDA?</strong></th>
+<th><strong>¿Qué hace si la palabra es INVÁLIDA?</strong></th>
+<th><strong>¿Es seguro?</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Recursivo</strong> (Decidible)</td>
+<td>Para y dice <strong>SÍ</strong>.</td>
+<td>Para y dice <strong>NO</strong>.</td>
+<td>Sí, siempre responde.</td>
+</tr>
+<tr>
+<td><strong>Rec. Enumerable</strong> (Semi-decidible)</td>
+<td>Para y dice <strong>SÍ</strong>.</td>
+<td>Puede parar y decir NO... <strong>O quedarse en bucle infinito</strong>.</td>
+<td>No, puede colgarse.</td>
+</tr>
+</tbody>
+</table>
+<h1>1.6 Tabla Resumen Definitiva (La &quot;Chuleta&quot;)</h1>
+<table>
+<thead>
+<tr>
+<th><strong>Nivel Chomsky</strong></th>
+<th><strong>Lenguaje</strong></th>
+<th><strong>Máquina (Autómata)</strong></th>
+<th><strong>Determinismo vs No Det.</strong></th>
+<th><strong>Ejemplo Matemático Clave</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tipo 3</strong></td>
+<td>Regular</td>
+<td><strong>Autómata Finito</strong></td>
+<td>Equivalentes</td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6887em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mbin mtight">∗</span></span></span></span></span></span></span></span></span></span></span></eq> (Patrones)</td>
+</tr>
+<tr>
+<td><strong>Tipo 2</strong></td>
+<td>Indep. Contexto</td>
+<td><strong>Autómata de Pila</strong></td>
+<td><strong>DIFERENTES</strong> (El No-Det es más potente)</td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></eq> (Pares, Palíndromos)</td>
+</tr>
+<tr>
+<td><strong>Tipo 1</strong></td>
+<td>Sensible Contexto</td>
+<td><strong>Linealmente Acotado</strong></td>
+<td><em>(Complejo, se asume No-Det)</em></td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></eq> (Tríos)</td>
+</tr>
+<tr>
+<td><strong>Tipo 0</strong></td>
+<td>Rec. Enumerable</td>
+<td><strong>Máquina de Turing</strong></td>
+<td>Equivalentes</td>
+<td>Cualquier algoritmo</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th><strong>Tipo de Máquina</strong></th>
+<th><strong>¿Es más potente la No Determinista?</strong></th>
+<th><strong>Razón</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Autómata Finito</strong></td>
+<td><strong>NO</strong> (Son equivalentes)</td>
+<td>Existe un algoritmo mecánico para convertir cualquier no determinista en uno determinista sin perder información.</td>
+</tr>
+<tr>
+<td><strong>Autómata de Pila</strong></td>
+<td><strong>SÍ</strong></td>
+<td>El determinista está limitado (solo reconoce lenguajes sin ambigüedad). El no determinista reconoce <strong>todos</strong> los independientes del contexto.</td>
+</tr>
+<tr>
+<td><strong>Autómata Linealmente Acotado (ALA)</strong></td>
+<td><strong>¿?</strong> (Problema Abierto / Se asume que <strong>SÍ</strong>)</td>
+<td>En teoría es una incógnita matemática no resuelta. Pero en la asignatura, el <strong>No Determinista</strong> es el que define los Lenguajes Sensibles al Contexto (Tipo 1).</td>
+</tr>
+<tr>
+<td><strong>Máquina de Turing</strong></td>
+<td><strong>NO</strong> (Son equivalentes)</td>
+<td>Cualquier cálculo de una MT no determinista puede ser simulado por una determinista (aunque tarde más tiempo).</td>
+</tr>
+<tr>
+<td><strong>Complejidad (P vs NP)</strong></td>
+<td><strong>SÍ</strong> (En tiempo)</td>
+<td>Aunque resuelven lo mismo, la No Determinista lo hace en tiempo polinómico (rápido), mientras que la determinista podría tardar siglos.</td>
+</tr>
+<tr>
+<td><img src="../../../img/talf/pasted-image-20260120204036.png" alt="Pasted image 20260120204036.png" loading="lazy"></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-automatas-finitos.html"><span class="nav-etiqueta">siguiente →</span>2. Autómatas finitos</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

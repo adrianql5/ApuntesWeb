@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Modelado Estructural Avanzado — apuntes de DESOFT (segundo curso de Ingeniería Informática).">
+<title>5. Modelado Estructural Avanzado · DESOFT · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">desoft</a><span class="miga-sep">/</span><span aria-current="page">5-modelado-estructural-avanzado</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DESOFT · curso 2</p>
+    <h1>5. Modelado Estructural Avanzado · DESOFT</h1>
+  </header>
+  <div class="prosa">
+<h1>5.1 Definición general</h1>
+<p>El <strong>modelado estructural</strong> en UML (Unified Modeling Language) se refiere a la representación de la <strong>estructura estática del sistema</strong>, es decir, <strong>cómo están organizados sus elementos (clases, objetos, relaciones, interfaces, etc.)</strong>.</p>
+<p>Se diferencia del <strong>modelado dinámico</strong>, que se enfoca en el comportamiento (interacciones, eventos, flujos).</p>
+<h1>5.2. Niveles de abstracción</h1>
+<p>La UML permite modelar un sistema en <strong>varios niveles de detalle</strong>, lo cual es crucial para <strong>diferenciar entre lo que se quiere hacer, cómo se piensa hacer y cómo se implementa finalmente</strong>.</p>
+<h3>✦ Conceptual</h3>
+<ul>
+<li><strong>Qué es</strong>: representación del dominio de forma abstracta, sin pensar en software aún.</li>
+<li><strong>Ejemplo</strong>: En una tienda, tienes conceptos como <code>Cliente</code>, <code>Producto</code>, <code>Pedido</code>.</li>
+</ul>
+<h3>✦ Especificación</h3>
+<ul>
+<li><strong>Qué es</strong>: definición de <strong>interfaces</strong> del sistema (cómo interactúan los componentes entre sí).</li>
+<li><strong>Ejemplo</strong>: Sabemos que <code>Cliente</code> puede &quot;realizarPedido()&quot;, pero no cómo lo hace.</li>
+</ul>
+<h3>✦ Implementación</h3>
+<ul>
+<li><strong>Qué es</strong>: ya vemos el detalle real en código, clases, métodos, campos.</li>
+<li><strong>Ejemplo</strong>: <code>Cliente</code> tiene <code>List&lt;Pedido&gt;</code> como atributo, y un método <code>crearPedido()</code>.</li>
+</ul>
+<h1>5.3 Elementos del modelo estructural</h1>
+<h3>Atributos</h3>
+<ul>
+<li>A <strong>nivel conceptual</strong>: identifican propiedades relevantes. Ej: <code>nombre</code> de un <code>Cliente</code>.</li>
+<li>A <strong>nivel de especificación</strong>: decides tipos y restricciones (e.g., <code>nombre: String</code>, obligatorio).</li>
+<li>A <strong>nivel de implementación</strong>: el atributo es un <strong>campo real en una clase</strong>.</li>
+</ul>
+<h3>Operaciones</h3>
+<ul>
+<li>A <strong>nivel conceptual</strong>: representan <strong>responsabilidades</strong>. Ej: <code>realizarPedido()</code>.</li>
+<li>A <strong>nivel de especificación</strong>: se definen visibilidad, parámetros, excepciones.</li>
+<li>También se incluyen <strong>operaciones privadas y protegidas</strong>, no visibles externamente.</li>
+</ul>
+<h3>Alcance</h3>
+<p>Define si el atributo es <strong>de instancia</strong> (cada objeto lo tiene) o <strong>de clase</strong> (compartido).</p>
+<ul>
+<li><strong>Ejemplo</strong>:</li>
+</ul>
+<pre><code class="language-java">class Usuario {
+    static int totalUsuarios; // atributo de clase (subrayado en UML)
+    String nombre;            // atributo de instancia
+}
+    ```
+
+# 5.4 Asociaciones y relaciones
+
+### Asociación
+Relación estructural entre clases. A distintos niveles, implica cosas distintas:
+
+- **Conceptual**: denota **navegabilidad**: puedes ir de `Pedido` a `Cliente`.
+- **Especificación**: muestra **responsabilidades** e **interfaces**.
+- **Implementación**: implica una **estructura de datos** (por ejemplo, una lista).
+
+```java
+class Cliente {
+    List&lt;Pedido&gt; pedidos; // Asociación 1 a muchos
+}
+</code></pre>
+<h3>Clase Asociación</h3>
+<p>Una <strong>asociación</strong> que necesita atributos propios se modela como <strong>clase</strong>.
+<strong>Ejemplo</strong>: Relación <code>Matricula</code> entre <code>Estudiante</code> y <code>Curso</code> con atributo <code>nota</code>.</p>
+<h3>Composición vs Agregación</h3>
+<ul>
+<li><strong>Agregación</strong>: relación débil. Las partes pueden vivir sin el todo.</li>
+<li><strong>Composición</strong>: relación fuerte. Las partes <strong>viven y mueren</strong> con el todo.</li>
+</ul>
+<pre><code class="language-java">class Pedido {
+    private List&lt;LineaPedido&gt; lineas; // Composición: LineaPedido no existe sin Pedido
+}
+</code></pre>
+<h1>5.5 Mecanismos de extensibilidad</h1>
+<p>UML es extensible para adaptarse a dominios específicos:</p>
+<h3>✦ Estereotipos (<code>&lt;&lt; &gt;&gt;</code>)</h3>
+<p>Permiten <strong>crear nuevos elementos</strong> especializados.</p>
+<ul>
+<li>Ej: <code>&lt;&lt;controller&gt;&gt;</code>, <code>&lt;&lt;entity&gt;&gt;</code>, <code>&lt;&lt;boundary&gt;&gt;</code> en MVC.</li>
+</ul>
+<h3>✦ Valores etiquetados</h3>
+<p>Metadatos asociados a elementos UML. Ej: <code>versión = 1.0</code>.</p>
+<h3>✦ Restricciones</h3>
+<p>Condiciones que deben cumplirse (<code>{ordered}</code>, <code>{unique}</code>, <code>{readOnly}</code>).</p>
+<h1>5.6 Clasificadores</h1>
+<p>Un <strong>clasificador</strong> es un concepto general que agrupa cosas como:</p>
+<ul>
+<li><strong>Clases</strong></li>
+<li><strong>Interfaces</strong></li>
+<li><strong>Componentes</strong></li>
+<li><strong>Casos de uso</strong></li>
+</ul>
+<p>Tienen <strong>instancias</strong>, <strong>atributos</strong>, <strong>operaciones</strong> y pueden participar en <strong>relaciones</strong>.</p>
+<h1>5.7 Visibilidad</h1>
+<p>Controla <strong>quién puede acceder</strong> a atributos u operaciones:</p>
+<table>
+<thead>
+<tr>
+<th>Símbolo</th>
+<th>Nivel</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code></td>
+<td>Pública</td>
+<td>Accesible desde cualquier clase</td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>Privada</td>
+<td>Solo accesible dentro de la clase</td>
+</tr>
+<tr>
+<td><code>#</code></td>
+<td>Protegida</td>
+<td>Accesible desde subclases</td>
+</tr>
+<tr>
+<td><code>~</code></td>
+<td>De paquete</td>
+<td>Accesible solo dentro del mismo paquete</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-java">class Cliente {
+    private String nombre;   // (-)
+    protected void validar(); // (#)
+    public void comprar();  // (+)
+}
+</code></pre>
+<h1>5.8 Interfaces y realización</h1>
+<h3>✦ ¿Qué es una interfaz?</h3>
+<p>Una <strong>colección de operaciones</strong> sin implementación ni atributos.</p>
+<ul>
+<li>No define estructura.</li>
+<li>Define <strong>qué se debe hacer</strong>, no <strong>cómo</strong>.</li>
+<li>Puede participar en:
+<ul>
+<li><strong>Generalización</strong></li>
+<li><strong>Dependencia</strong></li>
+<li><strong>Asociación</strong></li>
+<li><strong>Realización</strong></li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-java">interface Imprimible {
+    void imprimir();
+}
+
+class Factura implements Imprimible {
+    public void imprimir() {
+        // implementación concreta
+    }
+}
+</code></pre>
+<p>📌 <strong>Realización</strong> es la relación entre una interfaz y una clase que <strong>garantiza</strong> cumplir ese contrato.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-modelado-de-comportamiento.html"><span class="nav-etiqueta">← anterior</span>4. Modelado de Comportamiento</a>
+  <a class="nav-siguiente" href="6-otros-diagramas-de-modelado.html"><span class="nav-etiqueta">siguiente →</span>6. Otros Diagramas de Modelado</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

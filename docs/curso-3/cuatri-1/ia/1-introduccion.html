@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Introducción — apuntes de IA (tercer curso de Ingeniería Informática).">
+<title>1. Introducción · IA · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">ia</a><span class="miga-sep">/</span><span aria-current="page">1-introduccion</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">IA · curso 3</p>
+    <h1>1. Introducción · IA</h1>
+  </header>
+  <div class="prosa">
+<h1>1.1 Conceptos Principales</h1>
+<h2>1.1.1 Definición de Inteligencia Artificial (IA)</h2>
+<p>La IA no tiene una única definición, pero se puede entender desde dos perspectivas clave:</p>
+<ol>
+<li>
+<p><strong>Definición Institucional (UE):</strong> Sistemas que muestran comportamiento inteligente analizando su entorno y tomando acciones (con cierto grado de autonomía) para lograr objetivos específicos.</p>
+</li>
+<li>
+<p><strong>Definición Funcional:</strong> Un sistema es inteligente si posee <strong>autonomía</strong> significativa, riqueza de comportamiento en entornos dinámicos, capacidad de <strong>aprender de la experiencia</strong> y competencia en áreas especializadas.</p>
+</li>
+</ol>
+<h2>1.1.2 Los 4 Enfoques de la IA</h2>
+<p>Se clasifica la IA según su objetivo final (compararse con humanos o ser idealmente racional) y su faceta (pensamiento o comportamiento):</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><strong>Como Personas (Humanista)</strong></th>
+<th><strong>Racionalmente (Idealista)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pensamiento</strong></td>
+<td><strong>Modelado Cognitivo</strong> (intentar imitar cómo piensa el cerebro).</td>
+<td><strong>Leyes del Pensamiento</strong> (Lógica formal, silogismos).</td>
+</tr>
+<tr>
+<td><strong>Comportamiento</strong></td>
+<td><strong>Test de Turing</strong> (actuar de forma indistinguible a un humano).</td>
+<td><strong>Agentes Racionales</strong> (actuar para maximizar el resultado esperado).</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>El Test de Turing tiene como referencia el comportamiento humano.</p>
+<h2>1.1.3 La Triada de la IA Moderna</h2>
+<p>El auge actual de la IA (desde 2010) se debe a la convergencia de tres factores:</p>
+<ol>
+<li><strong>Algoritmos:</strong> Nuevas técnicas de aprendizaje automático (Deep Learning).</li>
+<li><strong>Datos:</strong> Disponibilidad masiva de datos (Big Data).</li>
+<li><strong>Computación:</strong> Capacidad de procesamiento (GPUs/TPUs).</li>
+</ol>
+<h1>1.2 Explicaciones Paso a Paso</h1>
+<h2>1.2.1 Evolución Histórica: Los &quot;Inviernos&quot; y &quot;Primaveras&quot;</h2>
+<p>La historia de la IA no es lineal, ha pasado por ciclos de optimismo exagerado y decepción5:</p>
+<ol>
+<li><strong>Nacimiento (1956):</strong> Conferencia de <strong>Dartmouth</strong>. Se acuña el término &quot;Inteligencia Artificial&quot; por McCarthy, Minsky, et al.6666.</li>
+<li><strong>Entusiasmo (1956-1973):</strong> Predicciones optimistas (ej. el Perceptrón que podría &quot;caminar, hablar y reproducirse&quot;)7.</li>
+<li><strong>Primer Invierno (1974-1980):</strong> Declive por falta de resultados prácticos frente a las promesas.</li>
+<li><strong>Sistemas Expertos (1981-1987):</strong> Recuperación comercial.</li>
+<li><strong>Segundo Invierno (1988-1993):</strong> Estancamiento.</li>
+<li><strong>Relanzamiento y Realismo (1994-Presente):</strong> Éxito basado en datos, aprendizaje profundo y aplicaciones específicas.</li>
+</ol>
+<h2>1.2.2 Paradigmas: Simbólico vs. Subsimbólico</h2>
+<ol>
+<li>
+<p><strong>IA Simbólica (Top-Down):</strong></p>
+<ul>
+<li>Se basa en reglas explícitas y lógica y árboles de decisión.</li>
+<li><em>Ejemplo:</em> Un árbol de decisión para saber qué comió un invitado (&quot;Si comió carne -&gt; No es vegetariano&quot;).</li>
+<li>Es interpretable por humanos.</li>
+</ul>
+</li>
+<li>
+<p><strong>IA Subsimbólica (Bottom-Up):</strong></p>
+<ul>
+<li>Se basa en <strong>Redes Neuronales</strong>. No se programan reglas, se entrena el sistema con ejemplos.</li>
+<li>Intenta imitar la estructura de las neuronas biológicas.</li>
+<li><em>Ejemplo:</em> Deep Learning para reconocimiento de imágenes.</li>
+</ul>
+</li>
+</ol>
+<h2>1.2.3 La Neurona Artificial (Perceptrón)</h2>
+<p>El componente básico de la IA subsimbólica es la neurona artificial. Matemáticamente se describe así:</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">Y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:3.0277em;vertical-align:-1.2777em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">(</span></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.6514em;"><span style="top:-1.8723em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2777em;"><span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">b</span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size4">)</span></span></span></span></span></span></span></eqn></section><p><strong>Desglose de componentes:</strong></p>
+<ul>
+<li><strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> (Inputs):</strong> Las señales de entrada (datos).</li>
+<li><strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> (Pesos / Weights):</strong> La importancia de cada entrada. Es lo que la red &quot;aprende&quot; durante el entrenamiento.</li>
+<li><strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Σ</span></span></span></span></eq> (Función Suma):</strong> Agrega todas las entradas ponderadas.</li>
+<li><strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span></span></span></span></eq> (Sesgo / Bias):</strong> Un umbral interno de activación (mencionado como &quot;Internal Activation&quot; en el gráfico).</li>
+<li><strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mopen">(</span><span class="mord">⋅</span><span class="mclose">)</span></span></span></span></eq> (Función de Activación):</strong> Decide si la neurona se &quot;dispara&quot; o no, introduciendo no linealidad (permite aprender patrones complejos).</li>
+<li><strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">Y</span></span></span></span></eq> (Output):</strong> El resultado final de la neurona.</li>
+</ul>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Esto no rallarse que se explica en los siguientes temas, este tema es para que suenen las cosas no para memorizarlo.</p>
+</div>
+<h1>1.3 Conexiones: &quot;Wetware&quot; vs. Hardware</h1>
+<p>Una comparación crítica para entender por qué la IA es diferente a la inteligencia biológica:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Característica</strong></th>
+<th><strong>Cerebro Humano (Wetware)</strong></th>
+<th><strong>Computador (Hardware)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Evolución</strong></td>
+<td>Biológica (lenta, 100k años sin cambios).</td>
+<td>Tecnológica (exponencial, Ley de Moore).</td>
+</tr>
+<tr>
+<td><strong>Procesamiento</strong></td>
+<td>Paralelo masivo (10 mil millones de neuronas).</td>
+<td>Serial (muy rápido en secuencia).</td>
+</tr>
+<tr>
+<td><strong>Fortalezas</strong></td>
+<td>Percepción, sentido común, aprendizaje general.</td>
+<td>Cálculos matemáticos, lógica formal, almacenamiento masivo.</td>
+</tr>
+<tr>
+<td><strong>Consumo</strong></td>
+<td>Muy eficiente (~20 Watts).</td>
+<td>Muy costoso (Megavatios en supercomputadores).</td>
+</tr>
+<tr>
+<td><strong>Velocidad</strong></td>
+<td>&quot;Lenta&quot; (disparo neuronal en ms).</td>
+<td>&quot;Rápida&quot; (ciclos de reloj en nanosegundos).</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conexión clave:</strong> La IA actual intenta emular la capacidad de aprendizaje del cerebro (redes neuronales) utilizando la velocidad de cálculo del hardware para compensar la falta de eficiencia biológica.</p>
+<h1>1.4 Aplicaciones Reales</h1>
+<ol>
+<li>
+<p><strong>Juegos de Estrategia (Hitos):</strong></p>
+<ul>
+<li><strong>Deep Blue (1997):</strong> Vence a Kasparov en ajedrez (fuerza bruta y búsqueda).</li>
+<li><strong>AlphaGo (2016):</strong> Vence a Lee Sedol en Go (aprendizaje profundo y refuerzo, un problema mucho más complejo que el ajedrez).</li>
+</ul>
+</li>
+<li>
+<p><strong>Vehículos Autónomos:</strong></p>
+<ul>
+<li>Uso de sensores complejos: <strong>LIDAR</strong> (láser para mapa 3D), <strong>RADAR</strong> y cámaras.</li>
+<li>Evolución desde el &quot;DARPA Challenge&quot; hasta coches comerciales (Tesla/Volvo)16161616.</li>
+</ul>
+</li>
+<li>
+<p><strong>Generación de Lenguaje Natural (NLG):</strong></p>
+<ul>
+<li><strong>GALIWeather:</strong> Sistema que convierte datos numéricos meteorológicos en predicciones escritas en texto natural (gallego).</li>
+</ul>
+</li>
+<li>
+<p><strong>Robótica:</strong></p>
+<ul>
+<li><strong>Boston Dynamics:</strong> Robots con equilibrio dinámico y movilidad avanzada (Atlas, Spot)18.</li>
+</ul>
+</li>
+<li>
+<p><strong>Limitaciones (Predicción Social):</strong></p>
+<ul>
+<li>Caso elecciones EE.UU. 2016: La IA falló al predecir la victoria de Trump basándose solo en &quot;sentimiento en redes&quot;, mostrando que el ruido en los datos puede llevar a errores graves19.</li>
+</ul>
+</li>
+</ol>
+<h1>1.5 Repercusiones Socioeconómicas y Éticas de la IA</h1>
+<h2>1.5.1 Contexto: La 4ª Revolución Industrial</h2>
+<p>La IA no es solo una tecnología aislada, sino el motor de una nueva fase industrial.</p>
+<ul>
+<li><strong>1ª Revolución:</strong> Vapor y agua (sustitución fuerza animal).</li>
+<li><strong>2ª Revolución:</strong> Electricidad y producción en masa.</li>
+<li><strong>3ª Revolución:</strong> Electrónica, internet y automatización simple.</li>
+<li><strong>4ª Revolución (Actual):</strong> Sistemas Ciber-físicos y <strong>Automatización Inteligente</strong>.</li>
+</ul>
+<h2>1.5.2 Automatización y Empleo</h2>
+<h3>La Matriz de Automatización</h3>
+<p>No todos los trabajos se automatizan igual. Se clasifican según la capacidad requerida (Manual vs. Cognitiva) y el tipo de tarea (Sistemática vs. No sistemática):</p>
+<table>
+<thead>
+<tr>
+<th><strong>Tipo de Tarea</strong></th>
+<th><strong>Capacidad Manual</strong></th>
+<th><strong>Capacidad Cognitiva</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sistemática</strong> (Predecible)</td>
+<td>Robots de soldadura y montaje (Fábricas)</td>
+<td>Sistemas expertos (Análisis de riesgo bancario)</td>
+</tr>
+<tr>
+<td><strong>No Sistemática</strong> (Impredecible)</td>
+<td>Robots de exploración en entornos abiertos</td>
+<td>Generación de noticias (Periodismo automatizado)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><em>Dato clave:</em> Las actividades físicas en entornos predecibles tienen un <strong>81%</strong> de potencial de automatización, mientras que la gestión de personas solo un <strong>9%</strong>.</li>
+</ul>
+<h3>Impacto Real (Ejemplos)</h3>
+<ul>
+<li>
+<p><strong>Manufactura:</strong> La empresa <em>Changying Precision Technology</em> reemplazó al 90% de sus trabajadores con robots, logrando un aumento de producción del 250%.</p>
+</li>
+<li>
+<p><strong>Periodismo:</strong> El &quot;Quakebot&quot; de <em>Los Angeles Times</em> genera noticias sobre terremotos automáticamente usando datos del servicio geológico8888.</p>
+</li>
+</ul>
+<h3>La Paradoja de la Desigualdad</h3>
+<p>A medida que avanza la tecnología, se observa una paradoja económica:</p>
+<ul>
+<li>La desigualdad <strong>entre países</strong> disminuye (países en desarrollo crecen).</li>
+<li>La desigualdad <strong>dentro de los países</strong> aumenta (brecha entre trabajadores cualificados/propietarios de capital y trabajadores desplazados).</li>
+</ul>
+<h3>¿Es esta vez diferente? (Debate Keynesiano)</h3>
+<p>Keynes predijo el &quot;desempleo tecnológico&quot;. Sin embargo, la revolución de la IA presenta desafíos únicos respecto a revoluciones pasadas:</p>
+<ol>
+<li><strong>Velocidad:</strong> El proceso se está acelerando.</li>
+<li><strong>Alcance:</strong> Afecta a tareas de nivel cognitivo medio y alto, no solo físico.</li>
+<li><strong>Reubicación:</strong> Es difícil reubicar a los trabajadores desplazados en nuevos sectores.</li>
+</ol>
+<h2>1.5.3 Ética y Riesgos Existenciales</h2>
+<h3>Superinteligencia y la &quot;Explosión de Inteligencia&quot;</h3>
+<p>Concepto propuesto por <strong>I.J. Good (1965)</strong> y analizado por <strong>Nick Bostrom</strong>:</p>
+<ul>
+<li><strong>Definición:</strong> Una máquina que supera intelectualmente a cualquier humano.</li>
+<li><strong>Consecuencia:</strong> Esta máquina podría diseñar máquinas aún mejores, provocando una &quot;explosión de inteligencia&quot; que dejaría atrás a la capacidad humana.</li>
+<li><strong>El Riesgo:</strong> La primera máquina ultrainteligente es el <em>último</em> invento que el hombre necesita crear, siempre que sepamos cómo mantenerla bajo control.</li>
+</ul>
+<h3>Armas Autónomas (&quot;Killer Robots&quot;)</h3>
+<p>Existe un debate ético activo y campañas para detener el desarrollo de armas totalmente autónomas que deciden atacar sin intervención humana (ej. campaña <em>Stop Killer Robots</em>).</p>
+<h3>Privacidad y Responsabilidad Civil</h3>
+<ul>
+<li><strong>Vigilancia:</strong> Uso masivo de reconocimiento facial y cámaras19.</li>
+<li><strong>Responsabilidad:</strong> El caso del atropello mortal de un coche autónomo de <strong>Uber</strong> en Arizona plantea quién es el culpable (¿el software, el conductor de seguridad, el fabricante?)20.</li>
+</ul>
+<h2>1.5.4 Regulación: La &quot;AI Act&quot; (Ley de IA de la UE)</h2>
+<p>La Unión Europea propone un marco regulatorio basado en niveles de riesgo para los sistemas de IA21:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Nivel de Riesgo</strong></th>
+<th><strong>Ejemplos</strong></th>
+<th><strong>Implicaciones / Sanciones</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Riesgo Inaceptable</strong></td>
+<td><em>Score</em> social, vigilancia biométrica en tiempo real por gobiernos.</td>
+<td><strong>Prohibición absoluta</strong>. Multas hasta 6% de ingresos globales o 30M€.</td>
+</tr>
+<tr>
+<td><strong>Riesgo Alto</strong></td>
+<td>Infraestructuras críticas, educación (admisión), justicia, dispositivos médicos.</td>
+<td>Evaluación de conformidad obligatoria. Multas hasta 4% o 20M€.</td>
+</tr>
+<tr>
+<td><strong>Riesgo Limitado</strong></td>
+<td>Deepfakes, Chatbots, sistemas que interactúan con personas.</td>
+<td>Obligación de <strong>transparencia</strong> (avisar que es una IA).</td>
+</tr>
+<tr>
+<td><strong>Riesgo Mínimo</strong></td>
+<td>Videojuegos, filtros de spam.</td>
+<td>Sin restricciones específicas (códigos de conducta voluntarios).</td>
+</tr>
+</tbody>
+</table>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-busqueda-en-espacio-de-estados.html"><span class="nav-etiqueta">siguiente →</span>2. Búsqueda en Espacio de Estados</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="6. Texturas — apuntes de COGA (segundo curso de Ingeniería Informática).">
+<title>6. Texturas · COGA · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">coga</a><span class="miga-sep">/</span><span aria-current="page">6-texturas</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">COGA · curso 2</p>
+    <h1>6. Texturas · COGA</h1>
+  </header>
+  <div class="prosa">
+<p>Una vez realizado el ensamblado de vértices se pasa al proceso de <strong>rasterizado</strong>, en el que se transforman los <strong>objetos</strong> que se van a proyectar en una matriz de <strong>píxeles</strong> que se mostrarán por pantalla. Así se obtiene la <strong>correspondencia</strong> de los <strong>puntos de los objetos</strong> con los <strong>puntos de la pantalla</strong>. Esta información compone un <strong>fragmento</strong>.</p>
+<p>En la <strong>pipelin fija (OPengl 1.2)</strong> hay poco control sobre el proceso de rasterizado e interpolación.
+<img src="../../../img/coga/pasted-image-20250426115540.png" alt="Pasted image 20250426115540.png" loading="lazy"></p>
+<p>En el <strong>retained mode (Opengl 3.3)</strong> el <strong>fragment shader</strong> permite trabajar a muy bajo nivel sobre los fragmentos.
+<img src="../../../img/coga/pasted-image-20250426115625.png" alt="Pasted image 20250426115625.png" loading="lazy"></p>
+<h1>6.1 Introducción</h1>
+<p>Una <strong>textura</strong> es una colección o array n-dimensional de valores que se representan sobre la geometría de los objetos.</p>
+<ul>
+<li>Aumentan el <strong>realismo de la imagen</strong> sin incrementar el <strong>número de polígonos</strong>.</li>
+<li>Proporcionan una clave para la percepción de la <strong>profundidad</strong>.</li>
+<li>Permiten simular muchos <strong>efectos:</strong> sombras, entornos, etc.</li>
+<li>Ocupan Memoria</li>
+</ul>
+<p><strong>Tipos de Textura:</strong></p>
+<ul>
+<li><strong>1D:</strong> imágenes sin alto, solo ancho</li>
+<li><strong>2D:</strong> imagenes bitmap ordinarias</li>
+<li><strong>3D:</strong> apilamientos de texturas. Ocupan mucha memoria</li>
+<li><strong>Texturas procuderales:</strong> la imagen es calculada a partir de un algoritmo matemático.
+<ul>
+<li>Ocupan poca memoria, pero consumen CPU</li>
+<li>Se pueden <strong>reescalar</strong> con facilidad, por lo que son útiles para superficies de cualquier tamaño.</li>
+<li>Ejemplos de mapas generados: geométricos, patrón repetitivo, ruido fractal, etc.</li>
+</ul>
+</li>
+</ul>
+<h1>6.2 Texturizado</h1>
+<p>El <strong>texturizado</strong> consiste en superponer sobre los polígonos de un objeto una textura.</p>
+<h2>6.2.1 Texture Mapping</h2>
+<p>Crea una textura a partir de una <strong>imagen</strong> para aplicarla sobre la superficie, como si fuera una pegatina.</p>
+<img src="../../../img/coga/pasted-image-20250412092447.png" alt="Pasted image 20250412092447.png" loading="lazy">
+<h2>6.2.1 Bump Mapping</h2>
+<p>Perturba la superficie modificando las <strong>normales</strong> de las caras del objeto, pero <strong>sin cambiar su geometría</strong>. En sentido estricto puede no considerarse texturizado, es un tipo de <strong>mapeado topológico</strong></p>
+<ul>
+<li>Las normales se calculan en función de un <strong>mapa de alturas</strong> (una matriz de datos <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6644em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6644em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></eq>, generalmente una imagen).</li>
+<li>Se combinan las normales con la geometría del objeto</li>
+<li>Se calcula el modelo de iluminación para esos nuevos valores de las normales.</li>
+</ul>
+<img src="../../../img/coga/pasted-image-20250426120913.png" alt="Pasted image 20250426120913.png" loading="lazy">
+<h2>6.2.3 Environment Mapping</h2>
+<p>Mapea el <strong>entorno</strong> del objeto sobre su superficie.</p>
+<img src="../../../img/coga/pasted-image-20250412092641.png" alt="Pasted image 20250412092641.png" loading="lazy">
+<h2>6.2.4 Light Mapping</h2>
+<p>El brillo de las superficies se calcula previamete y se almacena para aplicarse como <strong>mapa de iluminación</strong> sobre la superficie. Se suelen usar en objetos estáticos para proporcionar efectos de iluminación como los de la global con un coste muy bajo.</p>
+<img src="../../../img/coga/pasted-image-20250426121229.png" alt="Pasted image 20250426121229.png" loading="lazy">
+<h2>6.2.5 Displacing Mapping</h2>
+<p><strong>Modifica la geometría</strong> de un objeto mediante un mapa de texturas, normalmente cambiando la dirección de las <strong>normales</strong>.</p>
+<ul>
+<li>
+<p>Genera una gran cantidad de <strong>geometría adicional</strong></p>
+</li>
+<li>
+<p>Es muy <strong>lento</strong>.</p>
+</li>
+<li>
+<p>Se pueden generar <strong>sombras</strong></p>
+</li>
+<li>
+<p>Se pueden generar <strong>oclusiones</strong></p>
+</li>
+<li>
+<p>Se puede usar para <strong>sombreados</strong></p>
+</li>
+<li>
+<p>Geometry shader-&gt; shader que se aplica después del <strong>vertex shader</strong> para generar geometría</p>
+</li>
+</ul>
+<img src="../../../img/coga/pasted-image-20250426122331.png" alt="Pasted image 20250426122331.png" loading="lazy">
+<h1>6.3 Mapeado de Texturas</h1>
+<p>El <strong>mapeado de texturas</strong> es la correspondencia de los puntos de la textura con los puntos de la superficie en la que se aplica. Tipos de mapeado:</p>
+<ul>
+<li>Mapeado <strong>directo</strong>: la textura se mapea directamente sobre el objeto
+<img src="../../../img/coga/pasted-image-20250430093818.png" alt="Pasted image 20250430093818.png" loading="lazy"></li>
+<li>Mapeado <strong>en dos fases</strong>: la textura se mapea sobre un objeto 3D y se proyecta sobre el objeto
+<img src="../../../img/coga/pasted-image-20250430093829.png" alt="Pasted image 20250430093829.png" loading="lazy"></li>
+</ul>
+<h2>6.3.1 Mapeado Directo de Texturas</h2>
+<p>Una textura 2D se presenta como un patrón de datos 2D <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mopen">(</span><span class="mord mathnormal">u</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mclose">)</span></span></span></span></eq>, donde el par <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">u</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mclose">)</span></span></span></span></eq> se denominan <strong>coordenadas de Textura</strong>. El <strong>mapa de texturas</strong> asocia un punto <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mopen">(</span><span class="mord mathnormal">u</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mclose">)</span></span></span></span></eq> con un punto <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.044em;">z</span><span class="mclose">)</span></span></span></span></eq> de la geometría del objeto. En general el mapa de texturas es muy <strong>complejo</strong>, por lo que se suele un programa de diseño CAD.
+<img src="../../../img/coga/pasted-image-20250430094148.png" alt="Pasted image 20250430094148.png" loading="lazy">
+<img src="../../../img/coga/pasted-image-20250430094209.png" alt="Pasted image 20250430094209.png" loading="lazy"></p>
+<h2>6.3.2 Mapeado de Texturas en OpenGL</h2>
+<ul>
+<li>Habilitar el uso de texturas 1D, 2D o 3D.</li>
+<li>Activar la textura</li>
+<li>Almacenar en memoria, dando valores o leyendo un fichero</li>
+<li>Definir la textura</li>
+<li>Mapear la textura</li>
+</ul>
+<h3>Habilitar el Mapeado de Texturas</h3>
+<p>En el <code>main</code>o en el <code>InitOpenGL</code>: <code>glEnable(GL_TEXTURE_2D)</code>: Si se quiere deshabilitar para que alguna superficie aparezca sin textura, con le color original: <code>glDisable(GL_TEXTURE_2D)</code></p>
+<h3>Leer y Activar la Textura</h3>
+<ul>
+<li><code>void glGenTextures(GLsizei n, GLuint*textura)</code>
+<ul>
+<li><code>n</code>: número de índices a crear</li>
+<li><code>textura</code>: puntero al primer elemento del array donde se almacenan los índices creados.</li>
+</ul>
+</li>
+<li><code>void glBindTexture(GLenum target, GLuint texture)</code>
+<ul>
+<li><code>target</code>: <code>GL_TEXTURE_1D</code> o <code>GL_TEXTURE_2D</code></li>
+<li><code>texture</code>: indice de la textura que se quiere enlazar (si se quiere no usar textura, 0).</li>
+</ul>
+</li>
+<li><code>glDeleteTextures(GLsizei num, const CLuint *nombres)</code></li>
+</ul>
+<h3>Almacenar en Memoria</h3>
+<p>Una textura se puede especificar como un array de <strong>texels</strong>, que se puede crear <strong>manualmente</strong>.
+<img src="../../../img/coga/pasted-image-20250430095036.png" alt="Pasted image 20250430095036.png" loading="lazy">
+Normalmente, o bien se escribe un programa que la <strong>genere</strong> (texturas procedurales) o se lee de un <strong>fichero de imagen</strong> con la librería STB:
+<img src="../../../img/coga/pasted-image-20250430095140.png" alt="Pasted image 20250430095140.png" loading="lazy"></p>
+<h3>Definir la Textura</h3>
+<p><code>void glTextImage2D(objetivo, nivel, componentes, ancho, alto, borde, formato, tipo, *pixeles)</code></p>
+<ul>
+<li><code>objetivo</code>: indica cuál es la textura a definir (<code>GL_TEXTURE_1D</code> o <code>GL_TEXTURE_2D</code>)</li>
+<li><code>nivel</code>: indica el nivel de detalle de las texturas, normalmente 0.</li>
+<li><code>componentes</code>: indica el número de componentes de color usados en cada pixel.</li>
+<li><code>ancho</code>: indica el ancho de la textura, que debe ser potencia de 2</li>
+<li><code>alto</code>: indica el alto de la textura, que debe ser potencia de 2</li>
+<li><code>borde</code>: indica el número de pixeles de borde que se usarán.</li>
+<li><code>formato</code>: indica el tipo de valores esperados (normalmente <code>GL_RGB</code>)</li>
+<li><code>tipo</code>: indica el tipo de la variable que almacena los valores de color por pixel.</li>
+<li><code>pixeles</code>: puntero a la variable que almacena los colores de cada pixel
+<img src="../../../img/coga/pasted-image-20250430095707.png" alt="Pasted image 20250430095707.png" loading="lazy"></li>
+</ul>
+<h3>Pegar la Textura - OpenGL 1.2</h3>
+<img src="../../../img/coga/pasted-image-20250430095750.png" alt="Pasted image 20250430095750.png" loading="lazy">
+<p><img src="../../../img/coga/pasted-image-20250430095806.png" alt="Pasted image 20250430095806.png" loading="lazy"><img src="../../../img/coga/pasted-image-20250430095829.png" alt="Pasted image 20250430095829.png" loading="lazy">
+Con dos texturas:
+<img src="../../../img/coga/pasted-image-20250430095934.png" alt="Pasted image 20250430095934.png" loading="lazy"></p>
+<h3>Pegar la Textura - Opengl 3.3</h3>
+<p>La carga es igual, pero hay que especificar las coordenadas de textura.
+<img src="../../../img/coga/pasted-image-20250430100139.png" alt="Pasted image 20250430100139.png" loading="lazy">
+<img src="../../../img/coga/pasted-image-20250430100150.png" alt="Pasted image 20250430100150.png" loading="lazy">
+<img src="../../../img/coga/pasted-image-20250430100221.png" alt="Pasted image 20250430100221.png" loading="lazy">
+<img src="../../../img/coga/pasted-image-20250430100200.png" alt="Pasted image 20250430100200.png" loading="lazy"></p>
+<h2>6.3.3 Mapeado Multicapa en Opengl 3.3</h2>
+<p>Se usan <strong>unidades de textura</strong> que permiten ir activando o desactivando las texturas manualmente
+<img src="../../../img/coga/pasted-image-20250430100328.png" alt="Pasted image 20250430100328.png" loading="lazy">
+<img src="../../../img/coga/pasted-image-20250430100342.png" alt="Pasted image 20250430100342.png" loading="lazy"></p>
+<h1>6.4 Parámetros de Texturas</h1>
+<p>Sobre el <strong>objeto</strong>: problemas de <strong>tamaño</strong>: qué hacer si la textura no abarca todo el objeto.</p>
+<ul>
+<li><code>glTextParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S/T, GL_REPEAT/CLAMP)</code>: especifica qué ocurre la si la textura no cubre los límites del objeto, puede repetirse (<code>GL_REPEAT</code>), o estirarse (<code>GL_CLAMP</code>). Debe llamarse dos veces, para la vertical (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span></span></span></span></eq>) y para la horizontal (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span></eq>)
+<img src="../../../img/coga/pasted-image-20250430100652.png" alt="Pasted image 20250430100652.png" loading="lazy"></li>
+</ul>
+<p>Sobre la <strong>pantalla</strong>: problemas de <strong>escala</strong>: qué hacer si al rasterizar, cada texel de la textura no se corresponde exactamente con un pixel de la pantalla.</p>
+<ul>
+<li><code>glTextParameti(GL_TEXTURE_2D, GL_TEXTURE_MIN/MAG_FILTER, GL_LINEAR/NEAREST)</code>. Si la superficie es mayor que la textura, cada pixel se corresponderá con un trozo pequeño de texel: magnificación. Si la superficie es menor que la textura, cada pixel se corresponderá con un conjunto de texels contiguos: minificación.
+<img src="../../../img/coga/pasted-image-20250430101039.png" alt="Pasted image 20250430101039.png" loading="lazy">
+<img src="../../../img/coga/pasted-image-20250430101051.png" alt="Pasted image 20250430101051.png" loading="lazy"></li>
+</ul>
+<p><strong>Mezclas:</strong> que hacer si el objeto tenía un color.</p>
+<ul>
+<li><code>glTextEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GLint valor)</code>: para establecer el modo RGBA donde <code>valor</code> puede ser (<code>p</code>=pixel, <code>s</code>=textura, <code>c</code>= entorno):
+<ul>
+<li><code>GL_REPLACE</code>: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.2222em;">V</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> reemplaza el color del objeto por la textura.</li>
+<li><code>GL_MODULATE</code>: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.2222em;">V</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0576em;">S</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> se multiplica el color del objeto y el de la textura.</li>
+<li><code>GL_DECAL</code>: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.2222em;">V</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0037em;">α</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> sustituye teniendo en cuenta el canal Alpha</li>
+<li><code>GL_BLEND</code>: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.2222em;">V</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">P</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0576em;">S</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0715em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0715em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0576em;">S</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> multiplica el color del píxel por el color de la textura y del entorno un color elegido.</li>
+</ul>
+</li>
+<li><code>glTextEnvfv(GL_TEXTURE, GL_TEXTURE_ENV_COLOR, GLfloat color[4])</code> para enviar el color.
+<img src="../../../img/coga/pasted-image-20250430101851.png" alt="Pasted image 20250430101851.png" loading="lazy"></li>
+</ul>
+<h1>6.5 Transparencia</h1>
+<p><strong>Blending</strong>: la forma más sencilla de hacer una transparencia es mediante la técnica de puerta o <strong>ventana transparente</strong>. Se usa una ecuación de la forma <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">c</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6153em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> siendo <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> el color objetivo y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> e color fuente.
+<img src="../../../img/coga/pasted-image-20250430102128.png" alt="Pasted image 20250430102128.png" loading="lazy">
+<img src="../../../img/coga/pasted-image-20250430102149.png" alt="Pasted image 20250430102149.png" loading="lazy"></p>
+<p>El modelo RGBA acepta el valor alpha. Para ellos las texturas o color deben tener un alpha, por ejemplo .png o .gifa. Se habilita con <code>glEnable(GL_ALPHA_TEST)</code>.</p>
+<p>El <strong>alpha test</strong> compara el valor del fragmento con un valor de referencia. Por defecto, este valor es el 0 y la comparación se hace entre 0 y 1.</p>
+<ul>
+<li><code>glAlphaFunc(GLenum func, GLclamp ref)</code> donde <code>func</code> puede ser <code>GL_NEVER</code>, <code>GL_LESS</code>,<code>GL_EQUAL</code>, <code>GL_LEQUAL</code>,<code>GL_GREATER</code>, <code>GL_NOTEQUAL</code> o <code>GL_ALWAYS</code> (por defecto).</li>
+</ul>
+<p>Para cualquier otro elemento de color RGBA:</p>
+<ul>
+<li><code>glEnable(GL_BLEND)</code></li>
+<li><code>glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)</code></li>
+</ul>
+<p>Nosotros trabajaremos con texturas que tengan ya incorporado canal Alpha, por lo que tendremos en cuenta el número de canales, por lo que hay que incluir este número en la función de lectura.
+<img src="../../../img/coga/pasted-image-20250430102912.png" alt="Pasted image 20250430102912.png" loading="lazy"></p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="5-iluminacion.html"><span class="nav-etiqueta">← anterior</span>5. Iluminación</a>
+  <a class="nav-siguiente" href="7-otras-tecnicas.html"><span class="nav-etiqueta">siguiente →</span>7. Otras Técnicas</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

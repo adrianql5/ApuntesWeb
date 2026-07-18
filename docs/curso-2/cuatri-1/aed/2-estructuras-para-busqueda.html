@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. ESTRUCTURAS PARA BÚSQUEDA — apuntes de AED (segundo curso de Ingeniería Informática).">
+<title>2. ESTRUCTURAS PARA BÚSQUEDA · AED · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">aed</a><span class="miga-sep">/</span><span aria-current="page">2-estructuras-para-busqueda</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">AED · curso 2</p>
+    <h1>2. ESTRUCTURAS PARA BÚSQUEDA · AED</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<p>Un uso importante de los árboles, especialmente de los <strong>árboles binarios</strong>, es en <strong>algoritmo de búsqueda</strong>. Para ellos, se han desarrollado <strong>árboles binarios de búsqueda</strong>.</p>
+<h1>2.1 Árbol Binario de Búsqueda</h1>
+<p><strong>Árbol binario</strong> en el que, para todo <strong>nodo</strong>, los elementos de su <strong>subárbol izquierdo</strong> tienen un valor menor que él, y todos los elementos de su <strong>subárbol derecho</strong> tienen un valor mayor que él.</p>
+<p>Presenta clara ventaja de que <strong>localizar un elemento</strong> es muy fácil y rápido, al estar todos los datos ordenados.
+Además, al realizarle el <strong>recorrido inorden</strong>, los elementos se imprimen ordenados de menor a mayor.
+<img src="../../../img/aed/pasted-image-20240930000658.png" alt="archivos/imagenes/Pasted image 20240930000658.png" loading="lazy"></p>
+<h2>Inserción</h2>
+<p>En un <strong>ABB</strong> la inserción no se puede realizar en el primer hueco libre que se vea, sino que hay que respetar la estructura, buscando desde la <strong>raíz</strong> el hueco correspondiente al nodo que queremos insertar. Por lo tanto, la <strong>inserción es recursiva</strong>, ya que se parte del <strong>nodo raíz</strong> y se va mirando si el elemento que queremos insertar es <strong>menor o mayor</strong>, bajando por la rama correspondiente hasta encontrar su sitio.
+Como clara desventaja de este tipo de árbol, tenemos el caso en el que la mayor parte de los elementos que se inserten sea mayores o menores que el nodo raíz, provocando un <strong>árbol desbalanceado</strong>, lo que además <strong>aumenta el tiempo de búsqueda</strong>, al tener que recorrer muchos elementos, como si se tratase de una lista.</p>
+<pre><code class="language-C">void insertar(abb *A, tipoelem E) {
+	if (es_vacio(*A)) {
+		*A = (abb) malloc(sizeof (struct celda));
+		(*A)-&gt;info = E;
+		(*A)-&gt;izq = NULL;
+		(*A)-&gt;der = NULL;
+		return;
+	}
+	tipoclave cl = _clave_elem(&amp;E);
+	int comp = _comparar_clave_elem(cl, (*A)-&gt;info );
+	if (comp &gt; 0 ) {
+		insertar(&amp;(*A)-&gt;der, E);
+	} else {
+		insertar(&amp;(*A)-&gt;izq, E);
+	}
+}
+</code></pre>
+<img src="../../../img/aed/pasted-image-20240930001610.png" alt="archivos/imagenes/Pasted image 20240930001610.png" loading="lazy">
+## Eliminación
+La desventaja en el caso de la eliminación reside en tener que **reestructurar** el árbol si se eliminan ciertos nodos, para mantener la estructura que cumpla las restricciones de los **ABB**. Existen 3 posibles situaciones de eliminación:
+- **Si el nodo es hoja**, se suprime del árbol sin más
+- **Si tiene un único hijo**, se intercambia de posición con su hijo y se elimina del árbol
+- **Si tiene 2 hijos**, buscamos el menos de todos los descendientes del hijo derecho, sustituimos por dicho nodo, y lo eliminamos del árbol. Otra opción es sustituir por el nodo de mayor valor de los descendientes del subárbol izquierdo
+```C
+Algoritmos y Estructuras de Datos 16
+void suprimir(abb *A, tipoelem E) {
+	abb aux;
+	if(!es_vacio(*A)){ return; }
+	tipoclave cl = _clave_elem(&E);
+	int comp = _comparar_clave_elem(cl, (*A)->info);
+	if(comp < 0){ 
+		suprimir(&(*A)->izq, E);
+	} else if (comp > 0){ 
+		suprimir(&(*A)->der, E);
+	} else if (es_vacio((*A)->izq) && es_vacio((*A)->der)) { 
+		_destruir_elem(&((*A)->info));
+		free(*A);
+		*A = NULL;
+	} else if (es_vacio((*A)->izq)) { 
+		aux = *A;
+		*A = (*A)->der;
+		_destruir_elem(&aux->info);
+		free(aux);
+	} else if (es_vacio((*A)->der)) {
+		aux = *A;
+		*A = (*A)->izq;
+		_destruir_elem(&aux->info);
+		free(aux);
+	} else { 
+		_destruir_elem(&((*A)->info));
+		(*A)->info = _suprimir_min(&(*A)->der);
+	}
+}
+```
+<img src="../../../img/aed/pasted-image-20240930001829.png" alt="archivos/imagenes/Pasted image 20240930001829.png" loading="lazy">
+<h1>2.2 Montículo binario</h1>
+<p><strong>Árbol binario completo</strong> que da soporte eficiente a las operaciones del <strong>TAD</strong> <em>cola de prioridad</em> . Por tanto, sus aplicaciones son las mismas que las aplicaciones de una cola con prioridad.
+Pueden ser <em>montículos de mínimos</em>, de forma que los elementos con menor valor tienen <strong>mayor prioridad</strong>, o <em>montículos de máximos</em>, en los que los elementos de mayor valor tienen <strong>mayor prioridad</strong>. Por lo general usaremos montículos de mínimos, por que siempre se debe cumplir la condición de que cada nodo tenga un <strong>valor menos que el de cualquiera de sus hijos</strong>. Por tanto se dice que los montículos mantienen un <em>orden parcial</em>, ya que no es tan estricto como los <strong>ABB</strong>, pero lo es más que una ordenación aleatoria
+EN este tipo de aplicaciones hay que buscar siempre el elementos de <em>mayor prioridad</em>, que <em>será siempre la raíz</em>.</p>
+<h2>Implementación</h2>
+<h3>Dinámica</h3>
+<p>Igual que el resto de los árboles binarios, cada elemento consta de su valor y un puntero a cada uno de sus hijos.</p>
+<h3>Estática</h3>
+<p>Se representa los elementos del árbol dentro de un <strong>array</strong>., usando el índice de cada elemento como localizador (<em>puntero</em>) de su padre o de sus hijos. De esta forma, <strong>el hijo izquierdo</strong> de <em>k</em> se sitúa en la posición <em>2k</em> y el <strong>hijo derecho</strong> en la posición <em>2k+1</em> , mientras que su padre entra en la posición <em>k/2</em>.
+Esta representación facilita las operaciones de búsqueda tanto en simplicidad como en tiempo de ejecución, pero se requiere conocer el número máximo de elementos de antemano. Además, el hecho de ressturcturar el árbol se hace más difícil en este tipo de implementaciones.
+<img src="../../../img/aed/pasted-image-20240930003158.png" alt="archivos/imagenes/Pasted image 20240930003158.png" loading="lazy"></p>
+<h2>Inserción</h2>
+<p>Como <strong>árbol binario completo</strong> que es, la inserción se hace en el hueco libre más a la izquierda del último nivel. Sin embargo, si se inserta un elemento con un valor menor que su padre, es necesario <strong>reorganizar</strong> el árbol intercambiando el elemento con su padre hasta llegar una posición en la que se cumpla el criterio.</p>
+<pre><code class="language-C">void insertar(cola *C, tipoelem E, int prioridad){
+	int I, padre;
+	unsigned encontrado;
+	(*C)-&gt;ult=(*C)-&gt;ult+1;
+	I=(*C)-&gt;ult;
+	encontrado=0;
+	while(I&gt;0 &amp;&amp; !encontrado){
+		padre=(I-1)/2;
+		if (prioridad &gt; (*C)-&gt;datos[padre].prioridad)
+		encontrado=1;
+		else{ //pongo padre en posición I
+			(*C)-&gt;datos[I].elemento=(*C)-&gt;datos[padre].elemento;
+			(*C)-&gt;datos[I].prioridad=(*C)-&gt;datos[padre].prioridad;
+			I=padre;
+		}
+	}
+	//Encontré su sitio, inserto el dato
+	(*C)-&gt;datos[I].elemento=E;
+	(*C)-&gt;datos[I].prioridad=prioridad;
+}
+</code></pre>
+<img src="../../../img/aed/pasted-image-20240930003534.png" alt="archivos/imagenes/Pasted image 20240930003534.png" loading="lazy">
+<h2>Eliminación</h2>
+<p>En este tipo de árboles, el elemento que se quiere suprimir es siempre el de mayor prioridad, es decir, la raíz. Para llevar a cabo esta operación, el <strong>nodo raíz se intercambia de posición con el nodo hoja más a la derecha</strong>, y una vez allí se elimina. A continuación se procese a la reorganización del nuevo nodo raíz hasta encontrar su sitio, intercambiándolo con el hijo menor en cada caso.</p>
+<pre><code class="language-C">void suprimir(cola *C){
+	tipoelem elemento;
+	int I,J, prioridad;
+	unsigned encontrado;
+	elemento=(*C)-&gt;datos[(*C)-&gt;ult].elemento;
+	prioridad=(*C)-&gt;datos[(*C)-&gt;ult].prioridad;
+	(*C)-&gt;ult=(*C)-&gt;ult-1;
+	I=0; //raíz
+	J=2*I+1; //hijo izquierdo de raíz
+	encontrado=0;
+	while(J&lt;=(*C)-&gt;ult &amp;&amp; !encontrado){
+		if(J&lt;(*C)-&gt;ult)
+		if ((*C)-&gt;datos[J].prioridad &gt; (*C)-&gt;datos[J+1].prioridad)
+		J++; //hijo derecho
+		if(prioridad &lt;= (*C)-&gt;datos[J].prioridad )
+			encontrado=1;
+		else{
+			(*C)-&gt;datos[I].elemento=(*C)-&gt;datos[J].elemento;
+			(*C)-&gt;datos[I].prioridad=(*C)-&gt;datos[J].prioridad;
+			I=J;
+			J=2*I+1;
+		}
+	}
+	(*C)-&gt;datos[I].elemento=elemento;
+	(*C)-&gt;datos[I].prioridad=prioridad;
+}
+</code></pre>
+<img src="../../../img/aed/pasted-image-20240930003856.png" alt="archivos/imagenes/Pasted image 20240930003856.png" loading="lazy">
+<h2>Monticulación o heapify</h2>
+<p>Consiste en:</p>
+<ul>
+<li><strong>Dibujar el árbol que resulta a partir del array</strong></li>
+<li><strong>Si el arbol tiene L niveles</strong>, hacer desde <em>i=L-1</em> hsata <em>1</em>
+-Comprobar si cada nodo del nivel i cumple la regla del orden parcial, es decir , es menor o mayor que sus hijos. Si no la cumple, intercambiar con elmayor/menor de sus hijos.
+-Propagar esta comparación  hacia los niveles de i hasta L-1</li>
+</ul>
+<img src="../../../img/aed/pasted-image-20240930004535.png" alt="archivos/imagenes/Pasted image 20240930004535.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20240930004554.png" alt="archivos/imagenes/Pasted image 20240930004554.png" loading="lazy">
+<h1>2.3 Guía rápida resolver ejercicios tipo</h1>
+<h2>Crear un árbol binario</h2>
+<p>Cogemos el primer elemento que nos den, y el siguiente elemento comparamos si es mayor o menor, si es menor me muevo a la izquierda, si es mayor a derecha, y así hasta que no haya nada.
+Inorden muestra la lista en orden
+Preorden muestra el proceso de inserción
+Postorden muestra el proceso de eliminación</p>
+<h2>Eliminar nodos árbol binario</h2>
+<p>Hay 3 casos
+Si es un nodo hoja se elimina directamente
+Si el nodo tiene un único hijo se intercambian y se elimina
+Si el nodo tiene dos hijos, se intercambia con el mayor izquierdo o el mayor derecho</p>
+<h2>Inserción en montículos</h2>
+<p>Lo construimos así:
+<img src="../../../img/aed/pasted-image-20240930003158.png" alt="archivos/imagenes/Pasted image 20240930003158.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20240930003534.png" alt="archivos/imagenes/Pasted image 20240930003534.png" loading="lazy">
+Lo insertamos en el último nodo y vamos intercambiándolo hasta donde le corresponde, tener en cuenta que max-heap tiene el nodo de más valor arriba y min-heap el de menor arriba
+Para eliminar si lo pide cambiamos la raíz con el ultimo nodo, eliminamos y recolocamos.</p>
+<h2>Heapify</h2>
+<p>Vamos reordenando nivel a nivel los nodos si nos los dan sin ningún tipo de orden: <img src="../../../img/aed/pasted-image-20240930004535.png" alt="archivos/imagenes/Pasted image 20240930004535.png" loading="lazy">
+<img src="../../../img/aed/pasted-image-20240930003534.png" alt="archivos/imagenes/Pasted image 20240930003534.png" loading="lazy"></p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-arboles-binarios.html"><span class="nav-etiqueta">← anterior</span>1. ÁRBOLES BINARIOS</a>
+  <a class="nav-siguiente" href="3-arboles-equilibrados-avl.html"><span class="nav-etiqueta">siguiente →</span>3. Árboles Equilibrados AVL</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="9. Patrones Estructurales — apuntes de DESOFT (segundo curso de Ingeniería Informática).">
+<title>9. Patrones Estructurales · DESOFT · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">desoft</a><span class="miga-sep">/</span><span aria-current="page">9-patrones-estructurales</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DESOFT · curso 2</p>
+    <h1>9. Patrones Estructurales · DESOFT</h1>
+  </header>
+  <div class="prosa">
+<h1>9.1 Patrón Composite</h1>
+<p>Organiza objetos en <strong>estructura de árbol</strong> para representar jerarquías. Permite tratar de manera <strong>uniforme</strong> a <strong>individuos</strong> y <strong>grupos</strong>. Se usa para:</p>
+<ul>
+<li>Representar jerarquías de objetos <strong>parte-todo</strong>.</li>
+<li>Obviar diferencias entre los <strong>individuos</strong> y sus <strong>composiciones</strong>.</li>
+</ul>
+<img src="../../../img/desoft/pasted-image-20250423162658.png" alt="Pasted image 20250423162658.png" loading="lazy">
+<img src="../../../img/desoft/pasted-image-20250423162707.png" alt="Pasted image 20250423162707.png" loading="lazy">
+<img src="../../../img/desoft/pasted-image-20250423162718.png" alt="Pasted image 20250423162718.png" loading="lazy">
+<h2>Participantes</h2>
+<table>
+<thead>
+<tr>
+<th>Rol</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Componente</strong></td>
+<td>Define la interfaz común para todos los objetos (hojas y compuestos). Puede incluir comportamiento por defecto.</td>
+</tr>
+<tr>
+<td><strong>Hoja</strong></td>
+<td>Representa objetos simples que no contienen otros. Implementan la interfaz, pero no gestionan hijos.</td>
+</tr>
+<tr>
+<td><strong>Compuesto</strong></td>
+<td>Contiene otros componentes (hojas o compuestos). Implementa operaciones para añadir, eliminar o acceder a los hijos.</td>
+</tr>
+<tr>
+<td><strong>Cliente</strong></td>
+<td>Usa objetos a través de la interfaz del componente, sin preocuparse si es hoja o compuesto.</td>
+</tr>
+</tbody>
+</table>
+<h2>Estructura</h2>
+<img src="../../../img/desoft/pasted-image-20250423144129.png" alt="Pasted image 20250423144129.png" loading="lazy">
+## Ventajas e Inconvenientes
+- Permite **composición recursiva**, es decir, compuestos dentro de compuestos.
+- Simplifica el código del cliente al unificar el tratamiento de todos los elementos.
+- Facilita añadir nuevos tipos de componentes.
+<ul>
+<li>Puede ser difícil <strong>restringir qué tipos de componentes se pueden añadir</strong> dentro de un compuesto.</li>
+<li>A veces, hay métodos en la interfaz común que no tienen sentido para todas las clases (por ejemplo, <code>add()</code> en una hoja).</li>
+</ul>
+<h1>9.2 Patrón Decorator</h1>
+<p>Asigna/retira <strong>responsabilidades adicionales</strong> a un objeto particular <strong>dinámicamente</strong>. Proporciona una <strong>alternativa flexible</strong> a la <strong>herencia</strong> para ampliar funcionalidad. Suele combinarse con <strong>Composite</strong>. Se usa para:</p>
+<ul>
+<li>Otorgar o revocar responsabilidades a objetos individuales de manera dinámica y transparente.</li>
+<li>Cuando no es viable la extensión mediante herencia</li>
+</ul>
+<img src="../../../img/desoft/pasted-image-20250423163052.png" alt="Pasted image 20250423163052.png" loading="lazy">
+<img src="../../../img/desoft/pasted-image-20250423163104.png" alt="Pasted image 20250423163104.png" loading="lazy">
+<h2>Participantes</h2>
+<table>
+<thead>
+<tr>
+<th>Rol</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Componente</strong></td>
+<td>Interfaz común para objetos que pueden tener funcionalidades añadidas.</td>
+</tr>
+<tr>
+<td><strong>ComponenteConcreto</strong></td>
+<td>Implementación base que puede ser decorada.</td>
+</tr>
+<tr>
+<td><strong>Decorador</strong></td>
+<td>Clase abstracta que implementa la interfaz y contiene una referencia a un componente.</td>
+</tr>
+<tr>
+<td><strong>DecoradorConcreto</strong></td>
+<td>Añade funcionalidades específicas al componente envolviendo su comportamiento.</td>
+</tr>
+</tbody>
+</table>
+<h2>Estructura</h2>
+<img src="../../../img/desoft/pasted-image-20250423144302.png" alt="Pasted image 20250423144302.png" loading="lazy">
+<h2>Ventajas e Inconvenientes</h2>
+<ul>
+<li>
+<p>Mucho más <strong>flexible que la herencia</strong>: puedes combinar decoradores fácilmente.</p>
+</li>
+<li>
+<p>Evita clases &quot;gigantes&quot; con muchas funcionalidades opcionales.</p>
+</li>
+<li>
+<p>Puedes decorar objetos en tiempo de ejecución.</p>
+</li>
+<li>
+<p>Los decoradores <strong>no son idénticos al objeto decorado</strong>, lo cual puede ser confuso en ciertos contextos.</p>
+</li>
+<li>
+<p>Puede generar <strong>múltiples objetos pequeños muy similares</strong>, que pueden ser difíciles de rastrear y depurar.</p>
+</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="8-patrones-de-creacion.html"><span class="nav-etiqueta">← anterior</span>8. Patrones de Creación</a>
+  <a class="nav-siguiente" href="10-patrones-de-comportamiento.html"><span class="nav-etiqueta">siguiente →</span>10. Patrones de Comportamiento</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

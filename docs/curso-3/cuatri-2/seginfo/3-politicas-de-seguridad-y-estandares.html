@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="3. Políticas de seguridad y estándares — apuntes de SEGINFO (tercer curso de Ingeniería Informática).">
+<title>3. Políticas de seguridad y estándares · SEGINFO · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">seginfo</a><span class="miga-sep">/</span><span aria-current="page">3-politicas-de-seguridad-y-estandares</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">SEGINFO · curso 3</p>
+    <h1>3. Políticas de seguridad y estándares · SEGINFO</h1>
+  </header>
+  <div class="prosa">
+<h1>3.1 Enfoque general</h1>
+<p>La seguridad de la información es un <strong>proceso</strong>, no un producto. Requiere políticas, procedimientos, medidas técnicas, gestión de incidentes y auditorías.</p>
+<p>Metas clásicas:</p>
+<ul>
+<li><strong>Prevención</strong>: evitar que se viole la política.</li>
+<li><strong>Detección</strong>: descubrir que se ha violado.</li>
+<li><strong>Recuperación</strong>: detener el ataque, reparar daños y seguir funcionando.</li>
+</ul>
+<p>Diferencia clave: la <strong>política</strong> dice qué está permitido; los <strong>mecanismos o controles</strong> dicen cómo se hace cumplir. En entornos militares/gubernamentales suele pesar más la confidencialidad; en comerciales, integridad y disponibilidad.</p>
+<h1>3.2 Políticas y controles</h1>
+<p>Ejemplos de políticas:</p>
+<ul>
+<li><strong>Contraseñas</strong>: generación automatizada, mínimo 10 caracteres, mayúsculas, minúsculas, números, caracteres especiales y cambio periódico.</li>
+<li><strong>Software</strong>: no instalar programas sin autorización.</li>
+</ul>
+<p>Los controles aplican la política y pueden ser técnicos, físicos u organizativos. Ejemplos: autenticación biométrica, restricción de dispositivos externos y procedimientos de instalación, copia o acceso. <strong>INCIBE</strong> sirve como referencia práctica de modelos de políticas y planes directores.</p>
+<h1>3.3 Estándares</h1>
+<p>Los estándares aportan interoperabilidad, uniformidad, certificación y orden. No hay un estándar perfecto para todo: depende del servicio, tamaño y facilidad de implantación.</p>
+<p>Ejemplos importantes:</p>
+<ul>
+<li><strong>Orange Book</strong>: criterios del Departamento de Defensa de EE. UU.</li>
+<li><strong>BS 7799</strong>: antecedente histórico de gestión de seguridad.</li>
+<li><strong>COBIT</strong>: gobierno, auditoría y control de TI, creado por ISACA.</li>
+<li><strong>ISO/IEC 27000</strong>: familia de normas de seguridad de la información.</li>
+<li><strong>ENS</strong>: marco español para administraciones y entidades sujetas a él; regulado por el <strong>Real Decreto 311/2022, de 3 de mayo</strong>.</li>
+</ul>
+<h1>3.4 ISO/IEC 27001 y 27002</h1>
+<p>La familia <strong>ISO/IEC 27000</strong> se aplica a organizaciones públicas o privadas, grandes o pequeñas.</p>
+<ul>
+<li><strong>ISO/IEC 27001</strong>: norma principal y única certificable. Define requisitos para establecer, implementar, operar, monitorizar, revisar, mantener y mejorar un <strong>SGSI</strong>. Usa ciclo <strong>PDCA</strong>.</li>
+<li><strong>ISO/IEC 27002</strong>: guía de buenas prácticas y controles. En clase: <strong>114 controles</strong>, <strong>35 objetivos de control</strong> y <strong>14 dominios</strong>.</li>
+<li>Otras: <strong>27003</strong> implementación, <strong>27004</strong> métricas, <strong>27005</strong> riesgos, <strong>27006</strong> acreditación, <strong>27010</strong> información compartida, <strong>27034</strong> aplicaciones y <strong>27799</strong> ámbito sanitario.</li>
+</ul>
+<p>Dominios de 27002: políticas, organización, recursos humanos, activos, accesos, cifrado, seguridad física, operaciones, telecomunicaciones, adquisición/desarrollo/mantenimiento, proveedores, incidentes, continuidad de negocio y cumplimiento.</p>
+<h1>3.5 Ejemplo y test</h1>
+<p>Ejemplo público: plan director de seguridad TIC de la Xunta de Galicia, con cinco dimensiones: formación y concienciación, cumplimiento normativo, marco organizativo, marco operacional y medidas de protección.</p>
+<p>Para examen:</p>
+<ul>
+<li>Seguridad = prevención + detección + recuperación.</li>
+<li>Política = qué se permite; control = cómo se cumple.</li>
+<li>Los estándares ayudan a implantar, ordenar, auditar y certificar.</li>
+<li><strong>ISO/IEC 27001</strong> = SGSI y certificable.</li>
+<li><strong>ISO/IEC 27002</strong> = controles de buenas prácticas.</li>
+<li><strong>ENS</strong> = referencia principal del sector público español.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="2-sgsi-analisis-y-gestion-de-riesgos.html"><span class="nav-etiqueta">← anterior</span>2. SGSI Análisis y gestión de riesgos</a>
+  <a class="nav-siguiente" href="4-fundamentos-juridicos-basicos.html"><span class="nav-etiqueta">siguiente →</span>4. Fundamentos jurídicos básicos</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="6. Interfaces — apuntes de POO (segundo curso de Ingeniería Informática).">
+<title>6. Interfaces · POO · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">poo</a><span class="miga-sep">/</span><span aria-current="page">6-interfaces</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">POO · curso 2</p>
+    <h1>6. Interfaces · POO</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<h1>6.1 Concepto de Interfaz</h1>
+<p>Una <strong>interfaz</strong> se entiende como un compromiso entre los programadores de una aplicación para que las clases que crean unos puedan ser usadas por otros sin errores o necesidad de adaptarlas. En las interfaces se define:</p>
+<ul>
+<li>Los <strong>tipos de datos</strong> que se deben crear en el programa. En el programa se pueden definir otras, pero al menos deben estar definidos los indicados en las interfaces.</li>
+<li>Los <strong>métodos</strong> que deben tener las clases del programa, indicando exactamente sus nombres, tipo de dato de los argumentos que recibe y el tipo de dato que devuelven. En las clases se pueden definir otras, pero al menos deben tener los de las interfaces que implementan.</li>
+</ul>
+<p>El objetivo de las interfaces es establecer los <strong>métodos de interés</strong>, que alguna clase debe implementar y que serán visibles y accesibles por las otras clases. Estos métodos serán métodos <strong>publicos</strong>, pero no todos los métodos públicos son de interés, sólo lo son aquellos que proveen la <strong>funcionalidad requerida por las otras clases</strong>.</p>
+<p>El uso de interfaces <strong>facilita el desarrollo y mantenimiento</strong> de los programas, ya que con ellas se dividen las responsabilidades entre los programadores y las clases se pueden implementar de manera independiente.</p>
+<p>Un cambio en una clase que implementa los métodos de una interfaz no afectará a las otras clases que usan esa interfaz. Un cambio en la interfaz afectará de forma significativa tantos a las que clases que la implementan como a las que la usan. Por tanto, las <strong>interfaces deberían ser constantes</strong>, una vez se definen no se deberían cambiar.</p>
+<h1>6.2 Interfaces en Java</h1>
+<p>En java, una interfaz se entiende como una plantilla de una clase. Están formadas por constantes, declaraciones de métodos abstractos, métodos por defecto y métodos estáticos.</p>
+<p>Las interfaces <strong>no tienen constructores</strong> porque <strong>no se pueden instanciar</strong>. Los <strong>atributos</strong> de una interfaz son implícitamente <strong>públicos, estáticos y finales</strong> (constantes). Los <strong>métodos</strong> de una interfaz son implícitamente <strong>públicos y abstractos</strong>.</p>
+<p>Para que la interfaz se pueda usar, <strong>alguna clase debe implementarla</strong>, es decir, implementar sus métodos abstractos:
+<code>public class &lt;nombre_class&gt; implements &lt;nombre_interfaz&gt;</code></p>
+<img src="../../../img/poo/pasted-image-20250622131031.png" alt="archivos/imagenes/Pasted image 20250622131031.png" loading="lazy">
+<p>Una vez la <strong>interfaz</strong> haya sido implementada, <strong>se comportará como una clase</strong>, pudiendo invocar sus métodos abstractos (usando la implementación de la clase que la implementa), estáticos y por defecto.</p>
+<p>Cuando una <strong>clase</strong> implementa una interfaz, <strong>adquiere todos sus métodos</strong>, igual que sucede en la herencia de clases. Entonces, se pueden entender que la clase que implementa una interfaz es su &quot;derivada&quot;. Como consecuencia, con interfaces se pueden aplicar todos los conceptos de <strong>herencia,  jerarquías, clases abstractas y polimorfismo</strong>.</p>
+<img src="../../../img/poo/pasted-image-20250622131050.png" alt="archivos/imagenes/Pasted image 20250622131050.png" loading="lazy">
+<p>Una interfaz es <strong>funcionalmente equivalente</strong> a (provee la misma funcionalidad que) una clase abstracta en la que todos los métodos son abstractos, todos los atributos son constantes y no tiene constructores.</p>
+<p>Las <strong>diferencias</strong> entre clases abstractas e interfaces son:
+<img src="../../../img/poo/pasted-image-20241205195051.png" alt="archivos/imagenes/Pasted image 20241205195051.png" loading="lazy"></p>
+<ul>
+<li>Escogeremos <strong>interfaces</strong> cuando queramos establecer de forma clara e inequívoca los métodos que se van a usar en el resto de clases del programa.</li>
+<li>Escogeremos <strong>clases abstractas</strong> cuando queramos hacer énfasis en la reutilización de código, incluyendo constructores que se invocan desde las clases base.</li>
+</ul>
+<h1>6.3 Métodos por defecto</h1>
+<p>Los <strong>métodos por defecto</strong> son métodos que se deben declarar e implementar en la interfaz de manera que los heredan las clases que la implementan.
+<code>default &lt;tipo&gt; &lt;nombre_método&gt; (&lt;tipo&gt;&lt;nombre_argumento&gt;){codigo}</code></p>
+<p><strong>Operan</strong> únicamente con sus <strong>argumentos</strong>, pues todos los atributos de la interfaz son constantes. Si se quiere operar con los atributos de las clases que la implementan, se tendrán que pasar como argumento. Entonces, en este caso se debe valorar la conveniencia de usar métodos por defecto. El código será más difícil de entender y mantener, pues los métodos por defecto (que las clases que implementan la interfaz heredan) tendrán argumentos que no serían necesarios si se definieran en dicha clase.</p>
+<p>Son <strong>implícitamente públicos</strong>. Pueden <strong>usar métodos abstractos de la interfaz</strong>, pues estarán implementados en las clases que la implementan.</p>
+<p>Los métodos por defecto se heredan en las clases que implementan la interfaz y en las interfaces derivadas de la interfaz. Puede <strong>sobreescribirse</strong> y en la sobreescritura se puede usar <code>super</code> de la siguiente manera: <code>&lt;nombre_interfaz&gt;.super.&lt;nombre_método&gt;</code></p>
+<img src="../../../img/poo/pasted-image-20250622154401.png" alt="archivos/imagenes/Pasted image 20250622154401.png" loading="lazy">
+<h1>6.4 Métodos estáticos</h1>
+<p>Los <strong>métodos estáticos</strong> son aquellos que pueden ser invocados sin instanciar la clase en la que están definidos.</p>
+<ul>
+<li>Se cargan en memoria al arrancar el programa, así que <strong>están disponibles desde el inicio</strong>del programa.</li>
+<li>Se pueden definir en <strong>interfaces</strong> y en <strong>cualquier tipo de clase</strong> (abstracta, instanciable o final)</li>
+<li>Sólo pueden <strong>invocar métodos</strong> de la clase o interfaz en la que están definidos que también sean <strong>estáticos</strong>
+Los métodos <strong>estáticos no son heredados</strong> ni en las clases ni en las interfaces derivadas.</li>
+</ul>
+<img src="../../../img/poo/pasted-image-20241218164032.png" alt="archivos/imagenes/Pasted image 20241218164032.png" loading="lazy">
+<table>
+<thead>
+<tr>
+<th>Métodos por defecto</th>
+<th>Métodos estáticos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sólo se pueden definir en interfaces.</td>
+<td>Se pueden definir en interfaces y clases.</td>
+</tr>
+<tr>
+<td>Pueden invocar cualquier tipo de método, incluyendo métodos por defecto, estáticos y abstractos.</td>
+<td>Sólo pueden invocar métodos estáticos.</td>
+</tr>
+<tr>
+<td>Son heredados por las clases e interfaces derivadas de la interfaz que los define.</td>
+<td>No pueden ser heredados, son específicos de las clases o interfaces que los definen.</td>
+</tr>
+<tr>
+<td>No están disponibles desde el arranque del programa, hay que crear un objeto para invocarlos.</td>
+<td>Están disponibles desde el arranque del programa.</td>
+</tr>
+<tr>
+<td>Ambos son estáticos, por lo que operan sólo sobre sus argumentos.</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1>6.5 Herencia e Interfaces</h1>
+<p>Una clase que implementa una interfaz es como su derivada y además puede implementar más de una interfaz, se puede entender en que las interfaces existe <strong>herencia múltiple</strong>.</p>
+<p>Cuando una <strong>clase implementa varias interfaces</strong>, estas pueden tener algunos <strong>métodos en común</strong>.</p>
+<ul>
+<li>Si tienen en común métodos abstractos: no hay conflictos, la implementación en la clase será válida para todas las interfaces.</li>
+<li>Si tienen en común métodos estáticos, pues la clase no los hereda</li>
+<li>Si tienen en común métodos <strong>por defecto</strong> hay colisión entre los métodos, pues no existe ningún mecanismo para seleccionar automáticamente qué implementación se hereda. Para solucionar esto, la clase debe sobrescribir los métodos por defecto que son comunes a las interfaces que implementa. Así, en la propia sobreescritura se puede escoger qué implementación se usa con <code>super</code> (o se puede hacer otra implementación nueva).</li>
+</ul>
+<p>Cuando una <strong>interfaz hereda de varias interfaces</strong> que tienen algún <strong>método por defecto en común</strong>, hay el mismo problema y se soluciona de la misma manera, sobrescribiéndolo.</p>
+<p>Entonces se pueden crear <strong>jerarquías de interfaces</strong>, que seguirán las siguientes reglas:</p>
+<ul>
+<li>Una interfaz derivada puede contener varias interfaces base, es decir, hay <strong>herencia múltiple entre interfaces</strong>.</li>
+<li>Como todos los métodos de una interfaz son implícitamente públicos, <strong>las interfaces derivadas heredarán todos los métodos</strong> delas bases, <strong>excepto los estáticos</strong>.</li>
+<li><strong>No</strong> se puede establecer <strong>herencia entre clases e interfaces</strong>, es decir una clase no puede extender una interfaz ni viceversa.</li>
+</ul>
+<p>Entonces, las jerarquías totales combinan los siguientes tipos de relaciones:</p>
+<ul>
+<li><strong>Herencia de clases</strong></li>
+<li><strong>Herencia de interfaces</strong></li>
+<li><strong>Implementación de interfaces</strong></li>
+</ul>
+<p>Por tanto pueden ser muy <strong>complejas</strong>, pero lo importante es que son <strong>extensibles</strong> de manera relativamente sencilla</p>
+<img src="../../../img/poo/pasted-image-20250622160358.png" alt="archivos/imagenes/Pasted image 20250622160358.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="5-polimorfismo.html"><span class="nav-etiqueta">← anterior</span>5. Polimorfismo</a>
+  <a class="nav-siguiente" href="7-excepciones.html"><span class="nav-etiqueta">siguiente →</span>7. Excepciones</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="3. Conjuntos de datos — apuntes de POO (segundo curso de Ingeniería Informática).">
+<title>3. Conjuntos de datos · POO · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">poo</a><span class="miga-sep">/</span><span aria-current="page">3-conjuntos-de-datos</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">POO · curso 2</p>
+    <h1>3. Conjuntos de datos · POO</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<h1>3.1 Conjuntos de Datos</h1>
+<ul>
+<li>Una buena parte de la programación consiste en <strong>manejar conjuntos de datos</strong> sobre los que se realizan operaciones CRUD (creación, lectura, actualización y eliminación).</li>
+<li>Típicamente la mayoría de los lenguajes de programación soportan la representación de conjuntos de datos a través del concepto de <strong>array</strong>. Sin embargo tienen muchas <strong>limitaciones</strong>.</li>
+<li>Se han propuesto una buena cantidad de formas de representar conjunto de datos que intentan dar respuesta a esas limitaciones: arrays, colecciones, iteradores, listas, conjuntos... <strong>Todos los tipos de conjuntos de datos son mapas, colecciones o iteradores</strong>, el resto particulariza el tipo del cual hereda.</li>
+</ul>
+<h1>3.2 Arrays</h1>
+<p>Un <strong>array</strong> en Java es conceptualmente igual al resto de lenguajes, un conjunto de elementos del <strong>mismo tipo</strong> que ocupan posiciones de <strong>memoria consecutivas</strong> para facilitar su acceso de forma sencilla a través de un <strong>índice</strong>.</p>
+<p>En Java, un array es en realidad un <strong>objeto</strong>. Esto significa que al crear un array, se debe reservar memoria explícitamente usando <code>new</code>, a menos que se inicialice directamente con valores como en el ejemplo anterior (su clase es <code>tipodedatos[]</code> . Además, hereda métodos de la clase <code>Object</code> y tiene un atributo público <code>length</code> que almacena su longitud.</p>
+<pre><code class="language-java">int[] edades = new int[5];   // Crea un array de enteros con 5 elementos, inicializados en 0
+edades[0] = 10;              // Asigna valores a los elementos
+edades[1] = 15;
+System.out.println(edades.length);  // Imprime la longitud del array: 5
+</code></pre>
+<p>Es la única estructura que permite almacenar <strong>tipos primitivos</strong>. Pero presenta varias <strong>limitaciones:</strong></p>
+<ul>
+<li>Los <strong>arrays</strong> tienen un tamaño <strong>fijo</strong>, una vez se llega al límite no se pueden añadir más elementos.</li>
+<li><strong>No</strong> se pueden <strong>borrar</strong> elementos cuando el array maneja un <strong>tipo primitivo</strong>. Cuando maneja objetos, se pueden eliminar elementos escribiendo <code>null</code> en su posición. Como consecuencia, en todos los posteriores recorridos se deberá tener cuidado con estos valores nulos para evitar un error de ejecución.</li>
+</ul>
+<img src="../../../img/poo/pasted-image-20250618185012.png" alt="archivos/imagenes/Pasted image 20250618185012.png" loading="lazy">
+<blockquote>
+<p>[!Buenas Prácticas]</p>
+<ul>
+<li>Sólo se deben usar array cuando se sabe que el <strong>número de elementos es fijo</strong> y <strong>no</strong> se va a <strong>eliminar</strong> ninguno.</li>
+<li>Sólo se deben usar cuando se invocan <strong>métodos</strong> de otras clases que <strong>devuelvan un array</strong> y convertirlos a otras estructuras sea ineficiente.</li>
+</ul>
+</blockquote>
+<h1>3.3 Colecciones</h1>
+<p><strong>Colecciones:</strong> grupos de datos <strong>desordenados</strong> sobre los que se definen operaciones de inserción, borrado y actualización.</p>
+<h2>3.3.1 Collection</h2>
+<p><code>Collection&lt;E&gt;:</code> es una interfaz que define las operaciones que debe tener una colección que almacena datos de tipo <code>E</code>. <strong>No</strong> se puede <strong>reservar memoria</strong> (instanciar) para un objeto de tipo <code>Collection</code> porque es una interfaz.</p>
+<p>Los elementos de las colecciones están <strong>desordenados</strong>, así que sus elementos <strong>no</strong> se pueden identificar mediante un <strong>índice</strong>.</p>
+<p><strong>Métodos</strong> de <code>Collection</code> más frecuentes:</p>
+<ul>
+<li><code>boolean add(E ele):</code> añade el elemento <code>ele</code> a la colección</li>
+<li><code>boolean constains(Object ob):</code> comprueba si el objeto <code>obj</code> se encuentra en la colección</li>
+<li><code>boolean isEmpty():</code> indica si la colección está vacía</li>
+<li><code>void remove(Object obj):</code> elimina el objeto <code>obj</code> de la colección</li>
+<li><code>Iterator&lt;E&gt; iterator():</code> genera un iterador que se puede usar para recorrer la colección.</li>
+</ul>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p><code>contains</code> y <code>remove</code> usan <code>equals</code> para comprobar si el objeto está en la colección</p>
+</div>
+<p>Algunas implementacionereferenciados de la interfaz <code>Collection</code> <strong>no soportan todas sus métodos</strong>. Como de todas formas es necesario que los implementen, generan una excepción del tipo <code>UnsupportedOperationException</code>.
+Por ejemplo, la implementación del método <code>values()</code> de la clase <code>HashMap</code> devuelve una <code>Collection</code> para la cual el método <code>add()</code> no está soportado. Esta operación en concreto no se puede hacer, porque estaríamos metiendo un elemento sin clave en el HashMap, lo que rompe su estructura</p>
+<p>Una de las formas de recorrer todos los elementos de una <code>Collection</code> es a través de un <strong>bucle <code>for-each</code></strong>. No se puede hacer un <code>for</code> normal porque la colección no tiene índices que recorrer.
+Sin embargo surge un <strong>problema</strong>, las colecciones <strong>no se pueden modificar</strong> mientras se están recorriendo porque esto puede hacer que el iterador que la está recorriendo pierda la pista del estado de la colección. Si se intenta, se genera una excepción del tipo <code>ConcurrentModificationException</code></p>
+<pre><code class="language-java">Collection&lt;String&gt; nombres = new ArrayList&lt;&gt;();
+nombres.add(&quot;Ana&quot;); // Añadir un elemento
+nombres.add(&quot;Juan&quot;);
+
+System.out.println(nombres.contains(&quot;Ana&quot;)); // true
+System.out.println(nombres.isEmpty()); // false
+
+nombres.remove(&quot;Ana&quot;); // Eliminar un elemento
+System.out.println(nombres.contains(&quot;Ana&quot;)); // false
+</code></pre>
+<h2>3.3.2 Iterator</h2>
+<p><code>Iterator&lt;E&gt;:</code> interfaz que define las operaciones que se pueden usar para recorrer los elementos de una colección de datos de tipo <code>E</code>. <strong>No</strong> se puede <strong>reservar memoria</strong> (instanciar) para un objeto de tipo <code>Iterator</code>, porque es una interfaz.</p>
+<p><strong>Métodos</strong> de <code>Iterator:</code></p>
+<ul>
+<li><code>boolean hasNext():</code> indica si existe un elemento en la siguiente posición en la que se encuentra el puntero</li>
+<li><code>E next():</code> actualiza el puntero a la posición siguiente y obtiene el elemento que se encuentra ahí.</li>
+<li><code>remove():</code> elimina el elemento que se encuentra en la posición actual</li>
+</ul>
+<p>Como los punteros sólo se mueven hacia adelante, un iterador <strong>sólo se puede usar una vez</strong> para recorrer los elementos de la colección, ya que después el puntero del iterador estará en el final de la colección y <code>hasNext()</code> devolverá siempre falso.</p>
+<pre><code class="language-java">Iterator&lt;String&gt; iterador = nombres.iterator();
+while (iterador.hasNext()) {
+    String nombre = iterador.next();
+    System.out.println(nombre);
+    if (nombre.equals(&quot;Juan&quot;)) {
+        iterador.remove(); // Elimina el elemento actual
+    }
+}
+</code></pre>
+<img src="../../../img/poo/pasted-image-20250619174446.png" alt="archivos/imagenes/Pasted image 20250619174446.png" loading="lazy">
+<p>Un iterador es una forma alternativa al bucle <code>for-each</code> para <strong>recorrer los elementos de una colección</strong>.</p>
+<ul>
+<li>A diferencia de <strong>for-each</strong>, un <strong>iterador</strong> <strong>permite la eliminación de los elementos mientras se recorre la colección</strong>, eliminado tanto los elementos de la colección como del iterador.</li>
+<li>El <strong>rendimiento de un iterador y de un <code>for each</code> es el mismo,</strong> ya que en realidad el compilador interpreta el <code>for-each</code> como si fuese un iterador.
+<img src="../../../img/poo/pasted-image-20250619174742.png" alt="archivos/imagenes/Pasted image 20250619174742.png" loading="lazy"></li>
+</ul>
+<img src="../../../img/poo/pasted-image-20250619174742.png" alt="archivos/imagenes/Pasted image 20250619174742.png" loading="lazy">
+<h1>3.4 Listas</h1>
+<h2>3.4.1 Listas</h2>
+<p><code>List &lt;E&gt;:</code> subinterfaz de <code>Collection</code>. Además de soportar las operaciones de <code>Collection</code>, soporta las que debe tener una lista. <strong>No</strong> se puede <strong>reservar memoria</strong> (instanciar) para un objeto de tipo <code>List</code> porque es una interfaz.
+<img src="../../../img/poo/pasted-image-20250619175147.png" alt="archivos/imagenes/Pasted image 20250619175147.png" loading="lazy"></p>
+<p>Los elementos de las <code>List</code> tienen un <strong>orden</strong> que está relacionado con la secuencia en que dichos elementos han sido introducidos durante la ejecución. Este orden permite identificar cada elemento con un <strong>índice</strong> que indica su posición en la <code>List</code>. Pueden contener <strong>elementos duplicados</strong>.</p>
+<p><strong>Métodos</strong> de <code>List:</code></p>
+<ul>
+<li><code>E get(int i):</code> obtiene el elemento de índice <code>i</code>. (<code>get(null)</code> no da fallo, devuelve <code>null</code> )</li>
+<li><code>void set(int i, E ele):</code> actualiza el objeto de índice <code>i</code> con valor <code>ele</code></li>
+<li><code>E remove(int i)</code>: Elimina el objeto de índice <code>i</code></li>
+</ul>
+<p>Las <code>List</code> se pueden <strong>recorrer</strong> tanto usando sus <strong>índices</strong>, ya que son ordenadas, como usando un <strong>bucle <code>for-each</code></strong>, ya que son <code>Collections</code>.</p>
+<pre><code class="language-java">List&lt;String&gt; frutas = new ArrayList&lt;&gt;();
+frutas.add(&quot;Manzana&quot;);
+frutas.add(&quot;Pera&quot;);
+frutas.add(&quot;Manzana&quot;); // Las listas permiten duplicados
+
+System.out.println(frutas.get(1)); // Pera
+
+frutas.set(1, &quot;Banana&quot;); // Cambia el elemento en la posición 1
+System.out.println(frutas.get(1)); // Banana
+
+frutas.remove(0); // Elimina el primer elemento (Manzana)
+System.out.println(frutas); // [Banana, Manzana]
+</code></pre>
+<h2>3.4.2 ArrayList</h2>
+<p><code>ArrayList&lt;E&gt;:</code> clase que implementa la interfaz <code>List</code>. <strong>Sí</strong> se puede <strong>reservar memoria</strong> (instanciar) para un objeto de tipo <code>ArrayList</code>, pues es una clase.
+<img src="../../../img/poo/pasted-image-20250619180451.png" alt="archivos/imagenes/Pasted image 20250619180451.png" loading="lazy"></p>
+<p>Tiene un <strong>atributo público</strong>, <code>size</code>. Las <strong>operaciones de acceso</strong> a sus elementos tienen complejidad <strong>lineal</strong>. Además permite introducir <strong>valores nulos</strong>.</p>
+<p>El <strong>constructor sin argumentos</strong> de <code>ArrayList</code> reserva espacio para 10 elementos. <code>ArrayList</code> realiza una <strong>redimensión dinámica</strong> cuando el número de datos que se almacena es <strong>mayor que la capacidad</strong> de almacenamiento de la lista. Por defecto, se aumentará la capacidad en 10. Si la redimensión se realiza <strong>frecuentemente</strong> se penalizará el <strong>rendimiento</strong> de la lista, ya que internamente la redimensión supone incrementar el tamaño de un array normal.</p>
+<pre><code class="language-Java">ArrayList&lt;Tipo&gt; nombre = new ArrayList&lt;&gt;();
+ArrayList&lt;Tipo&gt; nombre = new ArrayList&lt;Tipo&gt;();
+ArrayList&lt;Tipo&gt; nombre = new ArrayList&lt;&gt;(capacidad);
+ArrayList&lt;Tipo&gt; nombre = new ArrayList&lt;&gt;(coleccion);
+ArrayList nombre = new ArrayList();
+ArrayList&lt;Tipo&gt; nombre = new ArrayList&lt;&gt;(){};
+ArrayList&lt;Tipo&gt; nombre = new ArrayList&lt;&gt;(){{ add(...); }};
+</code></pre>
+<p>Los <code>ArrayList</code> se <strong>recorren</strong> usando un bucle <code>for</code> normal. Al <strong>eliminar</strong> elementos durante el recorrido habrá que tener cuidado con que el <strong>índice no supere el nuevo tamaño</strong>. Durante el recorrido hay que comprobar que el elemento actual es <strong>distinto</strong> de <code>null</code> antes de operar sobre él.
+<img src="../../../img/poo/pasted-image-20250619181120.png" alt="archivos/imagenes/Pasted image 20250619181120.png" loading="lazy"></p>
+<p>En realidad, la clase <code>ArrayList</code> encapsula un <strong>array normal</strong> de objetos al que se accede a través de los métodos de la interfaz <code>List</code>.</p>
+<ul>
+<li>La <strong>pila</strong> almacena la <strong>referencia al array de objetos</strong></li>
+<li>El <strong>montón</strong> almacena el <strong>array de objetos</strong> y los <strong>demás atributos</strong> de <code>ArrayList</code> (<code>size</code>)</li>
+</ul>
+<img src="../../../img/poo/pasted-image-20241110170215.png" alt="archivos/imagenes/Pasted image 20241110170215.png" loading="lazy">
+<pre><code class="language-java">ArrayList&lt;Integer&gt; numeros = new ArrayList&lt;&gt;(); // Crea un ArrayList con capacidad para 10 elementos
+for (int i = 1; i &lt;= 15; i++) {
+    numeros.add(i); // Al llegar a 11 elementos, el ArrayList se redimensionará automáticamente
+}
+
+System.out.prreferenciadointln(&quot;Tamaño: &quot; + numeros.size()); // 15
+System.out.println(&quot;Elemento en la posición 10: &quot; + numeros.get(10)); // 11
+
+numeros.set(5, 100); // Actualiza el elemento en la posición 5
+System.out.println(numeros); // Muestra todos los elementos
+</code></pre>
+<h1>3.5 Conjuntos</h1>
+<p><strong>Conjutos:</strong> colecciones en las que <strong>no se repiten los datos</strong>. Eso significa que los datos serán diferentes de acuerdo al criterio de igualdad definido por ellos (método <code>equals</code>).</p>
+<h2>3.5.1 Set</h2>
+<p><code>Set&lt;E&gt;:</code> subinterfaz de <code>Collection</code> que soporta exactamente las mismas operaciones que una <code>Collection</code>. <strong>No</strong> se puede <strong>reservar memoria</strong> (instanciar) para un objeto de tipo <code>Set</code>, pues es una interfaz.
+<img src="../../../img/poo/pasted-image-20250619183359.png" alt="archivos/imagenes/Pasted image 20250619183359.png" loading="lazy"></p>
+<p>Los elementos del conjunto <strong>son únicos</strong>. Para asegurarse de esto, <strong>se debe sobreescribir el método <code>equals</code> de la clase</strong> <code>E</code>. Se debe controlar que la <strong>modificación</strong> de los objetos no se dé como resultado que dicho objeto sea igual a otro de los almacenados, porque se generarían inconsistencias cuando las modificaciones <strong>no se realizan con los métodos de <code>Set</code></strong>, si no que se realizan por aliasing. Como consecuencia, <strong>permiten sólo un valor nulo</strong>.</p>
+<p>Como es una colección, se <strong>recorre</strong> con un <strong>bucle</strong> <code>for-each</code> o un <strong>iterador</strong>, no con un índice.
+<img src="../../../img/poo/pasted-image-20250619184543.png" alt="archivos/imagenes/Pasted image 20250619184543.png" loading="lazy"></p>
+<h2>3.5.2 HashSet</h2>
+<p><code>HashSet&lt;E&gt;:</code> clase que implementa la interfaz <code>Set</code>. <strong>Sí</strong> se puede <strong>reservar memoria</strong> para un objeto de tipo <code>HashSet</code>, porque es una clase.
+<img src="../../../img/poo/pasted-image-20250619185256.png" alt="archivos/imagenes/Pasted image 20250619185256.png" loading="lazy">
+Internamente, sus datos se almacenan como las <strong>claves de un objeto <code>HashMap</code></strong>(<strong>se insertan en base al hashCode</strong>).</p>
+<ul>
+<li>Sus valores están <strong>desordenados</strong>, pues se almacenan en una <strong>tabla hash</strong> de acuerdo a una <strong>función hash</strong>.</li>
+<li>Las operaciones de <strong>acceso</strong> a sus elementos se realizan en tiempo constante <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></eq></li>
+</ul>
+<pre><code class="language-java">Set&lt;Integer&gt; numeros = new HashSet&lt;&gt;();
+numeros.add(10);
+numeros.add(20);
+numeros.add(10); // Este 10 no se añadirá porque ya existe en el conjunto
+
+System.out.println(numeros); // Muestra los elementos en un orden basado en su hash code
+
+numeros.add(null); // Se permite añadir un único elemento null
+System.out.println(numeros.contains(null)); // true
+
+// Recorrido del HashSet
+for (Integer numero : numeros) {
+    System.out.println(numero);
+}
+</code></pre>
+<h1>3.6 Mapas</h1>
+<h2>3.6.1 Map</h2>
+<p><code>Map &lt;K,V&gt;:</code> interfaz que relaciona una clave con un valor de manera que <strong>a partir de la clave se obtiene el valor asociado a ella</strong>. <strong>No</strong> se puede <strong>reservar memoria</strong> para un objeto de tipo Map, porque es una interfaz.
+<img src="../../../img/poo/pasted-image-20250619190249.png" alt="archivos/imagenes/Pasted image 20250619190249.png" loading="lazy"></p>
+<p>Las <strong>claves no pueden estar repetidas</strong>, pero los <strong>objetos sí</strong> (por tantos varias calves pueden tener asociado un mismo valor). Tanto las claves como los valores tienen que ser <strong>objetos</strong>, no pueden ser <strong>tipos primitivos</strong>. Algunas implementaciones permiten almacenar <strong>claves y valores nulos</strong>.</p>
+<p>La <strong>clave</strong> puede ser <strong>cualquier objeto</strong>, siempre que su clase siga las siguientes <strong>reglas:</strong></p>
+<ul>
+<li>El <code>equals()</code> <strong>debe estar sobrescrito</strong>, pues se usará para localizar y obtener la clave con las que recupera un valor.</li>
+<li>El objeto clave debe ser <strong>inmutable</strong> (es decir, no cambiará nunca una vez se realiza la reserva de memoria) pues si se cambiara, perderíamos el acceso al valor asociado a la clave, pues el identificador de la entrada (<code>hashCode</code>) se calculó en base al valor de la clave. Si la clave no es inmutable, entonces es necesario controlar que <strong>no se modifiquen aquellos atributos usados en</strong> <code>equals()</code> para comprobar la igualdad entre objetos.</li>
+</ul>
+<p><strong>Métodos de <code>Map</code>:</strong></p>
+<ul>
+<li><code>V get(Object key)</code>: Devuelve el valor asociado a la clave <code>key</code></li>
+<li><code>V put(K key, V value)</code>: Asocia un valor <code>value</code> al que se le asocia una clave <code>key</code></li>
+<li><code>V remove(Object key)</code>: Elimina el par clave-valor basado en la clave.</li>
+<li><code>boolean containsValue(Object value)</code>: indica si el valor <code>value</code> está almacenado en el mapa, es decir, si tiene asociada una clave.</li>
+<li><code>boolean containsKey(Object key)</code>: indica si existe algún dato asociado a la clave <code>key</code></li>
+<li><code>size()</code></li>
+</ul>
+<p><code>containsKey()</code> <strong>es más eficiente</strong> que <code>containsValue()</code> porque aprovecha la estructura de hashing de la implementación del <code>Map</code> para realizar la búsqueda de claves.</p>
+<p>Algunas implementaciones de la interfaz <code>Map</code> <strong>no soportan todos sus métodos</strong>. Como de todas formas es necesario que los implementen, generan una excepción del tipo <code>UnsupportedOperationException</code></p>
+<p>Los objetos almacenados en un <code>Map</code> <strong>no se pueden recorrer directamente</strong>, ya que su objetivo es acceder a los valores a partir de las claves, no realiza una búsqueda de datos usando un criterio diferente de las claves. <code>Map</code> define métodos para convertir las claves y <strong>valores en estructuras de datos que se pueden recorrer</strong>, lo cual facilita el acceso a cada componente del mapa:</p>
+<ul>
+<li><code>Collection&lt;V&gt; values()</code>: Devuelve una <strong>colección</strong> con todos los <strong>valores</strong> del mapa, porque no se conoce el orden en el que se insertaron
+<img src="../../../img/poo/pasted-image-20241214223841.png" alt="archivos/imagenes/Pasted image 20241214223841.png" loading="lazy"></li>
+<li><code>Set&lt;K&gt; keySet()</code>: Devuelve un <strong>conjunto</strong> con todas las claves, porque no puede haber claves duplicadas
+<img src="../../../img/poo/pasted-image-20241214223828.png" alt="archivos/imagenes/Pasted image 20241214223828.png" loading="lazy"></li>
+<li><code>Set&lt;Map.Entry&lt;K, V&gt;&gt; entrySet()</code>: Devuelve un conjunto con todas las entradas <code>&lt;clave, valor&gt;</code>. Devuelve un <strong>conjuntos</strong> porque no puede haber duplas duplicadas.
+<img src="../../../img/poo/pasted-image-20241214224010.png" alt="archivos/imagenes/Pasted image 20241214224010.png" loading="lazy"></li>
+</ul>
+<p>También se puede usar <code>Iterator&lt;Map.Entry&lt;String,Contiente&gt;&gt;  entrySet()</code></p>
+<h3>Map Entry</h3>
+<p><code>Map.Entry&lt;K,V&gt;:</code> Interfaz que define métodos para acceder a una entrada de un mapa</p>
+<ul>
+<li><code>K getKey():</code> permite acceder a la clave de la entrada en el mapa</li>
+<li><code>V getValue():</code> permite acceder al valor de la entrada en el mapa</li>
+</ul>
+<h2>3.6.2 HashMap</h2>
+<p><code>HashMap&lt;K,V&gt;:</code> clase que implementa la interfaz <code>Map</code>. <strong>Sí</strong> se puede <strong>reservar memoria</strong> para un objeto de tipo <code>HashMap</code>, pues es una clase.</p>
+<p>Los valores del <code>HashMap</code> están <strong>desordenados</strong>, pues se almacenan en una <strong>tabla hash</strong> de acuerdo con una <strong>función hash</strong>. Sin embargo, las operaciones de <strong>acceso</strong> a las entradas del <code>HashMap</code> se realizan en tiempo constante <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></eq>
+<img src="../../../img/poo/pasted-image-20250619191719.png" alt="archivos/imagenes/Pasted image 20250619191719.png" loading="lazy"></p>
+<p>Cada clave del mapa está asociada a un <strong>código hash</strong> (<strong>hashcode</strong>), que es un entero generado aleatoriamente a partir de una semilla. Se supone que los <code>hashCode</code> son <strong>únicos</strong> para cada objeto, pero como son generados aletoriamente es <strong>imposible asegurar esto</strong>. Por tanto, <strong>cuando se comparan dos entradas</strong> de un <code>HashMap</code></p>
+<ul>
+<li>Se comparan sus <code>hashCode:</code> si  son distintos, se entiende que los objetos son distitnos, si son iguales se pasa al paso 2</li>
+<li>Se invoca a <code>equals()</code> para aplicar el criterio de igualdad.</li>
+</ul>
+<p>El uso de los <code>hashCode</code> simplifica y hace más <strong>eficiente el acceso</strong> a los datos en un <code>HashMap</code> pues en primer lugar comprar enteros y sólo ejecutará <code>equals()</code> (que puede tener una implementación con comparaciones muy complejas) cuando coincidan.</p>
+<p>Para <strong>generar</strong> el <code>hashCode</code>, es necesario <strong>sobreescribir</strong> el método <code>hashCode()</code> heredado de <code>Object</code> usando el valor de los <strong>atributos inmutables de la clave</strong> como semillas. La implementación de <code>hashCode()</code> en <code>Object</code> es un método nativo escrito en C. Se generan <code>hashCodes</code> parciales usando estas semillas en el método <code>hashCode()</code> de la clase <code>Objects</code> (el de <code>Object</code> no funciona con valores nulos).</p>
+<img src="../../../img/poo/pasted-image-20250619192216.png" alt="archivos/imagenes/Pasted image 20250619192216.png" loading="lazy">
+<pre><code class="language-Java">HashMap&lt;K,V&gt; m = new HashMap&lt;&gt;();
+HashMap&lt;K,V&gt; m = new HashMap&lt;K,V&gt;();
+HashMap&lt;K,V&gt; m = new HashMap&lt;&gt;(capacidad);
+HashMap&lt;K,V&gt; m = new HashMap&lt;&gt;(capacidad, factorDeCarga);
+HashMap&lt;K,V&gt; m = new HashMap&lt;&gt;(otroMapa);
+HashMap m = new HashMap();
+HashMap&lt;K,V&gt; m = new HashMap&lt;&gt;(){};
+HashMap&lt;K,V&gt; m = new HashMap&lt;&gt;(){{ put(..., ...); }};
+</code></pre>
+<h1>3.7 Comparativa</h1>
+<p>Según las <strong>características</strong> de los conjuntos de datos escogeremos uno y otro en función de para qué lo necesitamos:</p>
+<img src="../../../img/poo/pasted-image-20241110171852.png" alt="archivos/imagenes/Pasted image 20241110171852.png" loading="lazy">
+<img src="../../../img/poo/pasted-image-20241214225539.png" alt="archivos/imagenes/Pasted image 20241214225539.png" loading="lazy">
+<p>Las <strong>listas</strong> ocupan <strong>menos memoria</strong> que los mapas, y los <strong>mapas</strong> son <strong>más rápidos</strong> que las listas. Por lo general:</p>
+<ul>
+<li>Si hay <strong>restricciones de memoria</strong> respecto a la cantidad de datos a almacenar y la <strong>eficiencia no es la priordad:</strong> `ArrayList</li>
+<li>Si <strong>se necesita acceder en el orden de llegada:</strong> <code>ArrayList</code></li>
+<li>Si <strong>no se necesita acceder</strong> a los datos <strong>en el orden en el que se almacenaron</strong> y <strong>se dispone de un identificador unívoco:</strong> <code>HashMap</code></li>
+<li>Si <strong>no se necesita acceder</strong> a los datos <strong>en el orden en el que se almacenaron</strong> y los datos <strong>no se pueden repetir:</strong> <code>HashSet</code></li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="2-clases-y-tipos-de-datos.html"><span class="nav-etiqueta">← anterior</span>2. Clases y tipos de datos</a>
+  <a class="nav-siguiente" href="4-herencia.html"><span class="nav-etiqueta">siguiente →</span>4. Herencia</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

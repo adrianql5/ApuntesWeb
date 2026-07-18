@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="4. Herencia — apuntes de POO (segundo curso de Ingeniería Informática).">
+<title>4. Herencia · POO · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">poo</a><span class="miga-sep">/</span><span aria-current="page">4-herencia</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">POO · curso 2</p>
+    <h1>4. Herencia · POO</h1>
+  </header>
+  <div class="prosa">
+<p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
+<h1>4.1 Concepto de Herencia</h1>
+<p>La <strong>herencia</strong> es el mecanismo por el cual una <strong>clase derivada</strong> reutiliza los atributos y métodos de una <strong>clase base</strong> o superior. Una <strong>clase derivada</strong> se considera una <strong>extensión de la clase base</strong>. Sus métodos y atributos son:</p>
+<ul>
+<li>Aquellos heredados de la clase base, que son copiados <strong>implícitamente</strong>. Los constructores de la clase base no se heredan, ya que se consideran específicos a ella.</li>
+<li>Aquellos definidos <strong>explícitamente</strong> como propios de la clase derivada.
+Se dice que hay una relación del tipo <strong>&quot;es un/a</strong> entre una clase derivada y una clase base</li>
+</ul>
+<h2>4.1.1 Tipos de Herencia</h2>
+<ul>
+<li><strong>Herencia simple:</strong> la clase <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span></eq> hereda los atributos y métodos de la clase <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq></li>
+<li><strong>Herencia multinivel:</strong> la clase <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span></span></span></span></eq> hereda los atributos y métodos de la clase <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span></eq> que, a su vez, hereda los atributos y métodos de la clase <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq>. Por tanto, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span></span></span></span></eq> hereda también los atributos y métodos de la clase <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq></li>
+<li><strong>Herencia jerárquica:</strong> las clases <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span></eq> y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span></span></span></span></eq> heredan los atributos y métodos de la clase <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq>, de modo que se diferencian por sus atributos y métodos propios.</li>
+<li><strong>Herencia múltiple:</strong> la clase <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span></span></span></span></eq> hereda los atributos y métodos de las clases <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq> y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span></eq>, por lo que hará falta definir <strong>políticas de herencia</strong> si <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq> y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span></eq> tienen métodos comunes.</li>
+</ul>
+<img src="../../../img/poo/pasted-image-20250619215709.png" alt="archivos/imagenes/Pasted image 20250619215709.png" loading="lazy">
+<h3>4.1.2 Beneficios de la Herencia</h3>
+<p>El principal beneficio es la <strong>reutilización de código</strong>, pues un segmento de código que ya ha sido desarrollado, depurado y validado en una clase se usa en otro sin tener que cambiarlo. Esto <strong>simplifica el código</strong>, porque evita tener que implementar varias veces el mismo método.</p>
+<p>En principio, <strong>facilita el mantenimiento de los programas</strong>, porque el cambio o reparación de los métodos se realiza sólo en las clases base, y no en todas las que los usan.
+En principio, <strong>facilita la extensibilidad de los programas</strong>, porque permite construir nuevas clases directamente a partir de otras que ya existían, en vez de empezar de cero.</p>
+<h2>4.1.3 Desventajas de la Herencia</h2>
+<p><strong>Puede ir en contra del concepto de</strong> de encapsulación, pues para facilitar su uso, se puede precisar que los atributos tengan un modificador de acceso diferente al privado.
+<strong>Puede complicar el mantenimiento de los programas</strong>, pues los cambios en las clases base tienen un impacto en las derivadas, por lo que estos cambios podrían ser <strong>inconsistentes</strong> con el código específico de las clases derivadas
+<strong>Puede dificultas la extensibilidad de los programas</strong> cuando la jerarquización es muy profunda, pues el código será mucho más <strong>difícil de entender</strong> ya que las relaciones entre clases serán complicadas y será difícil identificar a qué clase pertenece cada método.</p>
+<h1>4.2 Concepto de composición</h1>
+<p>La <strong>composición</strong> es el mecanismo por el cual una clase contiene <strong>objetos de otras clases</strong>, a los que se les <strong>delegan</strong> ciertas operaciones para conseguir la funcionalidad buscada. Se dice que hay una relación del tipo <strong>&quot;tiene un/a&quot;</strong> (o <strong>&quot;tiene los atributos de un/a&quot;</strong>) entre las clases que participan en una composición.</p>
+<h2>4.2.1 Beneficios de la Composición</h2>
+<ul>
+<li>El principal beneficio es la <strong>repartición de responsabilidades entre objetos</strong>, pues cada uno se encarga de realizar determinadas operaciones, que después podrán invocar otros.</li>
+<li><strong>Facilita el mantenimiento de los programas</strong>, pues las clases están más <strong>desacopladas entre sí</strong>, por lo que no comparten métodos, así que es poco probable que cambiar algo en una clase cree una inconsistencia en otra.</li>
+<li><strong>Facilita la extensibilidad de los programas</strong>, pues permite implementar funcionalidad en clases usando otras que ya existían.</li>
+</ul>
+<h2>4.2.2 Desventajas de usar Composición</h2>
+<ul>
+<li><strong>Genera mucho más código y mucho más complejo</strong> para hacer lo mismo que consigue la herencia.</li>
+<li><strong>Es más lento de desarrollar</strong> que la herencia, pues la construcción de nuevas clases se realiza desde cero.</li>
+</ul>
+<img src="../../../img/poo/pasted-image-20250620215945.png" alt="archivos/imagenes/Pasted image 20250620215945.png" loading="lazy">
+<h1>4.3 Herencia contra Composición</h1>
+<p>Debemos escoger composición sobre herencia cuando:</p>
+<ul>
+<li>Las clases <strong>no están relacionadas lógicamente:</strong> la herencia no tendría sentido</li>
+<li>La clase base tendría <strong>una única derivada:</strong> la herencia no tendría sentido</li>
+<li>Las clases derivadas heredarían <strong>código no necesario:</strong> la herencia no tendría sentido</li>
+<li>Existe la posibilidad de que las <strong>clases base cambien:</strong> la herencia complicaría el desarrollo</li>
+<li>Las clases derivadas tendrían que <strong>sobreescribir</strong> muchos métodos: la herencia complicaría el desarrollo.</li>
+</ul>
+<img src="../../../img/poo/pasted-image-20250702092040.png" alt="archivos/imagenes/Pasted image 20250702092040.png" loading="lazy">
+<img src="../../../img/poo/pasted-image-20241111104218.png" alt="archivos/imagenes/Pasted image 20241111104218.png" loading="lazy">
+<h1>4.3 Herencia en Java</h1>
+<p>En java se <strong>imponen restricciones</strong> sobre la herencia:</p>
+<ul>
+<li><strong>No existe herencia múltiple</strong></li>
+<li>Los atributos y métodos se heredan en función del <strong>tipo de acceso</strong> que tengan en la clase.</li>
+</ul>
+<h2>4.3.1 Revisitando el tipo de Acceso</h2>
+<img src="../../../img/poo/pasted-image-20250620220559.png" alt="archivos/imagenes/Pasted image 20250620220559.png" loading="lazy">
+- `private:` la clase derivada **nunca hereda** el atributo/método
+- `public:` la clase derivada **siempre hereda** el atributo/método
+- `acceso a paquete:` la clase derivada **solo hereda** el atributo/método si se encuentra en el **mismo paquete** que la clase base
+- `protected:` la clase derivada **siempre hereda** el atributo/método
+<p>Como los atributos privados no se heredan, <strong>se podrían hacer públicos</strong> o protegidos. Esto eliminaría (si son públicos) o debilitaría (si son protegidos) la encapsulación. Por tanto, los atributos se <strong>mantienen privados</strong>, ya que se considera que la <strong>encapsulación tiene más beneficios que la herencia</strong>:</p>
+<ul>
+<li>Sin encapsulación, el desarrollo, mantenimiento y validación de los programas sería mucho más difícil.</li>
+<li>Sin encapsulación, la composición no tiene sentido.
+<img src="../../../img/poo/pasted-image-20250620221008.png" alt="archivos/imagenes/Pasted image 20250620221008.png" loading="lazy"></li>
+</ul>
+<blockquote>
+<p>[!Buenas Prácticas]</p>
+<ul>
+<li>Los <strong>atributos</strong> son <strong>siempre privados</strong>, aunque se use herencia</li>
+<li>En una jerarquía de clases, se debería implementar los <strong>métodos de la clase donde se definen los atributos que usan</strong>, y no en sus derivadas.</li>
+</ul>
+</blockquote>
+<p>Entonces, la clase derivada <strong>no</strong> hereda los <strong>atributos</strong> ni los <strong>métodos privados</strong>, pero <strong>sí</strong> los <strong>métodos públicos</strong>, lo cual suscita ciertas preguntas:</p>
+<ul>
+<li>¿Cómo va a ejecutar los métodos heredados si no hereda los atributos que usan?
+<ul>
+<li>En realidad, la clase derivada <strong>hereda todos los atributos</strong> de la clase, independientemente de su tipo de acceso.</li>
+<li>El tipo de acceso de un atributos especifica su nivel de visibildad. Por tanto, los atributos privados se heredan, pero no se puede acceder a ellos directamente, si no que para ello se usan métodos.</li>
+</ul>
+</li>
+<li>¿ Cómo va a ejecutar los métodos heredados si no heredo los métodos que usan?
+<ul>
+<li>Igual que para los atributos, en realizada la clase derivada hereda todos los métodos, independientemente del tipo de acceso.</li>
+<li>El tipo de acceso de un método especifica su <strong>nivel de visibilidad</strong>. Por tanto, los métodos privados se heredan, pero no se puede acceder a ellos directamente, si no que para ellos se usan los métodos heredados.</li>
+</ul>
+</li>
+</ul>
+<h2>4.3.2 Constructores</h2>
+<p>Como se dijo antes, los <strong>constructores</strong> de la clase <strong>no se heredan</strong>, ya que se consideran <strong>específicos a ella</strong>. Los constructores de una clase reservan memoria e inicializan los atributos de esa clase, pero el constructor de la clase base no tiene acceso a los atributos de la derivada. Por tanto, si se pudiesen heredar los constructores de la clase base, no se podrían invocar para crear objetos de la clase derivada.</p>
+<p>¿Cómo consiguen los constructores de la clase derivada reservar memoria e inicializar los atributos privados de la clase base?</p>
+<ul>
+<li>En los constructores de la clase derivada <strong>sin argumentos:</strong>
+<ul>
+<li>Al invocarlos, se invoca <strong>automáticamente al constructor sin argumentos de la clase base</strong>.</li>
+<li>Por tanto, la clase base debe tener <strong>obligatoriamente</strong> un constructor sin argumentos. En caso contrario, se generará un <strong>error de compilación.</strong></li>
+<li>Si la clase base tiene algún constructor explícito, uno de ellos tendrá que ser sin argumentos.</li>
+<li>Si la clase base no tiene ningún constructor explícito, el constructor por defecto es suficiente.</li>
+</ul>
+</li>
+</ul>
+<img src="../../../img/poo/pasted-image-20250620222532.png" alt="archivos/imagenes/Pasted image 20250620222532.png" loading="lazy">
+<ul>
+<li>En los constructores de la clase derivada <strong>con argumentos:</strong>
+<ul>
+<li><strong>No se invoca automáticamente</strong> a ningún <strong>constructor de la clase base</strong>, ya que no se puede garantizar que exista alguno con los mismos argumentos.</li>
+<li>Por tanto, habrá que invocar <strong>manualmente</strong> el constructor de la clase base que se considere oportuno. Para poder hacer esto necesitamos <code>super(args)</code>, que es un método que nos permite acceder desde la clase derivada a los atributos, métodos y constructores de la clase base que tengan cierto nivel de visibilidad.
+<ul>
+<li><code>super(args)</code> sólo nos permite acceder a los elementos de la clase base inmediatamente superior a la clase derivada donde se invoca.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<img src="../../../img/poo/pasted-image-20250702092836.png" alt="archivos/imagenes/Pasted image 20250702092836.png" loading="lazy">
+<p>Java debe <strong>crear un objeto completo de tipo Infanteria</strong>, pero ese objeto también es, internamente, un objeto de tipo CartaDeEquipamiento (su clase base).</p>
+<ol>
+<li><strong>Reserva toda la memoria</strong> para el objeto completo (Infanteria + lo heredado de CartaDeEquipamiento).</li>
+<li><strong>Inicializa primero la parte de la clase base (CartaDeEquipamiento):</strong>
+<ul>
+<li>Esto incluye inicializar todos los atributos definidos en la clase base.</li>
+<li>Para eso, se llama primero al constructor de la clase base.</li>
+</ul>
+</li>
+<li><strong>Luego ejecuta el constructor de la subclase (Infanteria):</strong>
+<ul>
+<li>Ahora puede inicializar los atributos y comportamientos propios de la subclase.</li>
+</ul>
+</li>
+</ol>
+<p><strong>Necesidad de construir desde lo más general a lo más específico:</strong>
+- La subclase depende de que la clase base esté correctamente inicializada (por ejemplo, que los atributos privados de la base estén listos).</p>
+<img src="../../../img/poo/pasted-image-20250620222555.png" alt="archivos/imagenes/Pasted image 20250620222555.png" loading="lazy">
+<h1>4.4 Sobreescritura de Métodos</h1>
+<p>La <strong>sobreescritura de métodos</strong> es un mecanismo mediante el cual un método heredado de una clase base vuelve a ser implementado de manera distinta en la clase derivada. Para sobrescribir un método, se usa la palabra clave <code>@Override</code> sobre la reimplementación en la clase derivada.</p>
+<ul>
+<li>El <strong>nombre</strong> del método, sus <strong>argumentos</strong> y el <strong>tipo que devuelve</strong> deben ser los mismos en la clase base y en la derivada.</li>
+<li>El <strong>tipo de acceso</strong> del método en la clase derivada debe ser igual o superior al que tiene en la clase base.</li>
+<li>Un método se sobrescribe cuando la implementación de la clase base no es válida para la derivada o es conveniente adaptar la implementación de la clase base a las características específicas de la derivada.</li>
+</ul>
+<p>Se puede aprovechar la implementación original de un método en su sobreescritura usando <code>super()</code>. Al llamar al método <code>super()</code> en la sobreescritura en la clase derivada, se invoca la implementación de la clase base del método que se está sobreescribiendo. Se usa <code>super()</code> y no se invoca directamente el método pues la clase derivada no sabría distinguir si nos referimos a la sobreescritura o la implementación de la clase base.</p>
+<img src="../../../img/poo/pasted-image-20250621114446.png" alt="archivos/imagenes/Pasted image 20250621114446.png" loading="lazy">
+<p>Todas las clases creadas en Java son derivadas de <code>Object</code>, por lo que heredan todos sus métodos:</p>
+<ul>
+<li><code>getClass:</code> indica la clase a la que pertenece el objeto que lo invoca</li>
+<li><code>notify</code> y <code>wait:</code> orientados a la gestión de los hilos</li>
+<li><code>finalize:</code> se invoca cuando el recolector de basura elimina el objeto de la memoria del programa. Es necesario sobreescribirlo.
+<img src="../../../img/poo/pasted-image-20250621114508.png" alt="archivos/imagenes/Pasted image 20250621114508.png" loading="lazy"></li>
+</ul>
+<h1>4.5 Clases Abstractas</h1>
+<p>Las <strong>clase abstractas</strong> son clases que no se pueden instanciar.</p>
+<ul>
+<li>Pueden tener <strong>constructores</strong>. No se pueden invocar a través de <code>new</code>, sólo se pueden invocar mediante <code>super()</code> desde una clase derivada</li>
+<li>Pueden tener <strong>atributos</strong></li>
+<li>Pueden tener <strong>métodos implementados</strong> y métodos <strong>abstractos</strong>
+Una clase debería ser abstracta cuando no es necesario que tenga objetos pues todos los objetos pertenecen a cualquiera de las otras clases de la jerarquía</li>
+</ul>
+<p>Se suelen usar como <strong>clases base</strong> de otras clases que sí son instanciables, ocupando los primeros niveles de la jerarquía de clases. Por tanto, deben tener <strong>implementados</strong> la mayor cantidad posible de métodos para que las clases derivadas puedan heredarlos y así favorecer la <strong>reutilización de código</strong>.</p>
+<img src="../../../img/poo/pasted-image-20250621115814.png" alt="archivos/imagenes/Pasted image 20250621115814.png" loading="lazy">
+<p>Una clase abstracta:</p>
+<ul>
+<li>Puede tener atributos de cualquier tipo</li>
+<li>Puede tener todos los métodos implementados</li>
+<li>Puede tener todos los métodos abstractos, debería tener tantos métodos implementados como sea posible
+<ul>
+<li>Si todos sus métodos son abstractos, el enfoque del diseño será que todas sus derivadas tengan los mismo métodos que ella. Así las clases son más independientes, lo que facilita el mantenimiento y la extensibilidad del programa</li>
+<li>Si implementa tantos métodos como sea posible, el enfoque del diseño, será la reutilización de código.</li>
+</ul>
+</li>
+<li>Puede no tener constructores, debería tener tantos constructores como sea necesario.</li>
+<li>Puede ocupar cualquier lugar de la jerarquía de clases, debería ocupar los niveles superiores</li>
+<li>Puede ser una derivada de una clase no abstracta, debería ser derivada de otra clase abstracta</li>
+</ul>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Si tenemos una clase abstracta con métodos abstractos que hereda de otra clase abstracta con métodos abstractos, no hace falta escribir de nuevo los métodos abstractos en la derivada a no ser que queramos especificar su comportamiento ahí.</p>
+</div>
+<h2>4.5.1 Métodos abstractos</h2>
+<p>Los <strong>métodos abstractos</strong> son métodos que no tienen cuerpo, es decir, no están implementados. Sólamente se especifica su <strong>nombre</strong>, el <strong>tipo de datos</strong> que devuelve y sus <strong>argumentos</strong>.
+<code>public abstract tipo_dato nombre_metodo(tipo_dato2 arg);</code>
+Todas las clases que contengan métodos abstractos son <strong>clases abstractas</strong>.
+Los métodos abstractos tienen que estar <strong>implementados</strong> en <strong>todas las clases derivadas</strong> de la clase abstracta a la que pertenecen siempre que estas <strong>no sean abstractas</strong>.</p>
+<img src="../../../img/poo/pasted-image-20250621120051.png" alt="archivos/imagenes/Pasted image 20250621120051.png" loading="lazy">
+<h1>4.6 Clases, Atributos y Métodos Finales</h1>
+<p>Las <strong>clases finales</strong> son clases a partir de las cuales no se pueden crear clases derivadas, es decir, son los últimos nodos de la jerarquía de clases. Una clase debería ser final si se puede garantizar que no será necesario crear clases derivadas de ella.</p>
+<p>Los <strong>métodos finales</strong> son métodos que no se pueden sobreescribir. Un método debería ser final si se puede garantizar que no será necesario realizar modificaciones sobre él en las clases derivadas de la clase donde se implementa.</p>
+<p>Los <strong>atributos finales</strong> son atributos cuyo valor, una vez establecido, no se puede modificar. No tienen setters. Se usan para implementar <strong>constantes de los programas</strong>.
+<code>public final static tipo_dato nombre_atributo=valor;</code>
+<code>nombre_clase.nombre_atributo</code></p>
+<p>Se suelen definir en <strong>clases abstractas</strong> accesibles por todas las clases que las usan
+Se suelen establecer como <code>static</code> para poder usarlas sin tener que crear un objeto de la clase en la que están definidas. La palabra clave <code>static</code> para atributos o métodos hace que se almacenen en la memoria estática, permitiendo que estén disponibles desde el inicio del programa sin tener que instanciar su clase.</p>
+<img src="../../../img/poo/pasted-image-20250621120652.png" alt="archivos/imagenes/Pasted image 20250621120652.png" loading="lazy">
+<div class="callout callout-importante">
+<p class="callout-titulo">Importante</p>
+<p><strong>Qué se hereda??</strong>
+Los <strong>atributos</strong> y <strong>métodos</strong> independientemente de su <strong>tipo de acceso</strong> (<em>esto solo afecta a su nivel de visibilidad</em>). Incluyendo los <strong>final</strong>.
+<strong>Qué no se hereda??</strong>
+Los métodos y atributos <strong>static</strong> <strong>en una interfaz o en clases</strong>. (<em>Manolo Lama Said</em>)</p>
+</div>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="3-conjuntos-de-datos.html"><span class="nav-etiqueta">← anterior</span>3. Conjuntos de datos</a>
+  <a class="nav-siguiente" href="5-polimorfismo.html"><span class="nav-etiqueta">siguiente →</span>5. Polimorfismo</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="4. Visión — apuntes de COGA (segundo curso de Ingeniería Informática).">
+<title>4. Visión · COGA · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">coga</a><span class="miga-sep">/</span><span aria-current="page">4-vision</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">COGA · curso 2</p>
+    <h1>4. Visión · COGA</h1>
+  </header>
+  <div class="prosa">
+<h1>4.1 View Space</h1>
+<p>El <strong>View Space</strong> es el sistema de <strong>coordenadas de cámara</strong> o de punto de vista del observador.
+La <strong>View Matrix</strong> transforma las coordenadas de escena a coordenadas de cámara mediante una combinación de traslaciones y rotaciones.</p>
+<p>No existe una matriz separada para aplicar transformaciones a la cámara:</p>
+<ul>
+<li>En el view space, la <strong>cámara</strong> se ubica siempre en el <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">0</span><span class="mclose">)</span></span></span></span></eq> mirando hacia el eje <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.0715em;">Z</span></span></span></span></eq></li>
+<li>Para conseguir esto, se deberían realizar ciertas transformaciones sobre la posición de la cámara en el world space.</li>
+<li>En su lugar, a la <strong>escena</strong> se le aplica la <strong>inversa</strong> de las <strong>transformaciones</strong> que se le aplicarían a la <strong>cámara</strong>.</li>
+</ul>
+<p>El <strong>Clip Space</strong> es el sistema de coordenadas tras el <strong>recorte</strong> de los elementos que están fuera del frustrum. Las coordenadas que quedan en el clip space son <strong>procesadas</strong> y se pueden convertir en <strong>fragmentos</strong> visibles por pantalla.</p>
+<p>El <strong>Frustrum</strong> es el volumen de visión de la cámara, es decir, el área del espacio que la cámara verá. Por defecto, el frustrum es [-1,1],[-1,1]. Este rango corresponde al <strong>espacio de coordenadas normalizadas</strong>.</p>
+<p>La <strong>Projection Matrix</strong> permite cambiar las dimensiones del frustrum. Después de aplicar la matriz de proyección se realiza una <strong>división perspectiva</strong> que convierte las <strong>coordenadas del clip space a NCD (normalized device coordinates)</strong>, diviendo cada componente <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">y</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.044em;">z</span></span></span></span></eq> por el componente homogéneo <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0269em;">w</span></span></span></span></eq>.</p>
+<img src="../../../img/coga/pasted-image-20250426100241.png" alt="Pasted image 20250426100241.png" loading="lazy">
+<img src="../../../img/coga/pasted-image-20250301155409.png" alt="Pasted image 20250301155409.png" loading="lazy">
+<p>En la <strong>pipeline fija (Opengl 1.2)</strong> el paso de coordenadas de escena a coordenadas del clip space se corresponde con el paso <strong>transformación geométrica</strong>.
+<img src="../../../img/coga/pasted-image-20250426100441.png" alt="Pasted image 20250426100441.png" loading="lazy"></p>
+<p>En el <strong>retained mode (Opengl 3.3)</strong> el paso de coordenadas de escena a coordenadas del clip space se realiza mediante el <strong>vertex shader</strong>.</p>
+<img src="../../../img/coga/pasted-image-20250426100531.png" alt="Pasted image 20250426100531.png" loading="lazy">
+<img src="../../../img/coga/pasted-image-20250301160144.png" alt="Pasted image 20250301160144.png" loading="lazy">
+<h1>4.2 Proyección</h1>
+<p>Una <strong>proyección</strong> es una transformación que reduce la dimensionalidad de una espacio, normalmente de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span></span></eq> a <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0077em;">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span></eq>. Es decir, es el proceso de convertir una <strong>escena tridimensional</strong> en una <strong>imagen bidimensional</strong></p>
+<h2>4.2.1 Elementos de una proyección</h2>
+<ul>
+<li><strong>Escena:</strong> elementos 3D que componen el mundo virtual</li>
+<li><strong>Plano de proyección:</strong> superficie 2D en la que se representan los objetos 3D. En la práctica se corresponde a la pantalla o viewport.</li>
+<li><strong>Punto de vista o centro de proyección:</strong> posición desde donde se observa la escena. En la práctica se corresponde a la ubicación de la cámara</li>
+<li><strong>Proyectores:</strong> rayos imaginarios que se trazan desde los puntos del objeto hasta el CP. Los puntos en los que intersecan con el PP determinan dónde de dibujará cada punto del objeto en la imagen final.</li>
+</ul>
+<img src="../../../img/coga/pasted-image-20250426101243.png" alt="Pasted image 20250426101243.png" loading="lazy">
+<h2>4.2.2 Tipos de Proyecciones</h2>
+<h3><strong>Proyección ortográfica</strong> o paralela</h3>
+<p>El CP está situado en el infinito, por lo que los proyectores son paralelos entre sí.
+Se define una <strong>dirección de proyeción</strong> en vez de un CP
+<img src="../../../img/coga/pasted-image-20250426101551.png" alt="Pasted image 20250426101551.png" loading="lazy"></p>
+<h3><strong>Proyección perspectiva</strong></h3>
+<p>El CP está situado en el espacio, por lo que los proyectores forman un cono cuyo vértice es el CP.
+<img src="../../../img/coga/pasted-image-20250426101649.png" alt="Pasted image 20250426101649.png" loading="lazy">
+Proporciona <strong>realismo visual</strong>, da <strong>sensación tridimensional</strong>, no mantiene la forma ni la escala.</p>
+<h3>Proyección ortográfica multivista.</h3>
+<p>El PP es perpendicular a algún eje, por lo que se necesitan <strong>varias vistas</strong> para obtener una vision 3D de los objetos.</p>
+<ul>
+<li><strong>Planta:</strong> el PP es perpendicular al eje Y</li>
+<li><strong>Alzado:</strong> el PP es perpendicular al eje Z</li>
+<li>
+<ul>
+<li><strong>Perfil:</strong> el PP es perpendicular al eje X
+Es posible realizar <strong>medidas precisas</strong>. Todas las vistas tienen la <strong>misma escala</strong>. No se obtiene una <strong>visión 3D</strong> del objeto.</li>
+</ul>
+</li>
+</ul>
+<img src="../../../img/coga/pasted-image-20250426102134.png" alt="Pasted image 20250426102134.png" loading="lazy">
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="3-transformaciones.html"><span class="nav-etiqueta">← anterior</span>3. Transformaciones</a>
+  <a class="nav-siguiente" href="5-iluminacion.html"><span class="nav-etiqueta">siguiente →</span>5. Iluminación</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

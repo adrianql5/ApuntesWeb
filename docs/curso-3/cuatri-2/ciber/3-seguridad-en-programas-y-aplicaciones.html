@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="3. Seguridad en programas y aplicaciones — apuntes de CIBER (tercer curso de Ingeniería Informática).">
+<title>3. Seguridad en programas y aplicaciones · CIBER · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">ciber</a><span class="miga-sep">/</span><span aria-current="page">3-seguridad-en-programas-y-aplicaciones</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">CIBER · curso 3</p>
+    <h1>3. Seguridad en programas y aplicaciones · CIBER</h1>
+  </header>
+  <div class="prosa">
+<h1>3.1 Programación segura</h1>
+<p>El <strong>CERT</strong> (<em>Computer Emergency Response Team</em>) actúa como centro de coordinación de avisos de seguridad a nivel global. En la práctica, junto con otros <strong>CSIRT</strong>, pone de relieve una idea importante: buena parte de los riesgos actuales vienen de <strong>aplicaciones</strong> y <strong>servicios en Internet</strong>, y muchos de esos problemas <strong>no se arreglan con criptografía</strong>.</p>
+<p>La seguridad no es algo que se añada al final del desarrollo. Depende del <strong>entorno real</strong> donde se ejecutará el software, de la <strong>política de seguridad</strong> definida y de las decisiones tomadas desde el diseño. Los atacantes no “crean” por arte de magia los agujeros: normalmente <strong>explotan fallos que ya existen</strong>.</p>
+<h2>3.1.1 Introducción</h2>
+<p>Es habitual que las aplicaciones salgan al mercado con errores que se corrigen después, a medida que los atacantes los van encontrando. Eso tiene varias consecuencias: los <strong>parches</strong> solo solucionan los fallos ya detectados, muchos administradores <strong>tardan meses en aplicarlos</strong> o no los aplican nunca, y económicamente suele ser más rentable <strong>detectar y eliminar</strong> esos problemas <strong>antes</strong> del lanzamiento.</p>
+<p>El patrón típico es conocido: cuando una vulnerabilidad se <strong>descubre</strong> y se <strong>publica</strong>, los ataques aumentan; cuando sale el <strong>parche</strong>, los ataques pueden seguir creciendo porque muchos sistemas siguen sin actualizarse; y el descenso real puede retrasarse incluso <strong>más de un año</strong>.</p>
+<img src="../../../img/ciber/image-52.png" alt="imagenes/image-52.png" loading="lazy">
+<h3>Metas de un proyecto software</h3>
+<p>Todo proyecto software intenta equilibrar varios objetivos, y la seguridad compite con algunos de ellos:</p>
+<table>
+<thead>
+<tr>
+<th>Meta</th>
+<th>Idea principal</th>
+<th>Relación con la seguridad</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Funcionalidad</td>
+<td>Que el programa haga lo que debe hacer</td>
+<td>Suele verse como el objetivo principal</td>
+</tr>
+<tr>
+<td>Usabilidad</td>
+<td>Que sea fácil de usar</td>
+<td>Una mala interacción favorece errores humanos; además, puede chocar con medidas de seguridad</td>
+</tr>
+<tr>
+<td>Eficiencia</td>
+<td>Que consuma poco tiempo y pocos recursos</td>
+<td>Algunas defensas añaden sobrecarga</td>
+</tr>
+<tr>
+<td><em>Time-to-market</em></td>
+<td>Llegar rápido al mercado</td>
+<td>Las prisas suelen perjudicar a la seguridad</td>
+</tr>
+</tbody>
+</table>
+<p>También conviene separar dos tipos de prueba. Un <strong>test de funcionalidad</strong> verifica el comportamiento esperado en situaciones normales. Un <strong>test de seguridad</strong> comprueba que la aplicación siga comportándose correctamente en situaciones anómalas: entradas demasiado largas, parámetros erróneos, intentos de conexión inválidos o uso malicioso deliberado.</p>
+<h2>3.1.2 Principios básicos</h2>
+<p>La programación segura suele resumirse en diez reglas prácticas:</p>
+<ol>
+<li><strong>Asegurar los puntos más débiles.</strong> Un sistema es tan fuerte como su eslabón más débil. Si una comunicación va cifrada entre A y B, puede ser más eficaz atacar A o B; si existe un cortafuegos, quizá sea mejor atacar la aplicación expuesta. A veces el punto más débil ni siquiera está en el software, sino en el entorno o en la <strong>ingeniería social</strong>.</li>
+<li><strong>Practicar la defensa en profundidad.</strong> Hay que superponer capas para que el fallo de una no suponga la caída total del sistema. En una base de datos, por ejemplo, pueden coexistir cortafuegos corporativo, cifrado de comunicaciones internas, cortafuegos local, protección física y cifrado de los propios datos.</li>
+<li><strong>Fallar de forma segura.</strong> Los fallos son inevitables; lo importante es que, si una acción falla, el sistema quede <strong>tan seguro como antes</strong> de iniciarla. De hecho, forzar fallos es una técnica clásica de ataque.</li>
+<li><strong>Aplicar privilegios mínimos.</strong> Cada componente debería tener solo los permisos imprescindibles y durante el menor tiempo posible. El caso típico es un servicio que necesita privilegios elevados para una operación inicial y que después debería <strong>soltarlos</strong>. Muchos productos comerciales no lo hacen por comodidad. El ejemplo clásico es un servidor de correo en UNIX: puede necesitar privilegios para abrir el puerto 25, pero no para conservarlos durante toda su ejecución; sin embargo, programas como <code>sendmail</code> los mantuvieron históricamente más tiempo del necesario.</li>
+<li><strong>Compartimentalizar.</strong> Conviene separar subsistemas según sus privilegios y según la parte del sistema con la que necesitan interactuar. Cuanto más aisladas estén las piezas críticas, más difícil será una escalada lateral.</li>
+<li><strong>Apostar por lo simple.</strong> El software complejo se entiende peor y, por tanto, falla más. Esto favorece la reutilización de componentes de calidad, el uso de puntos de control claros para operaciones peligrosas, opciones seguras por defecto y un diseño que no dependa de diálogos que el usuario nunca leerá.</li>
+<li><strong>Favorecer la privacidad.</strong> La aplicación debe proteger los datos que le entrega el usuario. Además, exponer información innecesaria del propio programa, como su versión exacta, puede facilitar ataques.</li>
+<li><strong>Recordar que mantener secretos es difícil.</strong> Ocultar el diseño o la implementación rara vez funciona, sobre todo si el atacante puede estudiar el binario o la comunicación interna. La seguridad no debería depender de esa oscuridad, salvo en secretos reales como contraseñas o claves.</li>
+<li><strong>Ser cauto con la confianza.</strong> Un servidor no debe confiar ciegamente en el cliente ni el cliente en el servidor. Tampoco conviene asumir que terceros siguen buenas prácticas o que cualquier “producto de seguridad” es benigno. La confianza es transitiva y hay que tratarla como tal.</li>
+<li><strong>Aprovechar los recursos de la comunidad.</strong> Los componentes ampliamente usados, revisados durante años y analizados públicamente suelen ofrecer más confianza que las soluciones ad hoc poco examinadas.</li>
+</ol>
+<h1>3.2 Vulnerabilidades en el desarrollo de aplicaciones</h1>
+<p>Una <strong>vulnerabilidad software</strong> es un fallo en las <strong>políticas</strong>, <strong>procedimientos</strong> o <strong>controles</strong> de un programa que permite a alguien violar su política de seguridad. A quien aprovecha ese fallo se le llama <strong>atacante</strong>, y al proceso de aprovecharlo se le llama <strong>explotación</strong>. Un <strong>exploit</strong> es el programa o técnica concreta que materializa ese aprovechamiento.</p>
+<h2>3.2.1 TOCTOU</h2>
+<p><strong>TOCTOU</strong> (<em>Time Of Check, Time Of Use</em>) es una vulnerabilidad de sincronización en la que una decisión de acceso se toma en un instante y el uso real del recurso ocurre un poco después. Ese hueco es la <strong>ventana de vulnerabilidad</strong>: durante ese tiempo, un atacante puede cambiar la situación y provocar un acceso incorrecto.</p>
+<p>En accesos a ficheros suelen darse tres condiciones para que el ataque sea viable: el atacante tiene acceso a la <strong>máquina local</strong>, el programa vulnerable se ejecuta con <strong>privilegios elevados</strong> como <code>setuid</code> o <code>setgid</code>, y esos privilegios se mantienen durante la ventana de vulnerabilidad.</p>
+<p>Las medidas típicas son conocidas. Si es posible, conviene trabajar con <strong>descriptores o punteros de fichero</strong> en lugar de con <strong>nombres</strong>, porque así el objeto abierto ya no cambia por el camino. Si no es posible, el fichero debería residir en un directorio accesible solo para el <strong>UID del programa</strong>. Y, en general, <strong>no</strong> debería usarse <code>setuid</code> o <code>setgid</code> salvo que sea estrictamente necesario.</p>
+<h3>Ejemplo: <code>xterm</code></h3>
+<p><code>xterm</code> actuaba como emulador de terminal para X11 y, en ciertos sistemas UNIX, necesitaba ejecutarse con privilegios elevados. Su mecanismo de registro permitía al usuario guardar entradas y salidas en un fichero: si el fichero no existía, <code>xterm</code> lo creaba; si ya existía, comprobaba que el usuario pudiera escribir en él y luego añadía el registro.</p>
+<p>El problema es que <strong>root puede escribir en cualquier fichero</strong>, así que la comprobación tendía a salir bien. Entre <code>access</code> y <code>open</code> quedaba una ventana en la que un atacante podía sustituir el nombre por un <strong>enlace simbólico</strong> hacia un fichero sensible y lograr que el programa lo abriera con privilegios.</p>
+<img src="../../../img/ciber/image-53.png" alt="imagenes/image-53.png" loading="lazy">
+<img src="../../../img/ciber/image-54.png" alt="imagenes/image-54.png" loading="lazy">
+<p>Para elevar la probabilidad de éxito, el atacante puede automatizar el reemplazo del enlace hasta acertar con la ventana vulnerable.</p>
+<h2>3.2.2 Desbordamiento de memoria</h2>
+<p>Un <strong>buffer</strong> es una zona de memoria de tamaño prefijado destinada a almacenar datos del mismo tipo. Hay <strong>desbordamiento</strong> cuando un programa intenta escribir más datos de los que caben. Lo que sobra pisa memoria adyacente, corrompe datos válidos y puede incluso alterar el <strong>flujo de ejecución</strong>.</p>
+<p>Hay ataques <strong>remotos</strong>, cuando la entrada llega desde la red, y ataques <strong>locales</strong>, cuando un usuario con acceso al equipo intenta escalar privilegios explotando una aplicación que corre con otro usuario, por ejemplo <strong>root</strong>.</p>
+<p>El impacto real depende de cuatro factores: cuánta información se escribe fuera de límites, <strong>qué datos</strong> se sobrescriben, si el programa vuelve a <strong>leer</strong> esos datos y <strong>con qué valores</strong> han sido sustituidos.</p>
+<h3>Por qué es un problema de seguridad</h3>
+<p>La variante clásica es el <strong>stack-smashing</strong>: el atacante introduce código propio en la pila y fuerza un salto a esa zona modificando la <strong>dirección de retorno</strong>. Desbordar el <strong>heap</strong> suele ser más difícil, por eso muchos desarrolladores se sienten más cómodos con reserva dinámica, pero eso no elimina el problema.</p>
+<p>Si el programa vulnerable corre con <code>setuid</code>, el fallo puede convertirse en una vía de <strong>escalada de privilegios</strong>. Y si el servicio está expuesto a la red, el ataque puede llegar a ser <strong>remoto</strong>.</p>
+<img src="../../../img/ciber/image-57.png" alt="imagenes/image-57.png" loading="lazy">
+<p>En este contexto aparecen dos términos frecuentes:</p>
+<ul>
+<li><strong>Shellcode</strong>: código pensado para ejecutarse dentro del programa vulnerable y tomar su control. El ejemplo clásico abre una <strong>shell</strong> mediante <code>execve(&quot;/bin/sh&quot;, ...)</code>.</li>
+<li><strong>Exploit</strong>: programa o secuencia de entrada que aprovecha una o varias vulnerabilidades para ejecutar ese código o alterar el flujo del programa.</li>
+</ul>
+<p>Un exploit de pila suele combinar varias piezas: relleno para alcanzar la zona sensible, a veces una <strong>NOP sled</strong> para no tener que acertar una dirección exacta, el <strong>shellcode</strong> y una o varias <strong>direcciones de retorno</strong> que redirigen la ejecución.</p>
+<img src="../../../img/ciber/image-72.png" alt="imagenes/image-72.png" loading="lazy">
+<h3>Contramedidas</h3>
+<p>No existe una defensa única. Lo razonable es acumular barreras en varias capas:</p>
+<table>
+<thead>
+<tr>
+<th>Capa</th>
+<th>Medidas habituales</th>
+<th>Limitaciones</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Desarrollador</td>
+<td>Comprobar límites, usar funciones como <code>strncpy</code>, revisar con cuidado bucles con <code>getc</code> y similares, o usar lenguajes con comprobación de límites como Java o C#</td>
+<td>Requiere disciplina y no corrige errores ya escritos</td>
+</tr>
+<tr>
+<td>Compilador</td>
+<td>Compiladores con comprobación de límites, <code>StackGuard</code>, protecciones de pila y avisos de <strong>gcc</strong> frente a modificaciones sospechosas</td>
+<td>Puede penalizar rendimiento y no cubre todos los desbordamientos, especialmente en heap</td>
+</tr>
+<tr>
+<td>Sistema operativo</td>
+<td>Pila no ejecutable, ASLR</td>
+<td>Se puede intentar rodear mediante prueba y error u otras técnicas</td>
+</tr>
+<tr>
+<td>Red</td>
+<td>DPI para detectar <em>shellcodes</em>, secuencias largas de NOPs u otros patrones</td>
+<td>El malware puede ofuscarse o automodificarse</td>
+</tr>
+</tbody>
+</table>
+<p>La experiencia práctica es clara: la base del <strong>CERT</strong> contiene muchas vulnerabilidades de este tipo, siguen apareciendo constantemente, suelen ser <strong>fáciles de explotar</strong> cuando existen y <strong>no</strong> hay una solución universal que proteja cualquier programa vulnerable.</p>
+<h1>3.3 Vulnerabilidades web</h1>
+<h2>3.3.1 Ataques centrados en la web y en la sesión del usuario</h2>
+<p><strong>Man in the Browser</strong> introduce malware en el navegador para <strong>interceptar o modificar</strong> lo que el usuario escribe o envía, incluso si luego la comunicación viaja cifrada.</p>
+<img src="../../../img/ciber/image-75.png" alt="imagenes/image-75.png" loading="lazy">
+<p><strong>Registro de pulsaciones</strong> o <strong>keylogging</strong> consiste en capturar todo lo que el usuario teclea para robar credenciales u otra información. Puede hacerse con malware o incluso con hardware, y no se limita al navegador.</p>
+<p><strong>Page in the Middle</strong> redirige al usuario a una página distinta de la que cree visitar para capturar o manipular su entrada.</p>
+<p><strong>Browser in the Browser</strong> simula dentro de la propia web una ventana de inicio de sesión aparentemente legítima para engañar al usuario.</p>
+<p><strong>Clickjacking</strong> oculta la acción real asociada a un clic. El usuario cree pulsar algo inocente, pero en realidad activa otra operación, como conceder acceso a cámara o micrófono.</p>
+<img src="../../../img/ciber/image-76.png" alt="imagenes/image-76.png" loading="lazy">
+<h2>3.3.2 Engaño al usuario</h2>
+<p><strong>Phishing</strong> es cualquier mensaje o comunicación que engaña a la víctima para que entregue datos privados o haga algo inseguro.</p>
+<p>Un <strong>sitio web falso</strong> imita a uno legítimo para ganarse la confianza del usuario y robar credenciales o datos sensibles.</p>
+<p>La <strong>sustitución en la descarga de programas</strong> ofrece software aparentemente normal que, al descargarse o instalarse, introduce malware o spyware.</p>
+<p>Las <strong>herramientas falsas</strong> se presentan como utilidades útiles o incluso como soluciones de seguridad, pero en realidad manipulan al usuario, muestran alertas falsas o instalan malware.</p>
+<img src="../../../img/ciber/image-77.png" alt="imagenes/image-77.png" loading="lazy">
+<p><strong>User in the Middle</strong> convierte al propio usuario en intermediario involuntario. Un ejemplo típico es hacerle resolver un <strong>CAPTCHA</strong> o completar una acción que en realidad beneficia al atacante, como la creación masiva de cuentas.</p>
+<h2>3.3.3 Mediación incompleta</h2>
+<p>La <strong>mediación incompleta</strong> aparece cuando el servidor confía demasiado en datos que llegan del cliente y no los vuelve a validar. Entonces basta alterar parámetros de la URL o del formulario, como <strong>precio</strong>, <strong>cantidad</strong> o <strong>identificadores</strong>, para cambiar el resultado.</p>
+<p>La regla aquí es simple: <strong>no se debe confiar en el navegador ni en la entrada del usuario</strong>, porque ambos pueden ser manipulados antes de llegar al servidor.</p>
+<h2>3.3.4 Ataques de inyección</h2>
+<p>Un ataque de <strong>inyección</strong> introduce datos maliciosos para que la aplicación ejecute o interprete algo distinto de lo esperado.</p>
+<p>Los casos más conocidos son:</p>
+<ul>
+<li><strong>XSS</strong> (<em>Cross-Site Scripting</em>): se inyecta script o HTML para que el navegador ejecute contenido malicioso dentro de una web.</li>
+<li><strong>Path traversal</strong>: se manipulan rutas como <code>../</code> para acceder a ficheros del servidor que no deberían exponerse.</li>
+<li><strong>Inyección SQL</strong>: se introducen fragmentos SQL para alterar las consultas a la base de datos.</li>
+</ul>
+<p>Las contramedidas básicas son siempre las mismas: <strong>filtrar y sanear</strong> toda la entrada, teniendo en cuenta cualquier codificación válida; <strong>no hacer suposiciones</strong> sobre lo que enviará el usuario; y apoyarse en controles del lado servidor, como <strong>procedimientos almacenados</strong> o mecanismos equivalentes.</p>
+<h2>3.3.5 OWASP</h2>
+<p><strong>OWASP</strong> es una comunidad y proyecto abierto orientado a mejorar la seguridad de las aplicaciones web y a ayudar a desarrollar, comprar y mantener aplicaciones de confianza.</p>
+<p>Uno de sus recursos más conocidos es el <strong>OWASP Top 10</strong>, una lista de riesgos que se actualiza con el tiempo. Ya en la transición de <strong>2013</strong> a <strong>2017</strong> cambiaron varias categorías, por ejemplo con la aparición de <strong>XXE</strong> y de <strong>Insecure Deserialization</strong> y con el peso creciente del <strong>Broken Access Control</strong>. La imagen usada en los apuntes muestra además la transición de <strong>2017</strong> a <strong>2021</strong>, donde aparecen categorías como <strong>Broken Access Control</strong>, <strong>Cryptographic Failures</strong>, <strong>Injection</strong>, <strong>Insecure Design</strong>, <strong>Security Misconfiguration</strong>, <strong>Vulnerable and Outdated Components</strong>, <strong>Identification and Authentication Failures</strong>, <strong>Software and Data Integrity Failures</strong>, <strong>Security Logging and Monitoring Failures</strong> y <strong>SSRF</strong>.</p>
+<img src="../../../img/ciber/image-79.png" alt="imagenes/image-79.png" loading="lazy">
+<h1>3.4 Código malicioso</h1>
+<p>El <strong>código malicioso</strong> o <strong>malware</strong> es software que se ejecuta sin el conocimiento o autorización del propietario del equipo y realiza acciones perjudiciales para el usuario o para el sistema. A menudo se apoya en <strong>operaciones legales</strong>: un usuario autorizado podría realizarlas sin violar la política de seguridad, y el malware simplemente <strong>imita</strong> a ese usuario.</p>
+<h2>3.4.1 Tipos de malware</h2>
+<p>Los tipos más habituales son:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Qué hace</th>
+<th>Rasgo característico</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Virus</td>
+<td>Se replica asociado a un programa huésped e infecta otras copias</td>
+<td>Suele activarse al ejecutar el código infectado y busca pasar desapercibido</td>
+</tr>
+<tr>
+<td>Troyano</td>
+<td>Parece inofensivo, pero ejecuta acciones maliciosas</td>
+<td>Combina una función visible con otra encubierta</td>
+</tr>
+<tr>
+<td>Rootkit</td>
+<td>Intercepta funciones del sistema para ocultarse a sí mismo o a otro malware</td>
+<td>Puede ocultar procesos, ficheros, claves del registro o tráfico</td>
+</tr>
+<tr>
+<td>Gusano</td>
+<td>Se replica por una red sin requerir ayuda directa del usuario</td>
+<td>Puede degradar el rendimiento y propagarse por correo o protocolos estándar</td>
+</tr>
+<tr>
+<td>Spyware</td>
+<td>Recopila información del equipo y del usuario</td>
+<td>Puede esconderse, cambiar el navegador o instalar barras de herramientas</td>
+</tr>
+<tr>
+<td>Rogueware</td>
+<td>Finge ser un antivirus o una herramienta útil</td>
+<td>Muestra falsas infecciones e intenta cobrar o forzar instalaciones</td>
+</tr>
+<tr>
+<td>Ransomware</td>
+<td>Bloquea el equipo o cifra archivos para exigir un rescate</td>
+<td>Su objetivo es el secuestro o la extorsión</td>
+</tr>
+<tr>
+<td>Keylogger</td>
+<td>Registra las pulsaciones del teclado</td>
+<td>Puede ser software oculto o incluso hardware conectado al equipo</td>
+</tr>
+</tbody>
+</table>
+<p>Conviene matizar algunos casos. En un <strong>troyano</strong> hay una acción visible y otra encubierta; en un <strong>rootkit</strong> son frecuentes las <strong>puertas traseras</strong>, que abren conexiones externas y escuchan en puertos concretos, y un ejemplo clásico es un <code>ps</code> troyanizado que oculta un proceso; un <strong>gusano</strong> suele componerse de un localizador de objetivos, un propagador, un mecanismo de control remoto, una interfaz de actualización, una rutina de <em>payload</em> y algún sistema de autorastreo. Los <strong>gusanos de correo</strong> son especialmente comunes.</p>
+<p>Además de los tipos anteriores, también se citan:</p>
+<ul>
+<li><strong>Adware</strong>: realiza acciones publicitarias ocultas, como falsos clics, para dar beneficio al atacante.</li>
+<li><strong>Hoaxes</strong>: mensajes falsos sobre virus, amenazas o causas solidarias que buscan difusión masiva.</li>
+<li><strong>Exploits</strong>: código diseñado para ejecutar acciones en otros sistemas, locales o remotos, aprovechando vulnerabilidades.</li>
+</ul>
+<h2>3.4.2 Objetivos del malware</h2>
+<p>Hoy en día, en un porcentaje muy alto de casos, la infección está ligada directa o indirectamente a un <strong>móvil económico</strong>.</p>
+<p>El primer objetivo clásico es el <strong>robo de información</strong>: usuarios y contraseñas, historial de navegación, cookies, libretas de direcciones y también propiedad intelectual o industrial.</p>
+<p>El segundo es el <strong>secuestro</strong>. Aquí entran el ransomware que bloquea el equipo y el que cifra sus ficheros; en ambos casos la condición para recuperar el uso del dispositivo o de los datos es <strong>pagar</strong>.</p>
+<p>El tercero es el <strong>reclutamiento para botnets</strong>. Una <strong>red de bots</strong> o <strong>zombies</strong> es un conjunto de equipos infectados por un malware concreto y controlados desde un centro de <strong>Comando y Control</strong>. Un zombie aislado aporta poco; miles de ellos sirven para atacar otros equipos, enviar correo masivo, romper contraseñas, minar criptomonedas o robarlas. Cuantos más equipos infectados, mayor valor económico tiene la red, incluso como servicio alquilado a terceros.</p>
+<h2>3.4.3 Transmisión, propagación y activación</h2>
+<p>El malware puede llegar al sistema por muchas vías: programas de instalación, adjuntos, enlaces de descarga, fallos del navegador u otro software instalado, cracks o generadores de claves, dispositivos <strong>USB</strong> infectados, programas “gratuitos” descargados de sitios poco fiables y aplicaciones falsas que hacen más de lo que prometen.</p>
+<p>Un truco de ingeniería social muy común es la <strong>doble extensión</strong> y la manipulación del icono del fichero, especialmente en Windows, para hacer pasar un ejecutable por un documento inocente.</p>
+<img src="../../../img/ciber/image-125.png" alt="imagenes/image-125.png" loading="lazy">
+<p>Una vez presente en el sistema, el malware puede activarse de distintas formas: <strong>ejecución única</strong>, infección del <strong>sector de arranque</strong>, residencia en <strong>memoria</strong>, infección de <strong>ficheros de aplicación</strong>, infección de <strong>librerías</strong> o activación apoyada en <strong>ingeniería social</strong>.</p>
+<h2>3.4.4 Prevención y detección</h2>
+<p>Las medidas básicas siguen siendo muy pragmáticas: usar software de <strong>fuentes fiables</strong>, probarlo en <strong>entornos aislados</strong>, abrir solo adjuntos de los que se conoce su seguridad, tratar cualquier sitio web como potencialmente dañino y mantener <strong>copias de seguridad</strong>.</p>
+<p>Los escáneres de malware buscan signos de infección usando <strong>firmas</strong> en disco y en memoria. Sus mecanismos de detección suelen basarse en <strong>patrones de cadenas</strong>, <strong>patrones de ejecución</strong> y <strong>patrones de almacenamiento</strong>.</p>
+<p>El problema es que el malware evoluciona rápido y los antivirus tradicionales no siempre consiguen mantenerse al día. Por eso muchos códigos maliciosos incorporan mecanismos de <strong>autodefensa</strong> para evitar ser detectados, dificultar el análisis, ocultarse en el sistema o entorpecer a antivirus y cortafuegos. El uso de <strong>rootkits</strong> forma parte de esa lógica.</p>
+<h2>3.4.5 Técnicas de evasión del malware</h2>
+<h3>Tunneling</h3>
+<p>El <strong>tunneling</strong> crea un “túnel” entre el sistema operativo y el antivirus para proteger al malware de los módulos residentes que vigilan comportamientos típicos. Es especialmente frecuente en malware <strong>residente en memoria</strong>.</p>
+<p>En sistemas donde el usuario trabaja con privilegios altos, el malware puede intentar <strong>deshabilitar o matar</strong> el antivirus o el cortafuegos, esquivar los mecanismos de detección por comportamiento, borrar campos de integridad de la base del antivirus, ejecutar su código “a través” del antivirus, troyanizar la base de firmas o impedir que el producto se conecte para <strong>actualizarse</strong>.</p>
+<h3>Armouring</h3>
+<p><strong>Armouring</strong> agrupa técnicas destinadas a impedir que el malware sea analizado. El objetivo es dificultar el acceso a los ficheros abiertos, evitar el desensamblado o bloquear el <em>tracing</em> con depuradores.</p>
+<p>Las técnicas citadas en los apuntes son: <strong>antidesensamblador</strong>, <strong>cifrado de datos</strong>, <strong>ofuscación</strong>, <strong>compresión del código</strong>, <strong>antidepuración</strong>, <strong>antiheurísticas</strong>, <strong>antiemulación</strong> y <strong>anticebo</strong>.</p>
+<h3>Virus polimórficos</h3>
+<p>Un <strong>virus polimórfico</strong> cambia su forma cada vez que infecta otro programa. La idea es eludir la detección por firma modificando instrucciones o incluso el algoritmo concreto que realiza la misma tarea. Un ejemplo típico es incluir varias rutinas de cifrado y descifrado y elegir una al azar en cada infección.</p>
+<h2>3.4.6 APT y MITRE ATT&amp;CK</h2>
+<p>Una <strong>APT</strong> (<em>Amenaza Persistente Avanzada</em>) combina varias vulnerabilidades y técnicas de ataque para alcanzar objetivos a largo plazo. Puede afectar tanto a usuarios individuales como a entornos corporativos. En un escenario personal puede apoyarse en <strong>perfiles falsos</strong>, <strong>ingeniería social</strong>, aplicaciones de mensajería falsas o permisos abusivos, y terminar en extorsión o en venta de datos a terceros. En una organización puede continuar tras la primera infección mediante <strong>escalada de privilegios</strong> y <strong>movimientos laterales</strong>, con fines como robo de información, acceso no autorizado a recursos o secuestro de ficheros.</p>
+<p>No todas las APT siguen exactamente las mismas fases, pero suelen cubrir desde el reconocimiento inicial hasta la explotación y la permanencia.</p>
+<p>Para estudiar ese comportamiento se usa mucho <strong>MITRE ATT&amp;CK</strong>, una base de conocimiento y taxonomía del comportamiento del adversario a lo largo del ciclo de vida del ataque. ATT&amp;CK se divide en tres grandes entornos:</p>
+<ul>
+<li><strong>ATT&amp;CK for Enterprise</strong>: cubre redes y nube corporativas. Incluye Windows, macOS, Linux, PRE, Azure AD, Office 365, Google Workspace, SaaS, IaaS, redes y contenedores.</li>
+<li><strong>ATT&amp;CK for Mobile</strong>: se centra en <strong>Android</strong> e <strong>iOS</strong>.</li>
+<li><strong>ATT&amp;CK for ICS</strong>: se orienta a sistemas de control industrial.</li>
+</ul>
+<p>En ATT&amp;CK, las <strong>tácticas</strong> representan los objetivos del atacante en cada fase, y las <strong>técnicas</strong> o <strong>subtécnicas</strong> son las formas observadas de conseguirlos. De ahí que se hable a menudo de matrices de <strong>TTPs</strong> (<em>tactics, techniques and procedures</em>). Para implementar esas técnicas, el marco distingue entre <strong>herramientas</strong> de uso dual y <strong>malware</strong> específicamente malicioso. Dependiendo del objetivo del atacante y del sistema a comprometer, se usarán unas fases y unas técnicas u otras.</p>
+<p>El valor práctico del marco es doble: permite estudiar campañas y grupos conocidos, y también consultar qué <strong>mitigaciones</strong> resultan útiles frente a determinadas <strong>tácticas</strong> o <strong>técnicas</strong>.</p>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="2-criptografia.html"><span class="nav-etiqueta">← anterior</span>2. Criptografía</a>
+  <a class="nav-siguiente" href="4-seguridad-en-redes.html"><span class="nav-etiqueta">siguiente →</span>4. Seguridad en Redes</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Material de primer curso: resúmenes por asignatura y PDFs descargables.">
+<title>Primer curso · ApuntesWeb</title>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../index.html">inicio</a><span class="miga-sep">/</span><span aria-current="page">curso-1</span></nav>
+<main class="principal">
+<section class="encabezado-seccion">
+  <p class="sello">material legado · resúmenes y pdfs</p>
+  <h1>Primer curso</h1>
+  <p class="portada-texto">Primero lo cursé antes de empezar a tomar apuntes en Obsidian: aquí hay resúmenes por asignatura y el material en PDF tal cual lo conservo.</p>
+</section>
+<section aria-label="Contenido del curso">
+  <ul class="tarjetas">
+    <li class="tarjeta"><a href="algebra/index.html"><h2>Algebra</h2><p>resumen</p></a></li>
+    <li class="tarjeta"><a href="calculo/index.html"><h2>Calculo</h2><p>3 PDFs</p></a></li>
+    <li class="tarjeta"><a href="discreta/index.html"><h2>Discreta</h2><p>1 PDFs</p></a></li>
+    <li class="tarjeta"><a href="estadistica/index.html"><h2>Estadística</h2><p>3 PDFs</p></a></li>
+    <li class="tarjeta"><a href="fundcomp/index.html"><h2>FundComp</h2><p>1 PDFs</p></a></li>
+    <li class="tarjeta"><a href="fundmat/index.html"><h2>FundMat</h2><p>resumen</p></a></li>
+    <li class="tarjeta"><a href="futfi/index.html"><h2>FUTFI</h2><p>3 PDFs</p></a></li>
+    <li class="tarjeta"><a href="programacion-i/index.html"><h2>Programación-I</h2><p>resumen</p></a></li>
+    <li class="tarjeta"><a href="programacion-ii/index.html"><h2>Programacion-II</h2><p>1 PDFs</p></a></li>
+    <li class="tarjeta"><a href="sistemasdigitales/index.html"><h2>SistemasDigitales</h2><p>2 PDFs</p></a></li>
+  </ul>
+</section>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../js/app.js"></script>
+</body>
+</html>

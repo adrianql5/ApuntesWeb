@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. Búsqueda en Espacio de Estados — apuntes de IA (tercer curso de Ingeniería Informática).">
+<title>2. Búsqueda en Espacio de Estados · IA · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">ia</a><span class="miga-sep">/</span><span aria-current="page">2-busqueda-en-espacio-de-estados</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">IA · curso 3</p>
+    <h1>2. Búsqueda en Espacio de Estados · IA</h1>
+  </header>
+  <div class="prosa">
+<h1>2.1 Conceptos Principales</h1>
+<p>Para resolver problemas en IA, formalizamos el mundo como un conjunto de estados y transiciones.</p>
+<ol>
+<li><strong>Espacio de Estados</strong>: Conjunto de todos los estados alcanzables desde el estado inicial mediante una secuencia de operadores</li>
+<li><strong>Estado Inicial</strong>: Descripción de partida del sistema</li>
+<li><strong>Operadores (Acciones)</strong>: Reglas que transforman un estado en otro (ej. mover una pieza, mover el hueco en un puzle)</li>
+<li><strong>Prueba de Meta (Goal Test)</strong>: Condición que determina si un estado es la solución</li>
+<li><strong>Costo de Ruta</strong> (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></eq>): Costo acumulado desde el inicio hasta el estado actual (ej.  número de movimientos, distancia en km)</li>
+</ol>
+<p><strong>La Función de Evaluación (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></eq>):</strong> Es una fórmula matemática fundamental para guiar la búsqueda, decidiendo qué nodo es el más &quot;prometedor&quot; para expandir a continuación. Asigna un valor numérico a cada nodo que representa la estimación de cuán bueno es ese camino para llegar a la solución.  Permite ordenar los nodos en la &quot;frontera&quot; de búsqueda. El algoritmo siempre elegirá expandir el nodo con el mejor valor <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></eq> (generalmente el menor valor si hablamos de costes).</p>
+<p><strong>Componentes típicos</strong>:
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></span></eqn></section></p>
+<ul>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></eq>: Lo que ya has recorrido (costo real desde el inicio hasta <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></eq>)</li>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></eq>: Lo que te falta (estimación heurística desde <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></eq> hasta la meta)</li>
+</ul>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p><strong>Tipos de grafos generados en los procesos de búsqueda:</strong></p>
+<ul>
+<li><strong>Implícito:</strong> Es la <strong>representación teórica</strong> o virtual del espacio de estados completo. Se define únicamente mediante el <strong>estado inicial</strong> y los <strong>operadores</strong> (reglas de transición), ya que sus nodos se generan dinámicamente bajo demanda y no se almacenan en memoria debido a su tamaño potencialmente infinito.</li>
+<li><strong>Explícito:</strong> Es el <strong>subgrafo real</strong> que el algoritmo de búsqueda ha generado y <strong>almacenado en la memoria</strong> del ordenador durante su ejecución. Está formado por los nodos que han sido visitados o expandidos (listas ABIERTA y CERRADA) en el intento de encontrar la solución.</li>
+</ul>
+</div>
+<h1>2.2 Estrategias de Búsqueda:  Paso a Paso</h1>
+<p>Las estrategias se dividen en <strong>Ciegas</strong> (sin información del dominio) y <strong>Heurísticas</strong> (con información/estimaciones).</p>
+<blockquote>
+<p><strong>Heurística:</strong> Es un criterio basado en conocimiento del problema que ayuda a seleccionar los operadores o acciones más prometedoras, descartando opciones poco útiles.
+<strong>Una heurística es como un &quot;atajo inteligente&quot; que evita búsquedas exhaustivas.</strong></p>
+</blockquote>
+<h2>2.2.1 Búsqueda a Ciegas (No Informada)</h2>
+<p>Las <strong>estrategias de búsqueda a ciegas</strong> (no informadas) exploran posibles soluciones sin información adicional sobre cuál camino puede ser mejor. Se utilizan principalmente en problemas donde no se tiene una <strong>heurística</strong> clara para guiar la búsqueda.</p>
+<p><strong>Características de una búsqueda:</strong></p>
+<ul>
+<li><strong>Búsqueda completa:</strong> garantiza encontrar una solución si existe.</li>
+<li><strong>Búsqueda óptima:</strong> garantiza encontrar la mejor solución disponible.</li>
+<li><strong>Complejidad temporal:</strong> número total de nodos explorados durante la búsqueda.</li>
+<li><strong>Complejidad espacial:</strong> número máximo de nodos almacenados en memoria simultáneamente</li>
+</ul>
+<p><strong>Símbolos:</strong></p>
+<ul>
+<li><strong>r:</strong> factor de ramificación (promedio de sucesores por nodo)</li>
+<li><strong>p:</strong> profundidad de la solución</li>
+<li><strong>m:</strong> profundidad máxima</li>
+<li><strong>l:</strong> límite de profundidad</li>
+</ul>
+<img src="../../../img/ia/pasted-image-20260111102954.png" alt="Pasted image 20260111102954.png" loading="lazy">
+<h3>Búsqueda en Amplitud (Breadth-First Search - BFS)</h3>
+<p><strong>Funcionamiento</strong>: Explora nivel por nivel. Primero visita el nodo raíz, luego todos sus hijos, luego los nietos, etc.</p>
+<p><strong>Estructura de datos</strong>: Usa una lista ABIERTA como cola FIFO (Primero en entrar, primero en salir)</p>
+<p><strong>Propiedades</strong>:</p>
+<ul>
+<li><strong>Completa</strong>: Sí, encuentra la solución si existe (en espacios finitos)</li>
+<li><strong>Óptima</strong>: Sí, pero solo si el costo de los operadores es uniforme</li>
+<li><strong>Problema</strong>: Consume muchísima memoria (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>) porque guarda todos los nodos del nivel actual</li>
+</ul>
+<img src="../../../img/ia/pasted-image-20260111113547.png" alt="Pasted image 20260111113547.png" loading="lazy">
+<h3>Búsqueda en Profundidad (Depth-First Search - DFS)</h3>
+<p><strong>Funcionamiento</strong>: Explora una rama hasta el final antes de retroceder.  Si llega a un punto muerto, vuelve atrás.</p>
+<p><strong>Estructura de datos</strong>:  Usa una lista ABIERTA como pila LIFO (Último en entrar, primero en salir)</p>
+<p><strong>Propiedades</strong>:</p>
+<ul>
+<li><strong>Completa</strong>: No (puede caer en bucles infinitos o ramas infinitas)</li>
+<li><strong>Óptima</strong>: No (puede encontrar una solución muy profunda antes que una corta)</li>
+<li><strong>Ventaja</strong>: Muy eficiente en memoria (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">m</span><span class="mclose">)</span></span></span></span></eq>), solo guarda la rama actual</li>
+</ul>
+<img src="../../../img/ia/pasted-image-20260111113603.png" alt="Pasted image 20260111113603.png" loading="lazy">
+<h3>Otras Búsquedas</h3>
+<ul>
+<li><strong>En profundidad limitada.</strong> Se establece un límite máximo de profundidad para la exploración. Evita ciclos infinitos, pero puede perder soluciones si el límite es bajo.</li>
+<li><strong>En profundidad iterativa.</strong> Aplica búsqueda en profundidad con límites crecientes, combinando ventajas de amplitud y profundidad. Es completa y óptima (en espacios finitos).</li>
+<li><strong>Bidireccional.</strong> Realiza la búsqueda simultáneamente desde el estado inicial y desde el objetivo, esperando que ambas se encuentren. Reduce la complejidad temporal y espacial.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Estrategia</th>
+<th>Completa</th>
+<th>Óptima</th>
+<th>Tiempo</th>
+<th>Espacio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Amplitud</td>
+<td>Sí</td>
+<td>Sí</td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq></td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq></td>
+</tr>
+<tr>
+<td>Profundidad</td>
+<td>No</td>
+<td>No</td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq></td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">m</span><span class="mclose">)</span></span></span></span></eq></td>
+</tr>
+<tr>
+<td>Prof. limitada</td>
+<td>Si cuando <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7335em;vertical-align:-0.0391em;"></span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span></span></span></span></eq></td>
+<td>No</td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0991em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0197em;">l</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq></td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0197em;">l</span><span class="mclose">)</span></span></span></span></eq></td>
+</tr>
+<tr>
+<td>Iterativa</td>
+<td>Sí</td>
+<td>Sí</td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">p</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq></td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mclose">)</span></span></span></span></eq></td>
+</tr>
+<tr>
+<td>Bidireccional</td>
+<td>Sí</td>
+<td>Sí</td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.138em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">p</span><span class="mord mtight">/2</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq></td>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.138em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.888em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathnormal mtight">p</span><span class="mord mtight">/2</span><span class="mclose mtight">)</span></span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq></td>
+</tr>
+</tbody>
+</table>
+<h2>2.2.2 Búsqueda Heurística (Informada)</h2>
+<p>A diferencia de la búsqueda a ciegas (que explora sin rumbo), la búsqueda informada utiliza una &quot;pista&quot; o estimación llamada <strong>Heurística (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></eq>)</strong>.</p>
+<ul>
+<li><strong>¿Qué es una Búsqueda Informada?</strong> Es aquella que tiene conocimiento sobre el problema (como un mapa o una brújula) para estimar cuánto falta para llegar a la meta. Esto le permite <strong>ordenar</strong> las opciones y probar primero las que parecen más prometedoras, en lugar de probarlas al azar.</li>
+</ul>
+<p>Antes de ver los algoritmos, debemos distinguir cómo toman decisiones:</p>
+<h3>Concepto Clave: Irrevocable vs. Tentativa</h3>
+<table>
+<thead>
+<tr>
+<th><strong>Tipo de Estrategia</strong></th>
+<th><strong>Definición Sencilla</strong></th>
+<th><strong>Ejemplo Real</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Irrevocable</strong></td>
+<td><strong>&quot;Quemar las naves&quot;</strong>. Tomas una decisión y avanzas sin guardar el camino de vuelta. No puedes rectificar. Si te equivocas, fallas. Ahorra mucha memoria pero es arriesgada.</td>
+<td>Escalar una montaña en la niebla: solo subes por donde está más empinado. Si llegas a un pico falso, no puedes bajar y buscar otro pico.</td>
+</tr>
+<tr>
+<td><strong>Tentativa</strong></td>
+<td><strong>&quot;Dejar migas de pan&quot;</strong>. Guardas información de las alternativas no exploradas. Si un camino no funciona, puedes volver atrás (rectificar) y probar otro.</td>
+<td>Explorar un laberinto con un hilo atado a la entrada. Si hay un muro, regresas por el hilo y pruebas otro pasillo.</td>
+</tr>
+</tbody>
+</table>
+<h3>Búsqueda Retroactiva (Backtracking)</h3>
+<p><em>Tipo: <strong>Tentativa</strong> (Permite rectificar)</em></p>
+<p>Es una estrategia inteligente que intenta no gastar memoria. Avanza en profundidad, pero si se equivoca, vuelve sobre sus pasos.</p>
+<ul>
+<li>
+<p><strong>Funcionamiento</strong>:</p>
+<ul>
+<li>Elige el mejor hijo disponible (usando la heurística para ordenar) y avanza.</li>
+<li><strong>Gestión de memoria estricta</strong>: Solo recuerda el <strong>camino actual</strong> (la ruta activa desde el inicio), no todo el árbol.</li>
+<li><strong>Vuelta atrás</strong>: Si llega a un &quot;callejón sin salida&quot; (punto muerto), retrocede al padre y prueba el siguiente hijo prometedor 2.</li>
+</ul>
+</li>
+<li>
+<p><strong>Utilidad</strong>: Ideal cuando tienes muy poca memoria pero necesitas encontrar una solución, aunque no sea la más corta.</p>
+</li>
+</ul>
+<div class="callout callout-nota">
+<p class="callout-titulo">Nota</p>
+<p>Si <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></eq> es una búsqueda no informada, el backtracking no se si el profesor lo considera o no como búsqueda heurísitca. Yo sobreentiendo que no.</p>
+</div>
+<h3>Algoritmo de Escalada (Hill Climbing/Primeiro o mellor)</h3>
+<p><em>Tipo: <strong>Irrevocable</strong> (Versión estricta del algoritmo ávaro)</em></p>
+<p>Es el ejemplo clásico de estrategia irrevocable. Busca la cima de la montaña dando siempre el paso que más sube, sin mirar atrás.</p>
+<ul>
+<li>
+<p><strong>Estrategia</strong>: Evalúa los vecinos y se mueve <em>inmediatamente</em> al que tiene mejor heurística (parece estar más cerca de la meta), <strong>descartando y olvidando el resto</strong>.</p>
+</li>
+<li>
+<p><strong>Función de evaluación</strong>: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></eq> (Solo importa lo que falta).</p>
+</li>
+<li>
+<p><strong>Riesgo</strong>: Como no guarda la historia ni alternativas, puede quedarse atrapado en <strong>máximos locales</strong> (una pequeña colina que parece la cima pero no lo es) o <strong>mesetas</strong> (donde todos los pasos son iguales y no sabe a dónde ir).</p>
+</li>
+</ul>
+<img src="../../../img/ia/pasted-image-20260111103721.png" alt="Pasted image 20260111103721.png" loading="lazy">
+<h3>Algoritmo A* (A-Estrella)</h3>
+<p><em>Tipo: <strong>Tentativa</strong></em>
+La más completa es la estrategia estrella porque equilibra la precaución con la eficiencia. Guarda alternativas (es tentativa) y evalúa el coste total.</p>
+<ul>
+<li>
+<p><strong>Estrategia</strong>: No solo mira cuán cerca parece estar la meta (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">h</span></span></span></span></eq>), sino cuánto le ha costado llegar hasta ahí (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span></span></span></span></eq>).</p>
+</li>
+<li>
+<p>Función de evaluación: <section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></span></eqn></section><br>
+<em>(Costo Total = Costo ya pagado + Costo estimado restante)</em>.</p>
+</li>
+<li>
+<p><strong>Propiedad Clave</strong>: Si la heurística es <strong>admisible</strong> (nunca es pesimista, es decir, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span></span></span></span></eq> coste real), A* garantiza encontrar la solución <strong>óptima</strong> (la más barata/corta) y es <strong>completa</strong> (siempre encuentra solución, sea admisible o no la heurística).</p>
+</li>
+</ul>
+<div class="callout callout-info">
+<p class="callout-titulo">Info</p>
+<p>Una heurística admisible u optimista: siempre suponer casos en los que la realidad será peor que la estimación.</p>
+<p><strong>Si eres Pesimista (h &gt; coste real):</strong> Imagina que hay un atajo secreto que tarda 15 minutos. Pero tu heurística es pesimista y le dice al algoritmo: &quot;Por ese callejón vas a tardar 1 hora&quot;.</p>
+<ul>
+<li><strong>Consecuencia:</strong> El algoritmo se asusta, ve un coste altísimo y <strong>no explora ese camino</strong>.</li>
+<li><strong>Resultado:</strong> Pierdes la oportunidad de encontrar el mejor camino (la solución óptima) porque tu estimación te engañó diciendo que era malo.</li>
+</ul>
+<p><strong>Si eres Optimista (h &lt;= coste real):</strong> Tu heurística le dice al algoritmo: &quot;Por ese callejón parece que tardas solo 5 minutos&quot;.</p>
+<ul>
+<li><strong>Consecuencia:</strong> Como parece un camino barato, el algoritmo <strong>lo explora</strong>.</li>
+<li><strong>Resultado:</strong> Al entrar, se da cuenta de que en realidad son 15 minutos (la realidad es peor que la estimación, como dice tu nota), pero <strong>al menos lo exploró</strong>.</li>
+<li>A* prefiere equivocarse pensando que un camino es &quot;demasiado bueno&quot; (porque así lo comprueba) que equivocarse pensando que es &quot;demasiado malo&quot; (porque entonces lo ignora y podría ser la solución).</li>
+</ul>
+</div>
+<p>En el caso del 8-puzzle se acostumbra a usar estas <strong>heurísticas:</strong>
+<strong>Misplaced Tiles (Piezas Descolocadas)</strong>: Es la más simple. Simplemente <strong>cuentas cuántas fichas no están en su posición final</strong>.</p>
+<ul>
+<li><strong>Cálculo:</strong> Si la ficha '1' está en la casilla del '2', suma 1. Si la '2' está bien colocada, suma 0.</li>
+<li><strong>Ejemplo:</strong> Si 5 fichas están mal puestas, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5</span></span></span></span></eq></li>
+</ul>
+<p><strong>Distancia de Hamming:</strong> En el contexto del 8-puzzle, es <strong>sinónimo de &quot;Misplaced Tiles&quot;</strong>.</p>
+<ul>
+<li>Proviene de la teoría de la información (número de posiciones en las que dos cadenas de símbolos difieren). Aquí compara el &quot;estado actual&quot; con el &quot;estado meta&quot; y cuenta las diferencias.</li>
+</ul>
+<p><strong>Distancia de Manhattan (City Block):</strong> Es más precisa (y más informada) que la anterior.</p>
+<ul>
+<li><strong>Cálculo:</strong> Para cada ficha, calculas cuántas casillas debe moverse (horizontal + vertical) para llegar a su destino. Luego <strong>sumas todas esas distancias</strong>.</li>
+<li><strong>Por qué se llama así:</strong> Porque simula moverse por las calles de Manhattan (en cuadrícula), no puedes ir en diagonal.</li>
+<li><em>Ejemplo:</em> Si la ficha '1' está a 2 casillas a la derecha y 1 abajo de su meta, su distancia es 3.</li>
+</ul>
+<p><strong>Heurística de Gaschnig:</strong> es una <strong>relajación</strong> del problema. Asume que puedes mover cualquier ficha a la posición del hueco (teletransportándola), no solo las adyacentes.</p>
+<ul>
+<li><strong>Cálculo:</strong> Cuenta el número de intercambios necesarios para resolver el puzle si pudieras intercambiar el hueco con <strong>cualquier</strong> ficha del tablero para ponerla en su sitio de un solo movimiento.</li>
+<li>Suele dar un valor entre la de Hamming y la real.</li>
+</ul>
+<img src="../../../img/ia/pasted-image-20260111103757.png" alt="Pasted image 20260111103757.png" loading="lazy">
+<h1>2.3 Caso de Estudio Práctico: Ruta en Ciudades Gallegas</h1>
+<p>Este caso ilustra la diferencia entre ser &quot;miope&quot; (Voraz) y ser &quot;inteligente&quot; (A*).</p>
+<p><strong>El Problema</strong>: Ir de Ferrol a Ourense</p>
+<ul>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></eq>: Distancia real por carretera (tramos negros en el mapa)</li>
+<li><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></eq>: Distancia en línea recta a Ourense (números rojos en paréntesis)</li>
+</ul>
+<img src="../../../img/ia/pasted-image-20251220193002.png" alt="Pasted image 20251220193002.png" loading="lazy">
+<h3>A. Ejecución Búsqueda Voraz (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">h</span></span></span></span></eq>)</h3>
+<p>Solo mira la distancia recta a la meta.</p>
+<ol>
+<li>Ferrol va a Betanzos</li>
+<li>Betanzos tiene vecinos: Santiago (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">h</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">80</span></span></span></span></eq>) y Guitiriz (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">h</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">70</span></span></span></span></eq>)</li>
+<li><strong>Decisión</strong>: Elige Guitiriz porque <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">70</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">80</span></span></span></span></eq> (parece más cerca)</li>
+<li><strong>Resultado</strong>: Termina encontrando una ruta de 240 km. <strong>No es la mejor</strong>.</li>
+</ol>
+<h3>B. Ejecución Búsqueda A* (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">h</span></span></span></span></eq>)</h3>
+<p>Mira el pasado (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span></span></span></span></eq>) y el futuro (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">h</span></span></span></span></eq>).</p>
+<ol>
+<li>Ferrol va a Betanzos (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">50</span></span></span></span></eq>)</li>
+<li>En Betanzos, evalúa opciones:
+<ul>
+<li>Ruta por Guitiriz: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="mopen">(</span><span class="mord">50</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">70</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord">70</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">120</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">70</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">190</span></span></span></span></eq></li>
+<li>Ruta por Santiago:  <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">g</span><span class="mopen">(</span><span class="mord">50</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">50</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mopen">(</span><span class="mord">80</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">100</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">80</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">180</span></span></span></span></eq></li>
+</ul>
+</li>
+<li><strong>Decisión</strong>:  Elige Santiago porque <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">180</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">190</span></span></span></span></eq>. Aunque Santiago parece más lejos en línea recta, el costo total estimado es menor.</li>
+<li><strong>Resultado</strong>:  Encuentra la ruta óptima de 230 km pasando por Santiago y Silleda.</li>
+</ol>
+<img src="../../../img/ia/pasted-image-20251221164938.png" alt="Pasted image 20251221164938.png" loading="lazy">
+<img src="../../../img/ia/pasted-image-20251221164952.png" alt="Pasted image 20251221164952.png" loading="lazy">
+<img src="../../../img/ia/pasted-image-20251221165007.png" alt="Pasted image 20251221165007.png" loading="lazy">
+<h1>2.4 Destellos de calidad del Senén en clase</h1>
+<h2>2.4.1 Problema del Viajante de Comercio (TSP)</h2>
+<ul>
+<li><strong>Concepto:</strong> Es un problema clásico de optimización combinatoria. Dado un conjunto de nodos (ciudades) y las distancias entre ellos, el objetivo es encontrar un <strong>ciclo hamiltoniano</strong> de coste mínimo. Esto significa hallar una ruta cerrada que visite cada nodo exactamente una vez y regrese al nodo de origen, minimizando la distancia total recorrida.</li>
+<li><strong>Ejemplo:</strong> Un repartidor debe visitar <strong>100 ciudades</strong>. Parte de una central fija (ciudad 0). Debe trazar una ruta que pase por las 99 restantes una sola vez y vuelva a la 0, gastando la menor cantidad de combustible posible.</li>
+</ul>
+<h2>2.4.2 Tamaño del Espacio de Búsqueda</h2>
+<ul>
+<li><strong>Concepto:</strong> Es la cardinalidad del conjunto de todas las <strong>soluciones posibles</strong> (válidas) para el problema, independientemente de si son óptimas o no. En problemas de permutación como el TSP, este tamaño crece de forma factorial con respecto al número de elementos variables.</li>
+<li>Ejemplo: En el caso de 100 ciudades con un punto de partida y final fijo (la ciudad de origen no se permuta), el número total de rutas posibles son las permutaciones de las 99 ciudades restantes.
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal">ama</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6679em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">n</span></span><span style="top:-3.35em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.25em;"><span class="mord">~</span></span></span></span></span></span></span><span class="mord mathnormal">o</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">99</span><span class="mclose">!</span><span class="mspace" style="margin-right:1em;"></span><span class="mord text"><span class="mord">(Factorial de 99)</span></span></span></span></span></span></eqn></section></li>
+</ul>
+<h2>2.4.3 Tamaño del Entorno (Contorna)</h2>
+<ul>
+<li>
+<p><strong>Concepto:</strong> El entorno es el subconjunto de soluciones vecinas accesibles desde la solución actual aplicando <strong>una única vez un operador</strong> de transformación específico. Su tamaño (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span></span></span></span></eq>) depende del operador elegido y del número de elementos sobre los que se puede aplicar.</p>
+</li>
+<li>
+<p>Ejemplo: Usando el operador de intercambio de dos elementos (swap) sobre las 99 ciudades móviles (excluyendo origen/final).</p>
+<p>Debemos calcular cuántas combinaciones de 2 elementos distintos se pueden formar con los 99 disponibles. Matemáticamente, son combinaciones sin repetición de 99 elementos tomados de 2 en 2:<br>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="mord"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">(</span></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">99</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">)</span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0074em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">2</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">99</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord">98</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></eqn></section></p>
+</li>
+</ul>
+<h2>2.4.4 Búsqueda Tabú</h2>
+<ul>
+<li><strong>Concepto:</strong> Es una <strong>metaheurística de búsqueda local</strong> diseñada para escapar de óptimos locales. Explora el entorno de la solución actual y se mueve a la mejor vecina (aunque sea peor que la actual), pero utiliza una estructura de <strong>memoria a corto plazo</strong> (lista tabú) para restringir la búsqueda.</li>
+<li><strong>Ejemplo:</strong> Si el algoritmo decide intercambiar la ciudad A con la B para generar una nueva ruta, este movimiento se registra en la lista tabú. Durante un número determinado de iteraciones (tenencia tabú), el algoritmo tiene <strong>prohibido</strong> deshacer ese cambio (volver a intercambiar B con A), forzando así la exploración de nuevas zonas del espacio de búsqueda en lugar de entrar en ciclos repetitivos</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-introduccion.html"><span class="nav-etiqueta">← anterior</span>1. Introducción</a>
+  <a class="nav-siguiente" href="3-sistemas-basados-en-conocimiento.html"><span class="nav-etiqueta">siguiente →</span>3. Sistemas Basados en Conocimiento</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

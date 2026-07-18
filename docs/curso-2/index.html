@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Apuntes de Segundo curso de Ingeniería Informática.">
+<title>Segundo curso · ApuntesWeb</title>
+<link rel="stylesheet" href="../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../index.html">inicio</a><span class="miga-sep">/</span><span aria-current="page">curso-2</span></nav>
+<main class="principal">
+<section class="encabezado-seccion">
+  <p class="sello">teoría · por cuatrimestres</p>
+  <h1>Segundo curso</h1>
+  
+</section>
+<section aria-label="Contenido del curso">
+  <ul class="tarjetas">
+    <li class="tarjeta"><a href="cuatri-1/index.html"><span class="tarjeta-codigo">2.1</span><h2>1.º cuatrimestre</h2><p>5 asignaturas · 35 temas</p></a></li>
+    <li class="tarjeta"><a href="cuatri-2/index.html"><span class="tarjeta-codigo">2.2</span><h2>2.º cuatrimestre</h2><p>6 asignaturas · 36 temas</p></a></li>
+  </ul>
+</section>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../js/app.js"></script>
+</body>
+</html>

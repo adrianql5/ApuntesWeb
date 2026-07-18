@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="8. Patrones de Creación — apuntes de DESOFT (segundo curso de Ingeniería Informática).">
+<title>8. Patrones de Creación · DESOFT · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">desoft</a><span class="miga-sep">/</span><span aria-current="page">8-patrones-de-creacion</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DESOFT · curso 2</p>
+    <h1>8. Patrones de Creación · DESOFT</h1>
+  </header>
+  <div class="prosa">
+<h1>8.1 Patrones de creación</h1>
+<p>Los <strong>patrones de creación</strong> abstraen el proceso de <strong>creación de objetos</strong>, acotando el <strong>conocimiento</strong> sobre las <strong>clases</strong> concretas usadas. Ocultan como se <strong>crean y enlazan</strong> las <strong>instancias</strong> de las clases, de manera que <strong>el resto del sistema</strong> sólo <strong>conoce los objetos a través de sus interfaces</strong>. Hacen posible <strong>programar para interfaces</strong> y no para implementaciones.</p>
+<h1>8.2 Abstract Factory (Fábrica Abstracta)</h1>
+<p>La <strong>abstract factory</strong> aporta una <strong>interfaz</strong> para crear <strong>familias de objetos</strong> ocultando clases concretas. Se usa para:</p>
+<ul>
+<li>Configurar un sistema escogiendo una sola <strong>familia de productos</strong> entre varias.</li>
+<li>Si cada <strong>familia</strong> está diseñada para el <strong>uso conjunto de sus productos</strong>.</li>
+<li>Para proporcionar <strong>bibliotecas de productos</strong>de los que sólo se revelan sus interfaces.
+<img src="../../../img/desoft/pasted-image-20250423161150.png" alt="Pasted image 20250423161150.png" loading="lazy">
+<img src="../../../img/desoft/pasted-image-20250423161202.png" alt="Pasted image 20250423161202.png" loading="lazy"></li>
+</ul>
+<h2>Participantes:</h2>
+<ul>
+<li><strong>FabricaAbstracta</strong>: Declara una interfaz para operaciones que crean produtos abstractos.</li>
+<li><strong>FabricaConcreta</strong>: Implementa operaciones para crear produtos concretos.</li>
+<li><strong>ProdutoAbstracto</strong>: Declara una interfaz del tipo produto.</li>
+<li><strong>ProdutoConcreto</strong>: Define un produto a ser creado por la fábrica correspondiente.</li>
+<li><strong>Cliente</strong>: Usa interfaces de clases abstractas</li>
+</ul>
+<h2>Estructura</h2>
+<img src="../../../img/desoft/pasted-image-20250404174537.png" alt="Pasted image 20250404174537.png" loading="lazy">
+## Ventajas e Inconvenientes
+- **Consistencia** entre productos de una familia.
+- Fácil de **sustituir familias enteras**.
+- Alto nivel de **abstracción y flexibilidad**.
+<ul>
+<li>Difícil añadir nuevos <strong>tipos de productos</strong>.</li>
+<li>Puede volverse complejo si hay muchas familias/productos.</li>
+</ul>
+<h1>8.3 Factory Method (Método Fábrica)</h1>
+<p>El <strong>factory method</strong> define una <strong>interfaz</strong> para <strong>crear objetos</strong> cediendo a las <strong>subclases</strong> la decisión sobre <strong>qué clase instanciar</strong>. Se usa cuando:</p>
+<ul>
+<li>Una clase no puede prever la clase de objetos que debe crear.</li>
+</ul>
+<img src="../../../img/desoft/pasted-image-20250423161447.png" alt="Pasted image 20250423161447.png" loading="lazy">
+<h2>Participantes:</h2>
+<ul>
+<li><strong>Producto:</strong> define la interfaz de los objetos creados</li>
+<li><strong>ProductoConcreto:</strong> implementa la interfaz <strong>Producto</strong></li>
+<li><strong>Creador:</strong> declara el método de fabricación que devuelve un objeto <strong>Producto</strong>.</li>
+<li><strong>CreadorConcreto:</strong> Redefine el método de fabricación para devolver una instancia de <strong>ProductoConcreto.</strong></li>
+</ul>
+<h2>Estructura</h2>
+<img src="../../../img/desoft/pasted-image-20250404173912.png" alt="Pasted image 20250404173912.png" loading="lazy">
+<h2>Ventajas y Desventajas</h2>
+<ul>
+<li>
+<p>Código desacoplado.</p>
+</li>
+<li>
+<p>Fácil de extender.</p>
+</li>
+<li>
+<p>Fomenta el uso de interfaces.</p>
+</li>
+<li>
+<p>Puede llevar a muchas subclases si tienes muchos tipos de productos.</p>
+</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="7-patrones-de-diseno.html"><span class="nav-etiqueta">← anterior</span>7. Patrones de Diseño</a>
+  <a class="nav-siguiente" href="9-patrones-estructurales.html"><span class="nav-etiqueta">siguiente →</span>9. Patrones Estructurales</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

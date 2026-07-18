@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="4. JavaScript — apuntes de DAW (tercer curso de Ingeniería Informática).">
+<title>4. JavaScript · DAW · ApuntesWeb</title>
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">daw</a><span class="miga-sep">/</span><span aria-current="page">4-javascript</span></nav>
+<main class="principal">
+<article class="nota">
+  <header class="nota-encabezado">
+    <p class="sello">DAW · curso 3</p>
+    <h1>4. JavaScript · DAW</h1>
+  </header>
+  <div class="prosa">
+<h2>4.1 Introducción e integración con HTML</h2>
+<p><strong>JavaScript (JS)</strong> es un lenguaje de programación <strong>interpretado</strong> creado en <strong>1995</strong> por <strong>Brendan Eich</strong> para añadir interactividad a <strong>Netscape Navigator 2.0</strong>.</p>
+<p>Datos históricos:</p>
+<ul>
+<li>nombre original: <strong>Mocha</strong>;</li>
+<li>después se rebautiza como <strong>JavaScript</strong> mediante acuerdo con Sun Microsystems;</li>
+<li><strong>no es Java</strong>;</li>
+<li>en <strong>1997</strong> comienza su estandarización en <strong>ECMA</strong> como <strong>ECMAScript</strong>;</li>
+<li>posteriormente también se convierte en estándar <strong>ISO</strong>;</li>
+<li>con JS aparece el concepto de <strong>DHTML</strong> o HTML dinámico.</li>
+</ul>
+<p>JS normalmente se ejecuta en el <strong>lado cliente</strong> dentro del navegador, aunque hoy también puede ejecutarse en servidor mediante <strong>Node.js</strong>; ese uso no forma parte del tema.</p>
+<img src="../../../img/daw/image-74.png" alt="image-74.png" loading="lazy">
+<img src="../../../img/daw/image-73.png" alt="image-73.png" loading="lazy">
+<h3>Integración con HTML</h3>
+<p>Se incluye mediante la etiqueta <code>script</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Forma</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Código interno</td>
+<td>El código va como contenido de <code>&lt;script&gt;</code>.</td>
+</tr>
+<tr>
+<td>Fichero externo</td>
+<td>Se enlaza con <code>&lt;script src=&quot;codigo.js&quot;&gt;&lt;/script&gt;</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Para mejorar la carga de la página se aconseja colocar el script al final, antes de <code>&lt;/body&gt;</code>, de modo que el HTML principal ya esté creado cuando JS lo manipule.</p>
+<p>Microsoft desarrolló dos versiones propias para Internet Explorer:</p>
+<ul>
+<li><strong>VBScript</strong>: sintaxis basada en Visual Basic e incompatible con otros navegadores.</li>
+<li><strong>JScript</strong>: versión similar a ECMAScript, pero con diferencias en el modelo de objetos.</li>
+</ul>
+<p>Las incompatibilidades entre JScript y JavaScript llevaron al W3C a definir el <strong>HTML DOM</strong> como criterio común.</p>
+<h2>4.2 HTML DOM y APIs del navegador</h2>
+<p>El <strong>DOM (Document Object Model)</strong> es una API creada por W3C para acceder de forma estándar a documentos <strong>HTML</strong>, <strong>XML</strong> y <strong>SVG</strong>, permitiendo modificar contenido, estructura y estilo.</p>
+<table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Core DOM</td>
+<td>Modelo estándar para cualquier documento estructurado.</td>
+</tr>
+<tr>
+<td>XML DOM</td>
+<td>Modelo estándar para documentos XML.</td>
+</tr>
+<tr>
+<td>HTML DOM</td>
+<td>Modelo estándar para documentos HTML.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-75.png" alt="image-75.png" loading="lazy">
+<img src="../../../img/daw/image-76.png" alt="image-76.png" loading="lazy">
+<img src="../../../img/daw/image-78.png" alt="image-78.png" loading="lazy">
+<h3>Objetos e interfaces principales</h3>
+<p><code>document</code> representa la página mediante el árbol DOM. Es una propiedad de <code>window</code>, que representa el navegador, y una instancia de <code>HTMLDocument</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Objeto/interfaz</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>window</code></td>
+<td>Objeto global de la ventana o pestaña; contiene <code>document</code>.</td>
+</tr>
+<tr>
+<td><code>document</code> / <code>HTMLDocument</code></td>
+<td>Representa el documento HTML completo.</td>
+</tr>
+<tr>
+<td><code>Element</code> / <code>HTMLElement</code></td>
+<td>Representa una etiqueta del documento.</td>
+</tr>
+<tr>
+<td><code>Attr</code></td>
+<td>Representa atributos; propiedades como <code>name</code>, <code>value</code>, <code>specified</code>.</td>
+</tr>
+<tr>
+<td><code>Text</code></td>
+<td>Nodo de texto; propiedades como <code>data</code>, <code>length</code>; métodos como <code>appendData()</code>, <code>deleteData()</code>, <code>insertData()</code>, <code>replaceData()</code>.</td>
+</tr>
+<tr>
+<td><code>Comment</code></td>
+<td>Comentarios del documento.</td>
+</tr>
+<tr>
+<td><code>Style</code> / <code>CSSStyleDeclaration</code></td>
+<td>Estilos asociados a etiquetas; <code>cssText</code>, <code>length</code>, <code>parentRule</code>, <code>getPropertyValue()</code>, <code>setProperty()</code>, etc.</td>
+</tr>
+<tr>
+<td><code>Event</code></td>
+<td>Eventos asociados a etiquetas.</td>
+</tr>
+<tr>
+<td><code>location</code></td>
+<td>URL actual y redirecciones.</td>
+</tr>
+<tr>
+<td><code>history</code></td>
+<td>Historial de navegación.</td>
+</tr>
+<tr>
+<td><code>navigator</code></td>
+<td>Datos del navegador/dispositivo.</td>
+</tr>
+<tr>
+<td><code>screen</code></td>
+<td>Datos de pantalla.</td>
+</tr>
+<tr>
+<td><code>frames</code></td>
+<td>Acceso a marcos o <code>iframe</code>.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-80.png" alt="image-80.png" loading="lazy">
+<img src="../../../img/daw/image-81.png" alt="image-81.png" loading="lazy">
+<h3>Árbol DOM</h3>
+<p>Una página HTML está formada por etiquetas anidadas que el navegador transforma en un árbol:</p>
+<ul>
+<li>cada etiqueta crea un <strong>nodo elemento</strong>;</li>
+<li>el texto dentro de una etiqueta crea un <strong>nodo de texto</strong>;</li>
+<li>las etiquetas hijas se convierten en nodos hijos del nodo padre.</li>
+</ul>
+<p>Con el DOM, JavaScript puede cambiar etiquetas, atributos, estilos, eliminar o añadir nodos, reaccionar a eventos y crear eventos nuevos.</p>
+<img src="../../../img/daw/image-82.png" alt="image-82.png" loading="lazy">
+<img src="../../../img/daw/image-83.png" alt="image-83.png" loading="lazy">
+<h3>Selección y contenido</h3>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Devuelve</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>document.getElementById(&quot;id&quot;)</code></td>
+<td>Elemento cuyo <code>id</code> coincide.</td>
+</tr>
+<tr>
+<td><code>document.getElementsByClassName(&quot;nombre&quot;)</code></td>
+<td><code>HTMLCollection</code> con elementos que tienen esa clase.</td>
+</tr>
+<tr>
+<td><code>document.getElementsByName(&quot;nombre&quot;)</code></td>
+<td><code>HTMLCollection</code> con elementos cuyo <code>name</code> coincide.</td>
+</tr>
+<tr>
+<td><code>document.getElementsByTagName(&quot;tag&quot;)</code></td>
+<td><code>HTMLCollection</code> con elementos de esa etiqueta.</td>
+</tr>
+<tr>
+<td><code>document.querySelector(&quot;selectorCSS&quot;)</code></td>
+<td>Primer elemento que coincide con el selector CSS.</td>
+</tr>
+<tr>
+<td><code>document.querySelectorAll(&quot;selectorCSS&quot;)</code></td>
+<td><code>NodeList</code> con todos los elementos que coinciden.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-86.png" alt="image-86.png" loading="lazy">
+<p>Propiedades de contenido:</p>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>nodeValue</code></td>
+<td>Contenido del nodo actual.</td>
+</tr>
+<tr>
+<td><code>nodeName</code></td>
+<td>Nombre del nodo actual.</td>
+</tr>
+<tr>
+<td><code>nodeType</code></td>
+<td>Tipo de nodo: <code>1</code> elemento, <code>2</code> atributo, <code>3</code> texto, <code>8</code> comentario.</td>
+</tr>
+<tr>
+<td><code>innerHTML</code></td>
+<td>Contenido interpretando HTML.</td>
+</tr>
+<tr>
+<td><code>textContent</code></td>
+<td>Texto del nodo y sus hijos sin interpretar HTML.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-87.png" alt="image-87.png" loading="lazy">
+<img src="../../../img/daw/image-88.png" alt="image-88.png" loading="lazy">
+<img src="../../../img/daw/image-89.png" alt="image-89.png" loading="lazy">
+<h3>Colecciones DOM</h3>
+<table>
+<thead>
+<tr>
+<th>Colección</th>
+<th>Descripción</th>
+<th>Propiedades/métodos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HTMLCollection</code></td>
+<td>Lista de etiquetas HTML; se obtiene con métodos de acceso a etiquetas.</td>
+<td><code>length</code>, <code>item(index)</code>, <code>namedItem(id)</code>.</td>
+</tr>
+<tr>
+<td><code>NodeList</code></td>
+<td>Lista de nodos; puede incluir nodos de texto o atributos.</td>
+<td><code>length</code>, <code>item(index)</code>, <code>entries()</code>, <code>forEach()</code>, <code>keys()</code>, <code>values()</code>.</td>
+</tr>
+<tr>
+<td><code>NamedNodeMap</code></td>
+<td>Colección de atributos de una etiqueta, accesible con <code>.attributes</code>.</td>
+<td><code>length</code>, <code>getNamedItem()</code>, <code>setNamedItem()</code>, <code>item()</code>, <code>removeNamedItem()</code>.</td>
+</tr>
+<tr>
+<td><code>DOMTokenList</code></td>
+<td>Lista de clases de una etiqueta, accesible con <code>.classList</code>.</td>
+<td><code>length</code>, <code>value</code>, <code>add()</code>, <code>contains()</code>, <code>remove()</code>, <code>replace()</code>, <code>entries()</code>, <code>forEach()</code>, <code>item()</code>, <code>keys()</code>, <code>values()</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Similitudes entre <code>HTMLCollection</code> y <code>NodeList</code>:</p>
+<ul>
+<li>son listas tipo array;</li>
+<li>tienen <code>length</code>;</li>
+<li>permiten acceso por índice.</li>
+</ul>
+<p>Diferencias:</p>
+<ul>
+<li><code>HTMLCollection</code> permite acceso por nombre, <code>id</code> o índice;</li>
+<li><code>NodeList</code> solo por índice;</li>
+<li><code>NodeList</code> puede contener nodos de atributo y nodos de texto;</li>
+<li><code>HTMLCollection</code> suele ser viva y <code>NodeList</code> estática; por eso una puede detectar cambios del DOM automáticamente y la otra no.</li>
+</ul>
+<img src="../../../img/daw/image-90.png" alt="image-90.png" loading="lazy">
+<img src="../../../img/daw/image-91.png" alt="image-91.png" loading="lazy">
+<img src="../../../img/daw/image-92.png" alt="image-92.png" loading="lazy">
+<h3>Crear, eliminar y recorrer nodos</h3>
+<table>
+<thead>
+<tr>
+<th>Método/propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>document.createElement(&quot;tag&quot;)</code></td>
+<td>Crea un nodo elemento.</td>
+</tr>
+<tr>
+<td><code>document.createTextNode(&quot;data&quot;)</code></td>
+<td>Crea un nodo de texto.</td>
+</tr>
+<tr>
+<td><code>appendChild(nodo)</code></td>
+<td>Inserta un nodo hijo.</td>
+</tr>
+<tr>
+<td><code>removeChild(nodo)</code></td>
+<td>Elimina un nodo hijo.</td>
+</tr>
+<tr>
+<td><code>replaceChild(nuevo, viejo)</code></td>
+<td>Reemplaza un nodo hijo.</td>
+</tr>
+<tr>
+<td><code>parentNode</code></td>
+<td>Nodo padre.</td>
+</tr>
+<tr>
+<td><code>previousSibling</code> / <code>nextSibling</code></td>
+<td>Hermano anterior o siguiente.</td>
+</tr>
+<tr>
+<td><code>firstChild</code> / <code>lastChild</code></td>
+<td>Primer o último hijo, incluidos nodos de texto.</td>
+</tr>
+<tr>
+<td><code>firstElementChild</code></td>
+<td>Primer hijo que es elemento HTML.</td>
+</tr>
+<tr>
+<td><code>childNodes</code></td>
+<td>Todos los nodos hijos.</td>
+</tr>
+<tr>
+<td><code>children</code></td>
+<td>Solo elementos hijos.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-93.png" alt="image-93.png" loading="lazy">
+<img src="../../../img/daw/image-94.png" alt="image-94.png" loading="lazy">
+<img src="../../../img/daw/image-95.png" alt="image-95.png" loading="lazy">
+<h3>Atributos y estilos</h3>
+<p>Acceso a atributos:</p>
+<table>
+<thead>
+<tr>
+<th>Método/propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>element.atributo</code></td>
+<td>Acceso directo al valor del atributo.</td>
+</tr>
+<tr>
+<td><code>element.getAttribute(&quot;atributo&quot;)</code></td>
+<td>Valor del atributo como string.</td>
+</tr>
+<tr>
+<td><code>element.getAttributeNode(&quot;atributo&quot;)</code></td>
+<td>Nodo <code>Attr</code> del atributo.</td>
+</tr>
+<tr>
+<td><code>element.attributes</code></td>
+<td><code>NamedNodeMap</code> con los atributos.</td>
+</tr>
+<tr>
+<td><code>element.getAttributeNames()</code></td>
+<td>Array con nombres de atributos.</td>
+</tr>
+</tbody>
+</table>
+<p>Manipulación:</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>setAttribute(&quot;atributo&quot;, &quot;valor&quot;)</code></td>
+<td>Crea o modifica un atributo.</td>
+</tr>
+<tr>
+<td><code>hasAttribute(&quot;atributo&quot;)</code></td>
+<td>Comprueba si existe.</td>
+</tr>
+<tr>
+<td><code>removeAttribute(&quot;atributo&quot;)</code></td>
+<td>Elimina el atributo.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-96.png" alt="image-96.png" loading="lazy">
+<img src="../../../img/daw/image-97.png" alt="image-97.png" loading="lazy">
+<img src="../../../img/daw/image-98.png" alt="image-98.png" loading="lazy">
+<img src="../../../img/daw/image-99.png" alt="image-99.png" loading="lazy">
+<p>Estilos:</p>
+<table>
+<thead>
+<tr>
+<th>Acceso</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>element.style</code></td>
+<td>Acceso al estilo en línea del elemento.</td>
+</tr>
+<tr>
+<td><code>window.getComputedStyle(element, &quot;&quot;)</code></td>
+<td>Acceso a todos los estilos calculados del elemento.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-100.png" alt="image-100.png" loading="lazy">
+<img src="../../../img/daw/image-101.png" alt="image-101.png" loading="lazy">
+<img src="../../../img/daw/image-103.png" alt="image-103.png" loading="lazy">
+<img src="../../../img/daw/image-104.png" alt="image-104.png" loading="lazy" width="623">
+<h3>Eventos DOM</h3>
+<p>Un <strong>evento</strong> ocurre cuando el usuario o el navegador realizan una acción: click, teclado, resize, carga de página, etc. Cuando ocurre, se lanza una función programable.</p>
+<p>Tres formas de asociar eventos:</p>
+<table>
+<thead>
+<tr>
+<th>Forma</th>
+<th>Característica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Atributos HTML</td>
+<td><code>onevento=&quot;funcion()&quot;</code>; código antiguo, mezcla JS con HTML.</td>
+</tr>
+<tr>
+<td>Manejadores DOM</td>
+<td><code>element.onevento = funcion</code>; solo permite una función por evento.</td>
+</tr>
+<tr>
+<td>Listeners DOM</td>
+<td><code>element.addEventListener(&quot;event&quot;, funcion)</code>; permite varias funciones y es la forma recomendada.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-105.png" alt="image-105.png" loading="lazy">
+<img src="../../../img/daw/image-106.png" alt="image-106.png" loading="lazy">
+<img src="../../../img/daw/image-107.png" alt="image-107.png" loading="lazy">
+<img src="../../../img/daw/image-108.png" alt="image-108.png" loading="lazy">
+<img src="../../../img/daw/image-109.png" alt="image-109.png" loading="lazy">
+<p>Flujo de eventos: si el evento ocurre en una etiqueta interior, puede propagarse hacia fuera (<strong>bubbling</strong>, <code>false</code>) o desde fuera hacia dentro (<strong>capturing</strong>, <code>true</code>).</p>
+<img src="../../../img/daw/image-112.png" alt="image-112.png" loading="lazy">
+<p>El objeto evento permite consultar datos como <code>type</code> o <code>target</code>.</p>
+<img src="../../../img/daw/image-113.png" alt="image-113.png" loading="lazy">
+<h3>APIs JS</h3>
+<p>Una <strong>API</strong> permite a un programa interactuar con otros programas o scripts accediendo a sus datos.</p>
+<table>
+<thead>
+<tr>
+<th>Categoría</th>
+<th>Ejemplos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>APIs de navegador</td>
+<td>DOM, Web Audio, WebRTC, Canvas, WebGL, Geolocation, Storage.</td>
+</tr>
+<tr>
+<td>APIs de terceros</td>
+<td>Facebook, Twitter, Google Maps, YouTube, etc.; no vienen incluidas por defecto.</td>
+</tr>
+</tbody>
+</table>
+<p>APIs citadas:</p>
+<ul>
+<li><strong>Geolocation</strong>: obtiene latitud y longitud si el usuario da permiso; se usa con <code>navigator.geolocation</code>.</li>
+<li><strong>localStorage</strong> y <strong>sessionStorage</strong>: almacenamiento local en cliente, alternativo a cookies.</li>
+<li><strong>localStorage</strong> no tiene fecha de expiración.</li>
+<li><strong>sessionStorage</strong> dura la sesión y se pierde al cerrar la ventana.</li>
+<li>Datos de storage: se guardan con <code>setItem(nombreDato, valorDato)</code> o como atributo (<code>localStorage.nombreDato = valorDato</code>), y se recuperan con <code>getItem(nombreDato)</code> o <code>localStorage.nombreDato</code>.</li>
+<li><strong>history</strong>: acceso al historial de páginas visitadas.</li>
+<li><strong>console</strong>: depuración; <code>console.log()</code> registra valores o mensajes.</li>
+</ul>
+<img src="../../../img/daw/image-115.png" alt="image-115.png" loading="lazy">
+<img src="../../../img/daw/image-116.png" alt="image-116.png" loading="lazy">
+<img src="../../../img/daw/image-117.png" alt="image-117.png" loading="lazy">
+<img src="../../../img/daw/image-118.png" alt="image-118.png" loading="lazy">
+<h2>4.3 Sintaxis básica</h2>
+<h3>Reglas generales, variables y tipos</h3>
+<p>JavaScript:</p>
+<ul>
+<li>distingue mayúsculas y minúsculas;</li>
+<li>usa comentarios como C: <code>//</code> y <code>/* ... */</code>;</li>
+<li>suele terminar instrucciones con <code>;</code>.</li>
+</ul>
+<p>Variables:</p>
+<table>
+<thead>
+<tr>
+<th>Declaración</th>
+<th>Ámbito de bloque</th>
+<th>Redeclaración</th>
+<th>Reasignación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>var nombre;</code></td>
+<td>No</td>
+<td>Sí</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td><code>let nombre;</code></td>
+<td>Sí</td>
+<td>No</td>
+<td>Sí</td>
+</tr>
+<tr>
+<td><code>const nombre = valor;</code></td>
+<td>Sí</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>Tipos citados:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Idea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>string</code></td>
+<td>Cadenas de texto.</td>
+</tr>
+<tr>
+<td><code>number</code></td>
+<td>Valores numéricos.</td>
+</tr>
+<tr>
+<td><code>boolean</code></td>
+<td>Booleanos.</td>
+</tr>
+<tr>
+<td><code>Object</code></td>
+<td>Objetos.</td>
+</tr>
+<tr>
+<td><code>null</code></td>
+<td>Nulo.</td>
+</tr>
+<tr>
+<td><code>undefined</code></td>
+<td>No definido.</td>
+</tr>
+</tbody>
+</table>
+<p><code>typeof(variable)</code> devuelve el tipo.</p>
+<p>Conversión:</p>
+<ul>
+<li>implícita: coerción automática, frecuentemente hacia cadenas;</li>
+<li>explícita: <code>parseFloat()</code>, <code>parseInt()</code>, <code>toString()</code>, <code>String()</code>, <code>Number()</code>, etc.</li>
+</ul>
+<h3>Operadores, <code>Math</code> y control de flujo</h3>
+<table>
+<thead>
+<tr>
+<th>Grupo</th>
+<th>Operadores o elementos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aritméticos</td>
+<td><code>-</code>, <code>+</code>, <code>*</code>, <code>/</code>, <code>++</code>, <code>--</code>, <code>%</code>.</td>
+</tr>
+<tr>
+<td>Lógicos</td>
+<td>AND, OR, NOT.</td>
+</tr>
+<tr>
+<td>Relacionales</td>
+<td><code>==</code>, <code>!=</code>, <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>===</code>, <code>!==</code>.</td>
+</tr>
+<tr>
+<td>Bit a bit</td>
+<td><code>&amp;</code>, `</td>
+</tr>
+<tr>
+<td>Asignación</td>
+<td><code>=</code>, <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, `</td>
+</tr>
+<tr>
+<td>Otros</td>
+<td><code>+</code> para concatenar strings, <code>.</code>, ternario <code>?:</code>, spread <code>...</code>.</td>
+</tr>
+</tbody>
+</table>
+<p><code>==</code> compara con conversión; <code>===</code> compara valor y tipo.</p>
+<p><code>Math</code> agrupa operaciones matemáticas:</p>
+<ul>
+<li>métodos: <code>log()</code>, <code>exp()</code>, <code>sqrt()</code>, <code>pow()</code>, <code>abs()</code>, <code>floor()</code>, <code>ceil()</code>, <code>round()</code>, <code>random()</code>, <code>sin()</code>, <code>cos()</code>, <code>tan()</code>, <code>max()</code>, <code>min()</code>, etc.;</li>
+<li>constantes: <code>E</code>, <code>LN2</code>, <code>LN10</code>, <code>LOG2E</code>, <code>LOG10E</code>, <code>PI</code>, <code>SQRT2</code>, <code>SQRT1_2</code>;</li>
+<li>el PDF cita <code>with(Math)</code> para no repetir el objeto, aunque hoy no suele recomendarse.</li>
+</ul>
+<p>Estructuras de control:</p>
+<table>
+<thead>
+<tr>
+<th>Estructura</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>if (...) { ... } else { ... }</code></td>
+<td>Condicional.</td>
+</tr>
+<tr>
+<td><code>switch (...) { case ...: ... break; }</code></td>
+<td>Selección múltiple.</td>
+</tr>
+<tr>
+<td><code>for(inicial; condicion; incremento)</code></td>
+<td>Bucle clásico.</td>
+</tr>
+<tr>
+<td><code>for (dato in objeto)</code></td>
+<td>Itera claves o índices.</td>
+</tr>
+<tr>
+<td><code>for (dato of iterable)</code></td>
+<td>Itera valores.</td>
+</tr>
+<tr>
+<td><code>while(condicion)</code></td>
+<td>Bucle con condición inicial.</td>
+</tr>
+<tr>
+<td><code>do { ... } while(condicion)</code></td>
+<td>Bucle que se ejecuta al menos una vez.</td>
+</tr>
+</tbody>
+</table>
+<h3>Funciones</h3>
+<p>Las funciones no especifican tipo de parámetros ni de retorno.</p>
+<table>
+<thead>
+<tr>
+<th>Forma</th>
+<th>Idea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Declaración</td>
+<td><code>function nombre(parametros) { ... return ... }</code>.</td>
+</tr>
+<tr>
+<td>Expresión anónima</td>
+<td><code>x = function(parametros) { ... }</code>.</td>
+</tr>
+<tr>
+<td>Arrow function</td>
+<td><code>x = (parametros) =&gt; { ... }</code>; si tiene un argumento se pueden omitir paréntesis.</td>
+</tr>
+<tr>
+<td>Autoinvocada</td>
+<td><code>(function(parametros) { ... })(valores);</code>; no necesita nombre ni <code>return</code>.</td>
+</tr>
+<tr>
+<td>Callback</td>
+<td>Una función pasada como argumento a otra.</td>
+</tr>
+</tbody>
+</table>
+<p>Reglas importantes:</p>
+<ul>
+<li>se pueden establecer valores por defecto para parámetros;</li>
+<li>se permite número indefinido de parámetros con <code>...</code>;</li>
+<li>los primitivos se pasan por valor;</li>
+<li>los objetos, incluidos arrays, se pasan por referencia;</li>
+<li>las funciones son objetos y tienen <code>arguments</code>, <code>arguments.length</code> y <code>toString()</code>.</li>
+</ul>
+<img src="../../../img/daw/image-119.png" alt="image-119.png" loading="lazy">
+<img src="../../../img/daw/image-120.png" alt="image-120.png" loading="lazy">
+<img src="../../../img/daw/image-121.png" alt="image-121.png" loading="lazy">
+<img src="../../../img/daw/image-122.png" alt="image-122.png" loading="lazy">
+<img src="../../../img/daw/image-123.png" alt="image-123.png" loading="lazy">
+<img src="../../../img/daw/image-124.png" alt="image-124.png" loading="lazy">
+<img src="../../../img/daw/image-125.png" alt="image-125.png" loading="lazy">
+<img src="../../../img/daw/image-126.png" alt="image-126.png" loading="lazy">
+<h3>Objetos, arrays y cadenas</h3>
+<p>Objetos:</p>
+<ul>
+<li>tradicionalmente se instanciaban con <code>new</code>, invocando una función constructora;</li>
+<li>hoy se usa mucho el literal <code>{ atributo: valor, funcion() { ... } }</code>;</li>
+<li>las propiedades son públicas y se accede con <code>objeto.atributo</code> o <code>objeto[&quot;atributo&quot;]</code>;</li>
+<li>los métodos se invocan con <code>objeto.funcion(parametros)</code>;</li>
+<li>los constructores pueden llamar a la clase padre con <code>super()</code>.</li>
+</ul>
+<p>Arrays:</p>
+<ul>
+<li>son objetos;</li>
+<li>pueden crearse con <code>new</code>, pero se recomienda <code>let array = []</code>;</li>
+<li>tienen tamaño dinámico;</li>
+<li>son heterogéneos.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Método/propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>length</code></td>
+<td>Tamaño del array.</td>
+</tr>
+<tr>
+<td><code>join()</code></td>
+<td>Une elementos en una cadena.</td>
+</tr>
+<tr>
+<td><code>reverse()</code></td>
+<td>Invierte orden.</td>
+</tr>
+<tr>
+<td><code>sort()</code></td>
+<td>Ordena.</td>
+</tr>
+<tr>
+<td><code>concat()</code></td>
+<td>Concatena arrays.</td>
+</tr>
+<tr>
+<td><code>slice()</code></td>
+<td>Extrae parte.</td>
+</tr>
+<tr>
+<td><code>Array.from()</code></td>
+<td>Crea array desde iterable.</td>
+</tr>
+<tr>
+<td><code>keys()</code></td>
+<td>Iterador con índices.</td>
+</tr>
+<tr>
+<td><code>find()</code></td>
+<td>Primer elemento que cumple una función.</td>
+</tr>
+<tr>
+<td><code>findIndex()</code></td>
+<td>Índice del primer elemento que cumple una función.</td>
+</tr>
+<tr>
+<td><code>forEach()</code></td>
+<td>Ejecuta una función por elemento.</td>
+</tr>
+<tr>
+<td><code>map()</code></td>
+<td>Crea un nuevo array transformado.</td>
+</tr>
+<tr>
+<td><code>filter()</code></td>
+<td>Crea array con elementos que devuelven <code>true</code>.</td>
+</tr>
+<tr>
+<td><code>every()</code></td>
+<td><code>true</code> si todos cumplen.</td>
+</tr>
+<tr>
+<td><code>some()</code></td>
+<td><code>true</code> si alguno cumple.</td>
+</tr>
+<tr>
+<td><code>reduce()</code></td>
+<td>Reduce de izquierda a derecha a un único valor.</td>
+</tr>
+<tr>
+<td><code>reduceRight()</code></td>
+<td>Reduce desde la derecha.</td>
+</tr>
+</tbody>
+</table>
+<p>En <code>forEach</code>, <code>map</code>, <code>filter</code>, <code>every</code> y <code>some</code>, la función recibe <code>(value, index, array)</code>. En <code>reduce</code> y <code>reduceRight</code> se añade el acumulador o total.</p>
+<p>Cadenas:</p>
+<ul>
+<li>son objetos;</li>
+<li>se recomienda <code>let cadena = &quot;...&quot;</code>, no <code>new String()</code>;</li>
+<li>métodos citados: <code>fromCharCode()</code>, <code>charCodeAt()</code>, <code>indexOf()</code>, <code>lastIndexOf()</code>, <code>substr()</code>, <code>slice()</code>, <code>substring()</code>, <code>toLowerCase()</code>, <code>toUpperCase()</code>, <code>includes()</code>, <code>startsWith()</code>, <code>endsWith()</code>.</li>
+</ul>
+<h3>Eventos básicos y <code>Date</code></h3>
+<p>Eventos citados:</p>
+<table>
+<thead>
+<tr>
+<th>Evento</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>click</code></td>
+<td>Pulsar ratón.</td>
+</tr>
+<tr>
+<td><code>mouseover</code> / <code>mouseout</code></td>
+<td>Entrar o salir con el ratón.</td>
+</tr>
+<tr>
+<td><code>load</code> / <code>unload</code></td>
+<td>Cargar o abandonar página.</td>
+</tr>
+<tr>
+<td><code>focus</code> / <code>blur</code></td>
+<td>Activación o pérdida de foco.</td>
+</tr>
+<tr>
+<td><code>keypress</code></td>
+<td>Presionar tecla.</td>
+</tr>
+<tr>
+<td><code>select</code></td>
+<td>Seleccionar.</td>
+</tr>
+<tr>
+<td><code>change</code></td>
+<td>Modificar.</td>
+</tr>
+<tr>
+<td><code>submit</code> / <code>reset</code></td>
+<td>Enviar o reiniciar formulario.</td>
+</tr>
+<tr>
+<td><code>error</code> / <code>abort</code></td>
+<td>Error o aborto de carga.</td>
+</tr>
+</tbody>
+</table>
+<p>Eventos por elemento:</p>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Eventos citados</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>window</code></td>
+<td><code>load</code>, <code>unload</code>, <code>blur</code>, <code>focus</code>.</td>
+</tr>
+<tr>
+<td><code>link</code></td>
+<td><code>click</code>, <code>mouseout</code>, <code>mouseover</code>.</td>
+</tr>
+<tr>
+<td><code>area</code></td>
+<td><code>mouseOut</code>, <code>mouseOver</code>.</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td><code>abort</code>, <code>error</code>, <code>load</code>.</td>
+</tr>
+<tr>
+<td><code>form</code></td>
+<td><code>reset</code>, <code>submit</code>.</td>
+</tr>
+<tr>
+<td><code>text</code>, <code>textarea</code>, <code>password</code></td>
+<td><code>blur</code>, <code>change</code>, <code>focus</code>, <code>select</code>.</td>
+</tr>
+<tr>
+<td><code>button</code>, <code>reset</code>, <code>submit</code>, <code>radio</code>, <code>checkbox</code></td>
+<td><code>click</code>.</td>
+</tr>
+<tr>
+<td><code>select</code></td>
+<td><code>blur</code>, <code>change</code>, <code>focus</code>.</td>
+</tr>
+<tr>
+<td>Controles de selección de archivos</td>
+<td><code>blur</code>, <code>focus</code>, <code>select</code>.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-127.png" alt="image-127.png" loading="lazy">
+<p>Fechas:</p>
+<ul>
+<li>se gestionan con <code>Date</code>;</li>
+<li>constructores citados: <code>new Date(&quot;mes, dia, ano, horas:minutos:segundos&quot;)</code> y <code>new Date(ano, mes, dia, horas, minutos, segundos, milisegundos)</code>;</li>
+<li>métodos: <code>getTime()</code>, <code>getDay()</code>, <code>getDate()</code>, <code>getMonth()</code>, <code>getYear()</code>, <code>getFullYear()</code>, <code>getHours()</code>, <code>getMinutes()</code>, <code>getSeconds()</code>, <code>getMilliseconds()</code>;</li>
+<li>métodos <code>set...</code> equivalentes;</li>
+<li>métodos UTC equivalentes;</li>
+<li>conversiones: <code>toUTCString()</code>, <code>toGMTString()</code>.</li>
+</ul>
+<h2>4.4 JavaScript ES6</h2>
+<p>En <strong>2015</strong>, ECMAScript tuvo una revisión importante llamada <strong>ES6</strong> o <strong>ECMAScript 6</strong>. Desde entonces las revisiones continúan anualmente, pero con menor intensidad.</p>
+<p>ES6 introdujo:</p>
+<ul>
+<li><code>let</code> y <code>const</code>;</li>
+<li>operador spread <code>...</code>;</li>
+<li>valores por defecto en funciones;</li>
+<li>número indefinido de parámetros;</li>
+<li>funciones resumidas con <code>=&gt;</code>;</li>
+<li>bucles <code>for...of</code>;</li>
+<li>constructores sin escribir <code>function</code>;</li>
+<li>módulos;</li>
+<li>mapas y conjuntos;</li>
+<li>símbolos;</li>
+<li>nuevos métodos de <code>String</code>, <code>Array</code>, <code>Math</code>, <code>Number</code>;</li>
+<li>métodos globales <code>isFinite()</code> e <code>isNaN()</code>.</li>
+</ul>
+<img src="../../../img/daw/image-128.png" alt="image-128.png" loading="lazy">
+<h3>Módulos</h3>
+<p>Los <strong>módulos</strong> son ficheros que agrupan funciones o clases con un propósito común.</p>
+<p>Reglas:</p>
+<ul>
+<li>suelen organizarse en carpetas separadas;</li>
+<li>se ha planteado la extensión <code>.mjs</code>, pero no está generalizada;</li>
+<li>se invocan a través de servidores;</li>
+<li>para usarlos en HTML se añade <code>type=&quot;module&quot;</code> a <code>&lt;script&gt;</code>;</li>
+<li>se pueden importar nombres exportados, renombrarlos con <code>as</code>, importar un <code>default</code> o combinar <code>default</code> con nombres no <code>default</code>.</li>
+</ul>
+<img src="../../../img/daw/image-133.png" alt="image-133.png" loading="lazy">
+<img src="../../../img/daw/image-134.png" alt="image-134.png" loading="lazy">
+<h3><code>class</code>, <code>Map</code>, <code>Set</code> y <code>Symbol</code></h3>
+<p>ES6 introduce <code>class</code> como sintaxis moderna para clases. La herencia se hace con <code>extends</code> y <code>super()</code>. Los atributos siguen siendo públicos salvo que se usen mecanismos específicos modernos.</p>
+<img src="../../../img/daw/image-129.png" alt="image-129.png" loading="lazy">
+<img src="../../../img/daw/image-130.png" alt="image-130.png" loading="lazy">
+<p>Mapas:</p>
+<table>
+<thead>
+<tr>
+<th>Método/propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>new Map()</code></td>
+<td>Crea un mapa.</td>
+</tr>
+<tr>
+<td><code>set(clave, valor)</code></td>
+<td>Fija valor para una clave.</td>
+</tr>
+<tr>
+<td><code>get(clave)</code></td>
+<td>Recupera valor.</td>
+</tr>
+<tr>
+<td><code>clear()</code></td>
+<td>Borra todos los elementos.</td>
+</tr>
+<tr>
+<td><code>keys()</code></td>
+<td>Iterador de claves.</td>
+</tr>
+<tr>
+<td><code>values()</code></td>
+<td>Iterador de valores.</td>
+</tr>
+</tbody>
+</table>
+<p>Los mapas son iterables en orden y sus claves pueden ser objetos.</p>
+<img src="../../../img/daw/image-131.png" alt="image-131.png" loading="lazy">
+<p>Sets:</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>new Set()</code></td>
+<td>Crea un conjunto.</td>
+</tr>
+<tr>
+<td><code>add(valor)</code></td>
+<td>Añade valor.</td>
+</tr>
+<tr>
+<td><code>delete(valor)</code></td>
+<td>Elimina valor.</td>
+</tr>
+<tr>
+<td><code>clear()</code></td>
+<td>Borra todo.</td>
+</tr>
+<tr>
+<td><code>values()</code></td>
+<td>Iterador con valores.</td>
+</tr>
+</tbody>
+</table>
+<p>Un <code>Set</code> almacena valores únicos.</p>
+<img src="../../../img/daw/image-132.png" alt="image-132.png" loading="lazy">
+<p><code>Symbol</code> es un tipo primitivo que representa un identificador único oculto, útil para evitar accesos accidentales. Se crea con <code>Symbol(&quot;nombre&quot;)</code>; se accede mediante <code>[]</code>, no mediante punto.</p>
+<h2>4.5 Expresiones regulares y validación</h2>
+<p>Durante el intercambio de datos con el servidor conviene enviar datos consistentes para no corromper la información almacenada. Las <strong>expresiones regulares</strong> permiten definir patrones de cadenas y usarlos para comprobar información.</p>
+<h3>Definición y clase <code>RegExp</code></h3>
+<p>Formas de crear expresiones regulares:</p>
+<table>
+<thead>
+<tr>
+<th>Forma</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Literal</td>
+<td><code>/patron/opciones</code>.</td>
+</tr>
+<tr>
+<td>Constructor</td>
+<td><code>new RegExp(&quot;patron&quot;, &quot;opciones&quot;)</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Opciones:</p>
+<ul>
+<li><code>i</code>: no distingue mayúsculas/minúsculas;</li>
+<li><code>g</code>: búsqueda global;</li>
+<li><code>m</code>: búsqueda multilínea.</li>
+</ul>
+<p>Clase <code>RegExp</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Elemento</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Método</td>
+<td><code>exec()</code></td>
+<td>Comprueba coincidencias y retorna la primera.</td>
+</tr>
+<tr>
+<td>Método</td>
+<td><code>test()</code></td>
+<td>Devuelve <code>true</code> o <code>false</code>.</td>
+</tr>
+<tr>
+<td>Método</td>
+<td><code>toString()</code></td>
+<td>Devuelve la expresión como cadena.</td>
+</tr>
+<tr>
+<td>Propiedad</td>
+<td><code>global</code></td>
+<td>Indica si <code>g</code> está activado.</td>
+</tr>
+<tr>
+<td>Propiedad</td>
+<td><code>ignoreCase</code></td>
+<td>Indica si <code>i</code> está activado.</td>
+</tr>
+<tr>
+<td>Propiedad</td>
+<td><code>multiline</code></td>
+<td>Indica si <code>m</code> está activado.</td>
+</tr>
+<tr>
+<td>Propiedad</td>
+<td><code>lastIndex</code></td>
+<td>Posición de inicio de la siguiente coincidencia.</td>
+</tr>
+<tr>
+<td>Propiedad</td>
+<td><code>source</code></td>
+<td>Patrón como cadena.</td>
+</tr>
+</tbody>
+</table>
+<p>Métodos de <code>String</code> con regex:</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>match()</code></td>
+<td>Busca coincidencias y devuelve array.</td>
+</tr>
+<tr>
+<td><code>matchAll()</code></td>
+<td>Devuelve iterador con coincidencias.</td>
+</tr>
+<tr>
+<td><code>search()</code></td>
+<td>Devuelve índice de la primera coincidencia.</td>
+</tr>
+<tr>
+<td><code>replace()</code></td>
+<td>Reemplaza texto usando regex.</td>
+</tr>
+<tr>
+<td><code>split()</code></td>
+<td>Divide la cadena usando regex como separador.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-136.png" alt="image-136.png" loading="lazy">
+<img src="../../../img/daw/image-137.png" alt="image-137.png" loading="lazy">
+<h3>Patrones y precedencia</h3>
+<table>
+<thead>
+<tr>
+<th>Patrón</th>
+<th>Significado</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>*</code></td>
+<td>Cero o más veces.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>Una o más veces.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>?</code></td>
+<td>Cero o una vez.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\</code></td>
+<td>Carácter de escape.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>[conjunto]</code></td>
+<td>Cualquier carácter del conjunto.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\b</code></td>
+<td>Final de palabra.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\B</code></td>
+<td>No final de palabra.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>Comienzo de cadena o línea.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>$</code></td>
+<td>Final de cadena o línea.</td>
+<td></td>
+</tr>
+<tr>
+<td>`</td>
+<td>`</td>
+<td>Alternancia.</td>
+</tr>
+<tr>
+<td><code>(patron)</code></td>
+<td>Agrupación o captura.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>(?:...)</code></td>
+<td>Subpatrón sin captura.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>(?=...)</code></td>
+<td>Coincidencia si va seguida de otra expresión.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>(?!...)</code></td>
+<td>Coincidencia si no va seguida de otra expresión.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>{n}</code></td>
+<td>Exactamente <code>n</code> veces.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>{n,}</code></td>
+<td>Como mínimo <code>n</code> veces.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>{n,m}</code></td>
+<td>Entre <code>n</code> y <code>m</code> veces.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\d</code></td>
+<td>Equivale a <code>[0-9]</code>.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\w</code></td>
+<td>Equivale a letras, números y <code>_</code>.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\W</code></td>
+<td>Negación de <code>\w</code>.</td>
+<td></td>
+</tr>
+<tr>
+<td><code>\n</code>, <code>\r</code>, <code>\t</code>, <code>\f</code>, <code>\v</code>, <code>\s</code></td>
+<td>Abreviaturas de caracteres especiales o espacios.</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Precedencia:</p>
+<ol>
+<li><code>\</code></li>
+<li><code>()</code>, <code>[]</code></li>
+<li><code>*</code>, <code>+</code>, <code>{n}</code>, <code>{n,}</code>, <code>{n,m}</code></li>
+<li><code>^</code>, <code>$</code></li>
+<li><code>|</code></li>
+</ol>
+<h3>Validación</h3>
+<p>Validación con JavaScript:</p>
+<ul>
+<li>interceptar envío de formulario;</li>
+<li>usar expresiones regulares;</li>
+<li>cancelar comportamiento con <code>preventDefault()</code>;</li>
+<li>avisar con <code>alert()</code>;</li>
+<li>devolver foco con <code>focus()</code> o seleccionar texto con <code>select()</code>.</li>
+</ul>
+<img src="../../../img/daw/image-138.png" alt="image-138.png" loading="lazy">
+<p>Validación HTML5:</p>
+<table>
+<thead>
+<tr>
+<th>Atributo/tipo</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type=&quot;email&quot;</code></td>
+<td>Campo de email con validación básica.</td>
+</tr>
+<tr>
+<td><code>type=&quot;url&quot;</code></td>
+<td>Validación similar para URL.</td>
+</tr>
+<tr>
+<td><code>type=&quot;number&quot;</code></td>
+<td>Validación similar para número.</td>
+</tr>
+<tr>
+<td><code>pattern</code></td>
+<td>Permite introducir una expresión regular.</td>
+</tr>
+<tr>
+<td><code>required</code></td>
+<td>Campo obligatorio; es booleano.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-139.png" alt="image-139.png" loading="lazy">
+<img src="../../../img/daw/image-140.png" alt="image-140.png" loading="lazy">
+<img src="../../../img/daw/image-141.png" alt="image-141.png" loading="lazy">
+<h2>4.6 jQuery</h2>
+<p><strong>jQuery</strong> es una librería de funciones escrita en JavaScript, libre y de código abierto, creada por <strong>John Resig</strong> y presentada en enero de <strong>2006</strong> en BarCamp NYC.</p>
+<p>Permite:</p>
+<ul>
+<li>simplificar interacción con documentos HTML;</li>
+<li>manipular el DOM;</li>
+<li>manejar eventos;</li>
+<li>crear animaciones;</li>
+<li>trabajar con AJAX.</li>
+</ul>
+<p>Ventajas frente al DOM nativo:</p>
+<ul>
+<li>selecciones HTML más simples;</li>
+<li>varios métodos sobre la misma selección;</li>
+<li>robustez frente a diferencias entre navegadores;</li>
+<li>manejo de eventos más sencillo;</li>
+<li>métodos adicionales para animaciones;</li>
+<li>gestión de inconsistencias entre navegadores.</li>
+</ul>
+<p>Puede integrarse descargando <code>jquery.js</code> o enlazándolo desde un CDN.</p>
+<h3>Sintaxis y selectores</h3>
+<p>Sintaxis básica:</p>
+<p><code>$(selector).action()</code></p>
+<table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$</code></td>
+<td>Abreviatura de <code>jQuery()</code>.</td>
+</tr>
+<tr>
+<td><code>selector</code></td>
+<td>Selector con sintaxis CSS.</td>
+</tr>
+<tr>
+<td><code>action()</code></td>
+<td>Método aplicado al objeto jQuery.</td>
+</tr>
+<tr>
+<td><code>length</code></td>
+<td>Número de etiquetas seleccionadas.</td>
+</tr>
+</tbody>
+</table>
+<p><code>ready()</code> ejecuta una función cuando el DOM está preparado: <code>$(document).ready(function(){ ... })</code>; la forma abreviada es <code>$(function(){ ... })</code>.</p>
+<img src="../../../img/daw/image-142.png" alt="image-142.png" loading="lazy">
+<img src="../../../img/daw/image-143.png" alt="image-143.png" loading="lazy">
+<p>Selectores específicos:</p>
+<table>
+<thead>
+<tr>
+<th>Selector</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>$(this)</code></td>
+<td>Etiqueta actual.</td>
+</tr>
+<tr>
+<td><code>$(&quot;p:first&quot;)</code> / <code>$(&quot;p:last&quot;)</code></td>
+<td>Primera o última etiqueta <code>p</code>.</td>
+</tr>
+<tr>
+<td><code>$(&quot;ul li:first-child&quot;)</code></td>
+<td>Primer <code>li</code> de cada <code>ul</code>.</td>
+</tr>
+<tr>
+<td><code>$(&quot;:button&quot;)</code></td>
+<td><code>button</code> e <code>input type=&quot;button&quot;</code>.</td>
+</tr>
+<tr>
+<td><code>$(&quot;tr:even&quot;)</code> / <code>$(&quot;tr:odd&quot;)</code></td>
+<td>Filas pares o impares.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-144.png" alt="image-144.png" loading="lazy">
+<h3>Métodos jQuery</h3>
+<table>
+<thead>
+<tr>
+<th>Grupo</th>
+<th>Métodos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Contenido</td>
+<td><code>html()</code>, <code>text()</code>, <code>replaceWith()</code>, <code>remove()</code>.</td>
+</tr>
+<tr>
+<td>Nodos</td>
+<td><code>before()</code>, <code>after()</code>, <code>prepend()</code>, <code>append()</code>, <code>clone()</code>, <code>unwrap()</code>, <code>detach()</code>, <code>empty()</code>, <code>add()</code>.</td>
+</tr>
+<tr>
+<td>Atributos y estilos</td>
+<td><code>attr()</code>, <code>removeAttr()</code>, <code>addClass()</code>, <code>removeClass()</code>, <code>css()</code>.</td>
+</tr>
+<tr>
+<td>Formularios</td>
+<td><code>val()</code>, <code>isNumeric()</code>.</td>
+</tr>
+<tr>
+<td>Recorrido</td>
+<td><code>find()</code>, <code>closest()</code>, <code>parent()</code>, <code>parents()</code>, <code>children()</code>, <code>siblings()</code>, <code>next()</code>, <code>nextAll()</code>, <code>prev()</code>, <code>prevAll()</code>.</td>
+</tr>
+<tr>
+<td>Lazos</td>
+<td><code>each()</code>; los ítems se acceden con <code>this</code>.</td>
+</tr>
+<tr>
+<td>Testeo y filtrado</td>
+<td><code>filter()</code>, <code>not()</code>, <code>has()</code>, <code>is()</code>, <code>$.contains(padre, hijo)</code>.</td>
+</tr>
+<tr>
+<td>Orden</td>
+<td><code>eq()</code>, <code>lt()</code>, <code>gt()</code>.</td>
+</tr>
+<tr>
+<td>Dimensión</td>
+<td><code>height()</code>, <code>width()</code>, <code>innerHeight()</code>, <code>innerWidth()</code>, <code>outerHeight()</code>, <code>outerWidth()</code>, <code>$(document).height()</code>, <code>$(document).width()</code>, <code>$(window).height()</code>, <code>$(window).width()</code>.</td>
+</tr>
+<tr>
+<td>Posición</td>
+<td><code>offset()</code>, <code>position()</code>, <code>scrollLeft()</code>, <code>scrollTop()</code>.</td>
+</tr>
+<tr>
+<td>Animación</td>
+<td><code>show()</code>, <code>hide()</code>, <code>toggle()</code>, <code>fadeIn()</code>, <code>fadeOut()</code>, <code>fadeTo()</code>, <code>fadeToggle()</code>, <code>slideDown()</code>, <code>slideUp()</code>, <code>slideToggle()</code>, <code>delay()</code>, <code>stop()</code>, <code>animate()</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Notas:</p>
+<ul>
+<li><code>html()</code> interpreta HTML; <code>text()</code> no lo interpreta.</li>
+<li><code>replaceWith()</code> reemplaza el nodo entero.</li>
+<li><code>detach()</code> es como <code>remove()</code>, pero conserva una copia en memoria.</li>
+<li><code>height()</code> y <code>width()</code> no incluyen margen, borde ni padding.</li>
+<li><code>innerHeight()</code> e <code>innerWidth()</code> no incluyen margen ni borde.</li>
+<li><code>outerHeight()</code> y <code>outerWidth()</code> no incluyen margen.</li>
+<li><code>offset()</code> se refiere a la esquina superior izquierda del documento; <code>position()</code> al ancestro.</li>
+<li>todos los elementos retornados por una selección tienen índice.</li>
+</ul>
+<img src="../../../img/daw/image-145.png" alt="image-145.png" loading="lazy">
+<img src="../../../img/daw/image-146.png" alt="image-146.png" loading="lazy">
+<img src="../../../img/daw/image-147.png" alt="image-147.png" loading="lazy">
+<img src="../../../img/daw/image-148.png" alt="image-148.png" loading="lazy">
+<img src="../../../img/daw/image-149.png" alt="image-149.png" loading="lazy">
+<img src="../../../img/daw/image-150.png" alt="image-150.png" loading="lazy">
+<img src="../../../img/daw/image-151.png" alt="image-151.png" loading="lazy">
+<img src="../../../img/daw/image-152.png" alt="image-152.png" loading="lazy">
+<img src="../../../img/daw/image-153.png" alt="image-153.png" loading="lazy">
+<img src="../../../img/daw/image-154.png" alt="image-154.png" loading="lazy">
+<img src="../../../img/daw/image-155.png" alt="image-155.png" loading="lazy">
+<img src="../../../img/daw/image-156.png" alt="image-156.png" loading="lazy">
+<img src="../../../img/daw/image-157.png" alt="image-157.png" loading="lazy">
+<img src="../../../img/daw/image-158.png" alt="image-158.png" loading="lazy">
+<img src="../../../img/daw/image-159.png" alt="image-159.png" loading="lazy">
+<img src="../../../img/daw/image-160.png" alt="image-160.png" loading="lazy">
+<img src="../../../img/daw/image-161.png" alt="image-161.png" loading="lazy">
+<img src="../../../img/daw/image-162.png" alt="image-162.png" loading="lazy">
+<img src="../../../img/daw/image-163.png" alt="image-163.png" loading="lazy">
+<img src="../../../img/daw/image-164.png" alt="image-164.png" loading="lazy">
+<img src="../../../img/daw/image-165.png" alt="image-165.png" loading="lazy">
+<img src="../../../img/daw/image-166.png" alt="image-166.png" loading="lazy">
+<h3>Eventos jQuery</h3>
+<p>Dos formas:</p>
+<ul>
+<li><code>$(selector).evento(function(e){ ... })</code>;</li>
+<li><code>$(selector).on(&quot;evento&quot;, function(e){ ... })</code>.</li>
+</ul>
+<p><code>on()</code> es la forma moderna y recibe el evento y la función manejadora.</p>
+<img src="../../../img/daw/image-167.png" alt="image-167.png" loading="lazy">
+<img src="../../../img/daw/image-168.png" alt="image-168.png" loading="lazy">
+<p>Objeto evento:</p>
+<table>
+<thead>
+<tr>
+<th>Propiedad/método</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>Tipo de evento.</td>
+</tr>
+<tr>
+<td><code>which</code></td>
+<td>Botón o tecla que lo desencadena.</td>
+</tr>
+<tr>
+<td><code>target.nodeName</code></td>
+<td>Nombre del elemento seleccionado.</td>
+</tr>
+<tr>
+<td><code>pageX</code></td>
+<td>Posición del ratón desde el lado izquierdo del documento.</td>
+</tr>
+<tr>
+<td><code>pageY</code></td>
+<td>Posición del ratón desde la parte superior del documento.</td>
+</tr>
+<tr>
+<td><code>preventDefault()</code></td>
+<td>Evita la acción por defecto.</td>
+</tr>
+<tr>
+<td><code>stopPropagation()</code></td>
+<td>Detiene la propagación hacia ancestros.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-169.png" alt="image-169.png" loading="lazy">
+<img src="../../../img/daw/image-170.png" alt="image-170.png" loading="lazy">
+<img src="../../../img/daw/image-171.png" alt="image-171.png" loading="lazy">
+<img src="../../../img/daw/image-172.png" alt="image-172.png" loading="lazy">
+<p>Tipos de eventos:</p>
+<table>
+<thead>
+<tr>
+<th>Grupo</th>
+<th>Eventos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UI</td>
+<td><code>focus</code>, <code>blur</code>, <code>change</code>.</td>
+</tr>
+<tr>
+<td>Teclado</td>
+<td><code>input</code>, <code>keydown</code>, <code>keyup</code>, <code>keypress</code>.</td>
+</tr>
+<tr>
+<td>Ratón</td>
+<td><code>click</code>, <code>dblclick</code>, <code>mouseup</code>, <code>mousedown</code>, <code>mouseover</code>, <code>mousemove</code>, <code>mouseout</code>, <code>hover</code>.</td>
+</tr>
+<tr>
+<td>Formulario</td>
+<td><code>submit</code>, <code>select</code>, <code>change</code>.</td>
+</tr>
+<tr>
+<td>Documento</td>
+<td><code>ready</code>, <code>load</code>, <code>unload</code>.</td>
+</tr>
+<tr>
+<td>Navegador</td>
+<td><code>error</code>, <code>resize</code>, <code>scroll</code>.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-173.png" alt="image-173.png" loading="lazy">
+<h2>4.7 Ficheros de datos: XML y JSON</h2>
+<h3>XML</h3>
+<p><strong>XML (eXtensible Markup Language)</strong> es un lenguaje de marcas que describe información estructurada para facilitar el intercambio entre máquinas. Existen herramientas de fabricantes como Microsoft o Apache que facilitan su uso.</p>
+<table>
+<thead>
+<tr>
+<th>Archivos de propiedades</th>
+<th>Archivos XML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Jerarquía plana.</td>
+<td>Estructuras jerárquicas con etiquetas.</td>
+</tr>
+<tr>
+<td>No admiten repetición de valores.</td>
+<td>Admiten estructuras repetidas y anidadas.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-174.png" alt="image-174.png" loading="lazy" width="212">
+<img src="../../../img/daw/image-176.png" alt="image-176.png" loading="lazy" width="381" height="123">
+<img src="../../../img/daw/image-177.png" alt="image-177.png" loading="lazy">
+<p>XML frente a HTML:</p>
+<table>
+<thead>
+<tr>
+<th>HTML</th>
+<th>XML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Etiquetas predefinidas por estándar.</td>
+<td>Etiquetas no predefinidas.</td>
+</tr>
+<tr>
+<td>No distingue mayúsculas/minúsculas.</td>
+<td>Sí distingue mayúsculas/minúsculas.</td>
+</tr>
+<tr>
+<td>Existen atributos sin valor.</td>
+<td>Todo atributo debe tener valor.</td>
+</tr>
+<tr>
+<td>Más flexible con cierres.</td>
+<td>Toda etiqueta debe cerrarse; elementos vacíos terminan en <code>/&gt;</code>.</td>
+</tr>
+<tr>
+<td>Valores de atributos más flexibles.</td>
+<td>Comillas simples o dobles, pero deben abrirse y cerrarse igual.</td>
+</tr>
+</tbody>
+</table>
+<p>Estructura XML:</p>
+<ol>
+<li>Encabezado opcional pero recomendado: <code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</code>.</li>
+<li>Definición de tipo de documento opcional, por ejemplo un <code>DOCTYPE</code>.</li>
+<li>Cuerpo con elementos hijos, texto o ambas cosas.</li>
+</ol>
+<p>Consejos:</p>
+<ul>
+<li>evitar contenido mixto, es decir, texto y elementos al mismo nivel;</li>
+<li>usar atributos solo para modificar la interpretación de un valor, no para especificar valores.</li>
+</ul>
+<img src="../../../img/daw/image-181.png" alt="image-181.png" loading="lazy">
+<img src="../../../img/daw/image-182.png" alt="image-182.png" loading="lazy">
+<img src="../../../img/daw/image-183.png" alt="image-183.png" loading="lazy">
+<h3>XML DOM</h3>
+<p>El <strong>XML DOM</strong> define un estándar para acceder y manipular XML de manera similar al HTML DOM.</p>
+<table>
+<thead>
+<tr>
+<th>Objeto/método/propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DOMParser</code></td>
+<td>Parsea XML almacenado en una cadena y lo convierte en documento DOM.</td>
+</tr>
+<tr>
+<td><code>XMLHttpRequest.responseXML</code></td>
+<td>Devuelve un <code>XMLDocument</code> con el XML de la petición.</td>
+</tr>
+<tr>
+<td><code>parseFromString(texto, tipoMime)</code></td>
+<td>Método de <code>DOMParser</code> que devuelve un <code>XMLDocument</code>.</td>
+</tr>
+<tr>
+<td><code>getElementsByTagName(nombre)</code></td>
+<td>Devuelve <code>NodeList</code> con etiquetas de ese nombre.</td>
+</tr>
+<tr>
+<td><code>appendChild(nodo)</code></td>
+<td>Inserta nodo hijo.</td>
+</tr>
+<tr>
+<td><code>removeChild(nodo)</code></td>
+<td>Elimina nodo hijo.</td>
+</tr>
+<tr>
+<td><code>nodeName</code></td>
+<td>Nombre del nodo.</td>
+</tr>
+<tr>
+<td><code>nodeValue</code></td>
+<td>Valor del nodo.</td>
+</tr>
+<tr>
+<td><code>nodeType</code></td>
+<td>Tipo del nodo.</td>
+</tr>
+<tr>
+<td><code>parentNode</code></td>
+<td>Padre del nodo.</td>
+</tr>
+<tr>
+<td><code>childNodes</code></td>
+<td>Hijos del nodo.</td>
+</tr>
+<tr>
+<td><code>attributes</code></td>
+<td><code>NamedNodeMap</code> con atributos.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-184.png" alt="image-184.png" loading="lazy">
+<img src="../../../img/daw/image-185.png" alt="image-185.png" loading="lazy">
+<img src="../../../img/daw/image-186.png" alt="image-186.png" loading="lazy">
+<img src="../../../img/daw/image-187.png" alt="image-187.png" loading="lazy">
+<img src="../../../img/daw/image-188.png" alt="image-188.png" loading="lazy">
+<img src="../../../img/daw/image-189.png" alt="image-189.png" loading="lazy">
+<img src="../../../img/daw/image-190.png" alt="image-190.png" loading="lazy">
+<h3>JSON</h3>
+<p><strong>JSON (JavaScript Object Notation)</strong> es un formato de almacenamiento e intercambio de datos creado inicialmente en 1999 en el ámbito de JS y extendido a muchos lenguajes.</p>
+<p>Características:</p>
+<ul>
+<li>sencillo para máquinas y humanos;</li>
+<li>en JS se maneja como objeto;</li>
+<li>puede convertirse a cadena para intercambio entre servidores;</li>
+<li><code>JSON.stringify(obj)</code> transforma objetos JS en cadenas JSON;</li>
+<li><code>JSON.parse(cadena)</code> transforma cadenas JSON en objetos JS.</li>
+</ul>
+<p>Formato:</p>
+<table>
+<thead>
+<tr>
+<th>Estructura</th>
+<th>En JS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Colección de pares nombre/valor</td>
+<td>Objetos: <code>{ cadena: valor, ... }</code>.</td>
+</tr>
+<tr>
+<td>Lista ordenada de valores</td>
+<td>Arrays: <code>[valor, valor, ...]</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Valores admitidos: cadenas, números, objetos, arrays, booleanos y <code>null</code>.</p>
+<img src="../../../img/daw/image-191.png" alt="image-191.png" loading="lazy">
+<img src="../../../img/daw/image-192.png" alt="image-192.png" loading="lazy">
+<h3>XML vs JSON</h3>
+<p>Similitudes:</p>
+<ul>
+<li>ambos son autodescriptivos;</li>
+<li>ambos son jerárquicos;</li>
+<li>ambos son parseables;</li>
+<li>ambos son tratables mediante <code>XMLHttpRequest</code>.</li>
+</ul>
+<p>Diferencias:</p>
+<ul>
+<li>XML necesita parser XML; JSON usa funciones estándar de JS;</li>
+<li>JSON no usa etiquetas;</li>
+<li>JSON es más rápido en lectura y escritura;</li>
+<li>JSON puede usar arrays.</li>
+</ul>
+<img src="../../../img/daw/image-193.png" alt="image-193.png" loading="lazy">
+<h2>4.8 AJAX, promesas y Fetch</h2>
+<h3>MPA, SPA y procesamiento asíncrono</h3>
+<table>
+<thead>
+<tr>
+<th>Modelo</th>
+<th>Idea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MPA</td>
+<td>Multi-Page Application: cada página es una petición al servidor que devuelve un HTML completo.</td>
+</tr>
+<tr>
+<td>SPA</td>
+<td>Single-Page Application: una única página HTML sobrescribe contenido dinámicamente sin cargar una nueva página.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-194.png" alt="image-194.png" loading="lazy">
+<p>Procesamiento:</p>
+<ul>
+<li><strong>síncrono</strong>: al encontrar <code>&lt;script&gt;</code>, el navegador lo procesa y detiene la carga del resto de la página; si el script espera datos externos, la carga se bloquea;</li>
+<li><strong>asíncrono</strong>: AJAX carga datos en segundo plano y permite continuar con el resto del documento.</li>
+</ul>
+<p><strong>AJAX (Asynchronous JavaScript And XML)</strong> es una técnica para acceder al servidor desde la página web. Nace en febrero de <strong>2005</strong> de la mano de <strong>Jesse James Garrett</strong>.</p>
+<p>Permite:</p>
+<ul>
+<li>actualizar una página sin recargarla;</li>
+<li>pedir datos al servidor después de cargar la página;</li>
+<li>recibir datos después de cargar la página;</li>
+<li>enviar datos en background;</li>
+<li>desarrollar SPA.</li>
+</ul>
+<p>AJAX combina:</p>
+<ul>
+<li>JS y HTML DOM para mostrar datos;</li>
+<li>un objeto <code>XMLHttpRequest</code> construido en el navegador.</li>
+</ul>
+<p>El <strong>motor AJAX</strong> es el objeto o función JS invocado cuando se realiza una petición al servidor.</p>
+<img src="../../../img/daw/image-195.png" alt="image-195.png" loading="lazy">
+<h3><code>XMLHttpRequest</code></h3>
+<p><code>XMLHttpRequest</code> fue diseñado por Microsoft y hoy es estándar W3C. Sirve para insertar datos en una página sin recargarla.</p>
+<p>Métodos:</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>abort()</code></td>
+<td>Cancela la solicitud.</td>
+</tr>
+<tr>
+<td><code>getAllResponseHeaders()</code></td>
+<td>Devuelve cabeceras.</td>
+</tr>
+<tr>
+<td><code>getResponseHeader(nombre)</code></td>
+<td>Devuelve cabecera concreta.</td>
+</tr>
+<tr>
+<td><code>open(method, url, async, user, psw)</code></td>
+<td>Especifica solicitud: método <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>; URL; modo asíncrono; usuario y contraseña opcionales.</td>
+</tr>
+<tr>
+<td><code>send()</code></td>
+<td>Envía solicitud GET.</td>
+</tr>
+<tr>
+<td><code>send(string)</code></td>
+<td>Envía solicitud POST.</td>
+</tr>
+<tr>
+<td><code>setRequestHeader(header, value)</code></td>
+<td>Añade par etiqueta/valor a la cabecera.</td>
+</tr>
+</tbody>
+</table>
+<p>Atributos:</p>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>onreadystatechange</code></td>
+<td>Callback cuando cambia <code>readyState</code>.</td>
+</tr>
+<tr>
+<td><code>onload</code></td>
+<td>Callback cuando se recibe la petición; navegadores modernos lo soportan y suele usarse.</td>
+</tr>
+<tr>
+<td><code>readyState</code></td>
+<td>Estado de la petición.</td>
+</tr>
+<tr>
+<td><code>responseText</code></td>
+<td>Respuesta en texto.</td>
+</tr>
+<tr>
+<td><code>responseXML</code></td>
+<td>Respuesta en XML.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Código de estado: <code>200</code> OK, <code>403</code> prohibido, <code>404</code> no encontrado, etc.</td>
+</tr>
+<tr>
+<td><code>statusText</code></td>
+<td>Texto del estado.</td>
+</tr>
+</tbody>
+</table>
+<p><code>readyState</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Valor</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0</code></td>
+<td>Petición no inicializada.</td>
+</tr>
+<tr>
+<td><code>1</code></td>
+<td>Conexión con servidor establecida.</td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td>Petición recibida.</td>
+</tr>
+<tr>
+<td><code>3</code></td>
+<td>Procesando petición.</td>
+</tr>
+<tr>
+<td><code>4</code></td>
+<td>Petición finalizada y respuesta lista.</td>
+</tr>
+</tbody>
+</table>
+<p>Funcionamiento:</p>
+<ol>
+<li>crear objeto: <code>let miHttp = new XMLHttpRequest();</code>;</li>
+<li>definir callback con <code>onreadystatechange</code> u <code>onload</code>;</li>
+<li>abrir con <code>open(&quot;GET&quot;, &quot;miFile&quot;)</code>;</li>
+<li>enviar con <code>send()</code>.</li>
+</ol>
+<img src="../../../img/daw/image-196.png" alt="image-196.png" loading="lazy">
+<img src="../../../img/daw/image-197.png" alt="image-197.png" loading="lazy">
+<img src="../../../img/daw/image-198.png" alt="image-198.png" loading="lazy">
+<img src="../../../img/daw/image-199.png" alt="image-199.png" loading="lazy">
+<h3>Promesas y AJAX con jQuery</h3>
+<p>Una <strong>promesa</strong> representa la terminación correcta o el fracaso de una operación asíncrona.</p>
+<p>Forma general:</p>
+<p><code>new Promise(function(siExito, siFracaso) { ... siExito(valor); siFracaso(valor); })</code></p>
+<p><code>then(siExito, siFracaso)</code> define callbacks de éxito o fracaso.</p>
+<img src="../../../img/daw/image-200.png" alt="image-200.png" loading="lazy">
+<img src="../../../img/daw/image-201.png" alt="image-201.png" loading="lazy">
+<img src="../../../img/daw/image-202.png" alt="image-202.png" loading="lazy">
+<img src="../../../img/daw/image-203.png" alt="image-203.png" loading="lazy">
+<p>AJAX con jQuery usa <code>load()</code>:</p>
+<p><code>.load(url, [data, function(response, status, xhr)])</code></p>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>url</code></td>
+<td>URL de datos a cargar.</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>Datos enviados junto a la petición.</td>
+</tr>
+<tr>
+<td><code>response</code></td>
+<td>Datos resultantes.</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Estado de la petición.</td>
+</tr>
+<tr>
+<td><code>xhr</code></td>
+<td>Objeto <code>XMLHttpRequest</code>.</td>
+</tr>
+</tbody>
+</table>
+<img src="../../../img/daw/image-204.png" alt="image-204.png" loading="lazy">
+<h3>Fetch</h3>
+<p>Desventajas de <code>XMLHttpRequest</code>:</p>
+<ul>
+<li>diferencias entre fabricantes o versiones de navegador;</li>
+<li>uso de callbacks, que puede desordenar el código.</li>
+</ul>
+<p>La solución tradicional era usar herramientas de terceros, como jQuery. <strong>Fetch</strong> es una interfaz estándar para AJAX basada en promesas.</p>
+<p><code>window.fetch(url)</code> o <code>fetch(url)</code> trae al cliente el contenido de la URL y devuelve una promesa que resuelve en un objeto <code>Response</code>, incluso si el servidor devuelve un código de error HTTP.</p>
+<p>Objeto <code>Response</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Método/propiedad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.text()</code></td>
+<td>Promesa con representación en texto.</td>
+</tr>
+<tr>
+<td><code>.json()</code></td>
+<td>Promesa con representación JSON.</td>
+</tr>
+<tr>
+<td><code>.formData()</code></td>
+<td>Promesa con pares clave/valor.</td>
+</tr>
+<tr>
+<td><code>.bytes()</code></td>
+<td>Promesa con bytes.</td>
+</tr>
+<tr>
+<td><code>.status</code></td>
+<td>Código de estado.</td>
+</tr>
+<tr>
+<td><code>.ok</code></td>
+<td>Booleano de éxito; normalmente <code>200</code> a <code>299</code>.</td>
+</tr>
+<tr>
+<td><code>.headers</code></td>
+<td>Cabeceras de la respuesta.</td>
+</tr>
+<tr>
+<td><code>.url</code></td>
+<td>URL de la respuesta.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>fetch()</code> no rechaza la promesa por un <code>404</code> o un <code>500</code>; conviene comprobar <code>response.ok</code>;</li>
+<li>para texto se encadena <code>response.text()</code>;</li>
+<li>para JSON se usa <code>response.json()</code>;</li>
+<li>para XML se puede recibir texto y parsearlo con <code>DOMParser</code>.</li>
+</ul>
+<img src="../../../img/daw/image-307.png" alt="image-307.png" loading="lazy">
+<img src="../../../img/daw/image-308.png" alt="image-308.png" loading="lazy">
+<img src="../../../img/daw/image-309.png" alt="image-309.png" loading="lazy">
+<img src="../../../img/daw/image-310.png" alt="image-310.png" loading="lazy">
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="3-css-y-diseno-responsivo.html"><span class="nav-etiqueta">← anterior</span>3. CSS y Diseño Responsivo</a>
+  <a class="nav-siguiente" href="5-servlets.html"><span class="nav-etiqueta">siguiente →</span>5. Servlets</a>
+</nav>
+
+</main>
+<footer class="pie">
+  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
+  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
+</footer>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

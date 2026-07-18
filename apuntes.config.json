@@ -1,0 +1,26 @@
+{
+  "salida": "docs",
+  "urlPublica": "https://adrianql5.github.io/ApuntesWeb/",
+  "legacy": {
+    "curso": 1,
+    "ruta": "/Users/adrianql5/Desktop/1-Carrera"
+  },
+  "vaults": [
+    { "curso": 2, "cuatri": 1, "ruta": "/Users/adrianql5/Desktop/2-Carrera/2-TEORIA-1-CUATRI" },
+    { "curso": 2, "cuatri": 2, "ruta": "/Users/adrianql5/Desktop/2-Carrera/2-TEORIA-2-CUATRI" },
+    { "curso": 3, "cuatri": 1, "ruta": "/Users/adrianql5/Desktop/3-Carrera/3-TEORIA-1-CUATRI" },
+    { "curso": 3, "cuatri": 2, "ruta": "/Users/adrianql5/Desktop/3-Carrera/3-TEORIA-2-CUATRI" }
+  ],
+  "carpetasIgnoradas": [
+    ".obsidian",
+    ".git",
+    ".trash",
+    "Bibliografía",
+    "bibliografía",
+    "Bibliografia",
+    "Ejercicios",
+    "ejercicios",
+    "examenes",
+    "Examenes"
+  ]
+}

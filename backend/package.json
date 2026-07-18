@@ -1,0 +1,13 @@
+{
+  "name": "apuntesweb-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Generador estático de ApuntesWeb: bóvedas Obsidian → docs/",
+  "dependencies": {
+    "katex": "^0.16.11",
+    "markdown-it": "^14.1.0",
+    "markdown-it-texmath": "^1.0.0",
+    "puppeteer-core": "^23.0.0"
+  }
+}

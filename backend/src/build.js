@@ -44,6 +44,9 @@ function crearRegistro() {
 
 const enlaceCuatri = (v) => `curso-${v.curso}/cuatri-${v.cuatri}/`;
 
+// src de imagen para la web: registra la copia y devuelve la URL relativa
+const srcWeb = (rel, registrar) => (abs) => `${rel}img/${registrar(abs)}`;
+
 function tarjeta({ href, codigo, titulo, detalle }) {
   return `    <li class="tarjeta"><a href="${href}">` +
     (codigo ? `<span class="tarjeta-codigo">${escaparHtml(codigo)}</span>` : '') +
@@ -131,7 +134,7 @@ export async function construir(config, { strict = false } = {}) {
         const ctx = {
           asignatura: { slug: `curso-${v.curso}-cuatri-${v.cuatri}`, imagenes: new Map() },
           vault: v, rel, dirBase: v.ruta,
-          registrarImagen: registrador(`curso-${v.curso}-cuatri-${v.cuatri}`),
+          srcImagen: srcWeb(rel, registrador(`curso-${v.curso}-cuatri-${v.cuatri}`)),
           buscarNota: () => null,
         };
         observaciones = renderMd(v.readme, ctx, `README ${v.curso}-${v.cuatri}`);
@@ -184,7 +187,7 @@ export async function construir(config, { strict = false } = {}) {
         a.notas.forEach((n, i) => {
           const ctx = {
             asignatura: a, vault: v, rel: relAsig, dirBase: a.ruta,
-            registrarImagen: registrador(a.slug), buscarNota,
+            srcImagen: srcWeb(relAsig, registrador(a.slug)), buscarNota,
           };
           const cuerpo = renderMd(readFileSync(n.ruta, 'utf8'), ctx, `${a.nombre}/${n.archivo}`);
           const ant = a.notas[i - 1];
@@ -236,7 +239,7 @@ export async function construir(config, { strict = false } = {}) {
         ? renderMd(a.readme, {
             asignatura: { slug: `legacy-${a.slug}`, imagenes: new Map() },
             vault: { imagenesVault: new Map() }, rel, dirBase: a.ruta,
-            registrarImagen: registrador(`legacy-${a.slug}`), buscarNota: () => null,
+            srcImagen: srcWeb(rel, registrador(`legacy-${a.slug}`)), buscarNota: () => null,
           }, `1-Carrera/${a.nombre}/README.md`)
         : '<p>Sin resumen para esta asignatura.</p>';
       const listaPdfs = a.pdfs.map((abs) => {

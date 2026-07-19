@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.adrianql5.apuntesweb.diario</string>
+  <!-- Se arranca la mini-app (bundle) y no zsh directamente: el TCC de macOS
+       atribuye así todos los procesos hijos (zsh, node, git, gh, claude) a la
+       app, y basta UN permiso de acceso al Escritorio para toda la cadena. -->
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Users/adrianql5/Library/ApuntesWeb/ApuntesWebDiario.app/Contents/MacOS/applet</string>
+  </array>
+  <!-- Una vez al día a las 21:00; si el Mac estaba apagado/dormido a esa hora,
+       launchd lo ejecuta al despertar. -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Hour</key>
+    <integer>21</integer>
+    <key>Minute</key>
+    <integer>0</integer>
+  </dict>
+  <key>RunAtLoad</key>
+  <false/>
+  <key>StandardOutPath</key>
+  <string>/Users/adrianql5/Library/Logs/apuntesweb-diario.log</string>
+  <key>StandardErrorPath</key>
+  <string>/Users/adrianql5/Library/Logs/apuntesweb-diario.log</string>
+</dict>
+</plist>

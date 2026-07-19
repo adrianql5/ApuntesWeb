@@ -30,6 +30,7 @@ node backend/src/index.js pdf --solo-cambiadas
 
 # 3) Revisión de ortografía/coherencia con Claude (solo notas cambiadas)
 mkdir -p review-tmp
+rm -f review-tmp/informe.md
 log "Lanzando revisión con Claude…"
 if ! claude -p "Ejecuta la skill del proyecto revisar-apuntes: revisa las notas que devuelva 'node backend/src/index.js changed' y escribe el informe en review-tmp/informe.md con el formato de la skill." \
   --allowedTools "Bash(node backend/src/index.js changed),Read,Write" > review-tmp/claude.log 2>&1; then

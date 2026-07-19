@@ -10,4 +10,4 @@ https://adrianql5.github.io/ApuntesWeb/ vía GitHub Pages.
 - Despliegue: siempre vía PR (skill `desplegar` o `automation/pipeline.sh`); el merge
   del PR es la confirmación del usuario y dispara GitHub Actions → Pages.
 - Estructura: `backend/` (generador Node), `frontend/` (plantillas y estáticos),
-  `automation/` (watcher de Obsidian + pipeline), `plantillas/` (contenido canónico).
+  `automation/` (job diario + pipeline), `plantillas/` (contenido canónico).

@@ -2,7 +2,11 @@
 # Pipeline de publicación de ApuntesWeb:
 #   build → PDFs → revisión con Claude → rama → push → PR
 # La confirmación del usuario es el MERGE del PR desde el email de GitHub.
+# Con --dry-run hace build + revisión pero NO toca git ni crea PR (para pruebas).
 set -euo pipefail
+
+DRY_RUN=0
+[[ "${1:-}" == "--dry-run" ]] && DRY_RUN=1
 
 export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
@@ -46,6 +50,12 @@ if [[ ! -f review-tmp/informe.md ]]; then
     print -- "$CAMBIOS"
     print '```'
   } > review-tmp/informe.md
+fi
+
+if (( DRY_RUN )); then
+  log "Dry-run: build y revisión hechos; NO se registra la revisión ni se crea PR."
+  log "Informe en review-tmp/informe.md; sitio en docs/ (sirve con: python3 -m http.server -d docs)."
+  exit 0
 fi
 
 # 4) Registrar la revisión, commitear la salida y abrir PR

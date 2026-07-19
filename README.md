@@ -42,6 +42,7 @@ node backend/src/index.js build [--strict]     # genera el sitio en docs/
 node backend/src/index.js pdf [--solo-cambiadas]
 node backend/src/index.js changed [--update]   # notas modificadas desde la última revisión
 automation/pipeline.sh                         # flujo completo de publicación (¡crea PR!)
+automation/pipeline.sh --dry-run               # build + revisión SIN tocar git (pruebas)
 automation/install-daily.sh [--uninstall]      # instala el job diario de las 21:00 (launchd)
 ```
 

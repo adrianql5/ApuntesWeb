@@ -1,7 +1,7 @@
 {
   "vaults": {
     "2-1": {
-      "fecha": "2026-07-18T11:12:15.773Z",
+      "fecha": "2026-07-19T10:03:59.901Z",
       "hashes": {
         "AED/1. ÁRBOLES BINARIOS.md": "125e4a6b730c773b5d0a1e65999613a734cebec2",
         "AED/2. ESTRUCTURAS PARA BÚSQUEDA.md": "2dc7ffe18a9f58a6d16b387c0d8a61fa539b1782",
@@ -41,7 +41,7 @@
       }
     },
     "2-2": {
-      "fecha": "2026-07-18T11:12:15.775Z",
+      "fecha": "2026-07-19T10:03:59.903Z",
       "hashes": {
         "AQRCOMP/1. Sistemas Multinúcleo.md": "16bacebaf0fdc589b11186fa040f06f8e9add308",
         "AQRCOMP/2. Segmentación.md": "7ef25c0c2197520b7ab1c2c78f4c894d81748ee6",
@@ -82,7 +82,7 @@
       }
     },
     "3-1": {
-      "fecha": "2026-07-18T11:12:15.775Z",
+      "fecha": "2026-07-19T10:03:59.904Z",
       "hashes": {
         "ASR/1. Instalación de Linux Debian.md": "c18dfa35e160f960860b69eba5404740c720541c",
         "ASR/2. Instalación de Software.md": "f4b321001a6b3ed9ab66ac01304aebc3ea9d1b05",
@@ -102,7 +102,7 @@
         "COMDIS/10. Jade y Jess.md": "6053e964c96b69fb062ac64849e0bb09e1ce3bbd",
         "COMDIS/Resumen COMDIS.md": "29d67e175a632ed8a7dd691e54a74c418e6d9f67",
         "IA/1. Introducción.md": "f2f12662590e4050f28e8a097a5f19d9ffb605cf",
-        "IA/2. Búsqueda en Espacio de Estados.md": "14c42ab1212ae0a45381edf9fa439af053cb5773",
+        "IA/2. Búsqueda en Espacio de Estados.md": "759d61d1f980c40a08182b91bfcdd8e9faa27ddd",
         "IA/3. Sistemas Basados en Conocimiento.md": "4ab845160cb69b119f6d79933d0912600c640ddc",
         "IA/4. Sistemas Conexionistas.md": "e7906553462349d6ff5ca20c266687ae5fc4fb43",
         "IA/5. Aprendizaje Automático (Machine Learning).md": "ee6ce27ab5da8b16c3ba30aed3e1add724d3bc96",
@@ -119,7 +119,7 @@
       }
     },
     "3-2": {
-      "fecha": "2026-07-18T11:12:15.776Z",
+      "fecha": "2026-07-19T10:03:59.904Z",
       "hashes": {
         "CIBER/1. Introducción.md": "c9049b66b0d8490e6d339c0b317566c965ec22bb",
         "CIBER/2. Criptografía.md": "05f85a60edc24c58290103b5c0b89fb34ca5ec2c",

@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="3. Automatización de Tareas — apuntes de ASR (tercer curso de Ingeniería Informática).">
 <title>3. Automatización de Tareas · ASR · ApuntesWeb</title>
+<meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11151e" media="(prefers-color-scheme: dark)">
 <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
 <link rel="stylesheet" href="../../../css/estilos.css">
 <script>
@@ -12,19 +14,23 @@
 try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
 </script>
 </head>
-<body>
+<body data-rel="../../../">
+<a class="salto" href="#contenido">Saltar al contenido</a>
 <header class="cabecera">
   <div class="cabecera-interior">
     <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
     <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
   </div>
 </header>
 <nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">asr</a><span class="miga-sep">/</span><span aria-current="page">3-automatizacion-de-tareas</span></nav>
-<main class="principal">
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ASR"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ASR</a></p><ol><li><a href="1-instalacion-de-linux-debian.html">1. Instalación de Linux Debian</a></li><li><a href="2-instalacion-de-software.html">2. Instalación de Software</a></li><li><span class="actual" aria-current="page">3. Automatización de Tareas</span></li><li><a href="4-copias-de-seguridad.html">4. Copias de Seguridad</a></li><li><a href="5-programacion-de-scripts.html">5. Programación de Scripts</a></li><li><a href="6-actividades-administrativas-basicas.html">6. Actividades Administrativas Básicas</a></li></ol></div></aside>
+<main class="principal" id="contenido">
 <article class="nota">
   <header class="nota-encabezado">
     <p class="sello">ASR · curso 3</p>
-    <h1>3. Automatización de Tareas · ASR</h1>
+    <h1>3. Automatización de Tareas</h1>
   </header>
   <div class="prosa">
 <p>En Linux, diferenciar el &quot;cuándo&quot; se ejecuta una tarea es clave. Tenemos dos herramientas principales según nuestras necesidades:</p>
@@ -185,10 +191,19 @@ job 4 at Wed Nov 16 11:45:00 2025
 </nav>
 
 </main>
-<footer class="pie">
-  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
-  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
-</footer>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
 <script src="../../../js/app.js"></script>
 </body>
 </html>

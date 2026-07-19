@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="4. Interpretación y Análisis de la información financiera — apuntes de XEFE (segundo curso de Ingeniería Informática).">
 <title>4. Interpretación y Análisis de la información financiera · XEFE · ApuntesWeb</title>
+<meta name="theme-color" content="#faf9f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11151e" media="(prefers-color-scheme: dark)">
 <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
 <link rel="stylesheet" href="../../../css/estilos.css">
 <script>
@@ -12,19 +14,23 @@
 try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
 </script>
 </head>
-<body>
+<body data-rel="../../../">
+<a class="salto" href="#contenido">Saltar al contenido</a>
 <header class="cabecera">
   <div class="cabecera-interior">
     <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
     <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
   </div>
 </header>
 <nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">xefe</a><span class="miga-sep">/</span><span aria-current="page">4-interpretacion-y-analisis-de-la-informacion-financiera</span></nav>
-<main class="principal">
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de XEFE"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">XEFE</a></p><ol><li><a href="1-introduccion-a-la-actividad-economica-y-empresarial.html">1. Introducción a la actividad económica y empresarial</a></li><li><a href="2-creacion-de-empresas-de-la-generacion-de-ideas-al-business-plan.html">2. Creación de empresas, de la generación de ideas al Business Plan</a></li><li><a href="3-la-informacion-financiera-como-base-para-la-toma-de-decisiones.html">3. La Información Financiera como Base para la toma de Decisiones.</a></li><li><span class="actual" aria-current="page">4. Interpretación y Análisis de la información financiera</span></li><li><a href="5-fundamentos-del-calculo-financiero.html">5. Fundamentos del Calculo Financiero</a></li><li><a href="6-evaluacion-y-seleccion-de-proyectos.html">6. Evaluación y Selección de Proyectos</a></li><li><a href="7-fuentes-de-financiacion-de-la-empresa.html">7. Fuentes de Financiación de la Empresa</a></li></ol></div></aside>
+<main class="principal" id="contenido">
 <article class="nota">
   <header class="nota-encabezado">
     <p class="sello">XEFE · curso 2</p>
-    <h1>4. Interpretación y Análisis de la información financiera · XEFE</h1>
+    <h1>4. Interpretación y Análisis de la información financiera</h1>
   </header>
   <div class="prosa">
 <div class="callout callout-nota">
@@ -221,10 +227,19 @@ El análisis de **porcentajes horizontales** permite evaluar la evolución de di
 </nav>
 
 </main>
-<footer class="pie">
-  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
-  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
-</footer>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
 <script src="../../../js/app.js"></script>
 </body>
 </html>

@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, rmSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, rmSync, existsSync, writeFileSync } from 'node:fs';
 import { join, extname, basename } from 'node:path';
 import { escanearTodo } from './scanner.js';
 import { escanearLegacy } from './legacy.js';
@@ -47,6 +47,17 @@ const enlaceCuatri = (v) => `curso-${v.curso}/cuatri-${v.cuatri}/`;
 // src de imagen para la web: registra la copia y devuelve la URL relativa
 const srcWeb = (rel, registrar) => (abs) => `${rel}img/${registrar(abs)}`;
 
+// Apartados (h1–h3) de una nota markdown, para el índice del buscador
+function extraerApartados(texto) {
+  const apartados = [];
+  for (const m of texto.matchAll(/^#{1,3}[ \t]+(.+)$/gm)) {
+    const limpio = m[1].replace(/[*_`]|\[\[|\]\]/g, '').trim();
+    if (limpio) apartados.push(limpio);
+    if (apartados.length >= 40) break;
+  }
+  return apartados;
+}
+
 function tarjeta({ href, codigo, titulo, detalle }) {
   return `    <li class="tarjeta"><a href="${href}">` +
     (codigo ? `<span class="tarjeta-codigo">${escaparHtml(codigo)}</span>` : '') +
@@ -61,6 +72,7 @@ export async function construir(config, { strict = false } = {}) {
   const md = crearMarkdown();
   const { registro, registrador } = crearRegistro();
   const sinResolver = [];
+  const indiceBusqueda = [];
   let paginas = 0;
 
   limpiar(config);
@@ -155,6 +167,14 @@ export async function construir(config, { strict = false } = {}) {
         observaciones,
       });
 
+      indiceBusqueda.push({
+        t: `Observaciones · ${nombreCuatri(v.cuatri)} de ${ORDINAL_CURSO[v.curso]?.toLowerCase()}`,
+        a: 'observaciones',
+        c: `curso ${v.curso} · cuatrimestre ${v.cuatri}`,
+        u: `${enlaceCuatri(v)}index.html`,
+        h: v.readme ? extraerApartados(v.readme) : [],
+      });
+
       // ---------- Asignaturas ----------
       for (const a of v.asignaturas) {
         const relAsig = '../../../';
@@ -163,6 +183,13 @@ export async function construir(config, { strict = false } = {}) {
           const numero = n.orden !== null ? String(n.orden) : '·';
           return `    <li><a href="${n.slug}.html"><span class="nota-numero">${numero}</span>` +
             `<span class="nota-titulo">${escaparHtml(n.titulo.replace(/^\d+\.\s*/, ''))}</span></a></li>`;
+        });
+        indiceBusqueda.push({
+          t: a.nombre,
+          a: a.nombre,
+          c: `asignatura · curso ${v.curso} · cuatrimestre ${v.cuatri}`,
+          u: `${enlaceCuatri(v)}${a.slug}/index.html`,
+          h: [],
         });
         pagina(`${enlaceCuatri(v)}${a.slug}/index.html`, 'asignatura', {
           rel: relAsig, titulo: a.nombre,
@@ -184,16 +211,35 @@ export async function construir(config, { strict = false } = {}) {
           const objetivo = nombre.replace(/\.md$/i, '').toLowerCase();
           return a.notas.find((n) => n.titulo.toLowerCase() === objetivo) ?? null;
         };
+        // Sidebar con todos los temas de la asignatura (se marca el actual por nota)
+        const itemLateral = (m, actual) => actual
+          ? `<li><span class="actual" aria-current="page">${escaparHtml(m.titulo)}</span></li>`
+          : `<li><a href="${m.slug}.html">${escaparHtml(m.titulo)}</a></li>`;
+
         a.notas.forEach((n, i) => {
           const ctx = {
             asignatura: a, vault: v, rel: relAsig, dirBase: a.ruta,
             srcImagen: srcWeb(relAsig, registrador(a.slug)), buscarNota,
           };
-          const cuerpo = renderMd(readFileSync(n.ruta, 'utf8'), ctx, `${a.nombre}/${n.archivo}`);
+          const fuente = readFileSync(n.ruta, 'utf8');
+          const cuerpo = renderMd(fuente, ctx, `${a.nombre}/${n.archivo}`);
+          indiceBusqueda.push({
+            t: n.titulo,
+            a: a.nombre,
+            c: `${a.nombre} · curso ${v.curso} · cuatrimestre ${v.cuatri}`,
+            u: `${enlaceCuatri(v)}${a.slug}/${n.slug}.html`,
+            h: extraerApartados(fuente),
+          });
           const ant = a.notas[i - 1];
           const sig = a.notas[i + 1];
+          const lateral =
+            `<aside class="lateral" aria-label="Temas de ${escaparHtml(a.nombre)}"><div class="lateral-interior">` +
+            `<p class="lateral-titulo"><a href="index.html">${escaparHtml(a.nombre)}</a></p>` +
+            `<ol>${a.notas.map((m) => itemLateral(m, m.slug === n.slug)).join('')}</ol>` +
+            `</div></aside>`;
           pagina(`${enlaceCuatri(v)}${a.slug}/${n.slug}.html`, 'nota', {
-            rel: relAsig, titulo: `${n.titulo} · ${a.nombre}`,
+            lateral, claseDisposicion: ' con-lateral',
+            rel: relAsig, titulo: `${n.titulo} · ${a.nombre}`, encabezado: n.titulo,
             descripcion: `${n.titulo} — apuntes de ${a.nombre} (${ORDINAL_CURSO[v.curso]?.toLowerCase()} de Ingeniería Informática).`,
             sello: `${a.nombre} · curso ${v.curso}`,
             migas: migas([
@@ -249,6 +295,13 @@ export async function construir(config, { strict = false } = {}) {
         pdfsLegacy++;
         return `<li><a href="${nombrePdf}" download>${escaparHtml(basename(abs))}</a></li>`;
       });
+      indiceBusqueda.push({
+        t: a.nombre,
+        a: a.nombre,
+        c: `curso ${legacy.curso} · material legado`,
+        u: `curso-${legacy.curso}/${a.slug}/index.html`,
+        h: a.readme ? extraerApartados(a.readme) : [],
+      });
       pagina(`curso-${legacy.curso}/${a.slug}/index.html`, 'asignatura', {
         rel, titulo: a.nombre,
         descripcion: `Material de ${a.nombre} (primer curso): resumen y PDFs.`,
@@ -269,6 +322,7 @@ export async function construir(config, { strict = false } = {}) {
   }
 
   // ---------- Recursos ----------
+  writeFileSync(join(config.rutaSalida, 'buscador.json'), JSON.stringify(indiceBusqueda));
   const nImagenes = copiarImagenes(config, registro);
   copiarEstaticos(config);
   copiarKatex(config);

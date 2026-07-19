@@ -239,7 +239,11 @@ export async function construir(config, { strict = false } = {}) {
             `</div></aside>`;
           pagina(`${enlaceCuatri(v)}${a.slug}/${n.slug}.html`, 'nota', {
             lateral, claseDisposicion: ' con-lateral',
-            rel: relAsig, titulo: `${n.titulo} · ${a.nombre}`, encabezado: n.titulo,
+            rel: relAsig, titulo: `${n.titulo} · ${a.nombre}`,
+            encabezado: n.titulo.replace(/^\d+\.\s*/, ''),
+            fichaAsignatura: a.nombre,
+            fichaCurso: `${v.curso}.º · C${v.cuatri}`,
+            fichaTema: n.orden !== null ? `${n.orden} / ${a.notas.filter((x) => x.orden !== null).length}` : '—',
             descripcion: `${n.titulo} — apuntes de ${a.nombre} (${ORDINAL_CURSO[v.curso]?.toLowerCase()} de Ingeniería Informática).`,
             sello: `${a.nombre} · curso ${v.curso}`,
             migas: migas([

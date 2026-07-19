@@ -1,7 +1,7 @@
 {
   "vaults": {
     "2-1": {
-      "fecha": "2026-07-19T10:42:37.901Z",
+      "fecha": "2026-07-19T11:39:25.222Z",
       "hashes": {
         "AED/1. ÁRBOLES BINARIOS.md": "125e4a6b730c773b5d0a1e65999613a734cebec2",
         "AED/2. ESTRUCTURAS PARA BÚSQUEDA.md": "2dc7ffe18a9f58a6d16b387c0d8a61fa539b1782",
@@ -38,11 +38,11 @@
         "SISTEMAS OPERATIVOS/3. Memoria.md": "e0d48ea37ca4a34f1dcadfa79e4c474b5948b502",
         "SISTEMAS OPERATIVOS/4. Sistema de Archivos.md": "bcfd44d706cbcaa42d70140ff7fd156f90beae81",
         "SISTEMAS OPERATIVOS/5. Entrada-Salida.md": "5f0e8a879df7a3830aaa91cb0d58ede4d05afffb",
-        "README.md": "5acbd573424bd1ee2f23550406df6529e3d1b9f1"
+        "README.md": "7d20c23b26d22ab477296ba9c516169c04497c47"
       }
     },
     "2-2": {
-      "fecha": "2026-07-19T10:42:37.903Z",
+      "fecha": "2026-07-19T11:39:25.230Z",
       "hashes": {
         "AQRCOMP/1. Sistemas Multinúcleo.md": "16bacebaf0fdc589b11186fa040f06f8e9add308",
         "AQRCOMP/2. Segmentación.md": "7ef25c0c2197520b7ab1c2c78f4c894d81748ee6",
@@ -80,11 +80,11 @@
         "XEFE/5. Fundamentos del Calculo Financiero.md": "dbd1fac7c79bb7849653e52cd1a42d2eff0da328",
         "XEFE/6. Evaluación y Selección de Proyectos.md": "f1fe8a7fc3e42be72b14b123ca45671955174ae7",
         "XEFE/7. Fuentes de Financiación de la Empresa.md": "9ebfad13a22e689169af99c36a9c0b0978b151fc",
-        "README.md": "9ab7c275c333bc07c88562169499196b48227996"
+        "README.md": "a0b87b26899919ae43c0a9cd895490201f229d46"
       }
     },
     "3-1": {
-      "fecha": "2026-07-19T10:42:37.904Z",
+      "fecha": "2026-07-19T11:39:25.231Z",
       "hashes": {
         "ASR/1. Instalación de Linux Debian.md": "c18dfa35e160f960860b69eba5404740c720541c",
         "ASR/2. Instalación de Software.md": "f4b321001a6b3ed9ab66ac01304aebc3ea9d1b05",
@@ -122,7 +122,7 @@
       }
     },
     "3-2": {
-      "fecha": "2026-07-19T10:42:37.904Z",
+      "fecha": "2026-07-19T11:39:25.231Z",
       "hashes": {
         "CIBER/1. Introducción.md": "c9049b66b0d8490e6d339c0b317566c965ec22bb",
         "CIBER/2. Criptografía.md": "05f85a60edc24c58290103b5c0b89fb34ca5ec2c",
@@ -151,7 +151,7 @@
       }
     },
     "legacy": {
-      "fecha": "2026-07-19T10:42:37.904Z",
+      "fecha": "2026-07-19T11:39:25.231Z",
       "hashes": {
         "Algebra/README.md": "cb0a10e15606ee89eac28d25f3ad9ed336044f92",
         "Calculo/README.md": "aa67f3533d3776381d2e91c7575eebaa509b8a13",

@@ -1,7 +1,7 @@
 {
   "vaults": {
     "2-1": {
-      "fecha": "2026-07-19T10:03:59.901Z",
+      "fecha": "2026-07-19T11:20:57.062Z",
       "hashes": {
         "AED/1. ÁRBOLES BINARIOS.md": "125e4a6b730c773b5d0a1e65999613a734cebec2",
         "AED/2. ESTRUCTURAS PARA BÚSQUEDA.md": "2dc7ffe18a9f58a6d16b387c0d8a61fa539b1782",
@@ -37,11 +37,12 @@
         "SISTEMAS OPERATIVOS/2. Procesos e Hilos.md": "337b8e73f55ea7c5d0368e4ce18f956d33f451ed",
         "SISTEMAS OPERATIVOS/3. Memoria.md": "e0d48ea37ca4a34f1dcadfa79e4c474b5948b502",
         "SISTEMAS OPERATIVOS/4. Sistema de Archivos.md": "bcfd44d706cbcaa42d70140ff7fd156f90beae81",
-        "SISTEMAS OPERATIVOS/5. Entrada-Salida.md": "5f0e8a879df7a3830aaa91cb0d58ede4d05afffb"
+        "SISTEMAS OPERATIVOS/5. Entrada-Salida.md": "5f0e8a879df7a3830aaa91cb0d58ede4d05afffb",
+        "README.md": "7d20c23b26d22ab477296ba9c516169c04497c47"
       }
     },
     "2-2": {
-      "fecha": "2026-07-19T10:03:59.903Z",
+      "fecha": "2026-07-19T11:20:57.068Z",
       "hashes": {
         "AQRCOMP/1. Sistemas Multinúcleo.md": "16bacebaf0fdc589b11186fa040f06f8e9add308",
         "AQRCOMP/2. Segmentación.md": "7ef25c0c2197520b7ab1c2c78f4c894d81748ee6",
@@ -78,11 +79,12 @@
         "XEFE/4. Interpretación y Análisis de la información financiera.md": "6ed9b6b5fe5502f74cceacebb6ba82f49a18819e",
         "XEFE/5. Fundamentos del Calculo Financiero.md": "dbd1fac7c79bb7849653e52cd1a42d2eff0da328",
         "XEFE/6. Evaluación y Selección de Proyectos.md": "f1fe8a7fc3e42be72b14b123ca45671955174ae7",
-        "XEFE/7. Fuentes de Financiación de la Empresa.md": "9ebfad13a22e689169af99c36a9c0b0978b151fc"
+        "XEFE/7. Fuentes de Financiación de la Empresa.md": "9ebfad13a22e689169af99c36a9c0b0978b151fc",
+        "README.md": "a0b87b26899919ae43c0a9cd895490201f229d46"
       }
     },
     "3-1": {
-      "fecha": "2026-07-19T10:03:59.904Z",
+      "fecha": "2026-07-19T11:20:57.069Z",
       "hashes": {
         "ASR/1. Instalación de Linux Debian.md": "c18dfa35e160f960860b69eba5404740c720541c",
         "ASR/2. Instalación de Software.md": "f4b321001a6b3ed9ab66ac01304aebc3ea9d1b05",
@@ -115,11 +117,12 @@
         "TALF/5. Autómatas con Pila.md": "f3dfe2cda5b3c259cfda220c79792d80d3afa954",
         "TALF/6. Máquinas de Turing.md": "7b94986b664d10b9f2007ee5349681242e15deb5",
         "TALF/7. Gramáticas GSC Y GSR.md": "0e5dc975ba9faeb767da038ad23342813fe9dcbf",
-        "TALF/8. Decibilidad y Complejidad.md": "03469ea6d1d3a05a4156ad42a5330a2cdb340877"
+        "TALF/8. Decibilidad y Complejidad.md": "03469ea6d1d3a05a4156ad42a5330a2cdb340877",
+        "README.md": "1858281ddc3f3b6fc344d8585f49309693e0e3a5"
       }
     },
     "3-2": {
-      "fecha": "2026-07-19T10:03:59.904Z",
+      "fecha": "2026-07-19T11:20:57.070Z",
       "hashes": {
         "CIBER/1. Introducción.md": "c9049b66b0d8490e6d339c0b317566c965ec22bb",
         "CIBER/2. Criptografía.md": "05f85a60edc24c58290103b5c0b89fb34ca5ec2c",
@@ -143,7 +146,23 @@
         "SEGINFO/2. SGSI Análisis y gestión de riesgos.md": "aa0dd0736669e873d23dfb110fa4a614ff91fc1e",
         "SEGINFO/3. Políticas de seguridad y estándares.md": "f61420ec5f3d7d5f35b33424f95edbee33130167",
         "SEGINFO/4. Fundamentos jurídicos básicos.md": "740299fc723522f6ba10d4657c4b8405382f2d7c",
-        "SEGINFO/5. Protección de datos RGPD y LOPDGDD.md": "ad566dc76bf15c3e8a6b55cee0138b80d4919054"
+        "SEGINFO/5. Protección de datos RGPD y LOPDGDD.md": "ad566dc76bf15c3e8a6b55cee0138b80d4919054",
+        "README.md": "dbae4acaf0c59406a758780aaf52ba3722a3dd04"
+      }
+    },
+    "legacy": {
+      "fecha": "2026-07-19T11:20:57.070Z",
+      "hashes": {
+        "Algebra/README.md": "cb0a10e15606ee89eac28d25f3ad9ed336044f92",
+        "Calculo/README.md": "aa67f3533d3776381d2e91c7575eebaa509b8a13",
+        "Discreta/README.md": "36f39b16b7830c9cbc256ea3f600d08afe41236d",
+        "Estadística/README.md": "4fd555a102af61d7dec36d9efe66b3966c06ee43",
+        "FundComp/README.md": "da8465ffeecff77b6281a905b74b7e9cf1427184",
+        "FundMat/README.md": "008b4a30311476ac5444c65e4056f3870d81f834",
+        "FUTFI/README.md": "c8d0f6b17ed65e37b300f2e22eafc5a6ae505d94",
+        "Programación-I/README.md": "5856ac82b1dd68d18ad4a8da2a51edd7ca18f3ba",
+        "Programacion-II/README.md": "8e2a09811764464fa6bf339da82990d9d813d46c",
+        "SistemasDigitales/README.md": "6691947cd7cf47d78e95717fface8e8899fe5e5e"
       }
     }
   }

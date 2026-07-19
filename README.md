@@ -44,6 +44,11 @@ automation/pipeline.sh                         # flujo completo de publicación 
 automation/install-watcher.sh [--uninstall]    # instala el watcher de Obsidian (launchd)
 ```
 
+> **Requisito del watcher (macOS):** el Escritorio está protegido por TCC, así que
+> `/bin/zsh` necesita *Acceso total al disco* (Ajustes del Sistema → Privacidad y
+> seguridad) para que launchd pueda ejecutar el script y leer las bóvedas. Si el
+> log muestra `can't open input file`, es esto.
+
 Skills de Claude Code del proyecto: `revisar-apuntes`, `construir`, `desplegar`,
 `normalizar-readme` (+ `frontend-design` instalada del marketplace oficial).
 

@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="5. Servlets — apuntes de DAW (tercer curso de Ingeniería Informática).">
 <title>5. Servlets · DAW · ApuntesWeb</title>
+<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141517" media="(prefers-color-scheme: dark)">
 <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
 <link rel="stylesheet" href="../../../css/estilos.css">
 <script>
@@ -12,19 +14,27 @@
 try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
 </script>
 </head>
-<body>
+<body data-rel="../../../">
+<a class="salto" href="#contenido">Saltar al contenido</a>
 <header class="cabecera">
   <div class="cabecera-interior">
     <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
     <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
   </div>
 </header>
 <nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-3</a><span class="miga-sep">/</span><a href="../index.html">cuatri-2</a><span class="miga-sep">/</span><a href="index.html">daw</a><span class="miga-sep">/</span><span aria-current="page">5-servlets</span></nav>
-<main class="principal">
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de DAW"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">DAW</a></p><ol><li><a href="1-introduccion.html">1. Introducción</a></li><li><a href="2-html.html">2. HTML</a></li><li><a href="3-css-y-diseno-responsivo.html">3. CSS y Diseño Responsivo</a></li><li><a href="4-javascript.html">4. JavaScript</a></li><li><span class="actual" aria-current="page">5. Servlets</span></li><li><a href="6-jsp.html">6. JSP</a></li><li><a href="glosariomasticado.html">GlosarioMasticado</a></li><li><a href="preguntas.html">Preguntas</a></li></ol></div></aside>
+<main class="principal" id="contenido">
 <article class="nota">
-  <header class="nota-encabezado">
-    <p class="sello">DAW · curso 3</p>
-    <h1>5. Servlets · DAW</h1>
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>DAW</div>
+      <div><span class="ficha-etiqueta">Curso</span>3.º · C2</div>
+      <div><span class="ficha-etiqueta">Tema</span>5 / 6</div>
+    </div>
+    <h1>Servlets</h1>
   </header>
   <div class="prosa">
 <h2>5.1 Aplicaciones web en Java</h2>
@@ -1089,10 +1099,19 @@ if (session != null) session.invalidate();
 </nav>
 
 </main>
-<footer class="pie">
-  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
-  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
-</footer>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
 <script src="../../../js/app.js"></script>
 </body>
 </html>

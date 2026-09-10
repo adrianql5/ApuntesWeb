@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="2. Clases y tipos de datos — apuntes de POO (segundo curso de Ingeniería Informática).">
 <title>2. Clases y tipos de datos · POO · ApuntesWeb</title>
+<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141517" media="(prefers-color-scheme: dark)">
 <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
 <link rel="stylesheet" href="../../../css/estilos.css">
 <script>
@@ -12,19 +14,27 @@
 try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
 </script>
 </head>
-<body>
+<body data-rel="../../../">
+<a class="salto" href="#contenido">Saltar al contenido</a>
 <header class="cabecera">
   <div class="cabecera-interior">
     <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
     <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
   </div>
 </header>
 <nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-2</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">poo</a><span class="miga-sep">/</span><span aria-current="page">2-clases-y-tipos-de-datos</span></nav>
-<main class="principal">
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de POO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">POO</a></p><ol><li><a href="1-encapsulacion.html">1. Encapsulación</a></li><li><span class="actual" aria-current="page">2. Clases y tipos de datos</span></li><li><a href="3-conjuntos-de-datos.html">3. Conjuntos de datos</a></li><li><a href="4-herencia.html">4. Herencia</a></li><li><a href="5-polimorfismo.html">5. Polimorfismo</a></li><li><a href="6-interfaces.html">6. Interfaces</a></li><li><a href="7-excepciones.html">7. Excepciones</a></li><li><a href="protips-para-el-final.html">Protips para el Final</a></li></ol></div></aside>
+<main class="principal" id="contenido">
 <article class="nota">
-  <header class="nota-encabezado">
-    <p class="sello">POO · curso 2</p>
-    <h1>2. Clases y tipos de datos · POO</h1>
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>POO</div>
+      <div><span class="ficha-etiqueta">Curso</span>2.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>2 / 7</div>
+    </div>
+    <h1>Clases y tipos de datos</h1>
   </header>
   <div class="prosa">
 <p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
@@ -381,10 +391,19 @@ public boolean equals(Object obj) {
 </nav>
 
 </main>
-<footer class="pie">
-  <p>Apuntes personales de Ingeniería Informática · escritos en Obsidian, publicados con un generador propio.</p>
-  <p><a href="https://github.com/adrianql5/ApuntesWeb">Código en GitHub</a></p>
-</footer>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
 <script src="../../../js/app.js"></script>
 </body>
 </html>

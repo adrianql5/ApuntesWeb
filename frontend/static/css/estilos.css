@@ -1,90 +1,98 @@
-/* ApuntesWeb — "manual técnico"
-   Tesis: los apuntes como ficha técnica de ingeniería: plano, preciso, sin adornos.
-   Firma: la ficha de datos (asignatura / curso / tema) que abre cada nota.
-   Paleta: gris frío #f3f3f1 · tinta #16181d · acento industrial #d34e00 · líneas #d9d9d4
-   Tipos: IBM Plex Sans (títulos/UI) · IBM Plex Serif (lectura) · IBM Plex Mono (datos/código) */
+/* ApuntesWeb — "editorial atlántico"
+   Tesis: una revista técnica escrita en Compostela: papel cálido, tinta granito,
+   verde-azul atlántico y un ocre de liquen. Titulares con carácter, lectura serena.
+   Firma: la ficha de datos que abre cada nota y la lluvia de símbolos de la portada.
+   Tipos: Fraunces (titulares) · Newsreader (lectura) · JetBrains Mono (datos/código) */
 
 /* ---------- Fuentes autoalojadas ---------- */
 @font-face {
-  font-family: "IBM Plex Sans";
-  src: url("../fonts/ibm-plex-sans-v23-latin-500.woff2") format("woff2");
-  font-weight: 500; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: "IBM Plex Sans";
-  src: url("../fonts/ibm-plex-sans-v23-latin-700.woff2") format("woff2");
-  font-weight: 700; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: "IBM Plex Serif";
-  src: url("../fonts/ibm-plex-serif-v20-latin-regular.woff2") format("woff2");
-  font-weight: 400; font-style: normal; font-display: swap;
-}
-@font-face {
-  font-family: "IBM Plex Serif";
-  src: url("../fonts/ibm-plex-serif-v20-latin-italic.woff2") format("woff2");
-  font-weight: 400; font-style: italic; font-display: swap;
-}
-@font-face {
-  font-family: "IBM Plex Serif";
-  src: url("../fonts/ibm-plex-serif-v20-latin-600.woff2") format("woff2");
+  font-family: "Fraunces";
+  src: url("../fonts/fraunces-latin-600.woff2") format("woff2");
   font-weight: 600; font-style: normal; font-display: swap;
 }
 @font-face {
-  font-family: "IBM Plex Mono";
-  src: url("../fonts/ibm-plex-mono-v20-latin-regular.woff2") format("woff2");
+  font-family: "Fraunces";
+  src: url("../fonts/fraunces-latin-italic-400.woff2") format("woff2");
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Newsreader";
+  src: url("../fonts/newsreader-latin-400.woff2") format("woff2");
   font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
-  font-family: "IBM Plex Mono";
-  src: url("../fonts/ibm-plex-mono-v20-latin-600.woff2") format("woff2");
+  font-family: "Newsreader";
+  src: url("../fonts/newsreader-latin-italic-400.woff2") format("woff2");
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: "Newsreader";
+  src: url("../fonts/newsreader-latin-600.woff2") format("woff2");
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/jetbrains-mono-latin-400.woff2") format("woff2");
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/jetbrains-mono-latin-600.woff2") format("woff2");
   font-weight: 600; font-style: normal; font-display: swap;
 }
 
 /* ---------- Tokens ---------- */
 :root {
-  --fondo: #f3f3f1;
-  --superficie: #ffffff;
-  --tinta: #16181d;
-  --tinta-suave: #434852;
-  --gris: #71767f;
-  --acento: #d34e00;
+  --fondo: #f4f1ea;          /* papel */
+  --superficie: #fbfaf6;
+  --tinta: #23262b;          /* granito */
+  --tinta-suave: #474c54;
+  --gris: #676b72;
+  --acento: #0f6b6b;         /* atlántico */
   --acento-tinta: #ffffff;
-  --linea: #d9d9d4;
-  --linea-fuerte: #16181d;
-  --sombra-modal: 0 16px 48px rgba(10, 12, 16, 0.28);
+  --acento-2: #b0751c;       /* liquen / ocre (decorativo) */
+  --acento-velo: rgba(15, 107, 107, 0.08);
+  --linea: #dcd6c8;
+  --linea-fuerte: #23262b;
+  --sombra-modal: 0 16px 48px rgba(20, 24, 28, 0.25);
 
-  --sans: "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-  --serif: "IBM Plex Serif", Georgia, "Times New Roman", serif;
-  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --display: "Fraunces", Georgia, "Times New Roman", serif;
+  --serif: "Newsreader", Georgia, "Times New Roman", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   --ancho-lectura: 47rem;
   --ancho-lateral: 15rem;
 }
 
+/* Noche en Compostela: pizarra mojada y farolas turquesa */
 [data-tema="oscuro"] {
-  --fondo: #141517;
-  --superficie: #1d1f23;
-  --tinta: #ececed;
-  --tinta-suave: #b9bcc3;
-  --gris: #878c96;
-  --acento: #ff8a3d;
-  --acento-tinta: #141517;
-  --linea: #2e3138;
-  --linea-fuerte: #ececed;
+  --fondo: #11171c;
+  --superficie: #182028;
+  --tinta: #e9e6de;
+  --tinta-suave: #b9bdc1;
+  --gris: #8f979e;
+  --acento: #5cc8bf;
+  --acento-tinta: #11171c;
+  --acento-2: #e0a84e;
+  --acento-velo: rgba(92, 200, 191, 0.1);
+  --linea: #28333c;
+  --linea-fuerte: #e9e6de;
   --sombra-modal: 0 16px 48px rgba(0, 0, 0, 0.55);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-tema="claro"]) {
-    --fondo: #141517;
-    --superficie: #1d1f23;
-    --tinta: #ececed;
-    --tinta-suave: #b9bcc3;
-    --gris: #878c96;
-    --acento: #ff8a3d;
-    --acento-tinta: #141517;
-    --linea: #2e3138;
-    --linea-fuerte: #ececed;
+    --fondo: #11171c;
+    --superficie: #182028;
+    --tinta: #e9e6de;
+    --tinta-suave: #b9bdc1;
+    --gris: #8f979e;
+    --acento: #5cc8bf;
+    --acento-tinta: #11171c;
+    --acento-2: #e0a84e;
+    --acento-velo: rgba(92, 200, 191, 0.1);
+    --linea: #28333c;
+    --linea-fuerte: #e9e6de;
     --sombra-modal: 0 16px 48px rgba(0, 0, 0, 0.55);
   }
 }
@@ -109,6 +117,7 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
 }
 
 a { color: var(--acento); text-decoration-thickness: 1px; text-underline-offset: 3px; }
@@ -122,7 +131,7 @@ img { max-width: 100%; height: auto; }
 mark {
   background: none;
   color: inherit;
-  border-bottom: 3px solid var(--acento);
+  border-bottom: 3px solid var(--acento-2);
   padding-bottom: 0.04em;
 }
 
@@ -202,7 +211,19 @@ kbd {
   color: var(--tinta);
   cursor: pointer;
 }
-#boton-tema:hover { border-color: var(--tinta); }
+#boton-tema:hover, #boton-atajos:hover { border-color: var(--tinta); }
+#boton-atajos {
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  background: var(--superficie);
+  border: 1px solid var(--linea);
+  border-radius: 2px;
+  width: 2.1rem;
+  height: 2.1rem;
+  color: var(--tinta);
+  cursor: pointer;
+}
+@media (pointer: coarse) { #boton-atajos { display: none; } }
 
 /* ---------- Migas ---------- */
 .migas {
@@ -296,11 +317,11 @@ kbd {
 /* ---------- Portada y encabezados ---------- */
 .portada { padding: 3rem 0 1.5rem; }
 .portada h1 {
-  font-family: var(--sans);
-  font-weight: 700;
+  font-family: var(--display);
+  font-weight: 600;
   font-size: clamp(2rem, 5vw, 3rem);
   line-height: 1.1;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
   margin: 0.35em 0;
   text-wrap: balance;
 }
@@ -323,8 +344,8 @@ kbd {
 
 .encabezado-seccion { padding: 1.9rem 0 0.75rem; }
 .encabezado-seccion h1 {
-  font-family: var(--sans);
-  font-weight: 700;
+  font-family: var(--display);
+  font-weight: 600;
   font-size: clamp(1.6rem, 4vw, 2.3rem);
   letter-spacing: -0.015em;
   line-height: 1.12;
@@ -358,8 +379,8 @@ kbd {
   letter-spacing: 0.14em;
 }
 .ficha h1 {
-  font-family: var(--sans);
-  font-weight: 700;
+  font-family: var(--display);
+  font-weight: 600;
   font-size: clamp(1.5rem, 3.5vw, 2.1rem);
   letter-spacing: -0.015em;
   line-height: 1.15;
@@ -398,8 +419,8 @@ kbd {
   margin-bottom: 0.5rem;
 }
 .tarjeta h2, .tarjeta h3 {
-  font-family: var(--sans);
-  font-weight: 700;
+  font-family: var(--display);
+  font-weight: 600;
   font-size: 1.08rem;
   letter-spacing: -0.01em;
   margin: 0 0 0.3rem;
@@ -435,7 +456,7 @@ kbd {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
-.nota-titulo { font-family: var(--sans); font-weight: 500; font-size: 1.02rem; }
+.nota-titulo { font-family: var(--serif); font-size: 1.12rem; }
 
 .boton {
   display: inline-block;
@@ -456,8 +477,8 @@ kbd {
 /* ---------- Observaciones ---------- */
 .observaciones { margin-top: 3.5rem; }
 .observaciones-titulo {
-  font-family: var(--sans);
-  font-weight: 700;
+  font-family: var(--display);
+  font-weight: 600;
   font-size: 1.35rem;
   letter-spacing: -0.01em;
 }
@@ -469,8 +490,9 @@ kbd {
   line-height: 1.72;
 }
 .prosa h1, .prosa h2, .prosa h3, .prosa h4 {
-  font-family: var(--sans);
-  font-weight: 700;
+  font-family: var(--display);
+  font-weight: 600;
+  scroll-margin-top: 4.5rem;
   letter-spacing: -0.012em;
   line-height: 1.22;
   margin: 1.7em 0 0.5em;
@@ -636,7 +658,7 @@ kbd {
   background: var(--fondo);
   border-left-color: var(--acento);
 }
-.res-titulo { font-family: var(--sans); font-weight: 500; }
+.res-titulo { font-family: var(--serif); font-weight: 600; }
 .res-contexto {
   display: block;
   font-family: var(--mono);
@@ -659,9 +681,191 @@ kbd {
   color: var(--gris);
 }
 
+/* ---------- Portada: lluvia de símbolos ----------
+   El canvas lo inserta app.js; sin JS la portada es solo texto. */
+.portada { position: relative; isolation: isolate; }
+.lluvia {
+  position: absolute;
+  z-index: -1;
+  inset: -1.25rem calc(50% - 50vw) 0;
+  width: 100vw;
+  height: calc(100% + 1.25rem);
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+          mask-image: linear-gradient(to bottom, #000 55%, transparent);
+}
+.portada .sello::before {
+  content: "";
+  display: inline-block;
+  width: 1.6rem;
+  height: 2px;
+  background: var(--acento-2);
+  vertical-align: middle;
+  margin-right: 0.6rem;
+}
+
+/* ---------- Recorrido (cursos como línea temporal) ---------- */
+.recorrido {
+  list-style: none;
+  margin: 2rem 0 1rem;
+  padding: 0;
+  position: relative;
+}
+.recorrido::before {
+  content: "";
+  position: absolute;
+  left: 0.55rem;
+  top: 0.9rem;
+  bottom: 0.9rem;
+  border-left: 2px dotted var(--linea);
+}
+.recorrido li { position: relative; padding-left: 2.4rem; }
+.recorrido li::before {
+  content: "";
+  position: absolute;
+  left: 0.15rem;
+  top: 1.45rem;
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: var(--fondo);
+  border: 2px solid var(--acento);
+}
+.recorrido li:last-child::before { background: var(--acento); box-shadow: 0 0 0 4px var(--acento-velo); }
+.recorrido a {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: baseline;
+  gap: 0.2rem 1rem;
+  padding: 0.9rem 1rem;
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--linea);
+  transition: background-color 0.15s;
+}
+.recorrido a:hover { background: var(--acento-velo); }
+.recorrido h2 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 1.35rem;
+  margin: 0;
+  line-height: 1.2;
+}
+.recorrido a:hover h2 { color: var(--acento); }
+.recorrido-codigo {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  color: var(--gris);
+  grid-column: 2;
+  grid-row: 1;
+}
+.recorrido p { margin: 0; color: var(--gris); font-size: 0.9rem; grid-column: 1 / -1; }
+.recorrido-barra {
+  grid-column: 1 / -1;
+  height: 3px;
+  background: var(--linea);
+  margin-top: 0.35rem;
+}
+.recorrido-barra span { display: block; height: 100%; background: var(--acento-2); }
+
+/* ---------- Progreso de lectura ---------- */
+.progreso {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 20;
+  background: var(--acento);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  pointer-events: none;
+}
+
+/* ---------- Índice del tema (generado por app.js) ---------- */
+.toc { margin-top: 1.6rem; }
+.toc ol { font-size: 0.8rem; }
+.toc li { margin: 0.3rem 0; }
+.toc .toc-h3 { padding-left: 0.8rem; }
+.toc a { color: var(--gris) !important; }
+.toc a.activo { color: var(--acento) !important; font-weight: 600; }
+
+/* Índice de temas para pantallas sin raíl lateral (funciona sin JS) */
+.indice-movil {
+  margin: 1rem 0 0;
+  border: 1px solid var(--linea);
+  background: var(--superficie);
+  font-size: 0.92rem;
+}
+.indice-movil summary {
+  cursor: pointer;
+  padding: 0.7rem 0.9rem;
+  min-height: 44px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tinta-suave);
+}
+.indice-movil ol { margin: 0; padding: 0 0.9rem 0.8rem 2.2rem; }
+.indice-movil li { padding: 0.3rem 0; }
+.indice-movil a { color: var(--tinta-suave); text-decoration: none; }
+.indice-movil [aria-current] { color: var(--acento); font-weight: 600; }
+@media (min-width: 1200px) { .indice-movil { display: none; } }
+
+/* ---------- Temas leídos (marca local, app.js) ---------- */
+.lista-notas a { position: relative; }
+.lista-notas a.leida .nota-numero { color: var(--acento); }
+.lista-notas a.leida::after {
+  content: "leído";
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--acento);
+}
+.lateral a.leida::before, .indice-movil a.leida::before { content: "✓ "; color: var(--acento); }
+
+/* ---------- Ayuda de atajos ---------- */
+.atajos {
+  border: 1px solid var(--linea-fuerte);
+  background: var(--superficie);
+  color: var(--tinta);
+  box-shadow: var(--sombra-modal);
+  padding: 1.2rem 1.4rem;
+  width: min(24rem, calc(100% - 2rem));
+}
+.atajos::backdrop { background: rgba(12, 13, 16, 0.5); }
+.atajos h2 { font-family: var(--display); font-weight: 600; font-size: 1.2rem; margin: 0 0 0.8rem; }
+.atajos dl { display: grid; grid-template-columns: auto 1fr; gap: 0.5rem 1rem; margin: 0 0 1rem; font-size: 0.9rem; }
+.atajos dt { text-align: right; }
+.atajos dd { margin: 0; color: var(--tinta-suave); }
+.atajos button {
+  font: inherit;
+  font-size: 0.85rem;
+  background: var(--tinta);
+  color: var(--fondo);
+  border: none;
+  padding: 0.5rem 1rem;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+/* ---------- Objetivos táctiles (Fitts): ≥44px en punteros gruesos ---------- */
+@media (pointer: coarse) {
+  #boton-buscar, #boton-tema { min-height: 44px; min-width: 44px; }
+  .migas a { display: inline-block; padding: 0.6rem 0; }
+  .nota-nav a { padding: 0.5rem 0; }
+}
+@media (max-width: 30rem) {
+  #boton-buscar kbd { display: none; }
+}
+
 /* ---------- Impresión ---------- */
 @media print {
-  .cabecera, .migas, .nota-nav, .lateral, .paleta-fondo, .salto { display: none !important; }
+  .cabecera, .migas, .nota-nav, .lateral, .paleta-fondo, .salto, .progreso, .indice-movil, .lluvia { display: none !important; }
   body { background: #fff; color: #000; }
   .prosa img { border: none; }
 }

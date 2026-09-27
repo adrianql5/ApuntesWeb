@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="5. Structured Query Lanjuaje (SQL), Tablas y Vistas — apuntes de BASES DE DATOS (segundo curso de Ingeniería Informática).">
 <title>5. Structured Query Lanjuaje (SQL), Tablas y Vistas · BASES DE DATOS · ApuntesWeb</title>
-<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#141517" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
 <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
 <link rel="stylesheet" href="../../../css/estilos.css">
 <script>
@@ -15,11 +15,13 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
 </script>
 </head>
 <body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
 <a class="salto" href="#contenido">Saltar al contenido</a>
 <header class="cabecera">
   <div class="cabecera-interior">
     <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
     <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
     <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
   </div>
 </header>
@@ -36,6 +38,7 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
     </div>
     <h1>Structured Query Lanjuaje (SQL), Tablas y Vistas</h1>
   </header>
+<details class="indice-movil"><summary>Temas de BASES DE DATOS · 5/9</summary><ol><li><a href="1-modelo-entidad-relacion.html">1. MODELO ENTIDAD RELACIÓN</a></li><li><a href="2-modelo-relacional.html">2. MODELO RELACIONAL</a></li><li><a href="3-transformacion-de-mer-a-mr.html">3. Transformación de MER  a MR</a></li><li><a href="4-lenguajes-formales-de-consulta.html">4. Lenguajes Formales de Consulta</a></li><li><span aria-current="page">5. Structured Query Lanjuaje (SQL), Tablas y Vistas</span></li><li><a href="6-structured-query-languaje-sql-consultas.html">6. Structured Query Languaje (SQL) Consultas</a></li><li><a href="7-structured-query-languaje-sql-otros-elementos.html">7. Structured Query Languaje (SQL) Otros Elementos</a></li><li><a href="8-normalizacion-del-modelo-relacional.html">8. Normalización del Modelo Relacional</a></li><li><a href="9-sistemas-de-bases-de-datos.html">9. Sistemas de Bases de Datos</a></li></ol></details>
   <div class="prosa">
 <p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
 <p>SQL es el <strong>lenguaje de consulta</strong> de bases de datos más ampliamente utilizado. Aunque se le suele llamar lenguaje de consulta también tiene instrucciones para <strong>crear, modificar y eliminar tablas, insertar modificar y eliminar tuplas y definir restricciones de integridad.</strong></p>
@@ -311,6 +314,17 @@ CREATE TABLE Venta (
     </div>
   </div>
 </div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
 <script src="../../../js/app.js"></script>
 </body>
 </html>

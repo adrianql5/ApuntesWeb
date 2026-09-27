@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="4. Árboles equilibrados B y B+ — apuntes de AED (segundo curso de Ingeniería Informática).">
 <title>4. Árboles equilibrados B y B+ · AED · ApuntesWeb</title>
-<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#141517" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
 <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
 <link rel="stylesheet" href="../../../css/estilos.css">
 <script>
@@ -15,11 +15,13 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
 </script>
 </head>
 <body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
 <a class="salto" href="#contenido">Saltar al contenido</a>
 <header class="cabecera">
   <div class="cabecera-interior">
     <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
     <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
     <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
   </div>
 </header>
@@ -36,6 +38,7 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
     </div>
     <h1>Árboles equilibrados B y B+</h1>
   </header>
+<details class="indice-movil"><summary>Temas de AED · 4/8</summary><ol><li><a href="1-arboles-binarios.html">1. ÁRBOLES BINARIOS</a></li><li><a href="2-estructuras-para-busqueda.html">2. ESTRUCTURAS PARA BÚSQUEDA</a></li><li><a href="3-arboles-equilibrados-avl.html">3. Árboles Equilibrados AVL</a></li><li><span aria-current="page">4. Árboles equilibrados B y B+</span></li><li><a href="5-grafos-i.html">5. Grafos I</a></li><li><a href="6-grafos-ii.html">6. Grafos II</a></li><li><a href="7-tablas-hash.html">7. Tablas Hash</a></li><li><a href="8-estrategias-algoritmicas.html">8. Estrategias Algorítmicas</a></li></ol></details>
   <div class="prosa">
 <p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
 <p>Un árbol B es una estructura de datos diseñada para minimizar el número de accesos a disco al gestionar grandes volúmenes de datos. Se utiliza en sistemas de bases de datos, sistemas de archivos y otras aplicaciones donde el almacenamiento y recuperación eficiente de datos son cruciales.</p>
@@ -146,6 +149,17 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
     </div>
   </div>
 </div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
 <script src="../../../js/app.js"></script>
 </body>
 </html>

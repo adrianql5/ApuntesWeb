@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. Centros de Procesamiento de Datos (CPDs) — apuntes de ENCO (cuarto curso de Ingeniería Informática).">
+<title>2. Centros de Procesamiento de Datos (CPDs) · ENCO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enco</a><span class="miga-sep">/</span><span aria-current="page">2-centros-de-procesamiento-de-datos-cpds</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENCO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENCO</a></p><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><span class="actual" aria-current="page">2. Centros de Procesamiento de Datos (CPDs)</span></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENCO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>2 / 2</div>
+    </div>
+    <h1>Centros de Procesamiento de Datos (CPDs)</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENCO · 2/2</summary><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><span aria-current="page">2. Centros de Procesamiento de Datos (CPDs)</span></li></ol></details>
+  <div class="prosa">
+<h1>2.1 Qué es un CPD</h1>
+<p>Un <strong>CPD (Centro de Procesamiento de Datos, <em>data center</em>)</strong> es una <strong>infraestructura centralizada de computación</strong> en la que se mantienen funcionando un gran número de <strong>servidores</strong>, <strong>dispositivos de almacenamiento</strong> y <strong>redes de interconexión</strong>, junto con los <strong>sistemas eléctricos y de climatización</strong> que los sostienen. En ellos se alojan servicios de <strong>cloud computing</strong>, <strong>Big Data e IA</strong>, <strong>HPC</strong> (computación de altas prestaciones), la <strong>infraestructura de Internet y telecomunicaciones</strong> (webs, aplicaciones, streaming), el <strong>sector financiero</strong> o el <strong>comercio electrónico</strong>.</p>
+<p><img src="../../../img/enco/enco-t2-cpd-sala.png" alt="Sala de un CPD|400" loading="lazy"></p>
+<h2>2.1.1 Ventajas</h2>
+<p>Concentrar los equipos en un CPD <strong>ahorra espacio físico</strong> gracias a la alta densidad de computación y permite una <strong>administración centralizada</strong>. Además <strong>evita duplicar</strong> componentes y servicios innecesariamente y <strong>aprovecha mejor</strong> los que hay. Sobre esa base se pueden montar servicios avanzados: <strong>agregar la potencia</strong> de cálculo o almacenamiento de muchas máquinas para aumentar las prestaciones, y dar <strong>servicio ininterrumpido</strong> gracias a la <strong>redundancia</strong> (duplicar componentes para que, si uno falla, otro lo sustituya).</p>
+<h2>2.1.2 Requisitos</h2>
+<p>Un CPD debe cumplir cuatro requisitos básicos: albergar <strong>de forma segura</strong> servidores, almacenamiento y equipos de red; ofrecer <strong>conectividad de red 24x7</strong>; suministrar <strong>potencia eléctrica</strong> a todo el equipo, y mantener un ambiente con <strong>temperatura y humedad controladas</strong>.</p>
+<h2>2.1.3 Diseño</h2>
+<p>Un CPD mediano o grande es una infraestructura <strong>compleja y cara</strong>, tanto al ponerla en marcha como al mantenerla. Por eso su diseño debe ser <strong>simple, ampliable, modular y flexible</strong>, y debe tener en cuenta el <strong>espacio físico, la potencia eléctrica, la climatización, la red, la gestión y la seguridad</strong>, entre otros aspectos. Esos son precisamente los apartados que siguen.</p>
+<h1>2.2 Espacio físico</h1>
+<p>El espacio de un CPD se reparte entre <strong>servidores, almacenamiento, equipos de red, HVAC y pasillos</strong>. Lo llamativo es que los <strong>pasillos, rampas, etc. ocupan casi la mitad</strong> de la sala, como se ve en el plano.</p>
+<p><img src="../../../img/enco/enco-t2-espacio-fisico.png" alt="Ocupación del espacio|200" loading="lazy"></p>
+<h2>2.2.1 Suelo elevado</h2>
+<p>El <strong>suelo elevado</strong> es un falso suelo de baldosas apoyadas sobre soportes metálicos que deja un hueco de unos <strong>60 cm</strong> sobre el suelo real. <strong>No todos los CPDs lo usan</strong>, porque <strong>resta altura</strong> a la sala y obliga a poner <strong>rampas</strong>. A cambio, por ese hueco pasan los <strong>cables</strong> y, sobre todo, el <strong>aire frío</strong> de la climatización. Como encima van los racks, debe <strong>soportar mucho peso</strong>: hay <strong>baldosas de aluminio de hasta 700 kg</strong>.</p>
+<p><img src="../../../img/enco/enco-t2-suelo-elevado.png" alt="Baldosa levantada|250" loading="lazy"></p>
+<p>Para que la refrigeración funcione, el suelo <strong>no debe dejar escapar el aire frío</strong>, salvo por las <strong>baldosas perforadas</strong> que se colocan a propósito delante de los racks.</p>
+<p><img src="../../../img/enco/enco-t2-suelo-elevado-estructura.png" alt="Estructura y baldosa perforada|400" loading="lazy"></p>
+<p>Los cables bajan al subsuelo por <strong>aberturas sin fugas</strong> de aire. Como puede haber cientos o miles, se organizan con <strong>códigos de colores, etiquetas, bridas y cestas</strong>.</p>
+<p><img src="../../../img/enco/enco-t2-suelo-cableado.png" alt="Cableado bajo el suelo|400" loading="lazy"></p>
+<p>La corriente se reparte en cada rack mediante <strong>PDUs (<em>Power Distribution Units</em>)</strong>, cajas de distribución eléctrica a las que, igual que a las cestas de cables, debe haber <strong>fácil acceso</strong>.</p>
+<p><img src="../../../img/enco/enco-t2-pdus.png" alt="PDUs y cestas|400" loading="lazy"></p>
+<h2>2.2.2 Sin suelo elevado</h2>
+<p>En los CPDs sin suelo elevado los cables se llevan por <strong>guías y bandejas suspendidas del techo</strong>.</p>
+<p><img src="../../../img/enco/enco-t2-bandejas-techo.png" alt="Bandejas en el techo|400" loading="lazy"></p>
+<h1>2.3 Potencia eléctrica</h1>
+<p>El sistema eléctrico de un CPD debe dar <strong>potencia suficiente</strong>, ser <strong>redundante</strong> y <strong>cumplir las normativas de seguridad</strong>. Siempre se dimensiona para <strong>más de lo que realmente se va a consumir</strong>, sumando el consumo del <strong>equipamiento informático</strong>, el de la <strong>climatización (HVAC), que ronda el 70% del anterior</strong>, y el de la <strong>iluminación y los sistemas de control y extinción</strong>. Los <strong>cables deben soportar toda esa potencia</strong>, pero los <strong>limitadores</strong> (interruptores automáticos) <strong>deberían saltar al 90%</strong> para cortar antes de llegar al límite.</p>
+<h2>2.3.1 Cifras de consumo</h2>
+<table>
+<thead>
+<tr>
+<th>CPD</th>
+<th>Consumo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Laboratorio o pequeño</td>
+<td>1–12 kW</td>
+</tr>
+<tr>
+<td>Medio</td>
+<td>12–200 kW</td>
+</tr>
+<tr>
+<td>Grande</td>
+<td>200–10.000 kW</td>
+</tr>
+<tr>
+<td>Súper CPD</td>
+<td>&gt; 10 MW</td>
+</tr>
+</tbody>
+</table>
+<p>Para hacerse una idea, la <strong>central térmica de As Pontes</strong> produce <strong>1.400 MW</strong> y el <strong>embalse de Santa Uxía (Ézaro)</strong> <strong>10 MW</strong>: un súper CPD consume tanto como produce una central hidroeléctrica pequeña.</p>
+<p><img src="../../../img/enco/enco-t2-centrales.png" alt="Centrales de referencia|350" loading="lazy"></p>
+<p>Como <strong>sustituir el cableado cuesta muchísimo</strong>, conviene instalar desde el principio <strong>cables de alta calidad</strong> capaces de soportar el <strong>amperaje que pueda hacer falta en el futuro</strong>. Los <strong>cortes de corriente</strong> son otro problema: se mitigan contratando <strong>más de un proveedor</strong>, <strong>pactando indemnizaciones</strong> y, sobre todo, teniendo siempre un <strong>SAI potente y un generador</strong>.</p>
+<h2>2.3.2 SAI (Sistema de Alimentación Ininterrumpida)</h2>
+<p>El SAI es un sistema de baterías cuya misión es dar corriente <strong>durante la transición hasta que arranca el generador, entre 15 segundos y 1 minuto</strong>. Debe poder alimentar <strong>absolutamente todos los elementos</strong> y dar <strong>hasta un 50% más en el arranque</strong>, cuando los equipos tienen un pico de consumo. Lo deseable es que además sea <strong>redundante</strong> y que <strong>elimine las deficiencias de la corriente</strong>, como los <strong>picos</strong> y los <em><strong>brown-outs</strong></em> (caídas temporales de tensión). Su punto débil es que las <strong>baterías son caras y necesitan mantenimiento</strong>.</p>
+<p><img src="../../../img/enco/enco-t2-sai.png" alt="SAIs|200" loading="lazy"></p>
+<h2>2.3.3 Generadores</h2>
+<p>Los generadores son <strong>motores diésel o turbinas de gas</strong> que toman el relevo al SAI en cortes largos. Son <strong>caros</strong> (un corte anual de 20 minutos no justifica el gasto), obligan a <strong>gestionar el suministro de combustible</strong> y tienen <strong>implicaciones medioambientales</strong>.</p>
+<p><img src="../../../img/enco/enco-t2-generadores.png" alt="Generadores|400" loading="lazy"></p>
+<h2>2.3.4 Fases de corriente</h2>
+<p>Al CPD llega <strong>corriente trifásica</strong>, que es la que necesitan los equipos de <strong>mayor consumo</strong> (SAI, climatización y algunos racks), mientras que los <strong>servidores y equipos TI</strong> suelen funcionar con <strong>monofásica</strong>. Por eso la instalación debe incluir <strong>cableado, limitadores, distribuidores y tomas</strong> de ambos tipos, y planificarse pensando en <strong>futuras expansiones, redundancia y eficiencia energética</strong>.</p>
+<p><img src="../../../img/enco/enco-t2-fases.png" alt="Conectores 1 fase y 3 fases|300" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=b3JVth7IVXs">Corriente monofásica y trifásica [Bien explicado]</a> — qué diferencia hay entre una y otra y por qué los grandes consumos usan trifásica (vídeo, 4 min).</p>
+</div>
+<h2>2.3.5 Electricidad estática</h2>
+<p>Una descarga electrostática puede dañar los componentes electrónicos, así que hay que <strong>evitar materiales que generen carga</strong>, poner <strong>esterillas antiestáticas</strong> en todos los accesos, usar <strong>baldosas con toma de tierra</strong> y que los trabajadores <strong>se descarguen antes de tocar</strong> los equipos.</p>
+<p><img src="../../../img/enco/enco-t2-antiestatica.png" alt="Esterilla antiestática|150" loading="lazy"></p>
+<h1>2.4 Climatización (HVAC)</h1>
+<p><strong>HVAC</strong> (<em>Heating, Ventilation &amp; Air Conditioning</em>) es el sistema que saca de la sala todo el calor que producen los equipos.</p>
+<h2>2.4.1 Condiciones y características</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Recomendado</th>
+<th>Rango</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Temperatura</td>
+<td>21–23 °C</td>
+<td>10–32 °C</td>
+</tr>
+<tr>
+<td>Humedad</td>
+<td>45–50%</td>
+<td>25–75%</td>
+</tr>
+</tbody>
+</table>
+<p>Mantener la temperatura es crítico, porque <strong>la fiabilidad cae un 50% por cada 10 °C por encima de 21 °C</strong>. La humedad también tiene un rango estrecho por dos motivos opuestos: el <strong>exceso de humedad corroe los equipos</strong> y el <strong>aire seco aumenta la electricidad estática</strong>.</p>
+<p>Son instalaciones <strong>caras</strong>, que deben ser <strong>potentes y redundantes</strong>. Su potencia se mide en <strong>BTU/h</strong> (<em>British Thermal Units</em> por hora), donde <strong>1 W = 3,41214 BTU/h</strong> y <strong>1 BTU = 1055 J</strong>.</p>
+<p><img src="../../../img/enco/enco-t2-crac-suelo.png" alt="CRAC impulsando aire bajo el suelo|350" loading="lazy">
+<em>La unidad CRAC (aire acondicionado de sala) impulsa aire frío bajo el suelo, que sube por las baldosas perforadas hacia los racks.</em></p>
+<p><img src="../../../img/enco/enco-t2-hvac-equipos.png" alt="Equipos HVAC|400" loading="lazy"></p>
+<p>Los racks <strong>toman aire frío por delante</strong> y <strong>expulsan aire caliente por detrás</strong>. Cuando el aire frío sale del suelo, <strong>los servidores de la parte alta reciben aire ya parcialmente caliente</strong>, y el problema empeora cuanto más potencia disipa cada rack:</p>
+<p><img src="../../../img/enco/enco-t2-termico-3-10kw.png" alt="3 kW vs 10 kW por rack|400" loading="lazy">
+<em>Azul = frío, rojo = caliente. Con 10 kW/rack el calor invade la parte alta de los racks.</em></p>
+<h2>2.4.2 Necesidades crecientes</h2>
+<p>Las necesidades de climatización no dejan de crecer: los equipos generan <strong>muchísimo calor</strong> y los <strong>blades lo concentran</strong> aún más, los <strong>climas cálidos o húmedos</strong> aumentan la carga, y <strong>cualquier cambio en el CPD</strong> obliga a revisar el HVAC. Para hacerse una idea, en un CPD <strong>hay que renovar todo el aire cada minuto</strong>, cuando en una oficina basta con cada media hora. Además el sistema debe absorber <strong>imprevistos</strong> como puertas abiertas, baldosas levantadas por mantenimiento o fallos momentáneos de alguna de sus partes.</p>
+<h2>2.4.3 Eficiencia energética</h2>
+<p>El HVAC puede consumir <strong>entre el 40% y el 60% de la electricidad</strong> del CPD, así que es donde más se puede ahorrar. Algunos sistemas usan <strong>agua</strong> para enfriar el aire y, en climas secos, también para <strong>humidificarlo</strong> antes de inyectarlo. Por eso muchos grandes CPDs se construyen en <strong>regiones frías</strong> o con <strong>acceso a mucha agua</strong>; el caso extremo es <strong>Project Natick</strong> de Microsoft, un CPD sumergido en el mar.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.microsoft.com/en-us/research/project/natick/">Project Natick (Microsoft Research)</a> — página del proyecto de CPD sumergido en el mar, con fotos y vídeos (inglés; enlazado en las diapositivas).</p>
+</div>
+<p>En climas húmedos se usan <strong>sistemas de aire seco</strong>, que <strong>deshumidifican</strong> el aire entrante mediante <strong>agentes químicos</strong>. Son complejos, pero tienen la ventaja de <strong>limpiar el aire de contaminantes y bacterias</strong> mientras lo secan.</p>
+<p>Para medir la eficiencia se usan dos métricas. El <strong>PUE</strong> (<em>Power Usage Effectiveness</em>), creado por la asociación <strong>Green Grid</strong>, divide la potencia total que entra al CPD entre la que consumen los equipos informáticos:</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mord mathnormal" style="margin-right:0.109em;">U</span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2519em;vertical-align:-0.8804em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">potencia del equipamiento IT</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">potencia total del CPD</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8804em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></eqn></section><p>Su valor ideal es <strong>1</strong> (toda la energía va a los equipos); un PUE de 2 significa que por cada vatio útil se gasta otro en infraestructura. El <strong>DCIE</strong> (<em>Data Center Infrastructure Efficiency</em>) es simplemente el <strong>recíproco del PUE expresado en %</strong>, y es mejor cuanto más se acerca al <strong>100%</strong> (PUE 2 → DCIE 50%).</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=DQ-SVFxE8lE">What is PUE? – Data Center Efficiency</a> — cómo se calcula el PUE y qué significa cada valor (vídeo, 3:20, inglés).</p>
+</div>
+<p>Ligada a la eficiencia está la <strong>huella de carbono</strong>, es decir, los gases de efecto invernadero que genera el CPD. No es un tema menor: los CPDs consumen el <strong>2% de la energía mundial</strong> y las TIC suponen ya el <strong>3% de las emisiones globales</strong>.</p>
+<h2>2.4.4 Circulación del aire</h2>
+<p><img src="../../../img/enco/enco-t2-circulacion-aire.png" alt="Circulación del aire|300" loading="lazy"></p>
+<p>El flujo habitual consiste en <strong>introducir el aire frío por el subsuelo</strong> y <strong>retirar el caliente por el techo</strong>, aprovechando que <strong>el aire caliente sube de forma natural</strong>. Sin suelo elevado, el aire frío tiene que entrar <strong>también desde el techo</strong>, los dos flujos <strong>se mezclan</strong> y el sistema es <strong>menos eficiente</strong>.</p>
+<p>La colocación de los racks debe guiarse por la ventilación: <strong>cada rack necesita su propia &quot;área&quot; de aire frío</strong>, y si ese espacio lo ocupa otro equipo, el rack <strong>no conseguirá mantener la temperatura</strong>.</p>
+<h2>2.4.5 Estrategias de enfriamiento de racks</h2>
+<p><strong>Enfriar de abajo hacia arriba</strong> es la estrategia <strong>más eficiente</strong>, pero perjudica a los <strong>servidores de lo alto del rack</strong>, que reciben aire más templado y conviene dotar de <strong>mejores ventiladores</strong>. Sin suelo elevado ocurre justo lo contrario.</p>
+<p>En cuanto a la colocación de las filas, hay dos opciones. Con <strong>pasillos fríos y calientes separados</strong>, las filas se enfrentan frontal con frontal, formando un <strong>pasillo frío</strong> con baldosas perforadas, y trasera con trasera, formando un <strong>pasillo caliente</strong> con baldosas sólidas; así el aire caliente nunca llega a la entrada de otro rack. Con <strong>pasillos mezclados</strong>, todas las filas miran en la misma dirección y cada una expulsa su aire caliente hacia el frontal de la siguiente, lo que es claramente peor.</p>
+<p><img src="../../../img/enco/enco-t2-pasillos.png" alt="Pasillos separados (arriba) y mezclados (abajo)|250" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=qzTpqpHnRdU">Hot Aisle vs Cold Aisle Containment Explained</a> — animación de cómo circula el aire en pasillos fríos y calientes y cómo se encierran (<em>containment</em>) para evitar mezclas (vídeo, 5:30, inglés; MEP Academy).</p>
+</div>
+<h2>2.4.6 Buenas prácticas</h2>
+<p>Todo lo anterior se resume en una serie de buenas prácticas:</p>
+<ul>
+<li><strong>Separar pasillos fríos y calientes</strong> y ajustar la <strong>perforación de las baldosas</strong>.</li>
+<li>Colocar los <strong>equipos más calientes abajo</strong> (donde llega el aire más frío) y los <strong>menos calientes arriba</strong>, y los <strong>racks más calientes en el centro</strong> de la fila.</li>
+<li><strong>Dirigir el flujo de aire hacia arriba</strong> y completar con <strong>ventiladores</strong> si hace falta.</li>
+<li>Mantener los <strong>cables ordenados</strong> para que no bloqueen el aire.</li>
+<li><strong>Rellenar los huecos de los racks con <em>dummies</em></strong> (paneles ciegos), para que el aire caliente no vuelva al frente por ellos.</li>
+<li><strong>No juntar</strong> todos los equipos problemáticos.</li>
+</ul>
+<h2>2.4.7 Distribución de temperatura y flujo del aire</h2>
+<p>Las simulaciones térmicas muestran cómo, al subir de 3 a 10 kW por rack, el calor invade la parte alta, y cómo añadir <strong>aire acondicionado sobre el rack o desde el techo</strong> corrige esas zonas calientes:</p>
+<p><img src="../../../img/enco/enco-t2-distribucion-temperatura.png" alt="Distribución de temperatura|450" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t2-bypass-recirculacion.png" alt="By-pass y recirculación|400" loading="lazy"></p>
+<p>Hay dos defectos típicos del flujo. El <em><strong>by-pass</strong></em> ocurre cuando parte del aire frío <strong>pasa por encima del rack sin atravesarlo</strong> y se desperdicia; la <em><strong>re-circulación</strong></em>, cuando el aire caliente <strong>rodea el rack y vuelve a entrar por delante</strong>. Además, con suelo elevado, <strong>cuanto más lejos está un rack del CRAC, menos aire frío le llega</strong> y más se calienta.</p>
+<p><img src="../../../img/enco/enco-t2-configuraciones-flujo.png" alt="Configuraciones de flujo|450" loading="lazy">
+<em>Formas de aislar pasillos: retorno por falso techo (plenum-to-plenum), refrigeración sobre el rack (top-mount), suministro desde el techo (T-bar ceiling) y conductos de techo a suelo (deck-to-deck).</em></p>
+<h2>2.4.8 Otras técnicas</h2>
+<p>Cuando el aire no basta, se recurre a <strong>agua o refrigerante</strong>, a costa de más gasto y del <strong>riesgo de fugas</strong>. Como no todos los equipos calientan igual, también se puede crear una <strong>zona de alta densidad</strong> para los más calientes, refrigerada con un <strong>HVAC potente</strong>, y dejar un <strong>HVAC normal</strong> para el resto.</p>
+<p>Otra fuente de calor es la <strong>conversión de corriente alterna a continua</strong> que hacen las fuentes de los servidores: se pueden <strong>sacar los conversores fuera del CPD y alimentar directamente en DC</strong>, aunque todavía <strong>no es una opción muy popular</strong>. Por último, empresas como <strong>Google y Microsoft</strong> <strong>desafían las especificaciones de los fabricantes</strong>: dejan subir la temperatura <strong>hasta 30 °C</strong> y aumentar la <strong>humedad</strong>, lo que <strong>ahorra mucha energía</strong> en HVAC a cambio del <strong>riesgo de perder la garantía</strong>.</p>
+<h1>2.5 Infraestructura de red</h1>
+<p>La red de un CPD es <strong>muy compleja</strong>, porque en realidad hay <strong>varias redes</strong> (LAN de datos, almacenamiento, administración...) y lo deseable es que todas sean <strong>redundantes</strong>. Un ejemplo sencillo con <strong>50 servidores</strong> muestra hasta dónde crece el número de cables:</p>
+<table>
+<thead>
+<tr>
+<th>Conexión</th>
+<th>Cables</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cada servidor a 2 dispositivos de almacenamiento, redundante (50×2×2)</td>
+<td>200</td>
+</tr>
+<tr>
+<td>Dispositivos a la red de administración</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Servidores a la red de administración</td>
+<td>50</td>
+</tr>
+<tr>
+<td>Servidores a la red de datos, redundante</td>
+<td>100</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td><strong>450</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Los cables de almacenamiento, además, pueden ser de <strong>fibra óptica</strong>.</p>
+<h2>2.5.1 Patch panels</h2>
+<p>El cableado debe ser <strong>modular</strong>. En instalaciones sencillas los cables van <strong>directos al switch</strong>, pero cuando la cosa se complica se usa un <strong>patch panel</strong>: un panel donde terminan los cables fijos que vienen de los equipos y desde el que se hacen conexiones cortas y fáciles de cambiar hacia los switches.</p>
+<p><img src="../../../img/enco/enco-t2-patch-panel.png" alt="Patch panels|400" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=FfQui0mk85Q">What is a Patch Panel?</a> — animación de para qué sirve un patch panel y cómo ordena el cableado (vídeo, 6:45, inglés; enlazado en las diapositivas).</p>
+</div>
+<h2>2.5.2 Puntos de distribución (POD)</h2>
+<p>Un <strong>POD</strong> es un rack con <strong>switches, patch panels y <em>Network Terminal Servers</em></strong> que da servicio a un <strong>grupo de racks</strong>. Su ventaja se ve con un ejemplo: si un CPD de <strong>1000 racks</strong> se divide en <strong>50 grupos de 20</strong>, cada uno con su POD, al añadir un rack o servidor nuevo <strong>solo hay que llevar el cable hasta su POD</strong>, no hasta la otra punta de la sala.</p>
+<p><img src="../../../img/enco/enco-t2-pod.png" alt="POD|150" loading="lazy"></p>
+<p>En los <strong>patch panels</strong> del POD todos los cables deben estar <strong>etiquetados y testados</strong>, para poder identificarlos luego en la sala de switches. El <strong>NTS (<em>Network Terminal Server</em>)</strong> resuelve el acceso de administración: cada servidor tiene un <strong>puerto de consola</strong> (serie o de red) que se cablea al NTS, el cual tiene <strong>un socket por servidor</strong>, de modo que <strong>desde el NTS se accede por consola a cualquier servidor</strong>. Por último, los <strong>sub-switches</strong> conectan los servidores a redes concretas (<strong>administración, backup</strong>...) y, desde el POD, enlazan con el <strong>switch maestro</strong> mediante una conexión de <strong>mayor ancho de banda</strong>.</p>
+<h2>2.5.3 Consideraciones</h2>
+<p>Conviene contratar <strong>más de un ISP</strong> fiable y <strong>comprobar la compatibilidad</strong> de los equipos. La redundancia, además, hay que <strong>hacerla bien</strong>: tener 3 líneas T1 (1,5 Mbps) y una T3 (45 Mbps) parece redundante, pero si falla la T3 se pierde <strong>más del 90%</strong> de la capacidad.</p>
+<p>Hay que considerar el ancho de banda <strong>entrante y saliente</strong>, pero <strong>no merece la pena sobredimensionar</strong> pensando en el futuro, porque los precios bajan continuamente y es más barato ampliar después. Siempre que se pueda, se usan <strong>conexiones baratas</strong> (<strong>cobre Cat5</strong> o <strong>fibra multimodo</strong>), reservando la <strong>fibra monomodo</strong> para la WAN, la red de almacenamiento y los servidores con gran demanda de red.</p>
+<h2>2.5.4 Gestión del cableado</h2>
+<p>Una buena gestión del cableado empieza por <strong>etiquetar cada cable en ambos extremos</strong> con un código alfanumérico sencillo y usar <strong>códigos de colores</strong>. Los cables deben estar <strong>ordenados</strong> (bridas para agrupar los similares, bandejas para que no cuelguen, sin sobrantes de varios centímetros y <strong>sin retorcerlos ni curvarlos en exceso</strong>) y <strong>verificados</strong>, usando las herramientas adecuadas para poner los conectores y un <strong>tester</strong>. Finalmente, el <strong>acceso al NTS debe ser seguro</strong>: si es por red, debe hacerse desde una <strong>red interna no accesible desde fuera ni desde la DMZ</strong> (la zona de la red expuesta a Internet).</p>
+<p><img src="../../../img/enco/enco-t2-gestion-cableado.png" alt="Cableado y herramientas|400" loading="lazy">
+<em>Abajo: crimpadora RJ45, insertadora y tester.</em></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=ApR7duyTtk0">How to wire an RJ45</a> — cómo se pone un conector RJ45 con la crimpadora (vídeo, 6:30, inglés; enlazado en las diapositivas).</p>
+</div>
+<h1>2.6 Protección contra incendios</h1>
+<p>En un CPD <strong>no se puede apagar un fuego con agua</strong>, porque provoca <strong>cortocircuitos</strong> y puede <strong>conducir la electricidad</strong> hacia personas u otros equipos. Si hay aspersores, no puede haber cables ni otros objetos a <strong>menos de medio metro</strong> de cada uno, para no reducir su eficacia. En instalaciones pequeñas basta con <strong>extintores</strong>; en las medianas y grandes se usan <strong>aspersores con productos químicos sin agua</strong> (CO₂, reductores de temperatura, desplazadores del oxígeno e inhibidores del fuego) y <strong>paredes y puertas a prueba de fuego</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Extintor</th>
+<th>Ventajas</th>
+<th>Inconvenientes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CO₂</strong></td>
+<td>Sin residuos</td>
+<td><strong>Choque térmico</strong>; <strong>desplaza el oxígeno</strong></td>
+</tr>
+<tr>
+<td><strong>Polvo</strong></td>
+<td>Eficaz y <strong>evita que se reactive</strong></td>
+<td><strong>Residuos dañinos</strong></td>
+</tr>
+<tr>
+<td><strong>Halotron I / FE-36</strong></td>
+<td>Sin residuos, <strong>no conducen</strong>, sin choque térmico</td>
+<td><strong>Caros</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/enco/enco-t2-extintores.png" alt="Extintores|120" loading="lazy"></p>
+<h1>2.7 Gestión, seguridad y otros aspectos</h1>
+<h2>2.7.1 Gestión y monitorización</h2>
+<p>En instalaciones medianas y grandes, la gestión se hace <strong>por red desde un Centro de Operaciones</strong>, de forma <strong>centralizada</strong>, con software que <strong>monitoriza servidores, almacenamiento, routers, SAIs, HVAC</strong>, etc. Normalmente se usa <strong>SNMP</strong> (protocolo de gestión de red), que permite <strong>comprobar el funcionamiento</strong> de los dispositivos (por ejemplo, la ocupación de los discos), <strong>modificar parámetros</strong> y <strong>recibir notificaciones</strong>. Toda esa información sirve para <strong>tomar decisiones de forma proactiva</strong>, en lugar de esperar a que algo falle.</p>
+<p><img src="../../../img/enco/enco-t2-centro-operaciones.png" alt="Centro de operaciones|300" loading="lazy"></p>
+<p>La monitorización necesita una red, y hay dos opciones: <strong>in-band</strong>, que usa la <strong>LAN existente</strong>, y <strong>out-of-band</strong>, que usa una <strong>red de datos separada</strong> y por tanto sigue funcionando aunque la principal falle.</p>
+<h2>2.7.2 Seguridad física</h2>
+<p>El acceso físico debe estar controlado con <strong>puertas cerradas, tarjetas de identificación y cámaras</strong>, y solo <strong>algunos empleados</strong> deben poder entrar. Aquí importa el tipo de CPD: en un <em><strong>co-location data center</strong></em> los <strong>servidores y su gestión corren a cargo de los clientes</strong>, que entran a manejar sus máquinas; en un <em><strong>managed hosting data center</strong></em> la gestión <strong>física y lógica</strong> la hace el propio CPD y <strong>nadie entra salvo sus gestores</strong>.</p>
+<p><img src="../../../img/enco/enco-t2-seguridad.png" alt="Seguridad física|250" loading="lazy"></p>
+<h2>2.7.3 Localización geográfica</h2>
+<p>No siempre se puede elegir dónde construir, pero lo ideal es un lugar a salvo de <strong>peligros naturales</strong> (terremotos, inundaciones) y <strong>accidentales</strong> (incendios forestales, proximidad a <strong>aeropuertos o vías de tren</strong>, o a estaciones de telecomunicaciones, carreteras o tráfico pesado que transmitan <strong>vibraciones</strong>). También conviene evitar <strong>zonas contaminadas</strong> como industrias o granjas, porque afectan al HVAC. Además, debe haber <strong>personal técnico cualificado</strong>, <strong>electricidad barata</strong> y <strong>buenas conexiones a Internet</strong>, y el edificio necesita <strong>espacio suficiente</strong> tanto dentro (área y altura) como fuera (aparcamiento).</p>
+<h2>2.7.4 Limpieza</h2>
+<p>El CPD se limpia <strong>cada 3 o 6 meses</strong>, por <strong>personal cualificado</strong> y con <strong>materiales autorizados</strong>: de <strong>pH neutro</strong>, <strong>disipadores de electricidad estática</strong>, que <strong>no suelten pelusas</strong>, <strong>sin nada de metal</strong> y con <strong>aspiradoras con toma de tierra</strong>. Al limpiar el subsuelo o el techo hay que extremar el <strong>cuidado con los cables</strong> y <strong>no levantar varias baldosas a la vez</strong>, porque se altera el flujo de aire.</p>
+<h2>2.7.5 Otros elementos y costes</h2>
+<p>Un CPD necesita además <strong>iluminación, zona de carga y descarga, ventanas, apiladoras, cámaras de seguridad o lectores de tarjetas</strong>, y hay que planificar todos los gastos: <strong>infraestructura, funcionamiento y mantenimiento</strong> (limpieza y reparaciones).</p>
+<h2>2.7.6 Tendencia: CPD modular</h2>
+<p>La tendencia en los grandes CPDs son los <strong>CPDs modulares en contenedores</strong>, que ya vienen con racks, electricidad y refrigeración integrados y se van añadiendo según se necesita capacidad. Ejemplos son el <strong>Google Container Data Center</strong> y el <strong>ZTE Container Data Center</strong>.</p>
+<p><img src="../../../img/enco/enco-t2-modular.png" alt="CPDs en contenedor|400" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=zRwPSFpLX8I">Google container data center tour</a> — visita a un CPD de Google hecho con contenedores (vídeo, 6:40, inglés; enlazado en las diapositivas junto a uno de ZTE).</p>
+</div>
+<h1>2.8 Alta disponibilidad</h1>
+<h2>2.8.1 Disponibilidad y costes</h2>
+<p>La <strong>disponibilidad</strong> es el porcentaje de tiempo que el sistema está funcionando. Diferencias que parecen mínimas en el porcentaje son enormes en tiempo de parada: cada &quot;nueve&quot; que se añade <strong>divide la parada entre 10</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Funcionamiento</th>
+<th>Parada</th>
+<th>Parada/año</th>
+<th>Parada/mes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>98%</td>
+<td>2%</td>
+<td>7,3 días</td>
+<td>14 h 36 min</td>
+</tr>
+<tr>
+<td>99%</td>
+<td>1%</td>
+<td>3,65 días</td>
+<td>7 h 18 min</td>
+</tr>
+<tr>
+<td>99,9%</td>
+<td>0,1%</td>
+<td>8 h 45 min</td>
+<td>43 min 45 s</td>
+</tr>
+<tr>
+<td>99,99% (4 nueves)</td>
+<td>0,01%</td>
+<td>52,5 min</td>
+<td>4 min 22 s</td>
+</tr>
+<tr>
+<td>99,999% (5 nueves)</td>
+<td>0,001%</td>
+<td>5,25 min</td>
+<td>26 s</td>
+</tr>
+</tbody>
+</table>
+<p>Y estar parado sale cada vez más caro, como muestra el <strong>coste por minuto de una interrupción no planificada</strong> (en dólares):</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>2010</th>
+<th>2013</th>
+<th>2016</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mínimo</td>
+<td>573</td>
+<td>939</td>
+<td>926</td>
+</tr>
+<tr>
+<td>Mediana</td>
+<td>5.188</td>
+<td>6.828</td>
+<td>7.003</td>
+</tr>
+<tr>
+<td>Media</td>
+<td>5.617</td>
+<td>7.908</td>
+<td>8.851</td>
+</tr>
+<tr>
+<td>Máximo</td>
+<td>11.080</td>
+<td>16.246</td>
+<td>17.244</td>
+</tr>
+</tbody>
+</table>
+<p>En cuanto a las <strong>causas de las caídas</strong> (%), la primera es el <strong>fallo del SAI</strong>, el <strong>error humano</strong> se mantiene alrededor del 22–24%, y el <strong>cibercrimen</strong> se ha disparado del 2% al 22%:</p>
+<table>
+<thead>
+<tr>
+<th>Causa</th>
+<th>2010</th>
+<th>2013</th>
+<th>2016</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fallo del SAI</td>
+<td>29</td>
+<td>24</td>
+<td>25</td>
+</tr>
+<tr>
+<td>Cibercrimen (DDoS)</td>
+<td>2</td>
+<td>18</td>
+<td>22</td>
+</tr>
+<tr>
+<td>Error humano/accidental</td>
+<td>24</td>
+<td>22</td>
+<td>22</td>
+</tr>
+<tr>
+<td>Agua, calor o CRAC</td>
+<td>15</td>
+<td>12</td>
+<td>11</td>
+</tr>
+<tr>
+<td>Clima</td>
+<td>12</td>
+<td>12</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Fallo del generador</td>
+<td>10</td>
+<td>7</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Fallo del equipo IT</td>
+<td>5</td>
+<td>4</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Otros</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<h2>2.8.2 Niveles (tiers)</h2>
+<p>Se llama <strong>capacidad N</strong> a la infraestructura justa para soportar todo el equipo que funciona en el CPD; es el <strong>nivel mínimo</strong> para el que se diseña. Si se añade <strong>un componente extra (N+1)</strong>, el CPD puede seguir funcionando con normalidad aunque <strong>falle uno</strong>. Cada nivel de redundancia añade protección, pero también <strong>complejidad</strong>: más componentes suponen <strong>más coste</strong> y, paradójicamente, <strong>más probabilidad de que algo falle</strong>.</p>
+<p>El <strong>tier</strong> clasifica la fiabilidad de un CPD en cuatro niveles:</p>
+<table>
+<thead>
+<tr>
+<th>Tier</th>
+<th>Nombre</th>
+<th>Disponibilidad</th>
+<th>Parada/año</th>
+<th>Líneas de potencia y refrigeración</th>
+<th>Redundancia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>I</td>
+<td>Básico</td>
+<td>99,671%</td>
+<td>28,8 h</td>
+<td>Única</td>
+<td>N</td>
+</tr>
+<tr>
+<td>II</td>
+<td>Componentes redundantes</td>
+<td>99,741%</td>
+<td>22 h</td>
+<td>Única</td>
+<td>N+1</td>
+</tr>
+<tr>
+<td>III</td>
+<td>Mantenimiento simultáneo</td>
+<td>99,982%</td>
+<td>1,6 h</td>
+<td>Múltiples, <strong>una activa</strong></td>
+<td>N+1</td>
+</tr>
+<tr>
+<td>IV</td>
+<td>A prueba de fallos</td>
+<td>99,995%</td>
+<td>0,4 h</td>
+<td>Múltiples</td>
+<td>2(N+1)</td>
+</tr>
+</tbody>
+</table>
+<p>Un <strong>Tier I</strong> puede tener suelo elevado, SAIs o generadores, pero necesita una <strong>parada completa al menos una vez al año</strong> para mantenimiento. El <strong>Tier II</strong> ya <strong>incluye</strong> suelo elevado, SAIs y generadores con componentes redundantes, por lo que es <strong>menos susceptible a interrupciones</strong>, planeadas o no. En el <strong>Tier III</strong> hay capacidad para que <strong>una línea soporte toda la carga mientras se mantiene la otra</strong>, así que el <strong>mantenimiento planificado no afecta al servicio</strong>, aunque <strong>un imprevisto sí puede provocar una parada</strong>. El <strong>Tier IV</strong> va más allá y <strong>resiste al menos un fallo no planificado</strong> sin afectar a la carga crítica.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://journal.uptimeinstitute.com/explaining-uptime-institutes-tier-classification-system/">Explaining the Uptime Institute's Tier Classification System</a> — explicación de los tiers por el Uptime Institute, la organización que los define y certifica (artículo, inglés).
+<a href="https://www.youtube.com/watch?v=aENMFkxCGQo">CertMike Explains Data Center Tiers</a> — los cuatro tiers comparados en poco tiempo (vídeo, 4 min, inglés).</p>
+</div>
+<h2>2.8.3 Conceptos</h2>
+<p>Conviene distinguir cuatro conceptos. La <strong>fiabilidad (<em>reliability</em>)</strong> es la probabilidad de que un componente <strong>funcione sin fallos durante un periodo</strong>. La <strong>robustez (<em>resiliency</em>)</strong> es su capacidad de <strong>seguir funcionando, aunque sea parcialmente, tras sufrir fallos</strong>; un ejemplo es la memoria <strong>ECC</strong>, que corrige errores de bits y sigue trabajando. La <strong>disponibilidad (<em>availability</em>)</strong> es la capacidad del sistema de <strong>mantenerse en funcionamiento</strong>. Y la <strong>capacidad de dar servicio (<em>serviceability</em>)</strong> es la probabilidad de <strong>completar un servicio en un tiempo determinado</strong>, por ejemplo, un 98% de probabilidad de completarlo en 3 horas.</p>
+<h2>2.8.4 Clústers</h2>
+<p>Un <strong>clúster de alta disponibilidad</strong> son varios servidores que se vigilan entre sí para que, si uno cae, otro asuma su trabajo sin que los clientes lo noten.</p>
+<p><img src="../../../img/enco/enco-t2-cluster-ha.png" alt="Clúster HA|500" loading="lazy"></p>
+<p>Mientras todo va bien, ambos servidores funcionan y se envían continuamente un <strong>heartbeat</strong> (&quot;sigo vivo&quot;) por una <strong>red dedicada</strong>. Si <strong>un nodo cae</strong>, el heartbeat se interrumpe y <strong>el otro asume sus tareas además de las suyas</strong>. Para que el cambio sea invisible, cada servidor tiene su IP propia (192.168.1.8 y .9), pero los clientes se conectan a unas <strong>IPs flotantes</strong> (192.168.1.10 y .11) que pueden pasar de un servidor a otro, y ambos acceden a unos <strong>discos compartidos</strong>. Cuando falla el servidor 1, el 2 pasa a atender <strong>las dos IPs flotantes</strong>.</p>
+<p>Existen además otros tipos de clúster. Los <strong>de alto rendimiento</strong> se usan para <strong>computación paralela</strong>, con nodos homogéneos (o incluso heterogéneos) unidos por una <strong>red de alta velocidad</strong> y programados normalmente con <strong>MPI</strong>. Los <strong>de balanceo de carga</strong>, también llamados <strong>granjas de servidores</strong>, <strong>reparten la carga entre los nodos de forma transparente al usuario</strong> y son típicos de los <strong>servicios web</strong>.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://en.wikipedia.org/wiki/High-availability_cluster">High-availability cluster (Wikipedia)</a> — heartbeat, failover y el problema del <em>split-brain</em> (los dos nodos creen que el otro ha caído) (artículo, inglés).</p>
+</div>
+<h2>2.8.5 Métricas: MTBF y MTTR</h2>
+<p>El <strong>MTBF</strong> (<em>Mean Time Between Failures</em>) es el <strong>tiempo medio entre fallos</strong>, normalmente en horas, y <strong>no es la vida útil</strong> de un componente. Una pila puede durar 10 horas y tener un MTBF de 50.000 horas: significa que, <strong>de 50.000 pilas funcionando juntas, fallará una cada 10 horas</strong>. Por la misma razón, <strong>la redundancia no aumenta el MTBF de un componente</strong>; lo que mejora es el MTBF <strong>del sistema</strong>, aunque al haber más piezas <strong>aumenta la probabilidad de que haya algún fallo</strong>. El <strong>MTTR</strong> (<em>Mean Time To Repair</em>) es el <strong>tiempo medio de reparación</strong>. Con ambos se calcula la disponibilidad:</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord text"><span class="mord">Disponibilidad</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.1297em;vertical-align:-0.7693em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.109em;">M</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mord mathnormal" style="margin-right:0.1389em;">F</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">M</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal" style="margin-right:0.0077em;">R</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.109em;">M</span><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mord mathnormal" style="margin-right:0.1389em;">F</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.7693em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></eqn></section><p>Es decir, la fracción del tiempo total en la que el sistema funciona; por ejemplo, con MTBF = 999 h y MTTR = 1 h, la disponibilidad es del 99,9%.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.resco.net/learning/failure-metrics/">Simple Guide to Failure Metrics (MTBF vs MTTR vs MTTF)</a> — fórmulas con ejemplos numéricos y un vídeo de 3 min que compara las métricas (inglés).</p>
+</div>
+<h2>2.8.6 Cómo aumentar la disponibilidad</h2>
+<p>Hay tres niveles de protección: <strong>proteger los datos</strong> con redundancia en los discos y <strong>backup</strong>; hacer <strong>clustering de servidores</strong>, para que la aplicación <strong>migre a otro servidor</strong> si el suyo falla, y, frente a catástrofes, tener un <strong>CPD gemelo en otro lugar</strong> (<em><strong>Disaster Recovery</strong></em>).</p>
+<p><img src="../../../img/enco/enco-t2-disaster-recovery.png" alt="Disaster Recovery|300" loading="lazy"></p>
+<h1>2.9 Lectura: huella hídrica de la IA</h1>
+<p>El artículo <em>Making AI Less &quot;Thirsty&quot;</em> (Li, Yang, Islam y Ren, <em>Communications of the ACM</em>, 2025) llama la atención sobre algo que casi nadie mide: se estudia la <strong>huella de carbono</strong> de la IA, pero no su <strong>huella hídrica</strong>, es decir, el agua dulce que gastan los CPDs para refrigerarse y las centrales que les dan electricidad.</p>
+<h2>2.9.1 El problema</h2>
+<p>Las cifras son grandes y crecen deprisa. Los CPDs propios de <strong>una sola empresa tecnológica</strong> extrajeron <strong>29.000 millones de litros</strong> de agua y evaporaron <strong>más de 23.000 millones</strong> en 2023, <strong>casi un 80% potable</strong>, con subidas del <strong>~20%</strong> (2021→22) y del <strong>~17%</strong> (2022→23); otra tecnológica creció un <strong>~34%</strong> y un <strong>~22%</strong>. En EE. UU., el consumo de agua de los CPDs podría <strong>duplicarse o cuadruplicarse</strong> en <strong>2028</strong>, hasta <strong>150–280 mil millones de litros</strong>, y la IA es la carga que más rápido crece: podría consumir <strong>85–134 TWh</strong> de electricidad en el mundo en 2027, y solo los servidores de IA de EE. UU., <strong>150–300 TWh</strong> en 2028. En total, la IA mundial extraería <strong>4.200–6.600 millones de m³</strong> de agua en 2027 (más que <strong>4–6 Dinamarcas</strong> o <strong>medio Reino Unido</strong>), de los que <strong>380–600 millones de m³</strong> se evaporarían.</p>
+<p>Aun así, las fichas de los modelos (<em>model cards</em>) informan del carbono pero <strong>no del agua</strong>. Y ambas huellas <strong>no son sustituibles</strong>: reducir el carbono puede incluso <strong>empeorar</strong> el consumo de agua. La preocupación ya es oficial: Google y Microsoft se han comprometido a ser <strong>&quot;Water Positive&quot; en 2030</strong>, y la norma <strong>ISO/IEC</strong> sobre IA sostenible incluye el agua como métrica.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=RMGLxpRgxWE">La IA devora agua y energía: el costo ambiental de los centros de datos</a> — reportaje breve sobre el consumo de agua y energía de los CPDs de IA (vídeo, 4:45, DW).</p>
+</div>
+<h2>2.9.2 Conceptos</h2>
+<p>Hay que distinguir la <strong>extracción</strong> de agua, que es toda el agua tomada de ríos, lagos o acuíferos (e indica la competencia por el recurso), del <strong>consumo</strong>, que es la extracción menos lo que se devuelve, es decir, el agua evaporada o retirada del entorno (e indica la escasez que se provoca aguas abajo). Cuando se habla de <strong>huella hídrica</strong> sin más, se refiere a la de <strong>consumo</strong>.</p>
+<p>Igual que con el carbono, el agua se clasifica en tres alcances:</p>
+<table>
+<thead>
+<tr>
+<th>Alcance</th>
+<th>Dónde se gasta el agua</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scope 1</td>
+<td>En el CPD: <strong>refrigeración</strong></td>
+</tr>
+<tr>
+<td>Scope 2</td>
+<td>En las <strong>centrales eléctricas</strong> que lo alimentan</td>
+</tr>
+<tr>
+<td>Scope 3</td>
+<td>En la <strong>fabricación</strong> de chips y servidores</td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/enco/enco-t2-agua-ia-scopes.png" alt="Uso de agua de un CPD|500" loading="lazy">
+<em>Scope 1: el CPD evapora agua en una torre de refrigeración que, mediante un intercambiador, enfría el agua que la unidad CRAH usa para enfriar los racks. Scope 2: la central eléctrica también evapora agua en su torre.</em></p>
+<h2>2.9.3 Cómo gasta agua la IA</h2>
+<p>En el <strong>scope 1</strong>, el calor sale del CPD en dos etapas. Primero pasa <strong>del servidor a la instalación</strong>, por aire o por líquido (directo al chip o por inmersión), y esta etapa <strong>no evapora agua</strong>; los CPDs de IA suelen usar <strong>refrigeración líquida</strong> por su alta densidad. Después pasa <strong>de la instalación al exterior</strong>, y ahí es donde se gasta el agua.</p>
+<p>La forma más habitual son las <strong>torres de refrigeración</strong>, que evaporan parte del agua para enfriar el resto. El agua que no se evapora solo puede reciclarse <strong>3–10 veces</strong>, porque se acumulan sales y minerales, así que hay que <strong>reponer continuamente agua limpia, a menudo potable</strong>. Alrededor del <strong>80%</strong> de lo extraído acaba evaporado, y el gasto va de <strong>1 L/kWh</strong> (media de Google) a <strong>9 L/kWh</strong> (un CPD en Arizona en verano). La alternativa es el <strong>aire exterior con ayuda de evaporación</strong>, que solo gasta agua cuando el aire está <strong>muy caliente</strong> (más de 85 °F ≈ 29 °C) o <strong>muy seco</strong> y consume <strong>~70%</strong> de lo que extrae (Meta); de media es <strong>más eficiente</strong> que las torres, pero dispara el gasto en los días de calor. Los <em><strong>dry coolers</strong></em> no usan agua en el CPD, pero <strong>consumen más energía</strong>, con lo que el agua se gasta igualmente en la central eléctrica.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.sunbirddcim.com/glossary/data-center-cooling-tower">What Is a Data Center Cooling Tower?</a> — por qué evaporar agua enfría el resto y cómo circula el agua entre la torre y el CPD (artículo breve, inglés).
+<a href="https://www.youtube.com/watch?v=eVJBTDWR1Vw">Cooling tower. How it works?! Animation</a> — animación del circuito de agua y la evaporación dentro de la torre (vídeo, 2:20, inglés).</p>
+</div>
+<p>En el <strong>scope 2</strong>, el agua la gastan las <strong>centrales termoeléctricas</strong>, que también necesitan refrigerarse. La media de EE. UU. es de <strong>43,8 L/kWh de extracción</strong> y <strong>3,1 L/kWh de consumo</strong> (Meta declaró 3,7 L/kWh en 2023). En el <strong>scope 3</strong>, la fabricación de chips requiere <strong>agua ultrapura</strong> y refrigeración, y el vertido puede ser <strong>tóxico</strong>; el reciclaje es bajo (en Singapur, un <strong>45%</strong> en fábricas de obleas y un <strong>27%</strong> en las de semiconductores), y en el caso de Apple la cadena de suministro supone el <strong>99%</strong> de su huella hídrica.</p>
+<p>Por último, la IA gasta sobre todo <strong>agua azul</strong> (de ríos, lagos y acuíferos, directamente utilizable por las personas y escasa), no <strong>agua verde</strong> (la almacenada en el suelo, típica de la agricultura).</p>
+<h2>2.9.4 Cómo se calcula</h2>
+<p>Los autores definen dos eficiencias hídricas en litros por kWh. El <strong>WUE in situ</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="mord mtight">1</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></eq> es el agua consumida en el CPD por cada kWh de los servidores, y sube con el <strong>calor y la humedad exteriores</strong>. El <strong>WUE externo</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="mord mtight">2</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></eq>, o <strong>EWIF</strong>, es el agua que gasta la red eléctrica por kWh generado, y se calcula como una media ponderada según la mezcla de fuentes, por lo que cambia con la <strong>hora</strong> y la <strong>región</strong>:</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7167em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="mord mtight">2</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4254em;vertical-align:-0.9857em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4397em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1864em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.6897em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1864em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mord mathnormal" style="margin-right:0.1389em;">W</span><span class="mord mathnormal" style="margin-right:0.0785em;">I</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">F</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9857em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></eqn></section><p>donde <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9805em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></eq> es la electricidad generada con la fuente <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span></eq> en el instante <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6151em;"></span><span class="mord mathnormal">t</span></span></span></span></eq>. Con la energía <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> de los servidores y el PUE <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> del CPD, la huella total es:</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9275em;vertical-align:-0.2441em;"></span><span class="mord"><span class="mord text"><span class="mord">Agua</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.242em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.0197em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:3.0954em;vertical-align:-1.2671em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8283em;"><span style="top:-1.8829em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">t</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.05em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.1389em;">T</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.2671em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.0361em;vertical-align:-0.2861em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">[</span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="mord mtight">1</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2806em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal">ρ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="mord mtight">2</span><span class="mpunct mtight">,</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">]</span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.1963em;vertical-align:-0.836em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">W</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.836em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></eqn></section><p>El agua externa se multiplica por el <strong>PUE</strong> porque la central genera <strong>toda</strong> la energía del CPD, no solo la de los servidores. El último término reparte el <strong>agua de fabricación</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">W</span></span></span></span></eq> a lo largo de la vida útil <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> de los servidores.</p>
+<h2>2.9.5 Caso GPT-3</h2>
+<p>Los autores lo aplican a <strong>GPT-3</strong>, suponiendo <strong>1.287 MWh</strong> de entrenamiento y <strong>0,004 kWh por petición</strong> de uso (una conversación de hasta 800 palabras de entrada y 150–300 de salida), con los datos de PUE y WUE que Microsoft publica para cada ubicación (✱ = CPD en construcción en 2023; WUE y EWIF en L/kWh):</p>
+<table>
+<thead>
+<tr>
+<th>Ubicación</th>
+<th>PUE</th>
+<th>WUE in situ</th>
+<th>EWIF</th>
+<th>Agua entrenamiento (millones L)</th>
+<th>mL/petición</th>
+<th>Peticiones por 500 ml</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Media EE. UU.</td>
+<td>1,17</td>
+<td>0,55</td>
+<td>3,142</td>
+<td>5,439</td>
+<td>16,9</td>
+<td>29,6</td>
+</tr>
+<tr>
+<td>Arizona</td>
+<td>1,18</td>
+<td>1,63</td>
+<td>4,959</td>
+<td>9,629</td>
+<td>29,9</td>
+<td>16,7</td>
+</tr>
+<tr>
+<td>Georgia✱</td>
+<td>1,12</td>
+<td>0,06</td>
+<td>2,309</td>
+<td>3,406</td>
+<td>10,6</td>
+<td>47,2</td>
+</tr>
+<tr>
+<td>Illinois</td>
+<td>1,35</td>
+<td>0,74</td>
+<td>2,233</td>
+<td>4,833</td>
+<td>15,0</td>
+<td>33,3</td>
+</tr>
+<tr>
+<td>Iowa</td>
+<td>1,16</td>
+<td>0,14</td>
+<td>3,104</td>
+<td>4,814</td>
+<td>15,0</td>
+<td>33,4</td>
+</tr>
+<tr>
+<td>Texas</td>
+<td>1,28</td>
+<td>0,25</td>
+<td>1,287</td>
+<td>2,442</td>
+<td>7,6</td>
+<td>65,9</td>
+</tr>
+<tr>
+<td>Virginia</td>
+<td>1,14</td>
+<td>0,14</td>
+<td>2,385</td>
+<td>3,679</td>
+<td>11,4</td>
+<td>43,7</td>
+</tr>
+<tr>
+<td>Washington</td>
+<td>1,15</td>
+<td>0,95</td>
+<td>9,501</td>
+<td>15,285</td>
+<td>47,5</td>
+<td>10,5</td>
+</tr>
+<tr>
+<td>Wyoming</td>
+<td>1,11</td>
+<td>0,13</td>
+<td>2,574</td>
+<td>3,845</td>
+<td>11,9</td>
+<td>41,8</td>
+</tr>
+<tr>
+<td>Australia✱</td>
+<td>1,12</td>
+<td>0,012</td>
+<td>4,259</td>
+<td>6,154</td>
+<td>19,1</td>
+<td>26,1</td>
+</tr>
+<tr>
+<td>Dinamarca✱</td>
+<td>1,16</td>
+<td>0,01</td>
+<td>3,180</td>
+<td>4,760</td>
+<td>14,8</td>
+<td>33,8</td>
+</tr>
+<tr>
+<td>Finlandia✱</td>
+<td>1,12</td>
+<td>0,01</td>
+<td>4,542</td>
+<td>6,561</td>
+<td>20,4</td>
+<td>24,5</td>
+</tr>
+<tr>
+<td>India✱</td>
+<td>1,43</td>
+<td>0,00</td>
+<td>3,445</td>
+<td>6,340</td>
+<td>19,7</td>
+<td>25,4</td>
+</tr>
+<tr>
+<td>Indonesia✱</td>
+<td>1,32</td>
+<td>1,90</td>
+<td>2,271</td>
+<td>6,304</td>
+<td>19,6</td>
+<td>25,5</td>
+</tr>
+<tr>
+<td>Irlanda</td>
+<td>1,19</td>
+<td>0,02</td>
+<td>1,476</td>
+<td>2,287</td>
+<td>7,1</td>
+<td>70,4</td>
+</tr>
+<tr>
+<td>México✱</td>
+<td>1,12</td>
+<td>0,056</td>
+<td>5,300</td>
+<td>7,711</td>
+<td>24,0</td>
+<td>20,9</td>
+</tr>
+<tr>
+<td>Países Bajos</td>
+<td>1,14</td>
+<td>0,06</td>
+<td>3,445</td>
+<td>5,131</td>
+<td>15,9</td>
+<td>31,4</td>
+</tr>
+<tr>
+<td>Suecia</td>
+<td>1,16</td>
+<td>0,09</td>
+<td>6,019</td>
+<td>9,101</td>
+<td>28,3</td>
+<td>17,7</td>
+</tr>
+</tbody>
+</table>
+<p>El resultado es que entrenar GPT-3 en EE. UU. consume <strong>unos 5,4 millones de litros</strong> (de ellos <strong>0,7 millones en el propio CPD</strong>) y que el modelo &quot;se bebe&quot; <strong>medio litro cada 10–50 respuestas</strong>, según dónde se ejecute. Dos conclusiones saltan a la vista: el <strong>agua de scope 2 domina</strong> casi siempre, y <strong>la ubicación lo cambia todo</strong> (entrenar en Washington gasta casi siete veces más que en Irlanda).</p>
+<p>Además, la estimación es <strong>conservadora</strong>. En sistemas reales (Nvidia DGX H100), un modelo de tamaño similar como Falcon-180B gasta <strong>~0,016 kWh</strong> por petición, cuatro veces lo supuesto; Microsoft tiene de los <strong>WUE más bajos</strong> del sector; el EWIF usado para EE. UU. (3,14) es menor que el de otro informe reciente (4,35), y modelos posteriores como GPT-4, sobre todo en modo razonamiento, gastan más. El agua por petición puede bajar con modelos más eficientes, pero <strong>el consumo total seguirá creciendo</strong> con la demanda.</p>
+<h2>2.9.6 Recomendaciones</h2>
+<p>Los autores piden, en primer lugar, <strong>más transparencia</strong>: publicar el agua en las <em>model cards</em> y en los paneles de la nube, <strong>incluyendo el scope 2</strong>, e investigar el <strong>scope 3</strong>, del que apenas hay datos.</p>
+<p>En segundo lugar, destacan que <strong>&quot;cuándo&quot; y &quot;dónde&quot; importan</strong>: como la eficiencia hídrica varía con el tiempo atmosférico y con la mezcla eléctrica, se puede programar el entrenamiento, por ejemplo, <strong>de noche</strong> y en el <strong>CPD más eficiente</strong>, e incluso informar a los usuarios para que usen la IA en las horas más eficientes.</p>
+<p>Por último, señalan un conflicto: para reducir <strong>carbono</strong> conviene <strong>&quot;seguir al sol&quot;</strong> (ejecutar cuando hay más energía solar), pero para reducir <strong>agua</strong> conviene <strong>&quot;no seguir al sol&quot;</strong> (evitar las horas de más calor). Hay que buscar un <strong>equilibrio</strong> entre ambas huellas.</p>
+<p><img src="../../../img/enco/enco-t2-agua-ia-carbono.png" alt="Carbono vs agua|550" loading="lazy">
+<em>(a) Regiones eléctricas de EE. UU.: menos carbono no implica menos agua. (b) Virginia hora a hora: agua y carbono apenas se correlacionan (<strong>Pearson 0,06</strong>). (c) Mezcla de fuentes de Virginia (gas y nuclear 30–40%, carbón ~20%, resto renovables y otras), que explica esas variaciones.</em></p>
+<h1>2.10 Ideas clave</h1>
+<ul>
+<li><strong>CPD</strong>: infraestructura centralizada. Requisitos: seguridad, red 24x7, energía, clima controlado. Diseño <strong>simple, ampliable, modular y flexible</strong>.</li>
+<li><strong>Espacio</strong>: pasillos ≈ mitad. <strong>Suelo elevado</strong> ~60 cm (cables y aire frío; baldosas hasta 700 kg; perforadas solo donde debe salir el aire).</li>
+<li><strong>Electricidad</strong>: IT + HVAC (70% de IT) + resto; limitadores al 90%; <strong>SAI</strong> (15 s–1 min, +50% al arrancar) + <strong>generador</strong>; trifásica para grandes consumos.</li>
+<li><strong>HVAC</strong>: 21–23 °C, 45–50% humedad; −50% fiabilidad cada 10 °C sobre 21 °C; 40–60% del consumo; aire renovado cada minuto; <strong>pasillos fríos/calientes separados</strong>; evitar <em>by-pass</em> y recirculación.</li>
+<li><strong>PUE</strong> = total/IT (ideal 1); <strong>DCIE</strong> = 1/PUE en %.</li>
+<li><strong>Red</strong>: patch panels, <strong>PODs</strong> (switches, patch panels, NTS), redundancia real, etiquetar y probar.</li>
+<li><strong>Fuego</strong>: sin agua; químicos; extintores CO₂ / polvo / Halotron-FE-36.</li>
+<li><strong>Gestión</strong>: SNMP; <strong>in-band</strong> vs <strong>out-of-band</strong>. <strong>Co-location</strong> vs <strong>managed hosting</strong>.</li>
+<li><strong>Tiers</strong>: I (N, 28,8 h/año) · II (N+1, 22 h) · III (N+1, varias líneas, 1,6 h) · IV (2(N+1), 0,4 h).</li>
+<li><strong>Disponibilidad = MTBF / (MTBF + MTTR)</strong>. Clúster HA con <strong>heartbeat</strong> e <strong>IPs flotantes</strong>. <strong>Disaster Recovery</strong>.</li>
+<li><strong>Agua de la IA</strong>: scope 1 (refrigeración), 2 (electricidad, el mayor), 3 (fabricación). GPT-3: ~5,4 millones de L para entrenarse, 500 ml cada 10–50 respuestas. Agua y carbono no van alineados: elegir <strong>cuándo y dónde</strong> ejecutar.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-formatos-de-servidores-racks-y-blades.html"><span class="nav-etiqueta">← anterior</span>1. Formatos de Servidores - Racks y Blades</a>
+  
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

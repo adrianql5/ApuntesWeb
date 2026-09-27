@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Asignaturas y observaciones del 1.º cuatrimestre de cuarto curso.">
+<title>1.º cuatrimestre · Cuarto curso · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../index.html">inicio</a><span class="miga-sep">/</span><a href="../index.html">curso-4</a><span class="miga-sep">/</span><span aria-current="page">cuatri-1</span></nav>
+<div class="disposicion">
+
+<main class="principal" id="contenido">
+<section class="encabezado-seccion">
+  <p class="sello">curso 4 · cuatrimestre 1</p>
+  <h1>1.º cuatrimestre · Cuarto curso</h1>
+</section>
+<section aria-label="Asignaturas">
+  <ul class="tarjetas">
+    <li class="tarjeta"><a href="enco/index.html"><h2>ENCO</h2><p>2 temas</p></a></li>
+    <li class="tarjeta"><a href="myad/index.html"><h2>MYAD</h2><p>2 temas</p></a></li>
+    <li class="tarjeta"><a href="sisin/index.html"><h2>SISIN</h2><p>1 temas</p></a></li>
+  </ul>
+</section>
+<section class="observaciones" aria-label="Observaciones del cuatrimestre">
+  <h2 class="observaciones-titulo"><mark>Observaciones del cuatrimestre</mark></h2>
+  <div class="prosa">
+<pre><code>INPUT (T0, α, L, Tf)
+T ← T0
+S_act ← Genera_solucion_inicial
+WHILE T ≥ Tf DO
+    FOR cont ← 1 TO L(T) DO
+        S_cand ← Selecciona_solucion_N(S_act)
+        δ ← coste(S_cand) − coste(S_act)
+        IF (U(0,1) &lt; e^(−δ/T)) OR (δ &lt; 0) THEN S_act ← S_cand
+    END
+    T ← α(T)
+END
+{Escribe como solución la mejor de las S_act visitadas}
+</code></pre>
+<ul>
+<li>
+<p>Representación  de  las  soluciones:  representación  de  orden  (permutaciones)  comenzando y finalizando en la ciudad 0.</p>
+</li>
+<li>
+<p>Solución inicial: generación aleatoria de una permutación válida.</p>
+</li>
+<li>
+<p>Operador  de  selección  de  la  solución  siguiente  Scand  a  partir  de  la  actual  Sact:  operador  de  intercambio.</p>
+</li>
+<li>
+<p>Velocidad de enfriamiento: se ha generado un único vecino.</p>
+</li>
+<li>
+<p>Función de coste: suma de las distancias del camino según el orden del recorrido.</p>
+</li>
+<li>
+<p>Mecanismo de enfriamiento: mecanismo exponencial decreciente que sigue la expressión 𝑇(𝑘)=T0·𝑒(−𝜆𝑘), donde 𝑘 es el número de iteración empezando en 1 y T0, λ son los parámetros de diseño.</p>
+<p>Para esta implementación básica considera, 𝑇(𝑘) = 20 · 𝑒(−0.0045𝑘), para establecer los parámetros por defecto de T0 y 𝜆, con temperatura inicial fija T0=20 y 𝜆=0.0045 respectivamente.</p>
+</li>
+<li>
+<p>Condición de parada: número fijo de iteraciones (limite=500). No se precisa definir Tfinal.</p>
+</li>
+</ul>
+<p>Para verificar tu implementación, puedes utilizar el fichero de localizaciones de 8 ciudades gallegas (<em>grafo8cidades.txt</em>). La solución óptima resuelta con una búsqueda informada como A* se sitúa en torno a los 382km.</p>
+<p>Para comprobar que tu implementación es suficientemente general como para manejar problemas del VC de diferentes tallas, puedes probar también con el fichero de localizaciones de 120 ciudades de USA proporcionado en esta práctica (<em>US120.txt</em>).</p>
+<p><strong>IMPORTANTE</strong>: Es imprescindible que en tu implementación tengas funciones totalmente parametrizadas para el mecanismo de enfriamiento y la función de coste; también deberías parametrizar el algoritmo para poder recibir una solución inicial al principio de la ejecución del algoritmo de Temple Simulado. Estas recomendaciones sobre modularidad te facilitarán la resolución de las cuestiones del test de autoevaluación.</p>
+
+  </div>
+</section>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../js/app.js"></script>
+</body>
+</html>

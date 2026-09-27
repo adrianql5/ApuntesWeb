@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Apuntes de teoría de Ingeniería Informática: 126 temas con fórmulas, imágenes y PDFs descargables.">
+<meta name="description" content="Apuntes de teoría de Ingeniería Informática: 131 temas con fórmulas, imágenes y PDFs descargables.">
 <title>Apuntes de Ingeniería Informática · ApuntesWeb</title>
-<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#141517" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
 <link rel="stylesheet" href="vendor/katex/katex.min.css">
 <link rel="stylesheet" href="css/estilos.css">
 <script>
@@ -15,11 +15,13 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
 </script>
 </head>
 <body data-rel="">
+<div class="progreso" id="progreso" hidden></div>
 <a class="salto" href="#contenido">Saltar al contenido</a>
 <header class="cabecera">
   <div class="cabecera-interior">
     <a class="marca" href="index.html">Apuntes<span class="marca-web">Web</span></a>
     <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
     <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
   </div>
 </header>
@@ -35,11 +37,12 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
   Cada asignatura se puede descargar entera en PDF.</p>
 </section>
 <section aria-label="Cursos">
-  <ul class="tarjetas tarjetas-cursos">
-    <li class="tarjeta"><a href="curso-1/index.html"><span class="tarjeta-codigo">CURSO 1</span><h2>Primer curso</h2><p>10 asignaturas · resúmenes y PDFs</p></a></li>
-    <li class="tarjeta"><a href="curso-2/index.html"><span class="tarjeta-codigo">CURSO 2</span><h2>Segundo curso</h2><p>2 cuatrimestres · 11 asignaturas</p></a></li>
-    <li class="tarjeta"><a href="curso-3/index.html"><span class="tarjeta-codigo">CURSO 3</span><h2>Tercer curso</h2><p>2 cuatrimestres · 8 asignaturas</p></a></li>
-  </ul>
+  <ol class="recorrido">
+    <li><a href="curso-1/index.html"><h2>Primer curso</h2><span class="recorrido-codigo">CURSO 1</span><p>10 asignaturas · resúmenes y PDFs</p></a></li>
+    <li><a href="curso-2/index.html"><h2>Segundo curso</h2><span class="recorrido-codigo">CURSO 2</span><p>2 cuatrimestres · 11 asignaturas · 71 temas</p><span class="recorrido-barra" aria-hidden="true"><span style="width:100%"></span></span></a></li>
+    <li><a href="curso-3/index.html"><h2>Tercer curso</h2><span class="recorrido-codigo">CURSO 3</span><p>2 cuatrimestres · 8 asignaturas · 55 temas</p><span class="recorrido-barra" aria-hidden="true"><span style="width:77%"></span></span></a></li>
+    <li><a href="curso-4/index.html"><h2>Cuarto curso</h2><span class="recorrido-codigo">CURSO 4</span><p>1 cuatrimestre · 3 asignaturas · 5 temas</p><span class="recorrido-barra" aria-hidden="true"><span style="width:7%"></span></span></a></li>
+  </ol>
 </section>
 
 </main>
@@ -56,6 +59,17 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
     </div>
   </div>
 </div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
 <script src="js/app.js"></script>
 </body>
 </html>

@@ -7,5 +7,6 @@ Rol: diseñador/maquetador del sitio. Solo HTML, CSS y JavaScript vanilla, en es
 - URLs SIEMPRE relativas mediante el prefijo `{{rel}}` (el sitio vive bajo /ApuntesWeb/).
 - Sin CDNs ni dependencias externas: KaTeX se sirve desde `vendor/katex/`.
 - `static/css/estilos.css` incluye estilos de callouts por tipo y media print.
-- `static/js/app.js`: solo mejoras progresivas (menú móvil, tema oscuro); el sitio
+- `static/js/app.js`: solo mejoras progresivas (tema, buscador, atajos, índice y progreso
+  de lectura, temas leídos, lluvia de la portada); el sitio
   debe funcionar sin JavaScript.

@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Almacenes de Datos — apuntes de MYAD (cuarto curso de Ingeniería Informática).">
+<title>1. Almacenes de Datos · MYAD · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">myad</a><span class="miga-sep">/</span><span aria-current="page">1-almacenes-de-datos</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de MYAD"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">MYAD</a></p><ol><li><span class="actual" aria-current="page">1. Almacenes de Datos</span></li><li><a href="practica-1.html">Práctica 1</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>MYAD</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>1 / 1</div>
+    </div>
+    <h1>Almacenes de Datos</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de MYAD · 1/2</summary><ol><li><span aria-current="page">1. Almacenes de Datos</span></li><li><a href="practica-1.html">Práctica 1</a></li></ol></details>
+  <div class="prosa">
+<h1>1.1 Introducción</h1>
+<p>La información es <strong>uno de los activos más importantes</strong> de cualquier organización. Con la digitalización se dice que los datos son el <strong>&quot;nuevo petróleo&quot;</strong>: son el motor de las empresas, la economía del futuro, el progreso, la base de la <strong>empresa inteligente (IA)</strong> y del <em>data science</em>.</p>
+<p>En el día a día de cualquier organización se oyen frases como <em>&quot;tenemos un montón de datos y no hacemos nada con ellos&quot;</em>, <em>&quot;solo quiero saber lo que es importante&quot;</em>, <em>&quot;perdemos horas en reuniones discutiendo sobre los números en lugar de tomando decisiones&quot;</em> o <em>&quot;necesito un sistema que me permita obtener la información fácilmente&quot;</em>. El objetivo es dar a la organización un <strong>Sistema de Soporte a Decisiones (DSS)</strong> que permita extraer y generar conocimiento para <strong>analizar la organización</strong>, <strong>crear predicciones</strong> y <strong>definir estrategias</strong>.</p>
+<h2>1.1.1 Los dos usos de los datos</h2>
+<p>Los datos de una organización tienen dos usos principales. Por un lado, el <strong>apunte de los registros operacionales</strong>, que se hace con los <strong>sistemas operacionales</strong>: son los sistemas donde <strong>&quot;metes&quot;</strong> los datos. Por otro, la <strong>analítica de apoyo a la toma de decisiones</strong>, que se hace con los <strong>sistemas DW/BI</strong> (<em>Data Warehouse / Business Intelligence</em>): son los sistemas de donde <strong>&quot;sacas&quot;</strong> la información.</p>
+<h2>1.1.2 Sistemas operacionales (OLTP)</h2>
+<p>Sus usuarios son los que <strong>mantienen la organización en movimiento</strong> con la <strong>operativa diaria</strong> de los procesos de negocio: dar de alta pedidos, registrar usuarios, facturar, etc. <strong>Modifican los datos</strong> para reflejar el estado actual de la organización, <strong>repiten siempre las mismas operaciones</strong> y <strong>no necesitan grandes cantidades de datos históricos</strong>.</p>
+<p>Los sistemas que usan están pensados para <strong>procesar transacciones rápidamente</strong>, normalmente <strong>de una en una</strong>, y reflejan el <strong>estado actual</strong> de la organización, por lo que <strong>habitualmente no guardan el histórico</strong>. Se conocen como <strong>OLTP</strong> (<em>Online Transaction Processing</em>, procesamiento de transacciones en línea), que facilita y administra las aplicaciones transaccionales.</p>
+<h2>1.1.3 Sistemas DW/BI (OLAP)</h2>
+<p>Sus usuarios <strong>analizan &quot;los engranajes&quot;</strong> de la organización, es decir, los datos que generan los sistemas operacionales. <strong>Evalúan el rendimiento a lo largo del tiempo</strong> y <strong>consultan grandes cantidades de datos</strong> que deben sintetizarse en una respuesta comprensible.</p>
+<p>Por eso estos sistemas están <strong>altamente optimizados para consultas</strong> que analizan un gran volumen de transacciones y <strong>necesitan el histórico</strong> de datos. Se conocen como <strong>OLAP</strong> (<em>Online Analytical Processing</em>, procesamiento analítico en línea), un tipo de procesamiento que <strong>agiliza la consulta de grandes cantidades de datos</strong>.</p>
+<h2>1.1.4 OLTP frente a OLAP</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>OLTP</th>
+<th>OLAP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consultas</td>
+<td>Simples, uno o pocos registros</td>
+<td>Complejas, gran volumen de transacciones</td>
+</tr>
+<tr>
+<td>Velocidad</td>
+<td>Muy rápido</td>
+<td>Órdenes de magnitud más lento</td>
+</tr>
+<tr>
+<td>Modificación de datos</td>
+<td>Frecuente</td>
+<td>No modifica, solo consulta</td>
+</tr>
+<tr>
+<td>Histórico</td>
+<td>No suele necesitarlo</td>
+<td>Es esencial</td>
+</tr>
+<tr>
+<td>Almacenamiento</td>
+<td>Relativamente poco espacio</td>
+<td>Grandes volúmenes</td>
+</tr>
+<tr>
+<td>Copias de seguridad</td>
+<td>Frecuentes</td>
+<td>Menos frecuentes</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=WOF6a4EbZ-I">Inteligencia de negocio: OLTP vs OLAP</a> — las dos familias de sistemas comparadas con ejemplos (vídeo, 6 min).</p>
+</div>
+<h2>1.1.5 Características del almacén de datos</h2>
+<p>Un almacén de datos es un <strong>repositorio centralizado</strong> que <strong>recopila y consolida datos de múltiples fuentes heterogéneas</strong> bajo un <strong>único esquema unificado</strong>. No toda la información de los sistemas operacionales es útil, así que al extraerla <strong>se prescinde de lo no relevante</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-dw-centralizado.png" alt="Repositorio centralizado|420" loading="lazy"></p>
+<p>Es <strong>variable en el tiempo</strong>: los datos representan un <strong>periodo</strong> que se <strong>incrementa periódicamente</strong> mediante <strong>volcados</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-dw-variable-tiempo.png" alt="Variable en el tiempo|350" loading="lazy">
+<em>Cada volcado añade una &quot;rodaja&quot; nueva (mes 1, mes 2, mes 3...), de modo que el almacén guarda la evolución.</em></p>
+<p>Y es <strong>no volátil</strong>: los datos <strong>no se actualizan, solo se incrementan</strong>. Mientras la base de datos operacional recibe INSERT, UPDATE, DELETE y SELECT, en el almacén solo hay <strong>cargas y consultas (SELECT)</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-dw-no-volatil.png" alt="No volátil|420" loading="lazy"></p>
+<p>Frente a esto, los sistemas operacionales <strong>soportan múltiples usuarios</strong>, son <strong>sistemas críticos que requieren alta disponibilidad</strong> y tienen un <strong>diseño normalizado</strong> y optimizado para <strong>evitar redundancia y mantener la integridad</strong>.</p>
+<h1>1.2 Objetivos de los sistemas DW/BI</h1>
+<h2>1.2.1 Los siete objetivos</h2>
+<ol>
+<li><strong>Facilidad en el acceso a los datos</strong>: &quot;simple y rápido&quot;, con herramientas fáciles de usar, contenido <strong>entendible para los usuarios de negocio</strong> (no solo para desarrolladores) y <strong>tiempos de respuesta interactivos</strong> para explorar los datos.</li>
+<li><strong>Presentación consistente de la información</strong>: debe ser <strong>fiable y consistente</strong>. Como los datos vienen de fuentes distintas, es clave el <strong>preprocesado</strong> y que <strong>etiquetas y definiciones sean consistentes</strong>.</li>
+<li><strong>Adaptación a los cambios</strong>: se diseña asumiendo que los cambios son <strong>inevitables</strong>, y esos cambios <strong>no deben invalidar</strong> ni los datos ni las aplicaciones previas.</li>
+<li><strong>Información a tiempo</strong> para decidir: los <strong>datos crudos (RAW)</strong> deben convertirse en información en un tiempo realista.</li>
+<li><strong>Seguridad</strong>: la información confidencial es uno de los activos más valiosos, y hay que protegerla.</li>
+<li><strong>Base autorizada y confiable</strong> para decidir: debe contener <strong>los datos correctos</strong>.</li>
+<li><strong>Aceptación por los usuarios</strong>: usar el sistema DW/BI es <strong>típicamente opcional</strong>, así que es clave que los usuarios <strong>aprecien su valor añadido</strong> y lo utilicen.</li>
+</ol>
+<p>Los requisitos <strong>6 y 7 son clave, pero a menudo se ignoran</strong>.</p>
+<h2>1.2.2 Responsabilidades del gestor DW/BI</h2>
+<p>Su primera tarea es <strong>comprender a los usuarios de negocio</strong>: sus responsabilidades y objetivos, qué decisiones esperan tomar con el sistema, quiénes pueden tomar decisiones de impacto con esa información y quiénes podrían sacar partido del almacén de datos.</p>
+<p>Después debe <strong>dar acceso fácil a información y analíticas de calidad y relevantes</strong>, lo que implica elegir, de entre muchas fuentes, <strong>los datos más robustos</strong>; generar <strong>interfaces y aplicaciones simples y dirigidas por plantillas</strong>; asegurar que los datos son <strong>precisos, confiables y etiquetados de forma consistente</strong>; <strong>monitorizar la precisión</strong> a lo largo del tiempo, y <strong>adaptarse</strong> a requisitos, prioridades y fuentes de datos cambiantes.</p>
+<p>Por último, debe <strong>mantener el entorno DW/BI</strong>: actualizarlo regularmente, <strong>atribuirse parte del crédito</strong> de las decisiones empresariales tomadas con él para <strong>justificar personal y recursos</strong>, y mantener la <strong>confianza de los usuarios de negocio</strong> y satisfechos a usuarios, gestores y desarrolladores.</p>
+<h1>1.3 Modelado dimensional</h1>
+<h2>1.3.1 Qué es y por qué se usa</h2>
+<p>El <strong>modelado dimensional</strong> modela las particularidades de las <strong>actividades o procesos de negocio</strong> de una organización. Es el <strong>estándar de facto</strong> porque cubre a la vez dos requisitos esenciales: que los datos sean <strong>fácilmente entendibles por los usuarios</strong> y que las consultas tengan <strong>alto rendimiento</strong>. Lo consigue creando <strong>bases de datos simples</strong>, y esa simplicidad asegura que los usuarios <strong>reconozcan los datos como su modelo de negocio</strong> y que el software pueda <strong>navegar y generar resultados rápido</strong>.</p>
+<p>El ejemplo típico: un ejecutivo describe su negocio diciendo <em>&quot;vendemos <strong>productos</strong> en varios <strong>mercados</strong> y medimos nuestro rendimiento a lo largo del <strong>tiempo</strong>&quot;</em>. Los diseñadores piensan intuitivamente en un <strong>cubo de datos</strong> cuyos ejes son producto, mercado y tiempo. Poder <strong>visualizar algo abstracto</strong> (el modelo de negocio) como algo <strong>concreto y &quot;tangible&quot;</strong> es el punto clave.</p>
+<p><img src="../../../img/myad/myad-t1-cubo-datos.png" alt="Cubo de datos|550" loading="lazy">
+<em>Cada eje del cubo es una <strong>dimensión</strong> (producto, mercado, día) y cada celda guarda los <strong>hechos</strong> con sus <strong>medidas</strong> (ventas: 3453, beneficio: 345). Cortar el cubo por un valor de una dimensión es <strong>slicing</strong>; quedarse con un bloque acotando varias dimensiones es <strong>dicing</strong>.</em></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el cubo es una hoja de cálculo en 3D</p>
+<p>Una tabla de Excel tiene dos ejes: filas y columnas (por ejemplo, productos y meses). El cubo añade más ejes, uno por dimensión. &quot;¿Cuánto vendimos del producto 2, en el mercado 3, el día 1?&quot; es simplemente mirar una celda del cubo; y &quot;¿cuánto vendimos por producto?&quot; es aplastar el cubo sumando a lo largo de los otros ejes.</p>
+</div>
+<h2>1.3.2 Operaciones OLAP</h2>
+<p>Sobre ese cubo se definen cinco operaciones. El <strong>roll-up</strong> (también <strong>drill-up</strong> o <strong>agregación</strong>) permite <strong>subir en la jerarquía</strong>, agrupando todos los valores de un nivel bajo un mismo valor del nivel superior: pasar de datos diarios a semanales, o de regionales a país.</p>
+<p><img src="../../../img/myad/myad-t1-rollup.png" alt="Roll-up|400" loading="lazy">
+<em>Se pasa de ciudades (Chicago, Nueva York...) a países (USA, Canadá): los valores de cada ciudad se suman en el país.</em></p>
+<p>El <strong>drill-down</strong> es la operación contraria: <strong>bajamos en la jerarquía desagregando</strong>, de datos menos detallados a más detallados (por ejemplo, de datos mensuales a diarios).</p>
+<p><img src="../../../img/myad/myad-t1-drilldown.png" alt="Drill-down|400" loading="lazy">
+<em>De trimestres (Q1–Q4) a meses: cada trimestre se abre en sus meses.</em></p>
+<p>El <strong>slice</strong> <strong>selecciona en una o varias dimensiones</strong>: es el subconjunto del cubo correspondiente a <strong>un valor determinado</strong> de una o más dimensiones, con lo que se pierde esa dimensión.</p>
+<p><img src="../../../img/myad/myad-t1-slice.png" alt="Slice|300" loading="lazy">
+<em>Slice para tiempo = &quot;Q1&quot;: queda una tabla plana de ciudades × artículos solo del primer trimestre.</em></p>
+<p>El <strong>dice</strong> es similar, pero <strong>sin reducir el número de dimensiones</strong>: selecciona secciones del cubo <strong>estableciendo rangos</strong> en una o más dimensiones.</p>
+<p><img src="../../../img/myad/myad-t1-dice.png" alt="Dice|300" loading="lazy">
+<em>Dice para localización = Toronto o Vancouver, tiempo = Q1 o Q2 y artículo = Mobile o Modem: sigue siendo un cubo, pero más pequeño.</em></p>
+<p>El <strong>pivot</strong> permite <strong>rotar el cubo y presentar diferentes planos</strong>, reordenando las dimensiones.</p>
+<p><img src="../../../img/myad/myad-t1-pivot.png" alt="Pivot|300" loading="lazy">
+<em>Las mismas cifras, con los artículos en las filas y las ciudades en las columnas en vez de al revés.</em></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=0MM7zesKh74">Cubos OLAP y sus operaciones</a> — las cinco operaciones explicadas sobre un cubo (vídeo, 8:39).</p>
+</div>
+<h2>1.3.3 ¿Se puede hacer la analítica sobre la base de datos normalizada?</h2>
+<p>La primera pregunta es si pueden <strong>convivir el sistema operacional y el DW/BI</strong> en la misma base de datos, manteniendo la operativa transaccional (OLTP) y haciendo la analítica (OLAP) encima. La respuesta es que aparecen <strong>problemas de eficiencia en la operativa diaria</strong>, porque <strong>las consultas OLAP colisionan con las OLTP</strong>.</p>
+<p>La segunda es si vale con hacer una <strong>copia directa del sistema operacional</strong> para analizar sobre ella. Tampoco: hay <strong>problemas de eficiencia</strong>, porque falta un <strong>diseño específico y optimizado para OLAP</strong> (las consultas necesitarían <strong>muchísimos JOINs</strong>) y las <strong>consultas interactivas a menudo no son viables</strong>. Además, los <strong>usuarios tienen necesidades diferentes</strong> y los <strong>modelos normalizados son complejos de entender</strong>, así que al usuario le costaría obtener los datos que necesita. Y por último, los almacenes de datos tienen <strong>características diferenciadoras</strong> (por ejemplo, un sistema operacional no suele guardar histórico) que <strong>implican un diseño específico</strong>.</p>
+<p>La conclusión es que en un DW los datos se guardan típicamente en <strong>bases de datos relacionales, pero sin estructuras normalizadas</strong>. Un modelo dimensional contiene <strong>la misma información</strong> que uno normalizado, pero almacenada de forma que <strong>facilita la comprensión del usuario</strong>, <strong>optimiza el rendimiento de las consultas</strong> y <strong>proporciona resiliencia al cambio</strong>.</p>
+<h2>1.3.4 Esquema en estrella frente a cubos OLAP</h2>
+<p>El <strong>diseño lógico es común</strong>; lo que cambia es la <strong>implementación física</strong>. Si el modelo dimensional se implementa en una <strong>base de datos relacional</strong>, el esquema más usado es el <strong>esquema en estrella</strong>, llamado así porque la <strong>tabla de hechos</strong> queda en el centro rodeada por las <strong>tablas de dimensiones</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-esquema-estrella.png" alt="Esquema en estrella|450" loading="lazy"></p>
+<p>Si se implementa en una <strong>base de datos multidimensional</strong>, tenemos un <strong>cubo OLAP</strong>, donde los datos se <strong>almacenan e indexan con formatos y técnicas diseñadas para datos dimensionales</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-cubo-olap.png" alt="Cubo OLAP|350" loading="lazy"></p>
+<p>Los cubos OLAP son <strong>típicamente más eficientes</strong> en consulta y análisis, porque el motor suele crear y administrar <strong>agregaciones o resúmenes precalculados</strong>; permiten <strong>drill down/up</strong> o añadir y quitar atributos <strong>sin generar nuevas consultas</strong> y con alto rendimiento, y ofrecen <strong>funciones analíticas que no están en SQL</strong>. A cambio, <strong>la carga y actualización de datos es más costosa</strong>.</p>
+<p>Al decidir si desplegarlos hay que tener en cuenta que las <strong>bases de datos relacionales son estables y confiables</strong> para copias y recuperaciones, y que la <strong>diferencia de rendimiento entre ambas es cada vez menor</strong>, por los avances en hardware y en tecnologías relacionales como el <strong>almacenamiento en columnas</strong>. Además, las estructuras de los cubos <strong>varían según el fabricante</strong>, lo que dificulta la <strong>portabilidad de las aplicaciones BI</strong>.</p>
+<p>A favor de los cubos: ofrecen <strong>opciones de seguridad más sofisticadas</strong> (por ejemplo, limitar el acceso al detalle y permitirlo a los agregados) y <strong>capacidades analíticas más amplias</strong>, al no estar restringidos por las limitaciones de SQL, que es <strong>quizá la razón principal para elegirlos</strong>. En contra: tienen <strong>dificultades para actualizar los datos</strong> una vez creados, lo que <strong>penaliza los cambios en las dimensiones</strong>, y <strong>no soportan bien todos los tipos de tablas de hechos</strong> (en particular las instantáneas acumuladas). Su <strong>sintaxis de consulta específica</strong> también es un arma de doble filo: da mejores capacidades analíticas y <strong>soporta mejor las jerarquías</strong>, pero hay que aprenderla.</p>
+<h2>1.3.5 Tablas de hechos</h2>
+<p><strong>Todas las medidas importantes</strong> para la toma de decisiones de un proceso de negocio deben estar en la <strong>tabla de hechos</strong>. Como suponen una <strong>gran cantidad de datos</strong>, no deberían estar <strong>replicadas</strong> en varios lugares de la organización. <strong>Cada fila corresponde a un evento que genera medidas</strong>: el término <strong>&quot;hecho&quot; representa una medida de negocio</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-tabla-hechos.png" alt="Tabla de hechos|400" loading="lazy"></p>
+<p>Los datos de cada fila corresponden a un nivel de detalle llamado <strong>granularidad</strong> (por ejemplo, una fila por cada producto vendido en una transacción). <strong>Todas las filas deben tener la misma granularidad</strong>, y un evento del mundo físico tiene una <strong>relación 1-1 con una única fila</strong> de la tabla.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el ticket de la compra</p>
+<p>La tabla de hechos son las <strong>líneas del ticket</strong>: cada línea es un evento (este producto, en esta tienda, a esta hora) con sus <strong>medidas</strong> (precio, unidades, importe). Las dimensiones son los <strong>datos de la cabecera y las etiquetas</strong>: quién te atendió, en qué tienda, qué día, qué producto exactamente. La <strong>granularidad</strong> es decidir si guardas una fila por línea del ticket o una por ticket entero: si guardas solo el total del ticket, ya no podrás preguntar nunca qué producto concreto se vendió.</p>
+</div>
+<p>Según cómo se puedan sumar, hay tres <strong>tipos de hechos</strong>. Los <strong>aditivos</strong> pueden sumarse <strong>por todas las dimensiones</strong> (el importe de una venta en euros). Los <strong>semiaditivos</strong> solo por algunas: el <strong>saldo de una cuenta</strong> no puede sumarse por la dimensión tiempo (sumar el saldo de enero y el de febrero no significa nada). Los <strong>no aditivos</strong> no pueden sumarse por ninguna: el <strong>precio unitario</strong> de un producto o un <strong>% de descuento</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-tipos-hechos.png" alt="Tipos de hechos|500" loading="lazy"></p>
+<p>Los hechos más útiles son los <strong>numéricos y aditivos</strong>, porque <strong>normalmente no se consulta un hecho aislado</strong>: lo típico es recuperar <strong>muchos hechos, agruparlos por una o varias dimensiones y agregarlos</strong>.</p>
+<p>Normalmente las medidas toman <strong>valores reales en un espacio continuo</strong>, algo que no suele pasar con los atributos de las dimensiones. <strong>Teóricamente pueden ser textuales, pero es muy raro</strong>: un campo de texto suele ser la <strong>descripción de algo</strong> con un conjunto limitado de valores, y entonces conviene <strong>llevarlo a una tabla de dimensiones</strong> para ahorrar espacio. Si el texto <strong>se repite habitualmente</strong>, claramente va en una dimensión; si es <strong>siempre diferente</strong>, suele ser <strong>texto libre</strong> del que será muy difícil sacar información para OLAP, salvo con técnicas de <strong>procesamiento de lenguaje natural</strong>.</p>
+<p>Cuando <strong>no hay datos</strong> para una combinación de dimensiones, <strong>no se añade una fila de ceros</strong>: la tabla de hechos solo recoge <strong>actividad real</strong>, no la no-actividad (si un producto no se vende, no se crea su fila). Por eso las tablas de hechos tienden a ser <strong>dispersas (<em>sparse</em>)</strong>, aunque aun así representan en torno al <strong>90% del espacio</strong> de un modelo dimensional, y suelen ser <strong>profundas en filas y estrechas en columnas</strong>.</p>
+<p>Las tablas de hechos contienen <strong>claves foráneas (FK)</strong> que apuntan a las dimensiones, lo que garantiza la <strong>integridad referencial</strong>; a los hechos se accede <strong>a través de las dimensiones mediante JOINs</strong>, y son las dimensiones las que dan el <strong>contexto descriptivo</strong>. La <strong>clave primaria</strong> de la tabla de hechos es la <strong>combinación (clave compuesta) de un subconjunto de esas claves foráneas</strong>, el subconjunto de dimensiones que identifica unívocamente cada fila.</p>
+<p><img src="../../../img/myad/myad-t1-claves-hechos.png" alt="Claves de la tabla de hechos|250" loading="lazy"></p>
+<h2>1.3.6 Tipos de tablas de hechos según su granularidad</h2>
+<p>Las <strong>tablas de hechos de transacciones</strong> son <strong>las más comunes</strong>. Su fuente son los <strong>procesos de negocio transaccionales</strong> y su granularidad <strong>deriva directamente del evento</strong>: una fila por transacción o una fila por cada línea de una transacción. <strong>A menudo son dispersas</strong> (en una tienda no se venden todos los productos en cada transacción) y <strong>generan tablas de gran tamaño</strong>, con medidas que suelen ser <strong>aditivas</strong>.</p>
+<p>Además de las referencias a las dimensiones, pueden contener <strong>marcas de tiempo</strong> y <strong>dimensiones degeneradas</strong>, que son <strong>claves de dimensión que NO tienen una tabla de dimensión asociada</strong> y se guardan en la propia tabla de hechos: número de factura, id de pedido o número de transacción bancaria. La <strong>marca temporal se separa a menudo de la dimensión de tiempo</strong> para evitar una explosión de filas: una dimensión de tiempo con 20 años de historia son <strong>7.300 filas</strong>, pero con granularidad de segundo serían <strong>más de 31 millones por año</strong>.</p>
+<p>Las <strong>instantáneas periódicas (<em>periodic snapshot</em>)</strong> tienen como granularidad un <strong>periodo de tiempo</strong> (día, mes, año), que <strong>no se puede expresar a nivel de transacción</strong>. Cada hecho <strong>agrega los eventos ocurridos durante el periodo</strong>. Son <strong>más densas</strong> que las de transacción, lo que genera retos: <strong>incluso sin datos puede insertarse una fila con ceros</strong> (por ejemplo, stock 0) y el <strong>volumen puede ser muy alto</strong>, así que a veces hay que llegar a compromisos como <strong>reducir la frecuencia de las instantáneas</strong> con el tiempo.</p>
+<p><img src="../../../img/myad/myad-t1-snapshot-periodico.png" alt="Instantánea periódica|400" loading="lazy">
+<em>Inventario por tienda: una fila por fecha, producto y tienda, con la cantidad en ese momento.</em></p>
+<p>Las <strong>instantáneas acumuladas (<em>accumulated snapshot</em>)</strong> son <strong>menos habituales</strong>, pero interesantes para analizar <strong>flujos de trabajo</strong>: procesos con un <strong>inicio, un fin y varios hitos intermedios</strong>. Agregan los datos de los eventos de cada hito y pueden incluir <strong>medidas de diferencias entre hitos</strong> (retrasos). Su particularidad es que las filas <strong>se van actualizando a medida que se completan los hitos</strong>, así que <strong>solo al terminar el proceso la fila está completa</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-snapshot-acumulado.png" alt="Instantánea acumulada|250" loading="lazy">
+<em>Una fila por pedido, con una fecha por hito (pedido, empaquetado, inicio, fin), las cantidades y los retrasos entre hitos.</em></p>
+<p>Estas tablas tienen <strong>una referencia a la dimensión temporal por cada hito</strong>, lo que se conoce como <em><strong>role playing</strong></em> (la misma dimensión &quot;juega varios papeles&quot;). <strong>No todos los productos OLAP soportan role playing</strong> ni el renombramiento de atributos y, al requerir <strong>actualizaciones</strong>, son un tipo de tabla <strong>más difícil de implementar con cubos OLAP</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-role-playing.png" alt="Role playing|450" loading="lazy">
+<em>La dimensión Tiempo se usa dos veces con nombres distintos: TiempoPedidoDim y TiempoEmpaquetadoDim.</em></p>
+<h2>1.3.7 Tablas de dimensiones</h2>
+<p>Las dimensiones <strong>proporcionan el contexto</strong> necesario para entender los eventos: describen el <strong>quién, qué, dónde, cómo y por qué</strong> de cada evento. Pueden tener <strong>muchos atributos</strong> (<strong>50-100 columnas es normal</strong>) y <strong>pocas filas</strong> comparadas con la tabla de hechos. Tienen <strong>una única clave primaria</strong>, que aparece como <strong>foránea</strong> en las tablas de hechos relacionadas.</p>
+<p>Sus atributos se usan para <strong>filtrar</strong> (restricciones en las consultas), <strong>agrupar</strong> datos y <strong>generar etiquetas</strong> en informes y gráficas, y son <strong>fundamentales para que el sistema sea entendible</strong> por los usuarios.</p>
+<p>Sus valores deben ser <strong>palabras reales explicativas y no abreviaciones crípticas</strong>: hay que <strong>minimizar el uso de códigos</strong> y <strong>promover atributos textuales</strong>, incluyendo códigos solo si tienen un <strong>significado claro y conocido por TODOS los usuarios</strong>, o si hacen falta para comunicarse con los usuarios del sistema operacional, pero entonces <strong>junto a los atributos descriptivos</strong>. Cuando un código tiene <strong>información embebida</strong> (por ejemplo, los 6 primeros dígitos son el ID de cliente y los 4 últimos el del pedido), <strong>debe separarse</strong> en varios atributos, idealmente textuales, para facilitar filtrado, agrupado e informes.</p>
+<p>En muchos aspectos, <strong>un almacén de datos es tan bueno como lo sean los atributos de sus dimensiones</strong>: la capacidad analítica depende mucho de su <strong>calidad y profundidad</strong>, y un conjunto robusto de atributos es lo que da capacidad de <strong>slicing y dicing</strong>.</p>
+<p>Una duda frecuente es qué hacer con los <strong>atributos numéricos</strong>: ¿dimensión o medida? Normalmente no es difícil: los <strong>valores continuos</strong> son medidas y los <strong>valores discretos</strong> (lista corta) que participan en restricciones y etiquetas son atributos de dimensión. Ejemplo con el precio de un producto: en una <strong>tienda de todo a 10, 20 y 30 euros</strong> es un atributo de dimensión; si los <strong>precios cambian mucho</strong> (un continuo), es una medida.</p>
+<p>Las dimensiones contienen a menudo <strong>relaciones jerárquicas</strong> (producto → marca → país, o calle → ciudad → región → país), y esa <strong>información jerárquica se almacena de forma redundante</strong> para facilitar y optimizar las consultas.</p>
+<p><img src="../../../img/myad/myad-t1-dim-normalizadas.png" alt="Dimensiones normalizadas vs desnormalizadas|550" loading="lazy">
+<em>Izquierda: la jerarquía repartida en varias tablas (producto → marca → categoría). Derecha: la misma información aplanada en una sola tabla, repitiendo marca, país, región, etc.</em></p>
+<p>Por eso <strong>hay que resistirse a normalizar</strong> el modelo. Un modelo normalizado dejaría de ser una estrella y pasaría a ser un <em><strong>snowflake</strong></em> (copo de nieve). La normalización tiene un <strong>impacto residual en el tamaño</strong> de la base de datos, porque las dimensiones tienen pocas filas, <strong>pero un impacto negativo en el rendimiento</strong>, al requerir <strong>más JOINs</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-snowflake.png" alt="Esquema snowflake|450" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=HvzO18fUjqY">Tabla de hechos y dimensiones (Modelo Estrella)</a> — qué va en cada tipo de tabla, con un ejemplo (vídeo, 6:30).
+<a href="https://www.youtube.com/watch?v=sCn1-fF5Jkw">Esquemas del modelo dimensional</a> — estrella frente a copo de nieve y cuándo usar cada uno (vídeo, 6 min).</p>
+</div>
+<h2>1.3.8 Hechos y dimensiones unidos: el esquema en estrella</h2>
+<p>Cada <strong>proceso de negocio</strong> se representa con un modelo dimensional formado por una <strong>tabla de hechos rodeada de tablas de dimensiones</strong>. El esquema resultante es <strong>simple y simétrico</strong>, lo que facilita <strong>entender y navegar</strong> por los datos y hace que los usuarios <strong>reconozcan su negocio</strong> en él. Lo caracterizan un <strong>número reducido de tablas</strong> y <strong>descriptores significativos</strong>, así que es <strong>fácil de navegar y difícil equivocarse</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-estrella-completa.png" alt="Esquema en estrella completo|420" loading="lazy"></p>
+<p>Esa simplicidad también da <strong>rendimiento</strong>: hay <strong>menos JOINs</strong>, se <strong>filtra primero en las dimensiones</strong> y luego se hace el JOIN con la tabla de hechos, y <strong>solo hace falta pasar una vez por la tabla de hechos</strong>. Además, <strong>todas las dimensiones son equivalentes</strong>: son <strong>puntos de entrada</strong> a los hechos, y el modelo <strong>no tiene sesgo hacia ciertas consultas</strong>.</p>
+<p>El esquema es <strong>fácil de extender</strong>, de tres formas. Se pueden <strong>añadir medidas nuevas</strong> a la tabla de hechos siempre que la <strong>granularidad sea consistente</strong>, intentando que la medida <strong>se genere en el mismo evento</strong>; si no hay datos previos, se rellenan con <strong>NULLs</strong>. Se pueden <strong>añadir atributos</strong> a las dimensiones, rellenando lo anterior con un <strong>&quot;No disponible&quot;</strong> o similar, y las <strong>aplicaciones anteriores seguirán funcionando</strong> porque desconocen el cambio. Y se pueden <strong>añadir dimensiones</strong> nuevas siempre que <strong>cada hecho se asocie a un solo elemento</strong> de la nueva dimensión, lo que requiere una <strong>nueva clave externa</strong> en la tabla de hechos y probablemente una <strong>entrada por defecto</strong> en la dimensión.</p>
+<p>Conviene recordar que los <strong>datos atómicos (no agregados) son los más expresivos</strong>: son la base de las tablas de hechos y <strong>reducen la probabilidad de no poder responder a una consulta futura</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-ejemplo-consulta.png" alt="Ejemplo de analítica|600" loading="lazy"></p>
+<p>El ejemplo de la figura calcula el <strong>importe total vendido por marca y país en julio de 2023</strong>. La consulta hace el <strong>JOIN</strong> de la tabla de hechos <code>ventas</code> con las dimensiones <code>tiempo</code>, <code>producto</code> y <code>tienda</code>, <strong>filtra</strong> por <code>d.mes=7 and d.ano=2023</code>, <strong>agrupa</strong> por <code>p.marca, t.pais</code> y <strong>agrega</strong> con <code>sum(v.importe)</code>:</p>
+<pre><code class="language-sql">SELECT p.marca as marca, t.pais as pais, sum(v.importe) as importe
+FROM tiempo d, producto p, tienda t, ventas v
+WHERE d.id = v.tiempo and p.id = v.producto and t.id = v.tienda
+  and d.mes=7 and d.ano=2023
+GROUP BY p.marca, t.pais
+</code></pre>
+<p>Es el patrón de casi toda consulta analítica: <strong>el filtro y la agrupación salen de atributos de las dimensiones, y la suma, de las medidas de los hechos</strong>.</p>
+<h2>1.3.9 Ejemplo completo: ventas en un supermercado</h2>
+<p>Las transparencias de prácticas desarrollan el ejemplo clásico de Kimball. El <strong>proceso de negocio</strong> son las <strong>ventas de una cadena de supermercados</strong> y cada <strong>línea de ticket</strong> es un evento de ese proceso: una compra genera un ticket con varias líneas, una por producto. De cada evento se guardan <strong>medidas</strong> (importe neto, unidades) en la tabla de hechos, y cada evento ocurre en un <strong>contexto</strong> (qué producto, qué cliente, qué tienda, qué fecha), que son las <strong>dimensiones</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-estrella-kimball.png" alt="Esquema en estrella de ventas|500" loading="lazy">
+<em><code>Retail Sales Fact</code> guarda una fila por línea de ticket, con las FK a fecha, producto, tienda, promoción, cliente y empleado, y las medidas <code>Sales Dollars</code> y <code>Sales Units</code>. <code>Transaction #</code> es una <strong>dimensión degenerada</strong>.</em></p>
+<p>La <strong>dimensión producto</strong> muestra cómo se guarda la jerarquía <strong>desnormalizada</strong>: cada fila repite marca, subcategoría, categoría y departamento del producto, además de atributos descriptivos como el contenido en grasa.</p>
+<p><img src="../../../img/myad/myad-t1-dimension-producto.png" alt="Dimensión producto|600" loading="lazy"></p>
+<p>La <strong>dimensión tiempo</strong> es el ejemplo típico de dimensión rica en atributos: para cada fecha se precalculan el día de la semana, el mes, el trimestre, el año, el año fiscal y <strong>indicadores</strong> como si es festivo o día laborable. Así, preguntas como &quot;ventas en días festivos&quot; se responden filtrando por un atributo, sin calcular nada.</p>
+<p><img src="../../../img/myad/myad-t1-dimension-tiempo.png" alt="Dimensión tiempo|600" loading="lazy"></p>
+<p>Con ese esquema, un informe como <em>&quot;total de ventas por zona y marca de producto durante junio de 2013&quot;</em> se resuelve <strong>filtrando</strong> por la dimensión fecha, <strong>agrupando</strong> por atributos de las dimensiones tienda (distrito) y producto (marca) y <strong>sumando</strong> la medida <code>Sales Dollars</code>.</p>
+<p><img src="../../../img/myad/myad-t1-informe-ejemplo.png" alt="Ejemplo de informe|600" loading="lazy"></p>
+<p>Un detalle de implementación que añaden las prácticas: las <strong>claves primarias de las dimensiones son <em>subrogadas</em></strong>, es decir, identificadores propios del almacén (un entero sin significado) en lugar de la clave del sistema operacional. Esto es lo que permite, entre otras cosas, guardar varias versiones de un mismo elemento, como se ve en el apartado de dimensiones lentamente cambiantes.</p>
+<h1>1.4 Proceso de diseño en 4 pasos</h1>
+<p>Para diseñar un modelo dimensional se siguen <strong>cuatro pasos, en este orden</strong>.</p>
+<ol>
+<li><strong>Seleccionar el proceso de negocio.</strong> Define el objetivo y es lo que permite declarar después la granularidad, las dimensiones y los hechos.</li>
+<li><strong>Declarar la granularidad.</strong> Es el <strong>paso clave, porque &quot;ata&quot; al resto</strong>: debe escogerse <strong>antes</strong> de elegir dimensiones y hechos, ya que cada uno debe ser <strong>consistente con ella</strong>. <strong>Distintos niveles de granularidad no pueden coexistir</strong> en la misma tabla de hechos.</li>
+<li><strong>Identificar las dimensiones.</strong> Son el <strong>quién, dónde, qué, cuándo, por qué y cómo</strong>, que ayudan a &quot;pensar el problema&quot;. Son <strong>atributos descriptivos</strong> para agrupar, filtrar y etiquetar, y deben ser <strong>consistentes con la granularidad</strong>.</li>
+<li><strong>Identificar los hechos.</strong> Son las <strong>medidas</strong> del proceso analizado, también <strong>consistentes con la granularidad</strong>: una fila de la tabla de hechos tiene una <strong>relación uno a uno con un evento de medición</strong>, tal como lo describe esa granularidad.</li>
+</ol>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: montar el álbum de fotos antes de pegar las fotos</p>
+<p>Primero eliges <strong>de qué va el álbum</strong> (el proceso: el viaje), luego decides <strong>qué es cada página</strong> (la granularidad: una foto por día, o una por ciudad). Solo entonces tiene sentido decidir <strong>qué etiquetas pones</strong> a cada página (dimensiones) y <strong>qué datos anotas</strong> (hechos). Si cambias de idea sobre qué es una página a mitad del álbum, todo lo anterior deja de encajar: por eso la granularidad se declara antes y no se mezcla.</p>
+</div>
+<div class="callout callout-note">
+<p class="callout-titulo">Estas transparencias de prácticas son una **introducción complementaria**, no exhaustiva: la presentación de teoría es la referencia de cara al examen.</p>
+</div>
+<h1>1.5 Dimensiones lentamente cambiantes (SCD)</h1>
+<p>Solemos pensar que el contexto que aportan las dimensiones es <strong>fijo</strong>, pero aunque los atributos son <strong>relativamente estables, pueden cambiar</strong>: un producto cambia de departamento, un cliente se muda, un empleado cambia de categoría. <strong>Ignorar esa volatilidad corrompe la precisión analítica</strong>, así que el diseñador debe fijar una <strong>estrategia de gestión de cambios para cada atributo</strong> de la dimensión.</p>
+<p>Existen <strong>8 tipos</strong> (del 0 al 7); algunos son muy específicos, otros son soluciones generales y habituales, y algunos son <strong>híbridos</strong> que combinan varios. La referencia es el capítulo 5 del libro de Kimball y Ross. Estos son los más populares.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la ficha de un cliente</p>
+<p>Imagina la ficha de papel de un cliente que se muda de ciudad. Puedes <strong>no tocar nunca</strong> el dato de origen (tipo 0), <strong>tachar la ciudad vieja y escribir la nueva</strong> perdiendo el pasado (tipo 1), <strong>archivar la ficha antigua y abrir una nueva</strong> con fechas de validez (tipo 2), o <strong>separar en otra ficha aparte</strong> los datos que cambian cada dos por tres (tipo 4).</p>
+</div>
+<p>El <strong>tipo 0, retener el original</strong>, significa que el valor <strong>nunca cambia</strong> tras su inserción inicial. Está pensado para <strong>atributos duraderos</strong>, como los vinculados al momento de creación (por ejemplo, la <strong>fecha de alta</strong>).</p>
+<p>El <strong>tipo 1, sobrescribir el valor</strong>, <strong>reemplaza el valor viejo por el actual</strong>. Es <strong>simple y directo</strong>, <strong>no modifica la tabla de hechos</strong> ni hace crecer la dimensión, pero <strong>destruye la historia de forma permanente</strong>: ya no se podrá responder a &quot;¿tuvo beneficios para las ventas el cambio de departamento?&quot;. Es apropiado para <strong>cambios menores</strong> (una falta de ortografía) o cuando <strong>no tiene sentido guardar el histórico</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>ProdID</th>
+<th>SKU</th>
+<th>Nombre</th>
+<th>Departamento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12345</td>
+<td>ABC922-Z</td>
+<td>IntelliKidz</td>
+<td><s>Educación</s> → <strong>Estrategia</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Su efecto secundario es que <strong>las herramientas de BI dan resultados distintos antes y después</strong> del cambio: un informe de ventas agregadas por departamento <strong>cambia</strong>, los <strong>cálculos preagregados</strong> anteriores dejan de reflejar el estado actual y, si el modelo está sobre un <strong>cubo OLAP</strong>, hay que <strong>reprocesarlo</strong>.</p>
+<p>El <strong>tipo 2, añadir una nueva fila</strong>, <strong>aísla la historia</strong>: en el momento del cambio se <strong>añade una fila nueva a la dimensión con una nueva clave subrogada</strong>. Los <strong>hechos pasados siguen apuntando a la clave antigua</strong> y los nuevos apuntan a la nueva fila, así que cada venta queda asociada al departamento que el producto tenía <strong>en ese momento</strong>. Es la <strong>aproximación más habitual</strong> y la más útil cuando <strong>no sabemos cómo evolucionarán</strong> los atributos. Se suele acompañar de <strong>metadatos</strong>: <strong>fecha de inicio</strong>, <strong>fecha de expiración</strong> e <strong>indicador de fila actual</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>ProdID</th>
+<th>SKU</th>
+<th>Nombre</th>
+<th>Departamento</th>
+<th>FechaInicio</th>
+<th>FechaExpiración</th>
+<th>IndicadorActual</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12345</td>
+<td>ABC922-Z</td>
+<td>IntelliKidz</td>
+<td>Educación</td>
+<td>01/01/2026</td>
+<td>20/09/2026</td>
+<td>Expirado</td>
+</tr>
+<tr>
+<td>26584</td>
+<td>ABC922-Z</td>
+<td>IntelliKidz</td>
+<td>Estrategia</td>
+<td>21/09/2026</td>
+<td>31/12/9999</td>
+<td>Actual</td>
+</tr>
+</tbody>
+</table>
+<p><em>Fíjate en que el <strong>ProdID (clave subrogada) cambia</strong> aunque el SKU y el nombre del producto sean los mismos, y en que la fila vigente usa la fecha de expiración 31/12/9999.</em></p>
+<p>El <strong>tipo 4, añadir una minidimensión</strong>, resuelve el caso de los atributos <strong>muy volátiles</strong>, como los <strong>demográficos</strong> (franja de edad, franja de ingresos, estado civil). Si se aplicara el tipo 2 a una tabla de <strong>millones de clientes</strong>, la dimensión <strong>crecería de forma descontrolada</strong> y <strong>degradaría el rendimiento</strong> del almacén. La solución es <strong>sacar los atributos volátiles a una minidimensión</strong>: la tabla de hechos pasa a tener <strong>dos claves</strong>, la de la dimensión estable (cliente) y la de la minidimensión (por ejemplo, demográfica). Como esos atributos son <strong>rangos</strong>, el número de <strong>combinaciones posibles es asumible</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>DemográficaID</th>
+<th>FranjaEdad</th>
+<th>FrecuenciaCompra</th>
+<th>FranjaIngresos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>21-25</td>
+<td>Baja</td>
+<td>&lt; 30.000 $</td>
+</tr>
+<tr>
+<td>2</td>
+<td>21-25</td>
+<td>Media</td>
+<td>&lt; 30.000 $</td>
+</tr>
+<tr>
+<td>3</td>
+<td>21-25</td>
+<td>Alta</td>
+<td>&lt; 30.000 $</td>
+</tr>
+<tr>
+<td>4</td>
+<td>21-25</td>
+<td>Baja</td>
+<td>30.000–39.999 $</td>
+</tr>
+<tr>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr>
+<td>142</td>
+<td>26-30</td>
+<td>Baja</td>
+<td>&lt; 30.000 $</td>
+</tr>
+</tbody>
+</table>
+<h1>1.6 Arquitectura DW/BI de Kimball</h1>
+<h2>1.6.1 Visión general</h2>
+<p>Kimball divide el sistema en <strong>cuatro componentes</strong>, y es importante entender el <strong>significado estratégico de cada uno</strong> para no confundir sus roles.</p>
+<p><img src="../../../img/myad/myad-t1-arquitectura-kimball.png" alt="Arquitectura de Kimball|650" loading="lazy">
+<em>De izquierda a derecha: los <strong>sistemas operacionales</strong> generan transacciones; el <strong>sistema ETL</strong> transforma los datos, los adecúa a las dimensiones establecidas, opcionalmente los normaliza y <strong>no da soporte a consultas</strong> (sus objetivos de diseño son <strong>rendimiento, integridad y consistencia</strong>); el <strong>área de presentación</strong> guarda el <strong>modelo dimensional</strong> (estrella o cubos) con <strong>datos atómicos y agregados</strong>, organizado por <strong>procesos de negocio</strong> y con <strong>dimensiones acordadas</strong> (sus objetivos son <strong>facilidad de uso y rendimiento en las consultas</strong>); y las <strong>aplicaciones de BI</strong> permiten consultas ad-hoc, informes estándar, analítica y minería de datos.</em></p>
+<h2>1.6.2 Sistemas operacionales</h2>
+<p><strong>Capturan los datos de las transacciones</strong> del negocio durante la operativa diaria. Son un <strong>componente fuera del sistema DW/BI</strong>, sobre el que <strong>tendremos poco o ningún control</strong>. Sus consultas <strong>obtienen pocas filas</strong> y <strong>no son amplias ni inesperadas</strong> como en un DW/BI: están <strong>en el código de las aplicaciones</strong> y son <strong>muy previsibles</strong>.</p>
+<p>Mantienen un <strong>histórico reducido</strong> (un buen sistema DW/BI <strong>minimiza la necesidad</strong> de guardar histórico en ellos) y <strong>a menudo no comparten datos</strong> con otros sistemas, por ser aplicaciones de propósito específico; este hándicap se reduce adoptando soluciones tipo <strong>ERP</strong> (<em>Enterprise Resource Planning</em>).</p>
+<h2>1.6.3 Sistema ETL (Extracción, Transformación y Carga)</h2>
+<p>Está formado por <strong>estructuras de datos y un conjunto de procesos</strong>, y tiene tres fases. En la <strong>extracción</strong> se <strong>leen y entienden las fuentes</strong> y se copian los datos necesarios al sistema ETL, obteniendo los datos <strong>&quot;crudos&quot;</strong>. En la <strong>transformación</strong> se aplican operaciones como la <strong>limpieza de datos</strong> (<em>data cleansing</em>: valores nulos, formatos, corrección de errores, conflictos de dominio), la <strong>combinación de datos de múltiples fuentes</strong> y la <strong>eliminación de duplicados</strong>; estas operaciones <strong>aportan valor</strong> y, de forma colateral, permiten <strong>detectar errores en las fuentes</strong> que sirven para <strong>optimizar los sistemas operacionales</strong>. En la <strong>carga</strong> se llevan los datos transformados al <strong>modelo dimensional</strong> del área de presentación.</p>
+<p>Buena parte de los subsistemas ETL se centran en el <strong>procesamiento de las dimensiones</strong>: asignación de <strong>claves subrogadas</strong>, transformación de <strong>códigos en atributos descriptivos</strong>, combinación y separación de atributos, combinación de estructuras para <strong>desnormalizar</strong>, etc. La preparación de las <strong>tablas de hechos es más directa</strong>, aunque <strong>requiere más tiempo de procesamiento</strong> por el volumen.</p>
+<p>¿Conviene guardar los datos de forma <strong>normalizada dentro del ETL</strong> antes de cargarlos? En general <strong>no es buena aproximación</strong>: una vez validados, construir una base de datos en <strong>3FN</strong> solo para volver a transformarla en estructuras desnormalizadas <strong>procesa los datos dos veces</strong> y <strong>gasta recursos</strong>. Si los datos ya llegan en 3FN, algunos desarrolladores se sienten más cómodos transformando sobre estructuras normalizadas, lo que es <strong>aceptable y discutible, pero no debe ser el objetivo principal</strong>; en todo caso esas estructuras <strong>quedan fuera del alcance de las consultas</strong>, porque no cumplen los requisitos de facilidad de uso y rendimiento. De hecho, <strong>algunos proyectos fallan</strong> por gastar demasiados recursos en conseguir una vista normalizada y completa de los datos de la organización.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=amjYYy-CFzs">¿Qué es un ETL? Extraer, transformar y cargar datos</a> — las tres fases con ejemplos (vídeo, 6:23).</p>
+</div>
+<h2>1.6.4 Área de presentación</h2>
+<p>Es el componente donde los datos se <strong>almacenan, organizan y quedan disponibles</strong> para consulta y análisis, y es <strong>el único al que accede la comunidad que toma decisiones</strong>, a través de las aplicaciones de BI.</p>
+<p>Kimball hace varias consideraciones sobre él. Los datos deben <strong>almacenarse y accederse mediante modelos dimensionales</strong>, implementados con SGBD o cubos OLAP; hoy esto <strong>apenas se discute</strong>, porque el modelo dimensional es la técnica más apropiada para presentar los datos a los usuarios. Deben tener el <strong>máximo detalle necesario (atómicos)</strong>, lo que facilita resolver <strong>consultas futuras no predecibles</strong>, y pueden <strong>complementarse con agregados</strong> por rendimiento; <strong>no es aceptable</strong> que el almacén solo contenga agregados y que el usuario tenga que ir a un <strong>modelo normalizado</strong> para ver el detalle. Además, los modelos deben estructurarse <strong>sobre los eventos del proceso de negocio</strong> y <strong>nunca diseñarse pensando en los informes</strong> demandados en un momento concreto.</p>
+<p>Como es habitual que <strong>varios departamentos participen en un mismo proceso de negocio</strong>, hay que construir un <strong>modelo común</strong> para que todos &quot;vean lo mismo&quot;, en lugar de <em>n</em> modelos ligeramente distintos. Ahora bien, es <strong>poco realista construir el sistema completo de una vez</strong>, y <strong>construir piezas aisladas</strong> no da la consistencia buscada: la solución es una <strong>aproximación incremental sobre una arquitectura predefinida</strong>, la <em><strong>Enterprise data warehouse bus architecture</strong></em>.</p>
+<p>Para ello hace falta un <strong>conjunto de dimensiones estable y acordado</strong> que se comparta entre los procesos de negocio. Si cada proceso usa <strong>dimensiones diferentes</strong>, se acaba con <strong>modelos ad-hoc</strong> que dan <strong>vistas incompatibles</strong> y <strong>no se pueden integrar</strong>. En una organización pueden convivir <strong>decenas de modelos que comparten dimensiones</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-bus-dimensiones.png" alt="Matriz de bus|350" loading="lazy">
+<em>Los procesos de negocio (ventas, pedidos, inventario) comparten las mismas dimensiones: fecha, producto, tienda, promoción, almacén, vendedor, repartidor.</em></p>
+<p>En resumen, los datos del área de presentación son <strong>dimensionales</strong>, <strong>atómicos</strong> (opcionalmente con agregados por eficiencia), <strong>centrados en el proceso de negocio</strong> (no por departamentos) y <strong>comparten un conjunto común de dimensiones</strong>.</p>
+<h2>1.6.5 Aplicaciones de inteligencia de negocio</h2>
+<p>Son las aplicaciones con las que se hace la <strong>analítica de apoyo a la decisión</strong>. Las hay <strong>simples</strong>, que permiten <strong>consultas ad-hoc</strong>, y <strong>complejas</strong>, como la <strong>minería de datos</strong>. Las herramientas de consulta ad-hoc son <strong>muy potentes, pero requieren conocimientos técnicos</strong> que no todos los usuarios tienen, así que hacen falta <strong>aplicaciones parametrizables y con plantillas prediseñadas</strong> que no obliguen a construir la consulta completa. A veces, los <strong>resultados de las analíticas se cargan de vuelta</strong> como datos en otros componentes de la arquitectura (sistemas operacionales, ETL o área de presentación).</p>
+<h1>1.7 Arquitecturas alternativas</h1>
+<h2>1.7.1 Data marts independientes</h2>
+<p>Cada <strong>departamento construye su propia solución</strong>, sin intención de compartirla ni integrarla: sus propias transacciones, su ETL, su <em>data mart</em> y su aplicación BI.</p>
+<p><img src="../../../img/myad/myad-t1-datamarts-independientes.png" alt="Data marts independientes|500" loading="lazy"></p>
+<p>El problema es que <strong>varios departamentos suelen necesitar datos del mismo proceso de negocio</strong>, y sus informes y visiones <strong>no son consistentes</strong>. Aunque es <strong>habitual en organizaciones grandes</strong>, <strong>no tiene defensores</strong>: es una solución <strong>&quot;rápida y barata&quot; a corto plazo</strong>, pero <strong>totalmente ineficiente a largo plazo</strong>.</p>
+<p>La organización acaba con <strong>muchos subsistemas con visiones distintas de los mismos procesos</strong>, lo que da <strong>resultados dispares</strong> sobre el rendimiento global y obliga a <strong>gastar tiempo y recursos debatiendo y unificando informes</strong>. El <strong>modelo dimensional se puede aplicar</strong> a nivel de data mart sin problema, pero esta arquitectura <strong>no sigue las recomendaciones generales</strong>: modelar <strong>por procesos de negocio y no por departamento</strong>, centrarse en los <strong>hechos atómicos</strong> y <strong>compartir dimensiones</strong> para mejorar integración y consistencia.</p>
+<h2>1.7.2 Arquitectura de Inmon: <em>Hub-and-spoke</em> (CIF)</h2>
+<p>En la <em>Corporate Information Factory</em> de Inmon, los datos se extraen de los sistemas operacionales mediante el sistema de <strong>Adquisición de Datos</strong> (equivalente al ETL) y los <strong>datos atómicos se almacenan en el EDW</strong> (<em>Enterprise Data Warehouse</em>), una base de datos <strong>en 3FN</strong>: aquí <strong>la normalización es obligatoria</strong>, y el EDW hace de <strong>integrador de datos</strong> de la organización, proporcionando consistencia. Ojo con la distinción que subraya la diapositiva: <strong>normalizar ≠ integrar</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-arquitectura-inmon.png" alt="Arquitectura de Inmon|600" loading="lazy"></p>
+<p>De ahí, el sistema de <strong>Entrega de Datos</strong> alimenta <strong>data marts dimensionales</strong>, que son <strong>típicamente departamentales</strong> (no centrados en procesos de negocio) y <strong>normalmente con datos agregados</strong>, ya que los atómicos están en el EDW. Algunas <strong>aplicaciones BI pueden consultar directamente el EDW</strong>.</p>
+<p>Esa <strong>segunda transformación</strong> hace que sea <strong>complicado &quot;seguir la pista&quot;</strong> de un dato hasta el nivel atómico, sobre todo cuando hay transformaciones no básicas, como <strong>renombrar atributos</strong> o hacer <strong>cálculos alternativos por departamento</strong>. La <strong>opinión de Kimball</strong> es que una <strong>CIF extrema puede ser no funcional</strong>: si hay que consultar el EDW para obtener el detalle, el <strong>modelo normalizado es complejo para los usuarios y puede rendir mal</strong>; y si los data marts <strong>no acuerdan un conjunto común de dimensiones</strong>, darán <strong>visiones incompatibles</strong>.</p>
+<h2>1.7.3 Arquitectura híbrida</h2>
+<p>Combina las dos: mantiene el <strong>EDW normalizado con datos atómicos</strong>, pero <strong>no accesible para los usuarios</strong>, y añade un <strong>área de presentación</strong> al estilo Kimball, <strong>dimensional</strong>, con <strong>datos atómicos y agregados</strong>, <strong>centrada en procesos de negocio</strong> y con un <strong>conjunto común y acordado de dimensiones</strong>.</p>
+<p><img src="../../../img/myad/myad-t1-arquitectura-hibrida.png" alt="Arquitectura híbrida|600" loading="lazy"></p>
+<p>¿Lo mejor de los dos mundos? Depende: si <strong>ya se invirtió</strong> en un EDW en 3FN y <strong>no cubre las expectativas</strong> de los usuarios (usabilidad y rendimiento), puede ser una buena alternativa; pero <strong>si se empieza desde cero</strong>, requiere <strong>tiempo y dinero innecesarios</strong>.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=Tff34jj_V-0">Let's Compare the Kimball and Inmon Data Warehouse Architectures</a> — las dos filosofías comparadas, de abajo arriba frente a de arriba abajo (vídeo, 5 min, inglés).</p>
+</div>
+<h1>1.8 Mitos del modelado dimensional</h1>
+<p><strong>&quot;Son solo para datos agregados&quot;.</strong> Falso: para poder responder a <strong>consultas futuras no previstas</strong> hay que guardar los datos con la <strong>máxima granularidad (atómicos)</strong>, y los agregados se añaden como complemento para mejorar la eficiencia.</p>
+<p><strong>&quot;Son departamentales, no de empresa&quot;.</strong> Falso: los modelos dimensionales deben organizarse <strong>por procesos de negocio</strong> (pedidos, facturación, gestión de clientes, recursos humanos, contabilidad, inventario...) y <strong>no por departamento</strong>.</p>
+<p><strong>&quot;No son escalables&quot;.</strong> Falso: son <strong>extremadamente escalables</strong>, y en la práctica existen tablas de hechos con <strong>billones de filas</strong>. Además, los modelos normalizados y los dimensionales <strong>contienen la misma información y relaciones</strong> y pueden responder a las mismas preguntas, porque <strong>cada relación expresada en uno puede expresarse en el otro</strong>.</p>
+<p><strong>&quot;Son para un uso predecible&quot;.</strong> Falso: no deben diseñarse <strong>para un informe o analítica concretos</strong>, sino <strong>centrados en los procesos de negocio</strong>, y deben <strong>almacenar información detallada</strong> para atender consultas no predecibles. El corolario es que son <strong>extremadamente flexibles, extensibles y adaptables al cambio</strong>.</p>
+<p><strong>&quot;No pueden integrarse&quot;.</strong> Falso: se pueden <strong>integrar datos de varios modelos</strong> si se acuerda un <strong>conjunto común de dimensiones</strong>. La integración requiere <strong>etiquetas estandarizadas</strong>, <strong>valores acordados</strong> y <strong>definiciones claras</strong> de los conceptos. Sin ese conjunto común, se obtienen <strong>soluciones específicas por proceso</strong> que solo pueden usarse de forma aislada.</p>
+<p>El tema sigue el libro de referencia <strong>Ralph Kimball y Margy Ross, <em>The Data Warehouse Toolkit</em>, 3ª edición (Wiley, 2013)</strong>.</p>
+<h1>1.9 Ideas clave</h1>
+<ul>
+<li><strong>OLTP</strong>: sistemas operacionales, donde se &quot;meten&quot; los datos; transacciones rápidas, estado actual, sin histórico. <strong>OLAP</strong>: sistemas DW/BI, de donde se &quot;saca&quot; la información; consultas complejas sobre mucho volumen y con histórico.</li>
+<li><strong>Objetivos DW/BI</strong>: acceso fácil, información consistente, adaptable al cambio, a tiempo, segura, base confiable para decidir y <strong>aceptada por los usuarios</strong> (los dos últimos, clave y a menudo ignorados).</li>
+<li><strong>Modelado dimensional</strong>: entendible + rápido. Cubo con <strong>dimensiones</strong> (ejes) y <strong>hechos/medidas</strong> (celdas). Operaciones: <strong>roll-up, drill-down, slice, dice, pivot</strong>.</li>
+<li>No vale analizar sobre la BD normalizada: <strong>OLAP colisiona con OLTP</strong>, demasiados <strong>JOINs</strong> y modelos <strong>difíciles de entender</strong> para el usuario.</li>
+<li><strong>Tabla de hechos</strong>: una fila por evento, misma <strong>granularidad</strong>, medidas <strong>aditivas / semiaditivas / no aditivas</strong>, <strong>dispersa</strong> (sin filas de ceros), ~<strong>90% del espacio</strong>, FKs a dimensiones y <strong>PK compuesta</strong>.</li>
+<li>Tipos: <strong>transacciones</strong> (la más común, con dimensiones degeneradas), <strong>instantánea periódica</strong> (granularidad = periodo, más densa) e <strong>instantánea acumulada</strong> (hitos de un flujo, se actualiza, usa <strong>role playing</strong>).</li>
+<li><strong>Dimensiones</strong>: contexto (quién, qué, dónde, cómo, por qué), 50-100 atributos, textos explicativos y no códigos, jerarquías <strong>desnormalizadas</strong> a propósito. Normalizar → <strong>snowflake</strong> → más JOINs y peor rendimiento.</li>
+<li><strong>Estrella</strong>: hechos en el centro, dimensiones alrededor; menos JOINs, todas las dimensiones equivalentes, fácil de extender (medidas, atributos, dimensiones). Filtrar y agrupar por dimensiones; sumar medidas.</li>
+<li><strong>Kimball</strong>: sistemas operacionales → <strong>ETL</strong> (sin consultas; rendimiento, integridad, consistencia) → <strong>área de presentación</strong> (dimensional, atómica, por procesos, dimensiones comunes) → <strong>aplicaciones BI</strong>. Crecimiento incremental con la <strong>bus architecture</strong>.</li>
+<li><strong>Alternativas</strong>: <strong>data marts independientes</strong> (rápido y barato, inconsistente a largo plazo), <strong>Inmon/CIF</strong> (EDW en 3FN + data marts departamentales agregados) e <strong>híbrida</strong> (EDW no accesible + área de presentación Kimball).</li>
+<li><strong>Características del DW</strong>: repositorio <strong>centralizado</strong> de fuentes heterogéneas, <strong>variable en el tiempo</strong> (volcados) y <strong>no volátil</strong> (solo se incrementa).</li>
+<li><strong>Diseño en 4 pasos</strong>: proceso de negocio → <strong>granularidad</strong> (ata al resto) → dimensiones → hechos. PKs de dimensiones <strong>subrogadas</strong>.</li>
+<li><strong>SCD</strong>: tipo <strong>0</strong> (no cambia nunca), tipo <strong>1</strong> (sobrescribe y pierde historia), tipo <strong>2</strong> (nueva fila con nueva clave subrogada + fechas e indicador: la opción habitual), tipo <strong>4</strong> (minidimensión para atributos muy volátiles). Hay 8 tipos (0–7).</li>
+<li><strong>Mitos</strong>: no son solo agregados, ni departamentales, ni poco escalables, ni para uso predecible, ni imposibles de integrar (con dimensiones comunes).</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="practica-1.html"><span class="nav-etiqueta">siguiente →</span>Práctica 1</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

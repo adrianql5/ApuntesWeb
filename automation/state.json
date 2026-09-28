@@ -1,7 +1,7 @@
 {
   "vaults": {
     "2-1": {
-      "fecha": "2026-09-27T17:30:51.452Z",
+      "fecha": "2026-09-28T19:05:49.457Z",
       "hashes": {
         "AED/1. ÁRBOLES BINARIOS.md": "125e4a6b730c773b5d0a1e65999613a734cebec2",
         "AED/2. ESTRUCTURAS PARA BÚSQUEDA.md": "2dc7ffe18a9f58a6d16b387c0d8a61fa539b1782",
@@ -42,7 +42,7 @@
       }
     },
     "2-2": {
-      "fecha": "2026-09-27T17:30:51.455Z",
+      "fecha": "2026-09-28T19:05:49.461Z",
       "hashes": {
         "AQRCOMP/1. Sistemas Multinúcleo.md": "16bacebaf0fdc589b11186fa040f06f8e9add308",
         "AQRCOMP/2. Segmentación.md": "7ef25c0c2197520b7ab1c2c78f4c894d81748ee6",
@@ -84,7 +84,7 @@
       }
     },
     "3-1": {
-      "fecha": "2026-09-27T17:30:51.455Z",
+      "fecha": "2026-09-28T19:05:49.463Z",
       "hashes": {
         "ASR/1. Instalación de Linux Debian.md": "c18dfa35e160f960860b69eba5404740c720541c",
         "ASR/2. Instalación de Software.md": "f4b321001a6b3ed9ab66ac01304aebc3ea9d1b05",
@@ -122,7 +122,7 @@
       }
     },
     "3-2": {
-      "fecha": "2026-09-27T17:30:51.456Z",
+      "fecha": "2026-09-28T19:05:49.463Z",
       "hashes": {
         "CIBER/1. Introducción.md": "c9049b66b0d8490e6d339c0b317566c965ec22bb",
         "CIBER/2. Criptografía.md": "05f85a60edc24c58290103b5c0b89fb34ca5ec2c",
@@ -151,7 +151,7 @@
       }
     },
     "legacy": {
-      "fecha": "2026-09-27T17:30:51.456Z",
+      "fecha": "2026-09-28T19:05:49.464Z",
       "hashes": {
         "Algebra/README.md": "cb0a10e15606ee89eac28d25f3ad9ed336044f92",
         "Calculo/README.md": "aa67f3533d3776381d2e91c7575eebaa509b8a13",
@@ -166,14 +166,14 @@
       }
     },
     "4-1": {
-      "fecha": "2026-09-27T17:30:51.456Z",
+      "fecha": "2026-09-28T19:05:49.464Z",
       "hashes": {
         "ENCO/1. Formatos de Servidores - Racks y Blades.md": "dd598c2df0b41281907ef79e58088ad2084680ac",
         "ENCO/2. Centros de Procesamiento de Datos (CPDs).md": "ff0372bf14d88862bcb6ed7c175da1c4938a6e2f",
         "MYAD/1. Almacenes de Datos.md": "a0fa18678b6326224b25b07ca47dea33308a19f7",
         "MYAD/Práctica 1.md": "6e5b391ee63b6aeb8a286c70a40769d31b921550",
         "SISIN/1. Temple Simulado.md": "414063328e4b1a9c7ec50c025ec2275b8489d43c",
-        "README.md": "abc04ab340519948fbd1efd74eb9cc579d554b4b"
+        "README.md": "01b0a483dcc6778d58db7dfd8279f30ac3fbc1de"
       }
     }
   }

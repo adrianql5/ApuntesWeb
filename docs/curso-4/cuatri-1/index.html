@@ -43,46 +43,147 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
 <section class="observaciones" aria-label="Observaciones del cuatrimestre">
   <h2 class="observaciones-titulo"><mark>Observaciones del cuatrimestre</mark></h2>
   <div class="prosa">
-<pre><code>INPUT (T0, α, L, Tf)
-T ← T0
-S_act ← Genera_solucion_inicial
-WHILE T ≥ Tf DO
-    FOR cont ← 1 TO L(T) DO
-        S_cand ← Selecciona_solucion_N(S_act)
-        δ ← coste(S_cand) − coste(S_act)
-        IF (U(0,1) &lt; e^(−δ/T)) OR (δ &lt; 0) THEN S_act ← S_cand
-    END
-    T ← α(T)
-END
-{Escribe como solución la mejor de las S_act visitadas}
+<p>-- =====================================================================
+-- Almacén de datos: rendimiento deportivo en el circuito IJF
+-- Modelo dimensional en estrella (PostgreSQL)
+-- Granularidad: una fila por participación de un judoka en un
+--               campeonato en una fecha.
+-- =====================================================================</p>
+<p>DROP TABLE IF EXISTS hechos_participacion;
+DROP TABLE IF EXISTS dim_judoka;
+DROP TABLE IF EXISTS dim_campeonato;
+DROP TABLE IF EXISTS dim_categoria_peso;
+DROP TABLE IF EXISTS dim_categoria_edad;
+DROP TABLE IF EXISTS dim_fecha;</p>
+<hr>
+<p>-- DIMENSIÓN FECHA
+-- Jerarquía: día -&gt; mes -&gt; trimestre -&gt; año -&gt; ciclo olímpico</p>
+<hr>
+<p>CREATE TABLE dim_fecha (
+fecha_id        INTEGER      PRIMARY KEY,          -- formato AAAAMMDD
+fecha           DATE         NOT NULL UNIQUE,
+dia             SMALLINT     NOT NULL CHECK (dia BETWEEN 1 AND 31),
+dia_semana      VARCHAR(10)  NOT NULL,             -- 'Lunes', ...
+mes             SMALLINT     NOT NULL CHECK (mes BETWEEN 1 AND 12),
+nombre_mes      VARCHAR(12)  NOT NULL,             -- 'Enero', ...
+trimestre       SMALLINT     NOT NULL CHECK (trimestre BETWEEN 1 AND 4),
+anio            SMALLINT     NOT NULL,
+ciclo_olimpico  VARCHAR(9)   NOT NULL              -- '2025-2028'
+);</p>
+<hr>
+<p>-- DIMENSIÓN CATEGORÍA DE EDAD NATURAL DEL JUDOKA
+-- Categoría que le corresponde por edad el día de la competición.
+-- Sin jerarquía; 'orden' permite compararla con la del campeonato.</p>
+<hr>
+<p>CREATE TABLE dim_categoria_edad (
+categoria_edad_id  SMALLINT     PRIMARY KEY,
+nombre             VARCHAR(10)  NOT NULL UNIQUE,   -- 'Cadete', 'Júnior', 'Sénior'
+orden              SMALLINT     NOT NULL UNIQUE CHECK (orden BETWEEN 1 AND 3),
+edad_natural_min   SMALLINT     NOT NULL,
+edad_natural_max   SMALLINT                        -- NULL = sin límite (sénior)
+);</p>
+<hr>
+<p>-- DIMENSIÓN CATEGORÍA DE PESO
+-- Jerarquía: categoría -&gt; grupo de peso -&gt; género</p>
+<hr>
+<p>CREATE TABLE dim_categoria_peso (
+categoria_peso_id  SMALLINT      PRIMARY KEY,
+nombre             VARCHAR(10)   NOT NULL,         -- '-73 kg', '+100 kg'
+genero             CHAR(1)       NOT NULL CHECK (genero IN ('M', 'F')),
+limite_kg          NUMERIC(5,1),                   -- NULL para '+' (sin límite)
+grupo_peso         VARCHAR(10)   NOT NULL
+CHECK (grupo_peso IN ('Ligero', 'Medio', 'Pesado')),
+UNIQUE (nombre, genero)
+);</p>
+<hr>
+<p>-- DIMENSIÓN CAMPEONATO (una fila por campeonato; la edición concreta
+-- queda identificada por campeonato + fecha en la tabla de hechos)
+-- Jerarquías: ciudad -&gt; país -&gt; continente
+--             campeonato -&gt; rango</p>
+<hr>
+<p>CREATE TABLE dim_campeonato (
+campeonato_id    SERIAL        PRIMARY KEY,        -- clave subrogada
+nombre_oficial   VARCHAR(100)  NOT NULL UNIQUE,    -- 'Grand Slam de París'
+rango            VARCHAR(30)   NOT NULL,           -- 'Grand Slam', 'Grand Prix', 'Masters',
+-- 'Campeonato del Mundo', 'Continental Open'...
+categoria_edad         VARCHAR(10)  NOT NULL
+CHECK (categoria_edad IN ('Cadete', 'Júnior', 'Sénior')),
+categoria_edad_orden   SMALLINT     NOT NULL CHECK (categoria_edad_orden BETWEEN 1 AND 3),
+ciudad           VARCHAR(60)   NOT NULL,
+pais             VARCHAR(60)   NOT NULL,
+continente       VARCHAR(20)   NOT NULL
+);</p>
+<hr>
+<p>-- DIMENSIÓN JUDOKA
+-- Atributos estables: SCD tipo 0.
+-- Cinturón: SCD tipo 2 (nueva fila con nueva clave subrogada).
+-- Jerarquía: judoka -&gt; federación -&gt; unión continental</p>
+<hr>
+<p>CREATE TABLE dim_judoka (
+judoka_sk           SERIAL        PRIMARY KEY,     -- clave subrogada
+judoka_id_ijf       INTEGER       NOT NULL,        -- clave natural (sistema IJF)
+nombre_completo     VARCHAR(120)  NOT NULL,
+genero              CHAR(1)       NOT NULL CHECK (genero IN ('M', 'F')),
+fecha_nacimiento    DATE          NOT NULL,
+federacion_codigo   CHAR(3)       NOT NULL,        -- 'ESP', 'JPN', ...
+federacion_nombre   VARCHAR(100)  NOT NULL,
+union_continental   VARCHAR(5)    NOT NULL,        -- 'EJU', 'JUA', 'PJC', 'AJU', 'OJU'
+cinturon            VARCHAR(15)   NOT NULL,        -- '1º Dan', '2º Dan', ...
+fecha_inicio        DATE          NOT NULL,
+fecha_fin           DATE          NOT NULL DEFAULT DATE '9999-12-31',
+es_actual           BOOLEAN       NOT NULL DEFAULT TRUE,
+UNIQUE (judoka_id_ijf, fecha_inicio),
+CHECK (fecha_fin &gt;= fecha_inicio)
+);</p>
+<hr>
+<p>-- TABLA DE HECHOS: PARTICIPACIÓN</p>
+<hr>
+<p>CREATE TABLE hechos_participacion (
+-- Claves foráneas a dimensiones
+fecha_id                      INTEGER   NOT NULL REFERENCES dim_fecha (fecha_id),
+campeonato_id                 INTEGER   NOT NULL REFERENCES dim_campeonato (campeonato_id),
+judoka_sk                     INTEGER   NOT NULL REFERENCES dim_judoka (judoka_sk),
+categoria_peso_id             SMALLINT  NOT NULL REFERENCES dim_categoria_peso (categoria_peso_id),
+categoria_edad_judoka_id      SMALLINT  NOT NULL REFERENCES dim_categoria_edad (categoria_edad_id),</p>
+<pre><code>-- Medidas aditivas
+puntos               INTEGER   NOT NULL DEFAULT 0 CHECK (puntos &gt;= 0),
+combates_disputados  SMALLINT  NOT NULL CHECK (combates_disputados &gt;= 0),
+combates_ganados     SMALLINT  NOT NULL CHECK (combates_ganados &gt;= 0),
+es_oro               SMALLINT  NOT NULL DEFAULT 0 CHECK (es_oro IN (0, 1)),
+es_plata             SMALLINT  NOT NULL DEFAULT 0 CHECK (es_plata IN (0, 1)),
+es_bronce            SMALLINT  NOT NULL DEFAULT 0 CHECK (es_bronce IN (0, 1)),
+fuera_categoria      SMALLINT  NOT NULL DEFAULT 0 CHECK (fuera_categoria IN (0, 1)),
+
+-- Medidas no aditivas
+posicion             SMALLINT  NOT NULL CHECK (posicion &gt;= 1),
+edad                 SMALLINT  NOT NULL CHECK (edad &gt; 0),
+
+-- Granularidad: un judoka, en un campeonato, en una fecha
+PRIMARY KEY (campeonato_id, fecha_id, judoka_sk),
+CHECK (combates_ganados &lt;= combates_disputados),
+CHECK (es_oro + es_plata + es_bronce &lt;= 1)
 </code></pre>
-<ul>
-<li>
-<p>Representación  de  las  soluciones:  representación  de  orden  (permutaciones)  comenzando y finalizando en la ciudad 0.</p>
-</li>
-<li>
-<p>Solución inicial: generación aleatoria de una permutación válida.</p>
-</li>
-<li>
-<p>Operador  de  selección  de  la  solución  siguiente  Scand  a  partir  de  la  actual  Sact:  operador  de  intercambio.</p>
-</li>
-<li>
-<p>Velocidad de enfriamiento: se ha generado un único vecino.</p>
-</li>
-<li>
-<p>Función de coste: suma de las distancias del camino según el orden del recorrido.</p>
-</li>
-<li>
-<p>Mecanismo de enfriamiento: mecanismo exponencial decreciente que sigue la expressión 𝑇(𝑘)=T0·𝑒(−𝜆𝑘), donde 𝑘 es el número de iteración empezando en 1 y T0, λ son los parámetros de diseño.</p>
-<p>Para esta implementación básica considera, 𝑇(𝑘) = 20 · 𝑒(−0.0045𝑘), para establecer los parámetros por defecto de T0 y 𝜆, con temperatura inicial fija T0=20 y 𝜆=0.0045 respectivamente.</p>
-</li>
-<li>
-<p>Condición de parada: número fijo de iteraciones (limite=500). No se precisa definir Tfinal.</p>
-</li>
-</ul>
-<p>Para verificar tu implementación, puedes utilizar el fichero de localizaciones de 8 ciudades gallegas (<em>grafo8cidades.txt</em>). La solución óptima resuelta con una búsqueda informada como A* se sitúa en torno a los 382km.</p>
-<p>Para comprobar que tu implementación es suficientemente general como para manejar problemas del VC de diferentes tallas, puedes probar también con el fichero de localizaciones de 120 ciudades de USA proporcionado en esta práctica (<em>US120.txt</em>).</p>
-<p><strong>IMPORTANTE</strong>: Es imprescindible que en tu implementación tengas funciones totalmente parametrizadas para el mecanismo de enfriamiento y la función de coste; también deberías parametrizar el algoritmo para poder recibir una solución inicial al principio de la ejecución del algoritmo de Temple Simulado. Estas recomendaciones sobre modularidad te facilitarán la resolución de las cuestiones del test de autoevaluación.</p>
+<p>);</p>
+<p>-- Índices sobre las claves foráneas para acelerar los JOIN
+CREATE INDEX idx_hp_fecha      ON hechos_participacion (fecha_id);
+CREATE INDEX idx_hp_judoka     ON hechos_participacion (judoka_sk);
+CREATE INDEX idx_hp_peso       ON hechos_participacion (categoria_peso_id);
+CREATE INDEX idx_hp_edad_jud   ON hechos_participacion (categoria_edad_judoka_id);</p>
+<p>-- =====================================================================
+-- Consulta de ejemplo: ranking anual 2026 por género y categoría de peso
+-- (se agrupa por la clave natural para unir todas las versiones SCD2)
+-- =====================================================================
+-- SELECT p.genero, p.nombre AS categoria_peso,
+--        j.judoka_id_ijf, MAX(j.nombre_completo) AS judoka,
+--        MAX(j.federacion_codigo) AS federacion,
+--        SUM(h.puntos) AS puntos_totales
+-- FROM hechos_participacion h
+-- JOIN dim_fecha f          ON f.fecha_id = h.fecha_id
+-- JOIN dim_judoka j         ON j.judoka_sk = h.judoka_sk
+-- JOIN dim_categoria_peso p ON p.categoria_peso_id = h.categoria_peso_id
+-- WHERE f.anio = 2026
+-- GROUP BY p.genero, p.nombre, j.judoka_id_ijf
+-- ORDER BY p.genero, p.nombre, puntos_totales DESC;</p>
 
   </div>
 </section>

@@ -1,7 +1,7 @@
 /* ApuntesWeb — "editorial atlántico"
    Tesis: una revista técnica escrita en Compostela: papel cálido, tinta granito,
    verde-azul atlántico y un ocre de liquen. Titulares con carácter, lectura serena.
-   Firma: la ficha de datos que abre cada nota y la lluvia de símbolos de la portada.
+   Firma: la ficha de datos que abre cada nota y el recorrido de cursos de la portada.
    Tipos: Fraunces (titulares) · Newsreader (lectura) · JetBrains Mono (datos/código) */
 
 /* ---------- Fuentes autoalojadas ---------- */
@@ -117,7 +117,6 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: clip;
 }
 
 a { color: var(--acento); text-decoration-thickness: 1px; text-underline-offset: 3px; }
@@ -681,19 +680,7 @@ kbd {
   color: var(--gris);
 }
 
-/* ---------- Portada: lluvia de símbolos ----------
-   El canvas lo inserta app.js; sin JS la portada es solo texto. */
-.portada { position: relative; isolation: isolate; }
-.lluvia {
-  position: absolute;
-  z-index: -1;
-  inset: -1.25rem calc(50% - 50vw) 0;
-  width: 100vw;
-  height: calc(100% + 1.25rem);
-  pointer-events: none;
-  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
-          mask-image: linear-gradient(to bottom, #000 55%, transparent);
-}
+/* ---------- Portada ---------- */
 .portada .sello::before {
   content: "";
   display: inline-block;
@@ -865,7 +852,7 @@ kbd {
 
 /* ---------- Impresión ---------- */
 @media print {
-  .cabecera, .migas, .nota-nav, .lateral, .paleta-fondo, .salto, .progreso, .indice-movil, .lluvia { display: none !important; }
+  .cabecera, .migas, .nota-nav, .lateral, .paleta-fondo, .salto, .progreso, .indice-movil { display: none !important; }
   body { background: #fff; color: #000; }
   .prosa img { border: none; }
 }

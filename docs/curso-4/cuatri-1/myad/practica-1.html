@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Práctica 1 — apuntes de MYAD (cuarto curso de Ingeniería Informática).">
+<title>Práctica 1 · MYAD · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">myad</a><span class="miga-sep">/</span><span aria-current="page">practica-1</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de MYAD"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">MYAD</a></p><ol><li><a href="1-almacenes-de-datos.html">1. Almacenes de Datos</a></li><li><span class="actual" aria-current="page">Práctica 1</span></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>MYAD</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>—</div>
+    </div>
+    <h1>Práctica 1</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de MYAD · 2/2</summary><ol><li><a href="1-almacenes-de-datos.html">1. Almacenes de Datos</a></li><li><span aria-current="page">Práctica 1</span></li></ol></details>
+  <div class="prosa">
+<h4>Caso de uso 1</h4>
+<p>Una entidad financiera gestiona una red de cajeros automáticos propios (ATM). Estos terminales están distribuidos en sus sucursales y en ubicaciones de terceros, como centros comerciales o aeropuertos. A la entidad le interesa analizar el uso de dichos cajeros por parte de los usuarios y responder a cuestiones analíticas como: </p>
+<ul>
+<li>¿Cuáles son los días con mayor volumen de retiradas?</li>
+<li>¿Qué ubicaciones presentan la mayor demanda por parte de los usuarios?</li>
+<li>¿Que franjas horarias presentan mayor número de operaciones los sábados?</li>
+<li>¿Cuál es la media de fondos retirados por ubicación?</li>
+<li>¿Qué ciudades presentan mayor demanda de retiradas?</li>
+<li>Media de retiradas por usuario.</li>
+<li>Evolución mensual de las retiradas de fondos.</li>
+</ul>
+<p><strong>Nota:</strong> suponemos que los cajeros tienen siempre fondos y que las retiradas siempre finalizan. Solo se permiten retiradas.</p>
+<img src="../../../img/myad/pasted-image-20260914132022.png" alt="Pasted image 20260914132022.png" loading="lazy">
+<h4>Caso de uso 2</h4>
+<p>Una agencia gubernamental de meteorología en EEUU tiene como función recopilar datos sobre fenómenos meteorológicos extremos para mejorar los sistemas de alerta temprana y evaluar la resiliencia y respuesta de las distintas regiones. En particular está interesada en el registro y evaluación de cada tornado en su territorio y evaluar la capacidad de respuesta de los diferentes estados americanos. Para ello necesita analizar los datos de los que dispone y conseguir respuestas a preguntas como:</p>
+<ul>
+<li>¿Cuál es la peor época de tornados para cada estado?</li>
+<li>¿Cuál es la tendencia en el número de tornados a lo largo de los últimos años?</li>
+<li>¿Cuál es el estado menos preparado para estas situaciones?</li>
+<li>¿Cuál es la cantidad de tornados por año y estado?</li>
+<li>¿Qué estados tienen mayor número de tornados de máxima categoría?</li>
+<li>¿Cuál es el coste de los tornados para cada estado?¿y para el país?</li>
+</ul>
+<p>Ejemplo de fuente de datos: <a href="https://www.kaggle.com/datasets/danbraswell/us-tornado-dataset-1950-2021">https://www.kaggle.com/datasets/danbraswell/us-tornado-dataset-1950-2021</a></p>
+<img src="../../../img/myad/pasted-image-20260915131344.png" alt="Pasted image 20260915131344.png" loading="lazy">
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-almacenes-de-datos.html"><span class="nav-etiqueta">← anterior</span>1. Almacenes de Datos</a>
+  
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

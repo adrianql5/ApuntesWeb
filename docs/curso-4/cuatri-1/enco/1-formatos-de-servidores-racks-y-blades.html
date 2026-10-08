@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Formatos de Servidores - Racks y Blades — apuntes de ENCO (cuarto curso de Ingeniería Informática).">
+<title>1. Formatos de Servidores - Racks y Blades · ENCO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enco</a><span class="miga-sep">/</span><span aria-current="page">1-formatos-de-servidores-racks-y-blades</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENCO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENCO</a></p><ol><li><span class="actual" aria-current="page">1. Formatos de Servidores - Racks y Blades</span></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENCO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>1 / 2</div>
+    </div>
+    <h1>Formatos de Servidores - Racks y Blades</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENCO · 1/2</summary><ol><li><span aria-current="page">1. Formatos de Servidores - Racks y Blades</span></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li></ol></details>
+  <div class="prosa">
+<h1>1.1 Racks</h1>
+<p>Un <strong>rack</strong> es un armario de dimensiones estandarizadas en el que se montan servidores, switches, discos o SAIs. Precisamente porque sus medidas son estándar, cualquier equipo &quot;enrackable&quot; de cualquier fabricante encaja en cualquier rack. Para servidores informáticos el ancho estándar es de <strong>19 pulgadas (≈ 480 mm)</strong>, mientras que en telecomunicaciones se usan racks de <strong>23 pulgadas</strong>.</p>
+<p><img src="../../../img/enco/enco-t1-armario-rack.jpeg" alt="Armario rack|200" loading="lazy"></p>
+<h2>1.1.1 Unidad de rack (U)</h2>
+<p>La altura de los equipos también está estandarizada: siempre es múltiplo de <strong>1,75&quot; (44,45 mm)</strong>, medida que se conoce como <strong>unidad de rack</strong> o <strong>U</strong>. Así se habla de equipos de <strong>1U, 2U...</strong> y de racks de <strong>42U, 26U...</strong> de altura; en un rack de 42U caben, por ejemplo, 42 servidores de 1U.</p>
+<p><img src="../../../img/enco/enco-t1-unidad-rack.png" alt="Medidas de la unidad de rack|250" loading="lazy">
+<em>Cada U tiene 3 agujeros (0,625&quot; + 0,625&quot; = 1,25&quot;) más un hueco de 0,5&quot; hasta la siguiente: 1,25&quot; + 0,5&quot; = 1,75&quot;. A la derecha, 1U = 1,75&quot;, 2U = 3,5&quot;, 3U = 5,25&quot;, 4U = 7&quot;.</em></p>
+<h2>1.1.2 Montaje y fijación</h2>
+<p>Lo habitual es que el rack tenga <strong>4 postes</strong>, uno en cada arista vertical, con <strong>agujeros espaciados regularmente</strong> a los que se fijan los equipos. Esos agujeros <strong>pueden tener rosca</strong>, pero se suele evitar, porque si una rosca se estropea hay que cambiar el poste entero.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=apqV7qf0aas">Installing HP Rails in a Threaded Hole Server Rack</a> — montaje de raíles en un rack con agujeros roscados (vídeo, 2 min, inglés; enlazado en las diapositivas).</p>
+</div>
+<p><img src="../../../img/enco/enco-t1-postes-equipos.jpeg" alt="Equipos fijados a los postes|250" loading="lazy"></p>
+<p>Una alternativa son los agujeros sin rosca en los que se encaja una <strong>tuerca enjaulada (<em>cage nut</em>)</strong>: el tornillo del equipo se enrosca en ella y, si se daña, solo se cambia la tuerca.</p>
+<p><img src="../../../img/enco/enco-t1-cage-nuts.jpeg" alt="Cage nuts|200" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=KZOsPDJZbTQ">Server Cage Nut installation</a> — cómo se encaja una cage nut en el poste (vídeo, 1 min; enlazado en las diapositivas).</p>
+</div>
+<p>La otra opción son los agujeros cuadrados con <strong>montaje sin tornillos mediante raíles</strong>: el <strong>raíl se fija a los postes</strong> y el <strong>equipo se fija al raíl</strong>, de modo que se desliza como un cajón y es fácil sacarlo para mantenimiento. Los raíles <strong>no están estandarizados</strong> (cada fabricante tiene los suyos) y pueden incluir un <strong>sistema de retención</strong> que impide que el equipo se salga del todo.</p>
+<p><img src="../../../img/enco/enco-t1-railes.png" alt="Montaje con raíles|300" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=WfLRbf8slpY">HPE ProLiant DL360 Gen9 – How To Rack a Server</a> — montaje completo de un servidor con raíles deslizantes, sin tornillos (vídeo, 4:30, inglés; enlazado en las diapositivas).</p>
+</div>
+<p>Para que los equipos quepan con holgura, su altura real es algo menor que la nominal: <strong>1U mide 43,5 mm</strong> en lugar de 44, y <strong>2U mide 88,1 mm</strong> en lugar de 89. El <strong>fondo</strong> de un rack de 4 postes, en cambio, <strong>no está estandarizado</strong>; los formatos habituales son <strong>80 cm</strong> y <strong>1 m</strong>. Existen también <strong>racks de 2 postes</strong>, en los que, al no haber postes traseros, los equipos se fijan <strong>equilibrados sobre su centro de masas</strong>.</p>
+<p><img src="../../../img/enco/enco-t1-rack-2-postes.jpeg" alt="Rack de 2 postes|250" loading="lazy"></p>
+<h2>1.1.3 Cableado</h2>
+<p>Los cables deben mantenerse ordenados, porque una maraña <strong>dificulta el flujo de aire</strong> (los equipos se refrigeran peor) y <strong>complica el mantenimiento</strong>. Para ello conviene usar <strong>bandejas</strong> si el rack las tiene, <strong>abrazaderas y bridas</strong> para agrupar cables, y cables de la <strong>longitud exacta</strong> para que no sobren metros enrollados.</p>
+<p><img src="../../../img/enco/enco-t1-cableado.jpeg" alt="Cableado ordenado|350" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=bLnicMJSiVE">Cabling a SoftLayer Data Center Server Rack</a> — cableado real de un rack con bridas y longitudes ajustadas (vídeo, 4 min; enlazado en las diapositivas).</p>
+</div>
+<h2>1.1.4 KVM (<em>Keyboard, Video &amp; Mouse</em>)</h2>
+<p>Los servidores de un rack no tienen teclado, ratón ni monitor propios, porque sería un desperdicio tener uno por máquina. En su lugar, un <strong>switch KVM</strong> los conecta a un único teclado, monitor y ratón <strong>compartidos</strong>, y el administrador elige qué servidor controlar; algunos incluyen <strong>puertos USB</strong>. Hoy en día se puede acceder al switch KVM <strong>por IP</strong> y manejarlo desde un <strong>navegador web</strong>, sin estar delante. También existen <strong>bandejas enrackables</strong> que integran pantalla plegable, teclado y ratón.</p>
+<p><img src="../../../img/enco/enco-t1-switch-kvm.jpeg" alt="Switch KVM|300" loading="lazy"> <img src="../../../img/enco/enco-t1-bandeja-kvm.jpeg" alt="Bandeja KVM|250" loading="lazy"></p>
+<h2>1.1.5 Puertas y ventilación</h2>
+<p>Las puertas <strong>protegen</strong> los servidores, pero <strong>dificultan la ventilación</strong>, así que se usan <strong>puertas perforadas</strong> que dejan pasar el aire. Esto es cada vez más importante, porque el calor que hay que disipar por rack no ha dejado de crecer a medida que los equipos se hacen más densos:</p>
+<p><img src="../../../img/enco/enco-t1-puerta-perforada.jpeg" alt="Puerta perforada|200" loading="lazy"></p>
+<table>
+<thead>
+<tr>
+<th>Año</th>
+<th>Contenido del rack</th>
+<th>Potencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2000</td>
+<td>28 servidores de 2U</td>
+<td>2 kW</td>
+</tr>
+<tr>
+<td>2002</td>
+<td>42 servidores de 1U</td>
+<td>6 kW</td>
+</tr>
+<tr>
+<td>2006</td>
+<td>6 Blade Centers</td>
+<td>24 kW</td>
+</tr>
+<tr>
+<td>2009</td>
+<td>Blades a plena carga</td>
+<td>40 kW</td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/enco/enco-t1-ventilacion-evolucion.png" alt="Evolución de la potencia por rack|350" loading="lazy"></p>
+<h1>1.2 Servidores Blade</h1>
+<p>Un <strong>blade</strong> es un servidor simplificado al máximo para ocupar el <strong>mínimo espacio físico</strong>. No se monta directamente en el rack, sino que <strong>se inserta en un chasis</strong>, y es ese chasis el que es <strong>enrackable</strong>. El resultado es que caben <strong>más servidores por rack</strong>.</p>
+<p>El chasis aloja uno o más blades y todo lo que estos comparten: <strong>fuentes de alimentación y ventiladores</strong>, un <strong>KVM</strong> opcional, los <strong>conectores del midplane</strong>, <strong>switches redundantes</strong> y un <strong>módulo de gestión</strong>. La idea clave es que el blade lleva solo lo imprescindible y <strong>casi todo lo demás está virtualizado y compartido</strong> en el chasis.</p>
+<p><img src="../../../img/enco/enco-t1-chasis-blades.jpeg" alt="Chasis con blades|300" loading="lazy"> <img src="../../../img/enco/enco-t1-blade.jpeg" alt="Un blade|300" loading="lazy"></p>
+<p>Un ejemplo real es el <strong>chasis Dell EMC PowerEdge M1000</strong>, con los blades por delante y las fuentes, ventiladores y módulos de switch por detrás:</p>
+<p><img src="../../../img/enco/enco-t1-dell-m1000-frontal.jpeg" alt="Dell M1000 frontal|250" loading="lazy"> <img src="../../../img/enco/enco-t1-dell-m1000-trasera.jpeg" alt="Dell M1000 trasera|230" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=UGejVb4_I0I">¿Qué es un servidor Blade?</a> — qué es un blade y cómo se inserta en el chasis (vídeo, 4:30).</p>
+</div>
+<h2>1.2.1 Midplane</h2>
+<p>El <strong>midplane</strong> es la placa del chasis que <strong>da conectividad a los blades</strong>: cada blade se enchufa a ella y, a través de ella, llega a la red, la alimentación y la gestión. Por eso es una <strong>pieza clave en la virtualización de las conexiones</strong>. Su nombre viene de que está <strong>en mitad del chasis</strong>: los blades se conectan por una cara y los módulos por la otra. Normalmente los blades se insertan <strong>por el frontal y en vertical</strong>, aunque no siempre es así.</p>
+<p><img src="../../../img/enco/enco-t1-midplane.png" alt="Midplane|550" loading="lazy">
+<em>Blades (verticales) y módulos de switch (horizontales) se conectan a cada cara del midplane. En el centro y a la derecha, las dos caras de un midplane Dell: conectores de señal y alimentación de los blades por un lado; ventiladores, fuentes, módulos de E/S, iKVM y CMC (controlador del chasis) por el otro.</em></p>
+<h2>1.2.2 Alimentación y refrigeración</h2>
+<p>Las <strong>fuentes de alimentación son compartidas y redundantes</strong>, de modo que si una falla las demás siguen alimentando todos los blades. Hay incluso <strong>chasis sin fuentes</strong>, que toman la corriente de un elemento enrackable dedicado solo a fuentes. Para los cortes de luz existen <strong>SAIs enrackables</strong> (baterías que mantienen la corriente), en formatos <strong>desde 3U</strong>, que permiten seguir funcionando <strong>varios minutos</strong>.</p>
+<p>La refrigeración corre a cargo de <strong>ventiladores en el chasis</strong>, cuya velocidad <strong>ajusta el propio chasis según el calor generado</strong>; en algunos casos se usa <strong>refrigeración líquida</strong>.</p>
+<p><img src="../../../img/enco/enco-t1-chasis-trasera-esquema.jpeg" alt="Trasera de un chasis|250" loading="lazy"> <img src="../../../img/enco/enco-t1-sai-enrackable.jpeg" alt="SAI enrackable|250" loading="lazy">
+<em>Izquierda: fuentes a los lados, switch blades InfiniBand y gestor del chasis con su pantalla. Derecha: SAI enrackable.</em></p>
+<h2>1.2.3 Red y gestión</h2>
+<p>Las distintas conexiones (<strong>Ethernet, Fibre Channel, InfiniBand</strong>...) se implementan en el chasis y se <strong>virtualizan</strong>, y cada blade accede a ellas <strong>a través del midplane</strong>. Esta virtualización <strong>maximiza la utilización</strong> de la red, y para evitar puntos únicos de fallo se instalan <strong>2 o 3 módulos de switches redundantes</strong>. Si ya se tienen switches y no se quiere comprar uno nuevo con el chasis, se usan <strong>módulos <em>pass-through</em></strong>, que simplemente sacan los cables hacia un <strong>switch externo</strong>.</p>
+<p>El <strong>módulo de gestión</strong> controla fuentes, ventiladores, switches y blades. Se comunica con cada elemento de forma <em><strong>out-of-band</strong></em>, es decir, por un canal propio y no por la red normal de datos, así que sigue funcionando aunque esta falle.</p>
+<h2>1.2.4 Almacenamiento</h2>
+<p>Los blades <strong>pueden llevar discos duros o no llevar ninguno</strong>. Los discos pueden ser <strong>externos conectados directamente</strong> (FireWire, SATA, e-SATA, FC o SCSI) o estar <strong>en red</strong> mediante <strong>iSCSI</strong> o <strong>FC</strong>. Muchas veces el almacenamiento también se <strong>virtualiza</strong>, con <strong>racks dedicados a discos</strong> integrados con el sistema de <strong>backup</strong>, o con <strong>chasis que solo contienen discos</strong>. Además de servidores, hay <strong>blades que contienen routers, switches</strong>, etc.</p>
+<p><img src="../../../img/enco/enco-t1-cabina-discos.jpeg" alt="Cabina de discos|300" loading="lazy"></p>
+<h2>1.2.5 Ventajas, desventajas y uso</h2>
+<table>
+<thead>
+<tr>
+<th>Ventajas</th>
+<th>Desventajas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pequeño tamaño (<strong>&lt; 1U por servidor</strong>)</td>
+<td>Solo configuraciones que <strong>no disipen demasiado calor</strong></td>
+</tr>
+<tr>
+<td><strong>Gestión fácil</strong> gracias a la virtualización</td>
+<td></td>
+</tr>
+<tr>
+<td>Se <strong>instala en minutos</strong> y se sustituye fácilmente</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Los blades encajan especialmente bien con las <strong>aplicaciones <em>scale-out</em></strong>, diseñadas para <strong>escalar horizontalmente añadiendo más servidores</strong>: si hace falta más capacidad, basta con insertar otro blade. Lo contrario es el <em><strong>scale-up</strong></em>, que consiste en <strong>aumentar la capacidad de un solo servidor</strong> (más CPU, más memoria).</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=s3HslSNYe5s">Scale-Up versus Scale-Out</a> — diferencia entre mejorar una máquina y añadir más máquinas, con ejemplos (vídeo, 4 min, inglés).</p>
+</div>
+<p>Ejemplos de aplicaciones scale-out:</p>
+<table>
+<thead>
+<tr>
+<th>Área</th>
+<th>Ejemplos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nube y virtualización</td>
+<td>VMware vSphere, Hyper-V, KVM (hipervisor); Kubernetes, Docker Swarm; IaaS: AWS, Azure, OpenStack</td>
+</tr>
+<tr>
+<td>Big Data</td>
+<td>Hadoop, Spark, BigQuery; NoSQL: MongoDB, Cassandra; almacenamiento distribuido: Ceph, GlusterFS</td>
+</tr>
+<tr>
+<td>Web y backend</td>
+<td>Apache, Nginx, Caddy, LiteSpeed; Node.js; microservicios</td>
+</tr>
+<tr>
+<td>BD escalables</td>
+<td>BD relacionales en clúster: Oracle RAC, MySQL Cluster</td>
+</tr>
+<tr>
+<td>HPC</td>
+<td>Simulaciones con MPI; Deep Learning con TensorFlow y PyTorch en clústeres GPU</td>
+</tr>
+<tr>
+<td>Streaming</td>
+<td>Netflix, YouTube; CDN: Cloudflare, Akamai, Fastly</td>
+</tr>
+</tbody>
+</table>
+<h2>1.2.6 Popularidad decreciente</h2>
+<p>Los blades se adoptaron rápidamente, pero desde <strong>2015</strong> las unidades vendidas por los grandes fabricantes (<strong>HPE, Dell, Cisco y Lenovo</strong>) <strong>no han parado de caer</strong>. La primera razón es que ya no son los más densos: un blade ocupa de media <strong>0,86U por nodo</strong>, frente a 1U de un servidor rack, pero los <strong>servidores multinodo</strong> logran <strong>0,5U por servidor</strong> (Lenovo mete 4 servidores en 2U). Además, su <strong>almacenamiento local es muy limitado</strong>, <strong>2–6 discos por blade</strong> frente a <strong>10–12</strong> en un rack.</p>
+<p>Tampoco ayuda que la <strong>E/S y las GPUs estén limitadas</strong>: cada chasis tiene diseños de E/S propios, lo que reduce los proveedores y retrasa la llegada de tecnologías nuevas, y muchas <strong>GPUs no se pueden instalar</strong> por consumo o tamaño. Por último está el <strong>coste</strong>: con servidores rack se paga solo por los servidores, <strong>sin el gasto adicional del chasis</strong>.</p>
+<h1>1.3 PC Blades</h1>
+<p>Los <strong>PC blades</strong> son <strong>ordenadores personales en formato blade</strong>: en lugar de tener el PC bajo la mesa de cada usuario, todos están centralizados en un chasis. Cada PC blade sirve a <strong>un único usuario</strong> y contiene <strong>placa, procesador, memoria y disco</strong>, con el <strong>KVM externo</strong>, en el <em>thin client</em> o en el propio blade. A diferencia de los blades de servidor, <strong>no comparten componentes</strong> (fuente, red, ventilación...): son unidades independientes que están en el chasis <strong>solo por conveniencia</strong>.</p>
+<p>Centralizarlos facilita el mantenimiento y <strong>evita robos y accidentes</strong>, por lo que son interesantes en <strong>hospitales y ciertas industrias</strong>, y también permiten dar servicio a <strong>usuarios dispersos en varios edificios</strong>.</p>
+<p><img src="../../../img/enco/enco-t1-pc-blade.jpeg" alt="PC Blade|200" loading="lazy"></p>
+<p>El usuario se conecta a su blade de dos formas. La primera es un <strong>módulo KVM</strong> unido al blade por <strong>cable de par trenzado</strong> (conexión corta), <strong>fibra</strong> (conexión local) o <strong>Ethernet</strong> (conexión remota). La segunda es un <em><strong>thin client</strong></em>, un computador mínimo que se encarga de <strong>gestionar la interacción entre el blade y el usuario</strong>.</p>
+<p><img src="../../../img/enco/enco-t1-modulo-kvm-usuario.jpeg" alt="Módulo KVM de usuario|250" loading="lazy"> <img src="../../../img/enco/enco-t1-thin-client.jpeg" alt="Thin client|150" loading="lazy"></p>
+<p>Por último, los PC blades también se pueden <strong>virtualizar</strong>, lo que permite <strong>compartirlos</strong> entre usuarios y <strong>soluciona su infrautilización</strong> (un PC dedicado a una sola persona está ocioso la mayor parte del tiempo).</p>
+<h1>1.4 Ideas clave</h1>
+<ul>
+<li><strong>Rack</strong>: 19&quot; (23&quot; en telecom); <strong>1U = 1,75&quot; = 44,45 mm</strong>; racks de 42U; fondo no estándar (80 cm / 1 m).</li>
+<li>Fijación: rosca, <strong>cage nuts</strong> o <strong>raíles</strong> (no estandarizados). 1U real = 43,5 mm.</li>
+<li>Cableado ordenado, <strong>KVM</strong> compartido (también por IP), <strong>puertas perforadas</strong>; calor por rack de 2 kW (2000) a 40 kW (2009).</li>
+<li><strong>Blade</strong>: servidor mínimo en chasis enrackable que comparte fuentes, ventiladores, switches, KVM y gestión, conectado por el <strong>midplane</strong>; gestión <strong>out-of-band</strong>; <em>pass-through</em> a switches externos.</li>
+<li>Ventajas: densidad, gestión, sustitución rápida. Desventaja: calor. Ideal para <strong>scale-out</strong>.</li>
+<li><strong>En declive desde 2015</strong>: multinodo más denso, poco almacenamiento, E/S y GPU limitadas, coste del chasis.</li>
+<li><strong>PC blades</strong>: PCs centralizados que no comparten componentes; acceso por <strong>KVM</strong> o <strong>thin client</strong>; virtualizarlos evita infrautilización.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-centros-de-procesamiento-de-datos-cpds.html"><span class="nav-etiqueta">siguiente →</span>2. Centros de Procesamiento de Datos (CPDs)</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

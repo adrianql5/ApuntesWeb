@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="4. Gramáticas Independientes del Contexto — apuntes de TALF (tercer curso de Ingeniería Informática).">
 <title>4. Gramáticas Independientes del Contexto · TALF · ApuntesWeb</title>
-<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#141517" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
 <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
 <link rel="stylesheet" href="../../../css/estilos.css">
 <script>
@@ -15,11 +15,13 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
 </script>
 </head>
 <body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
 <a class="salto" href="#contenido">Saltar al contenido</a>
 <header class="cabecera">
   <div class="cabecera-interior">
     <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
     <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
     <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
   </div>
 </header>
@@ -36,6 +38,7 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
     </div>
     <h1>Gramáticas Independientes del Contexto</h1>
   </header>
+<details class="indice-movil"><summary>Temas de TALF · 4/8</summary><ol><li><a href="1-introduccion.html">1. Introducción</a></li><li><a href="2-automatas-finitos.html">2. Autómatas finitos</a></li><li><a href="3-lenguajes-regulares.html">3. Lenguajes Regulares</a></li><li><span aria-current="page">4. Gramáticas Independientes del Contexto</span></li><li><a href="5-automatas-con-pila.html">5. Autómatas con Pila</a></li><li><a href="6-maquinas-de-turing.html">6. Máquinas de Turing</a></li><li><a href="7-gramaticas-gsc-y-gsr.html">7. Gramáticas GSC Y GSR</a></li><li><a href="8-decibilidad-y-complejidad.html">8. Decibilidad y Complejidad</a></li></ol></details>
   <div class="prosa">
 <p>Una <strong>gramática</strong> es un conjunto de reglas que nos permite generar todas las palabras válidas de un lenguaje. Es como un &quot;recetario&quot; para crear frases correctas.</p>
 <h1>4.1 Clasificación de Gramáticas</h1>
@@ -455,6 +458,17 @@ Original: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><s
     </div>
   </div>
 </div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
 <script src="../../../js/app.js"></script>
 </body>
 </html>

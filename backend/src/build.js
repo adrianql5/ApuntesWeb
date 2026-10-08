@@ -64,6 +64,14 @@ function tarjeta({ href, codigo, titulo, detalle }) {
     `<h2>${escaparHtml(titulo)}</h2><p>${escaparHtml(detalle)}</p></a></li>`;
 }
 
+function hito({ href, codigo, titulo, detalle, proporcion }) {
+  const barra = proporcion === undefined ? ''
+    : `<span class="recorrido-barra" aria-hidden="true"><span style="width:${Math.round(proporcion * 100)}%"></span></span>`;
+  return `    <li><a href="${href}"><h2>${escaparHtml(titulo)}</h2>` +
+    `<span class="recorrido-codigo">${escaparHtml(codigo)}</span>` +
+    `<p>${escaparHtml(detalle)}</p>${barra}</a></li>`;
+}
+
 export async function construir(config, { strict = false } = {}) {
   const inicio = Date.now();
   const vaults = escanearTodo(config);
@@ -90,19 +98,26 @@ export async function construir(config, { strict = false } = {}) {
 
   // ---------- Portada ----------
   const totalNotas = vaults.reduce((s, v) => s + v.asignaturas.reduce((t, a) => t + a.notas.length, 0), 0);
+  // Recorrido: un hito por curso; la barra compara el nº de temas con el curso más largo
+  const cursos = [...new Set(vaults.map((v) => v.curso))].sort();
+  const temasDe = (c) => vaults.filter((v) => v.curso === c)
+    .reduce((s, v) => s + v.asignaturas.reduce((t, a) => t + a.notas.length, 0), 0);
+  const maxTemas = Math.max(1, ...cursos.map(temasDe));
   const tarjetasCursos = [];
-  for (const curso of [...new Set(vaults.map((v) => v.curso))].sort()) {
+  for (const curso of cursos) {
     const deCurso = vaults.filter((v) => v.curso === curso);
     const nAsig = deCurso.reduce((s, v) => s + v.asignaturas.length, 0);
-    tarjetasCursos.push(tarjeta({
+    const nTemas = temasDe(curso);
+    tarjetasCursos.push(hito({
       href: `curso-${curso}/index.html`,
       codigo: `CURSO ${curso}`,
       titulo: ORDINAL_CURSO[curso] ?? `Curso ${curso}`,
-      detalle: `${deCurso.length} cuatrimestres · ${nAsig} asignaturas`,
+      detalle: `${deCurso.length} ${deCurso.length === 1 ? 'cuatrimestre' : 'cuatrimestres'} · ${nAsig} asignaturas · ${nTemas} temas`,
+      proporcion: nTemas / maxTemas,
     }));
   }
   if (legacy) {
-    tarjetasCursos.unshift(tarjeta({
+    tarjetasCursos.unshift(hito({
       href: `curso-${legacy.curso}/index.html`,
       codigo: `CURSO ${legacy.curso}`,
       titulo: ORDINAL_CURSO[legacy.curso] ?? `Curso ${legacy.curso}`,
@@ -237,8 +252,13 @@ export async function construir(config, { strict = false } = {}) {
             `<p class="lateral-titulo"><a href="index.html">${escaparHtml(a.nombre)}</a></p>` +
             `<ol>${a.notas.map((m) => itemLateral(m, m.slug === n.slug)).join('')}</ol>` +
             `</div></aside>`;
+          const indiceMovil =
+            `<details class="indice-movil"><summary>Temas de ${escaparHtml(a.nombre)} · ${i + 1}/${a.notas.length}</summary>` +
+            `<ol>${a.notas.map((m) => m.slug === n.slug
+              ? `<li><span aria-current="page">${escaparHtml(m.titulo)}</span></li>`
+              : `<li><a href="${m.slug}.html">${escaparHtml(m.titulo)}</a></li>`).join('')}</ol></details>`;
           pagina(`${enlaceCuatri(v)}${a.slug}/${n.slug}.html`, 'nota', {
-            lateral, claseDisposicion: ' con-lateral',
+            lateral, claseDisposicion: ' con-lateral', indiceMovil,
             rel: relAsig, titulo: `${n.titulo} · ${a.nombre}`,
             encabezado: n.titulo.replace(/^\d+\.\s*/, ''),
             fichaAsignatura: a.nombre,

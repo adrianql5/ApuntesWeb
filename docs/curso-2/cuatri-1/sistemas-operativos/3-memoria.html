@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="3. Memoria — apuntes de SISTEMAS OPERATIVOS (segundo curso de Ingeniería Informática).">
 <title>3. Memoria · SISTEMAS OPERATIVOS · ApuntesWeb</title>
-<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#141517" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
 <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
 <link rel="stylesheet" href="../../../css/estilos.css">
 <script>
@@ -15,11 +15,13 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
 </script>
 </head>
 <body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
 <a class="salto" href="#contenido">Saltar al contenido</a>
 <header class="cabecera">
   <div class="cabecera-interior">
     <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
     <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
     <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
   </div>
 </header>
@@ -36,6 +38,7 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
     </div>
     <h1>Memoria</h1>
   </header>
+<details class="indice-movil"><summary>Temas de SISTEMAS OPERATIVOS · 3/5</summary><ol><li><a href="1-introduccion.html">1. Introduccion</a></li><li><a href="2-procesos-e-hilos.html">2. Procesos e Hilos</a></li><li><span aria-current="page">3. Memoria</span></li><li><a href="4-sistema-de-archivos.html">4. Sistema de Archivos</a></li><li><a href="5-entrada-salida.html">5. Entrada-Salida</a></li></ol></details>
   <div class="prosa">
 <p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
 <h1><strong>Administración de Memoria - Métodos de Tortura Medieval</strong></h1>
@@ -903,6 +906,17 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
     </div>
   </div>
 </div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
 <script src="../../../js/app.js"></script>
 </body>
 </html>

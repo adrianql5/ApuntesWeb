@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="7. Tablas Hash — apuntes de AED (segundo curso de Ingeniería Informática).">
 <title>7. Tablas Hash · AED · ApuntesWeb</title>
-<meta name="theme-color" content="#f3f3f1" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#141517" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
 <link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
 <link rel="stylesheet" href="../../../css/estilos.css">
 <script>
@@ -15,11 +15,13 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
 </script>
 </head>
 <body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
 <a class="salto" href="#contenido">Saltar al contenido</a>
 <header class="cabecera">
   <div class="cabecera-interior">
     <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
     <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
     <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
   </div>
 </header>
@@ -36,6 +38,7 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
     </div>
     <h1>Tablas Hash</h1>
   </header>
+<details class="indice-movil"><summary>Temas de AED · 7/8</summary><ol><li><a href="1-arboles-binarios.html">1. ÁRBOLES BINARIOS</a></li><li><a href="2-estructuras-para-busqueda.html">2. ESTRUCTURAS PARA BÚSQUEDA</a></li><li><a href="3-arboles-equilibrados-avl.html">3. Árboles Equilibrados AVL</a></li><li><a href="4-arboles-equilibrados-b-y-b.html">4. Árboles equilibrados B y B+</a></li><li><a href="5-grafos-i.html">5. Grafos I</a></li><li><a href="6-grafos-ii.html">6. Grafos II</a></li><li><span aria-current="page">7. Tablas Hash</span></li><li><a href="8-estrategias-algoritmicas.html">8. Estrategias Algorítmicas</a></li></ol></details>
   <div class="prosa">
 <p>Escrito por <strong>Adrián Quiroga Linares</strong>.</p>
 <p>El problema de búsqueda es uno de los problemas más importantes y repetidos. Se quiere buscar un elemento entre un conjunto. En función de si el conjunto está ordenado o no, se puede realizar una <strong>búsqueda lineal</strong> (<em>recorre todos los elementos del primero al último buscando el elemento buscado, por lo que el orden de complejidad es de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></eq></em>), una búsqueda binaria (<em>solo posible para arrays ordenados, reduciendo el orden de complejidad a <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mop"><span class="mop">lo<span style="margin-right:0.0139em;">g</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.207em;"><span style="top:-2.4559em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2441em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">))</span></span></span></span></eq></em>), o una <strong>búsqueda por clave</strong> (<em>con la que se accede a cualquier elemento por medio de su clave, teniendo una complejidad <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span></eq></em>).</p>
@@ -119,6 +122,17 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
     </div>
   </div>
 </div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
 <script src="../../../js/app.js"></script>
 </body>
 </html>

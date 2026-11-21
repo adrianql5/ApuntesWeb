@@ -7,6 +7,9 @@ Rol: diseñador/maquetador del sitio. Solo HTML, CSS y JavaScript vanilla, en es
 - URLs SIEMPRE relativas mediante el prefijo `{{rel}}` (el sitio vive bajo /ApuntesWeb/).
 - Sin CDNs ni dependencias externas: KaTeX se sirve desde `vendor/katex/`.
 - `static/css/estilos.css` incluye estilos de callouts por tipo y media print.
-- `static/js/app.js`: solo mejoras progresivas (tema, buscador, atajos, índice y progreso
-  de lectura, temas leídos, botón de erratas por párrafo → GitHub Issues); el sitio
-  debe funcionar sin JavaScript.
+- `static/js/app.js`: solo mejoras progresivas (tema y ajustes de lectura, paneles
+  laterales plegables —temas a la izquierda, índice a la derecha—, buscador, atajos,
+  progreso y tiempo restante, modo enfoque, retomar lectura, temas leídos, botón de
+  erratas por párrafo → GitHub Issues); el sitio debe funcionar sin JavaScript.
+- Dirección estética: "libro de texto atlántico" (Tufte + paleta Compostela). Ver la
+  cabecera de `estilos.css` antes de cambiar tipos, colores o la apertura de capítulo.

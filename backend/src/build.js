@@ -59,6 +59,12 @@ function extraerApartados(texto) {
   return apartados;
 }
 
+// Minutos de lectura estimados (texto técnico: ~180 palabras/min, sin bloques de código)
+function minutosLectura(texto) {
+  const palabras = texto.replace(/```[\s\S]*?```/g, ' ').split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(palabras / 180));
+}
+
 function tarjeta({ href, codigo, titulo, detalle }) {
   return `    <li class="tarjeta"><a href="${href}">` +
     (codigo ? `<span class="tarjeta-codigo">${escaparHtml(codigo)}</span>` : '') +
@@ -128,7 +134,7 @@ export async function construir(config, { strict = false } = {}) {
   pagina('index.html', 'index', {
     rel: '', titulo: 'Apuntes de Ingeniería Informática',
     descripcion: `Apuntes de teoría de Ingeniería Informática: ${totalNotas} temas con fórmulas, imágenes y PDFs descargables.`,
-    migas: migas([{ texto: 'inicio' }]),
+    migas: migas([{ texto: 'Inicio' }]),
     tarjetas: tarjetasCursos.join('\n'),
   });
 
@@ -145,7 +151,7 @@ export async function construir(config, { strict = false } = {}) {
       rel: '../', titulo: ORDINAL_CURSO[curso] ?? `Curso ${curso}`,
       descripcion: `Apuntes de ${ORDINAL_CURSO[curso] ?? `curso ${curso}`} de Ingeniería Informática.`,
       sello: 'teoría · por cuatrimestres', introduccion: '',
-      migas: migas([{ href: '../index.html', texto: 'inicio' }, { texto: `curso-${curso}` }]),
+      migas: migas([{ href: '../index.html', texto: 'Inicio' }, { texto: `${curso}.º curso` }]),
       tarjetas: tarjetasCuatris.join('\n'),
     });
 
@@ -175,9 +181,9 @@ export async function construir(config, { strict = false } = {}) {
         descripcion: `Asignaturas y observaciones del ${nombreCuatri(v.cuatri)} de ${ORDINAL_CURSO[v.curso]?.toLowerCase()}.`,
         sello: `curso ${v.curso} · cuatrimestre ${v.cuatri}`,
         migas: migas([
-          { href: '../../index.html', texto: 'inicio' },
-          { href: '../index.html', texto: `curso-${v.curso}` },
-          { texto: `cuatri-${v.cuatri}` },
+          { href: '../../index.html', texto: 'Inicio' },
+          { href: '../index.html', texto: `${v.curso}.º curso` },
+          { texto: nombreCuatri(v.cuatri) },
         ]),
         tarjetas: tarjetasAsig.join('\n'),
         observaciones,
@@ -212,10 +218,10 @@ export async function construir(config, { strict = false } = {}) {
           descripcion: `Apuntes de ${a.nombre}: ${a.notas.length} temas de teoría con PDF descargable.`,
           sello: `curso ${v.curso} · cuatrimestre ${v.cuatri} · ${a.notas.length} temas`,
           migas: migas([
-            { href: '../../../index.html', texto: 'inicio' },
-            { href: '../../index.html', texto: `curso-${v.curso}` },
-            { href: '../index.html', texto: `cuatri-${v.cuatri}` },
-            { texto: a.slug },
+            { href: '../../../index.html', texto: 'Inicio' },
+            { href: '../../index.html', texto: `${v.curso}.º curso` },
+            { href: '../index.html', texto: nombreCuatri(v.cuatri) },
+            { texto: a.nombre },
           ]),
           acciones: pdfs.length > 1
             ? pdfs.map((f, i) => `<a class="boton" href="${relAsig}${f}" download>Descargar PDF · parte ${i + 1}</a>`).join('\n  ')
@@ -250,11 +256,14 @@ export async function construir(config, { strict = false } = {}) {
           });
           const ant = a.notas[i - 1];
           const sig = a.notas[i + 1];
+          // Dos raíles: temas de la asignatura (izquierda) e índice del tema (derecha,
+          // lo rellena app.js; sin JS queda oculto)
           const lateral =
-            `<aside class="lateral" aria-label="Temas de ${escaparHtml(a.nombre)}"><div class="lateral-interior">` +
+            `<aside class="lateral lateral-temas" id="panel-temas" aria-label="Temas de ${escaparHtml(a.nombre)}"><div class="lateral-interior">` +
             `<p class="lateral-titulo"><a href="index.html">${escaparHtml(a.nombre)}</a></p>` +
             `<ol>${a.notas.map((m) => itemLateral(m, m.slug === n.slug)).join('')}</ol>` +
-            `</div></aside>`;
+            `</div></aside>` +
+            `<aside class="lateral lateral-indice" id="panel-indice" aria-label="En este tema" hidden><div class="lateral-interior"></div></aside>`;
           const indiceMovil =
             `<details class="indice-movil"><summary>Temas de ${escaparHtml(a.nombre)} · ${i + 1}/${a.notas.length}</summary>` +
             `<ol>${a.notas.map((m) => m.slug === n.slug
@@ -265,16 +274,18 @@ export async function construir(config, { strict = false } = {}) {
             rel: relAsig, titulo: `${n.titulo} · ${a.nombre}`,
             encabezado: n.titulo.replace(/^\d+\.\s*/, ''),
             fichaAsignatura: a.nombre,
-            fichaCurso: `${v.curso}.º · C${v.cuatri}`,
-            fichaTema: n.orden !== null ? `${n.orden} / ${a.notas.filter((x) => x.orden !== null).length}` : '—',
+            fichaCurso: `${ORDINAL_CURSO[v.curso] ?? `Curso ${v.curso}`}, ${nombreCuatri(v.cuatri)}`,
+            fichaTema: n.orden !== null ? `Tema ${n.orden} de ${a.notas.filter((x) => x.orden !== null).length}` : 'Tema',
+            numeroTema: n.orden ?? '',
+            minutos: minutosLectura(fuente),
             descripcion: `${n.titulo} — apuntes de ${a.nombre} (${ORDINAL_CURSO[v.curso]?.toLowerCase()} de Ingeniería Informática).`,
             sello: `${a.nombre} · curso ${v.curso}`,
             migas: migas([
-              { href: '../../../index.html', texto: 'inicio' },
-              { href: '../../index.html', texto: `curso-${v.curso}` },
-              { href: '../index.html', texto: `cuatri-${v.cuatri}` },
-              { href: 'index.html', texto: a.slug },
-              { texto: n.slug },
+              { href: '../../../index.html', texto: 'Inicio' },
+              { href: '../../index.html', texto: `${v.curso}.º curso` },
+              { href: '../index.html', texto: nombreCuatri(v.cuatri) },
+              { href: 'index.html', texto: a.nombre },
+              { texto: n.titulo.replace(/^\d+\.\s*/, '') },
             ]),
             cuerpo,
             anterior: ant
@@ -302,7 +313,7 @@ export async function construir(config, { strict = false } = {}) {
       descripcion: 'Material de primer curso: resúmenes por asignatura y PDFs descargables.',
       sello: 'material legado · resúmenes y pdfs',
       introduccion: '<p class="portada-texto">Primero lo cursé antes de empezar a tomar apuntes en Obsidian: aquí hay resúmenes por asignatura y el material en PDF tal cual lo conservo.</p>',
-      migas: migas([{ href: '../index.html', texto: 'inicio' }, { texto: `curso-${legacy.curso}` }]),
+      migas: migas([{ href: '../index.html', texto: 'Inicio' }, { texto: `${legacy.curso}.º curso` }]),
       tarjetas: tarjetasAsig.join('\n'),
     });
 
@@ -334,9 +345,9 @@ export async function construir(config, { strict = false } = {}) {
         descripcion: `Material de ${a.nombre} (primer curso): resumen y PDFs.`,
         sello: `curso ${legacy.curso} · material legado`,
         migas: migas([
-          { href: '../../index.html', texto: 'inicio' },
-          { href: '../index.html', texto: `curso-${legacy.curso}` },
-          { texto: a.slug },
+          { href: '../../index.html', texto: 'Inicio' },
+          { href: '../index.html', texto: `${legacy.curso}.º curso` },
+          { texto: a.nombre },
         ]),
         acciones: '',
         listaNotas: '',

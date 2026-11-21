@@ -1,11 +1,12 @@
 <article class="nota">
-  <header class="ficha">
-    <div class="ficha-datos">
-      <div><span class="ficha-etiqueta">Asignatura</span>{{fichaAsignatura}}</div>
-      <div><span class="ficha-etiqueta">Curso</span>{{fichaCurso}}</div>
-      <div><span class="ficha-etiqueta">Tema</span>{{fichaTema}}</div>
-    </div>
+  <header class="apertura" data-numero="{{numeroTema}}">
+    <p class="apertura-asignatura"><a href="index.html">{{fichaAsignatura}}</a></p>
     <h1>{{encabezado}}</h1>
+    <p class="apertura-datos">
+      <span>{{fichaTema}}</span>
+      <span>{{fichaCurso}}</span>
+      <span data-minutos="{{minutos}}">≈ {{minutos}} min de lectura</span>
+    </p>
   </header>
 {{{indiceMovil}}}
   <div class="prosa">

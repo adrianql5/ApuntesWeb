@@ -44,7 +44,7 @@ export function migas(items) {
         ? `<span aria-current="page">${escaparHtml(it.texto)}</span>`
         : `<a href="${it.href}">${escaparHtml(it.texto)}</a>`
     )
-    .join('<span class="miga-sep">/</span>');
+    .join('<span class="miga-sep" aria-hidden="true">›</span>');
 }
 
 export const ORDINAL_CURSO = { 1: 'Primer curso', 2: 'Segundo curso', 3: 'Tercer curso', 4: 'Cuarto curso' };

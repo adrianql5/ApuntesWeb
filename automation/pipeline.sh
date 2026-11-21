@@ -1,24 +1,39 @@
 #!/bin/zsh
 # Pipeline de publicación de ApuntesWeb:
-#   build → PDFs → revisión con Claude → rama → push → PR
-# La confirmación del usuario es el MERGE del PR desde el email de GitHub.
-# Con --dry-run hace build + revisión pero NO toca git ni crea PR (para pruebas).
+#   sync con origin → ¿cambios? → ¿bóveda en reposo? → build → PDFs →
+#   commit en main → push (GitHub Actions publica en Pages)
+# "En reposo" = ningún archivo cambiado se ha tocado en los últimos REPOSO_MIN
+# minutos; si estás editando espera (hasta ESPERA_MAX_MIN) para no publicar a medias.
+# Con --dry-run hace el build pero NO toca git (para pruebas).
 set -euo pipefail
 
 DRY_RUN=0
 [[ "${1:-}" == "--dry-run" ]] && DRY_RUN=1
 
-export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin"
+REPOSO_MIN=30
+ESPERA_MAX_MIN=180
+
+export PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$HOME/.local/bin"
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO"
 
-log() { print -- "[pipeline $(date '+%H:%M:%S')] $*"; }
+log() { print -- "[pipeline $(date '+%d/%m %H:%M:%S')] $*"; }
 
-for cmd in node gh claude git; do
+for cmd in node git; do
   command -v "$cmd" > /dev/null || { log "FALTA $cmd en el PATH"; exit 1; }
 done
 
-# 1) ¿Hay notas cambiadas desde la última revisión?
+# 0) Partir siempre de main limpio y al día (si no, se construye con config vieja)
+if (( ! DRY_RUN )); then
+  if [[ -n "$(git status --porcelain)" ]]; then
+    log "El repo tiene cambios sin commitear: no publico para no mezclarlos."
+    exit 1
+  fi
+  git checkout -q main
+  git pull -q --ff-only origin main
+fi
+
+# 1) ¿Hay notas cambiadas desde la última publicación?
 CAMBIOS="$(node backend/src/index.js changed)"
 if [[ "$CAMBIOS" == "[]" ]]; then
   log "Sin cambios en los apuntes: nada que publicar."
@@ -26,55 +41,56 @@ if [[ "$CAMBIOS" == "[]" ]]; then
 fi
 log "Notas cambiadas detectadas."
 
-# 2) Build del sitio + PDFs de las asignaturas afectadas
+# 2) Esperar a que la bóveda esté en reposo
+minutos_desde_ultima_edicion() {
+  node -e '
+    const { statSync } = require("node:fs");
+    const rutas = JSON.parse(process.argv[1]).flatMap((v) => v.notas.map((n) => n.ruta));
+    const ultima = Math.max(...rutas.map((r) => statSync(r).mtimeMs));
+    console.log(Math.floor((Date.now() - ultima) / 60000));
+  ' "$(node backend/src/index.js changed)"
+}
+ESPERADO=0
+while (( $(minutos_desde_ultima_edicion) < REPOSO_MIN )); do
+  if (( ESPERADO >= ESPERA_MAX_MIN )); then
+    log "Llevas ${ESPERA_MAX_MIN} min editando sin parar: lo dejo para la próxima ejecución."
+    exit 0
+  fi
+  log "Edición reciente (< ${REPOSO_MIN} min): espero 10 min para no publicar a medias…"
+  sleep 600
+  ESPERADO=$(( ESPERADO + 10 ))
+done
+CAMBIOS="$(node backend/src/index.js changed)"
+
+# 3) Build del sitio + PDFs de las asignaturas afectadas
 log "Generando sitio…"
 node backend/src/index.js build --strict
 log "Generando PDFs de asignaturas cambiadas…"
 node backend/src/index.js pdf --solo-cambiadas
 
-# 3) Revisión de ortografía/coherencia con Claude (solo notas cambiadas)
-mkdir -p review-tmp
-rm -f review-tmp/informe.md
-log "Lanzando revisión con Claude…"
-if ! claude -p "Ejecuta la skill del proyecto revisar-apuntes: revisa las notas que devuelva 'node backend/src/index.js changed' y escribe el informe en review-tmp/informe.md con el formato de la skill." \
-  --model haiku \
-  --allowedTools "Bash(node backend/src/index.js changed),Read,Write" > review-tmp/claude.log 2>&1; then
-  log "AVISO: la revisión con Claude falló (ver review-tmp/claude.log); sigo sin informe."
-fi
-if [[ ! -f review-tmp/informe.md ]]; then
-  {
-    print "# Actualización de apuntes — $(date '+%d/%m/%Y')"
-    print
-    print "La revisión automática no generó informe. Notas cambiadas:"
-    print
-    print '```json'
-    print -- "$CAMBIOS"
-    print '```'
-  } > review-tmp/informe.md
-fi
-
 if (( DRY_RUN )); then
-  log "Dry-run: build y revisión hechos; NO se registra la revisión ni se crea PR."
-  log "Informe en review-tmp/informe.md; sitio en docs/ (sirve con: python3 -m http.server -d docs)."
+  log "Dry-run: build hecho; NO se registra ni se publica nada."
+  log "Sitio en docs/ (sirve con: python3 -m http.server -d docs)."
   exit 0
 fi
 
-# 4) Registrar la revisión, commitear la salida y abrir PR
+# 4) Commit en main y push. state.json solo queda registrado si el push llega a
+#    GitHub: si falla, se deshace el commit y la próxima ejecución lo reintenta.
+BASE="$(git rev-parse HEAD)"
 node backend/src/index.js changed --update
-RAMA="apuntes/$(date '+%Y%m%d-%H%M')"
-git checkout -b "$RAMA"
 git add docs automation/state.json
 if git diff --cached --quiet; then
-  log "La salida generada no cambió: nada que publicar."
-  git checkout main && git branch -D "$RAMA"
-  exit 0
+  log "La salida generada no cambió: solo registro el estado."
 fi
-git commit -m "Apuntes: actualización $(date '+%d/%m/%Y %H:%M')"
-git push -u origin "$RAMA"
-
-gh pr create \
-  --title "Apuntes: actualización $(date '+%d/%m/%Y')" \
-  --body-file review-tmp/informe.md
-log "PR creado. Recibirás el email de GitHub: Merge = publicar, Close = descartar."
-
-git checkout main
+ASIGNATURAS="$(print -- "$CAMBIOS" | node -e '
+  let s = ""; process.stdin.on("data", (d) => (s += d)).on("end", () => {
+    const a = JSON.parse(s).flatMap((v) => v.notas.map((n) => `${v.vault} ${n.asignatura}`));
+    console.log([...new Set(a)].join(", "));
+  });')"
+git commit -q -m "Apuntes: actualización $(date '+%d/%m/%Y %H:%M')" -m "Cambios en: $ASIGNATURAS"
+if ! git push -q origin main; then
+  log "ERROR: el push falló (¿sin red?). Deshago el commit; se reintentará en la próxima ejecución."
+  git reset -q --hard "$BASE"
+  exit 1
+fi
+log "Publicado ($ASIGNATURAS). GitHub Actions lo desplegará en Pages en ~1 min."

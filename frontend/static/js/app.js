@@ -222,6 +222,108 @@
     actualizar();
   }
 
+  // ---------- Anotaciones por párrafo (erratas → GitHub Issues) ----------
+  // Cada bloque recibe un id estable (hash de su texto) y un botón al margen que
+  // abre un Issue prellenado. Los Issues abiertos que citan un bloque se marcan
+  // a su lado. El ancla va en un comentario HTML del cuerpo del Issue.
+  var REPO = 'adrianql5/ApuntesWeb';
+  if (prosa) {
+    var hashTexto = function (s) {
+      var h = 0x811c9dc5;
+      for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+      return (h >>> 0).toString(36);
+    };
+    var tipos = 'p, li, blockquote';
+    var bloques = Array.prototype.filter.call(prosa.querySelectorAll(tipos), function (b) {
+      return !b.parentElement.closest(tipos) && b.textContent.trim().length > 20;
+    });
+    var porId = {};
+    bloques.forEach(function (b) {
+      var base = 'p-' + hashTexto(b.textContent.replace(/\s+/g, ' ').trim());
+      var id = base, n = 2;
+      while (porId[id]) id = base + '-' + n++;
+      porId[id] = b;
+      if (!b.id) b.id = id;
+      b.dataset.ancla = id;
+      b.classList.add('anotable');
+
+      var boton = document.createElement('button');
+      boton.type = 'button';
+      boton.className = 'anotar';
+      boton.setAttribute('aria-label', 'Comentar este párrafo o avisar de un error');
+      boton.title = 'Comentar / avisar de un error';
+      boton.textContent = '✎';
+      boton.addEventListener('click', function () { window.open(urlIssue(b, id), '_blank', 'noopener'); });
+      b.appendChild(boton);
+    });
+
+    var urlIssue = function (b, id) {
+      var titulo = (document.querySelector('.nota h1') || document).textContent.trim();
+      var copia = b.cloneNode(true);
+      copia.querySelectorAll('.anotar, .anotacion').forEach(function (e) { e.remove(); });
+      var cita = copia.textContent.replace(/\s+/g, ' ').trim();
+      if (cita.length > 400) cita = cita.slice(0, 400) + '…';
+      var enlace = location.origin + location.pathname + '#' + id;
+      var cuerpo = '**Tema:** ' + titulo + '\n**Párrafo:** ' + enlace + '\n\n> ' + cita +
+        '\n\n**Comentario:**\n\n\n<!-- No borres esta línea: ancla=' + location.pathname + '#' + id + ' -->\n';
+      return 'https://github.com/' + REPO + '/issues/new?template=errata.md' +
+        '&title=' + encodeURIComponent('[Errata] ' + titulo) +
+        '&body=' + encodeURIComponent(cuerpo);
+    };
+
+    // Saltar al párrafo si se llega con #p-… (los ids se crean después de cargar)
+    if (location.hash && porId[location.hash.slice(1)]) {
+      var destino = porId[location.hash.slice(1)];
+      destino.scrollIntoView();
+      destino.classList.add('anotable-destacado');
+    }
+
+    // Marcar los bloques con Issues abiertos (caché de 10 min por pestaña: la API
+    // sin autenticar permite 60 peticiones/hora por IP)
+    var pintarAnotaciones = function (issues) {
+      issues.forEach(function (is) {
+        var m = /ancla=([^#\s]+)#(p-[a-z0-9-]+)/.exec(is.body || '');
+        if (!m || m[1] !== location.pathname || !porId[m[2]]) return;
+        var b = porId[m[2]];
+        var marca = b.querySelector('.anotacion');
+        if (!marca) {
+          marca = document.createElement('a');
+          marca.className = 'anotacion';
+          marca.target = '_blank';
+          marca.rel = 'noopener';
+          marca.dataset.n = 0;
+          marca.dataset.titulos = '';
+          b.classList.add('con-anotacion');
+          b.appendChild(marca);
+        }
+        var n = +marca.dataset.n + 1;
+        marca.dataset.n = n;
+        marca.dataset.titulos += (marca.dataset.titulos ? '\n' : '') + '#' + is.number + ' ' + is.title;
+        marca.textContent = n;
+        marca.title = n + (n > 1 ? ' anotaciones abiertas' : ' anotación abierta') + ':\n' + marca.dataset.titulos;
+        marca.href = n > 1
+          ? 'https://github.com/' + REPO + '/issues?q=' + encodeURIComponent('is:issue is:open "' + m[2] + '"')
+          : is.html_url;
+      });
+    };
+    var cacheado = null;
+    try { cacheado = JSON.parse(sessionStorage.getItem('anotaciones') || 'null'); } catch (e) {}
+    if (cacheado && Date.now() - cacheado.t < 600000) {
+      pintarAnotaciones(cacheado.issues);
+    } else if (window.fetch) {
+      fetch('https://api.github.com/repos/' + REPO + '/issues?state=open&per_page=100')
+        .then(function (r) { return r.ok ? r.json() : []; })
+        .then(function (datos) {
+          var issues = datos
+            .filter(function (is) { return !is.pull_request && /ancla=/.test(is.body || ''); })
+            .map(function (is) { return { number: is.number, title: is.title, body: is.body, html_url: is.html_url }; });
+          try { sessionStorage.setItem('anotaciones', JSON.stringify({ t: Date.now(), issues: issues })); } catch (e) {}
+          pintarAnotaciones(issues);
+        })
+        .catch(function () {});
+    }
+  }
+
   function saltarApartado(dir) {
     if (!apartados.length) return;
     var i;

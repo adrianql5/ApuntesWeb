@@ -19,6 +19,9 @@ Bóvedas Obsidian (Desktop)
 - **backend/**: generador Node.js a medida. Convierte markdown Obsidian (LaTeX,
   callouts, embeds `![[...]]`) a HTML con KaTeX renderizado en servidor, copia las
   imágenes referenciadas y genera un PDF por asignatura con Chrome (puppeteer-core).
+  En el PDF las imágenes grandes se reducen a 1400 px/JPEG (`sips`); si aun así pasa
+  de 45 MB (`APUNTES_PDF_MAX_MB`), se divide por temas en `<id>-parte-N.pdf` y la
+  página de la asignatura enlaza todas las partes.
 - **frontend/**: plantillas HTML + CSS + JS vanilla. URLs relativas (el sitio vive
   bajo `/ApuntesWeb/`), sin CDNs.
 - **automation/**: cada día a las 21:00, un LaunchAgent compara hashes para ver si

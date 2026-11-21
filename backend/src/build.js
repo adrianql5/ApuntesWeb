@@ -8,6 +8,7 @@ import {
 } from './render.js';
 import { copiarImagenes, copiarEstaticos, copiarKatex, copiarPdfLegacy } from './assets.js';
 import { slug } from './slug.js';
+import { pdfsAsignatura } from './pdf.js';
 
 // Borra la salida excepto CLAUDE.md (aviso de carpeta generada) y pdf/ (caros de regenerar)
 export function limpiar(config, { conservarPdfs = true } = {}) {
@@ -193,7 +194,7 @@ export async function construir(config, { strict = false } = {}) {
       // ---------- Asignaturas ----------
       for (const a of v.asignaturas) {
         const relAsig = '../../../';
-        const rutaPdf = `pdf/${v.curso}-${v.cuatri}-${a.slug}.pdf`;
+        const pdfs = pdfsAsignatura(config.rutaSalida, `${v.curso}-${v.cuatri}-${a.slug}`);
         const lista = a.notas.map((n) => {
           const numero = n.orden !== null ? String(n.orden) : '·';
           return `    <li><a href="${n.slug}.html"><span class="nota-numero">${numero}</span>` +
@@ -216,7 +217,9 @@ export async function construir(config, { strict = false } = {}) {
             { href: '../index.html', texto: `cuatri-${v.cuatri}` },
             { texto: a.slug },
           ]),
-          acciones: `<a class="boton" href="${relAsig}${rutaPdf}" download>Descargar PDF de la asignatura</a>`,
+          acciones: pdfs.length > 1
+            ? pdfs.map((f, i) => `<a class="boton" href="${relAsig}${f}" download>Descargar PDF · parte ${i + 1}</a>`).join('\n  ')
+            : `<a class="boton" href="${relAsig}${pdfs[0] ?? `pdf/${v.curso}-${v.cuatri}-${a.slug}.pdf`}" download>Descargar PDF de la asignatura</a>`,
           listaNotas: lista.join('\n'),
           extra: '',
         });

@@ -62,11 +62,12 @@ while (( $(minutos_desde_ultima_edicion) < REPOSO_MIN )); do
 done
 CAMBIOS="$(node backend/src/index.js changed)"
 
-# 3) Build del sitio + PDFs de las asignaturas afectadas
-log "Generando sitio…"
-node backend/src/index.js build --strict
+# 3) PDFs de las asignaturas afectadas y build del sitio (en este orden: el build
+#    enlaza las partes en que se haya dividido un PDF grande)
 log "Generando PDFs de asignaturas cambiadas…"
 node backend/src/index.js pdf --solo-cambiadas
+log "Generando sitio…"
+node backend/src/index.js build --strict
 
 if (( DRY_RUN )); then
   log "Dry-run: build hecho; NO se registra ni se publica nada."

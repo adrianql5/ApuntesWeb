@@ -1,5 +1,7 @@
-import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync, statSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { tmpdir } from 'node:os';
 import puppeteer from 'puppeteer-core';
@@ -26,6 +28,49 @@ function rutaNavegador() {
     );
   }
   return ruta;
+}
+
+// Las imágenes de las bóvedas son recortes a resolución completa (PNG de hasta
+// 3 MB); dentro del PDF basta con 1400 px en JPEG. Se convierten con sips (macOS)
+// a una caché en /tmp; si sips falla se usa el original.
+const DIR_CACHE_IMG = join(tmpdir(), 'apuntesweb-pdf-img');
+const IMG_UMBRAL = 300 * 1024;
+
+function imagenParaPdf(abs) {
+  try {
+    const st = statSync(abs);
+    if (st.size < IMG_UMBRAL || !/\.(png|jpe?g)$/i.test(abs)) return abs;
+    const transparente = /hasAlpha: yes/.test(execFileSync('sips', ['-g', 'hasAlpha', abs], { encoding: 'utf8' }));
+    const ext = transparente ? 'png' : 'jpg';
+    const clave = createHash('sha1').update(`${abs}:${st.mtimeMs}`).digest('hex');
+    const salida = join(DIR_CACHE_IMG, `${clave}.${ext}`);
+    if (!existsSync(salida)) {
+      mkdirSync(DIR_CACHE_IMG, { recursive: true });
+      // Con transparencia se mantiene PNG (JPEG la pintaría de negro); solo se reduce
+      const formato = transparente ? ['-s', 'format', 'png'] : ['-s', 'format', 'jpeg', '-s', 'formatOptions', '80'];
+      execFileSync('sips', ['-Z', '1400', ...formato, abs, '--out', salida], { stdio: 'ignore' });
+    }
+    return salida;
+  } catch {
+    return abs;
+  }
+}
+
+// Si un PDF supera este tamaño (GitHub avisa a partir de 50 MB y rechaza >100 MB)
+// se divide por temas en partes: <id>-parte-1.pdf, <id>-parte-2.pdf…
+const PDF_MAX_BYTES = (Number(process.env.APUNTES_PDF_MAX_MB) || 45) * 1024 * 1024;
+
+// Partes publicadas de una asignatura: ['pdf/<id>.pdf'] o ['pdf/<id>-parte-1.pdf', …]
+export function pdfsAsignatura(dirSalida, id) {
+  const dirPdf = join(dirSalida, 'pdf');
+  if (!existsSync(dirPdf)) return [];
+  if (existsSync(join(dirPdf, `${id}.pdf`))) return [`pdf/${id}.pdf`];
+  const re = new RegExp(`^${id}-parte-(\\d+)\\.pdf$`);
+  return readdirSync(dirPdf)
+    .map((f) => [f, re.exec(f)])
+    .filter(([, m]) => m)
+    .sort((x, y) => x[1][1] - y[1][1])
+    .map(([f]) => `pdf/${f}`);
 }
 
 export async function generarPdfs(config, { soloCambiadas = false } = {}) {
@@ -72,27 +117,35 @@ export async function generarPdfs(config, { soloCambiadas = false } = {}) {
         const cuerpo = a.notas.map((n) => {
           const ctx = {
             asignatura: a, vault: v, dirBase: a.ruta, rel: '',
-            srcImagen: (abs) => pathToFileURL(abs).href,
+            srcImagen: (abs) => pathToFileURL(imagenParaPdf(abs)).href,
             buscarNota: () => null, // dentro del PDF los enlaces entre notas no aplican
           };
           const { html } = renderNota(md, readFileSync(n.ruta, 'utf8'), ctx);
           return `<section class="nota-pdf"><h1 class="nota-pdf-titulo">${escaparHtml(n.titulo)}</h1>\n${html}</section>`;
-        }).join('\n');
-
-        const html = aplicar(plantilla, {
-          titulo: a.nombre,
-          subtitulo: `${ORDINAL_CURSO[v.curso] ?? `Curso ${v.curso}`} · ${nombreCuatri(v.cuatri)} · ${a.notas.length} temas`,
-          fecha,
-          url: config.urlPublica ?? '',
-          katexCss,
-          cuerpo,
         });
 
-        const rutaHtml = join(dirTmp, `${id}.html`);
-        writeFileSync(rutaHtml, html);
-        await pagina.goto(pathToFileURL(rutaHtml).href, { waitUntil: 'networkidle0', timeout: 120000 });
-        await pagina.pdf({
-          path: join(dirPdf, `${id}.pdf`),
+        const temas = (desde, hasta) => (hasta - desde === 1 ? `tema ${hasta}` : `temas ${desde + 1}–${hasta}`);
+
+        // Renderiza las secciones [desde, hasta) en un PDF y devuelve su tamaño
+        const renderizar = async (desde, hasta, ruta, parte) => {
+          const html = aplicar(plantilla, {
+            titulo: a.nombre + (parte ? ` (parte ${parte})` : ''),
+            subtitulo: `${ORDINAL_CURSO[v.curso] ?? `Curso ${v.curso}`} · ${nombreCuatri(v.cuatri)} · ` +
+              (parte ? `${temas(desde, hasta)} de ${a.notas.length}` : `${a.notas.length} temas`),
+            fecha,
+            url: config.urlPublica ?? '',
+            katexCss,
+            cuerpo: cuerpo.slice(desde, hasta).join('\n'),
+          });
+          const rutaHtml = join(dirTmp, `${id}.html`);
+          writeFileSync(rutaHtml, html);
+          await pagina.goto(pathToFileURL(rutaHtml).href, { waitUntil: 'networkidle0', timeout: 120000 });
+          await imprimir(ruta);
+          return statSync(ruta).size;
+        };
+
+        const imprimir = (ruta) => pagina.pdf({
+          path: ruta,
           format: 'A4',
           printBackground: true,
           margin: { top: '18mm', bottom: '16mm', left: '15mm', right: '15mm' },
@@ -103,7 +156,40 @@ export async function generarPdfs(config, { soloCambiadas = false } = {}) {
             `<span>${escaparHtml(a.nombre)} · ApuntesWeb</span>` +
             `<span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>`,
         });
-        console.log(`  ✓ pdf/${id}.pdf (${a.notas.length} temas)`);
+
+        // Se borra cualquier versión anterior (entera o por partes) antes de generar
+        for (const f of pdfsAsignatura(config.rutaSalida, id)) rmSync(join(config.rutaSalida, f));
+
+        const rutaEntera = join(dirPdf, `${id}.pdf`);
+        const tamano = await renderizar(0, cuerpo.length, rutaEntera, null);
+        if (tamano <= PDF_MAX_BYTES || cuerpo.length < 2) {
+          console.log(`  ✓ pdf/${id}.pdf (${a.notas.length} temas, ${(tamano / 1048576).toFixed(1)} MB)`);
+          continue;
+        }
+
+        // Demasiado grande: repartir los temas en el mínimo nº de partes que quepan
+        rmSync(rutaEntera);
+        let partes = Math.ceil(tamano / PDF_MAX_BYTES);
+        for (;;) {
+          const porParte = Math.ceil(cuerpo.length / partes);
+          const generadas = [];
+          let cabe = true;
+          for (let p = 0, desde = 0; desde < cuerpo.length; p++, desde += porParte) {
+            const hasta = Math.min(desde + porParte, cuerpo.length);
+            const ruta = join(dirPdf, `${id}-parte-${p + 1}.pdf`);
+            const t = await renderizar(desde, hasta, ruta, p + 1);
+            generadas.push({ ruta, t, desde, hasta });
+            if (t > PDF_MAX_BYTES && hasta - desde > 1) cabe = false;
+          }
+          if (cabe || partes >= cuerpo.length) {
+            for (const g of generadas) {
+              console.log(`  ✓ pdf/${id}-parte-${generadas.indexOf(g) + 1}.pdf (${temas(g.desde, g.hasta)}, ${(g.t / 1048576).toFixed(1)} MB)`);
+            }
+            break;
+          }
+          for (const g of generadas) rmSync(g.ruta);
+          partes++;
+        }
       }
     }
   } finally {

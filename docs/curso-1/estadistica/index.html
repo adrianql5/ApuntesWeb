@@ -10,8 +10,15 @@
 <link rel="stylesheet" href="../../vendor/katex/katex.min.css">
 <link rel="stylesheet" href="../../css/estilos.css">
 <script>
-// Aplica el tema guardado antes del primer pintado para evitar parpadeo
-try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+// Aplica tema, ajustes de lectura y paneles guardados antes del primer pintado (sin parpadeo)
+try {
+  var r = document.documentElement, l = JSON.parse(localStorage.getItem('lectura') || '{}');
+  var t = localStorage.getItem('tema'); if (t) r.dataset.tema = t;
+  ['letra', 'medida', 'interlineado', 'atenuar'].forEach(function (k) { if (l[k]) r.dataset[k] = l[k]; });
+  if (l.sinTemas) r.dataset.sinTemas = '';
+  if (l.sinIndice) r.dataset.sinIndice = '';
+  r.classList.add('js');
+} catch (e) {}
 </script>
 </head>
 <body data-rel="../../">
@@ -19,16 +26,68 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
 <a class="salto" href="#contenido">Saltar al contenido</a>
 <header class="cabecera">
   <div class="cabecera-interior">
+    <button class="boton-cabecera boton-panel" id="boton-temas" type="button" aria-controls="panel-temas" aria-expanded="true" title="Mostrar u ocultar los temas ( [ )" hidden><span class="icono-panel" aria-hidden="true"></span><span class="etiqueta">Temas</span></button>
     <a class="marca" href="../../index.html">Apuntes<span class="marca-web">Web</span></a>
-    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
-    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
-    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+    <button class="boton-cabecera" id="boton-buscar" type="button"><span class="etiqueta-buscar">Buscar</span> <kbd class="tecla-mod">Ctrl</kbd><kbd>K</kbd></button>
+    <button class="boton-cabecera" id="boton-lectura" type="button" aria-controls="ajustes" aria-expanded="false" title="Ajustes de lectura ( a )" hidden><span class="icono-aa" aria-hidden="true">Aa</span><span class="etiqueta">Lectura</span></button>
+    <button class="boton-cabecera boton-panel" id="boton-indice" type="button" aria-controls="panel-indice" aria-expanded="true" title="Mostrar u ocultar el índice del tema ( ] )" hidden><span class="etiqueta">Índice</span><span class="icono-panel icono-panel-der" aria-hidden="true"></span></button>
+    <button class="boton-cabecera" id="boton-atajos" type="button" aria-label="Atajos de teclado" title="Atajos de teclado ( ? )" hidden>?</button>
   </div>
 </header>
-<nav class="migas" aria-label="Estás en"><a href="../../index.html">inicio</a><span class="miga-sep">/</span><a href="../index.html">curso-1</a><span class="miga-sep">/</span><span aria-current="page">estadistica</span></nav>
+<section class="ajustes" id="ajustes" aria-labelledby="ajustes-titulo" hidden>
+  <div class="ajustes-cabecera">
+    <h2 id="ajustes-titulo">Ajustes de lectura</h2>
+    <button type="button" class="ajustes-cerrar" id="ajustes-cerrar" aria-label="Cerrar ajustes">×</button>
+  </div>
+  <fieldset>
+    <legend>Tema</legend>
+    <div class="segmentado">
+      <label><input type="radio" name="tema" value=""><span>Auto</span></label>
+      <label><input type="radio" name="tema" value="claro"><span>Papel</span></label>
+      <label><input type="radio" name="tema" value="sepia"><span>Sepia</span></label>
+      <label><input type="radio" name="tema" value="oscuro"><span>Noche</span></label>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>Tamaño de letra</legend>
+    <div class="segmentado">
+      <label><input type="radio" name="letra" value="s"><span style="font-size:.85em">A</span></label>
+      <label><input type="radio" name="letra" value=""><span>A</span></label>
+      <label><input type="radio" name="letra" value="l"><span style="font-size:1.15em">A</span></label>
+      <label><input type="radio" name="letra" value="xl"><span style="font-size:1.3em">A</span></label>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>Ancho de línea</legend>
+    <div class="segmentado">
+      <label><input type="radio" name="medida" value="estrecha"><span>Estrecho</span></label>
+      <label><input type="radio" name="medida" value=""><span>Normal</span></label>
+      <label><input type="radio" name="medida" value="ancha"><span>Ancho</span></label>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend>Interlineado</legend>
+    <div class="segmentado">
+      <label><input type="radio" name="interlineado" value="compacto"><span>Compacto</span></label>
+      <label><input type="radio" name="interlineado" value=""><span>Normal</span></label>
+      <label><input type="radio" name="interlineado" value="amplio"><span>Amplio</span></label>
+    </div>
+  </fieldset>
+  <fieldset class="ajustes-enfoque">
+    <legend>Concentración</legend>
+    <label class="interruptor"><input type="checkbox" id="opcion-enfoque"><span>Modo enfoque <kbd>f</kbd></span></label>
+    <label class="interruptor"><input type="checkbox" id="opcion-atenuar"><span>Atenuar los párrafos que no estás leyendo</span></label>
+  </fieldset>
+  <p class="ajustes-nota">¿Has visto un error? Pasa el ratón por un párrafo y pulsa <span class="ajustes-lapiz" aria-hidden="true">✎</span> en su margen: se abre un aviso en GitHub (necesitas cuenta).</p>
+  <div class="ajustes-pie">
+    <button type="button" id="ajustes-restablecer">Restablecer</button>
+    <button type="button" id="ajustes-olvidar">Borrar mi progreso</button>
+  </div>
+</section>
 <div class="disposicion">
 
 <main class="principal" id="contenido">
+<nav class="migas" aria-label="Estás en"><a href="../../index.html">Inicio</a><span class="miga-sep" aria-hidden="true">›</span><a href="../index.html">1.º curso</a><span class="miga-sep" aria-hidden="true">›</span><span aria-current="page">Estadística</span></nav>
 <section class="encabezado-seccion">
   <p class="sello">curso 1 · material legado</p>
   <h1>Estadística</h1>
@@ -54,6 +113,13 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
 
 </main>
 </div>
+<div class="velo-panel" id="velo-panel" hidden></div>
+<div class="aviso" id="aviso-retomar" role="status" hidden>
+  <span id="aviso-texto"></span>
+  <button type="button" id="aviso-si">Seguir leyendo</button>
+  <button type="button" id="aviso-no" aria-label="Descartar">×</button>
+</div>
+<a class="arriba" id="arriba" href="#contenido" aria-label="Volver arriba" title="Volver arriba" hidden>↑</a>
 <div class="paleta-fondo" id="paleta-fondo" hidden>
   <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
     <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
@@ -69,9 +135,12 @@ try { const t = localStorage.getItem('tema'); if (t) document.documentElement.da
 <dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
   <h2 id="atajos-titulo">Atajos de teclado</h2>
   <dl>
-    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd class="tecla-mod">Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
     <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
     <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>[</kbd> <kbd>]</kbd></dt><dd>Mostrar / ocultar temas e índice</dd>
+    <dt><kbd>f</kbd></dt><dd>Modo enfoque</dd>
+    <dt><kbd>a</kbd></dt><dd>Ajustes de lectura</dd>
     <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
     <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
   </dl>

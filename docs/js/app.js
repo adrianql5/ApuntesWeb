@@ -1,21 +1,112 @@
-// Mejora progresiva de ApuntesWeb: tema claro/oscuro, buscador Ctrl+K, navegación
-// con teclado, progreso e índice de lectura y temas leídos.
+// Mejora progresiva de ApuntesWeb: tema y ajustes de lectura, paneles laterales
+// plegables, buscador Ctrl+K, navegación con teclado, progreso e índice de lectura,
+// modo enfoque, retomar lectura y temas leídos.
 // El sitio funciona íntegro sin este archivo.
 (function () {
   'use strict';
   var rel = document.body.dataset.rel || '';
+  var raiz = document.documentElement;
+  var esMac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
 
-  // ---------- Tema claro/oscuro ----------
-  var botonTema = document.getElementById('boton-tema');
+  // En Mac el modificador es ⌘, no Ctrl
+  if (esMac) document.querySelectorAll('.tecla-mod').forEach(function (k) { k.textContent = '⌘'; });
+
+  // ---------- Preferencias de lectura (localStorage 'lectura') ----------
+  var lectura = {};
+  try { lectura = JSON.parse(localStorage.getItem('lectura') || '{}') || {}; } catch (e) {}
+  function guardarLectura() {
+    try { localStorage.setItem('lectura', JSON.stringify(lectura)); } catch (e) {}
+  }
+
+  // ---------- Tema: auto / claro (papel) / sepia / oscuro (noche) ----------
+  function ponerTema(valor) {
+    if (valor) raiz.dataset.tema = valor; else delete raiz.dataset.tema;
+    try { if (valor) localStorage.setItem('tema', valor); else localStorage.removeItem('tema'); } catch (e) {}
+    sincronizarAjustes();
+  }
   function alternarTema() {
-    var raiz = document.documentElement;
     var oscuroSistema = window.matchMedia('(prefers-color-scheme: dark)').matches;
     var actual = raiz.dataset.tema || (oscuroSistema ? 'oscuro' : 'claro');
-    var nuevo = actual === 'oscuro' ? 'claro' : 'oscuro';
-    raiz.dataset.tema = nuevo;
-    try { localStorage.setItem('tema', nuevo); } catch (e) {}
+    ponerTema(actual === 'oscuro' ? 'claro' : 'oscuro');
   }
-  if (botonTema) botonTema.addEventListener('click', alternarTema);
+
+  // ---------- Panel de ajustes de lectura ----------
+  var ajustes = document.getElementById('ajustes');
+  var botonLectura = document.getElementById('boton-lectura');
+  function sincronizarAjustes() {
+    if (!ajustes) return;
+    var valores = {
+      tema: raiz.dataset.tema || '',
+      letra: lectura.letra || '', medida: lectura.medida || '', interlineado: lectura.interlineado || '',
+    };
+    Object.keys(valores).forEach(function (k) {
+      ajustes.querySelectorAll('input[name="' + k + '"]').forEach(function (r) { r.checked = r.value === valores[k]; });
+    });
+    document.getElementById('opcion-enfoque').checked = 'enfoque' in raiz.dataset;
+    document.getElementById('opcion-atenuar').checked = !!lectura.atenuar;
+  }
+  function ponerLectura(k, valor) {
+    if (valor) { lectura[k] = valor; raiz.dataset[k] = valor; }
+    else { delete lectura[k]; delete raiz.dataset[k]; }
+    guardarLectura();
+  }
+  function abrirAjustes() {
+    sincronizarAjustes();
+    ajustes.hidden = false;
+    botonLectura.setAttribute('aria-expanded', 'true');
+    var marcado = ajustes.querySelector('input:checked') || ajustes.querySelector('input');
+    if (marcado) marcado.focus();
+  }
+  function cerrarAjustes(devolverFoco) {
+    if (!ajustes || ajustes.hidden) return;
+    ajustes.hidden = true;
+    botonLectura.setAttribute('aria-expanded', 'false');
+    if (devolverFoco) botonLectura.focus();
+  }
+  function alternarAjustes() { if (ajustes.hidden) abrirAjustes(); else cerrarAjustes(true); }
+  if (ajustes && botonLectura) {
+    botonLectura.hidden = false;
+    botonLectura.addEventListener('click', alternarAjustes);
+    document.getElementById('ajustes-cerrar').addEventListener('click', function () { cerrarAjustes(true); });
+    ajustes.addEventListener('change', function (ev) {
+      var el = ev.target;
+      if (el.name === 'tema') ponerTema(el.value);
+      else if (el.type === 'radio') ponerLectura(el.name, el.value);
+      else if (el.id === 'opcion-enfoque') alternarEnfoque(el.checked);
+      else if (el.id === 'opcion-atenuar') { ponerLectura('atenuar', el.checked ? '1' : ''); actualizarFoco(); }
+    });
+    document.getElementById('ajustes-restablecer').addEventListener('click', function () {
+      ['letra', 'medida', 'interlineado', 'atenuar'].forEach(function (k) { ponerLectura(k, ''); });
+      ponerTema('');
+      alternarEnfoque(false);
+      actualizarFoco();
+    });
+    document.getElementById('ajustes-olvidar').addEventListener('click', function () {
+      if (!window.confirm('¿Borrar los temas marcados como leídos y las posiciones de lectura guardadas en este navegador?')) return;
+      try { localStorage.removeItem('leidos'); localStorage.removeItem('posiciones'); } catch (e) {}
+      document.querySelectorAll('a.leida').forEach(function (a) { a.classList.remove('leida'); a.removeAttribute('title'); });
+    });
+    // Clic fuera del panel lo cierra
+    document.addEventListener('click', function (ev) {
+      if (!ajustes.hidden && !ajustes.contains(ev.target) && !botonLectura.contains(ev.target)) cerrarAjustes(false);
+    });
+  }
+
+  // ---------- Modo enfoque: solo el texto ----------
+  var salirEnfoque = null;
+  function alternarEnfoque(forzar) {
+    var activar = typeof forzar === 'boolean' ? forzar : !('enfoque' in raiz.dataset);
+    if (activar) raiz.dataset.enfoque = ''; else delete raiz.dataset.enfoque;
+    if (activar && !salirEnfoque) {
+      salirEnfoque = document.createElement('button');
+      salirEnfoque.type = 'button';
+      salirEnfoque.className = 'salir-enfoque';
+      salirEnfoque.innerHTML = 'Salir del modo enfoque <kbd>f</kbd>';
+      salirEnfoque.addEventListener('click', function () { alternarEnfoque(false); });
+      document.body.appendChild(salirEnfoque);
+    }
+    sincronizarAjustes();
+  }
 
   // ---------- Buscador (paleta Ctrl+K) ----------
   var fondo = document.getElementById('paleta-fondo');
@@ -160,43 +251,137 @@
     }
   });
 
+  // ---------- Paneles laterales: temas (izquierda) e índice (derecha) ----------
+  // En pantalla ancha se pliegan y el estado se recuerda; en estrecha se abren
+  // como cajones superpuestos al texto.
+  var ancho = window.matchMedia('(min-width: 1200px)');
+  var velo = document.getElementById('velo-panel');
+  var paneles = {
+    temas: { panel: document.getElementById('panel-temas'), boton: document.getElementById('boton-temas'), clave: 'sinTemas' },
+    indice: { panel: document.getElementById('panel-indice'), boton: document.getElementById('boton-indice'), clave: 'sinIndice' },
+  };
+  function panelVisible(nombre) {
+    var p = paneles[nombre];
+    return ancho.matches ? !(p.clave in raiz.dataset) : raiz.dataset.abierto === nombre;
+  }
+  function sincronizarPaneles() {
+    Object.keys(paneles).forEach(function (n) {
+      var p = paneles[n];
+      if (p.boton) p.boton.setAttribute('aria-expanded', panelVisible(n) ? 'true' : 'false');
+    });
+    if (velo) velo.hidden = ancho.matches || !raiz.dataset.abierto;
+  }
+  function cerrarCajon() {
+    if (!raiz.dataset.abierto) return;
+    var p = paneles[raiz.dataset.abierto];
+    delete raiz.dataset.abierto;
+    sincronizarPaneles();
+    if (p && p.boton) p.boton.focus();
+  }
+  function alternarPanel(nombre) {
+    var p = paneles[nombre];
+    if (!p.panel || p.panel.hidden) return;
+    if (ancho.matches) {
+      if (p.clave in raiz.dataset) delete raiz.dataset[p.clave]; else raiz.dataset[p.clave] = '';
+      lectura[p.clave] = p.clave in raiz.dataset ? 1 : undefined;
+      guardarLectura();
+    } else if (raiz.dataset.abierto === nombre) {
+      cerrarCajon();
+      return;
+    } else {
+      raiz.dataset.abierto = nombre;
+      var enlace = p.panel.querySelector('a.activo, .actual, a');
+      if (enlace) enlace.focus({ preventScroll: true });
+    }
+    sincronizarPaneles();
+  }
+  Object.keys(paneles).forEach(function (n) {
+    var p = paneles[n];
+    if (!p.panel || !p.boton) return;
+    p.boton.addEventListener('click', function () { alternarPanel(n); });
+    // Cierre visible para el modo cajón (solo se ve en pantallas estrechas)
+    var cerrarBtn = document.createElement('button');
+    cerrarBtn.type = 'button';
+    cerrarBtn.className = 'cerrar-cajon';
+    cerrarBtn.setAttribute('aria-label', 'Cerrar panel');
+    cerrarBtn.textContent = '×';
+    cerrarBtn.addEventListener('click', cerrarCajon);
+    p.panel.querySelector('.lateral-interior').prepend(cerrarBtn);
+    p.panel.addEventListener('click', function (ev) {
+      if (!ancho.matches && ev.target.closest('a')) cerrarCajon();
+    });
+  });
+  if (velo) velo.addEventListener('click', cerrarCajon);
+  ancho.addEventListener('change', function () { delete raiz.dataset.abierto; sincronizarPaneles(); });
+  if (paneles.temas.panel && paneles.temas.boton) paneles.temas.boton.hidden = false;
+
   // ---------- Índice del tema, progreso y apartados ----------
   var prosa = document.querySelector('.nota .prosa');
   var apartados = [];
+  var minutosTotales = +((document.querySelector('[data-minutos]') || {}).dataset || {}).minutos || 0;
   if (prosa) {
     var usados = {};
-    apartados = Array.prototype.slice.call(prosa.querySelectorAll('h2, h3'));
+    apartados = Array.prototype.slice.call(prosa.querySelectorAll('h1, h2, h3'));
+    // Nivel más alto presente: las notas usan # o ## para los apartados principales
+    var nivelBase = Math.min.apply(null, apartados.map(function (h) { return +h.tagName[1]; }).concat(3));
     apartados.forEach(function (h) {
-      if (h.id) return;
-      var base = normalizar(h.textContent).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'apartado';
-      var id = base, n = 2;
-      while (usados[id] || document.getElementById(id)) id = base + '-' + n++;
-      usados[id] = true;
-      h.id = id;
+      if (!h.id) {
+        var base = normalizar(h.textContent).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'apartado';
+        var id = base, n = 2;
+        while (usados[id] || document.getElementById(id)) id = base + '-' + n++;
+        usados[id] = true;
+        h.id = id;
+      }
+      // Numeración del apartado ("3.1") colgada en el margen, como en un libro
+      var primero = h.firstChild;
+      if (primero && primero.nodeType === 3) {
+        var m = /^\s*(\d+(?:\.\d+)*\.?)\s+/.exec(primero.nodeValue);
+        if (m) {
+          var num = document.createElement('span');
+          num.className = 'num-apartado';
+          num.textContent = m[1].replace(/\.$/, '');
+          primero.nodeValue = primero.nodeValue.slice(m[0].length);
+          h.insertBefore(num, primero);
+          h.classList.add('con-numero');
+        }
+      }
     });
 
-    // Índice "En este tema" en el rail lateral, con el apartado visible resaltado
-    var rail = document.querySelector('.lateral-interior');
+    // Índice "En este tema" en el panel derecho, con el apartado visible resaltado
+    var panelIndice = paneles.indice.panel;
     var enlacesToc = [];
-    if (rail && apartados.length > 1) {
+    var restante = null;
+    if (panelIndice && apartados.length > 1) {
       var toc = document.createElement('nav');
       toc.className = 'toc';
       toc.setAttribute('aria-label', 'En este tema');
-      toc.innerHTML = '<p class="lateral-titulo">En este tema</p>';
+      toc.innerHTML = '<p class="lateral-titulo">En este tema</p><p class="toc-restante" aria-live="off"></p>';
+      restante = toc.querySelector('.toc-restante');
       var ol = document.createElement('ol');
       apartados.forEach(function (h) {
         var li = document.createElement('li');
-        if (h.tagName === 'H3') li.className = 'toc-h3';
+        var nivel = +h.tagName[1] - nivelBase;
+        if (nivel > 0) li.className = 'toc-n' + Math.min(nivel, 2);
         var a = document.createElement('a');
         a.href = '#' + h.id;
-        a.textContent = h.textContent;
+        var num = h.querySelector('.num-apartado');
+        if (num) {
+          var sn = document.createElement('span');
+          sn.className = 'toc-num';
+          sn.textContent = num.textContent;
+          a.appendChild(sn);
+        }
+        a.appendChild(document.createTextNode(num ? h.textContent.slice(num.textContent.length) : h.textContent));
         li.appendChild(a);
         ol.appendChild(li);
         enlacesToc.push(a);
       });
       toc.appendChild(ol);
-      rail.appendChild(toc);
+      panelIndice.querySelector('.lateral-interior').appendChild(toc);
+      panelIndice.hidden = false;
+      if (paneles.indice.boton) paneles.indice.boton.hidden = false;
     }
+    sincronizarPaneles();
 
     var barra = document.getElementById('progreso');
     if (barra) barra.hidden = false;
@@ -208,18 +393,95 @@
       var p = Math.min(1, Math.max(0, -caja.top / Math.max(1, recorrido)));
       if (barra) barra.style.transform = 'scaleX(' + p + ')';
       if (p > 0.9) marcarLeida();
+      if (restante && minutosTotales) {
+        var min = Math.ceil(minutosTotales * (1 - p));
+        restante.textContent = p > 0.97 ? 'Terminado' : 'Quedan ≈ ' + min + ' min · ' + Math.round(p * 100) + ' %';
+      }
       if (enlacesToc.length) {
         var activo = 0;
         for (var i = 0; i < apartados.length; i++) {
           if (apartados[i].getBoundingClientRect().top < 120) activo = i;
         }
-        enlacesToc.forEach(function (a, i) { a.classList.toggle('activo', i === activo); });
+        enlacesToc.forEach(function (a, i) {
+          var es = i === activo;
+          a.classList.toggle('activo', es);
+          if (es) a.setAttribute('aria-current', 'location'); else a.removeAttribute('aria-current');
+        });
       }
+      actualizarFoco();
     };
     window.addEventListener('scroll', function () {
+      guardarPosicion();
       if (!pendiente) { pendiente = true; requestAnimationFrame(actualizar); }
     }, { passive: true });
     actualizar();
+  } else {
+    sincronizarPaneles();
+  }
+
+  // ---------- Atenuar lo que no se está leyendo ----------
+  // Resalta el bloque de la prosa que cruza el 40 % superior de la ventana.
+  var bloqueFoco = null;
+  function actualizarFoco() {
+    if (!prosa) return;
+    if (!lectura.atenuar) {
+      if (bloqueFoco) { bloqueFoco.classList.remove('en-foco'); bloqueFoco = null; }
+      return;
+    }
+    var y = window.innerHeight * 0.4, elegido = null;
+    for (var i = 0; i < prosa.children.length; i++) {
+      var c = prosa.children[i].getBoundingClientRect();
+      if (c.bottom >= y) { elegido = prosa.children[i]; break; }
+    }
+    if (elegido !== bloqueFoco) {
+      if (bloqueFoco) bloqueFoco.classList.remove('en-foco');
+      if (elegido) elegido.classList.add('en-foco');
+      bloqueFoco = elegido;
+    }
+  }
+
+  // ---------- Seguir donde lo dejé (posición por tema, solo en este navegador) ----------
+  var posiciones = {};
+  try { posiciones = JSON.parse(localStorage.getItem('posiciones') || '{}') || {}; } catch (e) {}
+  var temporizadorPos = null;
+  function fraccionScroll() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    return max > 0 ? window.scrollY / max : 0;
+  }
+  function guardarPosicion() {
+    if (!prosa) return;
+    clearTimeout(temporizadorPos);
+    temporizadorPos = setTimeout(function () {
+      var f = fraccionScroll();
+      if (f > 0.97 || f < 0.03) delete posiciones[location.pathname];
+      else posiciones[location.pathname] = { f: +f.toFixed(4), t: Date.now() };
+      try { localStorage.setItem('posiciones', JSON.stringify(posiciones)); } catch (e) {}
+    }, 500);
+  }
+  var guardada = posiciones[location.pathname];
+  var aviso = document.getElementById('aviso-retomar');
+  if (prosa && guardada && !location.hash && aviso && window.scrollY < 50) {
+    document.getElementById('aviso-texto').textContent = 'Lo dejaste al ' + Math.round(guardada.f * 100) + ' %.';
+    aviso.hidden = false;
+    var cerrarAviso = function () { aviso.hidden = true; };
+    document.getElementById('aviso-si').addEventListener('click', function () {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: guardada.f * max, behavior: 'auto' });
+      cerrarAviso();
+    });
+    document.getElementById('aviso-no').addEventListener('click', cerrarAviso);
+    setTimeout(function () { if (window.scrollY > 200) cerrarAviso(); }, 0);
+    window.addEventListener('scroll', function oculta() {
+      if (window.scrollY > window.innerHeight) { cerrarAviso(); window.removeEventListener('scroll', oculta); }
+    }, { passive: true });
+  }
+
+  // ---------- Volver arriba ----------
+  var arriba = document.getElementById('arriba');
+  if (arriba) {
+    var mostrarArriba = function () { arriba.hidden = window.scrollY < window.innerHeight * 1.5; };
+    window.addEventListener('scroll', mostrarArriba, { passive: true });
+    mostrarArriba();
   }
 
   // ---------- Anotaciones por párrafo (erratas → GitHub Issues) ----------
@@ -250,8 +512,8 @@
       var boton = document.createElement('button');
       boton.type = 'button';
       boton.className = 'anotar';
-      boton.setAttribute('aria-label', 'Comentar este párrafo o avisar de un error');
-      boton.title = 'Comentar / avisar de un error';
+      boton.setAttribute('aria-label', 'Avisar de un error en este párrafo (abre GitHub)');
+      boton.title = 'Avisar de un error en este párrafo · abre GitHub, necesitas cuenta';
       boton.textContent = '✎';
       boton.addEventListener('click', function () { window.open(urlIssue(b, id), '_blank', 'noopener'); });
       b.appendChild(boton);
@@ -343,6 +605,11 @@
       return;
     }
     if (ev.key === 'Escape' && !fondo.hidden) { cerrar(); return; }
+    if (ev.key === 'Escape') {
+      if (ajustes && !ajustes.hidden) { cerrarAjustes(true); return; }
+      if (raiz.dataset.abierto) { cerrarCajon(); return; }
+      if ('enfoque' in raiz.dataset) { alternarEnfoque(false); return; }
+    }
     // El resto, solo con la paleta cerrada, sin modificadores y sin foco en campos
     if (!fondo.hidden || ev.ctrlKey || ev.metaKey || ev.altKey) return;
     if (/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
@@ -359,6 +626,14 @@
       saltarApartado(-1);
     } else if (ev.key === 't') {
       alternarTema();
+    } else if (ev.key === '[') {
+      alternarPanel('temas');
+    } else if (ev.key === ']') {
+      alternarPanel('indice');
+    } else if (ev.key === 'f' && prosa) {
+      alternarEnfoque();
+    } else if (ev.key === 'a' && ajustes) {
+      alternarAjustes();
     } else if (ev.key === '?' && puedeDialogo) {
       dialogoAtajos.showModal();
     }

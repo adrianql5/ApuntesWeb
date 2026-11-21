@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="7. Estilos y paradigmas de interacción — apuntes de IPO (cuarto curso de Ingeniería Informática).">
+<title>7. Estilos y paradigmas de interacción · IPO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">ipo</a><span class="miga-sep">/</span><span aria-current="page">7-estilos-y-paradigmas-de-interaccion</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de IPO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">IPO</a></p><ol><li><a href="1-introduccion-a-la-ipo.html">1. Introducción a la IPO</a></li><li><a href="2-el-factor-humano.html">2. El factor humano</a></li><li><a href="3-prototipado-y-evaluacion.html">3. Prototipado y evaluación</a></li><li><a href="4-diseno-centrado-en-el-usuario.html">4. Diseño centrado en el usuario</a></li><li><a href="5-diseno-grafico-principios-estandares-y-guias.html">5. Diseño gráfico. Principios, estándares y guías</a></li><li><a href="6-accesibilidad.html">6. Accesibilidad</a></li><li><span class="actual" aria-current="page">7. Estilos y paradigmas de interacción</span></li><li><a href="notas-sobre-examen.html">Notas sobre examen</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>IPO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>7 / 7</div>
+    </div>
+    <h1>Estilos y paradigmas de interacción</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de IPO · 7/8</summary><ol><li><a href="1-introduccion-a-la-ipo.html">1. Introducción a la IPO</a></li><li><a href="2-el-factor-humano.html">2. El factor humano</a></li><li><a href="3-prototipado-y-evaluacion.html">3. Prototipado y evaluación</a></li><li><a href="4-diseno-centrado-en-el-usuario.html">4. Diseño centrado en el usuario</a></li><li><a href="5-diseno-grafico-principios-estandares-y-guias.html">5. Diseño gráfico. Principios, estándares y guías</a></li><li><a href="6-accesibilidad.html">6. Accesibilidad</a></li><li><span aria-current="page">7. Estilos y paradigmas de interacción</span></li><li><a href="notas-sobre-examen.html">Notas sobre examen</a></li></ol></details>
+  <div class="prosa">
+<h1>7.1 Evolución de la interacción</h1>
+<p>La forma de comunicarse con el ordenador ha pasado por varias etapas. Empezó con el <strong>texto</strong> (teclado y pantalla), siguió con los <strong>menús y la navegación</strong>, después llegó la <strong>manipulación directa</strong>, y ahora aparecen <strong>nuevos paradigmas</strong>: la <strong>realidad virtual</strong>, la <strong>realidad aumentada</strong> y la <strong>computación ubicua</strong>.</p>
+<p><img src="../../../img/ipo/ipo-t7-evolucion.png" alt="Evolución: texto → menús → manipulación directa → nuevos paradigmas (RV, RA, computación ubicua)|300" loading="lazy"></p>
+<h1>7.2 Estilos de interacción</h1>
+<p>Las <strong>interacciones</strong> son <strong>todos los intercambios</strong> entre la persona y el ordenador. Una interacción es <strong>multimodal</strong> cuando usa <strong>varios canales de comunicación humana a la vez</strong> (voz y gestos, por ejemplo). Un <strong>estilo de interacción</strong> es el término genérico que agrupa las <strong>diferentes maneras en que los usuarios se comunican</strong> con el ordenador. Hay cinco.</p>
+<h2>7.2.1 Interfaz por línea de órdenes</h2>
+<p>Fue el <strong>primer estilo de uso generalizado</strong>. Consiste en <strong>dar instrucciones directamente</strong> al ordenador escribiendo <strong>palabras enteras</strong> o <strong>abreviaturas</strong>, que son <strong>más fáciles de recordar</strong> (<code>copy</code>, <code>cp</code>), o con <strong>caracteres</strong> y <strong>teclas de función</strong>, que son <strong>más rápidas de ejecutar</strong> (<code>CTRL + C</code>). Ejemplos: <code>ls -la</code> en UNIX o <code>dir *.htm</code> en MS-DOS.</p>
+<p>Su gran baza es la <strong>flexibilidad</strong>. Las <strong>opciones</strong> modifican el comportamiento de cada orden, y una orden se puede <strong>aplicar a muchos objetos a la vez</strong> (<code>*.htm</code>). Permite la <strong>iniciativa del usuario</strong> y es <strong>atractiva para expertos</strong>, porque da <strong>acceso directo a la funcionalidad</strong> del sistema. Es potencialmente <strong>rápida para tareas complejas</strong> y permite crear <strong>macros</strong>.</p>
+<p>El precio es que exige <strong>mucha memorización y entrenamiento</strong>. <strong>No hay indicación visual</strong> de qué orden se necesita, así que es más útil para expertos que para principiantes. Además, su <strong>gestión de errores es pobre</strong>.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>La línea de órdenes es como <strong>pedir en un bar hablando con el camarero</strong>: si sabes exactamente qué quieres y cómo se llama (&quot;un cortado de máquina con leche de avena, templada&quot;), es lo más rápido y flexible. Pero si no conoces la carta, no tienes ni idea de qué pedir.</p>
+</div>
+<h2>7.2.2 Menús y navegación</h2>
+<p>Un <strong>menú</strong> es un <strong>conjunto de opciones visualizadas en pantalla</strong> que se pueden seleccionar y que llevan a ejecutar una acción asociada y, no siempre, a un cambio en el estado de la interfaz. Suelen <strong>estructurarse jerárquicamente</strong> y hay <strong>guías de estilo</strong> para diseñarlos. El <strong>número ideal de opciones</strong> es <strong>entre 3 y 8</strong>.</p>
+<p>Requieren <strong>poco entrenamiento</strong> y <strong>menos tecleo</strong>, permiten usar <strong>herramientas de gestión de diálogos</strong> y ofrecen una <strong>toma de decisión estructurada</strong>: el usuario reconoce la opción en vez de recordarla.</p>
+<p>Sus desventajas tienen solución. Pueden ser <strong>lentos para usuarios experimentados</strong>, y se resuelve con <strong>atajos de teclado</strong>. <strong>Ocupan mucho espacio</strong>, y se resuelve con <strong>menús desplegables y <em>pop-up</em></strong>. Lo que no tiene arreglo es que <strong>requieren una visualización rápida</strong>.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Siguiendo con el bar, el menú es <strong>la carta</strong>: no tienes que saber nada de antemano, solo señalar. El cliente habitual, en cambio, se cansa de leerla cada día y prefiere decir &quot;lo de siempre&quot; (el atajo).</p>
+</div>
+<h2>7.2.3 Lenguaje natural</h2>
+<p>Tiene dos beneficios: el usuario ya <strong>conoce su propio lenguaje</strong>, y si usa la <strong>voz</strong> tiene las <strong>manos libres</strong>. Los problemas son las <strong>diferencias de idioma, argot y voz</strong>, que pueden obligar a hacer <strong>diálogos de clarificación</strong>, y que las interfaces <strong>todavía no son inteligentes</strong>. Las diapositivas ponen como ejemplo programas de dictado de la época, como <em>IBM ViaVoice</em> y <em>Dragon NaturallySpeaking</em>.</p>
+<h2>7.2.4 Manipulación directa</h2>
+<p>Según <strong>Shneiderman</strong> (1991), la manipulación directa tiene tres características:</p>
+<ul>
+<li><strong>Representación continua</strong> de los objetos y acciones de interés.</li>
+<li>Sustituye una <strong>sintaxis de órdenes compleja</strong> por la <strong>manipulación de objetos y acciones</strong>.</li>
+<li>Las acciones son <strong>rápidas, incrementales y reversibles</strong> y tienen un <strong>efecto visible inmediato</strong> en el objeto seleccionado.</li>
+</ul>
+<p>Es posible gracias a las <strong>pantallas gráficas de alta resolución</strong> y los <strong>dispositivos apuntadores</strong>. Históricamente arranca con el <strong>Xerox Star</strong> y el <strong>Apple Macintosh</strong>. Su entorno más común es la <strong>interfaz WIMP</strong> (<em>Windows, Icons, Menus, Pointers</em>: ventanas, iconos, menús y puntero).</p>
+<p>Los <strong>nuevos usuarios aprenden rápido</strong>, los <strong>expertos trabajan rápido</strong>, todos <strong>ven enseguida el resultado</strong> de sus acciones y las acciones son <strong>reversibles</strong>. A cambio, <strong>necesita más recursos</strong>, <strong>no todas las tareas se pueden describir con objetos concretos</strong> y <strong>no todas las acciones se pueden hacer directamente</strong>.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Borrar un archivo arrastrándolo a la papelera es manipulación directa: ves el archivo, lo coges, lo sueltas y desaparece. Si te equivocas, lo sacas de la papelera. Pero &quot;borra todos los archivos de más de un año&quot; es difícil de hacer arrastrando: ahí gana la línea de órdenes.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://es.wikipedia.org/wiki/Manipulaci%C3%B3n_directa">Manipulación directa (Wikipedia)</a> — el concepto de Shneiderman y sus características (artículo).</p>
+</div>
+<h2>7.2.5 Interacción asistida</h2>
+<p>La manipulación directa exige que el usuario <strong>explicite todas las tareas y controle todos los eventos</strong>. El número creciente de nuevos usuarios pide otra forma de interactuar. La <strong>interacción asistida</strong> usa la metáfora del <strong>asistente personal o agente que colabora con el usuario</strong>: el usuario <strong>no dirige</strong> la interacción, sino que <strong>trabaja de forma cooperativa</strong> con uno o varios agentes. Así <strong>se reduce su esfuerzo</strong>. Hay dos variantes: <strong>agentes</strong> y <strong>asistentes</strong>.</p>
+<p>Un <strong>agente</strong> es un programa que el usuario ve como un <strong>ayudante, no como una herramienta</strong>. Tiene algunas características de la inteligencia humana: capacidad de <strong>aprender</strong>, inferencia, <strong>adaptabilidad</strong>, independencia, creatividad… (Lieberman, 1997). <strong>El usuario no ordena, delega</strong> tareas en el agente (Maes, 1994). El agente es <strong>más discreto que el asistente</strong>: trabaja <strong>en segundo plano</strong> y <strong>actúa por iniciativa propia</strong> cuando encuentra algo relevante para el usuario, y puede <strong>modificar objetos de la interfaz sin instrucciones explícitas</strong>.</p>
+<p>Las propiedades de un agente son tres:</p>
+<table>
+<thead>
+<tr>
+<th>Propiedad</th>
+<th>Qué implica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Autonomía</strong></td>
+<td>Trabaja en segundo plano; observa al usuario y las fuentes de información disponibles</td>
+</tr>
+<tr>
+<td><strong>Inteligencia</strong></td>
+<td>Actúa por iniciativa propia; se adapta a múltiples situaciones variando su estrategia</td>
+</tr>
+<tr>
+<td><strong>Uso personal</strong></td>
+<td>Se adapta y aprende del usuario; no insiste en una solución si el usuario elige otra</td>
+</tr>
+</tbody>
+</table>
+<p>Los <strong>asistentes, magos y guías</strong> son entidades que <strong>nos ayudan a usar las aplicaciones</strong> existentes. Nos explican de forma fácil lo que hay que hacer y pueden <strong>entender palabras escritas o habladas</strong> o acciones gráficas. Son muy <strong>flexibles</strong> recibiendo instrucciones, porque el usuario solo dice <strong>lo que quiere hacer</strong>, y pueden aprender de él. La diferencia clave con el agente es que <strong>el asistente lo activa el usuario</strong>.</p>
+<h2>7.2.6 Comparación de estilos</h2>
+<table>
+<thead>
+<tr>
+<th>Estilo</th>
+<th>Ventajas</th>
+<th>Desventajas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Línea de órdenes</strong></td>
+<td>Flexible, iniciativa del usuario, rápida para expertos, macros</td>
+<td>Memorización, sin pistas visuales, mala gestión de errores</td>
+</tr>
+<tr>
+<td><strong>Menús</strong></td>
+<td>Poco entrenamiento, menos tecleo, decisión estructurada</td>
+<td>Lentos para expertos, ocupan espacio, requieren visualización rápida</td>
+</tr>
+<tr>
+<td><strong>Lenguaje natural</strong></td>
+<td>Lenguaje conocido, manos libres (voz)</td>
+<td>Idiomas, argot y voces distintos; interfaces aún no inteligentes</td>
+</tr>
+<tr>
+<td><strong>Manipulación directa</strong></td>
+<td>Aprendizaje rápido, efecto visible, reversible</td>
+<td>Más recursos; no todo se puede representar ni hacer directamente</td>
+</tr>
+<tr>
+<td><strong>Interacción asistida</strong></td>
+<td>Menos esfuerzo; el usuario delega</td>
+<td>El usuario no dirige la interacción</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-note">
+<p class="callout-titulo">note</p>
+<p>Esta tabla no está en las diapositivas: resume las ventajas y desventajas de cada estilo, que según las notas de examen pueden preguntarse.</p>
+</div>
+<h1>7.3 Paradigmas de interacción</h1>
+<p>Los <strong>paradigmas de interacción</strong> son los <strong>modelos de los que se derivan todos los sistemas de interacción</strong>. Los actuales son el <strong>ordenador de sobremesa</strong>, la <strong>realidad virtual</strong>, la <strong>computación ubicua</strong> y la <strong>realidad aumentada</strong>.</p>
+<h2>7.3.1 Realidad virtual</h2>
+<p>El término <strong>realidad virtual</strong> (RV) se aplica a <strong>interfaces 3D</strong> con las que se puede interactuar y que <strong>se actualizan en tiempo real</strong>, y a sistemas cuyo nivel de <strong>autonomía, interacción y sensación de presencia es casi igual al del mundo real</strong>.</p>
+<p>Para hablar de RV se tienen que cumplir tres condiciones:</p>
+<ul>
+<li><strong>Sensación de presencia física directa</strong>, mediante indicaciones sensoriales (visuales, auditivas, hápticas) creadas por la tecnología.</li>
+<li><strong>Indicaciones sensoriales en tres dimensiones.</strong></li>
+<li><strong>Interacción natural</strong>: los objetos virtuales se manipulan con los mismos gestos que los reales (coger, girar…).</li>
+</ul>
+<p><img src="../../../img/ipo/ipo-t7-realidad-virtual.png" alt="Equipos de RV: casco y guante de datos, exoesqueleto háptico para la mano, un entorno virtual y una sala de proyección tipo CAVE|420" loading="lazy"></p>
+<h2>7.3.2 Computación ubicua</h2>
+<p>La <strong>computación ubicua</strong> trata de <strong>extender la capacidad computacional al entorno del usuario</strong>. Sus características principales son cuatro: la <strong>información está presente en todas partes</strong>, usa <strong>pequeños dispositivos muy diversos</strong>, realiza <strong>interacciones de poca dificultad</strong> y se <strong>conecta en red</strong> a servidores de información. El diseño y la ubicación de cada dispositivo son <strong>específicos de la tarea</strong> para la que sirve. El ordenador pasa a un <strong>segundo plano</strong> y se intenta que sea <strong>&quot;transparente&quot;</strong> al usuario: el <strong>ordenador invisible</strong> (Donald Norman, <em>The Invisible Computer</em>, MIT Press, 1998).</p>
+<p>Su <strong>origen</strong> está en <strong>Mark Weiser</strong>, de Xerox PARC (&quot;The computer for the 21st century&quot;, <em>Scientific American</em>, vol. 265, nº 3, pp. 94–104, 1991). Hay una gran variedad de dispositivos (PDA, tabletas, pizarras electrónicas, agendas…), y se habla de entornos en los que el usuario <strong>no interactúa con ordenadores, sino con dispositivos de diverso tipo y tamaño</strong>.</p>
+<p>Necesita tres cosas: <strong>ordenadores baratos y de bajo consumo</strong>, <strong>programas de ejecución ubicua</strong> y una <strong>red que lo unifique todo</strong>. Según las diapositivas, los avances en <em>hardware</em> <strong>aún no bastan</strong> para que sustituya al ordenador de sobremesa.</p>
+<p><img src="../../../img/ipo/ipo-t7-computacion-ubicua.png" alt="Ejemplos de computación ubicua: sala de reuniones de Xerox PARC con pizarra electrónica y tabletas, pizarra interactiva y PDA|420" loading="lazy"></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>La computación ubicua es como <strong>la electricidad</strong>: está en todas partes, en cientos de aparatos distintos, y nadie piensa en ella al encender la luz. El objetivo es que con los ordenadores pase lo mismo: usar el termostato, el reloj o la pizarra sin &quot;usar un ordenador&quot;.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://es.wikipedia.org/wiki/Computaci%C3%B3n_ubicua">Computación ubicua (Wikipedia)</a> — la visión de Mark Weiser y ejemplos actuales (artículo).</p>
+</div>
+<h2>7.3.3 Realidad aumentada</h2>
+<p>La <strong>realidad aumentada</strong> (RA) intenta <strong>reducir las interacciones con el ordenador usando la información del entorno como entrada implícita</strong>. <strong>Integra el mundo real y el computacional</strong>: el mundo real aparece <strong>aumentado con información sintética</strong>, y así <strong>baja mucho el coste interactivo</strong>.</p>
+<p>Sus objetivos son <strong>mejorar la interacción con el mundo real</strong>, <strong>integrar el ordenador en las actividades cotidianas</strong> y <strong>dar acceso a usuarios diversos y no especializados</strong>, convirtiendo los <strong>objetos cotidianos en objetos interactivos</strong>. También busca <strong>trasladar el foco de atención del ordenador al mundo real</strong>: la información <strong>va al mundo real</strong>, en lugar de meter el mundo real en el ordenador como hace la RV.</p>
+<p>El <strong>método más común</strong> es <strong>superponer información digital a las imágenes del mundo real</strong> mediante <strong>visualizadores en casco o proyecciones de vídeo</strong>. El sistema <strong>reconoce automáticamente la situación del usuario</strong> con diversas técnicas: tiempo, posición, objetos, códigos de barras…</p>
+<p><img src="../../../img/ipo/ipo-t7-realidad-aumentada.jpeg" alt="RA en un museo: con unas gafas, el visitante ve rótulos virtuales sobre las piezas|380" loading="lazy"></p>
+<p>Hay <strong>dos enfoques</strong>:</p>
+<ol>
+<li><strong>Aplicar la RV al mundo real</strong>: se <strong>mejora la visión</strong> del mundo real con información sintetizada, superpuesta mediante <strong>gafas especializadas</strong>.</li>
+<li><strong>Usar dispositivos que aumentan la realidad e interactúan directamente con ella</strong>: el usuario actúa sobre el mundo real aumentado. No se superpone información, sino que <strong>participan objetos cotidianos</strong> (un lápiz, una mesa) que interactúan con el sistema de forma automática.</li>
+</ol>
+<p><img src="../../../img/ipo/ipo-t7-ra-ejemplos.png" alt="Ejemplos de RA: cirujano con visor que superpone datos sobre el paciente, y reconstrucción virtual de un templo griego sobre sus ruinas|420" loading="lazy"></p>
+<p>Un caso particular son los <strong>ordenadores corporales</strong> (<em>wearable computers</em>, MIT Media Lab). Sus objetivos son <strong>llevar el ordenador encima</strong>, <strong>interactuar con el usuario según el contexto</strong> y <strong>enlazar la información del entorno personal con la de un sistema informático</strong>. Deben ser <strong>cómodos</strong>, <strong>naturales</strong> y estar <strong>integrados en la vestimenta</strong>.</p>
+<p><img src="../../../img/ipo/ipo-t7-ordenadores-corporales.png" alt="Ordenadores corporales del MIT Media Lab|300" loading="lazy"></p>
+<h1>7.4 Comparación entre paradigmas</h1>
+<p>Rekimoto (1995) compara los cuatro paradigmas según <strong>cómo se relacionan la persona, el computador (C) y el mundo real (R)</strong>:</p>
+<p><img src="../../../img/ipo/ipo-t7-comparacion-paradigmas.png" alt="Comparación de paradigmas (Rekimoto, 1995): flechas persona–computador, persona–mundo real y mundo real–computador|460" loading="lazy"></p>
+<table>
+<thead>
+<tr>
+<th>Paradigma</th>
+<th>Relación persona–computador–mundo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A) Sobremesa</strong></td>
+<td>Computador y mundo real están <strong>separados</strong>: la persona interactúa con uno o con otro</td>
+</tr>
+<tr>
+<td><strong>B) Realidad virtual</strong></td>
+<td>El computador <strong>envuelve a la persona</strong> y <strong>corta su relación con el mundo real</strong> (las flechas hacia R están tachadas)</td>
+</tr>
+<tr>
+<td><strong>C) Computación ubicua</strong></td>
+<td><strong>Muchos computadores repartidos</strong> por el mundo real; la persona interactúa con ellos y con el mundo a la vez</td>
+</tr>
+<tr>
+<td><strong>D) Realidad aumentada</strong></td>
+<td>El computador se <strong>interpone como filtro transparente</strong> entre persona y mundo real, y recibe información del mundo (entrada implícita)</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Para consultar una receta mientras cocinas: en <strong>sobremesa</strong>, dejas la sartén y vas al ordenador. En <strong>RV</strong>, te pones un casco y cocinas en una cocina simulada. En <strong>computación ubicua</strong>, la nevera, el horno y la báscula llevan pequeños ordenadores que te avisan. En <strong>RA</strong>, unas gafas te dibujan sobre la sartén real cuánto falta y qué ingrediente toca.</p>
+</div>
+<h1>7.5 Ideas clave</h1>
+<ul>
+<li><strong>Estilo de interacción</strong>: las distintas maneras en que el usuario se comunica con el ordenador. <strong>Multimodal</strong>: varios canales a la vez.</li>
+<li><strong>Línea de órdenes</strong>: el primer estilo generalizado. Flexible, rápida y con macros para expertos; exige memorizar, no tiene pistas visuales y gestiona mal los errores.</li>
+<li><strong>Menús</strong>: entre 3 y 8 opciones, jerárquicos; poco entrenamiento. Lentos para expertos (solución: atajos) y ocupan espacio (solución: desplegables y <em>pop-up</em>).</li>
+<li><strong>Lenguaje natural</strong>: lenguaje conocido y manos libres; problemas de idiomas, argot y voces, e interfaces aún poco inteligentes.</li>
+<li><strong>Manipulación directa</strong> (Shneiderman, 1991): representación continua; acciones rápidas, incrementales, reversibles y visibles. WIMP, Xerox Star, Macintosh. Necesita más recursos y no todo es representable.</li>
+<li><strong>Interacción asistida</strong>: el usuario delega. El <strong>agente</strong> es autónomo, inteligente y personal, y actúa por iniciativa propia; el <strong>asistente</strong> lo activa el usuario.</li>
+<li><strong>Paradigmas</strong>: sobremesa, <strong>RV</strong> (presencia, 3D, interacción natural), <strong>computación ubicua</strong> (Weiser; ordenador invisible; muchos dispositivos pequeños en red) y <strong>RA</strong> (información sintética sobre el mundo real; entrada implícita del entorno; casco o proyección; ordenadores corporales).</li>
+<li><strong>Rekimoto (1995)</strong>: la RV aísla del mundo real; la RA lo filtra y aumenta; la ubicua reparte computadores por él; el sobremesa lo mantiene separado.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="6-accesibilidad.html"><span class="nav-etiqueta">← anterior</span>6. Accesibilidad</a>
+  <a class="nav-siguiente" href="notas-sobre-examen.html"><span class="nav-etiqueta">siguiente →</span>Notas sobre examen</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

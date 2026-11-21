@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="13. Hardware para backup — apuntes de ENCO (cuarto curso de Ingeniería Informática).">
+<title>13. Hardware para backup · ENCO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enco</a><span class="miga-sep">/</span><span aria-current="page">13-hardware-para-backup</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENCO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENCO</a></p><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li><li><a href="7-almacenamiento-ip.html">7. Almacenamiento IP</a></li><li><a href="8-sistemas-de-ficheros-y-almacenamiento-en-red.html">8. Sistemas de ficheros y almacenamiento en red</a></li><li><a href="9-virtualizacion-del-almacenamiento.html">9. Virtualización del almacenamiento</a></li><li><a href="10-backup.html">10. Backup</a></li><li><a href="11-backup-en-red-y-software-para-backup.html">11. Backup en red y software para backup</a></li><li><a href="12-archivado-de-la-informacion.html">12. Archivado de la información</a></li><li><span class="actual" aria-current="page">13. Hardware para backup</span></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENCO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>13 / 13</div>
+    </div>
+    <h1>Hardware para backup</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENCO · 13/13</summary><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li><li><a href="7-almacenamiento-ip.html">7. Almacenamiento IP</a></li><li><a href="8-sistemas-de-ficheros-y-almacenamiento-en-red.html">8. Sistemas de ficheros y almacenamiento en red</a></li><li><a href="9-virtualizacion-del-almacenamiento.html">9. Virtualización del almacenamiento</a></li><li><a href="10-backup.html">10. Backup</a></li><li><a href="11-backup-en-red-y-software-para-backup.html">11. Backup en red y software para backup</a></li><li><a href="12-archivado-de-la-informacion.html">12. Archivado de la información</a></li><li><span aria-current="page">13. Hardware para backup</span></li></ol></details>
+  <div class="prosa">
+<h1>13.1 Requisitos</h1>
+<p>Un hardware de backup debe ofrecer <strong>fiabilidad</strong>, <strong>funcionamiento continuado</strong>, <strong>velocidad de transferencia</strong>, <strong>flexibilidad</strong>, <strong>lectura/escritura en tiempo real</strong>, <strong>capacidad</strong>, posibilidad de <strong>extraer el medio</strong> y un <strong>coste</strong> razonable.</p>
+<h1>13.2 Soportes físicos</h1>
+<h2>13.2.1 Cintas</h2>
+<p>Son dispositivos de <strong>almacenamiento secuencial</strong>, en <strong>cartucho</strong> o <strong>cassette</strong>. Deben recibir datos a <strong>velocidad constante</strong>: si los datos no llegan a tiempo, la unidad tiene que parar, <strong>rebobinar parcialmente</strong> y volver a arrancar, un vaivén llamado <em><strong>shoe-shining</strong></em> (&quot;sacar brillo a los zapatos&quot;) que reduce rendimiento y desgasta la cinta.</p>
+<p>Formatos más populares:</p>
+<ul>
+<li><strong>DDS</strong> (<em>Digital Data Storage</em>): usa el formato de las cassettes <strong>DAT</strong>; <strong>lentas pero baratas</strong>.</li>
+<li><strong>LTO</strong> (<em>Linear Tape Open</em>): <strong>las más usadas</strong>; rápidas, de gran capacidad, en cartucho y a precio asequible (<strong>LTO Gen9: 18 TB nativos, 45 TB comprimidos, 400 MB/s</strong>).</li>
+</ul>
+<p><img src="../../../img/enco/enco-t13-lto-interior.jpeg" alt="Interior de un cartucho LTO|300" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t13-lto-roadmap.png" alt="Hoja de ruta LTO|550" loading="lazy">
+<em>Capacidad nativa/comprimida: GEN5 1,5/3 TB, GEN6 2,5/6,25, GEN7 6/15, GEN8 12/30, GEN9 24/60 (previsto), GEN10 48/120, GEN11 96/240, GEN12 192/480. Compresión 2:1 en GEN5 y 2,5:1 desde GEN6.</em></p>
+<div class="callout callout-note">
+<p class="callout-titulo">note</p>
+<p>La diapositiva de texto da 18 TB para LTO-9 (la capacidad real comercializada); la hoja de ruta muestra los 24 TB que se planeaban.</p>
+</div>
+<p>Vida de una cinta según las primeras generaciones:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Capacidad nativa</th>
+<th>Pistas totales</th>
+<th>Pistas por pasada</th>
+<th>Pasadas para llenarla</th>
+<th>Pasadas totales</th>
+<th>Escrituras/lecturas totales</th>
+<th>Años (llenándola 1 vez/mes)</th>
+<th>Años (1 vez/semana)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>LTO-1</td>
+<td>100 GB</td>
+<td>384</td>
+<td>8</td>
+<td>48</td>
+<td>9600</td>
+<td>200</td>
+<td>17</td>
+<td>4</td>
+</tr>
+<tr>
+<td>LTO-2</td>
+<td>200 GB</td>
+<td>512</td>
+<td>8</td>
+<td>64</td>
+<td>16000</td>
+<td>250</td>
+<td>21</td>
+<td>5</td>
+</tr>
+<tr>
+<td>LTO-3</td>
+<td>400 GB</td>
+<td>704</td>
+<td>16</td>
+<td>44</td>
+<td>16000</td>
+<td>364</td>
+<td>30</td>
+<td>7</td>
+</tr>
+<tr>
+<td>LTO-4</td>
+<td>800 GB</td>
+<td>896</td>
+<td>16</td>
+<td>56</td>
+<td>11200</td>
+<td>200</td>
+<td>17</td>
+<td>4</td>
+</tr>
+<tr>
+<td>LTO-5</td>
+<td>1500 GB</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+</tr>
+</tbody>
+</table>
+<h2>13.2.2 Discos ópticos</h2>
+<p>Algo <strong>más flexibles</strong> que las cintas con la velocidad de escritura, permiten <strong>acceso aleatorio</strong> al recuperar y son un formato <strong>muy extendido</strong>, pero <strong>más caros</strong> y a menudo <strong>menos fiables</strong>. Hoy se usan soluciones como el <strong>Optical Disc Archive de Sony</strong> (hasta <strong>5,5 TB por cartucho</strong>, 2021).</p>
+<h2>13.2.3 Discos duros</h2>
+<p>Son <strong>muy baratos</strong> y cada vez más usados para backup: se puede usar un <strong>NAS</strong> o la <strong>SAN</strong>, idealmente con <strong>RAID</strong>. Las <strong>VTL</strong> (<em>Virtual Tape Library</em>) son bibliotecas de <strong>cintas virtuales</strong> que en realidad guardan en discos duros (el software de backup cree hablar con cintas); suelen ser <strong>bastante caras</strong>.</p>
+<h1>13.3 Robotización y bibliotecas</h1>
+<p>Las <strong>bibliotecas</strong> robotizadas gestionan muchísimos volúmenes con <strong>acceso aleatorio</strong>; algunas los <strong>etiquetan</strong> o los <strong>comparten</strong> con otras bibliotecas, y las más avanzadas se llaman <strong>silos</strong>.</p>
+<p><img src="../../../img/enco/enco-t13-biblioteca.jpeg" alt="Robot de una biblioteca de cintas|200" loading="lazy"></p>
+<p>La gestión puede ser <strong>in-band</strong> (comandos <strong>SCSI</strong> por iSCSI o FC) u <strong>out-band</strong> (interfaces propietarias por <strong>TCP/IP o RS-232</strong>). Las cintas se identifican con <strong>etiquetas externas</strong> (códigos de barras impresos por la biblioteca) o <strong>internas</strong> (en la propia cinta o en un <strong>chip</strong> del cartucho).</p>
+<h1>13.4 Soportes para archivado</h1>
+<p>Para archivar hacen falta soportes <strong>WORM</strong> (<em>Write Once, Read Many</em>).</p>
+<table>
+<thead>
+<tr>
+<th>Criterio</th>
+<th>Discos duros</th>
+<th>Soporte óptico</th>
+<th>Cintas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Protección WORM</td>
+<td>Software</td>
+<td><strong>Hardware</strong></td>
+<td><strong>Hardware</strong></td>
+</tr>
+<tr>
+<td>Escalabilidad</td>
+<td>Alta</td>
+<td>Baja</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Cumplimiento legal</td>
+<td>No aceptado en general</td>
+<td><strong>Generalmente aceptado</strong></td>
+<td>No aceptado en general</td>
+</tr>
+<tr>
+<td>Coste de adquisición</td>
+<td>Medio</td>
+<td>Bajo</td>
+<td>Medio</td>
+</tr>
+<tr>
+<td>Coste de operación</td>
+<td><strong>Alto</strong></td>
+<td>Bajo</td>
+<td>Bajo</td>
+</tr>
+<tr>
+<td>Tiempo de acceso</td>
+<td><strong>Rápido</strong></td>
+<td>Medio</td>
+<td>Lento</td>
+</tr>
+<tr>
+<td>Velocidad de transferencia</td>
+<td>Alta</td>
+<td>Baja</td>
+<td>Alta</td>
+</tr>
+<tr>
+<td>Alta disponibilidad</td>
+<td>Muy buena</td>
+<td>Baja</td>
+<td>Buena</td>
+</tr>
+<tr>
+<td>Robustez del soporte</td>
+<td>Mínima</td>
+<td><strong>Alta</strong></td>
+<td>Media</td>
+</tr>
+<tr>
+<td>Reutilizable</td>
+<td>Sí</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>Ventajas del <strong>almacenamiento removible</strong>: se puede guardar <strong>en otro lugar</strong> (a salvo de desastres), al estar <strong>off-line</strong> resiste mejor los <strong>ataques</strong>, miles de cintas <strong>no consumen energía</strong> (cientos de discos, muchísima) y una biblioteca removible es más barata que una red con muchísimos discos. Conclusión:</p>
+<ul>
+<li><strong>Discos</strong>: retención <strong>corta</strong> y cuando prima la <strong>velocidad de acceso</strong>.</li>
+<li><strong>Ópticos</strong>: <strong>pocos datos</strong> durante <strong>mucho tiempo</strong>.</li>
+<li><strong>Cintas</strong>: <strong>muchos datos</strong> durante <strong>mucho tiempo</strong>, sobre todo si se accede <strong>poco</strong>.</li>
+</ul>
+<h1>13.5 Compresión, deduplicación y cifrado</h1>
+<h2>13.5.1 Compresión</h2>
+<p>Reduce el volumen pero añade <strong>latencia</strong> al leer y escribir: no se recomienda para almacenamiento general, <strong>sí para backup y archivado</strong>. Dónde hacerla:</p>
+<table>
+<thead>
+<tr>
+<th>Dónde</th>
+<th>A favor</th>
+<th>En contra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cliente</strong></td>
+<td>Reparte la carga entre clientes; reduce el tráfico de red</td>
+<td>Carga la CPU de los clientes</td>
+</tr>
+<tr>
+<td><strong>Servidor</strong></td>
+<td>Libera a los clientes</td>
+<td>Sobrecarga la CPU del servidor y la red lleva datos sin comprimir</td>
+</tr>
+<tr>
+<td><strong>Unidad de cinta</strong></td>
+<td>Por hardware: libera clientes y servidor</td>
+<td><em>Throughput</em> impredecible; posible <strong>shoe-shining</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>13.5.2 Deduplicación</h2>
+<p>En sistemas grandes, los mismos archivos aparecen en muchos sitios: de media <strong>cada dato se repite unas 20 veces</strong>. La <strong>deduplicación</strong> guarda una sola copia y sustituye las demás por un <strong>enlace</strong>, detectando repeticiones con <strong>hashing</strong>. La forma más simple trabaja con <strong>archivos</strong> repetidos; la más eficiente, con <strong>bloques</strong> repetidos.</p>
+<p>Los productos se diferencian en si son <strong>HW o SW</strong>, sobre qué trabajan (<strong>VTL, NAS, SAN</strong>), el <strong>algoritmo</strong> de hash (<strong>SHA-1, MD5</strong> o propio), si deduplican <strong>inline</strong> (al escribir) o en <strong>postproceso</strong> (después), y si lo hacen en la <strong>fuente</strong> (cliente) o en el <strong>objetivo</strong> (destino). Ejemplos: Data Domain (HW, VTL y NAS, SHA-1, inline, objetivo), EMC/Avamar (SW, SHA-1 y MD5, inline, fuente), Symantec (SW, SHA-1, inline, fuente), NetApp (SW en el SO, NAS/SAN, propio, ambos), Quantum (ambos, VTL y NAS, MD5, ambos, objetivo).</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>En una oficina con 20 copias impresas del mismo manual, la deduplicación guarda una en la estantería y deja en las otras 19 mesas una nota: &quot;el manual está en la estantería&quot;.</p>
+</div>
+<h2>13.5.3 Cifrado</h2>
+<p>Backups y archivos suelen ser <strong>confidenciales</strong>, y los soportes se <strong>pierden o roban</strong>. Solución: <strong>cifrar todas las copias</strong>, por <strong>hardware</strong> (en la unidad de cintas o en la biblioteca) o por <strong>software</strong> (en clientes o servidores; <strong>AMANDA y Bacula</strong> lo soportan).</p>
+<h1>13.x Ideas clave</h1>
+<ul>
+<li>Requisitos: fiabilidad, continuidad, velocidad, flexibilidad, tiempo real, capacidad, medio extraíble, coste.</li>
+<li><strong>Cintas</strong>: secuenciales, necesitan velocidad constante (<strong>shoe-shining</strong>); <strong>DDS</strong> (lenta y barata) y <strong>LTO</strong> (la más usada; LTO-9 18/45 TB, 400 MB/s).</li>
+<li><strong>Ópticos</strong>: acceso aleatorio, caros y menos fiables (Sony ODA 5,5 TB). <strong>Discos</strong>: baratos, NAS/SAN con RAID; <strong>VTL</strong> emula cintas sobre discos.</li>
+<li><strong>Bibliotecas/silos</strong> robotizados; gestión <strong>in-band</strong> (SCSI) u <strong>out-band</strong>; etiquetas de código de barras o chip.</li>
+<li>Archivado necesita <strong>WORM</strong>: ópticos (aceptados legalmente, robustos), cintas (muchos datos, poco acceso), discos (rápidos, retención corta).</li>
+<li><strong>Compresión</strong> en cliente, servidor o cinta; <strong>deduplicación</strong> por hash (archivo o bloque; inline/postproceso; fuente/objetivo; ~20 copias de media); <strong>cifrado</strong> HW o SW.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="12-archivado-de-la-informacion.html"><span class="nav-etiqueta">← anterior</span>12. Archivado de la información</a>
+  
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

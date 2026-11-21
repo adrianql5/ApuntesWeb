@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="7. Almacenamiento IP — apuntes de ENCO (cuarto curso de Ingeniería Informática).">
+<title>7. Almacenamiento IP · ENCO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enco</a><span class="miga-sep">/</span><span aria-current="page">7-almacenamiento-ip</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENCO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENCO</a></p><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li><li><span class="actual" aria-current="page">7. Almacenamiento IP</span></li><li><a href="8-sistemas-de-ficheros-y-almacenamiento-en-red.html">8. Sistemas de ficheros y almacenamiento en red</a></li><li><a href="9-virtualizacion-del-almacenamiento.html">9. Virtualización del almacenamiento</a></li><li><a href="10-backup.html">10. Backup</a></li><li><a href="11-backup-en-red-y-software-para-backup.html">11. Backup en red y software para backup</a></li><li><a href="12-archivado-de-la-informacion.html">12. Archivado de la información</a></li><li><a href="13-hardware-para-backup.html">13. Hardware para backup</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENCO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>7 / 13</div>
+    </div>
+    <h1>Almacenamiento IP</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENCO · 7/13</summary><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li><li><span aria-current="page">7. Almacenamiento IP</span></li><li><a href="8-sistemas-de-ficheros-y-almacenamiento-en-red.html">8. Sistemas de ficheros y almacenamiento en red</a></li><li><a href="9-virtualizacion-del-almacenamiento.html">9. Virtualización del almacenamiento</a></li><li><a href="10-backup.html">10. Backup</a></li><li><a href="11-backup-en-red-y-software-para-backup.html">11. Backup en red y software para backup</a></li><li><a href="12-archivado-de-la-informacion.html">12. Archivado de la información</a></li><li><a href="13-hardware-para-backup.html">13. Hardware para backup</a></li></ol></details>
+  <div class="prosa">
+<h1>7.1 Por qué almacenamiento sobre IP</h1>
+<p>En el <a href="6-fibre-channel-y-redes-san.html">tema 6</a> la SAN usaba <strong>Fibre Channel</strong>, una red dedicada y cara. El <strong>almacenamiento IP</strong> propone transportar el protocolo de disco (<strong>SCSI</strong>) por la red de siempre: <strong>cable Ethernet y protocolo TCP/IP</strong>, con un switch Ethernet entre servidor y discos.</p>
+<p><img src="../../../img/enco/enco-t7-almacenamiento-ip.png" alt="Almacenamiento IP|380" loading="lazy"></p>
+<p>Sus ventajas:</p>
+<ul>
+<li>La tecnología IP está <strong>muy extendida</strong> y sus componentes son <strong>baratos</strong> por la competencia.</li>
+<li><strong>No hace falta una red nueva</strong> para los datos: se puede usar la <strong>LAN existente</strong>.</li>
+<li><strong>No hace falta personal formado en FC</strong>: basta la formación en IP que ya tienen todos los administradores.</li>
+<li>La red IP <strong>no tiene límite de distancia</strong>, así que se puede <strong>consolidar el almacenamiento entre varias sedes</strong>.</li>
+</ul>
+<p>Hay tres tipos de almacenamiento IP, todos apoyados en TCP (transporte), IP (red) y Ethernet (enlace y física) del modelo OSI:</p>
+<ul>
+<li><strong>iSCSI</strong> (<em>Internet SCSI</em>).</li>
+<li><strong>iFCP</strong> (<em>Internet Fibre Channel Protocol</em>, protocolo FC en Internet).</li>
+<li><strong>FCIP</strong> (<em>Fibre Channel over IP</em>, FC sobre IP).</li>
+</ul>
+<h1>7.2 iSCSI</h1>
+<p><strong>iSCSI</strong> transmite el <strong>protocolo SCSI sobre TCP/IP</strong>. El acceso al disco sigue siendo <strong>puramente SCSI, a nivel de bloque</strong> y con los comandos de siempre: los extremos SCSI no saben qué red se ha usado. A los datos y comandos SCSI se les añade una <strong>cabecera iSCSI</strong>, y luego se empaquetan con <strong>TCP + IP + Ethernet</strong>; en el destino se desempaquetan en orden inverso.</p>
+<p><img src="../../../img/enco/enco-t7-encapsulado-iscsi.png" alt="Encapsulado iSCSI|400" loading="lazy">
+<em>Como muñecas rusas: los datos SCSI van dentro de la cabecera iSCSI, esta dentro de TCP y esta dentro de IP.</em></p>
+<p>Puede implementarse de tres formas:</p>
+<ul>
+<li><strong>Por software</strong>: un <strong>driver iSCSI</strong> en el sistema operativo y una NIC normal.</li>
+<li><strong>NIC iSCSI</strong>: la tarjeta ayuda, pero la pila TCP/IP se gestiona <strong>por software</strong> (en la CPU).</li>
+<li><strong>HBA iSCSI</strong>: la pila se gestiona <strong>por hardware</strong> en la tarjeta, liberando la CPU.</li>
+</ul>
+<p><img src="../../../img/enco/enco-t7-iscsi.png" alt="Escenarios iSCSI|600" loading="lazy">
+<em>Izquierda: un servidor con HBA iSCSI (1) envía paquetes IP por una WAN (2–3) hasta un almacenamiento preparado para iSCSI (4). Derecha: una pasarela iSCSI-a-Fibre Channel conecta servidores de la red IP con una SAN FC existente (incluso para arrancar desde un disco remoto).</em></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://es.wikipedia.org/wiki/ISCSI">iSCSI — Wikipedia</a> — conceptos de iniciador, objetivo y LUN (artículo).</p>
+</div>
+<h1>7.3 iFCP</h1>
+<p><strong>iFCP</strong> asocia <strong>cada dispositivo FC (cada puerto) con una dirección IP</strong>. Toda la red es <strong>IP</strong>, pero los <strong>HBA de los equipos son FC</strong>, así que los switches de la LAN deben tener <strong>puertos FC F o FL</strong> para conectarlos. Es un protocolo <strong>complejo</strong>.</p>
+<p><img src="../../../img/enco/enco-t7-ifcp.png" alt="iFCP|550" loading="lazy">
+<em>Los dispositivos FC (puertos NL) se enchufan a puertos FL/iFCP de las SAN IP, unidas por un backbone IP.</em></p>
+<h1>7.4 FCIP</h1>
+<p><strong>FCIP</strong> sirve para <strong>conectar dos o más SAN FC distantes mediante una conexión IP</strong>: las SAN la ven como un simple <strong>enlace punto a punto</strong> (un túnel). La codificación es <strong>trivial</strong>: los frames FCP se <strong>encapsulan dentro de paquetes TCP/IP</strong> y en el destino se extraen siguiendo el proceso inverso.</p>
+<p><img src="../../../img/enco/enco-t7-fcip.png" alt="FCIP|500" loading="lazy"></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>FCIP es meter un camión (el frame FC) en un ferry (TCP/IP) para cruzar el mar entre dos islas (SAN). El camión no sabe que ha viajado en barco: sale por el otro lado igual que entró.</p>
+</div>
+<h2>7.4.1 Comparativa de los tres</h2>
+<p><img src="../../../img/enco/enco-t7-stacks-frames.png" alt="Pilas y formato de frames|600" loading="lazy">
+<em>Arriba, las pilas: FCP puro usa FC-3/FC-2; FCIP e iFCP meten FCP sobre TCP/IP; iSCSI va directamente sobre TCP/IP. Abajo, el formato de cada frame.</em></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Dispositivo</th>
+<th>Servicios de red</th>
+<th>Transporte</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FCP</strong></td>
+<td>Fibre Channel</td>
+<td>Fibre Channel</td>
+<td>Fibre Channel</td>
+</tr>
+<tr>
+<td><strong>FCIP</strong></td>
+<td>Fibre Channel</td>
+<td>Fibre Channel</td>
+<td>IP/Ethernet</td>
+</tr>
+<tr>
+<td><strong>iFCP</strong></td>
+<td>Fibre Channel</td>
+<td>IP/Ethernet</td>
+<td>IP/Ethernet</td>
+</tr>
+<tr>
+<td><strong>iSCSI</strong></td>
+<td>IP/Ethernet</td>
+<td>IP/Ethernet</td>
+<td>IP/Ethernet</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Solo iSCSI no usa dispositivos FC</strong>: es IP de principio a fin.</li>
+<li><strong>FCIP</strong> no solo &quot;tuneliza&quot; frames FC: también ofrece <strong>servicios de red</strong> como el enrutamiento, el servidor de nombres y el <em>zoning</em> sobre TCP/IP.</li>
+</ul>
+<h1>7.5 Ventajas, desventajas y consideraciones</h1>
+<table>
+<thead>
+<tr>
+<th>Ventajas de usar IP</th>
+<th>Desventajas de usar IP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Una red común</strong> para LAN, MAN, WAN, SAN, voz y vídeo</td>
+<td><strong>No es interoperable</strong> (no hay estándares totalmente definidos)</td>
+</tr>
+<tr>
+<td>Tecnología <strong>madura</strong></td>
+<td><strong>Carga mucho la CPU</strong></td>
+</tr>
+<tr>
+<td>Personal técnico <strong>familiarizado</strong></td>
+<td><strong>TCP/IP tiene mucho overhead</strong></td>
+</tr>
+<tr>
+<td><strong>Sin límite de distancia</strong></td>
+<td>La <strong>latencia</strong> de los switches TCP/IP/Ethernet es <strong>muy alta</strong></td>
+</tr>
+<tr>
+<td><strong>Hardware barato</strong> por la competencia</td>
+<td>Por las colisiones en Ethernet, solo se aprovecha el <strong>20-30 % del ancho de banda</strong></td>
+</tr>
+<tr>
+<td>Buenas <strong>herramientas de administración</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Consideraciones prácticas, en contra:</p>
+<ul>
+<li>Las LAN existentes pueden estar <strong>saturadas</strong> y no aguantar además el tráfico de almacenamiento.</li>
+<li>Hará falta <strong>formación específica</strong> para SAN IP, y las herramientas de administración IP pueden <strong>no ser adecuadas</strong>.</li>
+<li>IP <strong>no es adecuado para aplicaciones críticas sensibles a la latencia</strong>.</li>
+<li>Hay <strong>problemas de interoperabilidad</strong> en iSCSI e iFCP, igual que en FC.</li>
+<li><strong>Solo FC ofrece <em>cut-through routing</em></strong> (reenviar el frame en cuanto se lee la cabecera, sin esperar a recibirlo entero).</li>
+</ul>
+<p>Y a favor:</p>
+<ul>
+<li>Existen <strong>TOE</strong> (<em>TCP Offload Engine</em>) y <strong>HBA</strong> que <strong>aceleran iSCSI</strong> descargando la CPU.</li>
+<li>Los <strong>routers modernos</strong> han minimizado el impacto de las colisiones en Ethernet.</li>
+</ul>
+<h2>7.5.1 Migración de FC a IP</h2>
+<p>Se puede migrar poco a poco, uniendo las SAN FC existentes a SAN iSCSI mediante <strong>gateways iSCSI</strong>. Recomendaciones:</p>
+<ul>
+<li>La <strong>LAN existente puede ser suficiente</strong>.</li>
+<li>Usar <strong>VLANs</strong> para asignar ancho de banda.</li>
+<li>Poner una <strong>segunda NIC solo para el tráfico de almacenamiento</strong>.</li>
+<li>Usar <strong>Gigabit Ethernet o superior</strong>.</li>
+</ul>
+<h2>7.5.2 Puntos clave</h2>
+<ul>
+<li><strong>iSCSI y FCIP</strong> interesan porque <strong>reutilizan la red IP</strong>, pero <strong>el rendimiento no es el mejor</strong>.</li>
+<li><strong>iSCSI</strong> vale para dispositivos preparados para iSCSI o para SAN conectadas a redes IP.</li>
+<li>Los <strong>routers FCIP</strong> conectan por IP <strong>SAN entre sí</strong> o con dispositivos iSCSI.</li>
+<li>Para conexiones remotas (<strong>mirroring</strong>) pueden usarse IP, ATM o SONET con routers FC-IP.</li>
+<li><strong>No hay que infravalorar la latencia</strong> en conexiones largas.</li>
+<li>La velocidad de <strong>10 Gb Ethernet</strong> puede ser determinante en un futuro cercano.</li>
+</ul>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=9_TNzQW2yKA">Storage Area Networks (SAN) Explained: iSCSI, FCoE, Jumbo Frames, FC, and InfiniBand</a> — repaso de las tecnologías de este tema y cómo se comparan (vídeo, 10 min, inglés).</p>
+</div>
+<h1>7.6 InfiniBand</h1>
+<p><strong>InfiniBand (IB)</strong> es una tecnología de <strong>alta velocidad (y precio) y baja latencia</strong>, usada sobre todo como interconexión entre procesos dentro de <strong>clústeres de computadores</strong>. También se usa para conectar, directamente o mediante switches, <strong>servidores con sistemas de almacenamiento</strong> y sistemas de almacenamiento entre sí.</p>
+<p>Características:</p>
+<ul>
+<li><strong>Bus serie full-dúplex</strong> con <strong>250 MB/s efectivos en cada dirección</strong> en su versión básica.</li>
+<li>Versiones más rápidas (DDR, QDR, FDR, EDR…) llegan a <strong>25 Gbit/s por link (EDR)</strong>.</li>
+<li>Los links se agrupan de <strong>1, 4 o 12</strong>: hasta <strong>300 Gbit/s</strong> (EDR con 12 links). Lo más común es <strong>4X</strong>; en supercomputación, <strong>12X</strong>.</li>
+<li><strong>Latencia muy baja</strong>: menos de <strong>200 ns</strong> en los chips, menos de <strong>1,5 µs</strong> total y <strong>1 µs con RDMA</strong>.</li>
+</ul>
+<p><img src="../../../img/enco/enco-t7-infiniband.png" alt="Red InfiniBand|380" loading="lazy">
+<em>Las CPU y la RAM se conectan al bus del sistema y, mediante un <strong>HCA</strong> (<em>Host Channel Adapter</em>), a la red InfiniBand; los discos se conectan con un <strong>TCA</strong> (<em>Target Channel Adapter</em>). Switches y routers IB forman la red.</em></p>
+<p>Más del <strong>50 % de los 100 supercomputadores más potentes</strong> del mundo usaban IB (TOP500, junio de 2020). En almacenamiento sus ventajas son muy parecidas a las de FC: <strong>baja latencia</strong> y posibilidad de <strong>crear redes</strong>. Además, da comunicaciones ultrarrápidas <strong>entre CPUs</strong> y entre estas y los periféricos (p. ej. el <em>heartbeat</em> de un clúster), y con un <strong>bridge InfiniBand–FC</strong> puede acceder a una SAN FC.</p>
+<h2>7.6.1 VIA (Virtual Interface Architecture)</h2>
+<p><strong>VIA</strong> permite un intercambio de datos <strong>rápido y eficaz entre aplicaciones</strong> de distintos ordenadores. Necesita una red subyacente de <strong>baja latencia y baja tasa de error</strong> (como InfiniBand).</p>
+<p>El problema que resuelve: la comunicación normal entre aplicaciones es complicada y costosa porque los datos <strong>se copian una y otra vez en buffers</strong> al pasar por el sistema operativo. En VIA, el <strong>hardware y la aplicación intercambian datos en un área de memoria común, sin pasar por el SO</strong>.</p>
+<p><img src="../../../img/enco/enco-t7-via.png" alt="Arquitectura VIA|380" loading="lazy"></p>
+<p>Funcionamiento:</p>
+<ul>
+<li>Dos aplicaciones establecen primero una conexión, la <strong>Interfaz Virtual (VI)</strong>, que define una <strong>zona de memoria común</strong> en ambos ordenadores donde la aplicación y su NIC intercambian datos.</li>
+<li><strong>Para enviar</strong>: la aplicación llena el buffer y avisa a la NIC, que lee los datos de la zona común y los transmite al hardware VI del otro ordenador. <strong>El SO del receptor también se evita</strong>.</li>
+<li>Las VI son <strong>punto a punto</strong>: cada una se comunica con <strong>exactamente una VI remota</strong>.</li>
+</ul>
+<p>Hay <strong>dos modelos de comunicación</strong>:</p>
+<ul>
+<li><strong>Mensajes asíncronos</strong> (<em>send/receive</em>).</li>
+<li><strong>RDMA</strong> (<em>Remote Direct Memory Access</em>): transmitir <strong>grandes cantidades de datos casi sin overhead</strong>, dejándolos <strong>directamente en la memoria</strong> de la aplicación que los va a consumir.</li>
+</ul>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Sin VIA, un paquete pasa por la oficina de correos de cada ciudad (el SO), donde lo abren, lo reetiquetan y lo vuelven a cerrar. Con RDMA, el repartidor tiene llave de tu buzón y deja el paquete directamente dentro.</p>
+</div>
+<h2>7.6.2 SCSI sobre InfiniBand y RDMA</h2>
+<ul>
+<li><strong>RDMA sobre TCP</strong>: RDMA usando <strong>TCP/IP/Ethernet</strong> como transporte, con tarjetas aceleradoras llamadas <strong>RNIC</strong>.</li>
+<li><strong>SDP</strong> (<em>Socket Direct Protocol</em>): mapea la <strong>API de sockets TCP/IP sobre RDMA</strong>, mejorando todos los protocolos basados en TCP/IP sin cambiarlos.</li>
+<li><strong>iSER</strong> (<em>iSCSI Extensions for RDMA</em>): <strong>iSCSI sobre RDMA</strong>, sin el overhead de TCP/IP.</li>
+<li><strong>SRP</strong> (<em>SCSI RDMA Protocol</em>): mapea <strong>SCSI directamente sobre RDMA</strong>.</li>
+</ul>
+<h1>7.7 Fibre Channel over Ethernet (FCoE)</h1>
+<p>Ninguna de las tecnologías anteriores ha conseguido <strong>unificar las redes de datos y de almacenamiento</strong> (<strong>consolidación</strong>): lo habitual sigue siendo tener una red LAN, otra de almacenamiento y otra de clúster. <strong>FCoE</strong> busca <strong>migrar el tráfico de almacenamiento de FC a Ethernet</strong>: cable <strong>Ethernet con DCB</strong> (<em>Data Center Bridging</em>, extensiones que evitan pérdidas) y protocolo <strong>SCSI + FCP</strong>.</p>
+<p><img src="../../../img/enco/enco-t7-fcoe-consolidacion.png" alt="Redes convencionales frente a consolidadas|600" loading="lazy">
+<em>(a) Convencional: un servidor con tres redes (LAN, almacenamiento, clúster). (b) Consolidada: una sola red para todo. Derecha: servidor y discos unidos por un switch FCoE.</em></p>
+<h2>7.7.1 Ventajas de FCoE sobre 10 Gbit Ethernet</h2>
+<p><strong>iSCSI</strong> bastaría técnicamente para consolidar la E/S, pero los promotores de FCoE señalan dos deficiencias suyas:</p>
+<ul>
+<li><strong>Overhead de TCP</strong>: retransmitir paquetes perdidos y reensamblar los que llegan desordenados. FCoE <strong>prescinde de TCP</strong>.</li>
+<li><strong>iSCSI no es compatible con FC</strong>, mientras que FCoE <strong>aprovecha la gran inversión ya hecha en SAN FC</strong>.</li>
+</ul>
+<p><img src="../../../img/enco/enco-t7-stack-fcoe.png" alt="Pila de protocolos con FCoE|420" loading="lazy">
+<em>Comparación de pilas: FC nativo (FC-0…FC-3), FCoE (FCP y FC-3/FC-2 sobre FCoE y Ethernet + DCB), iSCSI (sobre TCP/IP/Ethernet) y SRP (sobre RDMA/InfiniBand).</em></p>
+<h2>7.7.2 Empaquetamiento e interfaces</h2>
+<p>El empaquetado es <strong>trivial</strong>: cada frame FC (cabecera FC-2 + FCP + datos SCSI + CRC) se mete en un frame Ethernet añadiendo una <strong>cabecera Ethernet y una cabecera FCoE</strong>. Un frame FC <strong>cabe casi exactamente</strong> en uno Ethernet: <strong>2112 bytes dentro de 2180</strong>.</p>
+<p>Requisitos:</p>
+<ul>
+<li>Las <strong>tarjetas Ethernet</strong> deben estar adaptadas a FCoE y saber implementar <strong>puertos FC</strong>.</li>
+<li>Hacen falta <strong>switches FCoE</strong> propios que implementen las funciones de FC (<strong>alias, name server, zoning</strong>).</li>
+</ul>
+<p>En un <strong>nodo FCoE</strong> (E-Nodo: servidor o almacenamiento), un controlador FCoE y entidades <strong>FCoE_LEP</strong> (<em>Link End Point</em>) sobre el puerto Ethernet implementan puertos virtuales <strong>VN_Port</strong>. En el <strong>switch FCoE</strong>, puertos <strong>VF_Port</strong> (y <strong>E_Port</strong> hacia switches FC) se apoyan en un elemento de conmutación Fibre Channel.</p>
+<h2>7.7.3 Implantación</h2>
+<p>FCoE se puede introducir <strong>de forma progresiva</strong>: un <strong>switch FCoE</strong> se une por un <strong>E-Port</strong> a un switch FC existente, de modo que conviven servidores y discos FC (puertos N/F) con otros FCoE (puertos VN/VF).</p>
+<p><img src="../../../img/enco/enco-t7-fcoe-progresiva.png" alt="Implantación progresiva|500" loading="lazy"></p>
+<p>También encaja con <strong>servidores blade</strong>: cada blade tiene un <strong>adaptador de red convergente</strong> (CNA) con puertos VN, un switch de capa 2 los agrupa y el switch FCoE da acceso tanto a los discos (FCoE) como a la LAN/TCP.</p>
+<p><img src="../../../img/enco/enco-t7-fcoe-blades.png" alt="FCoE con blades|500" loading="lazy"></p>
+<h2>7.7.4 Visión final</h2>
+<p>Ethernet ha evolucionado mucho, pero <strong>sigue perdiendo paquetes cuando hay congestión</strong>. TCP lo soluciona, pero <strong>FCoE prescinde de TCP</strong>, así que se está mejorando Ethernet (DCB) para que sirva a la vez para FCoE, LAN y clústeres. Resultado: FCoE <strong>atrae mucho interés, pero no acaba de despegar</strong>.</p>
+<h1>7.8 NVMe over Fabrics (NVMe-oF)</h1>
+<p>Es el <strong>recién llegado</strong>: un protocolo para conectar un <strong>host con un dispositivo o sistema de almacenamiento de estado sólido (SSD) a través de una red</strong> usando <strong>NVMe</strong>. Los proveedores están desarrollando un ecosistema NVMe-oF completo (SO e hipervisor del servidor, tarjetas de red, SO de almacenamiento y unidades), con varias implementaciones (NVMe-oF-RDMA, etc.).</p>
+<p><strong>NVMe</strong> es una alternativa a <strong>SCSI</strong> para conectar hosts con SSDs, y <strong>acelera el acceso en varios órdenes de magnitud</strong> frente a SAS o SCSI. La diferencia entre NVMe y NVMe-oF está en cómo se envían comandos y respuestas:</p>
+<ul>
+<li><strong>NVMe</strong> (local): los mapea usando <strong>memoria compartida</strong>.</li>
+<li><strong>NVMe-oF</strong>: usa un modelo <strong>basado en mensajes</strong> por la red.</li>
+</ul>
+<p><strong>Características</strong>: alta velocidad, baja latencia de red, <strong>control de flujo por créditos</strong>, escala a <strong>miles de dispositivos</strong>, <strong>multi-path</strong> (varias rutas simultáneas entre host y almacenamiento) y <strong>multi-host</strong> (varios hosts y subsistemas enviando y recibiendo comandos a la vez).</p>
+<p><strong>Beneficios</strong>: baja latencia, <strong>muchísimas peticiones en paralelo</strong>, más rendimiento general, <strong>menos carga del SO</strong> en el servidor, mejores arrays de almacenamiento y variedad de implementaciones.</p>
+<p>Tres formas de transportarlo:</p>
+<table>
+<thead>
+<tr>
+<th>Transporte</th>
+<th>Cómo es</th>
+<th>A favor</th>
+<th>En contra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RDMA</strong></td>
+<td>Los datos pasan de un espacio de memoria a otro <strong>sin invocar al SO ni al procesador</strong></td>
+<td>Menor sobrecarga, respuesta en <strong>microsegundos</strong></td>
+<td>Requiere en la práctica <strong>una red de almacenamiento nueva</strong>; <strong>menos escalable</strong> que FC</td>
+</tr>
+<tr>
+<td><strong>FC</strong></td>
+<td>FC admite mapear otros protocolos encima (NVMe, SCSI, FICON)</td>
+<td>Acceso a flash NVMe compartida sobre la SAN FC</td>
+<td>Se pierde rendimiento al <strong>traducir comandos SCSI encapsulados a NVMe</strong></td>
+</tr>
+<tr>
+<td><strong>TCP/IP</strong></td>
+<td>Uno de los avances más recientes: NVMe-oF sobre <strong>Ethernet estándar</strong></td>
+<td>Reutiliza la <strong>infraestructura Ethernet</strong> y la inversión ya hecha</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://en.wikipedia.org/wiki/NVM_Express#NVMe-oF">NVM Express — Wikipedia</a> — sección sobre NVMe over Fabrics y sus transportes (artículo, inglés).</p>
+</div>
+<h1>7.x Ideas clave</h1>
+<ul>
+<li><strong>Almacenamiento IP</strong>: SCSI sobre Ethernet + TCP/IP. Barato, reutiliza la LAN y el personal, sin límite de distancia; pero carga la CPU, mucho overhead, alta latencia y solo 20-30 % del ancho de banda.</li>
+<li><strong>iSCSI</strong>: SCSI + cabecera iSCSI + TCP + IP + Ethernet; acceso por bloques; driver SW, NIC iSCSI o <strong>HBA iSCSI</strong> (pila en HW). <strong>Único sin dispositivos FC</strong>.</li>
+<li><strong>iFCP</strong>: cada puerto FC con una IP; red IP pero HBA FC; complejo.</li>
+<li><strong>FCIP</strong>: <strong>túnel IP entre SAN FC</strong> distantes; encapsulado trivial; da también servicios de red (enrutamiento, name server, zoning).</li>
+<li>Ayudas: <strong>TOE/HBA</strong> para iSCSI; migrar con <strong>gateways</strong>, VLAN, NIC dedicada, GbE o más. Solo FC hace <em>cut-through routing</em>.</li>
+<li><strong>InfiniBand</strong>: serie full-dúplex, 250 MB/s base, hasta 25 Gbit/s por link (EDR) y 300 Gbit/s con 12X; latencia &lt; 1,5 µs (1 µs con RDMA); <strong>HCA/TCA</strong>; &gt;50 % del TOP100 (2020).</li>
+<li><strong>VIA</strong>: memoria común entre aplicación y NIC <strong>sin pasar por el SO</strong>; send/receive o <strong>RDMA</strong>. Derivados: RDMA sobre TCP (RNIC), SDP, <strong>iSER</strong>, <strong>SRP</strong>.</li>
+<li><strong>FCoE</strong>: FC sobre Ethernet + DCB <strong>sin TCP</strong> para <strong>consolidar</strong> redes; frame FC de 2112 B en uno Ethernet de 2180 B; necesita tarjetas y switches FCoE (VN/VF_Port, FCoE_LEP). Interesa pero no despega.</li>
+<li><strong>NVMe-oF</strong>: NVMe por red con mensajes (no memoria compartida); créditos, multi-path, multi-host; sobre <strong>RDMA</strong>, <strong>FC</strong> o <strong>TCP/IP</strong>.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="6-fibre-channel-y-redes-san.html"><span class="nav-etiqueta">← anterior</span>6. Fibre Channel y redes SAN</a>
+  <a class="nav-siguiente" href="8-sistemas-de-ficheros-y-almacenamiento-en-red.html"><span class="nav-etiqueta">siguiente →</span>8. Sistemas de ficheros y almacenamiento en red</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

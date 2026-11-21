@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="4. Preprocesamiento y análisis de datos — apuntes de MYAD (cuarto curso de Ingeniería Informática).">
+<title>4. Preprocesamiento y análisis de datos · MYAD · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">myad</a><span class="miga-sep">/</span><span aria-current="page">4-preprocesamiento-y-analisis-de-datos</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de MYAD"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">MYAD</a></p><ol><li><a href="1-almacenes-de-datos.html">1. Almacenes de Datos</a></li><li><a href="2-extraccion-transformacion-y-carga-etl.html">2. Extracción, Transformación y Carga (ETL)</a></li><li><a href="3-introduccion-a-la-mineria-de-datos.html">3. Introducción a la minería de datos</a></li><li><span class="actual" aria-current="page">4. Preprocesamiento y análisis de datos</span></li><li><a href="5-tareas-y-metodos-en-mineria-de-datos.html">5. Tareas y métodos en minería de datos</a></li><li><a href="6-entrenamiento-y-evaluacion-de-modelos.html">6. Entrenamiento y evaluación de modelos</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>MYAD</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>4 / 6</div>
+    </div>
+    <h1>Preprocesamiento y análisis de datos</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de MYAD · 4/6</summary><ol><li><a href="1-almacenes-de-datos.html">1. Almacenes de Datos</a></li><li><a href="2-extraccion-transformacion-y-carga-etl.html">2. Extracción, Transformación y Carga (ETL)</a></li><li><a href="3-introduccion-a-la-mineria-de-datos.html">3. Introducción a la minería de datos</a></li><li><span aria-current="page">4. Preprocesamiento y análisis de datos</span></li><li><a href="5-tareas-y-metodos-en-mineria-de-datos.html">5. Tareas y métodos en minería de datos</a></li><li><a href="6-entrenamiento-y-evaluacion-de-modelos.html">6. Entrenamiento y evaluación de modelos</a></li></ol></details>
+  <div class="prosa">
+<h1>4.1 Datasets y entradas del aprendizaje</h1>
+<p>Un <strong>dataset</strong> es un conjunto de <strong>instancias</strong> (ejemplos), cada una descrita por un conjunto predefinido de <strong>atributos</strong> (características). En la práctica los datasets dan guerra por varios motivos, y cada uno da pie a una tarea de este tema:</p>
+<ul>
+<li>El número de atributos varía entre aplicaciones e incluso dentro de la misma, y la existencia de un atributo puede depender del valor de otro → <strong>preprocesamiento</strong>.</li>
+<li>Algunos atributos son poco o nada relevantes → <strong>selección de características</strong>.</li>
+<li>Los datos casi nunca se recogieron pensando en minarlos → <strong>problemas de calidad</strong>.</li>
+</ul>
+<p>Las entradas de cualquier proceso de aprendizaje son tres:</p>
+<ul>
+<li><strong>Concepto</strong>: la &quot;cosa&quot; que se quiere aprender; es el <strong>resultado</strong> del aprendizaje.</li>
+<li><strong>Instancias</strong>: los ejemplos <strong>individuales e independientes</strong> del concepto (el elemento a clasificar, asociar o agrupar). Se describen con un conjunto fijo de atributos, su &quot;estructura&quot; puede cambiar según la tarea o el algoritmo, y tiene que haber <strong>suficientes</strong> para encontrar patrones.</li>
+<li><strong>Atributos</strong> (<em>features</em>): las medidas que caracterizan una instancia. Simplificando, hay dos grandes grupos: <strong>categóricos</strong> (nominales u ordinales) y <strong>numéricos</strong> (continuos o discretos).</li>
+</ul>
+<h2>4.1.1 Por qué importa el tipo de cada atributo</h2>
+<p>Saber qué tipo tiene cada atributo y qué representa permite:</p>
+<ul>
+<li><strong>Comparar bien</strong>: dos valores categóricos nominales sin orden (p. ej. colores) <strong>no se pueden comparar</strong>.</li>
+<li><strong>Detectar valores no válidos</strong>: un atributo binario no puede valer algo distinto de 0 o 1.</li>
+<li><strong>Gestionar faltantes</strong>: un año que falta entre otros años <strong>no se puede promediar</strong> sin más.</li>
+<li><strong>Gestionar atípicos</strong>, que se tratan distinto en categóricos y numéricos.</li>
+<li><strong>Elegir modelo</strong>: no todos aceptan todos los tipos. Una <strong>red neuronal no admite categóricos</strong> directamente, así que hay que transformarlos.</li>
+</ul>
+<p>Los tipos son la restricción más básica; en un almacén de datos se pueden añadir muchas más para mejorar consistencia y calidad.</p>
+<h1>4.2 Fundamentos del preprocesamiento</h1>
+<p>La preparación de los datos se lleva <strong>gran parte del esfuerzo</strong> de todo el proceso de minería. <strong>No hay receta mágica</strong> para garantizar la calidad, porque depende de las <strong>fuentes</strong>, de los <strong>atributos</strong> y del <strong>momento</strong> en que se recogieron (los datos son una instantánea).</p>
+<p>Por eso es vital <strong>estudiar los datos</strong> y hacer <strong>análisis estadísticos</strong> sobre ellos, y entender el <strong>dominio</strong> del problema. Cuanto más se conozcan datos y dominio, mejores decisiones: qué operaciones de preprocesado aplicar, qué algoritmos elegir y cómo interpretar los resultados. Se recomienda <strong>probar cada tarea de preprocesado por separado</strong> antes de montar el flujo completo.</p>
+<p>Las cuatro tareas del preprocesamiento son:</p>
+<table>
+<thead>
+<tr>
+<th>Tarea</th>
+<th>Objetivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Data cleaning</strong> (limpieza)</td>
+<td>Eliminar datos con <strong>ruido</strong>, <strong>incorrectos</strong> o <strong>desconocidos</strong> (<em>missing</em>/nulos)</td>
+</tr>
+<tr>
+<td><strong>Data integration</strong> (integración)</td>
+<td>Unir varias fuentes en un almacén coherente y homogéneo (un <em>data warehouse</em>) manteniendo la máxima calidad</td>
+</tr>
+<tr>
+<td><strong>Data transformation</strong> (transformación)</td>
+<td>Convertir los datos en otros más útiles o adecuados para la minería</td>
+</tr>
+<tr>
+<td><strong>Data reduction</strong> (reducción)</td>
+<td>Reducir el tamaño de la muestra, agregar y/o eliminar características</td>
+</tr>
+</tbody>
+</table>
+<h1>4.3 Limpieza de datos</h1>
+<h2>4.3.1 Datos desconocidos (<em>missing</em>)</h2>
+<p>Hay varias técnicas para tratar los valores que faltan:</p>
+<ul>
+<li><strong>Eliminar la tupla</strong>: cuando lo que falta es <strong>la clase</strong> (la salida), cuando hay <strong>nulos en varios atributos</strong> o cuando el dataset es <strong>muy amplio</strong> y perder filas no importa.</li>
+<li><strong>Corregir a mano</strong>: en general <strong>inabarcable</strong>.</li>
+<li><strong>Constante global</strong>: sustituir cada ausente por, p. ej., <code>&quot;unknown&quot;</code>.</li>
+<li><strong>Medida de centralización</strong> (media, mediana o moda), calculada con <strong>todos</strong> los valores del atributo o solo con los de las instancias de <strong>la misma clase</strong> (más afinado).</li>
+<li><strong>Tratarlo como un problema de aprendizaje automático</strong>: predecir el valor que falta a partir de los demás atributos.</li>
+</ul>
+<div class="callout callout-warning">
+<p class="callout-titulo">Ojo</p>
+<p><strong>Toda sustitución automática introduce un sesgo</strong> en los datos: el valor puesto puede no ser el correcto.</p>
+</div>
+<h2>4.3.2 Ruido</h2>
+<p>El <strong>ruido</strong> es un <strong>error aleatorio</strong> en las variables medidas. No interesa y <strong>perjudica a los modelos</strong>. Se reduce <strong>suavizando</strong> los datos con una <strong>ventana</strong> (vecindario): cada valor se sustituye por la <strong>media</strong> o la <strong>mediana</strong> de sus vecinos. La <strong>media es sensible a valores extremos</strong>; la <strong>mediana es más robusta</strong>. El suavizado también se considera una operación de transformación.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Media vs mediana</p>
+<p>En la ventana <code>[12, 14, 13, 90, 15]</code>, la media es <strong>28,8</strong> (el 90 la arrastra) y la mediana es <strong>14</strong>, que representa mucho mejor el vecindario.</p>
+</div>
+<p>La pregunta difícil es: ese valor raro, ¿es <strong>ruido</strong> o es un <strong>valor atípico</strong> legítimo?</p>
+<h2>4.3.3 Valores atípicos (<em>outliers</em>)</h2>
+<p>Un <strong>outlier</strong> es un dato <strong>estadísticamente inconsistente</strong> con los demás. Se asume que los datos &quot;normales&quot; siguen un patrón o proceso común; los atípicos son interesantes porque se <strong>sospecha que los generó un mecanismo diferente</strong>, y hay que encontrar una <strong>justificación</strong> para ellos.</p>
+<p><strong>No tienen por qué ser incorrectos</strong> (pueden ser muy valiosos, como un fraude), pero hay que <strong>detectarlos y decidir</strong> qué hacer, porque pueden condicionar el modelo final.</p>
+<p><img src="../../../img/myad/myad-t4-outliers-dispersion.png" alt="Ejemplo de atípicos en un diagrama de dispersión|400" loading="lazy">
+<em>Los puntos rodeados se separan claramente de la tendencia lineal del resto.</em></p>
+<h3>Detección</h3>
+<p>Hay muchísimos métodos (estadísticos paramétricos y no paramétricos, supervisados y no supervisados, univariados y multivariados…). Algunos:</p>
+<ul>
+<li><strong>Clustering</strong>: al agrupar por similitud, los valores alejados de todos los grupos pueden ser atípicos, aunque <strong>no todo atípico es extremo</strong>.</li>
+<li><strong>Regresión lineal</strong>: se ajusta la recta, se calcula el <strong>RMSE</strong> (raíz del error cuadrático medio) y los puntos cuyo error supera el RMSE se consideran atípicos.</li>
+<li><strong>Métodos estadísticos</strong>: <strong>boxplot</strong>, <strong>histograma</strong>, <strong>distancia de Mahalanobis</strong>…</li>
+</ul>
+<p><img src="../../../img/myad/myad-t4-boxplot.png" alt="Boxplot|300" loading="lazy">
+<em>En un boxplot la caja va del percentil 25 al 75 (rango intercuartílico, RIC) con la mediana dentro; los bigotes llegan hasta el valor más extremo dentro de 1,5 × RIC, y lo que queda fuera son atípicos.</em></p>
+<p><img src="../../../img/myad/myad-t4-histograma.png" alt="Histograma con colas anómalas|350" loading="lazy"></p>
+<p>Hay tres <strong>tipos</strong> de outliers:</p>
+<ul>
+<li><strong>Globales</strong>: muy lejos del resto en todo el conjunto.</li>
+<li><strong>Contextuales</strong>: anómalos solo en un contexto (30 °C es normal en agosto pero raro en enero).</li>
+<li><strong>Colectivos</strong>: un grupo de datos que es anómalo en conjunto aunque cada valor por separado no lo sea.</li>
+</ul>
+<h3>Tratamiento</h3>
+<p>Depende del caso:</p>
+<ul>
+<li><strong>Eliminarlos</strong>, si hay muchos datos normales, su origen es dudoso o no hay tiempo para analizarlos.</li>
+<li><strong>Eliminar la variable</strong> con más atípicos, valorando antes su importancia en el problema.</li>
+<li><strong>Tratarlos por separado</strong>. Importante: <strong>los atípicos de un problema pueden ser los datos normales de otro</strong>.</li>
+</ul>
+<h1>4.4 Transformación de datos</h1>
+<p>Convertir los datos en otros más útiles para la minería:</p>
+<ul>
+<li><strong>Suavizado</strong> (visto arriba).</li>
+<li><strong>Agregación</strong>: ventas diarias → semanales → mensuales.</li>
+<li><strong>Construcción de atributos</strong>: crear atributos nuevos a partir de otros. Facilita el trabajo al modelo, que ya no tiene que descubrir esa relación por sí mismo (p. ej. <strong>área</strong> a partir de altura y anchura; <strong>ganancia</strong> a partir de PVP y coste).</li>
+<li><strong>Normalización</strong>: llevar los atributos a una escala común, para que uno con valores grandes no domine a los demás.
+<ul>
+<li><strong>Min-Max</strong>: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7519em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.1963em;vertical-align:-0.836em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">ma</span><span class="mord mathnormal mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">min</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">min</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.836em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></eq>, que deja los valores en <strong>[0, 1]</strong>.</li>
+<li><strong>Z-Score</strong> (estandarización): <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7519em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.0463em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">σ</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">μ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></eq>, con <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">μ</span></span></span></span></eq> la media y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">σ</span></span></span></span></eq> la desviación típica; deja media 0 y desviación 1.</li>
+</ul>
+</li>
+<li><strong>Discretización</strong>: pasar valores continuos a discretos (edad en [0, 100) → menores, adulto joven, adulto, senior).</li>
+<li><strong>Generalización</strong> (jerarquías conceptuales): sustituir valores por otros <strong>más genéricos</strong>, de un nivel de abstracción superior. &quot;Calle&quot; → ciudad, provincia, comunidad; &quot;iphone&quot; → &quot;Smartphone&quot; → &quot;Electrónica&quot;.</li>
+</ul>
+<div class="callout callout-example">
+<p class="callout-titulo">Normalización con números</p>
+<p>Edades <code>[20, 35, 50, 80]</code>: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">min</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">20</span></span></span></span></eq>, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">ma</span><span class="mord mathnormal mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">80</span></span></span></span></eq>, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">μ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">46</span><span class="mord"><span class="mpunct">,</span></span><span class="mord">25</span></span></span></span></eq>, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4831em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">σ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">22</span><span class="mord"><span class="mpunct">,</span></span><span class="mord">19</span></span></span></span></eq>.</p>
+<table>
+<thead>
+<tr>
+<th>Edad</th>
+<th>Min-Max</th>
+<th>Z-Score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>20</td>
+<td>0,00</td>
+<td>−1,18</td>
+</tr>
+<tr>
+<td>35</td>
+<td>0,25</td>
+<td>−0,51</td>
+</tr>
+<tr>
+<td>50</td>
+<td>0,50</td>
+<td>0,17</td>
+</tr>
+<tr>
+<td>80</td>
+<td>1,00</td>
+<td>1,52</td>
+</tr>
+</tbody>
+</table>
+<p>Min-Max acota a [0, 1]; Z-Score dice a cuántas desviaciones de la media está cada valor (y es menos sensible a que un único extremo comprima todo lo demás).</p>
+</div>
+<h1>4.5 Reducción de datos</h1>
+<h2>4.5.1 La maldición de la dimensionalidad</h2>
+<p>Parecería que cuantos más atributos (dimensiones), mejor. <strong>A menudo no es así</strong>: al aumentar la dimensionalidad, el <strong>volumen del espacio crece exponencialmente</strong> y los datos quedan <strong>muy dispersos</strong>. Eso dificulta el entrenamiento y obliga a tener muchísimos más datos y más variados. Es la <strong>maldición de la dimensionalidad</strong> (<em>curse of dimensionality</em>), y por eso los modelos <strong>suelen mejorar al reducir dimensiones</strong>.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Busca a un amigo en un pasillo de 100 m (1 dimensión): fácil. En un campo de fútbol de 100 × 100 m (2 dimensiones): mucho más difícil. En un edificio de 100 plantas (3 dimensiones): casi imposible. Con el mismo número de &quot;datos&quot; (personas buscando), cada dimensión extra deja el espacio más vacío.</p>
+</div>
+<h2>4.5.2 Reducción de atributos</h2>
+<p><strong>Selección de características</strong> (FS, <em>Feature Selection</em>): quedarse con los atributos más relevantes e ignorar el resto.</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Cómo funciona</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Filtrado</strong></td>
+<td>Ordena las características según una métrica estadística (p. ej. correlación) y descarta las peores; hay que fijar un <strong>umbral</strong></td>
+</tr>
+<tr>
+<td><strong>Embebido</strong></td>
+<td>La selección va <strong>dentro del entrenamiento</strong> del modelo (p. ej. árboles de decisión)</td>
+</tr>
+<tr>
+<td><strong>Envolvente</strong> (<em>wrapper</em>)</td>
+<td>Prueba <strong>combinaciones</strong> de atributos entrenando un modelo con cada una y elige el subconjunto con mejores resultados</td>
+</tr>
+</tbody>
+</table>
+<p>(En prácticas se verán con más detalle.)</p>
+<p><strong>Extracción de características</strong>: en vez de elegir atributos existentes, se crean <strong>menos variables nuevas</strong>, cada una <strong>combinación</strong> de las originales: <strong>PCA</strong> (<em>Principal Component Analysis</em>), <strong>LDA</strong> (<em>Linear Discriminant Analysis</em>)…</p>
+<h2>4.5.3 Reducción de instancias</h2>
+<p>Reducir el número de registros mediante <strong>muestreo</strong> (<em>undersampling</em>) o <strong>agregación</strong>.</p>
+<h1>4.x Ideas clave</h1>
+<ul>
+<li>Entradas del aprendizaje: <strong>concepto</strong>, <strong>instancias</strong> y <strong>atributos</strong> (categóricos nominales/ordinales o numéricos continuos/discretos). El tipo condiciona comparaciones, validez, faltantes, atípicos y modelos admisibles.</li>
+<li>Preprocesar consume <strong>gran parte del esfuerzo</strong>; no hay receta, hay que conocer datos y dominio.</li>
+<li>Cuatro tareas: <strong>cleaning, integration, transformation, reduction</strong>.</li>
+<li><strong>Missing</strong>: eliminar tupla, a mano, constante, media/mediana/moda (global o por clase), predecirlos. Toda sustitución automática <strong>sesga</strong>.</li>
+<li><strong>Ruido</strong>: suavizar por ventana; la <strong>mediana es más robusta</strong> que la media.</li>
+<li><strong>Outliers</strong>: no necesariamente erróneos; detección por clustering, regresión (RMSE), boxplot, histograma, Mahalanobis; tipos <strong>global, contextual, colectivo</strong>; eliminar, quitar la variable o tratar aparte.</li>
+<li>Transformación: agregación, construcción de atributos, <strong>Min-Max</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.3335em;vertical-align:-0.4451em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8884em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1645em;"><span style="top:-2.357em;margin-left:-0.0785em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">ma</span><span class="mord mathnormal mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mbin mtight">−</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:-0.0785em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">min</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4101em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0785em;">X</span><span class="mbin mtight">−</span><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0785em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3281em;"><span style="top:-2.357em;margin-left:-0.0785em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">min</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4451em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></eq>, <strong>Z-Score</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2694em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.9244em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0359em;">σ</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.4461em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.0785em;">X</span><span class="mbin mtight">−</span><span class="mord mathnormal mtight">μ</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></eq>, discretización, generalización.</li>
+<li><strong>Maldición de la dimensionalidad</strong> → reducir: selección (<strong>filtrado, embebido, wrapper</strong>) o extracción (<strong>PCA, LDA</strong>); menos instancias por muestreo o agregación.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="3-introduccion-a-la-mineria-de-datos.html"><span class="nav-etiqueta">← anterior</span>3. Introducción a la minería de datos</a>
+  <a class="nav-siguiente" href="5-tareas-y-metodos-en-mineria-de-datos.html"><span class="nav-etiqueta">siguiente →</span>5. Tareas y métodos en minería de datos</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="6. Accesibilidad — apuntes de IPO (cuarto curso de Ingeniería Informática).">
+<title>6. Accesibilidad · IPO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">ipo</a><span class="miga-sep">/</span><span aria-current="page">6-accesibilidad</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de IPO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">IPO</a></p><ol><li><a href="1-introduccion-a-la-ipo.html">1. Introducción a la IPO</a></li><li><a href="2-el-factor-humano.html">2. El factor humano</a></li><li><a href="3-prototipado-y-evaluacion.html">3. Prototipado y evaluación</a></li><li><a href="4-diseno-centrado-en-el-usuario.html">4. Diseño centrado en el usuario</a></li><li><a href="5-diseno-grafico-principios-estandares-y-guias.html">5. Diseño gráfico. Principios, estándares y guías</a></li><li><span class="actual" aria-current="page">6. Accesibilidad</span></li><li><a href="7-estilos-y-paradigmas-de-interaccion.html">7. Estilos y paradigmas de interacción</a></li><li><a href="notas-sobre-examen.html">Notas sobre examen</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>IPO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>6 / 7</div>
+    </div>
+    <h1>Accesibilidad</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de IPO · 6/8</summary><ol><li><a href="1-introduccion-a-la-ipo.html">1. Introducción a la IPO</a></li><li><a href="2-el-factor-humano.html">2. El factor humano</a></li><li><a href="3-prototipado-y-evaluacion.html">3. Prototipado y evaluación</a></li><li><a href="4-diseno-centrado-en-el-usuario.html">4. Diseño centrado en el usuario</a></li><li><a href="5-diseno-grafico-principios-estandares-y-guias.html">5. Diseño gráfico. Principios, estándares y guías</a></li><li><span aria-current="page">6. Accesibilidad</span></li><li><a href="7-estilos-y-paradigmas-de-interaccion.html">7. Estilos y paradigmas de interacción</a></li><li><a href="notas-sobre-examen.html">Notas sobre examen</a></li></ol></details>
+  <div class="prosa">
+<h1>6.1 Introducción</h1>
+<p>Las personas son <strong>diferentes entre sí</strong>, y todas las interfaces deberían acomodarse a esas diferencias para que <strong>cualquiera pueda usarlas sin problemas</strong>. El objetivo es la <strong>usabilidad universal</strong>: que nadie se vea limitado al usar algo por esas diferencias. Por eso hay que evitar diseñar solo para las características de <strong>grupos de población concretos</strong>, porque eso impone <strong>barreras innecesarias</strong> que se podrían haber evitado.</p>
+<h2>6.1.1 Por qué importa</h2>
+<p>Hay dos motivos. La <strong>edad media de la población aumenta</strong>, y existe una <strong>relación entre edad y limitaciones funcionales</strong>. Además, cada vez más gente usa sistemas interactivos, <strong>incluidas las personas mayores</strong>.</p>
+<p><img src="../../../img/ipo/ipo-t6-limitacion-edad.png" alt="Limitación funcional según la edad (EE. UU., Bureau of the Census, SIPP 1984)|450" loading="lazy"></p>
+<p><em>En gris, el porcentaje con limitación funcional; en negro, con limitación severa. De 15–24 años solo la tiene el 5,3 % (1 % severa); a partir de 75 años, el 72,5 % (41 % severa). Los tramos intermedios: 7,5 % (25–34), 13,4 % (35–44), 23 % (45–54), 34,2 % (55–64), 45,4 % (65–69) y 55,3 % (70–74).</em></p>
+<p><img src="../../../img/ipo/ipo-t6-poblacion-galicia.png" alt="Población de Galicia por edades, 1981–2008 (Instituto Galego de Estatística)|420" loading="lazy"></p>
+<p><em>Los menores de 20 años bajan de ~31 % (1981) a ~15 % (2008), mientras los mayores de 64 suben de ~13 % a ~21 %. Los valores son aproximados, leídos del gráfico.</em></p>
+<h2>6.1.2 Discapacidad</h2>
+<p>Una <strong>discapacidad</strong> es una <strong>diferencia individual que supera un límite más o menos arbitrario</strong>. Conviene conocer las más comunes y las soluciones que se usan para evitar los problemas que causan en las interfaces actuales. Muchas de ellas aparecen <strong>en mayor o menor grado en personas consideradas &quot;normales&quot;</strong>: diseñar para la discapacidad beneficia a todos.</p>
+<h1>6.2 El diseño universal</h1>
+<p>El <strong>diseño universal</strong> es el proceso de diseñar productos <strong>usables por el rango más amplio de personas</strong>, que funcionen <strong>en el rango más amplio de situaciones</strong> y que sean <strong>comercialmente viables</strong>. Los productos y entornos deben poder usarlos la mayor parte de la gente <strong>sin necesidad de adaptaciones ni diseño especializado</strong>.</p>
+<p>Tiene <strong>siete principios</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Principio</th>
+<th>Qué exige</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. <strong>Uso equitativo</strong></td>
+<td>Usable y de precio razonable para personas con diferentes habilidades</td>
+</tr>
+<tr>
+<td>2. <strong>Uso flexible</strong></td>
+<td>Se acomoda a un rango amplio de personas con distintos gustos y habilidades</td>
+</tr>
+<tr>
+<td>3. <strong>Uso simple e intuitivo</strong></td>
+<td>Fácil de entender sea cual sea la experiencia, el conocimiento, el idioma o el nivel de concentración del usuario</td>
+</tr>
+<tr>
+<td>4. <strong>Información perceptible</strong></td>
+<td>Comunica bien la información necesaria, sean cuales sean las condiciones ambientales o las capacidades sensoriales del usuario</td>
+</tr>
+<tr>
+<td>5. <strong>Tolerancia al error</strong></td>
+<td>Minimiza los incidentes por azar y las consecuencias de acciones no previstas</td>
+</tr>
+<tr>
+<td>6. <strong>Esfuerzo físico mínimo</strong></td>
+<td>Se usa de forma eficiente y cómoda, con la mínima fatiga</td>
+</tr>
+<tr>
+<td>7. <strong>Tamaño y espacio para acercarse y usarlo</strong></td>
+<td>Espacio y tamaño apropiados para aproximarse, alcanzarlo y usarlo</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>El ejemplo clásico es el <strong>rebaje de las aceras</strong> en los pasos de peatones. Se pensó para sillas de ruedas, pero lo usan también carritos de bebé, maletas con ruedas y repartidores. Un buen diseño universal no es una &quot;versión especial&quot;: es una versión mejor para todos.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://es.wikipedia.org/wiki/Dise%C3%B1o_universal">Diseño universal (Wikipedia)</a> — origen del concepto y sus siete principios, con ejemplos (artículo).</p>
+</div>
+<h1>6.3 Tipos de discapacidades</h1>
+<p>Se agrupan en <strong>visuales</strong> (de color, visión reducida y ceguera), <strong>auditivas</strong>, <strong>de movimiento</strong> y <strong>cognoscitivas</strong>.</p>
+<h2>6.3.1 Deficiencia de color</h2>
+<p>La deficiencia de color (daltonismo) afecta <strong>más a los hombres (8 %) que a las mujeres (0,5 %)</strong> porque está ligada al <strong>cromosoma X</strong>. La <strong>falta de percepción del azul</strong> es el problema <strong>más grave pero el menos común</strong>.</p>
+<p><img src="../../../img/ipo/ipo-t6-daltonismo.png" alt="Cómo se ve una rueda de colores con visión normal, sin rojo, sin verde y sin azul|450" loading="lazy"></p>
+<p><em>Sin rojo o sin verde, rojos, naranjas y verdes se confunden en tonos amarillentos o pardos. Sin azul, se confunden azules y verdes.</em></p>
+<p>Hay tres soluciones:</p>
+<ul>
+<li><strong>No codificar la información solo mediante el color</strong>: hay que añadir forma, texto o posición.</li>
+<li><strong>Elegir colores distinguibles</strong> también para quien no percibe el rojo o el verde.</li>
+<li><strong>Probar las visualizaciones en distintas condiciones.</strong></li>
+</ul>
+<p><img src="../../../img/ipo/ipo-t6-colores-distinguibles.jpeg" alt="Una misma paleta vista con visión normal, sin rojo y sin verde|420" loading="lazy"></p>
+<p><em>De izquierda a derecha: visión normal, sin rojo y sin verde. Sin rojo o sin verde, &quot;red&quot;, &quot;orange&quot; y &quot;moss green&quot; pasan a tonos parecidos; &quot;blue&quot;, &quot;black&quot; o &quot;grey&quot; siguen distinguiéndose.</em></p>
+<p>Una herramienta útil es el <strong>comprobador de contraste de WebAIM</strong> (<a href="https://webaim.org/resources/contrastchecker/">webaim.org/resources/contrastchecker</a>). Indica la <strong>razón de contraste</strong> entre el color del texto y el del fondo, y si cumple los niveles AA y AAA de las WCAG (§6.4.2).</p>
+<p><img src="../../../img/ipo/ipo-t6-contraste.png" alt="Comprobador de contraste: azul #0000FF sobre gris #C7C7C7 da 5,08:1|420" loading="lazy"></p>
+<p><em>Con 5,08:1, el texto normal aprueba el nivel AA y suspende el AAA, y el texto grande aprueba ambos. En WCAG 2, el texto normal necesita 4,5:1 para AA y 7:1 para AAA; el texto grande, 3:1 y 4,5:1.</em></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=mNIABKgXs2w">El daltonismo y cómo ven los daltónicos (Cienciomaníacos)</a> — por qué se produce y cómo ve los colores cada tipo de daltónico (vídeo, 5:51).</p>
+</div>
+<h2>6.3.2 Visión reducida</h2>
+<p>Las discapacidades visuales van <strong>desde una falta de agudeza hasta la ceguera total</strong>. Como gran parte de las interfaces actuales se apoya en <strong>elementos gráficos</strong>, lo lógico es que los usuarios con visión reducida puedan seguir usándolos <strong>hasta donde sea posible</strong>. Para ello están los <strong>ampliadores</strong> de pantalla.</p>
+<p><img src="../../../img/ipo/ipo-t6-ampliador.png" alt="Ampliador de Windows: nivel de ampliación y opciones de seguir el ratón, el foco del teclado y la edición de texto|420" loading="lazy"></p>
+<p><em>El ampliador muestra en una franja superior la zona ampliada (aquí ×2) y puede seguir el cursor, el foco del teclado o el punto de edición. También permite invertir colores o usar alto contraste.</em></p>
+<h2>6.3.3 Deficiencias auditivas</h2>
+<p>Las personas con dificultades auditivas <strong>deberían tener menos problemas</strong> con las interfaces actuales, que son sobre todo visuales. Aun así, hay que tener en cuenta tres cosas:</p>
+<ul>
+<li>Cierta información debe <strong>convertirse en texto</strong> para que puedan seguirla.</li>
+<li>Algunos <strong>mensajes de alerta se codifican como sonidos</strong>, porque el oído es un canal que el usuario tiene libre. Hay que acordarse de que no todos lo oyen y ofrecer una alternativa visual.</li>
+<li>Algunas personas usan la <strong>lengua de signos</strong> y conocen un <strong>número relativamente pequeño de palabras</strong> escritas, así que hay que cuidar el <strong>vocabulario</strong>.</li>
+</ul>
+<h2>6.3.4 Movimiento</h2>
+<p>Hay usuarios con problemas para realizar tareas físicas como <strong>mover un puntero, pulsar dos teclas a la vez o mantener apretada una tecla</strong>. En el caso más extremo no pueden usar teclado ni ratón, y prefieren un sistema alternativo de entrada <strong>por voz</strong> o <strong>por movimientos de otras partes del cuerpo</strong> (cabeza, boca…).</p>
+<p>De ahí salen dos recomendaciones. Conviene dar a las aplicaciones una <strong>interfaz por teclado lo más completa posible</strong>, porque el teclado suele ser un método de entrada <strong>más sencillo que los apuntadores</strong> como el ratón. Y hay que <strong>etiquetar bien cada elemento</strong> (botones, cuadros de diálogo…), porque los programas de entrada por voz usan esas etiquetas para manejar la interfaz.</p>
+<h2>6.3.5 Cognoscitivas</h2>
+<p>El ordenador ha entrado en todas las esferas sociales, y las personas <strong>&quot;menos preparadas&quot;</strong> pueden tener problemas para aprovechar los recursos tecnológicos de la vida cotidiana (viajes, facturas, compras…). Los sistemas deben planificarse para que también ellas puedan usarlos. Las <strong>dos únicas recetas</strong> son la <strong>sencillez</strong> y la <strong>evaluación con personas apropiadas</strong>.</p>
+<h1>6.4 Accesibilidad web</h1>
+<blockquote>
+<p>&quot;El poder de la Web está en su universalidad. El acceso para todos, sin tener en cuenta las discapacidades, es un aspecto fundamental.&quot; — <strong>Tim Berners-Lee</strong>, director del W3C, en la introducción a la WAI.</p>
+</blockquote>
+<p>La accesibilidad web es importante por varias razones:</p>
+<ul>
+<li>El uso de la Web se ha <strong>extendido a todo el espectro social</strong>.</li>
+<li>Da un <strong>acceso sin precedentes a la información</strong> a las personas con discapacidad.</li>
+<li>Produce un <strong>diseño mejor para todos</strong>: la <strong>multimodalidad</strong> permite usar la Web en otros dispositivos. Un diseño accesible también ayuda cuando hay <strong>poco ancho de banda</strong> (imágenes lentas), en <strong>entornos ruidosos</strong> (no se oye el audio), con <strong>reflejos en la pantalla</strong> (no se ve bien) o <strong>conduciendo</strong> (ojos y manos ocupados).</li>
+<li>Hay <strong>legislación</strong> en algunos países. En España, la <strong>Ley 34/2002 de Servicios de la Sociedad de la Información y de Comercio Electrónico</strong> (LSSI), en su disposición adicional quinta y modificaciones posteriores.</li>
+</ul>
+<h2>6.4.1 La WAI</h2>
+<p>El <strong>W3C</strong> (World Wide Web Consortium) alberga la <strong>Iniciativa de Accesibilidad Web</strong> (WAI, <em>Web Accessibility Initiative</em>, <a href="https://www.w3.org/WAI/">w3.org/WAI</a>). Sus objetivos son asegurar que las tecnologías web permiten la accesibilidad, desarrollar <strong>guías</strong> y <strong>herramientas</strong> para evaluarla y facilitarla, la <strong>difusión y educación</strong>, y coordinar investigación y desarrollo. Ofrece <strong>guías</strong> para crear páginas accesibles, <strong>programas de test</strong> de accesibilidad y <strong>navegadores alternativos</strong> para personas con discapacidad.</p>
+<h2>6.4.2 Guías de diseño accesible</h2>
+<p>La WAI publica tres guías:</p>
+<table>
+<thead>
+<tr>
+<th>Guía</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>WCAG</strong> (<em>Web Content Accessibility Guidelines</em>)</td>
+<td>Principios para crear <strong>contenido web</strong> accesible</td>
+</tr>
+<tr>
+<td><strong>ATAG</strong> (<em>Authoring Tool Accessibility Guidelines</em>)</td>
+<td>Principios para crear <strong>herramientas de autor</strong> (editores web, gestores de contenido) que reduzcan las barreras</td>
+</tr>
+<tr>
+<td><strong>UAAG</strong> (<em>User Agent Accessibility Guidelines</em>)</td>
+<td>Principios para crear <strong>agentes de usuario</strong> que reduzcan las barreras</td>
+</tr>
+</tbody>
+</table>
+<p>Un <strong>agente de usuario</strong> es cualquier software que recupera y muestra contenido web: navegadores, reproductores multimedia, <em>plug-ins</em>…</p>
+<p>Las <strong>WCAG 2.0</strong> (<a href="https://www.w3.org/TR/WCAG20/">w3.org/TR/WCAG20</a>) recogen aspectos generales de diseño accesible y los <strong>principios de diseño accesible</strong>. De cada principio dan una explicación, sus aplicaciones concretas (<em><strong>checkpoints</strong></em>), técnicas de implementación con ejemplos y su <strong>prioridad</strong>. Una web que cumple las pautas puede mostrar un <strong>logo de conformidad</strong> del W3C con su nivel: <strong>A</strong>, <strong>AA</strong> o <strong>AAA</strong>, de menos a más exigente (<a href="https://www.w3.org/WAI/WCAG2-Conformance">logos de conformidad</a>).</p>
+<p>En España, el <strong>Portal de Administración Electrónica</strong> (PAe) impulsa y coordina la administración electrónica en los organismos públicos. También se ocupa de la <strong>accesibilidad</strong>: tiene un <strong>Observatorio de la Accesibilidad</strong> y recoge la normativa.</p>
+<div class="callout callout-note">
+<p class="callout-titulo">Los enlaces del PAe que trae la diapositiva (administracionelectronica.gob.es/PAe/accesibilidad) ya no funcionan (error 404).</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=2oCJFSFnOoQ">WCAG explained in 3 mins</a> — qué son las WCAG, sus principios y los niveles A/AA/AAA (vídeo, 3:05, en inglés).</p>
+</div>
+<h2>6.4.3 Test de accesibilidad</h2>
+<p>Hay tres tipos de herramientas:</p>
+<ul>
+<li><strong>De evaluación</strong>: analizan páginas o sitios y generan un informe o clasificación. Por ejemplo, <strong>TAW</strong> (<a href="http://www.tawdis.net">www.tawdis.net</a>); la WAI mantiene una <a href="https://www.w3.org/WAI/ER/tools/">lista completa</a>.</li>
+<li><strong>De reparación</strong>: ayudan al diseñador a mejorar la accesibilidad.</li>
+<li><strong>Filtros y transformadores</strong>: ayudan al usuario modificando las páginas para hacerlas más accesibles.</li>
+</ul>
+<h1>6.5 Comprobación de la accesibilidad</h1>
+<p>Para comprobar si una aplicación es accesible:</p>
+<ul>
+<li><strong>Seguir las listas de recomendaciones</strong> de cada sistema operativo (<a href="https://www.microsoft.com/es-es/accessibility">Microsoft</a>, <a href="https://www.apple.com/es/accessibility/">Apple</a>).</li>
+<li><strong>Manejar la interfaz solo con el teclado</strong>: comprobar que se puede y que los accesos están bien documentados e indicados.</li>
+<li>Comprobar que las <strong>herramientas de ampliación de pantalla</strong> del sistema funcionan bien con la aplicación.</li>
+<li><strong>Cambiar los tipos de letra estándar</strong> y ver si la aplicación se sigue viendo bien.</li>
+</ul>
+<p>Para la web, el W3C resume las pautas en unos <a href="http://www.w3.org/WAI/References/QuickTips/qt.es.htm">consejos rápidos</a>:</p>
+<table>
+<thead>
+<tr>
+<th>Elemento</th>
+<th>Qué hacer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Imágenes y animaciones</strong></td>
+<td>Usar el atributo <code>alt</code> para describir la función de cada elemento visual</td>
+</tr>
+<tr>
+<td><strong>Mapas de imagen</strong></td>
+<td>Usar el elemento <code>map</code> y texto para las zonas activas</td>
+</tr>
+<tr>
+<td><strong>Multimedia</strong></td>
+<td>Subtítulos y transcripción del sonido, y descripción del vídeo</td>
+</tr>
+<tr>
+<td><strong>Enlaces</strong></td>
+<td>Texto con sentido leído fuera de contexto: evitar &quot;pincha aquí&quot;</td>
+</tr>
+<tr>
+<td><strong>Organización</strong></td>
+<td>Encabezados, listas y estructura consistente; CSS para la maquetación</td>
+</tr>
+<tr>
+<td><strong>Figuras y diagramas</strong></td>
+<td>Describirlos brevemente en la página o con el atributo <code>longdesc</code></td>
+</tr>
+<tr>
+<td><strong>Scripts, applets y plug-ins</strong></td>
+<td>Ofrecer contenido alternativo si no son accesibles</td>
+</tr>
+<tr>
+<td><strong>Marcos</strong></td>
+<td>Elemento <code>noframes</code> y títulos con sentido</td>
+</tr>
+<tr>
+<td><strong>Tablas</strong></td>
+<td>Facilitar la lectura línea a línea y resumirlas</td>
+</tr>
+<tr>
+<td><strong>Revisión</strong></td>
+<td>Verificar con las herramientas, puntos de comprobación y pautas de las <a href="https://www.w3.org/TR/WCAG/">WCAG</a></td>
+</tr>
+</tbody>
+</table>
+<h1>6.6 Ideas clave</h1>
+<ul>
+<li><strong>Usabilidad universal</strong>: nadie debe verse limitado por sus diferencias. Importa porque la población envejece y la limitación funcional crece con la edad (del 5,3 % a los 15–24 años al 72,5 % a partir de 75).</li>
+<li><strong>Discapacidad</strong>: diferencia individual que supera un límite arbitrario; muchas aparecen en grado leve en personas &quot;normales&quot;.</li>
+<li><strong>Diseño universal</strong>: usable por el mayor número de personas, sin adaptaciones. Sus 7 principios: uso equitativo, flexible, simple e intuitivo, información perceptible, tolerancia al error, esfuerzo físico mínimo, tamaño y espacio adecuados.</li>
+<li><strong>Tipos de discapacidad</strong>: visual (color, visión reducida, ceguera), auditiva, de movimiento y cognoscitiva.</li>
+<li><strong>Color</strong>: afecta al 8 % de hombres y al 0,5 % de mujeres (cromosoma X). No codificar solo con color, elegir colores distinguibles, comprobar el contraste.</li>
+<li><strong>Soluciones por tipo</strong>: ampliadores (visión reducida); texto y alternativas a los sonidos, con vocabulario sencillo (auditiva); interfaz completa por teclado y etiquetas para la voz (movimiento); sencillez y evaluación con usuarios apropiados (cognoscitiva).</li>
+<li><strong>Accesibilidad web</strong>: beneficia a todos (poco ancho de banda, ruido, reflejos, conducción). En España, Ley 34/2002 (LSSI).</li>
+<li><strong>WAI del W3C</strong>: guías WCAG (contenido), ATAG (herramientas de autor) y UAAG (agentes de usuario). Niveles de conformidad A, AA y AAA.</li>
+<li><strong>Herramientas</strong>: de evaluación (TAW), de reparación, y filtros y transformadores. Comprobar: guías del SO, usar solo el teclado, ampliadores, cambiar fuentes; <code>alt</code>, subtítulos, enlaces con sentido, estructura con encabezados.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="5-diseno-grafico-principios-estandares-y-guias.html"><span class="nav-etiqueta">← anterior</span>5. Diseño gráfico. Principios, estándares y guías</a>
+  <a class="nav-siguiente" href="7-estilos-y-paradigmas-de-interaccion.html"><span class="nav-etiqueta">siguiente →</span>7. Estilos y paradigmas de interacción</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

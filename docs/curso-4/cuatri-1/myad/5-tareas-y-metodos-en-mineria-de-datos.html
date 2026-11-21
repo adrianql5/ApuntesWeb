@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Tareas y métodos en minería de datos — apuntes de MYAD (cuarto curso de Ingeniería Informática).">
+<title>5. Tareas y métodos en minería de datos · MYAD · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">myad</a><span class="miga-sep">/</span><span aria-current="page">5-tareas-y-metodos-en-mineria-de-datos</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de MYAD"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">MYAD</a></p><ol><li><a href="1-almacenes-de-datos.html">1. Almacenes de Datos</a></li><li><a href="2-extraccion-transformacion-y-carga-etl.html">2. Extracción, Transformación y Carga (ETL)</a></li><li><a href="3-introduccion-a-la-mineria-de-datos.html">3. Introducción a la minería de datos</a></li><li><a href="4-preprocesamiento-y-analisis-de-datos.html">4. Preprocesamiento y análisis de datos</a></li><li><span class="actual" aria-current="page">5. Tareas y métodos en minería de datos</span></li><li><a href="6-entrenamiento-y-evaluacion-de-modelos.html">6. Entrenamiento y evaluación de modelos</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>MYAD</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>5 / 6</div>
+    </div>
+    <h1>Tareas y métodos en minería de datos</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de MYAD · 5/6</summary><ol><li><a href="1-almacenes-de-datos.html">1. Almacenes de Datos</a></li><li><a href="2-extraccion-transformacion-y-carga-etl.html">2. Extracción, Transformación y Carga (ETL)</a></li><li><a href="3-introduccion-a-la-mineria-de-datos.html">3. Introducción a la minería de datos</a></li><li><a href="4-preprocesamiento-y-analisis-de-datos.html">4. Preprocesamiento y análisis de datos</a></li><li><span aria-current="page">5. Tareas y métodos en minería de datos</span></li><li><a href="6-entrenamiento-y-evaluacion-de-modelos.html">6. Entrenamiento y evaluación de modelos</a></li></ol></details>
+  <div class="prosa">
+<h1>5.1 Tareas frente a métodos</h1>
+<p>Una <strong>tarea</strong> de minería de datos es un <strong>tipo de problema</strong>: clasificar piezas en válidas o defectuosas, predecir las ventas de tomates en 2025… Un <strong>método</strong> es la <strong>técnica o algoritmo</strong> que resuelve la tarea. <strong>No todos los métodos sirven para todas las tareas</strong>.</p>
+<p>Las tareas principales se dividen en dos familias:</p>
+<table>
+<thead>
+<tr>
+<th>Análisis predictivo</th>
+<th>Análisis descriptivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clasificación, regresión, análisis de series temporales</td>
+<td>Clustering, reglas de asociación, análisis secuencial</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Predictivas</strong>: hay que <strong>predecir uno o más valores</strong> para uno o más ejemplos. Los datos de entrenamiento van <strong>etiquetados</strong> con una salida (clase, categoría o valor numérico) o con un orden entre ellos. Puede predecirse incluso un vector de muchos valores a la vez (p. ej. reconstruir una imagen de tomografía por impedancia eléctrica a partir de medidas, Fernández-Fuentes et al., 2018).</li>
+<li><strong>Descriptivas</strong>: los ejemplos <strong>no tienen etiqueta ni orden</strong>; no se busca predecir datos nuevos sino <strong>describir los existentes</strong>.</li>
+</ul>
+<h2>5.1.1 Notación del conjunto de datos</h2>
+<p>Las instancias se describen con valores de una serie de atributos (nominales o numéricos). El <strong>espacio de instancias</strong> es el producto de los dominios de los atributos, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>, y cada instancia concreta es una tupla <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⟨</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">⟩</span></span></span></span></eq>. Los <strong>datos de entrenamiento</strong> son un subconjunto de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span></span></span></span></eq>.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Habitaciones</th>
+<th>Baños</th>
+<th>Metros</th>
+<th>Terraza</th>
+<th>Altura</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>50</td>
+<td>False</td>
+<td>3</td>
+</tr>
+<tr>
+<td>2</td>
+<td>4</td>
+<td>2</td>
+<td>110</td>
+<td>True</td>
+<td>5</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>n</td>
+<td>1</td>
+<td>1</td>
+<td>40</td>
+<td>True</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p><em>Cada fila es una instancia <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>; cada columna, un atributo <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></eq>.</em></p>
+<h1>5.2 Tareas predictivas</h1>
+<h2>5.2.1 Clasificación</h2>
+<p>Las observaciones son <strong>pares</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⟨</span><span class="mord mathnormal">e</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">s</span><span class="mclose">⟩</span></span></span></span></eq> con <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span></span></span></span></eq> y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span></eq>, donde <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span></eq> es el conjunto de salidas: se dice que los ejemplos están <strong>etiquetados</strong>, y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0379em;">δ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{⟨</span><span class="mord mathnormal">e</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">s</span><span class="mclose">⟩}</span></span></span></span></eq> es el conjunto etiquetado (p. ej. foto → &quot;perro&quot;, foto → &quot;gato&quot;).</p>
+<p>El objetivo es aprender una función, el <strong>clasificador</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">λ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span></eq>, a partir de los ejemplos de entrenamiento, que <strong>generalice</strong> para clasificar instancias nuevas sin etiquetar. <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span></eq> es <strong>nominal</strong>: un conjunto de <strong>clases</strong>; si hay <strong>2 clases</strong>, la clasificación es <strong>binaria</strong>. Ejemplos: correo <em>ham</em>/<em>spam</em>, producto válido/no válido, operación bancaria válida/fraudulenta, calificación crediticia de un cliente.</p>
+<p>Hay varias variantes:</p>
+<ul>
+<li><strong>Clasificación suave</strong> (<em>soft</em>): además de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">λ</span></span></span></span></eq>, se aprende otra función <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6889em;"></span><span class="mord mathbb">R</span></span></span></span></eq> que da el <strong>grado de certeza</strong> de la predicción. Ejemplos: probabilidad de que un correo sea spam (&quot;potencialmente spam&quot;), el mejor medicamento con su certeza, futuras compras de un cliente con su certeza.</li>
+<li><strong>Estimación de la probabilidad de clasificación</strong>: generaliza la anterior. Se aprenden <strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span></eq> funciones, una por clase</strong>, y cada una da la probabilidad <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> de pertenecer a su clase. El conjunto se llama <strong>estimador de probabilidad</strong> (p. ej. perro 0,80; gato 0,15; conejo 0,05; o ibuprofeno 0,35, paracetamol 0,30, frenadol 0,20, aspirina 0,15).</li>
+<li><strong>Categorización multiclase</strong> (multietiqueta): asignar <strong>una o varias</strong> categorías a una observación, como el etiquetado automático de documentos o imágenes (una foto: &quot;industria&quot;, &quot;grúa&quot;, &quot;almacén&quot;). Si se presenta como estimador de probabilidades, <strong>las probabilidades pueden sumar más de 1</strong>, porque las categorías no son excluyentes.</li>
+<li><strong>Preferencias o priorización</strong>: aprender a <strong>ordenar</strong> instancias. Cada ejemplo es una secuencia <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⟨</span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">⟩</span></span></span></span></eq> con <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8304em;vertical-align:-0.136em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span></eq>, y el orden es la predicción (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6891em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≻</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6891em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≻</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6891em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≻</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6891em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≻</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>). En la versión simplificada se comparan pares: se entrena con pares ordenados como <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">0.74</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">25</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">165</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≻</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">0.45</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">35</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">155</span><span class="mclose">)</span></span></span></span></eq> y luego, dadas dos instancias, se predice cuál va antes. Ejemplo: ordenar candidatos a un puesto según sus características y selecciones anteriores.</li>
+</ul>
+<h2>5.2.2 Regresión</h2>
+<p>Igual que en clasificación, los datos son pares <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">⟨</span><span class="mord mathnormal">e</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">s</span><span class="mclose">⟩</span></span></span></span></eq> y se aprende <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">λ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span></eq>, con un único valor de salida por observación. La diferencia es que <strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">s</span></span></span></span></eq> es un valor numérico continuo</strong> (puede ser cualquier real), así que no hay un número fijo de salidas y se pueden representar <strong>funciones continuas</strong>.</p>
+<p>Un método de regresión puede convertirse en un <strong>clasificador binario suave</strong> aplicando un <strong>umbral</strong> a la salida: es lo que hace la <strong>regresión logística</strong>.</p>
+<p>Se usa muchísimo en industria, ventas o economía: estimar las ventas de 2023, el número de unidades defectuosas de una partida, el salario en Madrid, el precio de la vivienda o la humedad de la fibra en un punto de la fabricación de tableros.</p>
+<h1>5.3 Tareas descriptivas</h1>
+<h2>5.3.1 Agrupamiento (<em>clustering</em>)</h2>
+<p>Se buscan <strong>grupos</strong> entre los elementos de entrada <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0379em;">δ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mclose">}</span></span></span></span></eq> (¡sin etiqueta!) de forma que los de cada grupo sean <strong>similares</strong>. La función es la misma que en clasificación, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">λ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span></eq>, pero los valores de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span></eq> <strong>se &quot;inventan&quot; durante el aprendizaje</strong>. No se sabe cómo ni cuántos son los grupos: a veces se da el número; otras lo decide el algoritmo.</p>
+<p><img src="../../../img/myad/myad-t5-kmeans-iter.png" alt="Clustering con k-means|350" loading="lazy"></p>
+<p>Utilidades:</p>
+<ul>
+<li><strong>Predecir el comportamiento</strong> de una instancia nueva por el grupo en que cae (se parecerá al resto). P. ej. segmentar clientes, estudiar el impacto de un producto en cada segmento y orientar campañas.</li>
+<li><strong>Entender un dataset grande</strong>: reducir miles de instancias a media docena de grupos estudiables.</li>
+<li><strong>Encontrar subgrupos que se &quot;separan&quot;</strong> de la población (observaciones raras o anómalas).</li>
+</ul>
+<p>Ejemplos: familias de productos en tiendas, segmentación para publicidad, comunidades en redes sociales, segmentación de imágenes (bordes, objetos), ciencias sociales (crimen, educación), agrupar genes similares.</p>
+<h2>5.3.2 Reglas de asociación</h2>
+<p>Se usan con atributos <strong>nominales/categóricos</strong> para encontrar <strong>asociaciones</strong> entre observaciones. Sobre <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="minner">⋯</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>, una regla tiene la forma:</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord text"><span class="mord">si </span></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5556em;"></span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∧</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0572em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∧</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord text"><span class="mord"> entonces </span></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0315em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5556em;"></span><span class="mord mathnormal">u</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∧</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0197em;">l</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.5556em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∧</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.123em;"></span><span class="minner">…</span></span></span></span></span></eqn></section><ul>
+<li>Son <strong>direccionales</strong>: &quot;si compra aguacates, tomate y cilantro, entonces compra lima&quot; <strong>no</strong> permite concluir lo contrario.</li>
+<li>También hay reglas <strong>bidireccionales</strong>: &quot;comprar hamburguesa sucede conjuntamente con comprar kétchup&quot;.</li>
+</ul>
+<p>Su escenario estrella es el <strong>análisis de la cesta de la compra</strong>, para campañas dirigidas: descubrir que quien compra leche de soja suele comprar pan de semillas, o que &quot;si tiene 18 años y compra folios y una perforadora, entonces compra una carpeta&quot; → crear un <strong>pack para estudiantes</strong>.</p>
+<h2>5.3.3 Reglas de asociación secuenciales</h2>
+<p>Buscan asociaciones que <strong>no ocurren en el mismo momento</strong>: <strong>patrones secuenciales frecuentes</strong>. Sirven para entender el comportamiento en el tiempo (orden de compras, interacción con servicios). Ejemplo: quien compra medicamentos para el resfriado probablemente compre <strong>vitamina C en una semana</strong> y <strong>suplementos inmunitarios en tres semanas</strong>.</p>
+<h1>5.4 Métodos predictivos</h1>
+<p>Cada tarea se puede resolver con varios métodos y cada método sirve para muchas tareas, pero no para todas. Clasificar los métodos es <strong>muy complicado</strong> porque muchos son híbridos.</p>
+<h2>5.4.1 Técnicas algebraicas y estadísticas</h2>
+<p>Expresan el modelo con <strong>fórmulas</strong> (funciones lineales, no lineales…). Parten de un modelo con <strong>parámetros</strong> y estiman sus valores para que se ajuste lo mejor posible a los ejemplos: son <strong>técnicas paramétricas</strong>. El caso típico es la <strong>regresión lineal</strong>:</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span></eqn></section><p>donde <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> es el atributo de entrada y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> (ordenada en el origen) y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> (pendiente) son los parámetros que se ajustan, usando los atributos y las etiquetas de los ejemplos, para que la recta represente lo mejor posible los datos.</p>
+<p><img src="../../../img/myad/myad-t5-regresion-lineal.jpeg" alt="Ajuste de una regresión lineal|500" loading="lazy">
+<em>Izquierda: el coste (error) baja a medida que se ajusta el parámetro hasta llegar al mínimo. Derecha: la recta resultante sobre los datos.</em></p>
+<h2>5.4.2 Técnicas bayesianas</h2>
+<p>Estiman la probabilidad de pertenecer a una clase mediante probabilidades condicionadas y el <strong>teorema de Bayes</strong>:</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mopen">(</span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.363em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∣</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal">A</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mopen">(</span><span class="mord mathnormal">A</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></eqn></section><p>El más popular es el <strong>clasificador bayesiano <em>naive</em></strong>: calcula la probabilidad de cada clase según los valores de los atributos y elige la <strong>más alta</strong>. Supone (hipótesis <em>naive</em>, &quot;ingenua&quot;) que <strong>todos los atributos son independientes</strong>: la presencia de una característica no tiene que ver con la de otra. Así, la probabilidad de una clase se obtiene <strong>multiplicando</strong>, para todos los atributos, la probabilidad de esa clase condicionada al valor de cada atributo. <strong>Aunque la hipótesis suele ser falsa, funciona bien</strong> en muchísimas tareas.</p>
+<h2>5.4.3 Árboles de decisión</h2>
+<p>Un árbol es un conjunto de <strong>condiciones organizadas jerárquicamente</strong>: la decisión final se obtiene siguiendo las condiciones que se cumplen <strong>desde la raíz hasta una hoja</strong>. Son <strong>fáciles de usar e interpretar</strong> y se construyen por <strong>divide y vencerás</strong>.</p>
+<p><img src="../../../img/myad/myad-t5-arbol-titanic.png" alt="Árbol de decisión del Titanic|300" loading="lazy">
+<em>¿Es hombre? → ¿edad &gt; 9,5? → ¿hermanos/cónyuges a bordo &gt; 2,5? Cada hoja da la clase (sobrevive/muere), su probabilidad y el % de pasajeros que llegan a ella.</em></p>
+<p>Durante el entrenamiento, el árbol aprende <strong>qué preguntas separan mejor las clases</strong>, dividiendo recursivamente los datos en subconjuntos cada vez más homogéneos (<strong>partición recursiva</strong> del espacio). Cada <strong>nodo interno</strong> pregunta por un atributo; cada <strong>hoja</strong> da una clase; y cada <strong>camino raíz → hoja es una regla</strong> (p. ej. &quot;edad ≤ 30 y género masculino → sí&quot;).</p>
+<p>Se construye en <strong>dos fases</strong>:</p>
+<ol>
+<li><strong>Crecimiento</strong>: desde la raíz, en cada nodo se elige la condición que <strong>mejor separa</strong> las instancias, usando una función que compara las <strong>frecuencias relativas de las clases en los hijos</strong> con las del <strong>padre</strong> (cuanto más &quot;puros&quot; quedan los hijos, mejor). Una partición elegida <strong>no se reevalúa</strong>.</li>
+<li><strong>Poda</strong>: el árbol crecido es <strong>completo y consistente</strong> con los ejemplos (los cubre todos), pero <strong>demasiado específico</strong>: no generaliza. La poda elimina condiciones para hacerlo más general:
+<ul>
+<li><strong>Prepoda</strong>: un criterio de parada durante la construcción impide seguir especializando una rama.</li>
+<li><strong>Postpoda</strong>: con el árbol ya construido, se eliminan nodos <strong>de abajo arriba</strong>. Ventaja: se decide con la <strong>visión completa</strong> del modelo.</li>
+</ul>
+</li>
+</ol>
+<p>Algoritmos clásicos: <strong>ID3, C4.5, CART</strong>.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=_L39rN6gz7Y">Decision and Classification Trees, Clearly Explained!!!</a> — StatQuest construye un árbol paso a paso eligiendo la mejor división (vídeo, 18 min, inglés).</p>
+</div>
+<h2>5.4.4 Máquinas de soporte vectorial (SVM)</h2>
+<p>Las <strong>SVM</strong> son <strong>clasificadores lineales</strong>: buscan un <strong>hiperplano que separe</strong> los grupos. En <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></eq> el hiperplano es una <strong>recta</strong>, en <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span></span></span></span></span></span></span></span></eq> un <strong>plano</strong> y en <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6889em;"></span><span class="mord"><span class="mord mathbb">R</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6644em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></eq> un subespacio de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></eq> dimensiones.</p>
+<p><img src="../../../img/myad/myad-t5-svm-hiperplano.jpeg" alt="Hiperplanos en 2D y 3D|450" loading="lazy"></p>
+<p>Entre todos los hiperplanos posibles, la SVM elige el que <strong>maximiza el margen</strong>, la distancia a los puntos más cercanos de cada clase, llamados <strong>vectores de soporte</strong> (al menos uno por clase).</p>
+<p><img src="../../../img/myad/myad-t5-svm-margen.png" alt="Vectores de soporte y margen|400" loading="lazy">
+<em>Los puntos rodeados son los vectores de soporte; el margen es la franja entre las líneas paralelas.</em></p>
+<p>Cuando los datos <strong>no son linealmente separables</strong>, se usan <strong>funciones kernel</strong>: proyectan las observaciones a un <strong>espacio de mayor dimensión</strong> donde sí puede encontrarse un hiperplano separador.</p>
+<p><img src="../../../img/myad/myad-t5-svm-kernel.jpeg" alt="Truco del kernel|450" loading="lazy">
+<em>Rojos y azules están mezclados en el plano (input space); al proyectarlos a 3D (feature space), un plano los separa.</em></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Monedas rojas y azules mezcladas sobre una mesa: no puedes separarlas con una regla. Pero si das un golpe a la mesa y las rojas (más ligeras) saltan más alto, en el aire una hoja de papel horizontal sí las separa. El kernel es ese &quot;golpe&quot; que añade una dimensión.</p>
+</div>
+<h2>5.4.5 Redes neuronales artificiales</h2>
+<p>Nacen intentando <strong>imitar el cerebro</strong>. Se organizan en <strong>capas</strong>: una de <strong>entrada</strong>, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></eq> <strong>ocultas</strong> y una de <strong>salida</strong>.</p>
+<p><img src="../../../img/myad/myad-t5-red-neuronal.jpeg" alt="Red neuronal multicapa|500" loading="lazy"></p>
+<p>Cada neurona calcula la <strong>suma ponderada</strong> de sus entradas y le aplica una <strong>función de activación</strong> (p. ej. la sigmoide <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.2484em;vertical-align:-0.4033em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mbin mtight">+</span><span class="mord mtight"><span class="mord mathnormal mtight">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7027em;"><span style="top:-2.786em;margin-right:0.0714em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mathnormal mtight">x</span></span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4033em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></eq>) para producir su salida.</p>
+<p><img src="../../../img/myad/myad-t5-neurona.png" alt="Neurona y red|500" loading="lazy"></p>
+<p><img src="../../../img/myad/myad-t5-sigmoide.png" alt="Función sigmoide|300" loading="lazy"></p>
+<p>El modelo se aprende <strong>ajustando los pesos</strong> de las conexiones; la <strong>topología</strong> y los <strong>pesos</strong> determinan el patrón aprendido. El entrenamiento:</p>
+<ol>
+<li>Se parte de <strong>pesos aleatorios</strong>.</li>
+<li><strong>Cálculo hacia delante</strong>: con los pesos actuales se obtiene una salida y se compara con la esperada → <strong>error</strong>.</li>
+<li><strong>Backpropagation</strong>: ese error se usa para <strong>ajustar los pesos</strong>, minimizando una función de coste con, p. ej., <strong>descenso de gradiente</strong>.</li>
+<li>Se repite.</li>
+</ol>
+<p>Su popularidad ha crecido con el Big Data y la capacidad de cálculo, por sus <strong>buenos resultados</strong>. Pegas: <strong>muy costosas de entrenar</strong> y <strong>poco explicables</strong> (<strong>cajas negras</strong>), un problema en tareas donde hay que entender la predicción (medicina). La familia es enorme: ver el <a href="https://www.asimovinstitute.org/neural-network-zoo/">Neural Network Zoo</a> (enlazado en las diapositivas).</p>
+<h2>5.4.6 Ensembles</h2>
+<p>Un <strong>ensemble</strong> combina varios <strong>modelos base</strong> para obtener predicciones <strong>más precisas que cada uno por separado</strong>. Lo habitual es combinar por <strong>votación</strong> (clasificación). Se usan sobre todo en tareas predictivas, aunque podrían extenderse a descriptivas.</p>
+<p>La calidad depende de la <strong>precisión y la diversidad</strong> de los modelos base: si todos son parecidos, cuando uno se equivoca se equivocan todos y la combinación también; si son <strong>diversos</strong>, sus errores están <strong>poco correlacionados</strong> y la combinación acierta más.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Es &quot;la sabiduría de la multitud&quot;: preguntar a 100 personas distintas el peso de un buey y promediar acierta más que cualquiera de ellas. Pero si las 100 copian a la misma persona, el promedio es tan malo como ella.</p>
+</div>
+<p>Formas de construirlos:</p>
+<ul>
+<li><strong>Centrados en el modelo</strong>: combinar <strong>modelos de distinto tipo</strong>.</li>
+<li><strong>Centrados en los datos</strong>: el <strong>mismo tipo</strong> de modelo entrenado con <strong>distintos subconjuntos de datos</strong> o con <strong>variaciones de los atributos</strong> de entrada.</li>
+</ul>
+<p><strong>Bagging</strong> (<em>Bootstrap aggregation</em>): genera subconjuntos de entrenamiento eligiendo <strong>al azar y con reemplazamiento</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">m</span></span></span></span></eq> ejemplos (puede haber repetidos); cada subconjunto es un <em><strong>bootstrap replicate</strong></em>.</p>
+<p><strong>Random Forest</strong>: un bosque de árboles de decisión, normalmente construido con bagging. Los árboles son muy <strong>sensibles a pequeños cambios</strong> en los datos (<strong>inestabilidad</strong>); los modelos así se llaman <em><strong>weak learners</strong></em>, y precisamente esa variabilidad aporta la diversidad que necesita el ensemble. Predice por <strong>votación</strong> (clasificación) o <strong>media</strong> (regresión).</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=J4Wdy0Wc_xQ">StatQuest: Random Forests Part 1</a> — cómo se construye y evalúa un random forest con bootstrap (vídeo, 10 min, inglés).</p>
+</div>
+<h1>5.5 Métodos descriptivos</h1>
+<h2>5.5.1 Técnicas de agrupamiento</h2>
+<table>
+<thead>
+<tr>
+<th>Familia</th>
+<th>Idea</th>
+<th>Métodos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Basadas en distancia</strong> (no paramétricas)</td>
+<td>Agrupan según medidas de distancia</td>
+<td><strong>Particionamiento</strong>: k-Means, x-Means, k-Medoids. <strong>Jerárquicos</strong>: aglomerativos, divisivos</td>
+</tr>
+<tr>
+<td><strong>Basadas en densidad</strong> (no paramétricas)</td>
+<td>Usan el grado de aglomeración de los datos</td>
+<td><strong>DBSCAN</strong></td>
+</tr>
+<tr>
+<td><strong>Basadas en distribuciones</strong> (paramétricas)</td>
+<td>Proponen un modelo como hipótesis y buscan el mejor ajuste</td>
+<td><strong>Modelo de mezcla gaussiana (GMM)</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>k-Means</h3>
+<p>Divide <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></eq> observaciones en <strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span></eq> grupos</strong>, de modo que cada observación pertenece al grupo cuyo <strong>centroide</strong> (valor medio) está <strong>más cerca</strong>. Necesita dos funciones: una de <strong>distancia</strong> (p. ej. euclídea) y otra para <strong>calcular el centroide</strong> de un conjunto.</p>
+<p>Algoritmo:</p>
+<ol>
+<li>Elegir <strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span></eq> entidades al azar</strong> como centroides iniciales.</li>
+<li><strong>Asignar</strong> cada elemento al centroide más cercano.</li>
+<li><strong>Recalcular</strong> los centroides de cada grupo.</li>
+<li>Repetir 2–3 hasta que los centroides <strong>no cambien significativamente</strong>.</li>
+</ol>
+<div class="callout callout-example">
+<p class="callout-titulo">Ejemplo paso a paso (1D, $k=2$)</p>
+<p>Puntos: <code>1, 2, 3, 8, 9, 10</code>. Centroides iniciales: <strong>1</strong> y <strong>2</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Iteración</th>
+<th>Centroides</th>
+<th>Grupo A</th>
+<th>Grupo B</th>
+<th>Nuevos centroides</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>1 ; 2</td>
+<td>{1}</td>
+<td>{2, 3, 8, 9, 10}</td>
+<td>1 ; 6,4</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1 ; 6,4</td>
+<td>{1, 2, 3}</td>
+<td>{8, 9, 10}</td>
+<td>2 ; 9</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2 ; 9</td>
+<td>{1, 2, 3}</td>
+<td>{8, 9, 10}</td>
+<td>2 ; 9 → <strong>no cambian, fin</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Con una mala inicialización (dos centroides juntos) el primer reparto es absurdo, pero el algoritmo lo corrige en pocas iteraciones. No siempre lo consigue: por eso se repite con varias inicializaciones.</p>
+</div>
+<p>Características:</p>
+<ul>
+<li><strong>Popular, fácil de implementar y rápido</strong>.</li>
+<li><strong>No funciona bien con datos categóricos</strong> (no hay &quot;media&quot; de colores).</li>
+<li>Hay que <strong>fijar <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span></eq></strong> de antemano: ¿cuántos grupos?</li>
+<li>Converge a <strong>mínimos locales</strong>: sin garantía del óptimo global; se mitiga ejecutándolo <strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">n</span></span></span></span></eq> veces con inicializaciones distintas</strong>.</li>
+<li><strong>Muy sensible</strong> a los centroides iniciales y a los <strong>atípicos</strong>.</li>
+<li>Problemas con grupos de <strong>distinto tamaño</strong> o <strong>formas no convexas</strong>: asume grupos de tamaño similar y convexos.</li>
+</ul>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=bGmJJl4y-D0">08. K-Means | Centroides, método del codo y Silhouette</a> — el algoritmo paso a paso y cómo elegir <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span></eq> (vídeo, 9 min).</p>
+</div>
+<h3>Clustering jerárquico</h3>
+<p><strong>No hace falta fijar el número de grupos</strong>. Crea una jerarquía de clústeres (cada nodo tiene un solo padre y puede tener varios hijos) que se dibuja como un árbol llamado <strong>dendrograma</strong>; cortándolo a distinta altura se obtienen más o menos grupos.</p>
+<p><img src="../../../img/myad/myad-t5-dendrograma.jpeg" alt="Dendrograma|350" loading="lazy"></p>
+<ul>
+<li><strong>Aglomerativo</strong> (ascendente): empieza con <strong>cada punto como un clúster</strong> y va <strong>fusionando</strong> los más próximos, recalculando la matriz de proximidad en cada nivel.</li>
+<li><strong>Divisivo</strong> (descendente): empieza con <strong>todo junto</strong> y va <strong>dividiendo</strong>: primero parte el conjunto con un método plano como k-means y después vuelve a partir los clústeres con mayor <strong>SSE</strong> (suma de errores al cuadrado). Para al llegar a nodos individuales o a un SSE mínimo.</li>
+</ul>
+<h3>DBSCAN</h3>
+<p>Busca regiones con la <strong>densidad</strong> (concentración de puntos) que fija el usuario, mediante un radio de vecindad y un <strong>número mínimo de puntos</strong>. Clasifica cada punto en:</p>
+<ul>
+<li><strong>Punto central</strong>: su vecindad tiene <strong>al menos</strong> el mínimo de puntos.</li>
+<li><strong>Punto fronterizo</strong>: su vecindad tiene <strong>menos</strong> del mínimo, pero contiene un punto central.</li>
+<li><strong>Atípico</strong>: ni central ni fronterizo.</li>
+</ul>
+<p>Gracias a esto encuentra grupos de <strong>cualquier forma</strong> y detecta atípicos, justo donde k-Means falla:</p>
+<p><img src="../../../img/myad/myad-t5-dbscan-vs-kmeans.jpeg" alt="k-Means frente a DBSCAN|450" loading="lazy">
+<em>Con dos medias lunas o dos anillos, k-Means corta por la mitad; DBSCAN sigue la forma de cada grupo.</em></p>
+<h3>GMM (modelo de mezcla gaussiana)</h3>
+<p>Da una base <strong>estadística</strong>: cada observación tiene una <strong>probabilidad de pertenecer</strong> a cada grupo (en vez de una asignación tajante). Supone que los datos se generan a partir de una <strong>mezcla de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span></eq> distribuciones gaussianas</strong>, univariantes <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">μ</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">σ</span><span class="mclose">)</span></span></span></span></eq> o multivariantes <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord"><span class="mord boldsymbol">μ</span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord"><span class="mord mathbf">Σ</span></span></span><span class="mclose">)</span></span></span></span></eq>, y cada gaussiana es un clúster. Estima sus parámetros (medias, varianzas y pesos) con el algoritmo iterativo <strong>EM</strong> (expectación-maximización):</p>
+<ol>
+<li><strong>Inicialización</strong>: parámetros iniciales, p. ej. <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.0315em;">k</span></span></span></span></eq> grupos sacados con k-Means.</li>
+<li><strong>Iteración</strong> hasta converger o agotar iteraciones:
+<ul>
+<li><strong>Paso E</strong> (expectación): con los parámetros actuales se calcula, para cada dato, la probabilidad de pertenecer a cada gaussiana.</li>
+<li><strong>Paso M</strong> (maximización): se recalculan los parámetros a partir de esas probabilidades.</li>
+</ul>
+</li>
+</ol>
+<h2>5.5.2 Técnicas basadas en conteo de frecuencias: Apriori</h2>
+<p>Encuentran de forma eficiente <strong>conjuntos de ítems frecuentes</strong>: se empieza por pares de sucesos y se van ampliando los conjuntos <strong>solo si su frecuencia conjunta supera un umbral</strong>. Con esa información se construyen <strong>reglas de asociación</strong>.</p>
+<p><strong>Apriori</strong> es el algoritmo más simple y popular. Busca los conjuntos de ítems que superan un umbral de frecuencia y los convierte en reglas. Dos medidas valoran una regla:</p>
+<ul>
+<li><strong>Soporte</strong> (cobertura): instancias que contienen el conjunto ÷ total de instancias.</li>
+<li><strong>Confianza</strong> de &quot;si X entonces Y&quot;: porcentaje de veces que la regla se cumple cuando se puede aplicar, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">conf</span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">⇒</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">Y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.363em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">frec</span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">frec</span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0785em;">X</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∪</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.2222em;">Y</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></eq>.</li>
+</ul>
+<div class="callout callout-example">
+<p class="callout-titulo">Ejemplo: cestas de la compra</p>
+<p>7 cestas: {pan, leche, galletas, café}, {pan, leche, café}, {pan, leche}, {leche, galletas, café}, {leche, galletas}, {galletas, café}, {leche, café}. Umbral: <strong>3 apariciones</strong> (soporte ≥ 3/7 ≈ <strong>0,43</strong>).</p>
+<p><strong>Paso 1. Conjuntos frecuentes.</strong></p>
+<table>
+<thead>
+<tr>
+<th>k = 1</th>
+<th>frec</th>
+<th>k = 2</th>
+<th>frec</th>
+<th>k = 3</th>
+<th>frec</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pan</td>
+<td>3 ✔</td>
+<td>Pan, leche</td>
+<td>3 ✔</td>
+<td>Pan, leche, galletas</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Leche</td>
+<td>6 ✔</td>
+<td>Pan, galletas</td>
+<td>1</td>
+<td>Pan, leche, café</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Galletas</td>
+<td>4 ✔</td>
+<td>Pan, café</td>
+<td>2</td>
+<td>Leche, galletas, café</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Café</td>
+<td>5 ✔</td>
+<td>Leche, galletas</td>
+<td>3 ✔</td>
+<td>Pan, galletas, café</td>
+<td>1</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Leche, café</td>
+<td>4 ✔</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>Galletas, café</td>
+<td>3 ✔</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Ningún trío llega a 3, así que el proceso para en k = 2.</p>
+<p><strong>Paso 2. Reglas</strong> de los pares frecuentes, quedándonos con confianza ≥ <strong>70 %</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Regla</th>
+<th>Confianza</th>
+<th>¿Pasa?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>pan ⇒ leche</td>
+<td>3/3 = 1</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>leche ⇒ pan</td>
+<td>3/6 = 0,5</td>
+<td></td>
+</tr>
+<tr>
+<td>leche ⇒ galletas</td>
+<td>3/6 = 0,5</td>
+<td></td>
+</tr>
+<tr>
+<td>galletas ⇒ leche</td>
+<td>3/4 = 0,75</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>leche ⇒ café</td>
+<td>4/6 ≈ 0,67</td>
+<td></td>
+</tr>
+<tr>
+<td>café ⇒ leche</td>
+<td>4/5 = 0,8</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>galletas ⇒ café</td>
+<td>3/4 = 0,75</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>café ⇒ galletas</td>
+<td>3/5 = 0,6</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="callout callout-note">
+<p class="callout-titulo">Erratas en las diapositivas</p>
+<p>La diapositiva da 1 para {pan, leche, café} (aparece en 2 cestas), y 0,5 y 0,6 para leche ⇒ café y café ⇒ leche. Con los datos de la propia diapositiva salen <strong>0,67 y 0,8</strong>, así que <strong>café ⇒ leche también supera el 70 %</strong>. Las cifras de arriba están recalculadas.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://es.wikipedia.org/wiki/Algoritmo_apriori">Algoritmo apriori — Wikipedia</a> — descripción del algoritmo y la propiedad de los subconjuntos frecuentes (artículo).</p>
+</div>
+<h1>5.x Ideas clave</h1>
+<ul>
+<li><strong>Tarea</strong> = tipo de problema; <strong>método</strong> = algoritmo que lo resuelve. Predictivas (datos <strong>etiquetados</strong>) vs descriptivas (sin etiqueta).</li>
+<li><strong>Clasificación</strong>: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal">λ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">E</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span></eq> con <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span></span></span></span></eq> nominal (binaria si 2 clases). Variantes: <strong>suave</strong> (certeza), <strong>estimador de probabilidad</strong> (una función por clase), <strong>multiclase/multietiqueta</strong> (probabilidades pueden sumar &gt; 1), <strong>preferencias</strong> (ordenar).</li>
+<li><strong>Regresión</strong>: salida <strong>numérica continua</strong>; con umbral → clasificador suave (regresión logística).</li>
+<li>Descriptivas: <strong>clustering</strong> (grupos que se crean al aprender), <strong>reglas de asociación</strong> (direccionales o bidireccionales; cesta de la compra), <strong>secuenciales</strong> (en el tiempo).</li>
+<li>Métodos predictivos: <strong>regresión lineal</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0278em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0278em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> (paramétrica), <strong>naive Bayes</strong> (atributos independientes), <strong>árboles</strong> (crecimiento + pre/postpoda; ID3, C4.5, CART; explicables), <strong>SVM</strong> (hiperplano de <strong>margen máximo</strong>, <strong>vectores de soporte</strong>, <strong>kernel</strong>), <strong>redes neuronales</strong> (pesos, activación, backpropagation; cajas negras), <strong>ensembles</strong> (precisión + <strong>diversidad</strong>; bagging, <strong>random forest</strong>).</li>
+<li>Clustering: <strong>k-Means</strong> (k fijo, rápido, mínimos locales, sensible a inicio y atípicos, solo convexos), <strong>jerárquico</strong> (dendrograma, aglomerativo/divisivo), <strong>DBSCAN</strong> (densidad: central, frontera, atípico; formas arbitrarias), <strong>GMM</strong> (probabilístico, EM).</li>
+<li><strong>Apriori</strong>: conjuntos frecuentes (umbral de <strong>soporte</strong>) → reglas (umbral de <strong>confianza</strong> = frec(X∪Y)/frec(X)).</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-preprocesamiento-y-analisis-de-datos.html"><span class="nav-etiqueta">← anterior</span>4. Preprocesamiento y análisis de datos</a>
+  <a class="nav-siguiente" href="6-entrenamiento-y-evaluacion-de-modelos.html"><span class="nav-etiqueta">siguiente →</span>6. Entrenamiento y evaluación de modelos</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

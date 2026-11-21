@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="11. Backup en red y software para backup — apuntes de ENCO (cuarto curso de Ingeniería Informática).">
+<title>11. Backup en red y software para backup · ENCO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enco</a><span class="miga-sep">/</span><span aria-current="page">11-backup-en-red-y-software-para-backup</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENCO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENCO</a></p><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li><li><a href="7-almacenamiento-ip.html">7. Almacenamiento IP</a></li><li><a href="8-sistemas-de-ficheros-y-almacenamiento-en-red.html">8. Sistemas de ficheros y almacenamiento en red</a></li><li><a href="9-virtualizacion-del-almacenamiento.html">9. Virtualización del almacenamiento</a></li><li><a href="10-backup.html">10. Backup</a></li><li><span class="actual" aria-current="page">11. Backup en red y software para backup</span></li><li><a href="12-archivado-de-la-informacion.html">12. Archivado de la información</a></li><li><a href="13-hardware-para-backup.html">13. Hardware para backup</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENCO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>11 / 13</div>
+    </div>
+    <h1>Backup en red y software para backup</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENCO · 11/13</summary><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li><li><a href="7-almacenamiento-ip.html">7. Almacenamiento IP</a></li><li><a href="8-sistemas-de-ficheros-y-almacenamiento-en-red.html">8. Sistemas de ficheros y almacenamiento en red</a></li><li><a href="9-virtualizacion-del-almacenamiento.html">9. Virtualización del almacenamiento</a></li><li><a href="10-backup.html">10. Backup</a></li><li><span aria-current="page">11. Backup en red y software para backup</span></li><li><a href="12-archivado-de-la-informacion.html">12. Archivado de la información</a></li><li><a href="13-hardware-para-backup.html">13. Hardware para backup</a></li></ol></details>
+  <div class="prosa">
+<h1>11.1 Utilidades básicas de backup y recuperación</h1>
+<p>Los sistemas operativos traen herramientas sencillas de backup:</p>
+<table>
+<thead>
+<tr>
+<th>Herramienta</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>dump</strong></td>
+<td>Copia <strong>sistemas de ficheros completos</strong>; se recuperan con <strong>restore</strong></td>
+</tr>
+<tr>
+<td><strong>cpio</strong></td>
+<td>Copia cualquier número de ficheros y directorios (<strong>tar</strong> es más popular por ser más fácil de usar)</td>
+</tr>
+<tr>
+<td><strong>dd</strong></td>
+<td>Copia <strong>a bajo nivel</strong>: bits de un sitio a otro (p. ej. un disco entero)</td>
+</tr>
+<tr>
+<td><strong>rsync</strong></td>
+<td>Copias <strong>entre sistemas</strong>, conservando toda la <strong>metainformación</strong> de los ficheros</td>
+</tr>
+<tr>
+<td><strong>ditto</strong></td>
+<td><strong>Clonación de discos en macOS</strong></td>
+</tr>
+<tr>
+<td><strong>ntbackup</strong> (Windows)</td>
+<td>Evolucionó a <em>Backup and Restore</em> (Windows 7 y 10) y <em>Windows Server Backup</em> (Windows Server 2008)</td>
+</tr>
+<tr>
+<td><strong>System Restore</strong> (Windows)</td>
+<td>Crea <strong>puntos de recuperación</strong> del sistema (snapshots)</td>
+</tr>
+</tbody>
+</table>
+<h1>11.2 Recuperación</h1>
+<ul>
+<li><strong>Un archivo</strong>: se localiza el medio (cinta o disco) donde está y se copia.</li>
+<li><strong>Un sistema de ficheros</strong>: hay que recuperar todos sus archivos: normalmente, el <strong>último backup total</strong> y después <strong>los incrementales posteriores</strong>.</li>
+<li><strong>Un servidor completo</strong>: hay que <strong>particionar los discos</strong> como estaban, <strong>reinstalar el SO</strong> con todas sus actualizaciones, <strong>reinstalar todo el software</strong> con parches, y finalmente <strong>recuperar los sistemas de ficheros</strong> y montar los externos.</li>
+</ul>
+<h2>11.2.1 Complicaciones al recuperar un servidor</h2>
+<ul>
+<li>A menudo <strong>no hay registro</strong> de cómo estaban particionados los discos o configurado el <strong>RAID</strong>.</li>
+<li>Lleva <strong>varias horas</strong>: <strong>instalar es muchísimo más lento que copiar</strong>.</li>
+<li>El backup y la recuperación pueden <strong>no respetar permisos y fechas</strong> de los archivos, creando problemas difíciles de arreglar.</li>
+<li>Software instalado desde la red <strong>sin versión en CD</strong>, o que <strong>solo permite una instalación</strong>.</li>
+<li>La versión estable que se usaba puede <strong>no ser la última</strong> y ser <strong>imposible de volver a conseguir</strong>.</li>
+</ul>
+<h2>11.2.2 Recuperación <em>bare-metal</em></h2>
+<p>La solución es una <strong>copia total que permita recuperar un servidor &quot;en blanco&quot;</strong>, sin ningún software instalado (<em>bare metal</em>, &quot;metal desnudo&quot;). Es un procedimiento <strong>relativamente complejo y dependiente del SO</strong>. Hay que:</p>
+<ol>
+<li>Copiar la <strong>metainformación del particionado</strong> de los discos.</li>
+<li>Crear <strong>imágenes</strong> de las particiones que lo necesiten.</li>
+<li>Hacer backup normal de las particiones que no necesiten imagen.</li>
+</ol>
+<p>Las imágenes deben <strong>rehacerse tras cada instalación o actualización</strong>.</p>
+<p>La copia de particiones puede hacerse con <strong>software especializado o herramientas del SO</strong>, <strong>con el sistema en marcha</strong> o <strong>arrancando desde un CD</strong> u otro medio, de <strong>todas</strong> las particiones o solo de algunas, y <strong>a nivel de fichero</strong> (<strong>lenta pero portable</strong>) o <strong>a nivel de imagen</strong> (<strong>rápida</strong>).</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Recuperar un servidor &quot;a mano&quot; es reconstruir una casa ladrillo a ladrillo siguiendo los planos (si es que los tienes). Una imagen bare-metal es tener la casa prefabricada en piezas numeradas: la descargas en el solar y en unas horas está igual que antes.</p>
+</div>
+<h2>11.2.3 Backup de máquinas virtuales</h2>
+<p>Es fácil: basta <strong>copiar la imagen del disco</strong> (o discos), que incluso se puede <strong>portar a otros programas</strong> de virtualización, y la <strong>configuración</strong> de la máquina se copia, porta o recrea sin dificultad. Pero cuidado con las <strong>inconsistencias entre programas y versiones</strong>, sobre todo con los <strong>snapshots</strong>: el fichero con los cambios se guarda <strong>aparte</strong> de la imagen de disco y puede no ser compatible.</p>
+<h1>11.3 Backup en red: servidores y clientes</h1>
+<p>El <strong>backup en red</strong> centraliza el procedimiento: <strong>uno o más servidores</strong> hacen el backup de los datos de los <strong>clientes</strong>, con una conexión <strong>regular</strong> cliente–servidor para salvar datos y otra <strong>esporádica</strong> para recuperar los perdidos.</p>
+<h2>11.3.1 El servidor de backup</h2>
+<p>Tiene cuatro componentes:</p>
+<ul>
+<li><strong>Planificador de trabajos</strong>: qué datos salvar y <strong>cuándo</strong>.</li>
+<li><strong>Gestor de errores</strong>: detecta, analiza e informa de errores en los backups.</li>
+<li><strong>Gestión de metainformación</strong>: guarda, de cada fichero, su ubicación original y en el backup, fecha de modificación y de backup, etc.</li>
+<li><strong>Gestor de medios</strong>: gestiona el medio de backup.</li>
+</ul>
+<p>El <strong>gestor de medios</strong> elige y usa las <strong>cintas adecuadas</strong>, mantiene información de control (para no usar una cinta equivocada), <strong>retira y reutiliza</strong> las cintas obsoletas, <strong>planifica</strong> las grabaciones y <strong>compacta</strong> la información.</p>
+<p>Puede ser el <strong>eslabón débil</strong>: maneja muchísimos datos, depende de la <strong>LAN</strong> y de los <strong>clientes</strong>, y las <strong>cintas son un medio problemático</strong> porque necesitan recibir los datos a una <strong>velocidad determinada</strong> (si no llegan rápido, la cinta para y rebobina). Por eso cada vez es más común hacer <strong>primero una copia en disco</strong> y luego pasarla a cinta.</p>
+<h2>11.3.2 Los clientes de backup</h2>
+<p>Cada ordenador ejecuta un <strong>cliente</strong> (agente) <strong>específico de su plataforma</strong>, que negocia con el servidor el backup y la recuperación y puede ofrecer funciones avanzadas como <strong>almacenamiento jerárquico</strong>. El backup puede hacerse <strong>a nivel de fichero</strong> (lo habitual), <strong>de bloque</strong> o <strong>de volumen</strong>, y hay <strong>clientes específicos</strong> para aplicaciones (MS Exchange, HCL Domino) que hacen el backup más eficiente.</p>
+<h1>11.4 Software de backup de código abierto</h1>
+<h2>11.4.1 AMANDA</h2>
+<p><strong>AMANDA</strong> (<em>Advanced Maryland Automated Network Disk Archiver</em>) tiene un <strong>servidor</strong> (Linux) con disco y cinta y <strong>clientes</strong> en casi cualquier plataforma (macOS, Linux, Solaris, Windows).</p>
+<p><img src="../../../img/enco/enco-t11-amanda.png" alt="Arquitectura de AMANDA|420" loading="lazy"></p>
+<p>Características:</p>
+<ul>
+<li>Usa <strong>herramientas y formatos estándar</strong>: <strong>dump</strong> y <strong>tar</strong>.</li>
+<li>Usa un <strong>holding disk</strong> (disco intermedio) para guardar los archivos <strong>antes de grabarlos en cinta</strong>.</li>
+<li>Backups <strong>totales e incrementales</strong>.</li>
+<li><strong>Planificación automática</strong>: el administrador da reglas generales (qué servidores se incluyen y la política de totales e incrementales) y <strong>AMANDA calcula la mejor estrategia</strong> repartiendo la carga. Por ejemplo, si dos servidores A y B necesitan un total y un incremental en días alternos, un día hace <strong>total de A e incremental de B</strong> y al siguiente <strong>incremental de A y total de B</strong>.</li>
+</ul>
+<p><img src="../../../img/enco/enco-t11-amanda-planificacion.png" alt="Planificación de AMANDA|500" loading="lazy">
+<em>Con 4 directorios, AMANDA no hace todos los completos el mismo día: Diario1 completo de /home1, Diario2 completo de /home2 + incremental de /home1, etc. Así el volumen en cinta de cada día queda equilibrado.</em></p>
+<p>Más detalles: gestiona cintas y bibliotecas con <strong>herramientas estándar del SO</strong>; el cliente ejecuta un <strong>agente</strong>; se comunica por <strong>TCP, UDP y OpenSSH</strong>; permite <strong>cifrar</strong>; en vez de agentes se pueden <strong>montar en el servidor los directorios</strong> de los clientes (NFS o Samba); y la recuperación requiere <strong>privilegios de root</strong> en el cliente.</p>
+<p><strong>Ventajas</strong>: backup sencillo de todos los equipos de una red en casi cualquier plataforma, producto <strong>probado y bien documentado</strong>, backup en <strong>disco y cinta</strong>, <strong>sin formatos ni drivers propietarios</strong> (se puede leer cualquier backup desde cualquier dispositivo), <strong>cifrado</strong> en cliente o servidor y <strong>planificación automática optimizada</strong>.</p>
+<h2>11.4.2 Bacula</h2>
+<p><strong>Bacula</strong> tiene varios componentes que se comunican por <strong>TCP</strong>:</p>
+<ul>
+<li><strong>Director</strong>: gestiona los componentes y la configuración.</li>
+<li><strong>Servidor de base de datos</strong>: guarda la lista de ficheros salvados y su origen (el catálogo).</li>
+<li><strong>Demonio de almacenamiento</strong>: interactúa con las <strong>cintas o discos</strong>.</li>
+<li><strong>Consola</strong> administrativa.</li>
+<li><strong>Demonio de ficheros</strong>: el <strong>cliente</strong>, que envía los datos al demonio de almacenamiento.</li>
+</ul>
+<p><img src="../../../img/enco/enco-t11-bacula.png" alt="Componentes de Bacula|380" loading="lazy"></p>
+<p>Características: base de datos <strong>SQL</strong>; un backup puede <strong>ocupar varios volúmenes</strong>; trabaja con muchos soportes; backups <strong>completos, diferenciales e incrementales</strong>; <strong>formato propio</strong> de almacenamiento; <strong>muy escalable</strong> (reparte datos en varios discos); buen backup en Windows <strong>incluso con archivos abiertos</strong> gracias a <strong>VSS</strong> (<em>Volume Shadow Copy Service</em>); <strong>recuperación bare-metal</strong> y <strong>cifrado</strong> de datos y tráfico con <strong>TLS</strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>AMANDA</th>
+<th>Bacula</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Instalación</strong></td>
+<td><strong>Más sencilla</strong> (menos componentes)</td>
+<td>Más compleja</td>
+</tr>
+<tr>
+<td><strong>Formato</strong></td>
+<td>Estándar (dump, tar)</td>
+<td><strong>Propietario</strong></td>
+</tr>
+<tr>
+<td><strong>Catálogo</strong></td>
+<td>—</td>
+<td><strong>Base de datos SQL</strong></td>
+</tr>
+<tr>
+<td><strong>Cintas</strong></td>
+<td>—</td>
+<td><strong>Varios backups por cinta</strong> y <strong>un backup en varias cintas</strong></td>
+</tr>
+<tr>
+<td><strong>En común</strong></td>
+<td>Multiplataforma, cintas o discos, reparten los backups a lo largo de varios días</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>11.4.3 BackupPC</h2>
+<p>Pensado para <strong>oficinas</strong> donde los equipos <strong>no están siempre conectados</strong> (portátiles que entran y salen de la LAN). Si un cliente no responde, <strong>insiste</strong> y genera <strong>notificaciones</strong> sin dar fallo de backup, y sabe identificar clientes con <strong>DHCP</strong> que no tienen IP fija.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.amanda.org/">AMANDA</a>, <a href="https://www.bacula.org/">Bacula</a> y <a href="https://backuppc.github.io/backuppc/">BackupPC</a> — webs oficiales de los tres programas (artículos, inglés).</p>
+</div>
+<h2>11.4.4 ¿Por qué software comercial?</h2>
+<p>Se recurre a él cuando el open source falla en algo: <strong>plataforma no soportada</strong>; no admite <strong>particiones sin formatear</strong> (algunas BD usan bloques directamente); <strong>límite de clientes simultáneos</strong>; datos que necesitan <strong>trato especial</strong>; falta de <strong>gestión avanzada</strong> (archivado, almacenamiento jerárquico); no <strong>reduce tráfico</strong> (compresión en cliente, límite de ancho de banda por cliente); falta algún <strong>formato</strong> de backup; se necesita <strong>administración más fácil</strong>, <strong>alta seguridad</strong> o <strong>recuperación más fácil</strong>; o el producto <strong>no es suficientemente robusto</strong> o su <strong>automatización es insuficiente</strong>.</p>
+<h1>11.5 Arquitecturas de backup en red</h1>
+<p>El backup en red usa la <strong>LAN</strong> para mover los datos. Problemas:</p>
+<ul>
+<li><strong>Organización</strong>: decenas, cientos o miles de servidores, PC y portátiles en condiciones distintas.</li>
+<li><strong>Rendimiento</strong>: el almacenamiento <strong>se duplica cada pocos meses</strong>, <strong>ya no existe el backup nocturno</strong> y los patrones de uso cambian: se hace backup <strong>cuando se puede, no cuando se quiere</strong>.</li>
+</ul>
+<h2>11.5.1 Cuellos de botella sin red de almacenamiento</h2>
+<p>Sin SAN, hay sobrecarga en la <strong>gestión de la metainformación</strong>, en los <strong>buses del servidor de backup</strong> (durante el backup o al compactar cintas) y en los <strong>buses de los clientes</strong>. La causa es que los datos <strong>entran en cada ordenador por un bus hasta la memoria, los procesa la CPU y vuelven a salir por otro bus</strong>. Los <strong>TOE</strong> alivian algo la tarjeta de red, pero no son la solución.</p>
+<h2>11.5.2 Mejoras sin red de almacenamiento</h2>
+<p>En un entorno centrado en servidores (sin SAN) hay tres opciones. En los diagramas, (1) es el backup de los PC de usuario por la LAN y (2) el de los servidores:</p>
+<ul>
+<li><strong>LAN dedicada al backup</strong>: una segunda LAN solo para el tráfico de backup, para no saturar la de usuarios.</li>
+<li><strong>Varios servidores de backup</strong>: se reparte la carga entre ellos.</li>
+<li><strong>Servidor de backup en el propio servidor de aplicaciones</strong>: el servidor de ficheros hace su propio backup a sus cintas, sin enviar sus datos por la red.</li>
+</ul>
+<p><img src="../../../img/enco/enco-t11-lan-backup.png" alt="LAN para backup|380" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t11-multiples-servidores.png" alt="Múltiples servidores de backup|380" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t11-backup-en-servidor.png" alt="Backup en el servidor de aplicaciones|380" loading="lazy"></p>
+<h2>11.5.3 Backup con red de almacenamiento</h2>
+<p>Con una <strong>SAN</strong> aparecen opciones nuevas. En todos los diagramas, la línea fina (1–2) es la <strong>coordinación</strong> por la LAN y la gruesa (3) el <strong>camino de los datos</strong>:</p>
+<ul>
+<li><strong>Sin servidor</strong> (<em>server-free</em>): el servidor de backup coordina, pero los datos van <strong>directamente del disco a la cinta por la SAN</strong>, sin pasar por ningún servidor.</li>
+<li><strong>Sin LAN</strong> (<em>LAN-free</em>): los datos van del disco al <strong>servidor de ficheros</strong> y de ahí <strong>por la SAN</strong> a la cinta; no tocan la LAN.</li>
+<li><strong>Sin LAN con sistema de ficheros compartido</strong>: el <strong>servidor de backup lee directamente el disco</strong> del servidor de ficheros (gracias al sistema de ficheros compartido) y lo lleva a la cinta, descargando al servidor de ficheros.</li>
+<li><strong>Con copias instantáneas</strong>: el subsistema de discos hace una <strong>copia instantánea</strong> (1) y un segundo servidor hace el backup <strong>desde la copia</strong> (2), mientras el original sigue dando servicio.</li>
+</ul>
+<p><img src="../../../img/enco/enco-t11-sin-servidor.png" alt="Backup sin servidor|380" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t11-sin-lan.png" alt="Backup sin LAN|380" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t11-sin-lan-fs-compartido.png" alt="Backup sin LAN con sistema de ficheros compartido|380" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t11-copias-instantaneas.png" alt="Backup con copias instantáneas|380" loading="lazy"></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Es una mudanza: sin SAN, todas las cajas pasan por el salón (la LAN) y por las manos de cada inquilino (los buses y CPU de los servidores). Con SAN, el camión entra por el garaje (la red de almacenamiento) y, en el caso <em>server-free</em>, los operarios llevan las cajas del trastero al camión sin que nadie de la casa tenga que tocarlas.</p>
+</div>
+<h1>11.6 Mirroring remoto y disaster recovery</h1>
+<p><strong>Backup frente a mirroring remoto</strong>: el <strong>backup incremental</strong> es más útil que una simple copia porque <strong>conserva varias versiones</strong> de los archivos durante un tiempo; un espejo <strong>replica también las modificaciones erróneas</strong> (si borras algo por error, se borra en ambos lados).</p>
+<p>Lo ideal es <strong>combinarlos</strong>:</p>
+<ol>
+<li><strong>CPD_1</strong> envía todas las modificaciones a <strong>CPD_2</strong>.</li>
+<li>CPD_2 <strong>retiene los cambios unas horas</strong>; durante ese tiempo, CPD_1 puede <strong>anular</strong> una modificación.</li>
+<li>Pasado ese tiempo, CPD_2 <strong>consolida</strong> los cambios y está siempre listo para <strong>sustituir a CPD_1</strong> ante un desastre.</li>
+<li>Los <strong>backups se hacen en CPD_2</strong>, así que <strong>CPD_1 no carga su red ni sus servidores</strong> con backups.</li>
+</ol>
+<h1>11.7 Backup de sistemas de ficheros y NAS</h1>
+<ul>
+<li><strong>Servidores de ficheros</strong>: el backup debe incluir los <strong>archivos</strong>, su <strong>metainformación</strong> (nombre, etc.) y la <strong>metainformación del servidor</strong> (grupos, tamaño del sistema, configuración…).</li>
+<li><strong>Sistema de ficheros</strong>: operación sencilla; se puede usar el <strong>bit de archivo</strong>.</li>
+<li><strong>Servidores NAS</strong>: son <strong>sistemas cerrados</strong> con <strong>su propio cliente de backup</strong>. No es práctico sacar los datos del NAS para hacer backup, por la <strong>carga en la red</strong> y porque <strong>no es posible (o sencillo) copiar la metainformación del NAS</strong>. La solución es un <strong>backup externo</strong> con el cliente propio del NAS, que envía los datos por una LAN de backup o una red de almacenamiento hasta las cintas.</li>
+</ul>
+<p><img src="../../../img/enco/enco-t11-nas-externo.png" alt="Backup externo de un NAS|400" loading="lazy"></p>
+<h1>11.8 Backup de bases de datos</h1>
+<p>Una base de datos cambia constantemente, así que hay que elegir cómo copiarla:</p>
+<table>
+<thead>
+<tr>
+<th>Modo</th>
+<th>Cómo funciona</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>En frío</strong></td>
+<td>Se <strong>cierra la BD</strong> antes del backup</td>
+</tr>
+<tr>
+<td><strong>En caliente</strong></td>
+<td>Las transacciones pendientes <strong>no se aplican</strong>, se anotan en un <strong>log</strong>; tras el backup, la BD se actualiza con lo que hay en el log</td>
+</tr>
+<tr>
+<td><strong>Borroso</strong> (<em>fuzzy</em>)</td>
+<td>Se siguen aplicando cambios durante el backup, registrándolos en logs; la copia tendrá <strong>datos inconsistentes</strong>, que se eliminan examinando los logs</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Las dos primeras son preferibles por su simplicidad</strong>.</p>
+<p>Otra opción son las <strong>copias instantáneas</strong>: se entra en modo <strong>backup en caliente</strong> (creando logs), se hace una <strong>copia instantánea</strong> y la BD vuelve enseguida al estado normal aplicando los logs; el backup se hace después <strong>sobre la copia instantánea</strong>. Conviene que sea <strong>incremental</strong> y, en BD que acceden al disco por bloques, <strong>a nivel de bloque</strong>.</p>
+<h1>11.x Ideas clave</h1>
+<ul>
+<li>Utilidades: <strong>dump/restore</strong>, cpio/tar, <strong>dd</strong> (bajo nivel), <strong>rsync</strong> (entre sistemas, con metainformación), ditto; en Windows ntbackup → Backup and Restore, System Restore.</li>
+<li>Recuperar un servidor a mano es lento y frágil (particiones, RAID, software irrecuperable) → <strong>bare-metal</strong>: metainformación de particiones + imágenes; fichero (lento, portable) vs imagen (rápido). VMs: copiar imagen, ojo con snapshots.</li>
+<li><strong>Servidor de backup</strong>: planificador, gestor de errores, metainformación y <strong>gestor de medios</strong> (eslabón débil; cintas exigen velocidad constante → <strong>disco intermedio</strong>). Clientes por plataforma, a nivel de fichero, bloque o volumen.</li>
+<li><strong>AMANDA</strong>: dump/tar, <strong>holding disk</strong>, planificación automática equilibrada, sin formatos propietarios. <strong>Bacula</strong>: director, BD SQL, demonios de almacenamiento y ficheros, consola; formato propio, VSS, bare-metal, TLS. <strong>BackupPC</strong>: portátiles y DHCP.</li>
+<li>Sin SAN: cuellos de botella en buses y CPU; mejoras con <strong>LAN de backup</strong>, <strong>varios servidores</strong> o backup <strong>en el propio servidor</strong>. Con SAN: <strong>server-free</strong>, <strong>LAN-free</strong>, LAN-free con <strong>FS compartido</strong>, <strong>copias instantáneas</strong>.</li>
+<li><strong>Mirroring remoto + backup</strong>: CPD_2 retiene cambios unas horas, consolida y hace los backups.</li>
+<li>NAS: backup con su <strong>propio cliente</strong>. BD: <strong>frío</strong>, <strong>caliente</strong> (log), <strong>fuzzy</strong>; o <strong>copias instantáneas</strong> en modo caliente.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="10-backup.html"><span class="nav-etiqueta">← anterior</span>10. Backup</a>
+  <a class="nav-siguiente" href="12-archivado-de-la-informacion.html"><span class="nav-etiqueta">siguiente →</span>12. Archivado de la información</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

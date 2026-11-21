@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="10. Backup — apuntes de ENCO (cuarto curso de Ingeniería Informática).">
+<title>10. Backup · ENCO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enco</a><span class="miga-sep">/</span><span aria-current="page">10-backup</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENCO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENCO</a></p><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li><li><a href="7-almacenamiento-ip.html">7. Almacenamiento IP</a></li><li><a href="8-sistemas-de-ficheros-y-almacenamiento-en-red.html">8. Sistemas de ficheros y almacenamiento en red</a></li><li><a href="9-virtualizacion-del-almacenamiento.html">9. Virtualización del almacenamiento</a></li><li><span class="actual" aria-current="page">10. Backup</span></li><li><a href="11-backup-en-red-y-software-para-backup.html">11. Backup en red y software para backup</a></li><li><a href="12-archivado-de-la-informacion.html">12. Archivado de la información</a></li><li><a href="13-hardware-para-backup.html">13. Hardware para backup</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENCO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>10 / 13</div>
+    </div>
+    <h1>Backup</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENCO · 10/13</summary><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li><li><a href="7-almacenamiento-ip.html">7. Almacenamiento IP</a></li><li><a href="8-sistemas-de-ficheros-y-almacenamiento-en-red.html">8. Sistemas de ficheros y almacenamiento en red</a></li><li><a href="9-virtualizacion-del-almacenamiento.html">9. Virtualización del almacenamiento</a></li><li><span aria-current="page">10. Backup</span></li><li><a href="11-backup-en-red-y-software-para-backup.html">11. Backup en red y software para backup</a></li><li><a href="12-archivado-de-la-informacion.html">12. Archivado de la información</a></li><li><a href="13-hardware-para-backup.html">13. Hardware para backup</a></li></ol></details>
+  <div class="prosa">
+<h1>10.1 Qué es el backup y por qué hacerlo</h1>
+<p>Hacer <strong>backup</strong> es <strong>crear una copia de los datos</strong> para protegerse frente a su <strong>pérdida total o parcial</strong>. Parece sencillo, pero plantea varios retos: el <strong>medio</strong> donde guardar la copia, el <strong>tiempo</strong> que lleva, la <strong>política</strong> de backup, el <strong>backup en red</strong>, el <strong>mirroring remoto</strong> y, sobre todo, la <strong>recuperación</strong>.</p>
+<p>Motivos para hacer backup:</p>
+<ul>
+<li>Errores de <strong>usuarios</strong> y de <strong>administradores</strong>.</li>
+<li>Fallos de <strong>hardware</strong> del sistema, de los <strong>discos</strong> (conviene tener RAID, pero RAID no sustituye al backup) y del <strong>software</strong>.</li>
+<li><strong>Ataques</strong>, vandalismo y robos.</li>
+<li><strong>Desastres naturales</strong> y de otro tipo.</li>
+<li><strong>Conservar archivos durante mucho tiempo</strong>.</li>
+</ul>
+<h2>10.1.1 Prácticas parecidas</h2>
+<table>
+<thead>
+<tr>
+<th>Práctica</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Backup</strong></td>
+<td>Mantiene <strong>al menos una copia</strong> de todos los datos, con regularidad; los backups nuevos suelen sustituir a los antiguos. Busca tener la <strong>versión más reciente</strong> de los ficheros</td>
+</tr>
+<tr>
+<td><strong>Archivado</strong></td>
+<td><strong>Congela una versión</strong> de los datos en un momento dado, accesible en cualquier momento (tema 12)</td>
+</tr>
+<tr>
+<td><strong>Almacenamiento jerárquico</strong></td>
+<td>Mantiene en disco los datos <strong>muy usados</strong> y pasa a backup los <strong>poco usados</strong>, dejando en su lugar <strong>metainformación</strong> que indica dónde están</td>
+</tr>
+<tr>
+<td><strong>CVS</strong> (control de versiones)</td>
+<td>Los backups nuevos <strong>no destruyen</strong> los anteriores: se conservan varias versiones</td>
+</tr>
+</tbody>
+</table>
+<h1>10.2 Lo que puede salir mal</h1>
+<h2>10.2.1 El peor caso</h2>
+<p>Un <strong>incendio destruye todo el edificio</strong>: también la <strong>máquina de backup</strong>, la <strong>metainformación</strong> sobre cómo se hicieron los backups, los servidores de <strong>NIS, NFS, CIFS/SMB</strong> y otros servicios… y las <strong>cintas de backup</strong> si estaban allí. Por eso las copias deben guardarse <strong>también fuera</strong>.</p>
+<h2>10.2.2 Datos sin copia</h2>
+<p>La <strong>principal causa de fallo</strong> en los backups es que <strong>se pierden datos de los que nunca se hizo backup</strong>. Hay que <strong>revisar las políticas</strong> cada vez que se añaden equipos o discos y, ante <strong>cambios importantes</strong>, hacer <strong>copias totales</strong> y conservarlas. Además, <strong>un backup sin metainformación puede ser inservible</strong> (no se sabrá cómo restaurarlo).</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Caso real: &quot;Validated, My Eye&quot; (Jim Damoulakis)</p>
+<p>Una empresa de biotecnología perdió una base de datos crítica en un servidor validado por la FDA. Al ir a restaurarla descubrieron que <strong>ese servidor llevaba unos tres meses sin backup</strong>: alguien lo había sacado de la planificación y, como no había &quot;errores&quot;, nadie se dio cuenta. El problema llegó hasta el CEO.</p>
+</div>
+<h2>10.2.3 ¿Se hace el backup como se espera?</h2>
+<p>Hay que <strong>revisar los logs</strong>, porque pueden pasar cosas como quedarse <strong>sin espacio</strong> en la cinta o disco, que el software <strong>no copie</strong> ficheros por problemas con sus <strong>nombres o rutas</strong>, o que los datos <strong>no estén donde creemos</strong>.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Caso real: &quot;It Pays to Watch Your Logs&quot; (Jim &quot;Sparky&quot; Donnellan)</p>
+<p>Una aplicación de divisas guardaba parte de cada operación en la propia ruta del fichero (<code>/opt/app/opus/transactions/.../USD/CAI/GBP/BONY/ask/19970615...</code>). El <code>tar</code> de SunOS no admitía rutas de más de ~100 caracteres, y estas se pasaban por unos 9. El administrador llevaba tiempo <strong>copiando un árbol de directorios vacío, sin los ficheros del fondo</strong>. Si hubiera mirado los logs lo habría visto; no le renovaron el contrato.</p>
+</div>
+<h2>10.2.4 Probar los backups</h2>
+<p>Hay que <strong>comprobarlos intentando recuperar</strong> ficheros, sistemas de ficheros y <strong>servidores completos</strong>, y <strong>repetir las pruebas</strong> cada vez que cambie el sistema de backup. Un backup que nunca se ha restaurado es solo una esperanza.</p>
+<h2>10.2.5 Formación</h2>
+<p>Hace falta <strong>suficiente personal</strong> y <strong>bien formado</strong>: ahorrar unos miles de euros en personal o formación puede costar <strong>cientos de miles</strong> en compensaciones u oportunidades de negocio perdidas.</p>
+<h1>10.3 Organizar el backup</h1>
+<h2>10.3.1 Automatización</h2>
+<p><strong>No se puede depender de un operador humano</strong>. Se usa <strong>software automático o scripts</strong> y <strong>robotización</strong>: <strong>robots de cintas</strong> (bibliotecas que cargan y descargan cintas solas), bibliotecas ópticas (en desuso) o <strong>discos duros</strong>.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=hEWe8G0k51Y">Tape Library / Autoloader</a> — un autocargador de cintas en acción (vídeo, 1:27, enlazado en las diapositivas).
+<a href="https://www.youtube.com/watch?v=d-eWDuEo-3Q">Robots Move Data Inside NCAR's AMSTAR Digital Storage Library</a> — robots moviendo cintas en una gran biblioteca de un centro de supercomputación (vídeo, 1:29, inglés, enlazado en las diapositivas).</p>
+</div>
+<h2>10.3.2 Cuándo</h2>
+<ul>
+<li><strong>De noche</strong>: se modifican muy pocos ficheros y no se sobrecargan la red ni los clientes.</li>
+<li>En un <strong>mundo global</strong> siempre es de día en algún sitio, así que no hay &quot;noche&quot; para todos.</li>
+<li>Los backups <strong>muy grandes</strong> pueden empezar de noche y <strong>terminar de día</strong>.</li>
+</ul>
+<h2>10.3.3 Crecimiento del sistema</h2>
+<p>Al crecer pueden aparecer problemas con la <strong>red</strong>, el <strong>número de clientes</strong>, el <strong>volumen de datos</strong> que acepta el servidor de backup y el <strong>tamaño del medio</strong>.</p>
+<h2>10.3.4 Dónde guardar las copias</h2>
+<ul>
+<li><strong>Manualmente</strong>: el administrador etiqueta, cataloga y guarda las cintas o discos en lugar seguro (hay <strong>armarios ignífugos</strong>).</li>
+<li><strong>Biblioteca de cintas</strong>: almacenamiento y organización <strong>automáticos</strong>.</li>
+<li><strong>Empresas especializadas</strong> que recogen copias y las custodian fuera.</li>
+<li>Hoy se usa también <strong>la red</strong> para guardar una <strong>copia electrónica remota</strong>.</li>
+</ul>
+<h2>10.3.5 ¿Todo o solo una parte?</h2>
+<p><strong>Copiar todo</strong> aumenta los datos a guardar, el <strong>tráfico de red</strong>, la carga de discos y CPU de los clientes y el <strong>tiempo</strong>. Pero <strong>copiar solo una parte</strong> tiene inconvenientes: ahorra <strong>poco espacio</strong> comparado con un backup incremental, deja fuera ficheros útiles (como pequeños cambios en la configuración del SO) y es <strong>más difícil de administrar</strong>.</p>
+<h1>10.4 Niveles de backup</h1>
+<table>
+<thead>
+<tr>
+<th>Nivel</th>
+<th>Qué copia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0</strong></td>
+<td><strong>Backup completo</strong></td>
+</tr>
+<tr>
+<td><strong>1</strong></td>
+<td>Todo lo que ha cambiado desde el último <strong>nivel 0</strong></td>
+</tr>
+<tr>
+<td><strong>2 a 9</strong></td>
+<td>Todo lo cambiado desde el último backup de <strong>nivel inmediatamente inferior</strong></td>
+</tr>
+<tr>
+<td><strong>Incremental</strong></td>
+<td>Todo lo cambiado desde el <strong>anterior backup</strong>, sea del nivel que sea</td>
+</tr>
+</tbody>
+</table>
+<p><em>(Fuente: W. Curtis Preston, Backup &amp; Recovery.)</em></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Cómo se restaura</p>
+<p>Para recuperar el estado de un día hay que restaurar el último <strong>nivel 0</strong> y, después, <strong>el último backup de cada nivel superior</strong> posterior a él, en orden. Con niveles altos cada copia es pequeña (rápida de hacer) pero la restauración necesita más cintas; con todo a nivel 0 cada copia es enorme pero se restaura con una sola.</p>
+</div>
+<h2>10.4.1 El bit de archivo de Windows</h2>
+<p>Para facilitar el incremental, Windows (y antes MS-DOS) usa el <strong>bit de archivo</strong>: un atributo que <strong>se activa al crear o modificar</strong> un fichero. Cada backup incremental copia solo los ficheros con el bit activo y <strong>después lo desactiva</strong>.</p>
+<p>El problema es que, aunque en teoría solo la herramienta de backup debería tocarlo, <strong>cualquier aplicación puede cambiarlo</strong>, así que no es totalmente fiable; es mejor un <strong>log</strong> que registre, a petición del administrador, todos los ficheros modificados.</p>
+<p>Windows tiene además el backup <strong>diferencial</strong>: funciona como un incremental, pero <strong>no borra el bit de archivo</strong>, de modo que cada diferencial copia todo lo cambiado desde el último completo (equivale a un nivel 1).</p>
+<h1>10.5 Políticas de backup</h1>
+<p>Tres políticas típicas por semana:</p>
+<table>
+<thead>
+<tr>
+<th>Política</th>
+<th>Dom</th>
+<th>Lun</th>
+<th>Mar</th>
+<th>Mié</th>
+<th>Jue</th>
+<th>Vie</th>
+<th>Sáb</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Nivel 0 diario</strong></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><strong>Nivel 0 semanal, nivel 1 diario</strong></td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td><strong>Nivel 0 semanal, niveles progresivos</strong></td>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Política</th>
+<th>Copia diaria</th>
+<th>Restaurar el sábado necesita</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nivel 0 diario</td>
+<td>La más grande</td>
+<td>Solo la cinta del sábado</td>
+</tr>
+<tr>
+<td>0 semanal + 1 diario</td>
+<td>Crece cada día (todo desde el domingo)</td>
+<td>Domingo (0) + sábado (1): <strong>2 cintas</strong></td>
+</tr>
+<tr>
+<td>0 semanal + progresivos</td>
+<td>La más pequeña (solo lo del día)</td>
+<td>Domingo, lunes, martes… sábado: <strong>7 cintas</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>10.5.1 Sistema abuelo-padre-hijo (GFS)</h2>
+<p>El esquema <strong>GFS</strong> (<em>Grandfather-Father-Son</em>) usa <strong>3 niveles</strong>, por ejemplo: <strong>nivel 0 cada mes (abuelo)</strong>, <strong>nivel 1 cada semana (padre)</strong> y <strong>backups diarios (hijo)</strong>. Las cintas diarias (A–F, de domingo a viernes) se <strong>reutilizan cada semana</strong>; las de los sábados son padres o abuelos. Hay varias formas de implementarlo:</p>
+<p><img src="../../../img/enco/enco-t10-gfs-1.png" alt="GFS con padres reutilizados|600" loading="lazy">
+<em>Variante 1: los padres G, H, I se reutilizan en rotación y el último sábado del mes se usa una cinta abuelo (J, luego K), que se guarda.</em></p>
+<p><img src="../../../img/enco/enco-t10-gfs-2.png" alt="GFS con padres nuevos|600" loading="lazy">
+<em>Variante 2: cada mes usa padres nuevos (G, H, I y luego K, L, M) y abuelos nuevos (J, N).</em></p>
+<p><img src="../../../img/enco/enco-t10-gfs-promocion.png" alt="GFS con promoción de cintas|600" loading="lazy">
+<em>Promoción de cintas: las cintas van subiendo de categoría. La diaria A pasa a ser padre (sustituida por K), el padre I pasa a abuelo, y la cinta abuelo H vuelve a usarse cuando expira. Así ninguna cinta se gasta mucho más que las demás.</em></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Como las fotos del móvil: las de esta semana las tienes todas (hijos), de los meses anteriores guardas una por semana (padres) y de años anteriores una por mes (abuelos). Cuanto más atrás, menos detalle, pero nunca te quedas sin nada.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://en.wikipedia.org/wiki/Backup_rotation_scheme">Backup rotation scheme — Wikipedia</a> — GFS y otros esquemas de rotación de cintas (artículo, inglés).</p>
+</div>
+<h1>10.6 Buenas prácticas</h1>
+<ul>
+<li>Hacer backup <strong>no solo de los datos, también de la metainformación</strong>.</li>
+<li>Saber <strong>de qué dispositivos</strong> se hace backup, <strong>cómo están particionados</strong> y cómo están configurados los <strong>gestores de volúmenes</strong> (puntos de montaje, RAID…).</li>
+<li><strong>Documentar y salvar los ficheros de configuración</strong> (DHCP, NFS, CIFS/SMB, NIS…).</li>
+<li><strong>Conocer todos los detalles</strong> de los sistemas con que se trabaja.</li>
+</ul>
+<h1>10.x Ideas clave</h1>
+<ul>
+<li>Backup = copia para protegerse de pérdidas (errores humanos, fallos de HW/SW, ataques, desastres). Retos: medio, tiempo, política, red, recuperación.</li>
+<li>Distinto de <strong>archivado</strong> (congelar versión), <strong>almacenamiento jerárquico</strong> (lo poco usado a backup) y <strong>CVS</strong> (varias versiones).</li>
+<li>Peor caso: <strong>incendio</strong> que destruye todo, cintas incluidas → copias fuera.</li>
+<li>Fallos típicos: datos <strong>nunca incluidos</strong> en el backup, <strong>no mirar los logs</strong>, <strong>no probar la restauración</strong>, sin metainformación, poco personal.</li>
+<li><strong>Automatizar</strong> (scripts, robots de cintas), de <strong>noche</strong>, prever el crecimiento, guardar fuera (armarios ignífugos, empresas, red).</li>
+<li><strong>Niveles</strong>: 0 completo; n copia lo cambiado desde el último de nivel inferior; <strong>incremental</strong> desde el último backup. <strong>Bit de archivo</strong> (poco fiable) y <strong>diferencial</strong> (no borra el bit).</li>
+<li>Políticas: 0 diario, 0 semanal + 1 diario, 0 semanal + progresivos (copias pequeñas, restauración larga). <strong>GFS</strong>: abuelo mensual, padre semanal, hijo diario; con o sin <strong>promoción de cintas</strong>.</li>
+<li>Guardar también <strong>metainformación y configuración</strong>.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="9-virtualizacion-del-almacenamiento.html"><span class="nav-etiqueta">← anterior</span>9. Virtualización del almacenamiento</a>
+  <a class="nav-siguiente" href="11-backup-en-red-y-software-para-backup.html"><span class="nav-etiqueta">siguiente →</span>11. Backup en red y software para backup</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="9. Virtualización del almacenamiento — apuntes de ENCO (cuarto curso de Ingeniería Informática).">
+<title>9. Virtualización del almacenamiento · ENCO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enco</a><span class="miga-sep">/</span><span aria-current="page">9-virtualizacion-del-almacenamiento</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENCO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENCO</a></p><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li><li><a href="7-almacenamiento-ip.html">7. Almacenamiento IP</a></li><li><a href="8-sistemas-de-ficheros-y-almacenamiento-en-red.html">8. Sistemas de ficheros y almacenamiento en red</a></li><li><span class="actual" aria-current="page">9. Virtualización del almacenamiento</span></li><li><a href="10-backup.html">10. Backup</a></li><li><a href="11-backup-en-red-y-software-para-backup.html">11. Backup en red y software para backup</a></li><li><a href="12-archivado-de-la-informacion.html">12. Archivado de la información</a></li><li><a href="13-hardware-para-backup.html">13. Hardware para backup</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENCO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>9 / 13</div>
+    </div>
+    <h1>Virtualización del almacenamiento</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENCO · 9/13</summary><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li><li><a href="7-almacenamiento-ip.html">7. Almacenamiento IP</a></li><li><a href="8-sistemas-de-ficheros-y-almacenamiento-en-red.html">8. Sistemas de ficheros y almacenamiento en red</a></li><li><span aria-current="page">9. Virtualización del almacenamiento</span></li><li><a href="10-backup.html">10. Backup</a></li><li><a href="11-backup-en-red-y-software-para-backup.html">11. Backup en red y software para backup</a></li><li><a href="12-archivado-de-la-informacion.html">12. Archivado de la información</a></li><li><a href="13-hardware-para-backup.html">13. Hardware para backup</a></li></ol></details>
+  <div class="prosa">
+<h1>9.1 Qué es la virtualización del almacenamiento</h1>
+<p>La <strong>virtualización del almacenamiento</strong> es <strong>separar la implementación física</strong> de los dispositivos de almacenamiento de su <strong>representación lógica</strong>, que es lo que ven y usan los sistemas operativos, las aplicaciones y los usuarios. Los servidores trabajan con <strong>dispositivos virtuales</strong> (discos, cintas) y una capa intermedia los traduce a los <strong>dispositivos físicos</strong> reales.</p>
+<p><img src="../../../img/enco/enco-t9-definicion.png" alt="Dispositivos virtuales sobre físicos|350" loading="lazy"></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Es como la memoria virtual de un SO: cada programa cree tener un espacio de direcciones propio y continuo, pero el SO lo reparte por trozos de RAM física (e incluso de disco) sin que el programa se entere.</p>
+</div>
+<p>En el esquema general, funciones que hasta ahora estaban repartidas (el sistema de ficheros y el gestor de volúmenes en cada servidor, la &quot;inteligencia&quot; y el RAID en cada subsistema de discos) pasan a una <strong>entidad de virtualización</strong> central en la red, que sirve a todos los servidores y dispositivos (discos y bibliotecas de cintas).</p>
+<p><img src="../../../img/enco/enco-t9-esquema.png" alt="Esquema de virtualización del almacenamiento|350" loading="lazy"></p>
+<h1>9.2 Dónde se implementa</h1>
+<p>La virtualización puede hacerse en cualquier punto del camino entre la aplicación y el disco: en el <strong>gestor de volúmenes</strong> (software del servidor), en el <strong>HBA</strong>, en la <strong>red de almacenamiento</strong> o en el <strong>subsistema de discos</strong>.</p>
+<p><img src="../../../img/enco/enco-t9-donde.png" alt="Puntos donde se puede virtualizar|500" loading="lazy"></p>
+<table>
+<thead>
+<tr>
+<th>Dónde</th>
+<th>Ventajas</th>
+<th>Desventajas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Subsistema de disco</strong></td>
+<td><strong>No carga la red</strong>: las funciones (RAID…) se hacen donde están los datos</td>
+<td>Requiere <strong>hardware específico</strong>: el controlador del subsistema</td>
+</tr>
+<tr>
+<td><strong>Red de almacenamiento</strong></td>
+<td>Gestión <strong>más eficiente de todos los recursos</strong></td>
+<td>Requiere hardware y/o software específicos: la <strong>entidad de virtualización</strong> en la red</td>
+</tr>
+<tr>
+<td><strong>HBA</strong></td>
+<td><strong>No carga la CPU</strong></td>
+<td><strong>Carga los buses de E/S</strong></td>
+</tr>
+<tr>
+<td><strong>Gestor de volúmenes</strong></td>
+<td>Más rendimiento por <strong>redundancia de buses</strong>; más fiabilidad</td>
+<td><strong>Carga los buses y la CPU</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Lo que cambia en cada caso es <strong>dónde se duplica</strong> un bloque A que se escribe en espejo:</p>
+<ul>
+<li><strong>En el subsistema de discos</strong>: el servidor envía <strong>A una sola vez</strong> y el subsistema lo duplica internamente.</li>
+<li><strong>En la red</strong>: A viaja una vez hasta la red y un elemento de esta lo copia hacia los dos discos.</li>
+<li><strong>En el HBA</strong>: A cruza una vez los buses del servidor y el HBA lo envía a los dos destinos.</li>
+<li><strong>En el gestor de volúmenes</strong>: el servidor envía <strong>A dos veces</strong> desde el principio, por todos los buses.</li>
+</ul>
+<p><img src="../../../img/enco/enco-t9-en-subsistema.png" alt="En el subsistema de discos|420" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t9-en-red.png" alt="En la red de almacenamiento|420" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t9-en-hba.png" alt="En el HBA|420" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t9-en-gestor.png" alt="En el gestor de volúmenes|420" loading="lazy"></p>
+<h2>9.2.1 Mirroring y striping en el gestor de volúmenes</h2>
+<ul>
+<li><strong>Mirroring (RAID 1)</strong> en el gestor de volúmenes: es el gestor quien envía los datos <strong>por duplicado</strong> a través de buses, adaptadores, HBA y conexiones hasta los dispositivos. Es <strong>sencillo</strong>, pero <strong>la carga de buses y redes se duplica</strong>.</li>
+<li><strong>Striping (RAID 0)</strong> en el gestor de volúmenes: <strong>la mitad de los datos va a un subsistema de discos y la otra mitad a otro</strong> (A y C a uno; B y D al otro). Así se <strong>balancea la carga</strong> de los HBA, de la red y de los subsistemas, con un pequeño aumento de carga en el servidor.</li>
+</ul>
+<p><img src="../../../img/enco/enco-t9-mirroring.png" alt="Mirroring en el gestor de volúmenes|420" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t9-striping.png" alt="Striping en el gestor de volúmenes|420" loading="lazy"></p>
+<h1>9.3 Por qué virtualizar: limitaciones de las redes sin virtualizar</h1>
+<p>Sin virtualización, una red de almacenamiento tiene tres tipos de limitaciones:</p>
+<ul>
+<li><strong>Por su arquitectura</strong>: hay una <strong>conexión directa servidor–dispositivo</strong>, así que cualquier cambio en la red hay que <strong>trasladarlo también a los servidores</strong>, y <strong>no se puede compartir espacio de disco</strong> (el servidor B no puede usar el espacio libre del A aunque esté en el mismo subsistema).</li>
+<li><strong>Por su implementación</strong>: <strong>incompatibilidad entre dispositivos distintos</strong> (cada servidor necesita el driver de cada tipo de subsistema; en la práctica, <strong>una red = un fabricante</strong>), y no es fácil combinar dispositivos de gama alta con otros de gama media/baja.</li>
+<li><strong>Por los requisitos de los datos</strong>: cuesta distinguir datos <strong>importantes</strong> de los que no, y datos que <strong>cambian a menudo</strong> de los que no (para darles el almacenamiento adecuado).</li>
+</ul>
+<p><img src="../../../img/enco/enco-t9-limitaciones.png" alt="Limitaciones sin virtualizar|550" loading="lazy">
+<em>Izquierda: el servidor A no puede usar el espacio libre del B (STOP). Derecha: el servidor con el driver A no puede usar el subsistema tipo B.</em></p>
+<p>La virtualización permite:</p>
+<ul>
+<li><strong>Simplificar la administración</strong>.</li>
+<li><strong>Aprovechar del todo la red de almacenamiento</strong>: uso eficiente de los recursos y mejor rendimiento, protección y disponibilidad.</li>
+<li><strong>Funciones avanzadas</strong>: backup y archivado, <strong>migración de datos</strong> y control de acceso al compartir datos.</li>
+</ul>
+<h1>9.4 Requisitos de una buena implementación</h1>
+<ul>
+<li><strong>Entidad de virtualización</strong>: <strong>redundante</strong>, administrable desde una <strong>consola centralizada</strong> y <strong>compatible con almacenamiento no virtualizado</strong>.</li>
+<li><strong>Reemplazo de dispositivos en caliente</strong> sin perder datos.</li>
+<li><strong>Asignación dinámica</strong>: aumentar o reducir sobre la marcha el espacio asignado.</li>
+<li><strong>Migración de datos</strong>: mover los datos según perfiles de uso y la velocidad de acceso necesaria.</li>
+<li><strong>Más rendimiento</strong> mediante cachés, striping y mirroring.</li>
+<li><strong>Disponibilidad por redundancia</strong>: en los dispositivos (RAID) y en las conexiones.</li>
+<li><strong>Backup y archivado</strong> en red basados en reglas.</li>
+<li><strong>Compartición de datos</strong>: gestionar sistemas de ficheros desde la propia entidad de virtualización.</li>
+<li><strong>Privacidad</strong>: gestión de derechos de acceso y permisos.</li>
+</ul>
+<h1>9.5 Virtualización a nivel de bloques y de ficheros</h1>
+<ul>
+<li><strong>A nivel de bloques</strong>: la entidad de virtualización ofrece al servidor un <strong>disco virtual</strong> formado por bloques que en realidad están repartidos en varios discos físicos (bloques 1 y 2 en uno, 3 y 4 en otro). El <strong>sistema de ficheros sigue en el servidor</strong>, que lee y escribe bloques (como una SAN).</li>
+<li><strong>A nivel de ficheros</strong>: la entidad de virtualización incluye además el <strong>sistema de ficheros</strong>, así que el servidor pide <strong>ficheros</strong> (como un NAS).</li>
+</ul>
+<p><img src="../../../img/enco/enco-t9-bloques.png" alt="Virtualización por bloques|300" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t9-ficheros.png" alt="Virtualización por ficheros|300" loading="lazy"></p>
+<h1>9.6 Virtualización en el servidor, en los dispositivos o en la red</h1>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>En el servidor</th>
+<th>En los dispositivos</th>
+<th>En la red</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ventajas</strong></td>
+<td>Técnicas <strong>conocidas y probadas</strong>; puede integrar varios sistemas de almacenamiento; <strong>no requiere hardware</strong> (menos coste y menos fallos)</td>
+<td>Solo hay que administrar los subsistemas o NAS; <strong>no carga los buses de E/S</strong> con RAID o snapshots; se desacopla de los servidores (heterogeneidad); <strong>no carga los servidores</strong></td>
+<td><strong>Multifabricante</strong>; servidores con <strong>distintos SO</strong>; da mirroring, copias, etc. <strong>incluso con dispositivos básicos</strong>; <strong>administración centralizada</strong> de toda la red; no carga servidores ni dispositivos</td>
+</tr>
+<tr>
+<td><strong>Inconvenientes</strong></td>
+<td>Hay que <strong>administrar cada servidor por separado</strong>; <strong>más carga</strong> en el servidor; posibles incompatibilidades con aplicaciones; limitada a lo accesible desde ese servidor y a <strong>servidores individuales</strong> (salvo clústeres)</td>
+<td><strong>Dependiente del fabricante</strong> (incompatibilidades importantes); limitada a <strong>sistemas de almacenamiento individuales</strong></td>
+<td>Necesita <strong>hardware y software especializado</strong>; la entidad de virtualización puede ser <strong>un cuello de botella</strong>; tecnología <strong>nueva</strong>, sobre todo a nivel de fichero</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://en.wikipedia.org/wiki/Storage_virtualization">Storage virtualization — Wikipedia</a> — virtualización basada en host, en dispositivo y en red, con sus pros y contras (artículo, inglés).</p>
+</div>
+<h2>9.6.1 Productos de ejemplo</h2>
+<ul>
+<li><strong>Coraid EtherDrive VSX Storage Virtualizer</strong>: centraliza y agiliza la gestión de <strong>volúmenes lógicos (LVM)</strong>, los <strong>snapshots/snapclones</strong> y la <strong>replicación remota</strong>.</li>
+<li><strong>IBM SAN Volume Controller (SVC)</strong>: orientado a <strong>Fibre Channel</strong>, con <strong>módulos enrackables en clúster</strong>; virtualiza muchos aspectos de la red: <strong>LUN virtuales</strong>, <strong>mirroring local y remoto</strong>, <strong>snapshots</strong>…</li>
+</ul>
+<p><img src="../../../img/enco/enco-t9-ibm-svc.jpeg" alt="IBM SAN Volume Controller|300" loading="lazy"></p>
+<h1>9.x Ideas clave</h1>
+<ul>
+<li>Virtualizar = <strong>separar lo físico de la representación lógica</strong> que ven SO, aplicaciones y usuarios.</li>
+<li>Dónde: <strong>subsistema</strong> (no carga la red, HW específico), <strong>red</strong> (gestión global, necesita entidad de virtualización), <strong>HBA</strong> (no carga CPU, sí buses), <strong>gestor de volúmenes</strong> (carga buses y CPU).</li>
+<li><strong>Mirroring en el gestor</strong> duplica la carga de buses y red; <strong>striping en el gestor</strong> reparte la carga entre HBA, red y subsistemas.</li>
+<li>Sin virtualizar: conexión directa servidor–dispositivo, <strong>no se comparte espacio</strong>, <strong>un fabricante por red</strong>, no se diferencian datos por importancia o cambio.</li>
+<li>Requisitos: entidad redundante y centralizada, cambio en caliente, <strong>asignación dinámica</strong>, <strong>migración</strong>, rendimiento (caché, striping, mirroring), redundancia, backup por reglas, permisos.</li>
+<li><strong>Bloques</strong> (disco virtual, sistema de ficheros en el servidor) vs <strong>ficheros</strong> (sistema de ficheros en la entidad de virtualización).</li>
+<li><strong>Servidor</strong> (barato, pero por servidor), <strong>dispositivos</strong> (sin carga, pero atado al fabricante), <strong>red</strong> (multifabricante y centralizada, pero HW especializado y posible cuello de botella). Ejemplos: Coraid VSX, <strong>IBM SVC</strong>.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="8-sistemas-de-ficheros-y-almacenamiento-en-red.html"><span class="nav-etiqueta">← anterior</span>8. Sistemas de ficheros y almacenamiento en red</a>
+  <a class="nav-siguiente" href="10-backup.html"><span class="nav-etiqueta">siguiente →</span>10. Backup</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

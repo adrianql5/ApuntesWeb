@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="4. Orquestación de contenedores — apuntes de COMPNU (cuarto curso de Ingeniería Informática).">
+<title>4. Orquestación de contenedores · COMPNU · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">compnu</a><span class="miga-sep">/</span><span aria-current="page">4-orquestacion-de-contenedores</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de COMPNU"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">COMPNU</a></p><ol><li><a href="1-introduccion-a-la-computacion-en-la-nube.html">1. Introducción a la computación en la nube</a></li><li><a href="2-mecanismos-de-virtualizacion.html">2. Mecanismos de virtualización</a></li><li><a href="3-aplicaciones-y-servicios-en-la-nube.html">3. Aplicaciones y servicios en la nube</a></li><li><span class="actual" aria-current="page">4. Orquestación de contenedores</span></li><li><a href="5-microservicios.html">5. Microservicios</a></li><li><a href="6-serverless.html">6. Serverless</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>COMPNU</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>4 / 6</div>
+    </div>
+    <h1>Orquestación de contenedores</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de COMPNU · 4/6</summary><ol><li><a href="1-introduccion-a-la-computacion-en-la-nube.html">1. Introducción a la computación en la nube</a></li><li><a href="2-mecanismos-de-virtualizacion.html">2. Mecanismos de virtualización</a></li><li><a href="3-aplicaciones-y-servicios-en-la-nube.html">3. Aplicaciones y servicios en la nube</a></li><li><span aria-current="page">4. Orquestación de contenedores</span></li><li><a href="5-microservicios.html">5. Microservicios</a></li><li><a href="6-serverless.html">6. Serverless</a></li></ol></details>
+  <div class="prosa">
+<h1>4.1 Motivación: por qué hace falta orquestar</h1>
+<p>Imagina una aplicación web sencilla con <strong>tres componentes</strong>: un servidor web (<strong>nginx</strong>), una aplicación Java (<strong>Spring</strong>) y una base de datos (<strong>MongoDB</strong>). Cada uno corre en su <strong>propio contenedor</strong>, construido con su Dockerfile (<code>FROM nginx</code>, <code>FROM eclipse-temurin:21</code> + <code>app.jar</code>, <code>FROM mongo:8.0</code>). La arquitectura son 3 &quot;máquinas&quot;.</p>
+<p>Ahora la aplicación triunfa y los usuarios se disparan: hay que <strong>escalar</strong> las instancias de Spring para atender más usuarios concurrentes.</p>
+<p><img src="../../../img/compnu/compnu-t4-escalar-app.png" alt="Escalar la aplicación|500" loading="lazy"></p>
+<p>Al tiempo, la base de datos se satura y también hay que escalarla: ahora cada instancia de Spring habla con varias réplicas de MongoDB.</p>
+<p><img src="../../../img/compnu/compnu-t4-escalar-bd.png" alt="Escalar la base de datos|500" loading="lazy"></p>
+<p>Además, los contenedores de MongoDB son los &quot;dueños&quot; de los datos; si hay que recrear un contenedor se perderían, así que conviene <strong>persistirlos fuera del contenedor</strong>.</p>
+<p><img src="../../../img/compnu/compnu-t4-persistencia.png" alt="Persistencia externa|500" loading="lazy"></p>
+<p>¿Y si además se quiere desplegar en <strong>varios servidores físicos</strong> o en <strong>varias regiones</strong> (NA, APAC, EUW)? A medida que crecen las funcionalidades, la gestión se complica <strong>exponencialmente</strong>.</p>
+<p><img src="../../../img/compnu/compnu-t4-multirregion.png" alt="Despliegue multirregión|600" loading="lazy"></p>
+<p>La cadena es: <strong>muchos contenedores → muchas máquinas → mucho código → alto potencial de fallo</strong>. Y surgen preguntas difíciles de resolver a mano: ¿cuántos contenedores por servicio y por nodo?, ¿dónde coloco cada uno?, ¿cómo sé su estado?, ¿cómo sustituyo los que fallan?, ¿cómo actualizo versiones en marcha?, ¿cómo controlo a qué recursos accede cada servicio? La respuesta es la <strong>orquestación de contenedores</strong>.</p>
+<p>Hay un segundo motivo: el <strong>desperdicio de recursos</strong>. Muchos entornos permiten reservar recursos mínimos por servicio, pero en la práctica <strong>más del 65 % de los contenedores usan menos del 50 % de la CPU</strong> solicitada, y lo mismo ocurre con la <strong>memoria</strong> (más del 65 % usa menos de la mitad de la reservada). Un orquestador puede repartir mejor esa capacidad ociosa.</p>
+<p><img src="../../../img/compnu/compnu-t4-uso-cpu.jpeg" alt="Uso de CPU solicitada (Datadog)|500" loading="lazy">
+<em>La mayoría de contenedores está en la primera barra: usa menos del 25 % de la CPU que reservó.</em></p>
+<h1>4.2 Qué es y cómo funciona la orquestación</h1>
+<p>La <strong>orquestación</strong> gestiona el <strong>ciclo de vida de los contenedores</strong>, sobre todo en entornos grandes y dinámicos. Sus tareas, con la propiedad que aportan:</p>
+<ul>
+<li><strong>Aprovisionamiento y despliegue</strong> (configuración).</li>
+<li><strong>Redundancia y disponibilidad</strong> (tolerancia a fallos).</li>
+<li><strong>Distribución uniforme de la carga</strong> en la infraestructura (autoescalado).</li>
+<li><strong>Mover contenedores</strong> si falla su host (tolerancia a fallos).</li>
+<li><strong>Repartir la carga entre contenedores</strong> (balanceo de carga).</li>
+<li><strong>Exponer los servicios al exterior</strong> (descubrimiento).</li>
+<li><strong>Monitorizar la salud</strong> de contenedores y hosts (observabilidad).</li>
+</ul>
+<p>Para funcionar, el orquestador usa <strong>uno o varios ficheros de configuración</strong> (normalmente <strong>YAML o JSON</strong>) que indican, entre otras cosas: el <strong>repositorio</strong> de donde sacar las imágenes, las <strong>redes</strong> para que los nodos se comuniquen, los <strong>volúmenes</strong> y cómo montarlos, y dónde guardar los <strong>logs</strong> de cada contenedor. Estos ficheros se <strong>versionan y bifurcan</strong> para desplegar en distintos entornos (desarrollo, pruebas, producción).</p>
+<p>Los contenedores se despliegan en <strong>hosts</strong>, normalmente en <strong>grupos replicados</strong>. Cuando toca desplegar uno nuevo, el orquestador <strong>busca el host más adecuado</strong> del clúster según las restricciones del servicio (RAM, CPU o disco disponibles, etiquetas o metadatos, proximidad a otros hosts…). Una vez colocado, el orquestador <strong>gestiona su ciclo de vida</strong> según la configuración.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>El orquestador es el director de una orquesta: no toca ningún instrumento (no ejecuta tu código), pero decide cuántos violines hacen falta, dónde se sienta cada uno y sustituye al que se pone enfermo sin que el público lo note.</p>
+</div>
+<h2>4.2.1 Estado actual</h2>
+<p>Cuanto más grandes y complejos los entornos, más imprescindible es orquestar: en <strong>2020 casi el 90 % de los contenedores</strong> corrían en entornos orquestados, y <strong>Kubernetes</strong> se usaba en <strong>más del 50 %</strong> de los entornos.</p>
+<p><img src="../../../img/compnu/compnu-t4-uso-orquestacion.jpeg" alt="Cuota de Kubernetes entre organizaciones con contenedores|450" loading="lazy"></p>
+<h1>4.3 Principales alternativas</h1>
+<h2>4.3.1 Kubernetes (K8s)</h2>
+<p>Es el <strong>estándar absoluto de la industria</strong> y una plataforma de orquestación completa. Lo diseñó <strong>Google</strong> y hoy está bajo la <strong>Cloud Native Computing Foundation (CNCF)</strong>, con licencia <strong>Apache 2.0</strong> y una de las comunidades más activas de GitHub. Sus características:</p>
+<ul>
+<li>Configuración con un <strong>modelo declarativo</strong> muy robusto (describes el estado deseado, no los pasos).</li>
+<li><strong>Autorreparación</strong>: reinicia servicios que fallan y recoloca los de nodos caídos.</li>
+<li><strong>Autoescalado horizontal</strong> (crear/eliminar instancias) y <strong>vertical</strong> (más/menos recursos por instancia).</li>
+<li><strong>Descubrimiento y balanceo de carga</strong> integrados.</li>
+<li>Gestión de <strong>configuración y secretos</strong>.</li>
+<li><strong>Ecosistema</strong> de aplicaciones masivo.</li>
+</ul>
+<p><strong>Fortalezas</strong>: potencia y flexibilidad inigualables, la mayor comunidad y apoyo de la industria, independiente de la infraestructura. <strong>Debilidades</strong>: <strong>complejidad y curva de aprendizaje</strong> elevadas y <strong>mayor consumo de recursos</strong>.</p>
+<h2>4.3.2 Docker Swarm</h2>
+<p>Es la orquestación <strong>nativa de Docker</strong>, integrada en el motor y en la CLI: la opción <strong>más sencilla y accesible</strong>. Docker lo creó la empresa DotCloud en <strong>2013</strong> (luego renombrada Docker, Inc.); desde <strong>2019</strong> la división empresarial pertenece a <strong>Mirantis</strong> y las herramientas de desarrollo siguen en Docker, Inc. El motor es open source (Apache 2.0). Características:</p>
+<ul>
+<li><strong>Integración nativa</strong>: mismos comandos y ficheros que <strong>Docker Compose</strong>.</li>
+<li><strong>Configuración simple</strong>: crear un clúster son <strong>dos comandos</strong>.</li>
+<li><strong>Balanceador de carga interno</strong> fácil de usar.</li>
+<li><strong>Descubrimiento de servicios</strong> automático dentro del clúster.</li>
+</ul>
+<p><strong>Fortalezas</strong>: facilidad de uso extrema, <strong>ligereza</strong> (pocos recursos), ideal para proyectos pequeños donde prima la sencillez. <strong>Debilidades</strong>: funcionalidades <strong>limitadas</strong>, ecosistema y comunidad pequeños (la industria se ha consolidado en torno a Kubernetes) y <strong>futuro incierto</strong>.</p>
+<h2>4.3.3 Apache Mesos + Marathon</h2>
+<p>Solución de nivel industrial que combina <strong>Apache Mesos</strong>, que gestiona los recursos del clúster a muy bajo nivel, con <strong>Marathon</strong>, que orquesta los contenedores. Pensado para <strong>escala masiva</strong> y cargas de trabajo <strong>muy diversas</strong> (no solo contenedores). Licencia Apache 2.0; comunidad madura pero <strong>en declive</strong>, gestionada por la Apache Software Foundation. Características:</p>
+<ul>
+<li><strong>Arquitectura de dos niveles</strong>: Mesos gestiona los recursos y Marathon los consume para ejecutar contenedores.</li>
+<li><strong>Escalabilidad extrema</strong>: probado en clústeres de <strong>decenas de miles de nodos</strong> (Apple, Twitter).</li>
+<li><strong>Cargas mixtas</strong>: contenedores junto a aplicaciones de <strong>Big Data</strong> en el mismo clúster, compartiendo recursos.</li>
+<li><strong>Alta disponibilidad y tolerancia a fallos</strong> desde el diseño.</li>
+</ul>
+<p><strong>Fortalezas</strong>: la más capaz para entornos enormes, insuperable para unificar cargas heterogéneas, <strong>control granular</strong> de la asignación de recursos. <strong>Debilidades</strong>: gestión <strong>muy compleja</strong> (varios componentes que coordinar), comunidad en declive y sin la experiencia integrada de Kubernetes.</p>
+<h2>4.3.4 Comparativa y cuál elegir</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Kubernetes</th>
+<th>Docker Swarm</th>
+<th>Marathon (sobre Mesos)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Complejidad</td>
+<td>Alta</td>
+<td>Baja</td>
+<td>Muy alta</td>
+</tr>
+<tr>
+<td>Ideal para</td>
+<td>Aplicaciones complejas, multinube, estándar de la industria</td>
+<td>Desarrollos sencillos, prototipado rápido, equipos pequeños</td>
+<td>Escala masiva, cargas mixtas (Big Data + contenedores)</td>
+</tr>
+<tr>
+<td>Escalabilidad</td>
+<td>Muy alta</td>
+<td>Alta</td>
+<td>Extrema</td>
+</tr>
+<tr>
+<td>Comunidad</td>
+<td>Enorme y creciendo</td>
+<td>Moderada y estancada</td>
+<td>Madura (en declive para contenedores)</td>
+</tr>
+<tr>
+<td>Ecosistema</td>
+<td>Inmenso</td>
+<td>Limitado</td>
+<td>Limitado</td>
+</tr>
+<tr>
+<td>Flexibilidad</td>
+<td>Muy alta</td>
+<td>Baja</td>
+<td>Muy alta</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>Declarativa (YAML complejos)</td>
+<td>Declarativa (docker-compose)</td>
+<td>API REST / UI</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Kubernetes en el 90 % de los casos</strong>: es el estándar, el más apoyado y la apuesta más segura.</li>
+<li><strong>Docker Swarm</strong> si la prioridad absoluta es la <strong>sencillez</strong>, no necesitas funciones avanzadas y quieres algo funcionando en minutos.</li>
+<li><strong>Marathon + Mesos</strong> solo ante <strong>escala extrema</strong> (decenas de miles de nodos) o para compartir un clúster entre contenedores y aplicaciones pesadas como <strong>Spark o Hadoop</strong>. Para la mayoría está sobredimensionado.</li>
+</ul>
+<h1>4.4 Docker Swarm</h1>
+<p>Swarm (&quot;enjambre&quot;) está <strong>integrado en el motor de Docker</strong> y basado en Docker Compose; se maneja con el cliente estándar de Docker. Su función principal es gestionar un <strong>clúster de varios hosts Docker como si fuesen uno solo</strong>. Los servicios se definen en un <strong>YAML con la misma sintaxis que Docker Compose</strong>, así que una configuración local se reutiliza tal cual en un clúster distribuido.</p>
+<h2>4.4.1 Arquitectura</h2>
+<p>Es una arquitectura <strong>manager-worker</strong>:</p>
+<ul>
+<li><strong>Managers</strong>: mantienen el <strong>estado del clúster</strong>, deciden dónde desplegar cada contenedor y gestionan el escalado y la calidad de servicio. Si un nodo entra en mantenimiento, recrean sus tareas en otro y redistribuyen la carga; gestionan recursos (nombres DNS, IPs, contenedores, servicios), balancean los contenedores entre workers y notifican el estado de los servicios.</li>
+<li><strong>Workers</strong>: <strong>ejecutan las tareas</strong> que les asigna el líder.</li>
+</ul>
+<p>Un clúster tiene <strong>al menos un manager</strong> y tantos workers como se quiera; un manager puede hacer también de worker. Si hay varios managers, uno es el <strong>líder</strong> (elegido automáticamente) y toma todas las decisiones; el resto son <strong>seguidores</strong> (<em>followers</em>), réplicas pasivas listas para tomar el control si el líder cae. En producción se recomiendan <strong>al menos 3 managers</strong>.</p>
+<p><img src="../../../img/compnu/compnu-t4-swarm-arquitectura.png" alt="Arquitectura de Docker Swarm|500" loading="lazy"></p>
+<h2>4.4.2 Crear el enjambre y añadir nodos</h2>
+<p>Basta un comando en el host que será manager (<code>docker swarm init</code>); Docker responde con el comando que deben ejecutar los workers para unirse (<code>docker swarm join --token …</code>). Al hacer <code>init</code> ocurre lo siguiente:</p>
+<ol>
+<li>El motor pasa a <strong>modo Swarm</strong>.</li>
+<li>Se crea una <strong>Autoridad de Certificación raíz (CA)</strong> del clúster, que firmará los certificados de todos los nodos futuros: así <strong>toda la comunicación entre nodos va cifrada</strong>.</li>
+<li>Se inicializa la <strong>base de datos Raft</strong>, distribuida, que guarda el estado del clúster (de momento con un solo miembro).</li>
+<li>El nodo se <strong>autoproclama líder</strong> (es el único); los futuros managers serán followers.</li>
+<li>Se crean dos <strong>redes por defecto</strong>: <strong><code>ingress</code></strong> (para el balanceador de carga integrado) y <strong><code>docker_gwbridge</code></strong> (para que los contenedores salgan al exterior).</li>
+<li>Se generan y guardan dos <strong>tokens secretos</strong>: <strong>worker token</strong> y <strong>manager token</strong> (con más privilegios).</li>
+</ol>
+<p><strong>Añadir un worker</strong>: se ejecuta el comando de <code>join</code> (si se ha perdido el token, se recupera desde un manager con <code>docker swarm join-token worker</code>). Pasos:</p>
+<ol>
+<li>El worker contacta con el manager usando el <strong>token de worker</strong>.</li>
+<li>El líder valida el token y genera un <strong>certificado de identidad</strong> exclusivo para ese nodo con la CA raíz.</li>
+<li>El líder registra al worker en la BD y lo marca disponible.</li>
+<li>El worker instala su certificado; desde ahí <strong>toda la comunicación usa el certificado</strong> y el token se descarta.</li>
+<li>El motor del worker pasa a modo Swarm.</li>
+<li>Se abre una <strong>conexión segura y persistente</strong> con el líder; el worker envía un <strong>heartbeat</strong> y el líder lo marca como listo.</li>
+</ol>
+<p><strong>Añadir un manager</strong> es igual pero con el <strong>token de manager</strong> (<code>docker swarm join-token manager</code>), y con dos pasos extra al final: el nuevo manager <strong>replica la BD completa</strong> del enjambre desde los managers existentes y se <strong>sincroniza en tiempo real</strong> con el líder antes de marcarse listo.</p>
+<p>Para abandonar el enjambre: <code>docker swarm leave</code>. Si se va <strong>el último manager</strong>, el enjambre se destruye, por eso hay que añadir <code>--force</code>.</p>
+<h2>4.4.3 Gestión de nodos</h2>
+<p>Desde cualquier manager, <code>docker node ls</code> muestra los nodos y <code>docker node inspect &lt;nodo&gt; --pretty</code> sus detalles (estado, rol, dirección, CPU, memoria, plugins…). Dos columnas importantes:</p>
+<table>
+<thead>
+<tr>
+<th>AVAILABILITY (¿puede recibir tareas?)</th>
+<th>MANAGER STATUS (¿cómo decide?)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Active</strong>: el planificador puede asignarle tareas nuevas</td>
+<td><strong>Leader</strong>: el líder, hace toda la orquestación</td>
+</tr>
+<tr>
+<td><strong>Pause</strong>: no recibe tareas nuevas, pero las que tiene siguen</td>
+<td><strong>Reachable</strong>: manager elegible como nuevo líder</td>
+</tr>
+<tr>
+<td><strong>Drain</strong>: no recibe tareas nuevas y las suyas se <strong>migran</strong> a otro nodo</td>
+<td><strong>Unavailable</strong>: manager que no puede comunicarse con los demás</td>
+</tr>
+<tr>
+<td></td>
+<td><em>(vacío)</em>: no es manager</td>
+</tr>
+</tbody>
+</table>
+<p><code>docker node promote &lt;id&gt;</code> convierte un worker en manager; <code>docker node demote &lt;id&gt;</code>, al revés.</p>
+<h2>4.4.4 Servicios y tareas</h2>
+<p>En un enjambre las imágenes se despliegan como <strong>servicios</strong> (una BD, un servidor HTTP, un proxy, una app Java…). Al crear uno se indica la imagen y los comandos, y opcionalmente los puertos expuestos, la red, límites de memoria y CPU, políticas de actualización o el <strong>número de réplicas</strong>. El líder toma esa definición como <strong>estado objetivo</strong> y crea las tareas necesarias en los nodos para alcanzarlo.</p>
+<p>Una <strong>tarea</strong> es la <strong>unidad atómica</strong> del planificador: un hueco al que asocia <strong>un único contenedor</strong>. Sus estados:</p>
+<p><img src="../../../img/compnu/compnu-t4-swarm-tareas.png" alt="Estados de una tarea en Swarm|700" loading="lazy"></p>
+<p>El recorrido normal es <strong>NEW</strong> (creada por el manager) → <strong>PENDING</strong> (esperando recursos) → <strong>ASSIGNED</strong> (asignada a un worker) → <strong>ACCEPTED</strong> → <strong>PREPARING</strong> (<code>docker pull</code>) → <strong>STARTING</strong> (<code>docker run</code>) → <strong>RUNNING</strong>. Desde ahí acaba en un estado terminal: <strong>COMPLETE</strong> (salida 0), <strong>FAILED</strong> (fallo al iniciar o salida ≠ 0), <strong>SHUTDOWN</strong> (el manager la para: <code>service rm</code>, <code>scale=0</code>, update…) o <strong>REJECTED</strong> (el worker la rechaza o falla la preparación, p. ej. imagen no encontrada). Si el worker pierde conexión con el manager, queda <strong>ORPHANED</strong> (error no terminal).</p>
+<p>Si una tarea falla, el orquestador <strong>elimina tarea y contenedor y crea una nueva</strong> según la configuración del servicio. Orquestador y planificador son <strong>genéricos</strong>: las abstracciones de servicio y tarea no saben qué ejecutan (podrían ser VMs…), aunque Docker hoy <strong>solo implementa tareas con contenedores</strong>.</p>
+<p>Un servicio queda <strong>pendiente</strong> cuando ningún nodo puede ejecutar sus tareas: por ejemplo, todos los workers están en <em>pause</em> o <em>drain</em>, o ninguno cumple los recursos pedidos. Sigue pendiente hasta que aparezca un nodo válido.</p>
+<h2>4.4.5 Desplegar servicios</h2>
+<p>Hay dos tipos:</p>
+<ul>
+<li><strong>Replicados</strong>: se fija un <strong>número de tareas idénticas</strong> repartidas entre los nodos.</li>
+<li><strong>Globales</strong>: <strong>una tarea en cada nodo</strong>; al añadir un nodo nuevo se le crea automáticamente su tarea (útil para agentes de monitorización).</li>
+</ul>
+<p>Los servicios se definen de forma <strong>declarativa</strong> (el estado objetivo) y Docker lo mantiene: imagen, número de contenedores, puertos expuestos, condiciones de reinicio automático y requisitos de los nodos.</p>
+<p>El despliegue más básico es <code>docker service create nginx</code> (una réplica; <code>--name</code> para darle nombre; <code>docker service ls</code> para ver el estado). Para algo más complejo se usa un fichero estilo Compose y <code>docker stack deploy -c &lt;fichero&gt; &lt;nombre_stack&gt;</code>:</p>
+<pre><code class="language-yaml">version: '3.8'
+services:
+  web:
+    image: nginx:alpine
+    ports: [&quot;80:80&quot;]
+    networks: [rede-aplicacion]
+    depends_on: [app]
+    deploy:
+      replicas: 3              # tres tareas idénticas
+      update_config:
+        parallelism: 1         # actualiza de una en una
+        delay: 10s             # espera entre tareas
+      restart_policy:
+        condition: on-failure
+networks:
+  rede-aplicacion:
+    driver: overlay            # red que abarca todos los nodos
+</code></pre>
+<h2>4.4.6 Puertos y balanceo de carga</h2>
+<p>Un puerto se puede publicar de dos formas:</p>
+<ul>
+<li><strong>Routing mesh</strong>: el puerto queda disponible <strong>en todos los nodos</strong>; si un cliente se conecta a cualquiera, el mesh redirige la petición a una tarea del servicio. El cliente <strong>no necesita saber dónde corre</strong> el contenedor.</li>
+<li><strong>Publicación directa</strong>: el puerto solo se abre en el nodo que ejecuta la tarea; el cliente debe conocer <strong>la IP de ese nodo</strong>.</li>
+</ul>
+<p>Gracias al routing mesh, Swarm trae un <strong>balanceador interno</strong>: el puerto se publica en cada nodo aunque no ejecute el servicio, y la red de enrutamiento intercepta la petición y la manda a un contenedor del servicio esté donde esté. Esto permite poner delante un <strong>balanceador externo</strong> (AWS ELB, nginx) que reparta entre todos los nodos.</p>
+<p><img src="../../../img/compnu/compnu-t4-swarm-routing-mesh.png" alt="Routing mesh de Swarm|700" loading="lazy">
+<em>El balanceador externo reparte entre nodos; en cada nodo el routing mesh (IPVS) envía la petición por la red overlay <code>ingress</code> a la IP virtual del servicio, que la entrega a una de sus tareas.</em></p>
+<p><strong>Internamente</strong> los servicios se llaman por su <strong>nombre</strong>. Swarm asigna a cada servicio una <strong>IP virtual (VIP)</strong>: el DNS interno devuelve la VIP y el kernel reparte el tráfico entre las IPs reales de las tareas con <strong>Round Robin</strong>. Alternativa sin VIP: el DNS devuelve <strong>todas las IPs</strong> del servicio y el <strong>cliente elige</strong> a cuál llamar.</p>
+<h2>4.4.7 Redes overlay y almacenamiento</h2>
+<p>Para que contenedores en <strong>nodos distintos</strong> se comuniquen como si estuvieran en el mismo, se crea una <strong>red overlay</strong>: una red virtual implementada como un <strong>túnel</strong> que actúa como un switch al que se conectan todos los contenedores del stack.</p>
+<pre><code class="language-bash">docker network create --driver overlay rede1
+docker service create --network rede1 --name web nginx
+docker service update --network-add rede1 web
+</code></pre>
+<p>En el fichero de configuración se definen con <code>networks.&lt;red&gt;.driver</code> y <code>services.&lt;servicio&gt;.networks</code>.</p>
+<p>Swarm soporta los mismos tipos de almacenamiento que Docker local (ver tema 2): <strong>volúmenes</strong> (gestionados por Docker en el sistema de ficheros del host), <strong>bind mounts</strong> (rutas del host montadas en el contenedor) y <strong>tmpfs</strong> (en memoria, nunca a disco). El problema: los contenedores <strong>cambian de nodo</strong>, pero los volúmenes <strong>se quedan en el host donde se crearon</strong>. La solución es un <strong>plugin con driver de almacenamiento en red</strong> (NFS, volúmenes cloud, sistemas de ficheros distribuidos…).</p>
+<h2>4.4.8 Requisitos y preferencias de despliegue</h2>
+<p>Se pueden exigir requisitos a los nodos:</p>
+<ul>
+<li><strong>Recursos</strong>: <code>--reserve-memory</code> y <code>--reserve-cpu</code> por terminal, o <code>deploy.resources.reservations.cpus/memory</code> en el fichero.</li>
+<li><strong>Restricciones por etiquetas</strong> (región, SO, procesador, tipo de almacenamiento, GPU…): <code>--constraint</code> o <code>deploy.placement.constraints</code>.</li>
+</ul>
+<p>Si ningún nodo los cumple, el servicio queda <strong>pendiente</strong>.</p>
+<p>Las <strong>preferencias</strong> (<code>--placement-pref</code> o <code>deploy.placement.preferences</code>) reparten las réplicas según etiquetas: el orquestador agrupa los nodos por el valor de la etiqueta y distribuye entre grupos. Hay que indicar estrategia, y la única soportada es <strong><code>spread</code></strong> (reparto uniforme). A diferencia de los requisitos, si ningún nodo cumple la preferencia, <strong>se despliega igualmente ignorándola</strong>.</p>
+<p>El estado se consulta desde cualquier manager (<code>docker stack ps &lt;stack&gt;</code>, <code>docker service ls</code>).</p>
+<h2>4.4.9 Escalado, actualización y rollback</h2>
+<p><strong>Escalar</strong> es ajustar el número de réplicas; el líder mantiene ese número repartiendo tareas:</p>
+<pre><code class="language-bash">docker service update --replicas &lt;N&gt; &lt;SERVICIO&gt;
+docker service scale &lt;SERVICIO&gt;=&lt;N&gt;
+</code></pre>
+<p><strong>Actualizar</strong> un servicio sin redesplegar toda la aplicación y con mínima interrupción: <code>docker service update --image &lt;IMAGEN:VERSION&gt; &lt;SERVICIO&gt;</code>. Se hace por etapas: se para la primera tarea → se planifica su actualización → se reinicia su contenedor actualizado → si arranca bien, se sigue con la siguiente → si hay error, <strong>se para la actualización</strong>.</p>
+<p>Parámetros de la estrategia de actualización:</p>
+<ul>
+<li><strong>update delay</strong>: espera entre tareas.</li>
+<li><strong>update parallelism</strong>: tareas actualizadas a la vez.</li>
+<li><strong>update failure action</strong>: qué hacer si falla: <code>pause</code>, <code>continue</code> (ignorar) o <code>rollback</code> (volver a la versión previa).</li>
+<li><strong>update max failure ratio</strong>: proporción máxima de fallos admitida.</li>
+</ul>
+<p><strong>Rollback</strong>: <code>docker service update --rollback</code> revierte al estado anterior al último update; suele combinarse con <code>--update-delay 0</code> para que sea instantáneo. También se puede configurar una estrategia de rollback al crear el servicio para que <strong>vuelva solo</strong> si una actualización falla.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://docs.docker.com/engine/swarm/key-concepts/">Swarm mode key concepts</a> — documentación oficial: nodos, servicios, tareas y balanceo (artículo, inglés).</p>
+</div>
+<h1>4.5 Kubernetes</h1>
+<p><strong>Kubernetes</strong> lo diseñó <strong>Google</strong> y se liberó en <strong>2014</strong>; hoy es el proyecto estrella de la <strong>CNCF</strong> (Google, Alibaba, Amazon, Microsoft, Apple, IBM, Intel, Cisco, RedHat, Oracle, Huawei…). El nombre significa <strong>&quot;piloto de barco&quot;</strong> en griego (de ahí el timón del logo) y se abrevia <strong>k8s</strong> (k + 8 letras + s). Gestiona <strong>cómputo, redes y almacenamiento</strong> y es el <strong>estándar de facto</strong>.</p>
+<p>También es <strong>manager-worker</strong>:</p>
+<ul>
+<li><strong>Managers</strong>: gestionan los nodos, detectan y responden a eventos y se aseguran de que el <strong>estado real coincida con el deseado</strong>.</li>
+<li><strong>Workers</strong>: ejecutan las aplicaciones (varias por nodo).</li>
+</ul>
+<p>Mínimo <strong>un manager</strong>; se recomienda un <strong>número impar de managers</strong> (para facilitar el <strong>quórum</strong> en las votaciones) y <strong>varios workers</strong> (disponibilidad).</p>
+<p><img src="../../../img/compnu/compnu-t4-k8s-arquitectura.jpeg" alt="Arquitectura de Kubernetes|700" loading="lazy"></p>
+<h2>4.5.1 Componentes del manager (plano de control)</h2>
+<ul>
+<li><strong>API server</strong> (<code>kube-apiserver</code>): expone la API de k8s como <strong>API REST</strong>; es la <strong>puerta de entrada</strong> al clúster, gestiona autenticación y autorización y hace de túnel hacia los nodos. Admite varias instancias para balancear.</li>
+<li><strong>Scheduler</strong> (<code>kube-scheduler</code>): decide <strong>en qué nodo</strong> se ejecuta cada contenedor según los recursos libres y los pedidos. Puede haber varios.</li>
+<li><strong>Controller manager</strong> (<code>kube-controller-manager</code>): el <strong>cerebro</strong>; intenta que el estado de las aplicaciones coincida con el deseado. Agrupa varios controladores independientes:
+<ul>
+<li><strong>De nodos</strong>: vigila la salud de los nodos y mueve aplicaciones si uno falla.</li>
+<li><strong>De réplicas</strong>: asegura que el número de instancias coincide con el deseado.</li>
+<li><strong>De despliegue</strong>: actualiza versiones de forma controlada.</li>
+<li><strong>De endpoints</strong>: relaciona las IPs de los contenedores con los nombres de los servicios (como un DNS).</li>
+</ul>
+</li>
+<li><strong>etcd</strong>: BD <strong>clave/valor</strong> simple, distribuida y consistente con la <strong>configuración compartida</strong> del clúster; también sirve para descubrir servicios. Usa un <strong>algoritmo de consenso</strong> para replicarse entre managers.</li>
+<li><em>(Opcional)</em> <strong>Cloud controller manager</strong>: intermediario con el proveedor cloud (AWS, GCP, Azure) para crear rutas, balanceadores o volúmenes directamente allí.</li>
+</ul>
+<p>Los componentes pueden ir en cualquier máquina, pero por simplicidad se arrancan todos en la misma, que no suele hacer de worker.</p>
+<h2>4.5.2 Componentes del worker</h2>
+<ul>
+<li><strong>kubelet</strong>: el agente que habla con los managers, obtiene la configuración de las aplicaciones y <strong>garantiza que sus contenedores funcionen</strong>.</li>
+<li><strong>kube-proxy</strong>: proxy de red; gestiona las <strong>reglas de enrutamiento</strong> del nodo para exponer cada servicio en su IP y puerto, y <strong>balancea la carga</strong> entre ellos.</li>
+<li><strong>Container runtime</strong>: descarga imágenes y arranca contenedores. Ofrece una <strong>CRI</strong> (<em>Container Runtime Interface</em>), puente entre kubelet y el runtime. Opciones:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Runtime</th>
+<th>Rasgos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>containerd</strong></td>
+<td>Formato OCI. <strong>Estándar de la industria</strong> y opción por defecto; creado por Docker y cedido a la CNCF. Robusto y eficiente</td>
+</tr>
+<tr>
+<td><strong>CRI-O</strong></td>
+<td>Formato OCI. Creado por <strong>RedHat</strong> específicamente para k8s; ligero y fiel a sus especificaciones</td>
+</tr>
+<tr>
+<td><strong>kata</strong></td>
+<td>Ejecuta cada contenedor como una <strong>VM ligera</strong> con su propio kernel: aislamiento a nivel hardware, mucho más seguro, a costa de más CPU y memoria</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>Pods</strong>: &quot;las aplicaciones&quot; que ejecuta el worker. Un pod es una <strong>colección lógica de contenedores</strong> más los recursos que comparten (volúmenes, red, contexto). Es la <strong>unidad mínima de trabajo</strong> en k8s. Tipos de cargas que gestionan pods:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ReplicaSet</strong></td>
+<td>Apps <strong>sin estado</strong>: siempre N réplicas idénticas activas</td>
+</tr>
+<tr>
+<td><strong>DaemonSet</strong></td>
+<td>Agentes de infraestructura: <strong>uno en cada nodo</strong></td>
+</tr>
+<tr>
+<td><strong>StatefulSet</strong></td>
+<td>Apps <strong>con estado</strong> (BD): cada pod tiene <strong>identidad única y almacenamiento persistente</strong></td>
+</tr>
+<tr>
+<td><strong>Job / CronJob</strong></td>
+<td>Tareas con <strong>inicio y fin</strong>; CronJob permite <strong>programarlas</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>El clúster es un puerto: el plano de control es la torre de control (API server = ventanilla única, scheduler = quien asigna muelle, controller manager = supervisor que corrige desvíos, etcd = el libro de registro). Cada worker es un muelle con su capataz (kubelet), su operador de tráfico (kube-proxy) y sus grúas (runtime). Los pods son los contenedores de mercancía.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=8q5txsy3PAE">Entiende la Arquitectura de Kubernetes (Control Plane, Nodos, etcd)</a> — recorrido por cada componente (vídeo, 8 min).
+<a href="https://kubernetes.io/es/docs/concepts/overview/components/">Componentes de Kubernetes</a> — documentación oficial en español (artículo).</p>
+</div>
+<h2>4.5.3 Herramientas: kubeadm y kubectl</h2>
+<p><strong>kubeadm</strong> es el <strong>&quot;kit de montaje&quot;</strong>: arranca, instala y configura los componentes del clúster (<code>kubeadm init</code> crea el manager, <code>kubeadm join</code> une workers, <code>kubeadm upgrade</code> actualiza la versión). Requisitos:</p>
+<ul>
+<li>Mínimo <strong>2 nodos Linux</strong> (un manager y un worker), con <strong>2 vCPU y 2 GB de RAM</strong> cada uno.</li>
+<li>Conectividad plena entre nodos con estos puertos abiertos:</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Nodo</th>
+<th>Puertos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Manager</td>
+<td><strong>6443/TCP</strong> (kube-apiserver), <strong>2379-2380/TCP</strong> (etcd), <strong>10250/TCP</strong> (kubelet API), <strong>10259/TCP</strong> (kube-scheduler), <strong>10257/TCP</strong> (kube-controller-manager)</td>
+</tr>
+<tr>
+<td>Worker</td>
+<td><strong>10250/TCP</strong> (kubelet API), <strong>10256/TCP</strong> (kube-proxy), <strong>30000-32767/TCP y UDP</strong> (servicios)</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Nombres de host, direcciones MAC y <code>product_uuid</code> <strong>únicos</strong> en cada nodo.</li>
+</ul>
+<p><strong>kubectl</strong> es el <strong>&quot;mando a distancia&quot;</strong> de un clúster ya en marcha: habla con el kube-apiserver, que luego crea, planifica y distribuye las tareas.</p>
+<table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kubectl apply</code></td>
+<td>Desplegar aplicaciones</td>
+</tr>
+<tr>
+<td><code>kubectl get</code></td>
+<td>Ver los recursos desplegados</td>
+</tr>
+<tr>
+<td><code>kubectl logs</code></td>
+<td>Ver logs</td>
+</tr>
+<tr>
+<td><code>kubectl describe</code></td>
+<td>Estado detallado de un recurso</td>
+</tr>
+<tr>
+<td><code>kubectl drain</code></td>
+<td>Preparar un nodo para mantenimiento</td>
+</tr>
+<tr>
+<td><code>kubectl exec</code></td>
+<td>Ejecutar un comando en un contenedor de un pod</td>
+</tr>
+</tbody>
+</table>
+<h2>4.5.4 Crear y gestionar el clúster</h2>
+<p>Pasos para montar un clúster con kubeadm:</p>
+<ol>
+<li><strong>Desactivar el SWAP</strong> en todos los nodos.</li>
+<li>Configurar red, firewall y tablas de enrutamiento para que todos se vean.</li>
+<li>Instalar un <strong>runtime</strong> en cada nodo (containerd lo habitual; CRI-O otra opción).</li>
+<li>Instalar <strong>kubeadm, kubectl y kubelet</strong> en cada nodo.</li>
+<li>Iniciar el plano de control en un manager con <strong><code>kubeadm init</code></strong>.</li>
+<li>Configurar kubectl en el manager para usarlo como administrador.</li>
+<li>Instalar un <strong>plugin de red</strong>.</li>
+<li>Unir los workers.</li>
+<li>Validar el estado de componentes y nodos.</li>
+</ol>
+<p>Sin clúster propio, lo más práctico son los servicios gestionados de las nubes (<strong>GKE de GCP, AKS de Azure, EKS de AWS</strong>), que crean clústeres en minutos.</p>
+<p>En <code>kubeadm init</code> es crucial <strong><code>--pod-network-cidr</code></strong>: el rango de IPs de los pods, que depende del plugin de red elegido. <strong><code>--control-plane-endpoint</code></strong> fija el endpoint compartido por todos los managers. Los tokens se consultan o crean con <code>kubeadm token</code>.</p>
+<p><strong>kubeadm no instala ningún plugin de red</strong>: hay que desplegar uno externo como pod.</p>
+<table>
+<thead>
+<tr>
+<th>Plugin</th>
+<th>Cómo funciona</th>
+<th>Rendimiento</th>
+<th>Políticas de red</th>
+<th>Pegas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Flannel</strong></td>
+<td>Red <strong>overlay</strong> virtual</td>
+<td>Pequeña penalización</td>
+<td><strong>No</strong> soporta (inseguro)</td>
+<td>— Es el más sencillo</td>
+</tr>
+<tr>
+<td><strong>Calico</strong></td>
+<td>Enrutamiento con <strong>BGP</strong>, sin red virtual</td>
+<td>Casi nativo</td>
+<td>Muy granulares <strong>L3/L4</strong> (IPs y puertos)</td>
+<td>— Es el más popular en producción</td>
+</tr>
+<tr>
+<td><strong>Cilium</strong></td>
+<td><strong>eBPF</strong>: programas de red dentro del kernel Linux</td>
+<td>Igual o <strong>superior</strong> al nativo</td>
+<td><strong>L3/L4 y L7</strong> (reglas de HTTP…), además service mesh</td>
+<td>El más complejo; necesita kernels modernos</td>
+</tr>
+<tr>
+<td><strong>Antrea</strong></td>
+<td>Switch virtual <strong>OVS</strong> (Open vSwitch)</td>
+<td>Muy bueno, como Calico</td>
+<td>L3/L4/L7 (Cilium más maduro)</td>
+<td>El más nuevo; curva de aprendizaje por OVS</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Añadir workers</strong>: ejecutar el comando que dio <code>kubeadm init</code>. <strong>Añadir managers</strong> requiere más pasos y conviene haber configurado un <strong>balanceador de carga</strong> al crear el clúster: obtener los certificados del plano de control (<code>kubeadm init phase upload-certs --upload-certs</code>) y unirse con <code>kubeadm join --control-plane --certificate-key &lt;clave&gt;</code>.</p>
+<p><strong>Sacar un nodo</strong>: primero <strong>drenarlo</strong> para que sus pods se muevan (<code>kubectl drain &lt;nodo&gt; --delete-local-data --force --ignore-daemonsets</code>), luego <code>kubectl delete node &lt;nodo&gt;</code> y finalmente <code>kubeadm reset</code> en el nodo.</p>
+<p>Para desarrollo local existe <strong>minikube</strong>, que funciona sobre kubeadm y lo simplifica: Linux, Windows y macOS, soporte de GPU, despliegue en VMs, contenedores o bare metal, addons fáciles y funciones como balanceadores, políticas de red o montaje de sistemas de ficheros. Se arranca con <strong><code>minikube start</code></strong>.</p>
+<h2>4.5.5 Espacios de nombres</h2>
+<p>Los <strong>namespaces</strong> separan recursos: <strong>no comparten nada entre sí</strong>, útil cuando varios usuarios o equipos usan el mismo clúster. Se listan con <code>kubectl get namespace</code> y se crean con <code>kubectl create namespace &lt;nombre&gt;</code>. En producción se recomienda <strong>uno por aplicación</strong>. Los cuatro iniciales:</p>
+<table>
+<thead>
+<tr>
+<th>Namespace</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>default</code></td>
+<td>Objetos sin namespace explícito. <strong>No recomendado en producción</strong></td>
+</tr>
+<tr>
+<td><code>kube-system</code></td>
+<td>Objetos del sistema y del plano de control. <strong>No desplegar aplicaciones aquí</strong></td>
+</tr>
+<tr>
+<td><code>kube-public</code></td>
+<td>Legible por todos (incluso no autenticados); reservado al clúster</td>
+</tr>
+<tr>
+<td><code>kube-node-lease</code></td>
+<td>Los <em>leases</em> que envían los latidos de cada nodo al plano de control. Uso interno</td>
+</tr>
+</tbody>
+</table>
+<h2>4.5.6 Comunicación y servicios</h2>
+<p>Hay cuatro tipos de comunicación:</p>
+<ul>
+<li><strong>Dentro de un pod</strong>: los contenedores comparten la pila de red y se hablan por <strong><code>localhost</code></strong> y puerto.</li>
+<li><strong>Entre pods</strong>: cada pod tiene una <strong>IP privada única</strong> asignada por el plugin de red, que enruta el tráfico (overlay, BGP, eBPF…).</li>
+<li><strong>Pod → servicio</strong>: los pods son <strong>efímeros</strong> y su IP cambia, así que no se puede depender de ella. Por eso existen los <strong>servicios</strong>, que dan <strong>IP virtual y nombre DNS estables</strong> a un conjunto de pods.</li>
+<li><strong>Externa</strong>: el tráfico de entrada (<strong>ingress</strong>) llega por un proxy o balanceador; el de salida (<strong>egress</strong>) sale directo, con el plugin <strong>enmascarando la IP</strong> interna del pod para que la respuesta vuelva.</li>
+</ul>
+<p>Un <strong>servicio</strong> es una abstracción sobre un conjunto de pods que hace de proxy. Usa <strong>selectores</strong> (etiquetas) para saber qué pods lo forman; al recibir una petición elige uno de ellos y se la reenvía, y añade o quita pods automáticamente cuando aparecen o desaparecen pods con esas etiquetas.</p>
+<table>
+<thead>
+<tr>
+<th>Tipo de servicio</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ClusterIP</strong> (por defecto)</td>
+<td>IP <strong>interna</strong>: solo accesible desde dentro del clúster</td>
+</tr>
+<tr>
+<td><strong>NodePort</strong></td>
+<td>ClusterIP + publica un puerto (<strong>30000-32767</strong>) en <strong>todos los nodos</strong>. Para pruebas, no para producción</td>
+</tr>
+<tr>
+<td><strong>LoadBalancer</strong></td>
+<td>NodePort + pide al proveedor cloud un <strong>balanceador externo con IP pública</strong></td>
+</tr>
+<tr>
+<td><strong>ExternalName</strong></td>
+<td>No apunta a pods: crea un <strong>alias DNS</strong> interno hacia un servicio externo</td>
+</tr>
+</tbody>
+</table>
+<h2>4.5.7 Ingress</h2>
+<p>Un <strong>Ingress</strong> no es un servicio: es otro tipo de objeto con <strong>reglas de enrutamiento</strong> que permite el tráfico desde fuera. Funciona como <strong>gateway</strong>: expone varios servicios bajo <strong>una única IP pública</strong> y ofrece redirección a distintos servicios, autenticación, certificados SSL, cuotas… Necesita un <strong>ingress controller</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Controller</th>
+<th>Rasgos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ingress-nginx</strong></td>
+<td>El más usado y documentado, basado en nginx, muy potente; soporte limitado para configuraciones avanzadas</td>
+</tr>
+<tr>
+<td><strong>Traefik Proxy</strong></td>
+<td>El más moderno y automático: certificados SSL con <strong>Let's Encrypt</strong> y dashboard potente; para lo avanzado usa objetos propios no estándar</td>
+</tr>
+<tr>
+<td><strong>HAProxy Ingress</strong></td>
+<td>Muy probado, superestable y rápido con alta carga; menos extensiones</td>
+</tr>
+<tr>
+<td><strong>Kong</strong></td>
+<td>API gateway sobre nginx con <strong>plugins</strong> (autenticación, cuotas…); muchas funciones avanzadas son <strong>de pago</strong></td>
+</tr>
+<tr>
+<td><strong>APISIX</strong></td>
+<td>API gateway de alto rendimiento de la Apache Software Foundation, rival de Kong; open source y extensible, comunidad aún pequeña</td>
+</tr>
+</tbody>
+</table>
+<p>La evolución del Ingress es la <strong>Gateway API</strong>, que uniformiza la definición de políticas en los gateways.</p>
+<h2>4.5.8 Descubrimiento de servicios</h2>
+<ul>
+<li><strong>Variables de entorno</strong>: al arrancar un pod, kubelet le añade <code>{SVCNAME}_SERVICE_HOST</code> y <code>{SVCNAME}_SERVICE_PORT</code> por cada servicio activo.</li>
+<li><strong>DNS</strong> (recomendado): un servicio DNS del clúster vigila el API server y registra cada servicio nuevo con su <strong>nombre y namespace</strong>. Ha habido dos: <strong>kube-dns</strong> (hoy <em>deprecated</em>) y <strong>CoreDNS</strong> (el que debe usarse).</li>
+</ul>
+<h2>4.5.9 Desplegar aplicaciones</h2>
+<p>Se puede usar <code>kubectl create deployment</code>, pero lo habitual son <strong>YAML + <code>kubectl apply</code></strong>. Un ejemplo completo con Deployment, Service e Ingress:</p>
+<pre><code class="language-yaml">apiVersion: apps/v1
+kind: Deployment
+metadata: { name: test-app-deployment }
+spec:
+  replicas: 3
+  selector: { matchLabels: { app: test-app } }   # qué pods gestiona
+  template:                                     # plantilla de cada pod
+    metadata: { labels: { app: test-app } }
+    spec:
+      containers:
+      - name: nginx-container
+        image: nginx:1.25
+        ports: [{ containerPort: 80 }]
+---
+apiVersion: v1
+kind: Service
+metadata: { name: test-app-service }
+spec:
+  type: ClusterIP
+  ports: [{ port: 80, targetPort: 30080 }]
+  selector: { app: test-app }                   # agrupa los pods con esa etiqueta
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: test-app-ingress
+  annotations: { nginx.ingress.kubernetes.io/rewrite-target: / }
+spec:
+  rules:
+  - host: &quot;test-app.exemplo.com&quot;
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend: { service: { name: test-app-service, port: { number: 30080 } } }
+</code></pre>
+<div class="callout callout-note">
+<p class="callout-titulo">Posible errata de las diapositivas</p>
+<p>El contenedor escucha en el 80, así que lo coherente sería <code>targetPort: 80</code> en el Service y <code>port: number: 80</code> en el Ingress (el puerto del Service). El 30080 parece venir de un ejemplo con NodePort.</p>
+</div>
+<h2>4.5.10 Estrategias de despliegue y actualización</h2>
+<table>
+<thead>
+<tr>
+<th>Estrategia</th>
+<th>Cómo funciona</th>
+<th>Pega / uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Recrear</strong></td>
+<td>Se matan <strong>todos los pods a la vez</strong> y se reemplazan</td>
+<td><strong>Tiempo sin servicio</strong> prolongado</td>
+</tr>
+<tr>
+<td><strong>Rolling update</strong></td>
+<td>Los pods se recrean <strong>uno tras otro</strong>, sin cortes</td>
+<td>Difícil gestionar <strong>rollbacks</strong> si falla</td>
+</tr>
+<tr>
+<td><strong>Azul/verde</strong></td>
+<td>Se despliegan <strong>las dos versiones</strong>; la nueva se prueba internamente y, cuando está lista, <strong>el Service pasa a apuntar a ella</strong></td>
+<td>Necesita el doble de recursos durante el cambio</td>
+</tr>
+<tr>
+<td><strong>Canary</strong></td>
+<td>Un <strong>porcentaje del tráfico</strong> va a la nueva versión y el resto a la antigua (dos despliegues con el mismo nombre de app)</td>
+<td>Probar funcionalidades nuevas con riesgo acotado</td>
+</tr>
+<tr>
+<td><strong>A/B</strong></td>
+<td>Como canary, pero el tráfico nuevo es el de <strong>usuarios que cumplen ciertas condiciones</strong></td>
+<td>Experimentos por segmento</td>
+</tr>
+<tr>
+<td><strong>Sombra / espejo</strong></td>
+<td>Ambas versiones reciben <strong>todo el tráfico</strong>, pero solo cuentan las respuestas de la <strong>original</strong></td>
+<td>Probar con tráfico real sin afectar al usuario</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Canary viene de los canarios que bajaban a las minas: si el pájaro enfermaba, había gas. Mandas un poco de tráfico a la versión nueva y, si &quot;enferma&quot;, nadie más baja.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=H5z70EBtEow">Deployment Strategies Explained: Blue-Green vs. Canary vs. Rolling</a> — comparación visual de las estrategias (vídeo, 4 min, inglés).</p>
+</div>
+<h2>4.5.11 Almacenamiento</h2>
+<p>Como los pods son efímeros, la clave es <strong>desacoplar el almacenamiento del ciclo de vida del pod</strong> con cuatro conceptos: <strong>Volumes</strong>, <strong>PersistentVolumes (PV)</strong>, <strong>PersistentVolumeClaims (PVC)</strong> y <strong>StorageClass (SC)</strong>.</p>
+<ul>
+<li><strong>Volume</strong>: lo más básico. Puede ser una carpeta del host (<code>hostPath</code>), una ruta NFS, un proveedor cloud… Si es una carpeta local, <strong>solo existe en ese nodo</strong> y no es accesible desde otros.</li>
+<li><strong>PersistentVolume</strong>: como un <strong>disco duro virtual</strong> con un tamaño y un <strong>modo de acceso</strong>, vinculado a almacenamiento físico (carpeta del host, sistema distribuido, cloud).</li>
+<li><strong>PersistentVolumeClaim</strong>: una <strong>&quot;reclamación&quot;</strong> que hace un servicio para usar un PV que cumpla ciertos requisitos.</li>
+<li><strong>StorageClass</strong>: en lugar de crear el PV a mano, se <strong>aprovisiona automáticamente</strong> con un proveedor (p. ej. <strong>AWS EBS</strong>) o con soluciones <em>self-hosted</em> como <strong>Longhorn</strong>.</li>
+</ul>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>El PV es una plaza de garaje que existe; el PVC es tu solicitud (&quot;necesito una plaza de 20 GB&quot;); la StorageClass es un garaje que construye la plaza en el momento en que la pides.</p>
+</div>
+<h1>4.x Ideas clave</h1>
+<ul>
+<li>Orquestar = gestionar el <strong>ciclo de vida</strong> de muchos contenedores en muchas máquinas: despliegue, tolerancia a fallos, autoescalado, balanceo, descubrimiento y observabilidad, a partir de <strong>ficheros YAML/JSON declarativos</strong>.</li>
+<li>Motivación extra: <strong>&gt;65 % de los contenedores usan &lt;50 %</strong> de la CPU y memoria reservadas. En 2020, <strong>~90 %</strong> de contenedores orquestados y <strong>k8s en &gt;50 %</strong>.</li>
+<li><strong>Kubernetes</strong> (estándar, potente, complejo), <strong>Docker Swarm</strong> (sencillo, ligero, limitado), <strong>Mesos + Marathon</strong> (escala extrema y cargas mixtas, complejo, en declive). <strong>K8s en el 90 % de los casos</strong>.</li>
+<li><strong>Swarm</strong>: managers (líder + followers, ≥3 en producción, BD <strong>Raft</strong>, CA para cifrar) y workers; tokens de worker y manager. Disponibilidad <strong>Active / Pause / Drain</strong>. Servicio → tareas (un contenedor cada una); servicios <strong>replicados</strong> o <strong>globales</strong>; <code>docker stack deploy</code>.</li>
+<li>Swarm red: <strong>routing mesh</strong> (puerto en todos los nodos) y <strong>VIP + Round Robin</strong>; redes <strong>overlay</strong>; volúmenes locales al nodo → driver en red. Requisitos (si no se cumplen, pendiente) vs preferencias <code>spread</code> (se ignoran). Rolling update con delay, parallelism, failure action y <code>--rollback</code>.</li>
+<li><strong>K8s plano de control</strong>: <strong>API server</strong>, <strong>scheduler</strong>, <strong>controller manager</strong> (nodos, réplicas, despliegue, endpoints), <strong>etcd</strong>, cloud controller manager. <strong>Worker</strong>: <strong>kubelet</strong>, <strong>kube-proxy</strong>, <strong>runtime</strong> (containerd, CRI-O, kata) y <strong>pods</strong>.</li>
+<li>Cargas: <strong>ReplicaSet</strong> (sin estado), <strong>DaemonSet</strong> (uno por nodo), <strong>StatefulSet</strong> (con estado), <strong>Job/CronJob</strong>.</li>
+<li><strong>kubeadm</strong> monta el clúster (2 nodos, 2 vCPU, 2 GB, sin swap); <strong>kubectl</strong> lo maneja; <strong>minikube</strong> para local. Plugins de red: <strong>Flannel</strong> (sencillo, sin políticas), <strong>Calico</strong> (BGP, producción), <strong>Cilium</strong> (eBPF, L7), <strong>Antrea</strong> (OVS).</li>
+<li>Servicios: <strong>ClusterIP</strong>, <strong>NodePort</strong> (30000-32767), <strong>LoadBalancer</strong>, <strong>ExternalName</strong>; <strong>Ingress</strong> + controller como gateway (evoluciona a Gateway API); descubrimiento por <strong>DNS (CoreDNS)</strong>.</li>
+<li>Despliegues: recrear, <strong>rolling update</strong>, <strong>azul/verde</strong>, <strong>canary</strong>, A/B, sombra.</li>
+<li>Almacenamiento: <strong>Volume → PV → PVC → StorageClass</strong> (aprovisionamiento automático).</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="3-aplicaciones-y-servicios-en-la-nube.html"><span class="nav-etiqueta">← anterior</span>3. Aplicaciones y servicios en la nube</a>
+  <a class="nav-siguiente" href="5-microservicios.html"><span class="nav-etiqueta">siguiente →</span>5. Microservicios</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

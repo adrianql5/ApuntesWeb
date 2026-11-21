@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="3. Introducción a la minería de datos — apuntes de MYAD (cuarto curso de Ingeniería Informática).">
+<title>3. Introducción a la minería de datos · MYAD · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">myad</a><span class="miga-sep">/</span><span aria-current="page">3-introduccion-a-la-mineria-de-datos</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de MYAD"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">MYAD</a></p><ol><li><a href="1-almacenes-de-datos.html">1. Almacenes de Datos</a></li><li><a href="2-extraccion-transformacion-y-carga-etl.html">2. Extracción, Transformación y Carga (ETL)</a></li><li><span class="actual" aria-current="page">3. Introducción a la minería de datos</span></li><li><a href="4-preprocesamiento-y-analisis-de-datos.html">4. Preprocesamiento y análisis de datos</a></li><li><a href="5-tareas-y-metodos-en-mineria-de-datos.html">5. Tareas y métodos en minería de datos</a></li><li><a href="6-entrenamiento-y-evaluacion-de-modelos.html">6. Entrenamiento y evaluación de modelos</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>MYAD</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>3 / 6</div>
+    </div>
+    <h1>Introducción a la minería de datos</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de MYAD · 3/6</summary><ol><li><a href="1-almacenes-de-datos.html">1. Almacenes de Datos</a></li><li><a href="2-extraccion-transformacion-y-carga-etl.html">2. Extracción, Transformación y Carga (ETL)</a></li><li><span aria-current="page">3. Introducción a la minería de datos</span></li><li><a href="4-preprocesamiento-y-analisis-de-datos.html">4. Preprocesamiento y análisis de datos</a></li><li><a href="5-tareas-y-metodos-en-mineria-de-datos.html">5. Tareas y métodos en minería de datos</a></li><li><a href="6-entrenamiento-y-evaluacion-de-modelos.html">6. Entrenamiento y evaluación de modelos</a></li></ol></details>
+  <div class="prosa">
+<h1>3.1 Introducción: de los datos al conocimiento</h1>
+<p>La cantidad de datos disponibles crece de forma <strong>exponencial</strong>: según la ONU, el <strong>90 % de los datos del mundo se ha creado en los últimos dos años</strong>, se prevé un crecimiento del <strong>40 % anual</strong> y en <strong>2020 se crearon 64,2 zettabytes</strong>, un <strong>314 % más que en 2015</strong>. Sin embargo, la <strong>capacidad de análisis del ser humano es constante</strong>, así que hace falta <strong>automatizar la generación de conocimiento</strong> a partir de los datos. Eso es la minería de datos.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.un.org/es/global-issues/big-data-for-sustainable-development">Big Data para el desarrollo sostenible — ONU</a> — fuente de las cifras (artículo, enlazado en las diapositivas).</p>
+</div>
+<h2>3.1.1 Dato, información y conocimiento</h2>
+<p>No son lo mismo:</p>
+<ul>
+<li><strong>Dato</strong>: representación simbólica (un número, una letra) <strong>sin sentido semántico</strong>; por sí solo no aporta información y describe un <strong>hecho puntual</strong>.</li>
+<li><strong>Información</strong>: datos <strong>organizados y procesados</strong>, con significado (relevancia, propósito y contexto). Ayuda a <strong>tomar decisiones</strong>.</li>
+<li><strong>Conocimiento</strong>: <strong>interpretación personal (subjetiva)</strong> de la información; tiene significado para quien la asimila y entiende.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Dato</th>
+<th>Información</th>
+<th>Conocimiento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>35 º</td>
+<td>Temperatura exterior superior a la media</td>
+<td><strong>Riesgo de incendio alto</strong></td>
+</tr>
+<tr>
+<td>34 %</td>
+<td>Humedad exterior inferior a la media</td>
+<td></td>
+</tr>
+<tr>
+<td>60 km/h</td>
+<td>Velocidad del viento</td>
+<td></td>
+</tr>
+<tr>
+<td>Matorral</td>
+<td>Tipo de vegetación</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>El flujo es: los <strong>datos</strong> se convierten en <strong>información</strong> mediante procesamiento, clasificación, organización y agrupación; la información se convierte en <strong>conocimiento</strong> añadiendo aprendizaje previo, experiencias y expertos; y el conocimiento lleva a la <strong>toma de decisiones</strong>. Todo este recorrido es el <strong>proceso de extracción de conocimiento a partir de datos</strong> (<em>Knowledge Discovery in Databases</em>, <strong>KDD</strong>).</p>
+<p><img src="../../../img/myad/myad-t3-dato-info-conocimiento.png" alt="Flujo datos → información → conocimiento|650" loading="lazy"></p>
+<h1>3.2 Inteligencia de negocio</h1>
+<p>La <strong>inteligencia de negocio</strong> (BI, <em>Business Intelligence</em>) es el conjunto de <strong>tecnologías de la información</strong> que dan a una organización el <strong>conocimiento necesario para tomar decisiones estratégicas</strong>.</p>
+<p>Se puede ver como una pirámide con tres niveles, de la información (base) al conocimiento (cima):</p>
+<table>
+<thead>
+<tr>
+<th>Nivel</th>
+<th>Herramienta</th>
+<th>Ejemplo de pregunta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Operativo</strong></td>
+<td>Consultas SQL</td>
+<td>&quot;Quiero reservar un vuelo Madrid–Valencia&quot;: ¿hay disponibilidad?</td>
+</tr>
+<tr>
+<td><strong>Táctico</strong></td>
+<td>Consultas complejas (decisiones basadas en hechos)</td>
+<td>&quot;Informes de ventas de todas las cazadoras del último trimestre&quot;</td>
+</tr>
+<tr>
+<td><strong>Estratégico</strong></td>
+<td><strong>Minería de datos</strong>: modelos <strong>descriptivos</strong> y <strong>predictivos</strong> (decisiones estratégicas)</td>
+<td>&quot;¿Qué perfil de cliente compra en las tiendas del centro?&quot; (descriptivo), &quot;¿Qué comprará el cliente en el futuro?&quot; (predictivo)</td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/myad/myad-t3-inteligencia-negocio.png" alt="Pirámide de la inteligencia de negocio|600" loading="lazy"></p>
+<h2>3.2.1 Componentes de un sistema de BI</h2>
+<ul>
+<li><strong>Almacenes de datos</strong> (DW): guardan en un único sitio grandes cantidades de datos de muchas fuentes heterogéneas (ver temas 1 y 2).</li>
+<li><strong>Herramientas OLAP</strong>: manejan, combinan, agregan y rotan grandes volúmenes de información para mostrar <strong>vistas multidimensionales</strong> con distintos niveles de agregación (<em>roll-up</em>, <em>drill-down</em>, <em>slicing/dicing</em>, <em>pivot</em>).</li>
+<li><strong>Paneles de control</strong> (<em>dashboards</em>) y otras herramientas de supervisión: muestran el estado de la organización en todo momento.</li>
+<li><strong>Herramientas de minería de datos</strong>: más complejas que OLAP; <strong>descubren patrones</strong> de conocimiento y buscan soluciones a objetivos empresariales (p. ej. <strong>reducir colas</strong> en un supermercado o <strong>aumentar las ventas</strong> de un producto).</li>
+</ul>
+<h2>3.2.2 Arquitectura clásica</h2>
+<p><img src="../../../img/myad/myad-t3-arquitectura-bi.png" alt="Arquitectura clásica de BI|700" loading="lazy"></p>
+<p>De izquierda a derecha:</p>
+<ul>
+<li><strong>Fuentes internas</strong> (datos de la propia empresa: ERP, backups, BD operacional) y <strong>externas</strong> (competencia, redes sociales). Unas y otras pueden ser <strong>estructuradas</strong> (BD relacionales tipo Access, tabulares tipo Excel) o <strong>no estructuradas</strong> (BD textuales, RRSS).</li>
+<li><strong>ETL</strong> (<em>Extract, Transform, Load</em>): mueve los datos de las múltiples fuentes a un único lugar.</li>
+<li><strong>Almacén de datos</strong>: colección de datos <strong>orientada a un ámbito, integrada, no volátil y variable en el tiempo</strong>, que ayuda a decidir.</li>
+<li><strong>Interfaz y operadores</strong>: conecta las herramientas de decisión con el almacén.</li>
+<li><strong>Sistema de apoyo a la decisión (DSS)</strong>: consultas e informes, <strong>EIS</strong> (<em>Executive Information System</em>), <strong>OLAP</strong> y <strong>minería de datos</strong>.</li>
+</ul>
+<h2>3.2.3 OLAP frente a minería de datos</h2>
+<table>
+<thead>
+<tr>
+<th>OLAP</th>
+<th>Minería de datos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Consultas sobre datos <strong>ya existentes</strong>: <strong>no crea</strong> información nueva</td>
+<td>Análisis <strong>inductivo (predictivo)</strong> sobre los datos existentes: <strong>crea información nueva</strong></td>
+</tr>
+<tr>
+<td>Puede dar resultados erróneos <strong>si los datos almacenados son erróneos</strong></td>
+<td>Puede equivocarse si los datos son erróneos/inconsistentes <strong>o si el modelo es inadecuado</strong></td>
+</tr>
+<tr>
+<td>Consultas <strong>multidimensionales</strong> (venta vs producto vs tiempo)</td>
+<td>Varios tipos de decisiones: <strong>clasificación</strong> (binaria Sí/No o multiclase) y <strong>agrupamiento</strong></td>
+</tr>
+<tr>
+<td>Cambia de nivel de detalle sin rehacer la consulta (venta vs producto vs <strong>anual</strong> → <strong>mensual</strong>)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplos: &quot;¿cuántas naranjas se vendieron en julio de 2022?&quot; y &quot;¿qué tipo de verdura fue la más vendida en 2022?&quot; son <strong>OLAP</strong> (preguntan por lo que ya pasó). &quot;¿Cuántos puerros debería comprarle al proveedor?&quot; y &quot;¿cuál será la predicción de ventas de verduras en 2023?&quot; son <strong>minería de datos</strong> (requieren predecir).</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>OLAP es el espejo retrovisor: te enseña con todo detalle lo que ya ha pasado, desde el ángulo que quieras. La minería de datos es el GPS que, a partir de lo recorrido, estima lo que viene.</p>
+</div>
+<h1>3.3 El proceso KDD</h1>
+<p><strong>KDD</strong> es la extracción de conocimiento a partir de datos. Su definición clásica (Fayyad et al., 1996) tiene cada palabra pensada:</p>
+<blockquote>
+<p>&quot;Proceso <strong>no trivial</strong> de <strong>identificar patrones válidos, novedosos, potencialmente útiles y comprensibles</strong> a partir de datos.&quot;</p>
+</blockquote>
+<ul>
+<li><strong>No trivial</strong>: usa un conjunto de métodos, técnicas y modelos complejos.</li>
+<li><strong>Identificar patrones</strong>: deducir o inferir reglas o funciones hipotéticas que se <strong>extrapolan</strong> de los datos existentes.</li>
+<li><strong>Válidos</strong>: con el menor error posible (<strong>el error 0 no existe en informática</strong>). Si el conocimiento no es suficientemente válido, no sirve.</li>
+<li><strong>Novedosos</strong>: información nueva y <strong>no obvia</strong>. &quot;El 100 % de los pacientes de maternidad son mujeres&quot; es válido, pero obvio: no aporta conocimiento.</li>
+<li><strong>Potencialmente útiles</strong>: válido y novedoso <strong>no implica</strong> útil. &quot;Los clientes que compran champú compran tomates&quot; puede ser cierto, pero no tiene sentido poner el champú junto a los tomates.</li>
+<li><strong>Comprensibles</strong>: que los patrones se entiendan. No siempre es posible: depende del modelo (redes neuronales y <em>deep learning</em> <strong>no son explicables</strong>; los árboles de decisión <strong>sí</strong>).</li>
+</ul>
+<h2>3.3.1 Fases del KDD</h2>
+<p>Es un proceso <strong>iterativo e incremental</strong>:</p>
+<ol>
+<li><strong>Integración de datos</strong>: juntar en un almacén datos de fuentes heterogéneas.</li>
+<li><strong>Preparación</strong> (selección, limpieza y transformación): crear la <strong>vista minable</strong>, una estructura <strong>tabular</strong> (filas × columnas) con la información ya &quot;formateada&quot;.</li>
+<li><strong>Minería de datos</strong>: aplicar técnicas de minería o aprendizaje automático para obtener <strong>patrones</strong>.</li>
+<li><strong>Evaluación</strong>: comprobar qué modelos se ajustan mejor (menor error) usando <strong>datos no utilizados antes</strong>.</li>
+<li><strong>Despliegue</strong>: poner en uso los modelos elegidos para tomar decisiones.</li>
+<li><strong>Revisión</strong>: modificar el proceso para que los modelos <strong>no se queden obsoletos</strong>.</li>
+</ol>
+<p><img src="../../../img/myad/myad-t3-fases-kdd.png" alt="Fases del proceso KDD|700" loading="lazy"></p>
+<h2>3.3.2 Metodología CRISP-DM</h2>
+<p><strong>CRISP-DM</strong> (<em>Cross Industry Standard Process for Data Mining</em>) es una metodología específica para minería de datos. Es <strong>flexible</strong> (se adapta a cada proyecto) y es un modelo <strong>&quot;ideal&quot; de naturaleza cíclica</strong>: en la práctica las fases pueden hacerse en otro orden, repetirse o volver atrás. Tiene <strong>seis fases</strong>:</p>
+<p><img src="../../../img/myad/myad-t3-crisp-dm.jpeg" alt="Ciclo CRISP-DM|350" loading="lazy"></p>
+<ol>
+<li><strong>Entendimiento del negocio</strong>: comprender los <strong>objetivos y requisitos</strong> desde la perspectiva empresarial.</li>
+<li><strong>Entendimiento de los datos</strong>: recopilar y familiarizarse con los datos, <strong>detectar problemas de calidad</strong> y descubrir subconjuntos interesantes según los objetivos.</li>
+<li><strong>Preparación de los datos</strong>: obtener la <strong>vista minable</strong>:
+<ul>
+<li><strong>Selección</strong>: explicar por qué se incluyen o excluyen datos.</li>
+<li><strong>Limpieza</strong>: generar un informe de limpieza.</li>
+<li><strong>Construcción</strong>: crear atributos nuevos o derivados.</li>
+<li><strong>Integración</strong>: mezclar datos y generar agregados.</li>
+<li><strong>Formateo</strong>: cambios de diseño o formato.
+(Construcción, integración y formateo forman la <strong>transformación</strong>.)</li>
+</ul>
+</li>
+<li><strong>Modelado</strong>: elegir y aplicar técnicas de minería a la vista minable.</li>
+<li><strong>Evaluación</strong>: valorar los modelos <strong>en el contexto del negocio</strong>, es decir, si responden a los requisitos comerciales. Ojo: <strong>un error bajo en el modelado no implica que el modelo sea útil</strong> para la organización.</li>
+<li><strong>Despliegue</strong>: explotar los modelos, integrarlos en la toma de decisiones, generar informes sobre el conocimiento extraído…</li>
+</ol>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://es.wikipedia.org/wiki/Cross_Industry_Standard_Process_for_Data_Mining">CRISP-DM — Wikipedia</a> — descripción de las seis fases (artículo).</p>
+</div>
+<h1>3.4 Taxonomía de métodos de minería de datos</h1>
+<p>Los métodos se dividen primero en dos familias:</p>
+<ul>
+<li><strong>Verificación</strong>: <strong>evaluar una hipótesis</strong> con estadística tradicional (tests de bondad de ajuste, tests de hipótesis).</li>
+<li><strong>Descubrimiento</strong>: la mayoría se basa en <strong>aprendizaje inductivo</strong>: construir un modelo <strong>generalizando</strong> a partir de un conjunto de ejemplos.</li>
+</ul>
+<p>El descubrimiento, a su vez, se divide en:</p>
+<ul>
+<li><strong>Aprendizaje supervisado (predicción)</strong>: descubre la relación entre <strong>atributos de entrada</strong> (variables independientes) y <strong>atributos de salida</strong> (variables dependientes) para predecir la salida ante una entrada nueva. Incluye <strong>clasificación</strong> (salida categórica) y <strong>regresión</strong> (salida numérica), con técnicas como redes neuronales (ANN), árboles o SVM.</li>
+<li><strong>Aprendizaje no supervisado (descripción)</strong>: modela cómo se distribuyen las instancias en un espacio de entrada de alta dimensión, sin salida conocida (p. ej. <strong>clustering</strong>).</li>
+</ul>
+<p><img src="../../../img/myad/myad-t3-taxonomia.png" alt="Taxonomía de métodos|450" loading="lazy"></p>
+<h1>3.x Ideas clave</h1>
+<ul>
+<li>Datos crecen exponencialmente (90 % en dos años, 64,2 ZB en 2020), la capacidad humana no → hay que <strong>automatizar</strong> la extracción de conocimiento.</li>
+<li><strong>Dato</strong> (símbolo sin significado) → <strong>información</strong> (datos organizados con contexto) → <strong>conocimiento</strong> (interpretación) → decisión.</li>
+<li><strong>BI</strong>: DW + OLAP + dashboards + minería. Nivel operativo (SQL), táctico (consultas complejas) y estratégico (minería: modelos descriptivos y predictivos).</li>
+<li><strong>OLAP</strong> consulta lo existente (no crea información); <strong>minería</strong> induce y <strong>predice</strong> (crea información nueva).</li>
+<li><strong>KDD</strong> (Fayyad 1996): patrones <strong>válidos, novedosos, útiles y comprensibles</strong>. Fases: integración → preparación (<strong>vista minable</strong>) → minería → evaluación → despliegue → revisión.</li>
+<li><strong>CRISP-DM</strong>: negocio → datos → preparación → modelado → evaluación → despliegue; cíclico y flexible. Bajo error ≠ utilidad.</li>
+<li>Taxonomía: <strong>verificación</strong> vs <strong>descubrimiento</strong>; descubrimiento = <strong>supervisado</strong> (clasificación, regresión) o <strong>no supervisado</strong> (clustering).</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="2-extraccion-transformacion-y-carga-etl.html"><span class="nav-etiqueta">← anterior</span>2. Extracción, Transformación y Carga (ETL)</a>
+  <a class="nav-siguiente" href="4-preprocesamiento-y-analisis-de-datos.html"><span class="nav-etiqueta">siguiente →</span>4. Preprocesamiento y análisis de datos</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

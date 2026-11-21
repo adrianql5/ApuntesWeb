@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="12. Archivado de la información — apuntes de ENCO (cuarto curso de Ingeniería Informática).">
+<title>12. Archivado de la información · ENCO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enco</a><span class="miga-sep">/</span><span aria-current="page">12-archivado-de-la-informacion</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENCO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENCO</a></p><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li><li><a href="7-almacenamiento-ip.html">7. Almacenamiento IP</a></li><li><a href="8-sistemas-de-ficheros-y-almacenamiento-en-red.html">8. Sistemas de ficheros y almacenamiento en red</a></li><li><a href="9-virtualizacion-del-almacenamiento.html">9. Virtualización del almacenamiento</a></li><li><a href="10-backup.html">10. Backup</a></li><li><a href="11-backup-en-red-y-software-para-backup.html">11. Backup en red y software para backup</a></li><li><span class="actual" aria-current="page">12. Archivado de la información</span></li><li><a href="13-hardware-para-backup.html">13. Hardware para backup</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENCO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>12 / 13</div>
+    </div>
+    <h1>Archivado de la información</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENCO · 12/13</summary><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li><li><a href="7-almacenamiento-ip.html">7. Almacenamiento IP</a></li><li><a href="8-sistemas-de-ficheros-y-almacenamiento-en-red.html">8. Sistemas de ficheros y almacenamiento en red</a></li><li><a href="9-virtualizacion-del-almacenamiento.html">9. Virtualización del almacenamiento</a></li><li><a href="10-backup.html">10. Backup</a></li><li><a href="11-backup-en-red-y-software-para-backup.html">11. Backup en red y software para backup</a></li><li><span aria-current="page">12. Archivado de la información</span></li><li><a href="13-hardware-para-backup.html">13. Hardware para backup</a></li></ol></details>
+  <div class="prosa">
+<h1>12.1 Qué es archivar</h1>
+<p><strong>Archivar</strong> es <strong>guardar durante largos periodos datos que ya no van a cambiar</strong>. No es lo mismo que el backup (ver <a href="10-backup.html">tema 10</a>):</p>
+<ul>
+<li>El <strong>backup</strong> sirve para <strong>recuperar</strong> lo que se pierda, así que se hace <strong>con frecuencia</strong>, y su contenido <strong>queda obsoleto</strong> con el tiempo porque deja de reflejar los datos en uso.</li>
+<li>El <strong>archivado congela</strong> los datos: cada archivo representa <strong>el estado del sistema en un momento dado</strong> y <strong>nunca queda obsoleto</strong>, aunque haya muchos posteriores, porque cada uno es una versión distinta.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Característica</th>
+<th>Backup</th>
+<th>Archivado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Propósito</td>
+<td><strong>Protección</strong> de datos</td>
+<td><strong>Retención y conservación</strong></td>
+</tr>
+<tr>
+<td>Vigencia</td>
+<td>Corta: <strong>1 día a 1 año</strong></td>
+<td>Larga: <strong>5, 10, 30 años o más</strong></td>
+</tr>
+<tr>
+<td>Cumplimiento legal</td>
+<td>No suele exigirse</td>
+<td><strong>Normalmente obligatorio</strong></td>
+</tr>
+<tr>
+<td>Datos originales</td>
+<td>Coexisten con los backups</td>
+<td>El archivo <strong>sustituye</strong> a los originales</td>
+</tr>
+<tr>
+<td>Nº de versiones</td>
+<td>Múltiples</td>
+<td><strong>Una</strong></td>
+</tr>
+<tr>
+<td>Medio</td>
+<td>Transferencia rápida, reutilizable, barato</td>
+<td><strong>Robusto, WORM</strong> (escribir una vez, leer muchas), posiblemente barato</td>
+</tr>
+<tr>
+<td>Lectura</td>
+<td>Alta velocidad</td>
+<td>Respuesta rápida, velocidad media</td>
+</tr>
+<tr>
+<td>Búsqueda</td>
+<td>Por <strong>nombre de fichero</strong></td>
+<td>Por <strong>contenido</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>¿Por qué archivar?</strong> Para <strong>cumplir la legislación</strong> y normativas, <strong>reducir costes</strong> (sacando los datos archivados de la red de almacenamiento cara) y <strong>preservar la información</strong>.</p>
+<h1>12.2 Arquitectura de archivado</h1>
+<p>Se propone una arquitectura en <strong>tres capas</strong>:</p>
+<ol>
+<li><strong>Aplicaciones</strong>, donde se crean los datos.</li>
+<li><strong>Gestión de archivos</strong>, el <strong>DMS</strong> (<em>Document Management System</em>), con <strong>índices</strong> y aplicaciones de búsqueda.</li>
+<li><strong>Almacenamiento de archivos</strong>: un control de archivos sobre <strong>discos, ópticos y cintas</strong>.</li>
+</ol>
+<p><img src="../../../img/enco/enco-t12-arquitectura.png" alt="Arquitectura en tres capas|380" loading="lazy"></p>
+<p>Con dos niveles de almacenamiento, los datos viven primero en el <strong>almacenamiento primario</strong> y el <strong>proceso de archivado</strong> los mueve al de archivo; después, las aplicaciones acceden a ellos a través del DMS. Además, <strong>archivado y backup se pueden combinar</strong>: los datos archivados pueden servir para crear un backup.</p>
+<p><img src="../../../img/enco/enco-t12-backup-archivado.png" alt="Archivado con dos niveles y combinado con backup|600" loading="lazy"></p>
+<h1>12.3 Borrado de archivos</h1>
+<p>A menudo <strong>la ley obliga a borrar</strong> los archivos pasado cierto tiempo, y algunas normas no aceptan los métodos más débiles:</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Seguridad</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Borrar la <strong>metainformación</strong> y reutilizar el soporte</td>
+<td>Débil</td>
+<td>Cómodo para discos y cintas</td>
+</tr>
+<tr>
+<td>Borrar la metainformación y <strong>borrar el soporte</strong> antes de reutilizarlo</td>
+<td>Algo más segura, más lenta</td>
+<td></td>
+</tr>
+<tr>
+<td>Borrar la metainformación y <strong>destruir físicamente</strong> el soporte</td>
+<td>La más segura (hay normas sobre su eficacia)</td>
+<td>Cintas y ópticos</td>
+</tr>
+</tbody>
+</table>
+<h1>12.4 Casos de archivado</h1>
+<ul>
+<li><strong>Correo electrónico</strong>: gestionando los <strong>buzones</strong> (los correos antiguos pasan al archivo y se sustituyen por enlaces), mediante <strong>journaling</strong> (se archivan <strong>todos</strong> los correos, p. ej. MS Exchange, y siguen también en el buzón) o una <strong>combinación</strong> de ambos (ocupa más disco). Además: gestión de <strong>duplicados</strong> y archivado avanzado con el DMS.</li>
+<li><strong>Ficheros</strong>:
+<ul>
+<li>Accediendo al archivo <strong>como a un sistema de ficheros</strong> (NFS, CIFS/SMB): simple y estándar, pero <strong>aislado y limitado</strong>.</li>
+<li>Con un <strong>conversor de protocolo</strong> que pasa los ficheros al sistema de archivado; integrable con <strong>HSM</strong> (<em>Hierarchical Storage Management</em>).</li>
+<li>Con el <strong>DMS</strong> (normalmente junto al conversor): indexa los archivos y los clientes <strong>no acceden directamente</strong> al almacenamiento. <strong>Muy seguro, pero complejo</strong>.</li>
+</ul>
+</li>
+<li><strong>Sistemas ERP</strong> (<em>Enterprise Resource Planning</em>: SAP, Oracle e-Business Suite, Microsoft Dynamics…): información muy heterogénea (BD, documentos, correos); suelen traer <strong>sus propias utilidades</strong> de archivado, con o sin DMS.</li>
+<li><strong>Datos hospitalarios</strong>: historiales e imágenes <strong>DICOM</strong> que deben guardarse <strong>décadas</strong>. Sin DMS es simple pero limitado; <strong>con DMS</strong> se pueden <strong>vincular historiales e imágenes</strong>.</li>
+</ul>
+<h1>12.x Ideas clave</h1>
+<ul>
+<li>Archivar = <strong>congelar</strong> datos que no cambian, durante años (5–30+), normalmente por <strong>obligación legal</strong>; el archivo sustituye a los originales, una sola versión, búsqueda <strong>por contenido</strong>, medios <strong>WORM</strong>. Backup = protección, corto plazo, varias versiones.</li>
+<li>Motivos: <strong>ley</strong>, <strong>costes</strong>, <strong>preservación</strong>.</li>
+<li>Arquitectura en 3 capas: <strong>aplicaciones → DMS → almacenamiento</strong> (discos, ópticos, cintas). Archivado y backup se pueden combinar.</li>
+<li><strong>Borrado</strong>: solo metainformación (débil), + borrar soporte, + <strong>destruir</strong> soporte (más seguro).</li>
+<li>Casos: <strong>correo</strong> (buzones, journaling), <strong>ficheros</strong> (sistema de ficheros, conversor + HSM, DMS), <strong>ERP</strong>, <strong>hospitales</strong> (DICOM).</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="11-backup-en-red-y-software-para-backup.html"><span class="nav-etiqueta">← anterior</span>11. Backup en red y software para backup</a>
+  <a class="nav-siguiente" href="13-hardware-para-backup.html"><span class="nav-etiqueta">siguiente →</span>13. Hardware para backup</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

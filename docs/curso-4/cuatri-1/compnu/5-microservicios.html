@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Microservicios — apuntes de COMPNU (cuarto curso de Ingeniería Informática).">
+<title>5. Microservicios · COMPNU · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">compnu</a><span class="miga-sep">/</span><span aria-current="page">5-microservicios</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de COMPNU"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">COMPNU</a></p><ol><li><a href="1-introduccion-a-la-computacion-en-la-nube.html">1. Introducción a la computación en la nube</a></li><li><a href="2-mecanismos-de-virtualizacion.html">2. Mecanismos de virtualización</a></li><li><a href="3-aplicaciones-y-servicios-en-la-nube.html">3. Aplicaciones y servicios en la nube</a></li><li><a href="4-orquestacion-de-contenedores.html">4. Orquestación de contenedores</a></li><li><span class="actual" aria-current="page">5. Microservicios</span></li><li><a href="6-serverless.html">6. Serverless</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>COMPNU</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>5 / 6</div>
+    </div>
+    <h1>Microservicios</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de COMPNU · 5/6</summary><ol><li><a href="1-introduccion-a-la-computacion-en-la-nube.html">1. Introducción a la computación en la nube</a></li><li><a href="2-mecanismos-de-virtualizacion.html">2. Mecanismos de virtualización</a></li><li><a href="3-aplicaciones-y-servicios-en-la-nube.html">3. Aplicaciones y servicios en la nube</a></li><li><a href="4-orquestacion-de-contenedores.html">4. Orquestación de contenedores</a></li><li><span aria-current="page">5. Microservicios</span></li><li><a href="6-serverless.html">6. Serverless</a></li></ol></details>
+  <div class="prosa">
+<h1>5.1 Del monolito a los servicios</h1>
+<h2>5.1.1 Arquitecturas monolíticas</h2>
+<p>Tradicionalmente las aplicaciones empresariales se construían como <strong>monolitos</strong>: se dividían en <strong>capas</strong>, pero todas formaban parte de <strong>una única aplicación</strong>.</p>
+<p>Tienen <strong>ventajas</strong> claras: son <strong>simples de desarrollar, probar y desplegar</strong>, y el <strong>rendimiento depende solo de la aplicación</strong>, no de sistemas intermedios. Pero también <strong>problemas</strong>: <strong>escalar</strong> es complicado (hay que replicar todo), los <strong>despliegues y actualizaciones son arriesgados y lentos</strong>, la <strong>resiliencia es baja</strong> (un fallo en cualquier parte del código afecta a todo) y quedas <strong>atado a unas tecnologías</strong> concretas.</p>
+<h2>5.1.2 Arquitecturas orientadas a servicios (SOA)</h2>
+<p><strong>SOA</strong> supone un cambio de paradigma: en vez de pensar en aplicaciones, se piensa en <strong>componentes que colaboran</strong> para un fin. La aplicación se parte en <strong>componentes más pequeños</strong>, cada uno con una <strong>funcionalidad específica</strong> y una <strong>interfaz muy bien definida</strong>. Sus principios:</p>
+<ul>
+<li><strong>Contratos estandarizados</strong>, que ocultan la implementación.</li>
+<li><strong>Bajo acoplamiento</strong>: cada servicio depende lo mínimo de otros.</li>
+<li><strong>Abstracción</strong>: los servicios son <strong>cajas negras</strong>.</li>
+<li><strong>Reusabilidad</strong>: servicios aprovechables en varias aplicaciones.</li>
+<li><strong>Autonomía</strong>: control absoluto de cada servicio sobre sus datos y su lógica.</li>
+<li><strong>Descubribilidad</strong> (<em>discoverability</em>): un <strong>registro</strong> donde los consumidores encuentran los contratos.</li>
+<li><strong>Componibilidad</strong>: combinar servicios para crear flujos de negocio más complejos.</li>
+</ul>
+<h2>5.1.3 SOA tradicional: SOAP y REST</h2>
+<p>Históricamente SOA se implementó con <strong>SOAP</strong> (protocolo propio) y ficheros <strong>WSDL/XML</strong>, lo que lo hacía <strong>pesado e incómodo</strong>. La comunicación pasaba por un <strong>bus centralizado (ESB, <em>Enterprise Service Bus</em>)</strong> que era el <strong>&quot;cerebro&quot;</strong> del sistema: enrutaba y transformaba mensajes y orquestaba las llamadas.</p>
+<p>Las arquitecturas modernas migran a <strong>REST</strong>, que <strong>no es un protocolo</strong>: reutiliza toda la pila HTTP y formatos ligeros como <strong>JSON</strong>. La <strong>lógica pasa del ESB a los endpoints</strong> y la comunicación se reduce a mensajes HTTP simples. REST es mucho más sencillo y ligero, pero <strong>no resuelve del todo el problema del monolito</strong>.</p>
+<h1>5.2 Arquitecturas de microservicios</h1>
+<p>Los microservicios <strong>no son una arquitectura nueva</strong>, sino una <strong>forma de implementar SOA</strong> que lleva la simplicidad de REST un paso más allá. La diferencia clave: <strong>cada microservicio es dueño de sus datos</strong>. Dos definiciones clásicas:</p>
+<blockquote>
+<p>&quot;Una aproximación para desarrollar una aplicación como un conjunto de <strong>servicios pequeños</strong>, cada uno ejecutándose en <strong>su propio proceso</strong> y comunicándose mediante <strong>mecanismos ligeros</strong>.&quot; — Martin Fowler y James Lewis</p>
+</blockquote>
+<blockquote>
+<p>&quot;Servicios <strong>pequeños y autónomos</strong> que trabajan en común.&quot; — Sam Newman</p>
+</blockquote>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=-gN-JUjxaTw">MONOLITOS VS MICROSERVICIOS en 10 MINUTOS</a> — comparación de ambos enfoques (vídeo, 11 min).
+<a href="https://martinfowler.com/articles/microservices.html">Microservices — Martin Fowler</a> — el artículo original de Fowler y Lewis (artículo, inglés).</p>
+</div>
+<h2>5.2.1 Principios</h2>
+<p>Heredan los de SOA (desacoplamiento, autonomía, reusabilidad, componibilidad…) y añaden restricciones propias:</p>
+<ul>
+<li><strong>Tamaño pequeño y enfoque único</strong>: cada servicio hace <strong>una sola cosa, y bien</strong>. Se aplica la <strong>&quot;regla de las dos pizzas&quot;</strong> de Jeff Bezos: el equipo que mantiene un microservicio debe poder cenar con dos pizzas.</li>
+<li><strong>Un servicio = una base de datos</strong>: principio fundamental y a menudo <strong>el más difícil</strong>. Cada microservicio es <strong>propietario exclusivo</strong> de su BD, no compartida; si otro necesita esos datos, <strong>los pide al servicio</strong>, nunca a la BD directamente. Así el acoplamiento es mínimo.</li>
+<li><strong>Despliegue independiente</strong>: el <strong>mayor beneficio</strong>. Cada microservicio se despliega (o se replica según la demanda) sin que los demás se enteren.</li>
+<li><strong>Endpoints inteligentes, conexiones simples</strong> (<em>smart endpoints, dumb pipes</em>): la comunicación usa protocolos sencillos (HTTP o mensajería) y <strong>se prescinde del ESB</strong> y toda su lógica.</li>
+<li><strong>Libertad tecnológica y agnosticismo del lenguaje</strong>: al estar desacoplados, cada uno usa la tecnología más apropiada y se comunican mediante <strong>APIs neutras</strong>, normalmente JSON.</li>
+<li><strong>Automatización (DevOps)</strong>: tantas aplicaciones independientes (cada una con su BD) complican el despliegue, así que es <strong>imprescindible automatizar</strong>: integración continua, despliegue continuo, contenedores…</li>
+<li><strong>Servicios sin estado</strong>: sin esto no se podrían escalar ni automatizar los despliegues sin problemas de <strong>sincronización de estado</strong>.</li>
+</ul>
+<h2>5.2.2 Comunicación entre microservicios</h2>
+<p>Los microservicios se hablan <strong>por la red</strong>, de dos maneras:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Síncrona (petición/respuesta)</th>
+<th>Asíncrona (eventos)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cómo</td>
+<td>A llama a B (REST o RPC) y <strong>se bloquea</strong> hasta la respuesta</td>
+<td>A hace su trabajo y <strong>publica un evento</strong> en un canal (<strong>Kafka</strong>, <strong>RabbitMQ</strong>) sin esperar; B escucha el canal y procesa los eventos dirigidos a él</td>
+</tr>
+<tr>
+<td>Ventaja</td>
+<td><strong>Simple y universal</strong></td>
+<td><strong>Desacoplamiento total</strong></td>
+</tr>
+<tr>
+<td>Riesgo</td>
+<td><strong>Acoplamiento temporal</strong>: si B falla, A falla</td>
+<td><strong>Trazabilidad</strong>: difícil seguir qué pasó</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>La síncrona es una llamada de teléfono: si el otro no contesta, te quedas colgado esperando. La asíncrona es dejar una carta en un buzón: sigues con tu día y el destinatario la lee cuando puede, pero no sabes exactamente cuándo ni si la ha leído.</p>
+</div>
+<h2>5.2.3 Retos</h2>
+<p>La complejidad <strong>sale del monolito y se traslada a la comunicación</strong> entre componentes. Surgen preguntas nuevas: ¿cómo gestiono la configuración de muchos servicios?, ¿cómo sabe cada servicio dónde están los otros?, ¿qué pasa si uno no responde?, ¿fallos en cadena?, ¿a qué servicio llama la interfaz?, ¿quién gestiona lo transversal (autenticación, logs)?, ¿cómo mantengo la consistencia si una transacción afecta a varios servicios?, ¿cómo agrego resultados de varios servicios?, ¿cómo sé cuál falló en una cadena de llamadas distribuidas? La respuesta son <strong>patrones de diseño específicos para microservicios</strong>.</p>
+<h1>5.3 Patrones de microservicios</h1>
+<p>Cada patrón responde a uno de los retos anteriores:</p>
+<table>
+<thead>
+<tr>
+<th>Patrón</th>
+<th>Problema</th>
+<th>Solución</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Externalized Configuration</strong></td>
+<td><em>Hardcodear</em> parámetros (IPs, claves criptográficas) en cada servicio no es recomendable</td>
+<td>Un <strong>servidor de configuración centralizado</strong> al que los servicios acuden al arrancar. Un cambio en un solo sitio llega a todos <strong>sin redesplegar</strong></td>
+</tr>
+<tr>
+<td><strong>Microservice Chassis</strong></td>
+<td>Cada servicio necesita mucho <em>boilerplate</em>: inicialización, logs, pruebas de vida, métricas, acceso a la configuración…</td>
+<td>Un <strong>framework</strong> que dé todo eso <em>out-of-the-box</em> para centrarse en la lógica de negocio</td>
+</tr>
+<tr>
+<td><strong>Service Discovery &amp; Registry</strong></td>
+<td>Con despliegues dinámicos, ¿cómo sabe un servicio a dónde llamar?</td>
+<td>Un <strong>registro</strong> donde los servicios se dan de alta al arrancar y donde se consulta la ubicación de los demás. Evita <em>hardcodear</em> direcciones</td>
+</tr>
+<tr>
+<td><strong>API Gateway</strong></td>
+<td>El cliente no puede conocer la ubicación de todos los microservicios; ¿y quién gestiona autenticación, SSL, enrutamiento?</td>
+<td>Una <strong>puerta de entrada única</strong> que centraliza el acceso y las tareas transversales</td>
+</tr>
+<tr>
+<td><strong>Circuit Breaker</strong></td>
+<td>Un servicio caído no debe contagiar a los sanos (<strong>fallos en cadena</strong>)</td>
+<td>Un <strong>interruptor automático</strong> que corta las llamadas al detectar fallos; tras un tiempo deja pasar alguna de prueba: si va bien reabre la comunicación, si no vuelve a cortar y reintenta más tarde</td>
+</tr>
+<tr>
+<td><strong>Database per Service</strong></td>
+<td>Garantizar que solo el propietario accede a sus datos</td>
+<td>Cada microservicio tiene una <strong>BD independiente y aislada</strong> a la que solo él accede</td>
+</tr>
+<tr>
+<td><strong>Saga</strong></td>
+<td>Transacciones distribuidas que abarcan varios microservicios</td>
+<td><strong>Transacciones locales</strong> y, si una falla, <strong>transacciones compensatorias</strong> que deshacen lo ya confirmado. Por <strong>coreografía</strong> (los servicios reaccionan a eventos) u <strong>orquestación</strong> (un servicio central llama al resto en orden)</td>
+</tr>
+<tr>
+<td><strong>Transactional Outbox</strong></td>
+<td>En una saga, el servicio puede caer <strong>después de actualizar la BD pero antes de publicar el evento</strong>: BD y cola quedan inconsistentes</td>
+<td>Guardar el evento en una <strong>tabla de la propia BD dentro de la misma transacción</strong>; un proceso aparte vigila esa tabla y publica los eventos de forma fiable</td>
+</tr>
+<tr>
+<td><strong>CQRS</strong> (<em>Command Query Responsibility Segregation</em>)</td>
+<td>¿Cómo hago una consulta que necesita datos de varios microservicios?</td>
+<td><strong>Vistas de solo lectura</strong> con datos <strong>desnormalizados</strong> de varios servicios, actualizadas escuchando sus eventos. Las consultas van a esa BD optimizada: se <strong>separan lecturas de escrituras</strong></td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: Transactional Outbox</p>
+<p>En vez de anotar el pedido en el libro y luego correr a avisar al repartidor (y arriesgarte a tropezar entre una cosa y otra), escribes el aviso en la misma hoja del libro. Un empleado repasa el libro y entrega los avisos pendientes: si está escrito, se enviará seguro.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://microservices.io/patterns/data/cqrs.html">Pattern: CQRS — microservices.io</a> — explicación del patrón con ejemplo (artículo, inglés).</p>
+</div>
+<p>Hay muchos más patrones, recogidos en el catálogo de Chris Richardson:</p>
+<p><img src="../../../img/compnu/compnu-t5-patrones-microservices-io.jpeg" alt="Mapa de patrones de microservices.io|650" loading="lazy">
+<em>Fuente: <a href="https://microservices.io/patterns/">microservices.io/patterns</a>. Los patrones se agrupan por problema: descomposición, datos, comunicación, despliegue, observabilidad, seguridad…</em></p>
+<h1>5.4 ¿Microservicios sí o no?</h1>
+<p>Los microservicios <strong>no son una bala de plata</strong>: añaden una <strong>enorme complejidad</strong> de gestión e infraestructura.</p>
+<table>
+<thead>
+<tr>
+<th>Úsalos si…</th>
+<th>No los uses si…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tienes un <strong>equipo grande</strong> que puede trabajar en paralelo</td>
+<td>Tienes un <strong>equipo pequeño</strong></td>
+</tr>
+<tr>
+<td>Necesitas <strong>escalar partes</strong> de la aplicación por separado</td>
+<td>La aplicación es <strong>simple</strong></td>
+</tr>
+<tr>
+<td>Necesitas <strong>despliegues rápidos y autónomos</strong></td>
+<td>Estás en <strong>fases iniciales</strong> del desarrollo</td>
+</tr>
+<tr>
+<td>Quieres <strong>mezclar stacks</strong> tecnológicos</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1>5.x Ideas clave</h1>
+<ul>
+<li><strong>Monolito</strong>: simple de desarrollar, probar y desplegar; pero difícil de escalar, despliegues arriesgados, baja resiliencia y atado a una tecnología.</li>
+<li><strong>SOA</strong>: componentes con interfaz bien definida; principios: contratos, bajo acoplamiento, abstracción, reusabilidad, autonomía, descubribilidad, componibilidad. Clásicamente <strong>SOAP + WSDL + ESB</strong> (pesado) → <strong>REST</strong> (ligero, lógica en los endpoints).</li>
+<li><strong>Microservicios</strong> = forma de implementar SOA: servicios <strong>pequeños, autónomos, en su propio proceso, con mecanismos ligeros</strong>, cada uno <strong>dueño de sus datos</strong>.</li>
+<li>Principios: enfoque único (<strong>regla de las dos pizzas</strong>), <strong>una BD por servicio</strong>, <strong>despliegue independiente</strong> (mayor beneficio), <em>smart endpoints, dumb pipes</em>, libertad tecnológica, <strong>DevOps</strong>, <strong>sin estado</strong>.</li>
+<li>Comunicación <strong>síncrona</strong> (simple, acoplamiento temporal) vs <strong>asíncrona</strong> con Kafka/RabbitMQ (desacoplada, difícil de trazar).</li>
+<li>Patrones: <strong>Externalized Configuration, Chassis, Service Discovery, API Gateway, Circuit Breaker, Database per Service, Saga, Transactional Outbox, CQRS</strong>.</li>
+<li>No son bala de plata: para equipos grandes y escalado independiente; no para equipos pequeños, apps simples o fases iniciales.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-orquestacion-de-contenedores.html"><span class="nav-etiqueta">← anterior</span>4. Orquestación de contenedores</a>
+  <a class="nav-siguiente" href="6-serverless.html"><span class="nav-etiqueta">siguiente →</span>6. Serverless</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

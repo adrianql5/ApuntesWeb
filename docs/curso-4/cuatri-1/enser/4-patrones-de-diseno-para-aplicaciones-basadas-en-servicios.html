@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="4. Patrones de diseño para aplicaciones basadas en servicios — apuntes de ENSER (cuarto curso de Ingeniería Informática).">
+<title>4. Patrones de diseño para aplicaciones basadas en servicios · ENSER · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enser</a><span class="miga-sep">/</span><span aria-current="page">4-patrones-de-diseno-para-aplicaciones-basadas-en-servicios</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENSER"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENSER</a></p><ol><li><a href="1-introduccion-a-la-ingenieria-de-servicios.html">1. Introducción a la Ingeniería de Servicios</a></li><li><a href="2-componentes-distribuidos-y-estilos-arquitectonicos-soap-y-rest.html">2. Componentes distribuidos y estilos arquitectónicos. SOAP y REST</a></li><li><a href="3-concepto-de-servicio-y-servicios-sin-estado-buenas-practicas-en-el-diseno-de-servicios.html">3. Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios</a></li><li><span class="actual" aria-current="page">4. Patrones de diseño para aplicaciones basadas en servicios</span></li><li><a href="5-mas-alla-de-rest.html">5. Más allá de REST</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENSER</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>4 / 5</div>
+    </div>
+    <h1>Patrones de diseño para aplicaciones basadas en servicios</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENSER · 4/5</summary><ol><li><a href="1-introduccion-a-la-ingenieria-de-servicios.html">1. Introducción a la Ingeniería de Servicios</a></li><li><a href="2-componentes-distribuidos-y-estilos-arquitectonicos-soap-y-rest.html">2. Componentes distribuidos y estilos arquitectónicos. SOAP y REST</a></li><li><a href="3-concepto-de-servicio-y-servicios-sin-estado-buenas-practicas-en-el-diseno-de-servicios.html">3. Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios</a></li><li><span aria-current="page">4. Patrones de diseño para aplicaciones basadas en servicios</span></li><li><a href="5-mas-alla-de-rest.html">5. Más allá de REST</a></li></ol></details>
+  <div class="prosa">
+<h1>4.1 Documentación de APIs REST</h1>
+<p>La <strong>documentación</strong> de un servicio REST no es un extra: es lo que permite la <strong>interoperabilidad</strong>, el <strong>desacoplamiento</strong> y que la API se pueda mantener y evolucionar. Cumple tres papeles:</p>
+<ul>
+<li><strong>Contrato</strong>: es el punto de referencia único entre cliente y servidor; mientras ambos respeten el documento, pueden cambiar por dentro sin coordinarse.</li>
+<li><strong>Guía para desarrolladores</strong>: facilita consumir, mantener y depurar la API.</li>
+<li><strong>Mecanismo de descubrimiento</strong> (<em>discoverability</em>): permite montar <strong>catálogos de APIs</strong>, como apis.guru (&quot;la Wikipedia de las APIs web&quot;) o directorios de APIs públicas.</li>
+</ul>
+<p><img src="../../../img/enser/enser-t4-apisguru.png" alt="Catálogo apis.guru|500" loading="lazy"></p>
+<p>A lo largo del tiempo han aparecido varios lenguajes para escribir ese contrato de forma formal:</p>
+<table>
+<thead>
+<tr>
+<th>Lenguaje</th>
+<th>Formato</th>
+<th>Idea</th>
+<th>Por qué triunfó o no</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>WADL</strong> (<em>Web Application Description Language</em>)</td>
+<td>XML</td>
+<td>Primer intento serio, inspirado en el WSDL de SOAP. Describe recursos (<code>&lt;resource&gt;</code>), acciones (<code>&lt;method&gt;</code>), tipos de datos (<code>&lt;representation&gt;</code>, modelados con <code>&lt;grammars&gt;</code>) y tipo de parámetro con el atributo <code>style</code></td>
+<td>Poco expresivo y atado a XML cuando las APIs ya usaban JSON. <strong>Obsoleto</strong></td>
+</tr>
+<tr>
+<td><strong>RAML</strong> (<em>RESTful API Modeling Language</em>)</td>
+<td>YAML</td>
+<td>Pensado específicamente para diseñar y documentar REST; prioriza la <strong>lectura humana</strong> y la <strong>reutilización de fragmentos</strong>; facilita el enfoque <em>design-first</em></td>
+<td>Perdió la batalla porque las grandes empresas apoyaron OpenAPI</td>
+</tr>
+<tr>
+<td><strong>API Blueprint</strong></td>
+<td>Markdown</td>
+<td>El contrato va dentro del texto Markdown: documentación <strong>legible por naturaleza</strong>, muy <em>human-friendly</em></td>
+<td>Poco soporte de herramientas (generación de código, validación, <em>mocking</em>) y poca estandarización</td>
+</tr>
+<tr>
+<td><strong>OpenAPI (OAS)</strong></td>
+<td>JSON o YAML</td>
+<td>Especificación formal, estandarizada e <strong>independiente del lenguaje de programación</strong></td>
+<td><strong>Adopción masiva</strong> y muchísimas herramientas (generar código, validar, <em>mocks</em>…). Es el estándar actual</td>
+</tr>
+</tbody>
+</table>
+<h2>4.1.1 OpenAPI</h2>
+<p>Una especificación OpenAPI define de forma estandarizada:</p>
+<ul>
+<li><strong><code>paths</code></strong>: todas las rutas (endpoints) disponibles.</li>
+<li><strong><code>operations</code></strong>: para cada ruta, qué métodos HTTP admite y qué hace cada uno.</li>
+<li><strong><code>parameters</code></strong>: parámetros obligatorios u opcionales, <strong>dónde van</strong> (ruta, consulta, cabecera…), su tipo y descripción.</li>
+<li><strong><code>schemas</code></strong>: la estructura exacta de los objetos de datos de peticiones y respuestas.</li>
+<li><strong><code>responses</code></strong>: todos los códigos de estado posibles y, para cada uno, el formato y esquema de la respuesta.</li>
+<li><strong><code>security</code></strong>: los mecanismos de autenticación y autorización que exige la API.</li>
+</ul>
+<pre><code class="language-yaml">paths:
+  /usuarios:
+    get:
+      summary: Obter a lista de Usuarios
+      parameters:
+        - name: estado
+          in: query            # parámetro de consulta
+          required: false
+          schema: { type: string, enum: [activo, inactivo], default: activo }
+      responses:
+        '200':
+          description: Lista de usuarios devolta correctamente.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Usuario' }   # esquema reutilizable
+        '400':
+          description: Solicitude incorrecta
+</code></pre>
+<h1>4.2 Versionado de APIs</h1>
+<p>Cualquier cambio en una API puede <strong>&quot;romper&quot; a los clientes</strong> que ya la usan. Por eso hace falta una estrategia de versionado: los <strong>cambios disruptivos</strong> (quitar un campo, cambiar un tipo) exigen <strong>una versión nueva</strong>, mientras que los <strong>no disruptivos</strong> (añadir un campo opcional) no. Una buena estrategia permite <strong>compatibilidad hacia atrás</strong>, <strong>migración gradual</strong> de los clientes e <strong>innovar</strong> sin miedo.</p>
+<p>Hay cuatro formas de indicar la versión, que van de la más sencilla a la más &quot;pura&quot; según REST:</p>
+<table>
+<thead>
+<tr>
+<th>Estrategia</th>
+<th>Ejemplo</th>
+<th>A favor</th>
+<th>En contra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>En la URL</strong></td>
+<td><code>/v2/usuarios</code></td>
+<td>La más <strong>extendida, clara y sencilla</strong> para el cliente; la más <strong>amigable con las cachés</strong> (la URL ya es la clave de caché)</td>
+<td>La <strong>menos REST</strong>: la URL debería identificar el recurso de forma atemporal, no una versión suya. En el código provoca <strong>ramificaciones y duplicación</strong> de controladores y servicios</td>
+</tr>
+<tr>
+<td><strong>Parámetro de consulta</strong></td>
+<td><code>/usuarios?version=2</code></td>
+<td>Fácil fijar una <strong>versión por defecto</strong> (la última) y cambiar bajo demanda</td>
+<td>Semánticamente sucio (la query es para filtrar, paginar o limitar campos); <strong>poco amigable con cachés</strong> (hay que configurarlas para incluir el parámetro en la clave); complica el enrutamiento</td>
+</tr>
+<tr>
+<td><strong>Cabecera personalizada</strong></td>
+<td><code>x-api-version: 2</code></td>
+<td>Mejor alineado con REST: la URL queda <strong>pura</strong> y la versión se negocia aparte</td>
+<td><strong>Menos descubrible</strong>, peticiones más complejas; las cachés deben configurarse para usar la cabecera como clave</td>
+</tr>
+<tr>
+<td><strong>MediaType</strong> (negociación de contenido)</td>
+<td><code>Accept: application/myapp.user.v2+json</code>, <code>Accept: application/json;version=2</code> o combinados (<code>application/myapp.user+json;version=2</code>)</td>
+<td>El <strong>más alineado con REST</strong>; permite elegir versión <strong>recurso a recurso</strong></td>
+<td>Igual que las cabeceras: configuración extra para cachear</td>
+</tr>
+</tbody>
+</table>
+<h1>4.3 HATEOAS</h1>
+<p><strong>HATEOAS</strong> (<em>Hypermedia as the Engine of Application State</em>) es un patrón fundamental de REST que hace la API <strong>autodescubrible</strong>: cada respuesta incluye, además de los datos, <strong>enlaces a las operaciones que se pueden hacer a continuación</strong>. Así el cliente solo necesita conocer el <strong>punto de entrada</strong> y va descubriendo el resto dinámicamente, igual que navegas por una web siguiendo enlaces sin saberte las URLs.</p>
+<p>Cada enlace lleva la URL, el método HTTP y una <strong>relación</strong> que dice qué significa ese enlace respecto al recurso actual:</p>
+<ul>
+<li><strong>Relaciones estándar</strong> (definidas por la IANA): <code>self</code> (el propio recurso), <code>next</code>/<code>prev</code>/<code>first</code>/<code>last</code> (páginas de una colección), <code>item</code> (un miembro de la colección), <code>collection</code>, <code>author</code>…</li>
+<li><strong>Relaciones del dominio</strong>, propias de la aplicación: <code>ingresar</code>, <code>cancelar-pedido</code>, <code>engadir-ao-carro</code>…</li>
+</ul>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Un cajero automático no te enseña todas las operaciones del banco: según tu saldo y tu tarjeta te muestra solo los botones que puedes pulsar ahora. Los enlaces HATEOAS son esos botones.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://es.wikipedia.org/wiki/HATEOAS">HATEOAS — Wikipedia</a> — definición y ejemplo de respuesta con enlaces (artículo).</p>
+</div>
+<h2>4.3.1 Formas de incluir los enlaces</h2>
+<p><strong>Cabecera <code>Link</code></strong>: los enlaces van en la cabecera HTTP y el cuerpo queda <strong>limpio</strong>, pero es la opción <strong>menos cómoda</strong> para los clientes.</p>
+<pre><code class="language-http">HTTP/1.1 200 OK
+Content-Type: application/json
+Link: &lt;https://api.banco.exemplo/contas/ES80.../ingresos&gt;; rel=&quot;ingresar&quot;; method=&quot;POST&quot;
+Link: &lt;https://api.banco.exemplo/contas/ES80...&gt;; rel=&quot;self&quot;
+
+{ &quot;numero_conta&quot;: &quot;ES80...&quot;, &quot;titular&quot;: &quot;Pepe Pérez&quot;, &quot;saldo&quot;: 1500.00, &quot;estado&quot;: &quot;ACTIVA&quot; }
+</code></pre>
+<p>El resto son <strong>formatos hipermedia</strong> que meten los enlaces dentro del JSON:</p>
+<table>
+<thead>
+<tr>
+<th>Formato</th>
+<th>MIME</th>
+<th>Cómo es</th>
+<th>Valoración</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>HAL</strong></td>
+<td><code>application/hal+json</code></td>
+<td>Campos <code>_links</code> (enlaces) y <code>_embedded</code> (subrecursos)</td>
+<td><strong>Muy fácil</strong> y con muchas librerías, pero <strong>básico</strong>: no describe peticiones complejas</td>
+</tr>
+<tr>
+<td><strong>HAL-Forms</strong></td>
+<td><code>application/prs.hal-forms+json</code></td>
+<td>Extiende HAL con <code>_templates</code>: operaciones con <strong>verbos distintos de GET</strong> y plantillas del contenido a enviar (campos, tipos, obligatorios, mínimos…)</td>
+<td>Cubre lo que le falta a HAL</td>
+</tr>
+<tr>
+<td><strong>Siren</strong></td>
+<td><code>application/vnd.siren+json</code></td>
+<td>Describe <strong>entidades, enlaces y acciones</strong> (<code>class</code>, <code>properties</code>, <code>links</code>, <code>actions</code> con sus <code>fields</code>), como un formulario HTML</td>
+<td><strong>Muy expresivo</strong>, pero más complejo, verboso y con menos herramientas que HAL</td>
+</tr>
+<tr>
+<td><strong>JSON-LD</strong></td>
+<td><code>application/ld+json</code></td>
+<td>JSON para <em>Linked Data</em>: un objeto <code>@context</code> mapea cada término JSON a un elemento semántico (ontologías); <code>@id</code>, <code>@type</code></td>
+<td><strong>Estándar W3C</strong>, potentísimo para interoperabilidad semántica; curva de aprendizaje alta, <strong>excesivo para APIs sencillas</strong></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">{
+  &quot;numero_conta&quot;: &quot;ES80...&quot;, &quot;titular&quot;: &quot;Pepe Perez&quot;, &quot;saldo&quot;: 1500.00,
+  &quot;_links&quot;: {
+    &quot;self&quot;:       { &quot;href&quot;: &quot;https://api.banco.exemplo/contas/ES80...&quot; },
+    &quot;movementos&quot;: { &quot;href&quot;: &quot;https://api.banco.exemplo/contas/ES80.../movementos{?tipo}&quot;, &quot;templated&quot;: true }
+  }
+}
+</code></pre>
+<p><em>Ejemplo HAL: <code>templated: true</code> indica que la URL es una plantilla (<code>{?tipo}</code> se rellena).</em></p>
+<h1>4.4 Seguridad en REST</h1>
+<p>La seguridad se apoya en dos pilares:</p>
+<ul>
+<li><strong>Autenticación</strong>: verificar la identidad del cliente. Responde a <strong>&quot;¿quién eres?&quot;</strong>.</li>
+<li><strong>Autorización</strong>: decidir qué puede hacer esa identidad sobre cada recurso. Responde a <strong>&quot;¿qué tienes permitido hacer?&quot;</strong>.</li>
+</ul>
+<p>Como REST es <strong>sin estado</strong>, ambas deben resolverse con la información de <strong>cada petición</strong>. Por eso se usan <strong>tokens</strong> que el cliente envía en cada llamada, normalmente en la cabecera <strong><code>Authorization</code></strong>.</p>
+<h2>4.4.1 Tokens opacos</h2>
+<p>Tras el login, el servidor genera un <strong>token opaco</strong>: una cadena aleatoria y única (p. ej. un UUID) que <strong>no significa nada por sí misma</strong>. Lo <strong>guarda en una base de datos</strong> asociado al usuario y con fecha de expiración, y se lo devuelve al cliente.</p>
+<p><img src="../../../img/enser/enser-t4-opaco-login.png" alt="Login con token opaco|600" loading="lazy"></p>
+<p>En cada petición el cliente envía <code>Authorization: Bearer &lt;token&gt;</code> y el servidor <strong>consulta la BD en cada solicitud</strong> para comprobar que el token existe y no ha caducado; si es válido ya conoce el ID del usuario y sirve los datos, si no, responde <strong>401 Unauthorized</strong>.</p>
+<p><img src="../../../img/enser/enser-t4-opaco-acceso.png" alt="Acceso con token opaco|600" loading="lazy"></p>
+<p><strong>Invalidar</strong> un token es trivial: se borra de la BD. El problema es que esto <strong>choca con el principio sin estado</strong> de REST, porque el servidor depende de un almacén de tokens.</p>
+<h2>4.4.2 JSON Web Tokens (JWT)</h2>
+<p>Con <strong>JWT</strong>, tras el login el servidor genera un token <strong>firmado</strong> y se lo envía; el cliente lo manda en cada petición (<code>Authorization: Bearer &lt;token&gt;</code>) y el servidor solo <strong>comprueba su validez</strong>. La clave es que los JWT son <strong>autocontenidos</strong>: llevan dentro los datos (usuario, roles, caducidad) y la firma que prueba que no se han tocado, así que <strong>no hace falta guardarlos en ninguna BD</strong>.</p>
+<p><img src="../../../img/enser/enser-t4-jwt-login.png" alt="Login con JWT|600" loading="lazy">
+<em>El servidor NO guarda el token: su validez se basa en la firma. El cliente lo almacena de forma segura.</em></p>
+<p><img src="../../../img/enser/enser-t4-jwt-acceso.png" alt="Acceso con JWT|600" loading="lazy">
+<em>Validación local: verifica la firma con la clave y la caducidad (<code>exp</code>), sin consultar la BD; luego extrae el <code>userID</code> del payload.</em></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>El token opaco es el número de un guardarropa: sin consultar el libro del guardarropa no sabes de quién es. El JWT es un DNI: lleva tus datos impresos y un sello difícil de falsificar, así que cualquiera que conozca el sello puede comprobarlo sin llamar a nadie.</p>
+</div>
+<p>Un JWT tiene <strong>3 partes en base64 separadas por puntos</strong>: <code>&lt;header&gt;.&lt;payload&gt;.&lt;signature&gt;</code>.</p>
+<ul>
+<li><strong>Header</strong>: tipo de token y algoritmo de firma, p. ej. <code>{&quot;alg&quot;: &quot;HS256&quot;, &quot;typ&quot;: &quot;JWT&quot;}</code>.</li>
+<li><strong>Payload</strong>: la carga útil, formada por <strong>claims</strong> (identidad del usuario, caducidad, permisos…). Base64 <strong>no es cifrado</strong>: cualquiera puede leerlo, así que <strong>nunca debe llevar información sensible</strong>.</li>
+<li><strong>Signature</strong>: firma criptográfica de <code>&lt;header&gt;.&lt;payload&gt;</code> calculada con el algoritmo del header y una <strong>clave secreta/privada del servidor</strong>. Al recibir el token, el servidor recalcula la firma y la compara con la adjunta; si coinciden, garantiza <strong>integridad y autenticidad</strong> (nadie ha cambiado el contenido).</li>
+</ul>
+<p>Claims estándar del payload:</p>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>iss</code></td>
+<td>Emisor del JWT</td>
+</tr>
+<tr>
+<td><code>sub</code></td>
+<td>Sujeto principal (para quién se emite)</td>
+</tr>
+<tr>
+<td><code>aud</code></td>
+<td>Destinatarios</td>
+</tr>
+<tr>
+<td><code>exp</code></td>
+<td>Instante de caducidad</td>
+</tr>
+<tr>
+<td><code>nbf</code></td>
+<td>Instante antes del cual <strong>no</strong> debe aceptarse (<em>not before</em>)</td>
+</tr>
+<tr>
+<td><code>iat</code></td>
+<td>Instante de emisión (<em>issued at</em>)</td>
+</tr>
+<tr>
+<td><code>jti</code></td>
+<td>Identificador único del token; sirve para evitar <strong>ataques de repetición</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/enser/enser-t4-jwt-io.png" alt="Ejemplo en jwt.io|600" loading="lazy">
+<em>Header, payload (con <code>roles: [&quot;ADMIN&quot;]</code>) y secreto a la izquierda; el token resultante a la derecha, con sus tres partes.</em></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=3o4vEIkiRgE">Qué es JWT, cómo funciona y buenas prácticas</a> — CodelyTV compara JWT con sesiones y explica su estructura (vídeo, 19 min).
+<a href="https://jwt.io/introduction">Introduction to JSON Web Tokens</a> — referencia de <a href="http://jwt.io">jwt.io</a> con la estructura y el flujo (artículo, inglés).</p>
+</div>
+<h3>Refresh tokens</h3>
+<p>Como el JWT no tiene estado, <strong>quien lo posea puede hacerse pasar por el usuario</strong>. Hay que guardarlo en sitios seguros y, sobre todo, limitar el daño si se roba: <strong>tokens de acceso de vida corta + tokens de refresco de vida larga</strong>.</p>
+<p>En el login se generan dos tokens:</p>
+<ul>
+<li><strong>Access token</strong> (JWT, p. ej. <strong>15 min</strong>): se guarda <strong>en memoria</strong> y se usa en cada petición.</li>
+<li><strong>Refresh token</strong> (opaco, p. ej. <strong>7 días</strong>): se guarda en el servidor asociado al usuario y en el cliente en una <strong>cookie segura</strong>:</li>
+</ul>
+<pre><code class="language-http">Set-Cookie: __Secure-RefreshToken=&lt;token&gt;;Path=/refresh-token;Max-Age=2592000;Secure;HttpOnly;SameSite=Strict
+</code></pre>
+<p><em><code>HttpOnly</code> impide que JavaScript lea la cookie, <code>Secure</code> la envía solo por HTTPS, <code>SameSite=Strict</code> evita que otras webs la usen y <code>Path</code> la limita al endpoint de refresco.</em></p>
+<p><img src="../../../img/enser/enser-t4-refresh-login.png" alt="Login con refresh token|600" loading="lazy"></p>
+<p><img src="../../../img/enser/enser-t4-refresh-acceso.png" alt="Acceso con access token|500" loading="lazy"></p>
+<p>Cuando la API devuelve <strong>401</strong> porque el access token caducó, el cliente llama a <code>/api/refresh</code> con el refresh token. Si es válido y no está revocado, el servidor emite <strong>un par nuevo</strong> (e invalida el refresh viejo) y el cliente <strong>reintenta la llamada que falló</strong>; si no, hay que volver a iniciar sesión.</p>
+<p><img src="../../../img/enser/enser-t4-refresh-renovar.png" alt="Renovación con refresh token|600" loading="lazy"></p>
+<h3>Cómo invalidar un JWT</h3>
+<p>Al no tener estado, un JWT es <strong>válido hasta su <code>exp</code></strong>. ¿Cómo se cierra sesión? Con <strong>listas de denegación</strong> (<em>blocklists</em>): se guardan los <code>jti</code> de los tokens revocados y el servidor los consulta antes de aceptar cualquier token. Funciona, pero <strong>va contra el enfoque sin estado</strong>.</p>
+<p><img src="../../../img/enser/enser-t4-blocklist.png" alt="Logout con blocklist|600" loading="lazy">
+<em>El JWT debe tener <code>jti</code>. La entrada en la blocklist dura lo que le queda de vida al token (según <code>exp</code>), para que la lista se limpie sola.</em></p>
+<p>Con refresh tokens hay dos escenarios de cierre de sesión:</p>
+<ul>
+<li><strong>Cerrar sesión en este dispositivo</strong>: el cliente envía su refresh token y el servidor <strong>lo borra</strong>; el cliente elimina ambos tokens localmente. El access token viejo <strong>aún funcionaría unos minutos</strong> hasta caducar, pero ya no podrá renovarse.</li>
+<li><strong>Cerrar sesión en todos los dispositivos</strong> (<code>/api/logout-all</code>, autenticada con el access token): el servidor saca el <code>userID</code> y <strong>borra todos los refresh tokens</strong> de ese usuario, invalidando las sesiones de otros navegadores y dispositivos.</li>
+</ul>
+<p><img src="../../../img/enser/enser-t4-logout-dispositivo.png" alt="Logout en el dispositivo actual|600" loading="lazy"></p>
+<p><img src="../../../img/enser/enser-t4-logout-todos.png" alt="Logout en todos los dispositivos|550" loading="lazy"></p>
+<h2>4.4.3 El ecosistema JOSE</h2>
+<p>JWT forma parte de <strong>JOSE</strong> (<em>JavaScript Object Signing and Encryption</em>), un conjunto de estándares de la IETF para dar integridad, autenticidad, confidencialidad y claves estandarizadas a objetos JSON:</p>
+<table>
+<thead>
+<tr>
+<th>Estándar</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>JWS</strong> (<em>JSON Web Signature</em>)</td>
+<td>Integridad y autenticidad. <strong>No oculta</strong> los datos, solo asegura que no se han modificado</td>
+</tr>
+<tr>
+<td><strong>JWE</strong> (<em>JSON Web Encryption</em>)</td>
+<td>Confidencialidad: el payload va <strong>cifrado</strong> y solo lo lee el destinatario. Token de <strong>5 componentes</strong>; suele combinarse con JWS</td>
+</tr>
+<tr>
+<td><strong>JWK / JWKS</strong> (<em>JSON Web Key / Key Set</em>)</td>
+<td>Serializar claves criptográficas (simétricas o asimétricas) en JSON</td>
+</tr>
+<tr>
+<td><strong>JWA</strong> (<em>JSON Web Algorithms</em>)</td>
+<td>Identificadores estándar de los algoritmos de firma y cifrado</td>
+</tr>
+</tbody>
+</table>
+<h2>4.4.4 OAuth 2.0 y OpenID Connect</h2>
+<p><strong>OAuth 2.0</strong> y <strong>OpenID Connect (OIDC)</strong> permiten dar acceso a terceros <strong>sin compartir contraseñas</strong> y habilitan el <strong>inicio de sesión único</strong> (SSO). <strong>OAuth 2.0</strong> es un framework de <strong>autorización delegada</strong>: una app obtiene acceso limitado a tus recursos en otro servicio sin ver tus credenciales. <strong>OIDC</strong> añade encima una capa de <strong>autenticación</strong> para que el cliente sepa quién es el usuario.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Es la llave de aparcacoches: das al aparcacoches (la app) una llave que solo arranca el coche, no abre el maletero ni la guantera. Tu llave maestra (la contraseña) nunca sale de tu bolsillo.</p>
+</div>
+<p>En lugar de un único servidor que autentica y sirve datos, OAuth 2.0 separa <strong>cuatro roles</strong>:</p>
+<ul>
+<li><strong>Resource owner</strong>: el usuario dueño de los datos, que concede los permisos.</li>
+<li><strong>Cliente</strong>: la app que pide acceso o identificar al usuario; <strong>nunca ve sus credenciales</strong>.</li>
+<li><strong>Authorization server / Identity provider (IdP)</strong>: autentica al usuario, gestiona el consentimiento y <strong>emite los tokens</strong> (Google, Auth0, AWS Cognito, Keycloak…).</li>
+<li><strong>Resource server</strong>: la API REST que sirve los datos y los protege <strong>validando el token</strong> en cada petición.</li>
+</ul>
+<p>En un flujo OIDC/OAuth se emiten hasta <strong>3 tokens</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Token</th>
+<th>Formato</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ID token</strong></td>
+<td>JWT</td>
+<td>Claims de identidad (nombre, email, avatar). Lo usa el <strong>cliente</strong> para saber quién inició sesión; <strong>nunca se envía al resource server</strong></td>
+</tr>
+<tr>
+<td><strong>Access token</strong></td>
+<td>JWT u opaco</td>
+<td>Permisos autorizados (<strong>scope</strong>). El cliente lo guarda en memoria y lo manda con <code>Authorization: Bearer</code></td>
+</tr>
+<tr>
+<td><strong>Refresh token</strong></td>
+<td>Opaco</td>
+<td>Se envía al <strong>authorization server</strong> para obtener nuevos access tokens cuando caducan</td>
+</tr>
+</tbody>
+</table>
+<h3>Descubrimiento y validación con JOSE</h3>
+<p>Para que la API valide los JWT <strong>sin preguntar al authorization server en cada petición</strong>, este publica rutas predefinidas:</p>
+<ul>
+<li><strong>OIDC Discovery</strong> en <code>/.well-known/openid-configuration</code>: URLs de autorización y de obtención de tokens, algoritmos soportados (en formato JWA)…</li>
+<li><strong>Claves JWKS</strong> en <code>/.well-known/jwks.json</code>: las <strong>claves públicas</strong> del servidor en formato JWK.</li>
+</ul>
+<p>La API lee el <strong>identificador de clave</strong> de la cabecera del JWT, descarga y <strong>cachea</strong> esa clave pública del endpoint JWKS y <strong>verifica el token localmente</strong>.</p>
+<h3>Flujos de OAuth 2.0</h3>
+<p>Hay varios flujos según el tipo de cliente:</p>
+<ul>
+<li><strong>Authorization code + PKCE</strong>: el estándar actual para apps web, de escritorio y móviles.</li>
+<li><strong>Client credentials</strong>: comunicación <strong>máquina a máquina</strong> (M2M), entre microservicios o <em>daemons</em> sin humano de por medio.</li>
+<li><strong>Device authorization flow</strong>: dispositivos con entrada limitada (Smart TV, videoconsolas).</li>
+</ul>
+<p>Las versiones antiguas tenían otros flujos, hoy <strong>deprecated</strong> por inseguros.</p>
+<p><img src="../../../img/enser/enser-t4-oauth-pkce.png" alt="Flujo Authorization code + PKCE|700" loading="lazy"></p>
+<p>El flujo con PKCE (<em>Proof Key for Code Exchange</em>) tiene tres fases:</p>
+<ol>
+<li><strong>Solicitud de autorización (front-channel)</strong>: el usuario pulsa &quot;Login&quot;; la app genera un <code>code_verifier</code> secreto y su <code>code_challenge</code> (un hash) y redirige al navegador a <code>/authorize</code> con <code>client_id</code>, <code>scope=openid</code> y el <code>code_challenge</code>. El usuario se autentica en el IdP y acepta permisos; el IdP redirige de vuelta con un <strong>código temporal</strong> (<em>authorization code</em>).</li>
+<li><strong>Canje del código por tokens (back-channel seguro)</strong>: la app hace <code>POST /token</code> con el código y el <code>code_verifier</code>; el IdP comprueba que el verifier corresponde al challenge y devuelve <strong>ID token + access token + refresh token</strong>.</li>
+<li><strong>Consumo de la API</strong>: <code>GET /api/datos</code> con <code>Authorization: Bearer &lt;access_token&gt;</code> → 200 OK.</li>
+</ol>
+<p>La gracia de PKCE es que, aunque alguien intercepte el código en la redirección, no puede canjearlo porque no conoce el <code>code_verifier</code>.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=gEIfV3ZSt-8">OAuth 2.0 + PKCE Explained</a> — recorrido animado del flujo con PKCE y los tokens (vídeo, 9 min, inglés).
+<a href="https://oauth.net/2/pkce/">PKCE — oauth.net</a> — página de referencia de la comunidad OAuth (artículo, inglés).</p>
+</div>
+<h2>4.4.5 Estrategias de autorización</h2>
+<p>Una vez autenticado el cliente, hay que comprobar <strong>qué puede hacer</strong>. Las estrategias se diferencian en su <strong>granularidad</strong> y <strong>escalabilidad</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Estrategia</th>
+<th>Se concede a…</th>
+<th>Granularidad</th>
+<th>Escalabilidad</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DAC</strong> (<em>Discretionary Access Control</em>)</td>
+<td>Cada <strong>usuario</strong> individual</td>
+<td>Muy alta</td>
+<td>Muy baja: inmanejable al crecer</td>
+<td>Ver comentarios de una noticia: el usuario <code>&lt;id=user&gt;</code></td>
+</tr>
+<tr>
+<td><strong>PBAC</strong> (<em>Permission-Based</em>)</td>
+<td>Usuarios con <strong>permisos atómicos</strong> (<code>users:create</code>, <code>users:read</code>…)</td>
+<td>Muy alta</td>
+<td>Baja: hay que asignar cada permiso a cada usuario a mano</td>
+<td>Cualquiera con <code>comments:read</code></td>
+</tr>
+<tr>
+<td><strong>RBAC</strong> (<em>Role-Based</em>)</td>
+<td><strong>Roles</strong>; los usuarios tienen roles</td>
+<td>Menor</td>
+<td><strong>Muy alta</strong>, fácil de mantener. <strong>La más usada</strong></td>
+<td>Modificar comentarios: rol <code>moderador</code></td>
+</tr>
+<tr>
+<td><strong>RBAC + PBAC</strong></td>
+<td>Permisos → roles → usuarios</td>
+<td>Alta</td>
+<td>Alta</td>
+<td><code>comments:update</code> está en el rol <code>moderador</code>, que se asigna a usuarios</td>
+</tr>
+<tr>
+<td><strong>ABAC</strong> (<em>Attribute-Based</em>)</td>
+<td><strong>Políticas</strong> sobre atributos del usuario, recurso, acción y <strong>contexto</strong></td>
+<td><strong>La más flexible y granular</strong></td>
+<td>—</td>
+<td>Modifica un comentario quien tenga <code>comments:update</code> (moderadores) <strong>o</strong> su autor si han pasado <strong>menos de 12 h</strong> desde la publicación</td>
+</tr>
+</tbody>
+</table>
+<h1>4.5 Calidad de servicio (QoS)</h1>
+<p>La <strong>QoS</strong> (<em>Quality of Service</em>) es el conjunto de métricas que definen el <strong>rendimiento y la fiabilidad</strong> de un servicio. En arquitecturas de servicios es crítica por tres motivos:</p>
+<ul>
+<li>Un servicio es una <strong>promesa de ejecución</strong>, no solo funcionalidad: una API perfectamente diseñada pero lenta o poco disponible es una mala API para quien la consume.</li>
+<li>Hay <strong>dependencias</strong>: un fallo puede provocar <strong>efectos en cascada</strong>. ¿Qué pasa si un servicio es muy lento, o falla el 50 % de las veces?</li>
+<li>Los servicios <strong>comparten recursos</strong> (red, BD, CPU): ¿y si la red se satura o un cliente malicioso acapara toda la CPU?</li>
+</ul>
+<p>Se evalúa desde <strong>cuatro perspectivas</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Métrica</th>
+<th>Qué mide</th>
+<th>Cómo se expresa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Disponibilidad</strong> (<em>uptime</em>)</td>
+<td>% del tiempo que el servicio funciona y responde bien</td>
+<td>En &quot;<strong>nueves</strong>&quot;: <strong>99 %</strong> (dos nueves) ≈ <strong>3,65 días</strong> caído al año como máximo; <strong>99,999 %</strong> (cinco nueves) ≈ <strong>5,26 min</strong> al año</td>
+</tr>
+<tr>
+<td><strong>Rendimiento</strong> (latencia)</td>
+<td>Tiempo que tarda el <strong>servidor</strong> en procesar y responder (la latencia de la red <strong>no</strong> cuenta)</td>
+<td>En ms y con <strong>percentiles</strong>: <strong>p50 (x ms)</strong> = el 50 % de peticiones tarda menos de x ms; <strong>p95/p99</strong> = el 95 %/99 %</td>
+</tr>
+<tr>
+<td><strong>Capacidad</strong> (<em>throughput</em>)</td>
+<td>Cuántas peticiones aguanta por unidad de tiempo y cómo escala con más clientes</td>
+<td><strong>RPS</strong> o <strong>RPM</strong> (peticiones por segundo/minuto)</td>
+</tr>
+<tr>
+<td><strong>Fiabilidad</strong> (tasa de error)</td>
+<td>% de peticiones que fallan <strong>por culpa del servidor</strong></td>
+<td>% de errores <strong>5XX</strong> sobre el total. <strong>No</strong> se cuentan los <strong>4XX</strong>, que son errores del cliente</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Por qué percentiles y no la media</p>
+<p>Si 99 peticiones tardan 10 ms y una tarda 5 s, la media (≈ 60 ms) parece aceptable, pero ese 1 % de usuarios está esperando 5 segundos. El p99 lo destapa.</p>
+</div>
+<h2>4.5.1 Acuerdos de nivel de servicio (SLA)</h2>
+<p>Un <strong>SLA</strong> (<em>Service Level Agreement</em>) convierte métricas de QoS en un <strong>contrato formal</strong> entre proveedor y consumidor. Un SLA bien hecho incluye <strong>métricas objetivo</strong> (latencia, disponibilidad), <strong>penalizaciones</strong> si no se cumplen (normalmente créditos o descuentos), <strong>exclusiones</strong> (situaciones fuera del control del proveedor) y los <strong>límites de uso</strong> del cliente con sus consecuencias si los supera. Los SLA son la base de los <strong>planes de pago</strong>: cuanto más caro el plan, más exigente la QoS.</p>
+<p>Hay tres términos encadenados:</p>
+<ul>
+<li><strong>SLI</strong> (indicador): la <strong>medición</strong> concreta y cuantitativa (latencia, uptime…).</li>
+<li><strong>SLO</strong> (objetivo): la <strong>meta interna</strong> para un SLI (p. ej. &quot;p95 &lt; 300 ms&quot;).</li>
+<li><strong>SLA</strong> (acuerdo): el <strong>contrato externo</strong> que formaliza uno o varios SLO y sus consecuencias (p. ej. &quot;si el p95 trimestral supera 300 ms, el cliente recibe un <strong>10 % de descuento</strong> en la siguiente cuota&quot;).</li>
+</ul>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://sre.google/sre-book/service-level-objectives/">Service Level Objectives — Google SRE Book</a> — el capítulo de referencia sobre SLI, SLO y SLA (artículo, inglés).</p>
+</div>
+<h2>4.5.2 Monitorización y observabilidad</h2>
+<p>¿Cómo sé si cumplo los SLO, y si no, <strong>por qué</strong>? Con dos capacidades complementarias:</p>
+<ul>
+<li><strong>Monitorización</strong>: vigilar un conjunto de <strong>métricas predefinidas</strong> (los SLI). Avisa cuando algo <strong>conocido</strong> va mal.</li>
+<li><strong>Observabilidad</strong>: capacidad de <strong>entender el estado interno</strong> del sistema analizando sus salidas. Permite investigar problemas complejos y <strong>desconocidos</strong>.</li>
+</ul>
+<p>Ambas se basan en tres elementos:</p>
+<ul>
+<li><strong>Métricas</strong>: agregaciones numéricas en el tiempo (series temporales). Dicen <strong>cómo está</strong> el sistema.</li>
+<li><strong>Registros (logs)</strong>: eventos discretos e inmutables. Dicen <strong>qué pasó en cada instante</strong> y dan el contexto para encontrar la causa concreta.</li>
+<li><strong>Trazas</strong>: el <strong>viaje completo de una petición</strong> a través de los servicios. Agrupan sus &quot;pasos&quot;, muestran dependencias y localizan dónde se origina el problema; además se enlazan con los logs para filtrar los eventos de una petición concreta.</li>
+</ul>
+<p>El estándar actual es <strong>OpenTelemetry</strong>, que <strong>desacopla la instrumentación del código</strong> del backend que recibe los datos.</p>
+<h1>4.6 Mecanismos para asegurar la QoS</h1>
+<p>Para cumplir los SLA hay que limitar el abuso de las APIs con tres tipos de mecanismos:</p>
+<ul>
+<li><strong>Limitación de tasa</strong> (<em>rate limits</em>): máximo de peticiones por unidad de tiempo corta (p. ej. <strong>10 peticiones/s</strong>). Protege del uso abusivo, intencionado o no, y reparte los recursos de forma justa.</li>
+<li><strong>Cuotas</strong> (<em>quotas</em>): límites a <strong>largo plazo</strong>, alineados con la facturación (p. ej. <strong>100 GB de transferencia al mes</strong>).</li>
+<li><strong>Arquitecturas escalables y resilientes</strong>: infraestructura distribuida y mecanismos de resiliencia, tanto de <strong>infraestructura</strong> (balanceadores, autoescalado, redundancia) como de <strong>software</strong> (patrones <em>circuit breaker</em>, <em>retry</em>, <em>timeout</em>…).</li>
+</ul>
+<h2>4.6.1 Limitación de tasa</h2>
+<p>Es el mecanismo <strong>más importante</strong> para proteger la estabilidad en tiempo real. Los dos algoritmos más populares:</p>
+<ul>
+<li><strong>Token bucket</strong>: el cliente tiene un cubo de tokens que se <strong>reponen a ritmo constante</strong>; cada petición gasta tokens y, sin tokens, se rechaza. <strong>Permite picos cortos</strong> (mientras queden tokens acumulados).</li>
+<li><strong>Leaky bucket</strong>: las peticiones entran en una <strong>cola</strong> que se vacía a <strong>ritmo constante</strong>; si la cola se llena, las nuevas se rechazan. Garantiza un <strong>flujo constante, sin picos</strong>.</li>
+</ul>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p><em>Token bucket</em>: una hucha que recibe una moneda por segundo; puedes ahorrar y gastar varias de golpe. <em>Leaky bucket</em>: un embudo con un agujero fijo; por mucho que eches de golpe, abajo siempre sale el mismo chorrito, y si rebosa, lo que sobra se pierde.</p>
+</div>
+<p>Si un cliente supera el límite se devuelve <strong><code>429 Too Many Requests</code></strong> con una cabecera <strong><code>Retry-After</code></strong> (cuánto esperar). Es buena práctica añadir a <strong>todas</strong> las respuestas <code>X-RateLimit-Limit</code> (tokens totales de la ventana), <code>X-RateLimit-Remaining</code> (tokens restantes) y <code>X-RateLimit-Reset</code> (cuándo se reinicia la cuenta).</p>
+<h2>4.6.2 Cuotas</h2>
+<p>Una <strong>cuota</strong> limita el <strong>volumen total</strong> de uso durante un periodo largo (p. ej. <strong>1M de peticiones al mes</strong>), <strong>independientemente de la velocidad</strong> de consumo. Permite definir niveles de servicio y alinearlos con los planes de pago. Al superarla:</p>
+<ul>
+<li><strong>Hard limit</strong>: se corta el acceso devolviendo <strong><code>403</code></strong> (no autorizado a más peticiones en ese periodo).</li>
+<li><strong>Pay-as-you-go</strong>: el cliente sigue usando el servicio, pero se le <strong>cobra el uso adicional</strong>.</li>
+</ul>
+<h2>4.6.3 Patrones de resiliencia</h2>
+<p><strong>Timeout — &quot;Nunca esperes indefinidamente&quot;</strong>. Se fija un <strong>tiempo máximo de espera</strong>; si la operación tarda más, se aborta (en cliente o en servidor). Riesgo: <strong>procesos zombis</strong>, tareas que siguen ejecutándose aunque su resultado se vaya a ignorar.</p>
+<p><img src="../../../img/enser/enser-t4-timeout.png" alt="Timeout|400" loading="lazy">
+<em>Con timeout de 2 s: si B responde rápido, todo normal; si tarda más, A lanza una excepción y libera el hilo.</em></p>
+<p><strong>Retry — &quot;Inténtalo de nuevo, pero con cuidado&quot;</strong>. Muchos fallos de red son <strong>transitorios</strong> y un reintento los resuelve. El gran riesgo es que <strong>todos reintenten a la vez</strong> y hundan el servicio; por eso las esperas son <strong>exponenciales</strong> según el número de intentos (≈ <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8305em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8305em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord text mtight"><span class="mord mtight">intento</span></span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></span></eq> s) más un componente <strong>aleatorio de ~100 ms</strong> (<em>jitter</em>). Mejora la <strong>fiabilidad</strong> a costa de <strong>latencia</strong>. <strong>No debe usarse con operaciones no idempotentes</strong> (un <code>POST</code> de pago reintentado podría cobrar dos veces).</p>
+<p><img src="../../../img/enser/enser-t4-retry.png" alt="Retry|200" loading="lazy"></p>
+<p><strong>Circuit breaker — &quot;Deja de llamar a un servicio que sabes que está roto&quot;</strong>. Envuelve las llamadas en una máquina de <strong>tres estados</strong>:</p>
+<ul>
+<li><strong>Cerrado</strong>: estado normal, las llamadas pasan. Al alcanzar el <strong>umbral de fallos</strong> → abierto.</li>
+<li><strong>Abierto</strong>: durante un tiempo (p. ej. <strong>30 s</strong>) <strong>todas las llamadas se rechazan sin intentarlo</strong>. Agotado el tiempo → semiabierto.</li>
+<li><strong>Semiabierto</strong>: se deja pasar alguna <strong>llamada de prueba</strong>; si va bien → cerrado, si falla → abierto otra vez.</li>
+</ul>
+<p>Así el invocador <strong>falla rápido</strong> y el invocado tiene <strong>tiempo para recuperarse</strong>.</p>
+<p><img src="../../../img/enser/enser-t4-circuit-breaker.png" alt="Circuit breaker|400" loading="lazy"></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Es el diferencial de casa: si detecta un problema, corta la corriente para que no se queme nada. Pasado un rato lo subes con cuidado (semiabierto) y, si vuelve a saltar, sigue habiendo avería.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://martinfowler.com/bliki/CircuitBreaker.html">CircuitBreaker — Martin Fowler</a> — explicación de referencia con diagramas de estados (artículo, inglés).</p>
+</div>
+<p><strong>Bulkhead — &quot;Si un compartimento se inunda, que al menos no se hunda el barco entero&quot;</strong>. Se <strong>aíslan los recursos</strong> para que un componente defectuoso no acapare todos y &quot;contagie&quot; al resto. A nivel de <strong>software</strong> (pools de hilos o de conexiones a BD separados) o de <strong>infraestructura</strong> (clientes básicos en un despliegue y clientes <em>pro</em> en otro). Riesgo: <strong>infrautilizar recursos</strong>.</p>
+<p><img src="../../../img/enser/enser-t4-bulkhead.png" alt="Bulkhead|400" loading="lazy">
+<em>El servicio A tiene un pool de hilos para B y otro para C: si C se vuelve lento y agota su pool, las llamadas a B (crítico) siguen funcionando.</em></p>
+<p><strong>Fallback — &quot;¿Qué hacer cuando todo lo demás falla?&quot;</strong>. Cuando ya se sabe que el servicio no funciona (por retry, timeout, circuit breaker…), en vez de devolver un error se recurre a un <strong>plan B</strong>: <strong>datos de caché</strong>, <strong>valores por defecto</strong>, implementaciones <strong>más simples y menos exactas</strong>, aproximaciones… o, como mínimo, un <strong>manejo amigable del error</strong>.</p>
+<p><img src="../../../img/enser/enser-t4-fallback.png" alt="Fallback|250" loading="lazy">
+<em>Si falla la llamada: ¿hay datos en caché? → devolverlos; si no, ¿hay valor por defecto? → devolverlo; si no, devolver error.</em></p>
+<h1>4.x Ideas clave</h1>
+<ul>
+<li>La documentación es <strong>contrato</strong>, guía y mecanismo de descubrimiento. <strong>OpenAPI</strong> (JSON/YAML) es el estándar; WADL (XML) está obsoleto, RAML y API Blueprint no cuajaron.</li>
+<li>Versionado: <strong>URL</strong> (simple, cacheable, poco REST) → <strong>query</strong> → <strong>cabecera</strong> → <strong>MediaType</strong> (el más REST, necesita configurar cachés). Solo los <strong>cambios disruptivos</strong> exigen versión nueva.</li>
+<li><strong>HATEOAS</strong>: cada respuesta trae enlaces (<code>rel</code> estándar IANA o del dominio) a las siguientes acciones. Formatos: cabecera <code>Link</code>, <strong>HAL</strong> (<code>_links</code>, <code>_embedded</code>), HAL-Forms (<code>_templates</code>), Siren, JSON-LD.</li>
+<li><strong>Autenticación</strong> = quién eres; <strong>autorización</strong> = qué puedes hacer. Siempre sin estado, con token en <code>Authorization: Bearer</code>.</li>
+<li><strong>Token opaco</strong>: aleatorio, guardado en BD, fácil de revocar pero con estado. <strong>JWT</strong>: <code>header.payload.signature</code>, autocontenido y verificable sin BD, payload legible (nada sensible), difícil de revocar (blocklist por <code>jti</code>).</li>
+<li><strong>Access token corto (15 min, en memoria) + refresh token largo (7 días, cookie <code>HttpOnly; Secure; SameSite</code>)</strong>.</li>
+<li>JOSE: <strong>JWS</strong> firma, <strong>JWE</strong> cifra (5 partes), <strong>JWK/JWKS</strong> claves, <strong>JWA</strong> algoritmos.</li>
+<li><strong>OAuth 2.0</strong> = autorización delegada; <strong>OIDC</strong> = autenticación encima. Roles: resource owner, cliente, authorization server, resource server. Tokens: ID, access, refresh. Flujos: <strong>authorization code + PKCE</strong>, client credentials (M2M), device flow.</li>
+<li>Autorización: DAC, PBAC, <strong>RBAC (la más usada)</strong>, RBAC+PBAC, <strong>ABAC (la más flexible)</strong>.</li>
+<li>QoS: <strong>disponibilidad</strong> (nueves), <strong>latencia</strong> (percentiles p50/p95/p99), <strong>throughput</strong> (RPS), <strong>tasa de error</strong> (solo 5XX). <strong>SLI</strong> mide, <strong>SLO</strong> es la meta interna, <strong>SLA</strong> es el contrato con penalizaciones.</li>
+<li>Observabilidad: <strong>métricas, logs y trazas</strong>; estándar <strong>OpenTelemetry</strong>.</li>
+<li>Rate limit (<strong>token bucket</strong> permite picos, <strong>leaky bucket</strong> flujo constante) → <strong>429 + Retry-After</strong>; cuotas → <strong>403</strong> o pago por uso.</li>
+<li>Resiliencia: <strong>timeout</strong>, <strong>retry</strong> (backoff exponencial + jitter, solo idempotentes), <strong>circuit breaker</strong> (cerrado/abierto/semiabierto), <strong>bulkhead</strong> (aislar recursos), <strong>fallback</strong> (plan B).</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="3-concepto-de-servicio-y-servicios-sin-estado-buenas-practicas-en-el-diseno-de-servicios.html"><span class="nav-etiqueta">← anterior</span>3. Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios</a>
+  <a class="nav-siguiente" href="5-mas-alla-de-rest.html"><span class="nav-etiqueta">siguiente →</span>5. Más allá de REST</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

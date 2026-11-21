@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="8. Sistemas de ficheros y almacenamiento en red — apuntes de ENCO (cuarto curso de Ingeniería Informática).">
+<title>8. Sistemas de ficheros y almacenamiento en red · ENCO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enco</a><span class="miga-sep">/</span><span aria-current="page">8-sistemas-de-ficheros-y-almacenamiento-en-red</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENCO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENCO</a></p><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li><li><a href="7-almacenamiento-ip.html">7. Almacenamiento IP</a></li><li><span class="actual" aria-current="page">8. Sistemas de ficheros y almacenamiento en red</span></li><li><a href="9-virtualizacion-del-almacenamiento.html">9. Virtualización del almacenamiento</a></li><li><a href="10-backup.html">10. Backup</a></li><li><a href="11-backup-en-red-y-software-para-backup.html">11. Backup en red y software para backup</a></li><li><a href="12-archivado-de-la-informacion.html">12. Archivado de la información</a></li><li><a href="13-hardware-para-backup.html">13. Hardware para backup</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENCO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>8 / 13</div>
+    </div>
+    <h1>Sistemas de ficheros y almacenamiento en red</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENCO · 8/13</summary><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li><li><a href="7-almacenamiento-ip.html">7. Almacenamiento IP</a></li><li><span aria-current="page">8. Sistemas de ficheros y almacenamiento en red</span></li><li><a href="9-virtualizacion-del-almacenamiento.html">9. Virtualización del almacenamiento</a></li><li><a href="10-backup.html">10. Backup</a></li><li><a href="11-backup-en-red-y-software-para-backup.html">11. Backup en red y software para backup</a></li><li><a href="12-archivado-de-la-informacion.html">12. Archivado de la información</a></li><li><a href="13-hardware-para-backup.html">13. Hardware para backup</a></li></ol></details>
+  <div class="prosa">
+<h1>8.1 Almacenamiento en red: bloques frente a ficheros</h1>
+<p>Hay tres formas de ofrecer almacenamiento por red, que se distinguen por <strong>qué</strong> se comparte y <strong>dónde vive el sistema de ficheros</strong>:</p>
+<ul>
+<li><strong>Subsistemas de disco</strong>: actúan como <strong>servidores de discos</strong> (temas 4–5).</li>
+<li><strong>Redes de almacenamiento (SAN)</strong>: acceso <strong>a nivel de bloque</strong>. El <strong>sistema de ficheros reside en el servidor</strong> que usa los discos.</li>
+<li><strong>Servidores de ficheros</strong>: acceso <strong>a nivel de fichero</strong>. El <strong>sistema de ficheros reside en el dispositivo de almacenamiento en red</strong>. Son válidos para <strong>compartir ficheros</strong>, se ponen en marcha de forma <strong>muy sencilla</strong>, pero su <strong>escalabilidad es problemática</strong>.</li>
+</ul>
+<h1>8.2 Sistemas de ficheros locales</h1>
+<p>En un servidor, los datos bajan por una pila de capas: los <strong>procesos</strong> y sus <strong>estructuras de datos</strong> trabajan con <strong>directorios y ficheros</strong>; el <strong>sistema de ficheros</strong> los traduce a <strong>bloques lógicos</strong>; el <strong>gestor de volúmenes</strong> los traduce a <strong>bloques físicos</strong>; y los <strong>drivers</strong> (SCSI estándar, SCSI específico o iSCSI/Fibre Channel) los llevan al disco local o a la SAN. Es decir, <strong>el sistema de ficheros y el gestor de volúmenes gestionan los bloques de los discos</strong>.</p>
+<p><img src="../../../img/enco/enco-t8-fs-local.png" alt="Pila de un sistema de ficheros local|450" loading="lazy"></p>
+<p><strong>Algunas bases de datos</strong> se saltan el sistema de ficheros (e incluso el gestor de volúmenes) y <strong>gestionan los bloques ellas mismas</strong> para ganar rendimiento.</p>
+<p><img src="../../../img/enco/enco-t8-fs-bd.png" alt="Base de datos que elude el sistema de ficheros|380" loading="lazy"></p>
+<h2>8.2.1 Funciones avanzadas</h2>
+<ul>
+<li><strong>Journaling</strong>: un <strong>log de todas las operaciones en curso</strong> hasta que terminan. Tras un cuelgue, permite <strong>recomponer el sistema de ficheros</strong>.</li>
+<li><strong>Snapshots</strong>: parecidas a las copias instantáneas de los subsistemas de disco, pero <strong>las hace el servidor</strong>. Cargan los buses y el procesador, aunque no necesitan hardware especial porque son <strong>software</strong>.</li>
+<li><strong>Gestor de volúmenes</strong> (<em>volume manager</em>): capa intermedia entre el sistema de ficheros y los discos. Permite <strong>integrar varios discos físicos</strong> en un sistema de ficheros, <strong>crear discos virtuales</strong> a partir de los físicos y ofrece funciones como <strong>RAID y snapshots</strong>. A cambio, <strong>sobrecarga la CPU y los buses</strong>.</li>
+</ul>
+<p><img src="../../../img/enco/enco-t8-gestor-volumenes.png" alt="Gestor de volúmenes con RAID 1|450" loading="lazy">
+<em>Con RAID 1 en el gestor de volúmenes, cada bloque A se escribe dos veces (A y A'): viaja por el bus del sistema y el PCI hasta dos HBA SCSI y dos discos. Por eso este RAID por software carga los buses.</em></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>El journaling es la libreta de un camarero: apunta cada pedido antes de llevarlo a cocina. Si se va la luz a mitad de servicio, mirando la libreta sabe qué quedó a medias.</p>
+</div>
+<h1>8.3 Sistemas de ficheros en red</h1>
+<p>Extienden el concepto de sistema de ficheros <strong>a la red</strong>. Los dos más conocidos son <strong>NFS</strong> (<em>Network File System</em>) y <strong>CIFS</strong> (<em>Common Internet File System</em>), también llamado <strong>SMB</strong> (<em>Server Message Block</em>).</p>
+<p>El <strong>servidor exporta parte de su sistema de ficheros</strong> y los clientes acceden a él de forma <strong>compartida</strong>; en el cliente, el sistema de ficheros montado <strong>se integra con el propio</strong> (aparece como una carpeta más). Son muy interesantes para <strong>compartir datos</strong>, pero su <strong>rendimiento es menor que DAS o SAN</strong>.</p>
+<p><img src="../../../img/enco/enco-t8-fs-red.png" alt="Sistema de ficheros en red|400" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://es.wikipedia.org/wiki/Network_File_System">Network File System — Wikipedia</a> — funcionamiento y versiones de NFS (artículo).</p>
+</div>
+<h1>8.4 NAS (Network Attached Storage)</h1>
+<p>Un <strong>NAS</strong> es un equipo con <strong>uno o más servidores internos</strong>, una serie de <strong>discos preconfigurados</strong> y un <strong>sistema operativo mínimo</strong> con funciones específicas para gestionar los discos. Es, en esencia, un <strong>servidor de ficheros &quot;empaquetado&quot;</strong> que se enchufa a la LAN.</p>
+<p><img src="../../../img/enco/enco-t8-nas-foto.jpeg" alt="Ejemplo de NAS en rack|300" loading="lazy"></p>
+<p>Hay dos variantes: el <strong>servidor NAS</strong> con sus propios discos (conectados internamente por SCSI, iSCSI o FC) y la <strong>pasarela NAS</strong> (<em>NAS gateway</em>), que no tiene discos propios sino que usa los de una SAN por iSCSI o FC y los ofrece como ficheros a la LAN.</p>
+<p><img src="../../../img/enco/enco-t8-nas.png" alt="Servidor NAS y pasarela NAS|380" loading="lazy"></p>
+<table>
+<thead>
+<tr>
+<th>Ventajas</th>
+<th>Desventajas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Conexión simple</strong> a la red (normalmente Ethernet)</td>
+<td>Por lo general <strong>no se puede ampliar</strong>: viene <strong>lleno de discos</strong></td>
+</tr>
+<tr>
+<td><strong>Compartir ficheros</strong> entre los equipos de la red</td>
+<td>Se escala <strong>añadiendo NAS nuevos</strong>, no aumentando la capacidad de los existentes</td>
+</tr>
+<tr>
+<td><strong>Fácil de instalar y configurar</strong></td>
+<td>Con el tiempo hay <strong>decenas de NAS que administrar uno a uno</strong>: más costes de administración y más errores</td>
+</tr>
+<tr>
+<td><strong>Barato</strong>; se amplía comprando y conectando otro NAS</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Es conveniente <strong>separar la red local</strong> de los clientes de la red que usan los <strong>servidores de aplicaciones</strong> para acceder al NAS, para que el tráfico de almacenamiento no sature la LAN.</p>
+<p><img src="../../../img/enco/enco-t8-trafico-nas.png" alt="Separación del tráfico|500" loading="lazy"></p>
+<p>Además de compartir ficheros, un NAS suele ofrecer <strong>backup</strong>, <strong>snapshots</strong>, <strong>mirroring remoto</strong> y, en entornos <strong>SOHO</strong> (<em>Small Office/Home Office</em>), funciones de servidor <strong>web</strong>, de <strong>correo</strong>, de <strong>impresoras</strong> o <strong>agentes P2P</strong>.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=9GHubWY8xYA">DAS vs NAS vs SAN: Almacenamiento explicado en 3 minutos</a> — las tres arquitecturas en un vistazo (vídeo, 3:31).</p>
+</div>
+<h2>8.4.1 Rendimiento limitado de los servidores de ficheros</h2>
+<p>Los protocolos de ficheros <strong>no son lo bastante potentes para aplicaciones con E/S intensiva</strong>. Los <strong>cuellos de botella</strong> son los <strong>buses del servidor</strong> y <strong>TCP/IP</strong>:</p>
+<ul>
+<li>En cada petición, los datos pasan <strong>dos veces</strong> por el bus del sistema y el bus PCI del servidor de ficheros (del disco a memoria y de memoria a la tarjeta de red).</li>
+<li><strong>Overhead de TCP/IP</strong>, que se puede aliviar con <strong>TOE</strong> (<em>TCP Offload Engine</em>) o sustituyendo TCP/IP por <strong>RDMA</strong>.</li>
+</ul>
+<p><img src="../../../img/enco/enco-t8-rendimiento-nas.png" alt="Cuello de botella del servidor NAS|380" loading="lazy"></p>
+<h2>8.4.2 DAFS (Direct Access File System)</h2>
+<p><strong>DAFS</strong> es un sistema de ficheros en red que usa <strong>RDMA</strong> (vía VIA, ver <a href="7-almacenamiento-ip.html">tema 7</a>) mapeado sobre <strong>Ethernet, Fibre Channel o InfiniBand</strong>. Admite <strong>múltiples servidores</strong>, y la comunicación entre el <strong>cliente DAFS</strong> y el <strong>servidor DAFS</strong> se hace por <strong>RDMA</strong>, evitando la doble copia por los buses y el overhead de TCP/IP.</p>
+<p><img src="../../../img/enco/enco-t8-dafs.png" alt="Arquitectura DAFS|380" loading="lazy"></p>
+<h1>8.5 Sistemas de ficheros de discos compartidos</h1>
+<p>La idea es que <strong>varios servidores accedan a la vez al mismo sistema de ficheros</strong> a través de una <strong>red de almacenamiento</strong>. Así <strong>la carga de acceder al almacenamiento se reparte</strong> entre varios servidores. Hace falta <strong>sincronizar</strong> los servidores para mantener la <strong>consistencia</strong> (quién escribe qué y dónde), lo que puede hacerse por la LAN, normalmente con un servidor de metadatos (<strong>MDC</strong>, <em>metadata controller</em>). Ejemplo: <strong>GPFS</strong> (<em>General Parallel File System</em>) de IBM.</p>
+<p><img src="../../../img/enco/enco-t8-discos-compartidos.png" alt="Sistema de ficheros de discos compartidos|300" loading="lazy">
+<em>Todos los servidores leen y escriben los datos directamente por la red de almacenamiento, mientras el MDC coordina por la LAN los metadatos para que no se pisen.</em></p>
+<h1>8.6 Comparativas</h1>
+<h2>8.6.1 Pilas de protocolos</h2>
+<p>Si se dibujan las pilas de cada opción, la diferencia clave está en <strong>qué viaja por la red y dónde está el sistema de ficheros</strong>:</p>
+<ul>
+<li><strong>Directo (DAS)</strong>: aplicación → sistema de ficheros → gestor de volúmenes → SCSI → HBA SCSI → bus SCSI → disco. Todo en el servidor.</li>
+<li><strong>Fibre Channel / FCoE / iSCSI (SAN)</strong>: igual hasta SCSI, pero el SCSI viaja como <strong>FCP</strong> sobre FC, como <strong>FCP sobre FCoE</strong> (Ethernet + DCB, con CNA) o como <strong>iSCSI sobre TCP/IP</strong>. El sistema de ficheros sigue <strong>en el servidor</strong>.</li>
+<li><strong>NAS (con SCSI o con iSCSI)</strong>: en el cliente solo hay aplicación → <strong>cliente NFS</strong> → TCP/IP → Ethernet. El <strong>servidor NFS, el sistema de ficheros y el gestor de volúmenes están en el NAS</strong>, que a su vez habla SCSI o iSCSI con sus discos.</li>
+</ul>
+<h2>8.6.2 Fibre Channel, FCoE, iSCSI y NAS</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Fibre Channel</th>
+<th>FCoE</th>
+<th>iSCSI</th>
+<th>NAS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Protocolo</td>
+<td>FCP (SCSI)</td>
+<td>FCP (SCSI)</td>
+<td>iSCSI (SCSI)</td>
+<td>NFS, CIFS, HTTP, TCP/IP</td>
+</tr>
+<tr>
+<td>Red</td>
+<td>Fibre Channel</td>
+<td>DCB Ethernet</td>
+<td>TCP/IP</td>
+<td>TCP/IP</td>
+</tr>
+<tr>
+<td>Fuente/objetivo</td>
+<td>Servidor / almacenamiento</td>
+<td>Servidor / almacenamiento</td>
+<td>Servidor / almacenamiento</td>
+<td>Cliente o servidor de aplicaciones / servidor NAS</td>
+</tr>
+<tr>
+<td>Objetos transferidos</td>
+<td><strong>Bloques</strong></td>
+<td><strong>Bloques</strong></td>
+<td><strong>Bloques</strong></td>
+<td><strong>Ficheros</strong> o fragmentos</td>
+</tr>
+<tr>
+<td>Acceso al dispositivo</td>
+<td>Directo por FC</td>
+<td>Directo por FC</td>
+<td>Directo por iSCSI</td>
+<td><strong>Indirecto</strong>, a través del servidor interno del NAS</td>
+</tr>
+<tr>
+<td>Incluye sistema de ficheros</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td><strong>Sí</strong></td>
+</tr>
+<tr>
+<td>Tasa de acierto</td>
+<td>40 %</td>
+<td>40 %</td>
+<td>40 %</td>
+<td>100 %</td>
+</tr>
+<tr>
+<td>Configuración</td>
+<td>Por el usuario</td>
+<td>Por el usuario</td>
+<td>Por el usuario</td>
+<td>Por el fabricante (<strong>plug &amp; play</strong>)</td>
+</tr>
+<tr>
+<td>Apropiado para BD</td>
+<td>Sí</td>
+<td>Sí</td>
+<td>Parcialmente</td>
+<td>Parcialmente</td>
+</tr>
+<tr>
+<td>Listo para usar</td>
+<td>Sí</td>
+<td>Introduciéndose</td>
+<td>Sí</td>
+<td>Sí</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-note">
+<p class="callout-titulo">note</p>
+<p>La fila &quot;tasa de acierto&quot; (40 % / 100 %) aparece así en las diapositivas sin más explicación.</p>
+</div>
+<h2>8.6.3 DAS frente a SAN</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>DAS</th>
+<th>SAN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Escalabilidad</strong></td>
+<td>Añadir o quitar dispositivos de un servidor es <strong>complejo y caro</strong></td>
+<td><strong>Sencillo</strong>; conectividad total; el administrador cambia con facilidad el espacio asignado a cada servidor</td>
+</tr>
+<tr>
+<td><strong>Uso de recursos del host</strong></td>
+<td>El host dedica recursos a aplicaciones, E/S, transferencias y backups</td>
+<td>La E/S y el almacenamiento los hace la SAN; el host solo ejecuta SO y aplicaciones</td>
+</tr>
+<tr>
+<td><strong>Disponibilidad</strong></td>
+<td>Dispositivos ligados a 1 o 2 servidores: si caen, <strong>datos inaccesibles</strong></td>
+<td>Varios servidores y varias rutas por servidor: aunque fallen varios, otros acceden</td>
+</tr>
+<tr>
+<td><strong>Consolidación</strong></td>
+<td><strong>No hay</strong>: cada servidor con sus dispositivos</td>
+<td>Grandes dispositivos compartidos y particionados entre servidores</td>
+</tr>
+<tr>
+<td><strong>Coste de administración</strong></td>
+<td>Caro y lento: cada <strong>&quot;isla de almacenamiento&quot;</strong> se gestiona por separado</td>
+<td>Todo en una red: administración más simple y barata</td>
+</tr>
+<tr>
+<td><strong>Distancia</strong></td>
+<td>Limitada por el cable: <strong>25 m en SCSI</strong>; sin límite en iSCSI</td>
+<td><strong>10 km</strong> con FC sobre fibra monomodo; más con FC sobre IP</td>
+</tr>
+<tr>
+<td><strong>Fiabilidad</strong></td>
+<td>Interferencias electromagnéticas en cobre</td>
+<td>Sin interferencias con fibra óptica</td>
+</tr>
+<tr>
+<td><strong>Nº de dispositivos</strong></td>
+<td><strong>7 o 15</strong> por controladora SCSI</td>
+<td><strong>126 nodos</strong> en FC-AL y <strong>16 millones</strong> en fabrics</td>
+</tr>
+</tbody>
+</table>
+<h2>8.6.4 NAS frente a SAN</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>NAS</th>
+<th>SAN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Red</strong></td>
+<td>Redes <strong>TCP/IP estándar</strong> (de Ethernet a ATM)</td>
+<td>Red específica <strong>Fibre Channel</strong> (IP es una opción menos eficiente)</td>
+</tr>
+<tr>
+<td><strong>Diseño</strong></td>
+<td>Es un <strong>producto físico</strong></td>
+<td>Es una <strong>arquitectura</strong></td>
+</tr>
+<tr>
+<td><strong>Protocolos</strong></td>
+<td>Cualquier host accede por <strong>HTTP, FTP, CIFS o NFS</strong></td>
+<td><strong>SCSI encapsulado (FCP)</strong></td>
+</tr>
+<tr>
+<td><strong>Rendimiento</strong></td>
+<td><strong>Latencia elevada</strong> por TCP/IP</td>
+<td>Protocolo sencillo y <strong>latencia baja</strong></td>
+</tr>
+<tr>
+<td><strong>Conexiones</strong></td>
+<td>Acceso a ficheros por conexión <strong>indirecta y compartida</strong> (<em>routed</em>)</td>
+<td>El servidor accede a un volumen por conexión <strong>directa</strong> (<em>switched</em>)</td>
+</tr>
+<tr>
+<td><strong>Nivel de acceso</strong></td>
+<td><strong>Fichero</strong>: el NAS gestiona permisos de ficheros y directorios y el <strong>bloqueo</strong> de ficheros</td>
+<td><strong>Bloque</strong>: se transfieren bloques de disco individuales</td>
+</tr>
+<tr>
+<td><strong>Sistema de ficheros</strong></td>
+<td>Lo gestiona el NAS (cabecera o pasarela)</td>
+<td>Lo crean y gestionan <strong>los servidores</strong></td>
+</tr>
+<tr>
+<td><strong>Compatibilidad entre plataformas</strong></td>
+<td>Comparte ficheros <strong>simultáneamente entre distintos SO</strong></td>
+<td>Depende del SO de los servidores: limitada o nula</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Un NAS es una <strong>biblioteca</strong>: pides un libro por su título y el bibliotecario (el sistema de ficheros del NAS) te lo da; cualquiera puede ir, sea del idioma que sea. Una SAN es un <strong>almacén de piezas numeradas</strong>: tu propio taller (el servidor, con su sistema de ficheros) pide &quot;la caja 4.512&quot; y sabe montar con ellas lo que necesite, pero las cajas solo tienen sentido para quien conoce el plano.</p>
+</div>
+<h2>8.6.5 Ventajas de la SAN según la aplicación</h2>
+<table>
+<thead>
+<tr>
+<th>Aplicación</th>
+<th>Por qué conviene una SAN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Edición y distribución de vídeo</strong></td>
+<td>Ficheros enormes creados y editados en tiempo real por varios usuarios y servidores, incluso lejos: la SAN da <strong>alta velocidad</strong> y <strong>grandes arrays RAID</strong></td>
+</tr>
+<tr>
+<td><strong>Software de clustering</strong></td>
+<td>Necesita <strong>conectividad total y arbitraria</strong> entre servidores y dispositivos, y añadir o quitar dispositivos <strong>sin apagar</strong> los servidores</td>
+</tr>
+<tr>
+<td><strong>Disaster recovery</strong></td>
+<td>Automatiza el backup y tiene los datos en un <strong>CPD remoto</strong>; su gran ancho de banda permite <strong>replicar rápido y lejos</strong> con fibra</td>
+</tr>
+<tr>
+<td><strong>Conexiones redundantes</strong></td>
+<td>Varios links a cada dispositivo para <strong>balancear carga</strong> o <strong>tolerar fallos</strong></td>
+</tr>
+<tr>
+<td><strong>Backup</strong></td>
+<td>Copia <strong>directamente de discos a cintas</strong> sin cargar a los clientes ni a la LAN</td>
+</tr>
+</tbody>
+</table>
+<h1>8.7 Almacenamiento de objetos (<em>object storage</em>)</h1>
+<p>Es un recién llegado. Los primeros trabajos (Carnegie-Mellon y Replicus) buscaban <strong>abstraer la gestión del almacenamiento</strong> de sistemas muy estructurados e inflexibles. Conceptualmente:</p>
+<ul>
+<li>Permite guardar <strong>muchísimos metadatos por objeto</strong>, y con ellos aplicar <strong>políticas</strong> (compresión, jerarquización…) y hacer <strong>búsquedas</strong> en configuraciones a muy gran escala.</li>
+<li>Es <strong>flexible</strong>: admite además acceso a nivel de fichero o de bloque.</li>
+</ul>
+<p>¿Por qué tiene sentido? Hoy la <strong>mayoría de los datos se mueven sin modificarse</strong> (web, fotos, películas). Si no hay que alterar bloques, los datos estáticos pueden tratarse como <strong>una entidad: un objeto</strong>, y los objetos son <strong>más fáciles de manejar en grandes cantidades</strong> que bloques o ficheros.</p>
+<p>Funcionamiento:</p>
+<ul>
+<li>Se usa <strong>hashing</strong> para crear un <strong>ID</strong> para cada archivo, y ese hash <strong>determina dónde se almacena</strong>. Por ejemplo, <strong>Ceph</strong> (open source) usa el algoritmo <strong>CRUSH</strong> (<em>Controlled Replication Under Scalable Hashing</em>).</li>
+<li>Los objetos se guardan sobre un sistema de ficheros estándar (ext4, BTRFS, ZFS…), pero <strong>sin árboles de directorios</strong>: todos los archivos están <strong>al mismo nivel</strong>, indexados por su ID. El espacio solo está limitado por el <strong>número de IDs únicos</strong>.</li>
+<li>Decidida la ubicación, los datos del objeto se <strong>dividen en trozos de 64 KB</strong> y se almacenan, con <strong>réplicas en otros nodos</strong>.</li>
+</ul>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Un sistema de ficheros es un archivo con cajones y carpetas: para encontrar algo sigues la ruta. El almacenamiento de objetos es un guardarropa con tickets: entregas el abrigo, te dan un número (el ID/hash) y con ese número lo recuperas, sin importar en qué percha esté.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://docs.ceph.com/en/latest/architecture/">Ceph Architecture</a> — cómo Ceph reparte objetos con CRUSH y los replica (artículo, inglés).</p>
+</div>
+<h1>8.x Ideas clave</h1>
+<ul>
+<li><strong>SAN</strong> = bloques, sistema de ficheros <strong>en el servidor</strong>; <strong>servidor de ficheros/NAS</strong> = ficheros, sistema de ficheros <strong>en el dispositivo</strong>.</li>
+<li>Pila local: ficheros → <strong>sistema de ficheros</strong> → bloques lógicos → <strong>gestor de volúmenes</strong> → bloques físicos → drivers. Algunas BD se saltan el sistema de ficheros.</li>
+<li>Funciones avanzadas: <strong>journaling</strong>, <strong>snapshots</strong> por software, <strong>gestor de volúmenes</strong> (agrupar discos, discos virtuales, RAID, snapshots; carga CPU y buses).</li>
+<li>Ficheros en red: <strong>NFS</strong>, <strong>CIFS/SMB</strong>; el servidor exporta y el cliente monta; menos rendimiento que DAS/SAN.</li>
+<li><strong>NAS</strong>: servidores + discos preconfigurados + SO mínimo; servidor NAS o <strong>pasarela NAS</strong>. Simple, barato, comparte ficheros; no ampliable, escala a base de <strong>muchos NAS</strong> que administrar. Cuellos de botella: <strong>buses (doble paso)</strong> y <strong>TCP/IP</strong> → TOE, RDMA, <strong>DAFS</strong>.</li>
+<li><strong>Discos compartidos</strong> (GPFS): varios servidores sobre el mismo sistema de ficheros por la SAN, con sincronización (MDC).</li>
+<li><strong>DAS vs SAN</strong>: SAN escala, consolida, más disponible, 10 km, 16 M dispositivos. <strong>NAS vs SAN</strong>: producto vs arquitectura, fichero vs bloque, TCP/IP (latencia alta) vs FC (baja), multiplataforma vs dependiente del SO.</li>
+<li><strong>Object storage</strong>: objetos con muchos metadatos, ID por <strong>hash</strong> que fija la ubicación (Ceph/<strong>CRUSH</strong>), sin directorios, trozos de 64 KB replicados.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="7-almacenamiento-ip.html"><span class="nav-etiqueta">← anterior</span>7. Almacenamiento IP</a>
+  <a class="nav-siguiente" href="9-virtualizacion-del-almacenamiento.html"><span class="nav-etiqueta">siguiente →</span>9. Virtualización del almacenamiento</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

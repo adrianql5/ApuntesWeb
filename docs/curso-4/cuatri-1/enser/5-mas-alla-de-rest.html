@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Más allá de REST — apuntes de ENSER (cuarto curso de Ingeniería Informática).">
+<title>5. Más allá de REST · ENSER · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enser</a><span class="miga-sep">/</span><span aria-current="page">5-mas-alla-de-rest</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENSER"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENSER</a></p><ol><li><a href="1-introduccion-a-la-ingenieria-de-servicios.html">1. Introducción a la Ingeniería de Servicios</a></li><li><a href="2-componentes-distribuidos-y-estilos-arquitectonicos-soap-y-rest.html">2. Componentes distribuidos y estilos arquitectónicos. SOAP y REST</a></li><li><a href="3-concepto-de-servicio-y-servicios-sin-estado-buenas-practicas-en-el-diseno-de-servicios.html">3. Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios</a></li><li><a href="4-patrones-de-diseno-para-aplicaciones-basadas-en-servicios.html">4. Patrones de diseño para aplicaciones basadas en servicios</a></li><li><span class="actual" aria-current="page">5. Más allá de REST</span></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENSER</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>5 / 5</div>
+    </div>
+    <h1>Más allá de REST</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENSER · 5/5</summary><ol><li><a href="1-introduccion-a-la-ingenieria-de-servicios.html">1. Introducción a la Ingeniería de Servicios</a></li><li><a href="2-componentes-distribuidos-y-estilos-arquitectonicos-soap-y-rest.html">2. Componentes distribuidos y estilos arquitectónicos. SOAP y REST</a></li><li><a href="3-concepto-de-servicio-y-servicios-sin-estado-buenas-practicas-en-el-diseno-de-servicios.html">3. Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios</a></li><li><a href="4-patrones-de-diseno-para-aplicaciones-basadas-en-servicios.html">4. Patrones de diseño para aplicaciones basadas en servicios</a></li><li><span aria-current="page">5. Más allá de REST</span></li></ol></details>
+  <div class="prosa">
+<h1>5.1 Las limitaciones de REST</h1>
+<p>Hasta ahora todo el diseño se ha centrado en el <strong>tráfico norte-sur</strong>: el que entra al clúster desde fuera (un navegador, una app). Ahí REST es <strong>imbatible</strong>: cualquier lenguaje lee JSON, cualquier cliente habla HTTP de forma nativa y la infraestructura de red se reutiliza tal cual.</p>
+<p>Los problemas aparecen en tres situaciones:</p>
+<ul>
+<li>Al <strong>escalar a miles de usuarios</strong> una aplicación monolítica.</li>
+<li>En el <strong>tráfico este-oeste</strong> (servicio a servicio dentro del clúster), donde pesan la <strong>sincronía</strong> de las llamadas y el coste de <strong>serializar</strong> a JSON.</li>
+<li>Con los <strong>agentes de IA</strong>, que se comportan como <strong>clientes estocásticos</strong> (no deterministas) y tienen necesidades para las que REST no se pensó.</li>
+</ul>
+<h1>5.2 Del monolito a los microservicios</h1>
+<p>En las arquitecturas REST tradicionales suele haber un <strong>monolito</strong>: todos los módulos comparten proceso, recursos y base de datos. El problema llega al <strong>escalar una sola parte</strong> que recibe mucho tráfico: hay que replicar la aplicación entera, <strong>desperdiciando recursos</strong> en módulos que no lo necesitan. La solución son los <strong>microservicios</strong>, que se diseñan con tres principios:</p>
+<ul>
+<li><strong>Diseño guiado por el dominio</strong> (DDD, <em>domain-driven design</em>): cada microservicio modela un <strong>contexto acotado</strong> del negocio.</li>
+<li><strong>Una base de datos por servicio</strong> (<em>database per service</em>): cada microservicio es el <strong>dueño exclusivo</strong> de sus datos.</li>
+<li><strong>Autonomía tecnológica</strong>: cada uno puede escribirse en el lenguaje más adecuado para su función.</li>
+</ul>
+<h2>5.2.1 Anatomía de los microservicios</h2>
+<p>Para unificar el acceso se usa una <strong>API Gateway</strong>: un <strong>punto de entrada único</strong> que centraliza la dirección, la autenticación, los mecanismos de resiliencia, los límites de consumo, etc.</p>
+<p>Partir un monolito no es gratis. Se pierden cosas que antes eran automáticas:</p>
+<ul>
+<li><strong>Transaccionalidad global</strong>: ya no hay una única BD con transacciones ACID, así que se pasa a <strong>consistencia eventual</strong> y <strong>patrones Saga</strong>.</li>
+<li><strong>Efecto cascada</strong>: un servicio que falla puede arrastrar a los que dependen de él.</li>
+<li><strong>Más latencia y fallos de red</strong>: lo que antes era una llamada en memoria ahora viaja por la red.</li>
+</ul>
+<h2>5.2.2 Patrón Saga</h2>
+<p>¿Cómo se hace una transacción que abarca varios microservicios, cada uno con su BD? Con una <strong>saga</strong>: la operación se divide en una <strong>secuencia de transacciones locales</strong> y, si una falla, se ejecutan <strong>transacciones compensatorias</strong> que <strong>deshacen</strong> los cambios ya confirmados (<em>commiteados</em>) por los pasos anteriores.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Reservar un viaje: vuelo, hotel y coche son tres empresas distintas. Si el coche falla después de haber reservado vuelo y hotel, no puedes hacer un &quot;rollback&quot; mágico: tienes que <strong>cancelar</strong> el vuelo y el hotel (compensar).</p>
+</div>
+<p>Hay dos formas de coordinarla:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Cómo funciona</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Coreografía</strong></td>
+<td>No hay jefe: cada servicio <strong>reacciona a eventos</strong> de los demás y publica los suyos</td>
+</tr>
+<tr>
+<td><strong>Orquestación</strong></td>
+<td>Un <strong>servicio central</strong> llama al resto en el orden correcto y lanza las compensaciones si algo falla</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=37Llutw5aNM">Microservicios, Orquestación y Coreografía</a> — compara los dos estilos de coordinación (vídeo, 17 min).
+<a href="https://microservices.io/patterns/data/saga.html">Pattern: Saga — microservices.io</a> — referencia de Chris Richardson con ejemplos de ambos tipos (artículo, inglés).</p>
+</div>
+<h1>5.3 Arquitecturas dirigidas por eventos (EDA)</h1>
+<p>Para evitar la <strong>sincronía</strong> de las llamadas entre microservicios se puede adoptar una <strong>EDA</strong> (<em>Event-Driven Architecture</em>): en vez de llamar imperativamente a otros servicios, cada servicio <strong>espera</strong> y, cuando recibe un <strong>evento</strong> dirigido a él, ejecuta su lógica y puede emitir a su vez nuevos eventos. Sus ventajas:</p>
+<ul>
+<li><strong>Desacoplamiento temporal y espacial</strong>: el emisor no sabe quién consume ni cuándo; se pueden <strong>añadir consumidores nuevos</strong> (en cualquier lenguaje) sin tocar el código del emisor.</li>
+<li><strong>Absorción de picos de carga</strong>: el gestor de la <strong>cola de mensajería</strong> (el <em>broker</em>) almacena los eventos y los consumidores los procesan al ritmo que permita la BD.</li>
+</ul>
+<h2>5.3.1 Retos de las EDA</h2>
+<ol>
+<li><strong>Consistencia transaccional</strong> (<em>transactional outbox</em>): <strong>nunca</strong> publicar un evento en el broker antes de asegurar el <strong>COMMIT</strong> en la BD local; si no, se anunciarían operaciones que luego sufren un <em>rollback</em>.</li>
+<li><strong>Mensajes venenosos</strong> (<em>poison pills</em>) y <strong>DLQ</strong>: un mensaje que siempre falla no debe reintentarse infinitamente al instante. Se aplica <strong>retry con backoff exponencial</strong> y los mensajes que agotan los intentos se desvían a una <strong>Dead Letter Queue</strong> para inspeccionarlos.</li>
+<li><strong>Idempotencia</strong>: en una red distribuida los mensajes pueden <strong>llegar duplicados</strong>, así que los consumidores deben <strong>registrar los eventos ya procesados</strong> y hacer operaciones idempotentes (aplicarlas dos veces da el mismo resultado que una).</li>
+</ol>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://microservices.io/patterns/data/transactional-outbox.html">Pattern: Transactional outbox — microservices.io</a> — cómo guardar el evento en la misma transacción que los datos (artículo, inglés).</p>
+</div>
+<h1>5.4 Comunicación entre servicios: gRPC</h1>
+<p>Para el tráfico <strong>este-oeste</strong>, REST <strong>no es eficiente</strong>. Lo óptimo es un protocolo <strong>RPC</strong> (llamada a procedimiento remoto), pero los clásicos como <strong>CORBA o RMI están obsoletos</strong>: atados a un lenguaje concreto o con protocolos muy pesados que dan problemas de red (<em>firewalls</em>, etc.).</p>
+<p>En <strong>2015 Google libera gRPC</strong>, que junta las mejores ideas de RPC con las ventajas de <strong>HTTP/2</strong>: <em>streaming</em> bidireccional, <strong>multiplexación</strong> de varias llamadas sobre una sola conexión TCP y compresión de cabeceras. Además:</p>
+<ul>
+<li>Usa <strong>Protocol Buffers</strong>, una serialización <strong>binaria ultracompacta</strong> (mucho más ligera que JSON).</li>
+<li>Sigue un enfoque <strong>contract-first</strong>: primero se define el contrato (<code>.proto</code>) y de él se genera código para cualquier lenguaje, así que la comunicación es <strong>agnóstica del lenguaje</strong>.</li>
+</ul>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://grpc.io/docs/what-is-grpc/introduction/">Introduction to gRPC</a> — documentación oficial: servicios, <code>.proto</code> y Protocol Buffers (artículo, inglés).</p>
+</div>
+<h1>5.5 Model Context Protocol (MCP)</h1>
+<h2>5.5.1 Los agentes de IA como clientes estocásticos</h2>
+<p>Un agente de IA no se comporta como un cliente programado:</p>
+<ul>
+<li>Ante el mismo problema puede <strong>redactar la petición de otra forma</strong>, elegir <strong>otras herramientas</strong> o cambiar el <strong>orden de los argumentos</strong> según su razonamiento en ese momento.</li>
+<li>Como interpreta los contratos <strong>por probabilidades</strong>, la documentación y las descripciones en lenguaje natural <strong>dejan de ser comentarios</strong> y pasan a ser <strong>instrucciones</strong> que condicionan su comportamiento.</li>
+<li>El servidor debe estar preparado para recibir <strong>llamadas ligeramente imprecisas</strong>, <strong>reintentar</strong> si el modelo sufre una alucinación temporal y <strong>validar estrictamente</strong> los parámetros con esquemas rígidos para que su comportamiento probabilístico no corrompa la BD ni el estado del negocio.</li>
+</ul>
+<h2>5.5.2 Qué es MCP</h2>
+<p><strong>MCP</strong> es el <strong>estándar abierto para exponer servicios a LLMs</strong> (modelos de lenguaje) y agentes autónomos. Antes, para que un LLM consultase tu BD o abriese una incidencia, había que programar <strong>un conector a medida por cada modelo y cada servicio</strong>. MCP lo estandariza igual que <strong>JDBC</strong> estandarizó el acceso a bases de datos.</p>
+<p>Técnicamente no inventa nada exótico: es un protocolo <strong>cliente-servidor sobre JSON-RPC 2.0</strong>, que funciona sobre <strong>pipes locales</strong> o sobre <strong>HTTP con Server-Sent Events (SSE)</strong>. ¿Por qué JSON-RPC en texto y no gRPC binario? Porque el consumidor final es un <strong>modelo de lenguaje que razona sobre texto</strong>.</p>
+<p>Define <strong>tres primitivas</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Primitiva</th>
+<th>Qué es</th>
+<th>Equivalente REST</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Resources</strong></td>
+<td>Datos de <strong>lectura</strong> para dar contexto al modelo</td>
+<td><code>GET</code></td>
+</tr>
+<tr>
+<td><strong>Tools</strong></td>
+<td>Funciones que el agente <strong>ejecuta</strong>, con efectos secundarios</td>
+<td><code>POST</code> / RPC</td>
+</tr>
+<tr>
+<td><strong>Prompts</strong></td>
+<td><strong>Plantillas</strong> estandarizadas de interacción</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>Supone un <strong>cambio de paradigma</strong> en dos sentidos:</p>
+<ul>
+<li><strong>Descubrimiento dinámico en tiempo de ejecución</strong>: <code>initialize</code> → <code>tools/list</code> → <code>tools/call</code>; el agente pregunta qué herramientas hay y luego las usa.</li>
+<li>La <strong>descripción en lenguaje natural</strong> de cada herramienta es la instrucción que usa el LLM para decidir <strong>cuándo y por qué</strong> invocarla.</li>
+</ul>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://modelcontextprotocol.io/docs/getting-started/intro">What is the Model Context Protocol?</a> — introducción oficial al protocolo (artículo, inglés).</p>
+</div>
+<h1>5.6 Un servicio, múltiples accesos</h1>
+<p>Si la <strong>lógica de negocio</strong> está bien separada en el servicio, añadir una nueva forma de acceso consiste solo en escribir <strong>otro adaptador</strong> (gRPC, MCP, EDA, SOAP…), y todos delegan en el mismo servicio:</p>
+<table>
+<thead>
+<tr>
+<th>Consumidor</th>
+<th>Capa de acceso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cliente web</td>
+<td><strong>REST</strong></td>
+</tr>
+<tr>
+<td>Otro microservicio a alta velocidad</td>
+<td><strong>gRPC</strong></td>
+</tr>
+<tr>
+<td>Dependencias desacopladas y asíncronas</td>
+<td><strong>EDA</strong></td>
+</tr>
+<tr>
+<td>Agente de IA</td>
+<td><strong>Tool de MCP</strong></td>
+</tr>
+</tbody>
+</table>
+<h1>5.x Ideas clave</h1>
+<ul>
+<li>REST es ideal para <strong>tráfico norte-sur</strong>; flojea al escalar monolitos, en el tráfico <strong>este-oeste</strong> (sincronía, serialización) y con <strong>agentes de IA</strong>.</li>
+<li><strong>Microservicios</strong>: DDD (contexto acotado), <strong>una BD por servicio</strong>, autonomía tecnológica; <strong>API Gateway</strong> como entrada única. Coste: sin transacciones globales (→ <strong>consistencia eventual, Saga</strong>), efecto cascada y más latencia.</li>
+<li><strong>Saga</strong>: transacciones locales + <strong>compensatorias</strong>; por <strong>coreografía</strong> (eventos) u <strong>orquestación</strong> (servicio central).</li>
+<li><strong>EDA</strong>: desacoplamiento temporal/espacial y absorción de picos. Retos: <strong>transactional outbox</strong> (publicar tras el COMMIT), <strong>poison pills → DLQ</strong> con backoff exponencial, <strong>idempotencia</strong>.</li>
+<li><strong>gRPC</strong> (Google, 2015): RPC sobre HTTP/2 (streaming, multiplexación), <strong>Protocol Buffers</strong> binario, <strong>contract-first</strong>, agnóstico del lenguaje.</li>
+<li><strong>MCP</strong>: estándar abierto para exponer servicios a LLMs (como JDBC para BD), <strong>JSON-RPC 2.0</strong> sobre pipes o HTTP+SSE; primitivas <strong>resources, tools, prompts</strong>; descubrimiento dinámico y descripciones que actúan como instrucciones.</li>
+<li>Buen diseño = <strong>un servicio con varios adaptadores</strong> (REST, gRPC, EDA, MCP).</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-patrones-de-diseno-para-aplicaciones-basadas-en-servicios.html"><span class="nav-etiqueta">← anterior</span>4. Patrones de diseño para aplicaciones basadas en servicios</a>
+  
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

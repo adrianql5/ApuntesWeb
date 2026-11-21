@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="6. Serverless — apuntes de COMPNU (cuarto curso de Ingeniería Informática).">
+<title>6. Serverless · COMPNU · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">compnu</a><span class="miga-sep">/</span><span aria-current="page">6-serverless</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de COMPNU"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">COMPNU</a></p><ol><li><a href="1-introduccion-a-la-computacion-en-la-nube.html">1. Introducción a la computación en la nube</a></li><li><a href="2-mecanismos-de-virtualizacion.html">2. Mecanismos de virtualización</a></li><li><a href="3-aplicaciones-y-servicios-en-la-nube.html">3. Aplicaciones y servicios en la nube</a></li><li><a href="4-orquestacion-de-contenedores.html">4. Orquestación de contenedores</a></li><li><a href="5-microservicios.html">5. Microservicios</a></li><li><span class="actual" aria-current="page">6. Serverless</span></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>COMPNU</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>6 / 6</div>
+    </div>
+    <h1>Serverless</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de COMPNU · 6/6</summary><ol><li><a href="1-introduccion-a-la-computacion-en-la-nube.html">1. Introducción a la computación en la nube</a></li><li><a href="2-mecanismos-de-virtualizacion.html">2. Mecanismos de virtualización</a></li><li><a href="3-aplicaciones-y-servicios-en-la-nube.html">3. Aplicaciones y servicios en la nube</a></li><li><a href="4-orquestacion-de-contenedores.html">4. Orquestación de contenedores</a></li><li><a href="5-microservicios.html">5. Microservicios</a></li><li><span aria-current="page">6. Serverless</span></li></ol></details>
+  <div class="prosa">
+<h1>6.1 Qué es la computación serverless</h1>
+<p><strong>Serverless no significa literalmente &quot;sin servidores&quot;</strong>: sigue habiéndolos, pero <strong>no los gestionamos nosotros</strong>. Es la misma idea que en <em>wireless</em>: en alguna parte del sistema sigue habiendo cables, pero nos olvidamos de ellos.</p>
+<h2>6.1.1 IaaS, CaaS, PaaS, FaaS…</h2>
+<p>Los modelos de servicio se diferencian en <strong>qué capas gestiona el cliente y cuáles el proveedor</strong>. Serverless se corresponde sobre todo con <strong>FaaS</strong> (<em>Function as a Service</em>): el cliente solo aporta los <strong>datos y configuración</strong> y el <strong>código de la aplicación</strong> (en forma de funciones); el proveedor se encarga incluso del <strong>escalado</strong>.</p>
+<p><img src="../../../img/compnu/compnu-t6-iaas-caas-paas-faas.png" alt="Responsabilidades en cada modelo de servicio|650" loading="lazy">
+<em>Azul = lo gestionas tú; verde = lo gestiona el proveedor.</em></p>
+<table>
+<thead>
+<tr>
+<th>Capa</th>
+<th>On-premises</th>
+<th>IaaS</th>
+<th>CaaS</th>
+<th>PaaS</th>
+<th>FaaS</th>
+<th>SaaS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Datos y configuración</td>
+<td>Tú</td>
+<td>Tú</td>
+<td>Tú</td>
+<td>Tú</td>
+<td>Tú</td>
+<td>Tú</td>
+</tr>
+<tr>
+<td>Código de la aplicación</td>
+<td>Tú</td>
+<td>Tú</td>
+<td>Tú</td>
+<td>Tú</td>
+<td>Tú</td>
+<td>Proveedor</td>
+</tr>
+<tr>
+<td>Escalado</td>
+<td>Tú</td>
+<td>Tú</td>
+<td>Tú</td>
+<td>Tú</td>
+<td><strong>Proveedor</strong></td>
+<td>Proveedor</td>
+</tr>
+<tr>
+<td>Runtime</td>
+<td>Tú</td>
+<td>Tú</td>
+<td>Tú</td>
+<td><strong>Proveedor</strong></td>
+<td>Proveedor</td>
+<td>Proveedor</td>
+</tr>
+<tr>
+<td>Sistema operativo</td>
+<td>Tú</td>
+<td>Tú</td>
+<td><strong>Proveedor</strong></td>
+<td>Proveedor</td>
+<td>Proveedor</td>
+<td>Proveedor</td>
+</tr>
+<tr>
+<td>Virtualización</td>
+<td>Tú</td>
+<td><strong>Proveedor</strong></td>
+<td>Proveedor</td>
+<td>Proveedor</td>
+<td>Proveedor</td>
+<td>Proveedor</td>
+</tr>
+<tr>
+<td>Hardware</td>
+<td>Tú</td>
+<td>Proveedor</td>
+<td>Proveedor</td>
+<td>Proveedor</td>
+<td>Proveedor</td>
+<td>Proveedor</td>
+</tr>
+</tbody>
+</table>
+<h2>6.1.2 Los cinco principios</h2>
+<ol>
+<li><strong>Abstracción de servidores (NoOps)</strong>: hay servidores, pero no los gestionamos, actualizamos ni parcheamos.</li>
+<li><strong>Basada en eventos</strong> (<em>event driven</em>): las funciones <strong>no están siempre en ejecución</strong>; se lanzan solo en respuesta a <strong>eventos disparadores</strong> (una petición HTTP, la subida de un fichero, un <em>trigger</em> de una base de datos…).</li>
+<li><strong>Sin estado</strong> (<em>stateless</em>): las funciones viven muy poco, a veces <strong>milisegundos</strong>, así que <strong>no pueden guardar nada en memoria</strong>; cualquier dato debe persistirse en una <strong>BD externa</strong>.</li>
+<li><strong>Escalado automático</strong> (<em>scale-to-zero</em>): sin uso, consume <strong>0 recursos</strong>; si entran <strong>10 000 usuarios</strong>, la nube levanta automáticamente los servidores necesarios y los apaga al terminar.</li>
+<li><strong>Microfacturación</strong>: pagas <strong>por invocación y por tiempo de cómputo</strong> realmente usado, nunca por tener un servidor encendido esperando tráfico.</li>
+</ol>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Un servidor tradicional es tener coche propio: pagas seguro y garaje aunque no lo uses. Serverless es pedir un taxi: aparece cuando lo llamas, pagas solo el trayecto y si un día necesitas cien, llegan cien.</p>
+</div>
+<h1>6.2 Los retos de serverless</h1>
+<h2>6.2.1 El arranque en frío (<em>cold start</em>)</h2>
+<p>Es la <strong>latencia invisible</strong> de serverless: no depende de cuánto tarde tu código, sino de <strong>todo lo que hay que hacer para arrancarlo</strong> cuando no había ninguna instancia lista. Al llegar una petición hay cuatro fases:</p>
+<ol>
+<li><strong>Asignación de cómputo</strong>: el proveedor busca un servidor físico libre y arranca una <strong>microVM</strong> para tu código (<strong>~100 ms</strong> actualmente).</li>
+<li><strong>Descarga del código</strong>: la instancia recién creada descarga tu código (de un repositorio Git, un ZIP, una imagen de contenedor…). <strong>El tamaño importa</strong>: un paquete de <strong>1 MB</strong> baja mucho antes que uno de <strong>50 MB</strong>.</li>
+<li><strong>Arranque del runtime</strong>: lenguajes &quot;pesados&quot; como <strong>Java o .NET</strong> tienen que levantar un intérprete pesado y cargar muchos componentes; lenguajes ligeros como <strong>JavaScript o Python</strong> reducen este coste, aunque sigue existiendo.</li>
+<li><strong>Inicialización de la aplicación</strong>: conectar a la BD, cargar librerías, leer ficheros…</li>
+</ol>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Es como un restaurante que solo enciende la cocina cuando entra un cliente: el primero de la noche espera a que se caliente el horno (arranque en frío); los siguientes, con la cocina ya caliente, son atendidos al momento.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtime-environment.html">Lambda execution environment lifecycle</a> — documentación de AWS sobre las fases de inicialización (<em>Init</em>) e invocación de una función (artículo, inglés).</p>
+</div>
+<h2>6.2.2 Dependencia del proveedor (<em>vendor lock-in</em>)</h2>
+<p>Serverless <strong>ata más</strong> a las tecnologías propias del proveedor. Muchas funciones son del tipo &quot;<strong>cuando se cree un objeto en el sistema X, dispara la función Y y guarda el resultado en la BD Z</strong>&quot;, y X, Y y Z suelen ser servicios propietarios (<strong>AWS S3, AWS Lambda, DynamoDB</strong>…). Además, <strong>los eventos no siguen ningún estándar</strong>: cada proveedor usa su propia estructura.</p>
+<p>La salida sería desplegar herramientas propias (<strong>MongoDB, Kafka</strong>…) en vez de las del proveedor, pero entonces <strong>se pierden las ventajas</strong> de serverless.</p>
+<h2>6.2.3 Observabilidad</h2>
+<p>Los &quot;servidores&quot; son <strong>efímeros</strong>: si algo falla, el servidor <strong>ya no existe</strong> y no puedes conectarte a él para ver qué pasó. Hacen falta herramientas de <strong>telemetría distribuida</strong> (<strong>OpenTelemetry</strong>), como en microservicios pero aún más complejo. Además, <strong>reproducir el entorno cloud en local</strong> para desarrollar y depurar es difícil, así que se acaba <strong>depurando en producción</strong>, con los riesgos que conlleva.</p>
+<h1>6.3 ¿Serverless, Kubernetes o monolito?</h1>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Monolito</th>
+<th>Microservicios (k8s)</th>
+<th>Serverless</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unidad</td>
+<td>Aplicación completa</td>
+<td>Contenedor</td>
+<td><strong>Función</strong></td>
+</tr>
+<tr>
+<td>Gestión</td>
+<td>Baja (1 servidor)</td>
+<td>Muy elevada (clúster k8s)</td>
+<td><strong>Nula (NoOps)</strong></td>
+</tr>
+<tr>
+<td>Escalado</td>
+<td>Lento (clonar VM)</td>
+<td>Rápido (nodos/pods)</td>
+<td><strong>Instantáneo / infinito</strong></td>
+</tr>
+<tr>
+<td>Coste</td>
+<td>Fijo (24/7)</td>
+<td>Elevado (infraestructura)</td>
+<td><strong>Variable (pago por uso)</strong></td>
+</tr>
+<tr>
+<td>Persistencia</td>
+<td>Stateful (memoria/disco)</td>
+<td>Stateful o stateless</td>
+<td><strong>Stateless</strong></td>
+</tr>
+<tr>
+<td>Caso ideal</td>
+<td>MVP, apps simples</td>
+<td>Enterprise, alta carga</td>
+<td><strong>Eventos, APIs</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>6.3.1 Plataformas</h2>
+<p>Las principales plataformas serverless son <strong>AWS Lambda</strong>, <strong>Azure Functions</strong>, <strong>Google Cloud Functions</strong>, <strong>Google Cloud Run</strong> (contenedores sin servidor) y <strong>Knative</strong> (serverless sobre Kubernetes, para no depender de un proveedor).</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://martinfowler.com/articles/serverless.html">Serverless Architectures — Martin Fowler</a> — artículo de referencia de Mike Roberts sobre FaaS, ventajas y pegas (artículo, inglés).</p>
+</div>
+<h1>6.x Ideas clave</h1>
+<ul>
+<li>Serverless <strong>sí tiene servidores</strong>, pero no los gestionas (como <em>wireless</em> con los cables). Corresponde a <strong>FaaS</strong>: tú solo aportas código y datos; el proveedor incluso escala.</li>
+<li>Cinco principios: <strong>NoOps</strong>, <strong>basado en eventos</strong>, <strong>sin estado</strong> (persistir fuera), <strong>scale-to-zero</strong>, <strong>microfacturación</strong> (por invocación y tiempo).</li>
+<li><strong>Cold start</strong>: asignar cómputo (microVM ~100 ms) → descargar código (tamaño importa) → arrancar runtime (Java/.NET peor que JS/Python) → inicializar la app.</li>
+<li><strong>Vendor lock-in</strong>: servicios propietarios (S3, Lambda, DynamoDB) y eventos sin estándar.</li>
+<li><strong>Observabilidad</strong> difícil: servidores efímeros, OpenTelemetry, depuración en producción.</li>
+<li>Comparativa: monolito (MVP, coste fijo), microservicios/k8s (enterprise, gestión alta), serverless (eventos y APIs, pago por uso).</li>
+<li>Plataformas: AWS Lambda, Azure Functions, Google Cloud Functions, Cloud Run, Knative.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="5-microservicios.html"><span class="nav-etiqueta">← anterior</span>5. Microservicios</a>
+  
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

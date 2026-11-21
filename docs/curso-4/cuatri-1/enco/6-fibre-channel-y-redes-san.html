@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="6. Fibre Channel y redes SAN — apuntes de ENCO (cuarto curso de Ingeniería Informática).">
+<title>6. Fibre Channel y redes SAN · ENCO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enco</a><span class="miga-sep">/</span><span aria-current="page">6-fibre-channel-y-redes-san</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENCO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENCO</a></p><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><span class="actual" aria-current="page">6. Fibre Channel y redes SAN</span></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENCO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>6 / 6</div>
+    </div>
+    <h1>Fibre Channel y redes SAN</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENCO · 6/6</summary><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><span aria-current="page">6. Fibre Channel y redes SAN</span></li></ol></details>
+  <div class="prosa">
+<h1>6.1 Qué es una SAN</h1>
+<p>Una <strong>SAN</strong> (<em>Storage Area Network</em>, red de área de almacenamiento) es una <strong>red dedicada</strong> solo a interconectar servidores con dispositivos de almacenamiento (subsistemas de disco y arrays de discos, vistos en el <a href="5-subsistemas-de-disco.html">tema 5</a>). La tecnología habitual es <strong>Fibre Channel (FC)</strong>: switches FC unidos por fibra óptica (también puede ser cobre); también existen <strong>SAN basadas en IP</strong>.</p>
+<p>Los servidores acceden a los discos de la SAN <strong>a nivel de bloque</strong> (como si fueran discos locales, leyendo y escribiendo bloques), <strong>no a nivel de fichero</strong>. Por eso una SAN <strong>no es un servidor de ficheros</strong> (eso sería un NAS, que comparte ficheros por la LAN) <strong>ni un servidor de discos</strong>: es la red por la que viajan los bloques.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>La LAN es la red de carreteras por la que circulan los usuarios; la SAN es una red de raíles privada que solo une las fábricas (servidores) con los almacenes (discos). Por ella no se piden &quot;documentos&quot; sino cajas numeradas (bloques), y como nadie más la usa, el tráfico de la LAN no la frena.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=9GHubWY8xYA">DAS vs NAS vs SAN: Almacenamiento explicado en 3 minutos</a> — diferencia entre almacenamiento directo, NAS (ficheros) y SAN (bloques) (vídeo, 3:31).</p>
+</div>
+<h1>6.2 Fibre Channel</h1>
+<p><strong>Fibre Channel</strong> es la tecnología de red pensada para almacenamiento. Ofrece <strong>transmisión serie de alta velocidad a larga distancia</strong>, una <strong>tasa de errores muy baja</strong> y <strong>baja latencia</strong>. Además, el protocolo FC (<strong>FCP</strong>) se implementa <strong>en hardware dentro del HBA</strong> (<em>Host Bus Adapter</em>, la tarjeta que conecta el servidor a la red FC), de modo que no carga la CPU del servidor.</p>
+<p>Igual que las redes TCP/IP, FC se organiza en una <strong>pila de niveles</strong>, del FC-0 (lo físico) al FC-4 (lo que ven las aplicaciones). Encima de FC-4 están los <strong>protocolos de nivel superior</strong> (ULP, <em>Upper Layer Protocols</em>): SCSI-3, IP y FICON/ESCON (los canales de los mainframes de IBM).</p>
+<p><img src="../../../img/enco/enco-t6-stack.png" alt="Pila de niveles de Fibre Channel|380" loading="lazy">
+<em>Cada nivel con sus funciones; al lado, los servicios de enlace y de fabric, que quedan fuera de la pila.</em></p>
+<table>
+<thead>
+<tr>
+<th>Nivel</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>FC-4</strong></td>
+<td>Mapea los protocolos superiores sobre FC: SCSI sobre FC (<strong>FCP</strong>), IP sobre FC (<strong>IPFC</strong>), comandos de canal (FICON)</td>
+</tr>
+<tr>
+<td><strong>FC-3</strong></td>
+<td>Servicios comunes (dispositivos multipuerto, cifrado/compresión, RAID). En la práctica <strong>ningún producto implementa nada</strong>; se discute qué funciones debería tener</td>
+</tr>
+<tr>
+<td><strong>FC-2</strong></td>
+<td>Transferencia de datos: gestión de <em>exchanges</em> y secuencias, estructura del <em>frame</em>, clases de servicio y control de flujo</td>
+</tr>
+<tr>
+<td><strong>FC-1</strong></td>
+<td>Codificación <strong>8b/10b</strong>, conjuntos ordenados (palabras de control) y protocolos de control del enlace</td>
+</tr>
+<tr>
+<td><strong>FC-0</strong></td>
+<td>Interfaz física: cables, conectores y señales ópticas o eléctricas</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=qSnuWCYQoD8">What Is Fibre Channel? | Follow the Wire</a> — qué es FC, para qué se usa y cómo encaja en un centro de datos (vídeo, 8:50, inglés).</p>
+</div>
+<h2>6.2.1 FC-0: cables, conectores y señales</h2>
+<p>FC es un <strong>bus serie</strong> (los bits van uno detrás de otro por un único canal) y, salvo en la topología <strong>FC-AL</strong> (<em>Arbitrated Loop</em>, ver 6.4), es <strong>full-dúplex</strong>: cada puerto tiene un canal de entrada y otro de salida y puede enviar y recibir a la vez. La tasa de error es muy baja: <strong>1 bit erróneo cada <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">12</span></span></span></span></span></span></span></span></span></span></span></span></eq></strong> transmitidos, que a 100 Mbit/s supone <strong>un error cada 2,78 horas</strong> (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0641em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">12</span></span></span></span></span></span></span></span></span><span class="mord">/1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">8</span></span></span></span></span></span></span></span></span></span></span></span></eq> bit/s <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.3669em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span></span></span></span></span></span></span></span></eq> s).</p>
+<p>Cada generación duplica la velocidad. La tabla indica el caudal <strong>en cada dirección</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Nombre</th>
+<th>MB/s</th>
+<th>Especificación</th>
+<th>En el mercado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1GFC</td>
+<td>100</td>
+<td>1996</td>
+<td>1997</td>
+</tr>
+<tr>
+<td>2GFC</td>
+<td>200</td>
+<td>2000</td>
+<td>2001</td>
+</tr>
+<tr>
+<td>4GFC</td>
+<td>400</td>
+<td>2003</td>
+<td>2005</td>
+</tr>
+<tr>
+<td>8GFC</td>
+<td>800</td>
+<td>2006</td>
+<td>2008</td>
+</tr>
+<tr>
+<td>16GFC</td>
+<td>1.600</td>
+<td>2009</td>
+<td>2011</td>
+</tr>
+<tr>
+<td>32GFC</td>
+<td>3.200</td>
+<td>2013</td>
+<td>2016</td>
+</tr>
+<tr>
+<td>64GFC</td>
+<td>6.400</td>
+<td>2017</td>
+<td>2019</td>
+</tr>
+<tr>
+<td>128GFC</td>
+<td>12.800</td>
+<td>2014</td>
+<td>2016</td>
+</tr>
+<tr>
+<td>256GFC</td>
+<td>25.600</td>
+<td>2017</td>
+<td>2019</td>
+</tr>
+</tbody>
+</table>
+<p>Hay además una segunda familia de velocidades:</p>
+<table>
+<thead>
+<tr>
+<th>Nombre</th>
+<th>MB/s</th>
+<th>Especificación</th>
+<th>En el mercado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10GFC</td>
+<td>1.200</td>
+<td>2003</td>
+<td>2004</td>
+</tr>
+<tr>
+<td>20GFC</td>
+<td>2.400</td>
+<td>2008</td>
+<td>2008</td>
+</tr>
+<tr>
+<td>40GFC</td>
+<td>4.800</td>
+<td>2009</td>
+<td>2011</td>
+</tr>
+<tr>
+<td>80GFC</td>
+<td>9.600</td>
+<td>futuro</td>
+<td>según demanda</td>
+</tr>
+<tr>
+<td>100GFC</td>
+<td>12.000</td>
+<td>futuro</td>
+<td>según demanda</td>
+</tr>
+<tr>
+<td>160GFC</td>
+<td>19.200</td>
+<td>futuro</td>
+<td>según demanda</td>
+</tr>
+</tbody>
+</table>
+<p>Las diapositivas plantean el <strong>problema de compatibilidad entre generaciones</strong> sin responderlo. En la práctica se resuelve con <strong>autonegociación</strong>: cada puerto FC es compatible con las generaciones anteriores (normalmente las dos previas) y, al conectarse, ambos extremos acuerdan la velocidad más alta que soportan los dos.</p>
+<h3>Cables de cobre y fibra óptica</h3>
+<p>Los cables FC pueden ser de <strong>cobre</strong> o de <strong>fibra óptica</strong>. Una fibra es una hebra fina de vidrio de sílice, de grosor parecido a un cabello. La luz que entra por un extremo queda confinada dentro y viaja hasta el otro, perdiendo muy poca intensidad por el camino, incluso si la fibra se dobla.</p>
+<p><img src="../../../img/enco/enco-t6-fibra-optica.jpeg" alt="Fibra óptica iluminada|400" loading="lazy"></p>
+<p>Frente al cobre, la fibra permite <strong>distancias de hasta 10 km</strong>, es <strong>insensible a las interferencias electromagnéticas</strong> (EMI), <strong>no emite radiación</strong>, <strong>no hay conexión eléctrica</strong> entre los equipos y alcanza velocidades mucho mayores.</p>
+<p>Hay dos tipos. La <strong>monomodo</strong> tiene un núcleo muy fino (9 µm) por el que la luz va prácticamente en línea recta; se usa para <strong>largas distancias</strong> con láseres de onda larga (<strong>1300–1500 nm</strong>). La <strong>multimodo</strong> tiene un núcleo más ancho (50 o 62,5 µm) en el que la luz rebota por varios caminos, lo que deforma el pulso con la distancia; se usa para <strong>distancias cortas</strong> con láseres de onda corta (<strong>780–850 nm</strong>). El revestimiento mide 125 µm en ambas.</p>
+<p><img src="../../../img/enco/enco-t6-fibra-modos.png" alt="Fibra monomodo y multimodo|500" loading="lazy">
+<em>En la multimodo el pulso de salida llega &quot;ensanchado&quot; porque cada rayo recorre un camino distinto.</em></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=DOmrnxuTlf0">Diferencias entre la fibra Monomodo y Multimodo</a> — núcleo, alcance y uso de cada tipo (vídeo, 2:05).</p>
+</div>
+<h3>Conectores</h3>
+<p>Los conectores antiguos son el <strong>DB-9</strong> (cobre) y el <strong>SC</strong> (fibra); los modernos, más compactos, son el <strong>MT_RJ</strong> y el <strong>LC</strong>. Suelen ser <strong>dúplex</strong>: una fibra para enviar y otra para recibir.</p>
+<p><img src="../../../img/enco/enco-t6-conectores.png" alt="Conectores FC: LC, MT_RJ, SC y DB-9|450" loading="lazy"></p>
+<h2>6.2.2 FC-1: codificación 8b/10b</h2>
+<p>Por una línea serie no viaja un reloj aparte: el receptor se sincroniza con los cambios 0→1 y 1→0 de la señal. Si se enviaran muchos ceros o unos seguidos, perdería la cuenta. Además, conviene que haya tantos unos como ceros (señal equilibrada). La <strong>codificación 8b/10b</strong> resuelve ambas cosas: cada <strong>byte (8 bits) se transmite como 10 bits</strong>, elegidos de forma que nunca haya rachas largas iguales y que el número de unos y ceros esté compensado. El precio es que un 20 % de los bits de la línea son de codificación. Se usa también en otros estándares.</p>
+<p>El byte se divide en dos trozos que se codifican por separado con tablas:</p>
+<ul>
+<li>Los <strong>5 bits bajos</strong> (EDCBA) pasan a <strong>6 bits</strong> (abcdei) con la tabla <strong>5b/6b</strong>.</li>
+<li>Los <strong>3 bits altos</strong> (HGF) pasan a <strong>4 bits</strong> (fghj) con la tabla <strong>3b/4b</strong>.</li>
+</ul>
+<p>Cada entrada tiene dos versiones posibles, según la <strong>disparidad acumulada</strong> (<em>running disparity</em>, RD): si lo transmitido hasta ahora tiene <strong>exceso de 1s</strong> (RD = +1) se elige la versión con más ceros, y si hay <strong>exceso de 0s</strong> (RD = −1) la versión con más unos. Los códigos equilibrados (tres unos y tres ceros) son iguales en ambas columnas y no cambian la disparidad.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Es como un camarero que lleva una bandeja: si se le ha inclinado hacia la derecha, el siguiente vaso lo pone a la izquierda. La RD es &quot;hacia dónde está inclinada la bandeja&quot; y la tabla le dice qué versión del código usar para volver a equilibrarla.</p>
+</div>
+<h3>Ejemplos de las diapositivas</h3>
+<p><strong>Codificar 01001010b con exceso de 1s.</strong> Se separa en HGF = <code>010</code> y EDCBA = <code>01010</code>. Por la tabla 5b/6b, <code>01010</code> → <code>101010</code> (tres unos y tres ceros: equilibrado, la disparidad no cambia). Por la tabla 3b/4b, <code>010</code> → <code>1010</code> (también equilibrado). El código de 10 bits es <strong><code>1010 101010</code></strong> y <strong>sigue habiendo exceso de 1s</strong>.</p>
+<p><strong>Codificar 11101111b con exceso de 1s.</strong> HGF = <code>111</code>, EDCBA = <code>01111</code>. Como hay exceso de 1s, la tabla 5b/6b da <code>01111</code> → <code>000101</code> (más ceros), con lo que <strong>se pasa a exceso de 0s</strong>. Ahora, con exceso de 0s, la tabla 3b/4b da <code>111</code> → <code>0111</code> (más unos), y <strong>se vuelve a exceso de 1s</strong>. El código es <strong><code>0111 000101</code></strong> y sigue habiendo exceso de 1s.</p>
+<div class="callout callout-note">
+<p class="callout-titulo">Orden de los bits</p>
+<p>En las tablas 5b/6b y 3b/4b el orden de los bits cambia: la entrada se escribe EDCBA y la salida abcdei, donde A y a son los bits <strong>menos significativos</strong>.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://en.wikipedia.org/wiki/8b/10b_encoding">8b/10b encoding (Wikipedia)</a> — tablas 5b/6b y 3b/4b completas y explicación de la disparidad (artículo, inglés).</p>
+</div>
+<h2>6.2.3 FC-2: transferencia de datos</h2>
+<p>La unidad de transmisión es el <strong>frame</strong>. Cada frame lleva un delimitador de inicio (<strong>SOF</strong>, <em>Start Of Frame</em>), una <strong>cabecera</strong> de 6 palabras, el <strong>campo de datos</strong> (<em>payload</em>) de <strong>0 a 2112 bytes</strong> (0–528 palabras de 4 bytes; puede incluir una cabecera opcional), un <strong>CRC</strong> para detectar errores y un delimitador de fin (<strong>EOF</strong>). La cabecera incluye la <strong>dirección destino</strong> (D_ID), la <strong>dirección origen</strong> (S_ID), el <strong>Sequence ID</strong>, el <strong>número de frame dentro de la secuencia</strong> y el <strong>Exchange ID</strong>.</p>
+<p><img src="../../../img/enco/enco-t6-frame.png" alt="Estructura del frame y control de flujo por créditos|420" loading="lazy"></p>
+<p>Los frames se agrupan en dos niveles. Una <strong>secuencia</strong> es un conjunto de frames que un puerto envía en un sentido (por ejemplo, un bloque grande de datos troceado). Un <strong>exchange</strong> es el conjunto de secuencias, en ambos sentidos, que forman una operación completa (por ejemplo, la orden de lectura, los datos y la respuesta).</p>
+<p><img src="../../../img/enco/enco-t6-exchange.png" alt="Exchange formado por secuencias de frames entre dos puertos|380" loading="lazy"></p>
+<h3>Control de flujo por créditos</h3>
+<p>Para no desbordar al receptor, FC usa <strong>créditos</strong>: el emisor solo puede enviar tantos frames como huecos libres le ha anunciado el receptor, y cada vez que este libera un hueco le devuelve un crédito. Funciona a dos niveles: <strong>(1) entre puertos vecinos</strong> (<em>link flow</em>, por ejemplo servidor–switch o switch–switch) y <strong>(2) entre los HBA de los extremos</strong> (<em>end-to-end flow</em>, servidor–disco).</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Es un aparcamiento con contador de plazas libres a la entrada: un coche (frame) solo entra si el contador marca alguna plaza (crédito). Así nunca se pierde un frame por falta de sitio, a diferencia de Ethernet, que descarta paquetes cuando se llena.</p>
+</div>
+<h3>Clases de servicio 2 y 3</h3>
+<p>La <strong>clase 2</strong> es un servicio <strong>orientado a paquetes con confirmación</strong> (control de flujo <em>end-to-end</em> y <em>link flow</em>). No se reserva una conexión dedicada: cada frame se encamina por la red FC de forma individual, así que un puerto puede mantener varias conexiones a la vez. Si un frame se pierde, el emisor recibe un aviso de fallo y lo reenvía enseguida.</p>
+<p><img src="../../../img/enco/enco-t6-clase2.png" alt="Clase 2: cada frame se confirma; arriba envío normal, abajo un frame perdido|480" loading="lazy"></p>
+<p>La <strong>clase 3</strong> es igual pero <strong>sin confirmación</strong> (solo <em>link flow</em>). Con un protocolo más sencillo se sacrifica algo de fiabilidad: si un frame se pierde nadie avisa, y hay que esperar a que venza un temporizador del nivel superior, así que el <strong>tiempo de respuesta ante un frame perdido es mayor</strong>. Aun así, es <strong>la clase más utilizada</strong>, porque los errores son rarísimos y SCSI ya confirma las operaciones por su cuenta.</p>
+<p><img src="../../../img/enco/enco-t6-clase3.png" alt="Clase 3: sin confirmaciones; abajo, frame perdido y reenvío tras el temporizador|480" loading="lazy"></p>
+<h2>6.2.4 FC-3 y FC-4</h2>
+<p><strong>FC-3</strong> reúne los servicios comunes, pero hoy <strong>ningún producto implementa nada</strong> en él. <strong>FC-4</strong> mapea otros protocolos sobre FC, entre los <strong>ULP</strong>: <strong>SCSI sobre FC → FCP</strong> e <strong>IP sobre FC → IPFC</strong>. Gracias a FCP, el sistema operativo cree estar hablando con discos SCSI normales aunque estén a kilómetros.</p>
+<h1>6.3 Servicios de enlace y de red (fabric)</h1>
+<p>Fuera de la pila hay servicios que gestionan la propia red.</p>
+<h2>6.3.1 Login</h2>
+<p>Antes de intercambiar datos, dos puertos deben <strong>negociar</strong> los parámetros. Hay <strong>3 etapas</strong>:</p>
+<ol>
+<li><strong>Fabric Login</strong>: se establece la sesión entre el puerto N del servidor y el puerto F del switch.</li>
+<li><strong>N-Port Login</strong>: entre los dos puertos N de los extremos (servidor y disco).</li>
+<li><strong>Process Login</strong>: se establece la sesión entre los dos procesos FC-4 (por ejemplo, los dos extremos SCSI). Después ya fluyen los frames de datos.</li>
+</ol>
+<p><img src="../../../img/enco/enco-t6-login.png" alt="Secuencia de login y transferencia entre servidor y disco|420" loading="lazy"></p>
+<h2>6.3.2 Direccionamiento</h2>
+<p>En FC <strong>todos los dispositivos tienen un identificador de 64 bits</strong>. Los que son únicos en todo el mundo se llaman <strong>WWN</strong> (<em>World Wide Names</em>) y los que solo son únicos en la red, <strong>FCN</strong> (<em>FC Names</em>); en la práctica no se distinguen. Se distingue el nombre de cada <strong>puerto</strong> (WWPN) y el del <strong>nodo</strong> o equipo (WWNN): un servidor con dos puertos tiene un WWNN y dos WWPN.</p>
+<p>Como 64 bits son demasiados para encaminar cada frame, <strong>la red traduce automáticamente cada WWN a una dirección de puerto de 24 bits</strong> (Port_ID). En el ejemplo, el primer byte del Port_ID indica el switch (01 o 02) y el segundo, el puerto del switch.</p>
+<p><img src="../../../img/enco/enco-t6-direccionamiento.png" alt="Ejemplo de direccionamiento con dos switches|480" loading="lazy"></p>
+<table>
+<thead>
+<tr>
+<th>Port_ID</th>
+<th>Dispositivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>010000</td>
+<td>Servidor 1, puerto A</td>
+</tr>
+<tr>
+<td>010100</td>
+<td>Servidor 1, puerto B</td>
+</tr>
+<tr>
+<td>010200</td>
+<td>Servidor 2</td>
+</tr>
+<tr>
+<td>010300</td>
+<td>Servidor 3</td>
+</tr>
+<tr>
+<td>020600</td>
+<td>Disco, puerto B</td>
+</tr>
+<tr>
+<td>020700</td>
+<td>Disco, puerto A</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>El WWN es como el DNI (fijo y único, vaya donde vaya) y el Port_ID como la dirección postal actual (depende de a qué switch y puerto esté enchufado).</p>
+</div>
+<h2>6.3.3 Servicios del fabric</h2>
+<p>En una red FC con topología <em>fabric</em>, los <strong>switches gestionan los servicios de red</strong>: el <strong>Fabric login</strong>, el <strong>Fabric controller</strong> (gestiona los cambios que se producen en la red, como un equipo que se conecta o desconecta) y el <strong>Name server</strong> (la base de datos de puertos N y dispositivos, que se puede consultar para saber quién está en la red).</p>
+<h1>6.4 Puertos y topologías FC</h1>
+<p>Para conectar un dispositivo a una red FC necesita un <strong>puerto FC</strong>; en un servidor suele estar en el <strong>HBA</strong>, normalmente una tarjeta PCIe. Los puertos tienen siempre <strong>2 canales</strong>, uno de entrada y otro de salida. Hay tres topologías básicas:</p>
+<p><img src="../../../img/enco/enco-t6-topologias.png" alt="Topologías FC: punto a punto, arbitrated loop y fabric|500" loading="lazy"></p>
+<ul>
+<li><strong>Punto a punto</strong>: dos dispositivos unidos directamente.</li>
+<li><strong>Arbitrated loop</strong> (FC-AL): los dispositivos forman un anillo y comparten el medio.</li>
+<li><strong>Fabric</strong>: los dispositivos se conectan a uno o varios switches.</li>
+</ul>
+<h2>6.4.1 Tipos de puerto</h2>
+<table>
+<thead>
+<tr>
+<th>Puerto</th>
+<th>Dónde está / para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>N-port</strong></td>
+<td>Puerto de un dispositivo (<em>node</em>) en una fabric</td>
+</tr>
+<tr>
+<td><strong>F-port</strong></td>
+<td>Puerto de un switch en una fabric (donde se enchufa un N-port)</td>
+</tr>
+<tr>
+<td><strong>L-port</strong></td>
+<td>Puerto de un dispositivo en un arbitrated loop</td>
+</tr>
+<tr>
+<td><strong>NL-port</strong></td>
+<td>Puerto de dispositivo que vale para fabric y loop; es el que se ofrece hoy por flexibilidad</td>
+</tr>
+<tr>
+<td><strong>FL-port</strong></td>
+<td>Puerto de switch que une un loop a una fabric</td>
+</tr>
+<tr>
+<td><strong>E-port</strong></td>
+<td>Une dos switches FC (<em>expansion</em>)</td>
+</tr>
+<tr>
+<td><strong>EX-port</strong></td>
+<td>Une un switch FC con un router FC</td>
+</tr>
+<tr>
+<td><strong>G-port</strong></td>
+<td>Genérico: algunos switches modernos lo configuran como E-port o F-port según el papel que desempeñe</td>
+</tr>
+<tr>
+<td><strong>B-port</strong></td>
+<td>Actúa como un <em>bridge</em>: conecta dos switches FC a través de una red ATM o IP</td>
+</tr>
+</tbody>
+</table>
+<h2>6.4.2 Arbitrated loop</h2>
+<p>En un <strong>arbitrated loop</strong> los dispositivos forman un anillo lógico: los datos van pasando de uno a otro y, como el medio es compartido, un dispositivo debe <strong>ganar el arbitraje</strong> antes de transmitir (por eso no es full-dúplex). Físicamente no se cablea como un anillo, sino en estrella hacia un <strong>hub FC</strong>, que cierra el lazo por dentro; si un equipo falla, el hub lo puentea. Varios hubs pueden encadenarse para ampliar el lazo, y uno de ellos puede conectarse a un switch para dar acceso a una fabric.</p>
+<p><img src="../../../img/enco/enco-t6-arbitrated-loop.png" alt="Arbitrated loop: cableado físico en estrella con hubs y lazo lógico|460" loading="lazy">
+<em>Línea continua: cable físico. Discontinua: recorrido lógico del lazo.</em></p>
+<p>Un loop es <strong>público</strong> si está unido a una fabric a través de un <strong>FL-port</strong> del switch, y <strong>privado</strong> si no. En un loop público, los <strong>NL-ports</strong> pueden hablar con dispositivos de fuera del lazo, mientras que los <strong>L-ports</strong> solo ven a los de su lazo.</p>
+<p><img src="../../../img/enco/enco-t6-loops.png" alt="Loop público (con FL-port) y loop privado|500" loading="lazy"></p>
+<p>En el ejemplo, el servidor del lazo envía los datos (1) al FL-port del switch, y este los reenvía (2) por otro FL-port al disco de otro lazo.</p>
+<p><img src="../../../img/enco/enco-t6-loop-publico.png" alt="Comunicación entre dos loops públicos a través del switch|330" loading="lazy"></p>
+<h2>6.4.3 Fabric</h2>
+<p>En la topología <strong>fabric</strong> todos los dispositivos se conectan a switches. Los switches FC tienen <strong>latencia muy baja: 2–4 µs</strong> para transmitir una señal o un frame, muy inferior a la de un enlace de 10 km o a la de un subsistema de disco (con o sin aciertos en caché), así que apenas añaden retardo. Además, <strong>varios dispositivos pueden enviar y recibir simultáneamente usando el máximo ancho de banda</strong>, siempre que la red esté bien diseñada.</p>
+<p><img src="../../../img/enco/enco-t6-latencia.png" alt="Latencia (escala logarítmica, µs): switch, enlace de 10 km y subsistema de disco|430" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t6-fabric.png" alt="Fabric con un switch: tres conversaciones simultáneas|380" loading="lazy"></p>
+<p>Los switches se unen entre sí mediante <strong>ISL</strong> (<em>Inter-Switch Links</em>), enlaces entre E-ports que permiten crecer la red y repartir el tráfico.</p>
+<p><img src="../../../img/enco/enco-t6-isl.png" alt="Dos switches unidos por ISL|400" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://es.wikipedia.org/wiki/Fibre_Channel">Fibre Channel (Wikipedia)</a> — resumen de la pila FC, topologías y tipos de puerto (artículo).</p>
+</div>
+<h1>6.5 Características de las SAN Fibre Channel</h1>
+<p>Gracias a la fibra, una SAN FC puede tener <strong>gran extensión</strong> (kilómetros), lo que facilita implementar <strong>backup remoto</strong>. Además, es posible <strong>dividirla a nivel lógico</strong> para facilitar la gestión, aumentar la seguridad y separar partes de la red por clientes o por características. Hay dos tecnologías para hacerlo:</p>
+<ul>
+<li><strong>Zoning</strong>: restringe con qué puertos se puede conectar uno dado. En el <strong>soft zoning</strong> la seguridad es por oscuridad (el name server solo enseña a cada equipo los de su zona, pero si conoce otra dirección podría llegar a ella); en el <strong>hard zoning</strong> la seguridad es activa (el switch bloquea por hardware el tráfico entre zonas).</li>
+<li><strong>SAN virtuales</strong>: dividen una SAN física en varias SAN lógicas independientes; más sofisticado y flexible.</li>
+</ul>
+<p>Los switches ofrecen además otros servicios. El <strong>aliasing</strong> permite dar un alias a un grupo de puertos, para acceder al primer servidor libre del grupo o para hacer <em>multicast</em>. El <strong>servidor de nombres</strong> registra todos los dispositivos conectados a un switch y se puede consultar. Y el <strong>LUN masking</strong> (que en el <a href="5-subsistemas-de-disco.html">tema 5</a> hacía el subsistema de disco) también puede hacerlo el switch, que &quot;bucea&quot; en los paquetes para ver a qué LUN van, a costa de un pequeño aumento de latencia.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>El zoning es como las tarjetas de acceso de un edificio: en el soft zoning simplemente no te dicen que existe la planta 5 (pero si la encuentras, entras); en el hard zoning el ascensor no te deja pulsar ese botón.</p>
+</div>
+<h1>6.6 Topologías de una SAN FC</h1>
+<p>Según cómo se conecten los switches entre sí:</p>
+<table>
+<thead>
+<tr>
+<th>Topología</th>
+<th>Cómo es</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Estrella</strong></td>
+<td>Varios switches sin comunicación entre ellos; cada servidor y cada dispositivo se conecta a todos</td>
+</tr>
+<tr>
+<td><strong>Cascada</strong></td>
+<td>Hay comunicación entre switches, encadenados uno tras otro</td>
+</tr>
+<tr>
+<td><strong>Anillo</strong></td>
+<td>Los switches se conectan en anillo; <strong>anillo + estrella</strong> añade un switch central que reduce el número de saltos</td>
+</tr>
+<tr>
+<td><strong>Malla</strong></td>
+<td>Como cascada, pero cada switch tiene <strong>al menos 2 conexiones inter-switch</strong></td>
+</tr>
+<tr>
+<td><strong>Árbol</strong></td>
+<td><strong>3 capas de switches</strong> (externa, central y externa); puede ser <strong>fat tree</strong> o <strong>skinny tree</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/enco/enco-t6-estrella.png" alt="Estrella con N switches|300" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t6-cascada.png" alt="Cascada de 2 y de 3 switches|420" loading="lazy"></p>
+<p>La cascada puede combinarse con un lazo FC-AL: un hub SAN une al lazo almacenamiento y arrays más baratos, y se conecta a la fabric conmutada.</p>
+<p><img src="../../../img/enco/enco-t6-cascada-al.png" alt="Cascada con un arbitrated loop|450" loading="lazy"></p>
+<p>Una SAN tampoco sustituye al servidor de ficheros: los clientes siguen pidiendo ficheros por la LAN (Ethernet) a un <strong>servidor de ficheros</strong>, y este guarda sus datos en discos de la SAN (FC).</p>
+<p><img src="../../../img/enco/enco-t6-servidor-ficheros.png" alt="Servidor de ficheros con SAN en cascada|430" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t6-anillo.png" alt="Anillo de switches|380" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t6-anillo-estrella.png" alt="Anillo + estrella: el switch central (amarillo) acorta los caminos|380" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t6-malla.png" alt="Mallas de 4 y 5 switches|380" loading="lazy"></p>
+<p>En el árbol, la diferencia entre <strong>fat tree</strong> y <strong>skinny tree</strong> está en cuántos enlaces unen las capas: en el fat tree cada switch externo se une a todos los centrales (muchos caminos, más ancho de banda hacia el centro); en el skinny tree hay menos enlaces entre capas.</p>
+<p><img src="../../../img/enco/enco-t6-arbol.png" alt="Árbol: fat tree (arriba) y skinny tree (abajo)|480" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://en.wikipedia.org/wiki/Fat_tree">Fat tree (Wikipedia)</a> — por qué los enlaces se &quot;engordan&quot; hacia la raíz del árbol (artículo, inglés).</p>
+</div>
+<h1>6.7 Componentes hardware de una SAN</h1>
+<p>Una SAN necesita <strong>un HBA por servidor</strong>, y en el sistema operativo hay que instalar sus <strong>drivers</strong>. También hace falta <strong>un HBA (o puerto FC) por dispositivo</strong> de almacenamiento, con posibles <strong>problemas de incompatibilidad</strong> entre modelos. Lo mismo ocurre con <strong>cables y conectores</strong>: hay distintos modelos y hay que vigilar la compatibilidad. Los <strong>bridges</strong> permiten aprovechar equipos antiguos; por ejemplo, un <strong>convertidor SCSI a FC</strong> conecta una biblioteca de cintas SCSI a un switch FC.</p>
+<p><img src="../../../img/enco/enco-t6-bridge.png" alt="Bridge FC–SCSI que conecta una biblioteca de cintas|420" loading="lazy"></p>
+<p>Los <strong>switches</strong> tienen entre <strong>8 y 250 puertos</strong>. Los <strong>directors</strong> son switches de <strong>alta fiabilidad con gran número de puertos</strong>, pensados para el núcleo de la red. Para los lazos FC-AL se usan <strong>hubs</strong>, de tres tipos: <strong>sin gestión</strong> (totalmente pasivos), <strong>gestionados</strong> (con funciones de administración y diagnóstico de dispositivos) y <strong>switched hubs</strong>, una versión barata de switch con menos puertos y sin servicios como aliasing o zoning.</p>
+<p><img src="../../../img/enco/enco-t6-directors.png" alt="Servidores conectados a dos switches FC|300" loading="lazy"></p>
+<p>Los <strong>extensores de link</strong> unen dos switches FC distantes a través de una red metropolitana (<strong>MAN</strong>) sobre IP, DWDM, ATM o SONET.</p>
+<p><img src="../../../img/enco/enco-t6-extensor.png" alt="Extensores de link a través de una MAN|450" loading="lazy"></p>
+<p>Con ellos se crean <strong>conexiones remotas</strong> entre SAN de distintas sedes. En redes grandes se distingue entre <strong>edge switches</strong> (los de borde, donde se conectan los equipos) y <strong>core switches o directors</strong> (el núcleo que une todo).</p>
+<p><img src="../../../img/enco/enco-t6-conexiones-remotas.png" alt="Conexiones remotas entre SAN; abajo, diseño con edge switches y core switch/director|480" loading="lazy"></p>
+<p>En los <strong>blades</strong> (ver <a href="1-formatos-de-servidores-racks-y-blades.html">tema 1</a>) cada blade lleva su <strong>HBA</strong> (una tarjeta mezzanine) y el chasis incluye uno o más <strong>switches FC</strong>: switches reales o módulos <strong>pass-through</strong>, que solo sacan las conexiones al exterior (útil si no todos los blades se conectan a FC).</p>
+<p><img src="../../../img/enco/enco-t6-blades.png" alt="Módulo switch FC de chasis blade y HBA mezzanine|450" loading="lazy"></p>
+<h1>6.8 Diseño e implementación de una SAN</h1>
+<h2>6.8.1 Fases de diseño</h2>
+<ol>
+<li><strong>Analizar los requerimientos</strong>: tipos de plataformas, tamaño total, estrategia de backup, alta disponibilidad, necesidad de <em>disaster recovery</em>…</li>
+<li><strong>Analizar la información del entorno</strong>: número de servidores, ancho de banda disponible, número y tamaño de los LUNs de cada servidor, disponibilidad de discos FC…</li>
+<li><strong>Seleccionar una solución de almacenamiento masivo</strong>.</li>
+<li><strong>Conectar almacenamiento y servidores</strong>.</li>
+</ol>
+<h2>6.8.2 Implementación gradual</h2>
+<p>Una SAN no se monta de golpe, sino en tres fases. Primero se crean <strong>SAN locales</strong>: se empieza con un switch o un hub al que se conectan almacenamiento y servidores, usando un convertidor SCSI-FC para aprovechar los equipos SCSI existentes.</p>
+<p><img src="../../../img/enco/enco-t6-san-local.png" alt="SAN local con un switch y pasarela SCSI a FC|330" loading="lazy"></p>
+<p>Después se construye <strong>una SAN para toda la empresa</strong>, uniendo las SAN locales con un switch (en el ejemplo, por <strong>fibra monomodo de 10 km</strong>). Así los equipos, incluidos los de backup como la biblioteca de cintas, se comparten entre sedes.</p>
+<p><img src="../../../img/enco/enco-t6-san-empresa.png" alt="Dos SAN locales unidas por fibra monomodo de 10 km|300" loading="lazy"></p>
+<p>Por último se <strong>protegen los datos</strong>: ante <strong>fallos de componentes</strong>, con cables y componentes redundantes; ante <strong>desastres locales</strong>, replicando los datos en un lugar remoto (en el ejemplo, un <em>router</em> FC a IP envía los datos por la WAN de la empresa a un <em>site</em> C usado como réplica).</p>
+<p><img src="../../../img/enco/enco-t6-san-proteccion.png" alt="Protección: réplica en un sitio remoto a través de la WAN|380" loading="lazy"></p>
+<h2>6.8.3 Buenas prácticas</h2>
+<p>Conviene <strong>empezar la SAN con un switch o dos</strong>: aunque son más caros que un hub, permiten escalar e integrar mejor la SAN. Se usan <strong>hubs para migrar</strong> las conexiones SCSI a la SAN, <strong>switches pequeños</strong> para construir la infraestructura de almacenamiento y <strong>switches grandes</strong> para el centro de datos completo. Y hay que <strong>implementar redundancia donde sea necesario</strong>.</p>
+<h1>6.9 SAN para alta disponibilidad</h1>
+<p>Hay <strong>3 niveles de redundancia</strong>, cada uno más fiable que el anterior:</p>
+<ol>
+<li><strong>Conexiones duplicadas</strong>: cada servidor tiene dos cables al switch. Si uno falla, sigue el otro; además, puede servir para repartir el tráfico entre ambos.</li>
+<li><strong>Switches duplicados</strong>: con un único switch existe el riesgo de que falle y se caiga todo. Con dos switches <strong>conectados entre sí (ISL)</strong> y cada servidor unido a ambos, se gana fiabilidad: en la figura, aunque se corten un cable y un enlace de un switch, los discos siguen accesibles.</li>
+<li><strong>Redes (fabrics) duplicadas</strong>: conexiones y switches redundantes, pero además repartidos en <strong>dos redes SAN separadas</strong> (fabric 1 y fabric 2), de modo que un fallo o un error de configuración en una red no afecta a la otra. Es doblemente redundante.</li>
+</ol>
+<p><img src="../../../img/enco/enco-t6-conexiones-duplicadas.png" alt="Conexiones duplicadas|300" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t6-switches-duplicados.png" alt="Switches duplicados unidos por ISL; las X marcan fallos que el sistema soporta|330" loading="lazy"></p>
+<p><img src="../../../img/enco/enco-t6-redes-duplicadas.png" alt="Dos fabrics SAN independientes|380" loading="lazy"></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Conexiones duplicadas = tener dos puertas en casa. Switches duplicados = dos calles para llegar a casa. Fabrics duplicadas = dos ciudades distintas con sus propias calles: un atasco o una obra mal planificada en una no afecta a la otra.</p>
+</div>
+<h2>6.9.1 Switches: rendimiento y disponibilidad</h2>
+<p>Los switches mejoran el rendimiento y facilitan la alta disponibilidad de varias formas: <strong>encuentran una ruta alternativa</strong> si falla una conexión, <strong>reparten la carga usando los ISL</strong>, <strong>eligen automáticamente la ruta más eficiente</strong>, <strong>dan prioridad a los datos que lo requieren</strong> y permiten el <strong>reemplazo en caliente</strong> de componentes (ventiladores, fuente de alimentación).</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=jbR1QShUWGo">SISTEMAS de ALMACENAMIENTO DAS NAS y SAN explicados fácil</a> — repaso general de cuándo usar cada arquitectura y sus ventajas (vídeo, 7:37).</p>
+</div>
+<h1>6.10 Ideas clave</h1>
+<ul>
+<li><strong>SAN</strong>: red dedicada servidores–almacenamiento, acceso <strong>por bloques</strong> (no ficheros); no es servidor de ficheros ni de discos. Normalmente FC, también IP.</li>
+<li><strong>FC</strong>: serie, full-dúplex (salvo FC-AL), baja latencia, BER <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">12</span></span></span></span></span></span></span></span></span></span></span></span></eq>, FCP en hardware en el <strong>HBA</strong>. Velocidades de 1GFC (100 MB/s) a 256GFC (25.600 MB/s).</li>
+<li><strong>Pila</strong>: FC-0 físico (fibra mono/multimodo, hasta 10 km; conectores SC, LC, MT_RJ, DB-9), FC-1 <strong>8b/10b</strong> con disparidad, FC-2 frames/secuencias/exchanges, créditos y clases (clase 2 con confirmación, <strong>clase 3 sin confirmación y la más usada</strong>), FC-3 vacío, FC-4 FCP e IPFC.</li>
+<li><strong>Login</strong> en 3 etapas: Fabric, N-Port, Process. <strong>WWN</strong> de 64 bits → Port_ID de 24 bits. Switch: fabric login, fabric controller, name server.</li>
+<li><strong>Topologías FC</strong>: punto a punto, arbitrated loop (hub, público/privado), fabric (switch 2–4 µs, ISL). <strong>Puertos</strong>: N, F, L, NL, FL, E, EX, G, B.</li>
+<li><strong>SAN FC</strong>: zoning (soft/hard), SAN virtuales, aliasing, name server, LUN masking en el switch. Topologías estrella, cascada, anillo, malla, árbol (fat/skinny).</li>
+<li><strong>Hardware</strong>: HBA + drivers, cables, bridges SCSI-FC, switches 8–250 puertos, directors, hubs (pasivos, gestionados, switched), extensores de link, edge/core.</li>
+<li><strong>Implantación</strong>: SAN locales → SAN de empresa → protección (redundancia + réplica remota). Alta disponibilidad: conexiones, switches (ISL) y fabrics duplicadas.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="5-subsistemas-de-disco.html"><span class="nav-etiqueta">← anterior</span>5. Subsistemas de Disco</a>
+  
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

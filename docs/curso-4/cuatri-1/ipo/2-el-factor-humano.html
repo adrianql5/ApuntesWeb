@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. El factor humano — apuntes de IPO (cuarto curso de Ingeniería Informática).">
+<title>2. El factor humano · IPO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">ipo</a><span class="miga-sep">/</span><span aria-current="page">2-el-factor-humano</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de IPO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">IPO</a></p><ol><li><a href="1-introduccion-a-la-ipo.html">1. Introducción a la IPO</a></li><li><span class="actual" aria-current="page">2. El factor humano</span></li><li><a href="3-prototipado-y-evaluacion.html">3. Prototipado y evaluación</a></li><li><a href="4-diseno-centrado-en-el-usuario.html">4. Diseño centrado en el usuario</a></li><li><a href="5-diseno-grafico-principios-estandares-y-guias.html">5. Diseño gráfico. Principios, estándares y guías</a></li><li><a href="notas-sobre-examen.html">Notas sobre examen</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>IPO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>2 / 5</div>
+    </div>
+    <h1>El factor humano</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de IPO · 2/6</summary><ol><li><a href="1-introduccion-a-la-ipo.html">1. Introducción a la IPO</a></li><li><span aria-current="page">2. El factor humano</span></li><li><a href="3-prototipado-y-evaluacion.html">3. Prototipado y evaluación</a></li><li><a href="4-diseno-centrado-en-el-usuario.html">4. Diseño centrado en el usuario</a></li><li><a href="5-diseno-grafico-principios-estandares-y-guias.html">5. Diseño gráfico. Principios, estándares y guías</a></li><li><a href="notas-sobre-examen.html">Notas sobre examen</a></li></ol></details>
+  <div class="prosa">
+<h1>2.1 El modelo de procesamiento humano</h1>
+<p>Para estudiar el papel de la persona en el diseño de sistemas interactivos se recurre a la <strong>psicología cognitiva</strong>, la disciplina que estudia el <strong>sistema de procesamiento de información humano</strong>. Los psicólogos cognitivos han acumulado datos y teorías sobre las <strong>capacidades y limitaciones</strong> de nuestro sistema cognitivo: cómo percibimos el mundo, cómo almacenamos y recuperamos la información, etc. Conocerlas permite saber <strong>qué cosas le resultan difíciles de aprender o de hacer</strong> a un usuario, y diseñar en consecuencia.</p>
+<p><strong>Newell y Simon</strong> publicaron en <strong>1972</strong> <em>Human problem solving</em>, una contribución decisiva a la IA. Describen el sistema cognitivo humano mediante <strong>reglas de producción</strong> del tipo <strong>SI condición ENTONCES acción</strong>, y ven la resolución de un problema como el paso de un <strong>estado inicial</strong> a un <strong>estado final</strong> (el deseado) atravesando <strong>estados intermedios</strong> de forma <strong>secuencial</strong>. Lo ejemplifican con el juego de las <strong>Torres de Hanói</strong>.</p>
+<p>El modelo compara a la persona con un ordenador: igual que este tiene dispositivos de entrada, de salida y memoria, nosotros tenemos <strong>sentidos</strong> (entrada), <strong>efectores</strong> (salida) y <strong>varias memorias</strong>.</p>
+<p><img src="../../../img/ipo/ipo-t2-procesamiento.png" alt="Modelo de procesamiento humano|500" loading="lazy">
+<em>A la izquierda de la línea discontinua, el ordenador; a la derecha, la persona. Los sensores captan la salida del ordenador y la pasan a la memoria sensorial; con la atención, pasa a la memoria de trabajo, que intercambia información con la memoria a largo plazo (elaboración, recuperación) y ordena a los efectores actuar sobre los dispositivos de entrada del ordenador.</em></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el ordenador humano</p>
+<p>Los <strong>sentidos</strong> son el teclado y el ratón por los que entra la información; la <strong>memoria sensorial</strong> es un búfer diminuto que la retiene un instante; la <strong>memoria de trabajo</strong> es la RAM (rápida pero pequeña); la <strong>memoria a largo plazo</strong> es el disco duro (enorme pero más lenta), y los <strong>efectores</strong> (manos, voz) son la pantalla y la impresora con los que &quot;sacamos&quot; resultados.</p>
+</div>
+<h1>2.2 Los sentidos</h1>
+<h2>2.2.1 Canales de entrada y salida</h2>
+<p>La <strong>entrada</strong> es la <strong>percepción a través de los sentidos</strong>: vista, oído, tacto, gusto y olfato. La <strong>salida</strong> son las <strong>acciones a través de los efectores</strong>: extremidades, miembros, dedos, ojos, cabeza y sistema vocal.</p>
+<p>El conocimiento del mundo lo construimos con la vista, el oído, el tacto, el dolor, la sensación de movimiento del cuerpo... La percepción empieza en <strong>células receptoras</strong>, cada una sensible a un tipo de estímulo, y las <strong>vías sensoriales</strong> las conectan con las estructuras centrales de procesamiento. El cerebro <strong>no registra el mundo como una fotografía</strong>, sino que <strong>construye una representación interna</strong> tras analizar sus componentes.</p>
+<h2>2.2.2 El sistema visual</h2>
+<p>Conviene distinguir dos pasos. La <strong>sensación</strong> es la <strong>captación del estímulo físico</strong> y su conversión en impulso nervioso. La <strong>percepción</strong> es la <strong>asignación de significado</strong> a ese estímulo. En el nivel sensoriomotor, lo relevante para la IPO son el <strong>color</strong> y la <strong>iluminación</strong>.</p>
+<p><strong>El color.</strong> La retina tiene dos tipos de fotorreceptores: los <strong>conos</strong>, para la <strong>visión diurna</strong>, y los <strong>bastones</strong>, para la <strong>nocturna</strong>; al recibir luz segregan sustancias químicas que estimulan a las neuronas. La <strong>teoría tricromática</strong> explica cómo se obtienen colores por mezcla, y la <strong>teoría de procesos oponentes</strong> explica los <strong>postefectos</strong> del color en pares opuestos: <strong>rojo-verde</strong>, <strong>azul-amarillo</strong> y <strong>acromático</strong>. La consecuencia práctica es que <strong>hay que evitar combinar colores oponentes</strong> en una pantalla (rojo sobre verde, amarillo sobre azul), porque se leen fatal; la psicología ya ofrece <strong>guías para elegir colores</strong> en las interfaces.</p>
+<p><img src="../../../img/ipo/ipo-t2-colores-oponentes.png" alt="Colores oponentes|400" loading="lazy">
+<em>&quot;¿Qué tal lo ves?&quot;: texto rojo sobre verde y verde sobre rojo, casi ilegibles.</em></p>
+<p>Además, <strong>no se debe abusar del color para codificar información</strong>, porque los problemas de visión del color son frecuentes: los tiene el <strong>8% de los hombres</strong> y el <strong>1% de las mujeres</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tricrómata</td>
+<td>Visión cromática normal</td>
+</tr>
+<tr>
+<td>Dicromático protanopa</td>
+<td>Insensible al <strong>rojo</strong></td>
+</tr>
+<tr>
+<td>Dicromático deuterópata</td>
+<td>Insensible al <strong>verde</strong></td>
+</tr>
+<tr>
+<td>Tritanopa</td>
+<td>Insensible al <strong>azul y amarillo</strong></td>
+</tr>
+<tr>
+<td>Monocrómata</td>
+<td><strong>Sin</strong> visión del color</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el semáforo sin luces en columna</p>
+<p>Si un semáforo solo cambiara de color sin cambiar de posición, una persona daltónica no sabría si está en rojo o en verde. Por eso las luces están en posiciones fijas: el color es una <strong>ayuda</strong>, no la <strong>única</strong> pista. En una interfaz, un error no debería indicarse solo con rojo, sino también con un icono o un texto.</p>
+</div>
+<p><strong>La iluminación</strong> es la intensidad de energía luminosa que llega a la retina; influyen la duración del estímulo, el área de retina que cubre, etc. La <strong>luminosidad</strong> es cómo percibimos las características <strong>acromáticas</strong> (blancos, grises, negros). El usuario trabaja en un ambiente luminoso que afecta a cómo ve la interfaz, así que conviene <strong>alinear las pantallas correctamente respecto a las fuentes de luz</strong>, <strong>no colocarlas contra una pared o un espejo</strong>, usar <strong>vídeo inverso</strong> para minimizar destellos, usar <strong>filtros</strong>, etc.</p>
+<h2>2.2.3 Los demás sentidos</h2>
+<p><strong>El oído.</strong> La audición es <strong>crucial para la comunicación</strong>: es el núcleo de las interacciones sociales y de la transmisión del conocimiento. En IPO interesa estudiar las <strong>interfaces auditivas</strong> y las <strong>multimodales</strong> (imagen y sonido), como los <strong>menús auditivos</strong> de las compañías telefónicas.</p>
+<p><strong>El tacto.</strong> Es muy importante en <strong>realidad virtual</strong>, muy útil para personas con <strong>discapacidades visuales o auditivas</strong> y da <strong>realimentación</strong> en tareas como pulsar un botón o arrastrar un objeto. <strong>No está localizado</strong> (recibimos estímulos por toda la piel) y las zonas <strong>más sensibles son los dedos</strong>.</p>
+<p><strong>El sentido cenestésico.</strong> Es un sentido <strong>somático</strong>: informa de lo que ocurre en la superficie y el interior del cuerpo, incluidas la <strong>posición y el movimiento</strong> de las partes del cuerpo, y nos da conciencia de dónde están el cuerpo y las extremidades.</p>
+<p><strong>El sentido vestibular.</strong> Informa de la <strong>orientación, el movimiento y la aceleración</strong>; sirve para el <strong>equilibrio</strong>, mantener la <strong>cabeza erguida</strong> y <strong>ajustar los ojos</strong> a los movimientos de la cabeza. Junto con el cenestésico, es clave en <strong>realidad virtual</strong> para evitar <strong>náuseas y mareos</strong> (cuando lo que ven los ojos no coincide con lo que siente el cuerpo).</p>
+<p><strong>El olfato.</strong> Empieza a explorarse en IPO para crear mundos virtuales más realistas y porque está <strong>conectado con el sistema que procesa las emociones</strong> (<strong>interfaces emocionales</strong>). Pero es difícil de usar: hay <strong>gran variación individual</strong> en la sensibilidad y esta <strong>se pierde con el tiempo de exposición</strong>.</p>
+<h1>2.3 La percepción</h1>
+<p>La <strong>percepción</strong> es la <strong>asignación de significado</strong> al estímulo captado. El cerebro procesa <strong>en paralelo</strong> toda la información sensorial y la interpreta según las <strong>experiencias anteriores</strong> (la memoria).</p>
+<h2>2.3.1 Percepción y organización de objetos</h2>
+<p>La distribución de los elementos de una interfaz suele decidirla el diseñador <strong>por intuición</strong> o por el <strong>espacio disponible</strong>, pero hoy se sabe bastante de cómo percibimos las escenas de forma organizada. La <strong>Gestalt</strong> afirma que <em>&quot;la percepción humana no es la suma de los datos sensoriales, sino que pasa por un proceso de reestructuración que configura a partir de esa información una forma, una gestalt, que se destruye cuando se intenta analizar&quot;</em>. En otras palabras, <strong>vemos el conjunto antes que las partes</strong>.</p>
+<p>La <strong>ley figura-fondo</strong> dice que percibimos <strong>dos componentes</strong>, una <strong>figura principal</strong> y un <strong>fondo</strong>, que evaluamos de forma distinta; el mismo objeto puede ser figura o fondo según en qué se fije el observador.</p>
+<p><img src="../../../img/ipo/ipo-t2-figura-fondo.png" alt="Ley figura-fondo|400" loading="lazy">
+<em>En la primera imagen se puede ver una copa blanca o dos perfiles negros enfrentados, pero no las dos cosas a la vez.</em></p>
+<p>Los <strong>principios de agrupación</strong> explican qué elementos tendemos a ver como un grupo:</p>
+<table>
+<thead>
+<tr>
+<th>Principio</th>
+<th>Tendemos a agrupar...</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Proximidad</strong></td>
+<td>Los elementos <strong>cercanos</strong> entre sí</td>
+</tr>
+<tr>
+<td><strong>Similitud</strong></td>
+<td>Los elementos <strong>parecidos</strong> (mismo color, forma)</td>
+</tr>
+<tr>
+<td><strong>Destino común</strong></td>
+<td>Los que <strong>se mueven en la misma dirección</strong></td>
+</tr>
+<tr>
+<td><strong>Buena continuación</strong></td>
+<td>Los que forman una <strong>línea o curva continua</strong></td>
+</tr>
+<tr>
+<td><strong>Cierre</strong></td>
+<td>Completamos figuras <strong>incompletas</strong> para verlas <strong>cerradas</strong></td>
+</tr>
+<tr>
+<td><strong>Región común</strong></td>
+<td>Los que están <strong>dentro de un mismo recuadro</strong></td>
+</tr>
+<tr>
+<td><strong>Conexión entre elementos</strong></td>
+<td>Los que están <strong>unidos por una línea</strong></td>
+</tr>
+<tr>
+<td><strong>Sincronía</strong></td>
+<td>Los que <strong>cambian a la vez</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/ipo/ipo-t2-agrupacion.png" alt="Principios de agrupación|300" loading="lazy"></p>
+<p>En una interfaz gráfica estos principios se aplican constantemente: en el formulario del ejemplo, los tres botones de &quot;Índice de...&quot; se perciben como un grupo porque están <strong>juntos</strong>, son <strong>iguales</strong> y comparten <strong>recuadro azul</strong>, y cada etiqueta (AUTOR, TÍTULO...) se asocia a su campo por <strong>proximidad</strong>.</p>
+<p><img src="../../../img/ipo/ipo-t2-ejemplo-gui.png" alt="Ejemplo en interfaz gráfica|400" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=F0_zH-XWiy4">Leyes de la Gestalt aplicadas al diseño UI</a> — los principios de agrupación con ejemplos de interfaces reales (vídeo, 4 min).</p>
+</div>
+<h2>2.3.2 Percepción y atención</h2>
+<p>En una interfaz el usuario recibe a menudo <strong>más información de la que puede procesar a la vez</strong> (piensa en la portada de un portal de Internet). La <strong>atención</strong> actúa como un <strong>filtro</strong> que restringe qué información se analiza en cada momento. La atrae <strong>el ambiente</strong>, con estímulos llamativos (una imagen de colores brillantes), y <strong>el propio usuario</strong>, que <strong>no recorre toda la imagen</strong>, sino que se centra en las <strong>zonas de alto contenido informativo</strong> para hacerse una idea. Un ejemplo es la <strong>&quot;ceguera al banner&quot;</strong>: los usuarios ignoran la franja superior de las webs porque han aprendido que ahí suele haber publicidad.</p>
+<h2>2.3.3 Percepción y conocimiento</h2>
+<p><strong>Iconos.</strong> Las imágenes dan un <strong>acceso más directo y rápido que las palabras</strong> al significado de lo que representan. Por eso los iconos deben tener una <strong>mínima diferencia con el objeto real</strong> que representan, aparecer <strong>en la misma posición en todas las pantallas</strong>, ser <strong>fácilmente distinguibles</strong> del resto y <strong>no admitir varias interpretaciones</strong> (como la casita de &quot;inicio&quot; del navegador).</p>
+<p><strong>Affordances.</strong> Son las <strong>funciones de un objeto que se perciben directamente a partir de su imagen</strong> (por ejemplo, &quot;ser presionado&quot;). El diseñador quiere que el usuario sepa qué hace cada objeto de la interfaz; un <strong>ejemplo negativo</strong> es poner un hipervínculo en una imagen que no parece pulsable. Para conseguir buenas affordances hacen falta <strong>forma funcional</strong>, <strong>visibilidad</strong> y <strong>acción coherente</strong>.</p>
+<p><img src="../../../img/ipo/ipo-t2-affordance.png" alt="Affordance de un botón|350" loading="lazy">
+<em>A la izquierda, &quot;Enviar Mensaje&quot; parece un botón (tiene relieve) y se entiende que se pulsa; a la derecha, el mismo texto plano no lo parece.</em></p>
+<h1>2.4 El modelo de memoria</h1>
+<p>Las memorias forman una cadena: <strong>memoria sensorial</strong> → (atención) → <strong>memoria de trabajo</strong> ↔ <strong>memoria a largo plazo</strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Memoria sensorial</th>
+<th>Memoria de trabajo (operativa)</th>
+<th>Memoria a largo plazo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Función</td>
+<td><strong>Búfer</strong> de los estímulos de los sentidos</td>
+<td>Símbolos <strong>activos</strong> a los que prestamos atención y que manipulamos</td>
+<td>Almacena <strong>todo nuestro conocimiento</strong></td>
+</tr>
+<tr>
+<td>Duración</td>
+<td>Muy breve (milésimas de segundo a 2 s)</td>
+<td>Rápida decaída (<strong>~200 ms</strong> si no se refresca)</td>
+<td>Pérdidas <strong>muy lentas</strong></td>
+</tr>
+<tr>
+<td>Acceso</td>
+<td>—</td>
+<td>Rápido (<strong>70 ms</strong>)</td>
+<td>Más lento (<strong>1/10 s</strong>)</td>
+</tr>
+<tr>
+<td>Capacidad</td>
+<td>Pequeña</td>
+<td><strong>7 ± 2 elementos</strong></td>
+<td><strong>Casi ilimitada</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>2.4.1 Memoria sensorial</h2>
+<p>La información llega a los sentidos de forma <strong>continua y muy rápida</strong>, y los procesos de la memoria de trabajo necesitan tiempo, así que podría perderse antes de analizarla. Por eso cada canal sensorial tiene una memoria que la <strong>retiene muy poco tiempo</strong> para que pase a la memoria de trabajo. Hay <strong>tantas memorias sensoriales como sentidos</strong>, y se actualizan constantemente. Las mejor conocidas son la <strong>memoria icónica</strong> (visual: <strong>9 elementos / 250 ms</strong>) y la <strong>ecoica</strong> (auditiva: <strong>250 ms para sonidos / 2 s para palabras con significado</strong>). Gracias a ellas sabemos <strong>de dónde viene un sonido</strong> (llega a cada oído con un pequeño desfase) o vemos un <strong>fogonazo en la oscuridad</strong> después de que haya terminado.</p>
+<h2>2.4.2 Memoria de trabajo (operativa)</h2>
+<p>Es el conjunto de símbolos <strong>activos</strong> en un momento dado, a los que <strong>prestamos atención</strong> y podemos <strong>manipular voluntariamente</strong>; se mantienen mientras los usamos. Tiene <strong>acceso rápido (70 ms)</strong>, <strong>decae rápido (unos 200 ms)</strong> y tiene <strong>poca capacidad: 7 ± 2 elementos</strong>, aunque varía según la persona y <strong>mejora con entrenamiento</strong>.</p>
+<p>Como su capacidad es limitada, tendemos a buscar <strong>asociaciones</strong>; cuando una asociación se forma bien se crea una <strong>&quot;huella&quot;</strong>, y si no, se pierde el acceso a la información (tener algo <strong>&quot;en la punta de la lengua&quot;</strong>). Las <strong>interferencias</strong> provocan errores. El ejemplo clásico es el <strong>cajero que da el dinero antes que la tarjeta</strong>: el usuario coge el dinero, siente que ha terminado (la huella se forma antes de tiempo, porque el objetivo era el dinero) y <strong>olvida la tarjeta</strong>. La solución de diseño es <strong>devolver primero la tarjeta</strong>.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la encimera de la cocina</p>
+<p>La memoria de trabajo es la encimera: cabe poco (7 ± 2 ingredientes) y lo que no usas se cae enseguida. Por eso agrupar ayuda: recordar 612345789 cuesta, pero 612 345 789 son solo 3 &quot;bloques&quot;. En una interfaz, pedir al usuario que recuerde un código de 12 caracteres de una pantalla a otra es sobrecargar su encimera.</p>
+</div>
+<p>Los experimentos muestran además que se recuerdan mejor <strong>las primeras y las últimas palabras de una lista</strong> (efectos de <strong>primacía y recencia</strong>), que es más fácil recordar elementos <strong>con significado o relacionados</strong> y más difícil recordar elementos <strong>parecidos</strong>, y que la escasez de recursos <strong>perjudica hacer varias tareas a la vez</strong>.</p>
+<h2>2.4.3 Memoria a largo plazo</h2>
+<p>Almacena <strong>todo nuestro conocimiento</strong>, con <strong>gran capacidad</strong>, <strong>acceso más lento (1/10 s)</strong> y <strong>pérdidas lentas</strong>. La información pasa desde la memoria de trabajo mediante la <strong>memorización</strong>, que consiste en <strong>refrescarla</strong> y que puede mejorarse con técnicas. El <strong>olvido</strong> se explica por el <strong>decaimiento</strong> (la información acaba perdiéndose) y por la <strong>interferencia</strong> (la información nueva borra la antigua, como un número de teléfono nuevo). Los <strong>factores emocionales</strong> influyen: recordamos mejor lo <strong>positivo</strong> y los <strong>hechos importantes</strong>. No está claro si realmente olvidamos o si simplemente <strong>nos cuesta recuperar</strong> la información.</p>
+<p>Tiene dos grandes tipos:</p>
+<ul>
+<li><strong>Memoria procedimental</strong>: reglas y estrategias para hacer tareas, del tipo <strong>condición-acción</strong>, que se ejecutan de forma <strong>automática</strong> y con <strong>pocos recursos de atención</strong> (repertorios motores, estrategias cognitivas). Por ejemplo, conducir o escribir a máquina.</li>
+<li><strong>Memoria declarativa</strong>, con dos subtipos:
+<ul>
+<li><strong>Episódica</strong>: recuerdos de <strong>eventos y experiencias</strong> propias, en orden (<em>&quot;ayer me crucé con un extraño, me pidió fuego y me atracó&quot;</em>).</li>
+<li><strong>Semántica</strong>: <strong>hechos, conceptos y habilidades</strong> que sacamos de las experiencias (<em>&quot;no debes fiarte de los extraños&quot;</em>).</li>
+</ul>
+</li>
+</ul>
+<h1>2.5 El modelo mental</h1>
+<p>La información de la memoria <strong>no está desordenada</strong>: se organiza en <strong>estructuras semánticas</strong> que facilitan adquirirla y recuperarla. Para la IPO, las más importantes son los <strong>modelos mentales</strong>: el modelo que una persona tiene <strong>de sí misma, de los demás, del entorno y de las cosas con las que interactúa</strong>. Es el <strong>modelo conceptual del sistema que tiene el usuario</strong>, con su <strong>estructura</strong> y su <strong>funcionamiento</strong>. Se forma con la <strong>experiencia, el entrenamiento y el aprendizaje</strong>, y <strong>no implica saber cómo funciona el sistema por dentro</strong>.</p>
+<p>Un modelo mental es:</p>
+<ul>
+<li><strong>Incompleto</strong>.</li>
+<li><strong>Ejecutable mentalmente</strong>: el usuario puede <strong>simular</strong> su funcionamiento en la cabeza.</li>
+<li><strong>Inestable</strong>: se <strong>olvidan los detalles</strong>.</li>
+<li><strong>Sin límites claros</strong>: se <strong>confunde con modelos de sistemas parecidos</strong>.</li>
+<li><strong>Acientífico</strong>: incluye <strong>supersticiones y creencias erróneas</strong>.</li>
+<li><strong>Parsimonioso</strong>: el usuario prefiere <strong>simplificarlo</strong>.</li>
+</ul>
+<p>Los <strong>errores</strong> aparecen cuando <strong>el sistema funciona distinto de como el usuario cree</strong> (de su modelo mental). Por eso es muy importante que el usuario tenga un <strong>modelo mental correcto</strong>, y el <strong>diseño de la interfaz debe ayudar a construirlo</strong>. Es una representación <strong>dinámica</strong>, que adapta lo guardado en la memoria a largo plazo a la tarea concreta que se está haciendo.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el termostato</p>
+<p>Mucha gente cree que subir el termostato a 30 °C calienta la casa más rápido que ponerlo a 22 °C, como si fuera un grifo. En realidad es un interruptor: la caldera calienta igual de rápido en ambos casos. Es un modelo mental incompleto y erróneo que lleva a un error (pasar calor). Un buen diseño, por ejemplo mostrando el tiempo estimado para llegar a la temperatura, corregiría ese modelo.</p>
+</div>
+<h1>2.6 Ideas clave</h1>
+<ul>
+<li><strong>Psicología cognitiva</strong> para conocer capacidades y límites del usuario. <strong>Newell y Simon (1972)</strong>: reglas SI-ENTONCES, estados inicial → final (Torres de Hanói). Modelo: sentidos → memoria sensorial → (atención) → memoria de trabajo ↔ memoria a largo plazo → efectores.</li>
+<li><strong>Sensación</strong> (captar el estímulo) ≠ <strong>percepción</strong> (darle significado). Color: <strong>conos</strong> (día) y <strong>bastones</strong> (noche); evitar <strong>colores oponentes</strong> (rojo-verde, azul-amarillo); no codificar solo con color (<strong>8% de hombres, 1% de mujeres</strong>). Iluminación: evitar reflejos.</li>
+<li>Otros sentidos: oído (interfaces auditivas), tacto (RV, discapacidad, realimentación), <strong>cenestésico</strong> (posición del cuerpo), <strong>vestibular</strong> (equilibrio; mareo en RV), olfato (interfaces emocionales).</li>
+<li><strong>Gestalt</strong>: el todo antes que las partes; <strong>figura-fondo</strong>; agrupación por <strong>proximidad, similitud, destino común, continuación, cierre, región común, conexión, sincronía</strong>.</li>
+<li><strong>Atención</strong> como filtro (ceguera al banner); <strong>iconos</strong> claros y consistentes; <strong>affordances</strong> (forma funcional, visibilidad, acción coherente).</li>
+<li>Memorias: <strong>sensorial</strong> (icónica 9 elem./250 ms, ecoica 250 ms/2 s), <strong>de trabajo</strong> (70 ms, 200 ms, <strong>7 ± 2</strong>; ejemplo del cajero), <strong>a largo plazo</strong> (casi ilimitada, 1/10 s; procedimental y declarativa episódica/semántica).</li>
+<li><strong>Modelo mental</strong>: incompleto, ejecutable, inestable, sin límites claros, acientífico y parsimonioso. Los errores surgen cuando el sistema difiere del modelo; la interfaz debe ayudar a formarlo bien.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-introduccion-a-la-ipo.html"><span class="nav-etiqueta">← anterior</span>1. Introducción a la IPO</a>
+  <a class="nav-siguiente" href="3-prototipado-y-evaluacion.html"><span class="nav-etiqueta">siguiente →</span>3. Prototipado y evaluación</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

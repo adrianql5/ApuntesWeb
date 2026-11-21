@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="3. Prototipado y evaluación — apuntes de IPO (cuarto curso de Ingeniería Informática).">
+<title>3. Prototipado y evaluación · IPO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">ipo</a><span class="miga-sep">/</span><span aria-current="page">3-prototipado-y-evaluacion</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de IPO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">IPO</a></p><ol><li><a href="1-introduccion-a-la-ipo.html">1. Introducción a la IPO</a></li><li><a href="2-el-factor-humano.html">2. El factor humano</a></li><li><span class="actual" aria-current="page">3. Prototipado y evaluación</span></li><li><a href="4-diseno-centrado-en-el-usuario.html">4. Diseño centrado en el usuario</a></li><li><a href="5-diseno-grafico-principios-estandares-y-guias.html">5. Diseño gráfico. Principios, estándares y guías</a></li><li><a href="notas-sobre-examen.html">Notas sobre examen</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>IPO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>3 / 5</div>
+    </div>
+    <h1>Prototipado y evaluación</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de IPO · 3/6</summary><ol><li><a href="1-introduccion-a-la-ipo.html">1. Introducción a la IPO</a></li><li><a href="2-el-factor-humano.html">2. El factor humano</a></li><li><span aria-current="page">3. Prototipado y evaluación</span></li><li><a href="4-diseno-centrado-en-el-usuario.html">4. Diseño centrado en el usuario</a></li><li><a href="5-diseno-grafico-principios-estandares-y-guias.html">5. Diseño gráfico. Principios, estándares y guías</a></li><li><a href="notas-sobre-examen.html">Notas sobre examen</a></li></ol></details>
+  <div class="prosa">
+<h1>3.1 Introducción</h1>
+<p>La <strong>evaluación de la usabilidad</strong> es una parte básica del <strong>diseño centrado en el usuario</strong>: sin evaluar es <strong>imposible saber si un sistema cumple las expectativas</strong> de los usuarios y se adapta a su contexto social, físico y organizativo. Los <strong>prototipos</strong> permiten hacer esas evaluaciones <strong>desde las primeras etapas</strong> del diseño, antes de tener el sistema construido.</p>
+<p><img src="../../../img/ipo/ipo-t1-dcu.png" alt="Diseño centrado en el usuario|350" loading="lazy">
+<em>El prototipado y la evaluación acompañan a todas las fases del ciclo (ver <a href="1-introduccion-a-la-ipo.html">tema 1</a>).</em></p>
+<h1>3.2 Usabilidad</h1>
+<h2>3.2.1 Definiciones</h2>
+<p>La norma <strong>ISO 9241-11 (1998)</strong> define la usabilidad como la <em>medida en la que un producto puede ser usado por determinados usuarios para conseguir objetivos específicos con <strong>efectividad, eficiencia y satisfacción</strong> en un contexto de uso especificado</em>:</p>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Qué mide</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Efectividad</strong></td>
+<td><strong>Precisión y plenitud</strong> con que los usuarios alcanzan sus objetivos. Asociada a la facilidad de aprendizaje, la tasa de errores y la facilidad de recuerdo</td>
+</tr>
+<tr>
+<td><strong>Eficiencia</strong></td>
+<td>Precisión y plenitud <strong>en relación con los recursos empleados</strong> (tiempo, esfuerzo)</td>
+</tr>
+<tr>
+<td><strong>Satisfacción</strong></td>
+<td><strong>Comodidad y actitud positiva</strong> al usar el producto. Es <strong>subjetiva</strong></td>
+</tr>
+</tbody>
+</table>
+<p>La norma <strong>ISO/IEC 9126-1 (2000)</strong>, sobre calidad del software, la define como la <em>capacidad de un producto software de ser <strong>entendido, aprendido, usado y atractivo</strong> para el usuario en unas condiciones específicas</em>.</p>
+<p>Un sistema es usable si los usuarios pueden hacer sus tareas <strong>rápida y fácilmente</strong>, y la usabilidad descansa en cuatro puntos: <strong>centrarse en el usuario</strong>; conocer bien el <strong>contexto de uso</strong> (la gente usa los productos para ser más productiva); que el producto <strong>satisfaga las necesidades</strong> del usuario (son personas ocupadas intentando hacer tareas); y que <strong>son los usuarios, no los diseñadores ni los desarrolladores, quienes deciden cuándo un producto es fácil de usar</strong>.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la llave del coche</p>
+<p>Una llave es <strong>efectiva</strong> si abre el coche; <strong>eficiente</strong> si lo abre a la primera sin forcejear; y da <strong>satisfacción</strong> si además es cómoda de llevar. Un mando a distancia que abre desde 10 metros gana en las tres.</p>
+</div>
+<h2>3.2.2 Beneficios</h2>
+<p>Tener en cuenta la usabilidad <strong>reduce los costes de producción</strong> (evita rediseños y cambios posteriores), <strong>de mantenimiento y soporte</strong> (los sistemas usables necesitan menos formación y ayuda) y <strong>de uso</strong> (mejoran la productividad), y <strong>mejora la calidad</strong> del producto, algo clave en un mercado que exige productos fáciles de usar.</p>
+<p>Por eso debe considerarse <strong>en todo momento</strong>: <strong>antes</strong> de empezar el proyecto (conocer a los usuarios y qué aspectos del producto les interesan más), <strong>durante</strong> todo el desarrollo (con pruebas continuas) e <strong>incluso después</strong> de lanzarlo (preguntando a los usuarios por sus necesidades y su actitud). Los <strong>prototipos</strong> permiten que el usuario participe y evalúe el producto <strong>desde las primeras fases</strong>.</p>
+<h1>3.3 Prototipos</h1>
+<p>Un <strong>prototipo</strong> es una <strong>representación limitada de un diseño</strong> que permite a los usuarios <strong>interaccionar con él y explorar sus posibilidades</strong>. Según qué parte del sistema cubren, hay dos enfoques:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Prototipo vertical</th>
+<th>Prototipo horizontal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qué incluye</td>
+<td><strong>Pocas características</strong> (una o varias partes del sistema)</td>
+<td><strong>Toda la interfaz</strong>, con todas sus características</td>
+</tr>
+<tr>
+<td>Funcionalidad</td>
+<td><strong>Totalmente funcionales</strong></td>
+<td><strong>Sin funcionalidad</strong> por debajo</td>
+</tr>
+<tr>
+<td>Para qué sirve</td>
+<td>Probar a fondo una parte concreta</td>
+<td>Probar la navegación y el aspecto general</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la casa de muestra</p>
+<p>Un prototipo <strong>horizontal</strong> es la <strong>maqueta de toda la urbanización</strong>: ves todas las casas y calles, pero no puedes entrar en ninguna. Un prototipo <strong>vertical</strong> es <strong>un único piso piloto terminado</strong>: puedes abrir los grifos y encender las luces, pero solo de esa vivienda.</p>
+</div>
+<h2>3.3.1 Tipos de prototipos</h2>
+<p><strong>Maquetas.</strong> Objetos hechos con <strong>materiales muy básicos</strong> para <strong>evaluar una parte física</strong> del sistema (por ejemplo, la forma de un mando).</p>
+<p><strong>Prototipos de papel.</strong> Se hacen con <strong>papel, tijeras, lápiz, post-it</strong>... para dibujar el diseño, lo que da <strong>gran velocidad y flexibilidad</strong>. Normalmente se dibuja <strong>una hoja (viñeta) por cada interacción posible</strong>. Se plantea un <strong>escenario de uso</strong> en el que el <strong>diseñador actúa como coordinador</strong> (hace de &quot;ordenador&quot;, cambiando las hojas según lo que el usuario &quot;pulsa&quot;) y un posible <strong>usuario intenta hacer algunas de las tareas</strong>. Sus ventajas: <strong>costes reducidos</strong>, <strong>rapidez para cambiar</strong> y que el usuario <strong>se desinhibe para criticar</strong> (no le da reparo tachar un dibujo a lápiz).</p>
+<p><img src="../../../img/ipo/ipo-t3-prototipo-papel.png" alt="Ejemplo de prototipo en papel|300" loading="lazy">
+<em>Pantalla de &quot;forma de pago&quot; dibujada a mano: opciones de tarjeta, efectivo o domiciliación, campos para el número y la caducidad, y botones Aceptar y Cancelar.</em></p>
+<p><strong>Storyboard.</strong> Serie de <strong>viñetas</strong> que muestran <strong>cómo evoluciona la situación del usuario</strong> durante la interacción: una narración gráfica en cuadros consecutivos, a veces junto con escenarios.</p>
+<p><strong>Escenario.</strong> <strong>Historia de ficción</strong> con personajes, sucesos, productos y entornos. Maneja la <strong>configuración</strong> (sitúa la acción), los <strong>actores</strong> (la realizan) y el <strong>diagrama de la secuencia</strong> de acciones y eventos.</p>
+<p><strong>Vídeo.</strong> Permite <strong>rodar un escenario</strong>; útil para interfaces <strong>multimodales</strong> o para escenarios futuros.</p>
+<p><strong>Prototipo software.</strong> <strong>Primeras versiones de ciertas funcionalidades</strong>. Llegar aquí suele requerir <strong>varias iteraciones de prototipado y evaluación</strong>. Puede ser <strong>incremental</strong> (por componentes separados) o <strong>evolutivo</strong> (sirve de base a sucesivos refinamientos del diseño).</p>
+<h1>3.4 Evaluación</h1>
+<p>La <strong>evaluación</strong> es el conjunto de <strong>metodologías y técnicas que analizan la usabilidad</strong> de un sistema interactivo en <strong>distintas etapas del ciclo de vida</strong>, para crear mejores productos y ayudar a los usuarios a ser más productivos. <strong>Ojo</strong>: se tiende a <strong>primar la funcionalidad sobre la usabilidad</strong>. Al elegir un método hay que considerar el <strong>coste</strong>, <strong>quién evalúa</strong> y <strong>en qué etapa</strong> del ciclo de vida se está.</p>
+<p>Hay tres grandes familias de métodos:</p>
+<table>
+<thead>
+<tr>
+<th>Familia</th>
+<th>Quién evalúa</th>
+<th>Métodos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Inspección</strong></td>
+<td><strong>Expertos</strong>, sin usuarios</td>
+<td>Evaluación heurística, recorrido de usabilidad plural, recorrido cognitivo, estándares</td>
+</tr>
+<tr>
+<td><strong>Indagación</strong></td>
+<td>Se <strong>habla con los usuarios y se les observa</strong></td>
+<td>Observación de campo, focus group, entrevistas, logging, cuestionarios</td>
+</tr>
+<tr>
+<td><strong>Test</strong></td>
+<td><strong>Usuarios reales haciendo tareas</strong></td>
+<td>Medida de prestaciones, thinking aloud, interacción constructiva, test retrospectivo, método del conductor</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: evaluar un restaurante</p>
+<p><strong>Inspección</strong> es mandar a un crítico gastronómico que revisa el local con su lista de criterios. <strong>Indagación</strong> es preguntar a los clientes qué les parece y observar cómo se mueven por el local. <strong>Test</strong> es invitar a clientes a cenar y medir cuánto tardan en pedir, cuántas veces llaman al camarero y si vuelven.</p>
+</div>
+<h2>3.4.1 Inspección</h2>
+<p>Un <strong>pequeño grupo de evaluadores</strong> examina aspectos de usabilidad de la interfaz; <strong>no se basa en usuarios</strong>. Los inspectores pueden ser <strong>especialistas en usabilidad</strong>, <strong>consultores de desarrollo</strong> con experiencia en guías de estilo o <strong>usuarios finales que conozcan el dominio</strong>. Los métodos más importantes son la <strong>evaluación heurística</strong>, los <strong>recorridos cognitivos</strong> y la <strong>inspección de estándares</strong>.</p>
+<h3>Evaluación heurística</h3>
+<p>Analiza si la interfaz cumple unos <strong>principios reconocidos de usabilidad</strong> (la <strong>&quot;heurística&quot;</strong>), con <strong>entre tres y cinco evaluadores expertos</strong>. Cada evaluador revisa la interfaz <strong>por separado</strong>; al terminar, <strong>ponen en común y sintetizan</strong> los resultados. Hacerlo así asegura evaluaciones <strong>independientes e imparciales</strong>. Los resultados se recogen en <strong>informes escritos</strong> o haciendo que cada evaluador <strong>comente en voz alta</strong> a un observador mientras evalúa.</p>
+<p>Las dos listas de principios más conocidas:</p>
+<table>
+<thead>
+<tr>
+<th>8 reglas de oro de <strong>Shneiderman</strong></th>
+<th>10 heurísticas de <strong>Nielsen</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Esforzarse por la <strong>consistencia</strong></td>
+<td>1. El <strong>estado del sistema</strong> debe ser siempre visible</td>
+</tr>
+<tr>
+<td>2. Crear <strong>atajos</strong> para usuarios avanzados</td>
+<td>2. Utilizar el <strong>lenguaje de los usuarios</strong></td>
+</tr>
+<tr>
+<td>3. Ofrecer <strong>realimentación</strong> graduada a las acciones</td>
+<td>3. <strong>Control y libertad</strong> para el usuario</td>
+</tr>
+<tr>
+<td>4. Diseñar el diálogo para <strong>mostrar el trabajo pendiente</strong></td>
+<td>4. <strong>Consistencia y estándares</strong></td>
+</tr>
+<tr>
+<td>5. <strong>Gestión sencilla de errores</strong></td>
+<td>5. <strong>Prevención de errores</strong></td>
+</tr>
+<tr>
+<td>6. <strong>Fácil recuperación</strong> de acciones (deshacer)</td>
+<td>6. <strong>Minimizar la carga de memoria</strong> del usuario</td>
+</tr>
+<tr>
+<td>7. <strong>Control</strong> por parte del usuario</td>
+<td>7. <strong>Flexibilidad y eficiencia</strong> de uso</td>
+</tr>
+<tr>
+<td>8. <strong>Reducir la carga de memoria</strong> del usuario</td>
+<td>8. Diálogos <strong>estéticos</strong> y de diseño <strong>minimalista</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>9. Ayudar a <strong>reconocer, diagnosticar y recuperarse de errores</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>10. <strong>Ayuda y documentación</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplos rápidos de las heurísticas de Nielsen: la <strong>barra de progreso</strong> de una descarga cumple la 1 (estado visible); decir &quot;Carpeta&quot; en vez de &quot;Directorio&quot; cumple la 2; el botón <strong>Deshacer</strong> cumple la 3; que el botón de guardar sea siempre el <strong>disquete</strong> cumple la 4; <strong>desactivar &quot;Enviar&quot;</strong> mientras falta un campo obligatorio cumple la 5, y <strong>mostrar las opciones</strong> en un menú en lugar de obligar a recordar comandos cumple la 6.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.nngroup.com/articles/ten-usability-heuristics/">10 Usability Heuristics for User Interface Design (Nielsen Norman Group)</a> — las 10 heurísticas explicadas por su autor, con ejemplos (artículo, inglés).
+<a href="https://www.youtube.com/watch?v=IYrKEu3qoJI">Los 10 principios de usabilidad de Jakob Nielsen</a> — resumen rápido de las 10 heurísticas (vídeo, 2 min).</p>
+</div>
+<h3>Recorrido cognitivo</h3>
+<p>Método de inspección que evalúa la <strong>facilidad de aprendizaje</strong> (sobre todo <strong>por exploración</strong>) y la <strong>comprensión</strong>. Se basa en los <strong>recorridos estructurales</strong> de la ingeniería del software y evalúa un <strong>prototipo de la interfaz en el contexto de una o más tareas</strong>. Es idóneo en la <strong>etapa de diseño</strong>, aunque sirve en las demás.</p>
+<p>Parte de unos <strong>datos iniciales</strong>: el <strong>diseño de la interfaz</strong> (prototipo de papel o software), un <strong>escenario</strong>, las <strong>tareas</strong> a realizar (del análisis de tareas) y la <strong>población de usuarios y el contexto de uso</strong>. En la <strong>ejecución</strong> se <strong>elige una tarea</strong> y se <strong>recorren sus acciones</strong>: para cada una, se comprueba si el usuario <strong>elegiría la acción correcta</strong>, si el sistema da la <strong>realimentación</strong> adecuada y si el usuario <strong>percibe que avanza</strong> hacia el objetivo.</p>
+<h3>Inspección de estándares</h3>
+<p>Un <strong>estándar</strong> es un requisito, regla o recomendación <strong>basada en principios probados y en la práctica</strong>, acordada por profesionales autorizados a nivel local, nacional o internacional. Un <strong>experto en un estándar</strong> de interfaz (<strong>de facto</strong> o <strong>de iure</strong>) inspecciona minuciosamente la interfaz para comprobar que <strong>cumple todos sus puntos</strong>, en cada detalle y globalmente.</p>
+<h2>3.4.2 Indagación</h2>
+<p>Conocer los <strong>gustos y necesidades</strong> del usuario e identificar requisitos es imprescindible <strong>al principio</strong> del desarrollo. Estos métodos consisten en <strong>hablar con los usuarios, observarlos, usar el sistema en el trabajo real</strong> y obtener respuestas, oralmente o por escrito.</p>
+<p><strong>Grabación del uso (<em>logging</em>).</strong> Se añade al sistema una extensión que <strong>recoge automáticamente estadísticas de uso</strong>, normalmente modificando los <strong>drivers</strong> (ratón, teclado) o la <strong>propia aplicación</strong> evaluada. Muestra cómo trabajan los usuarios <strong>de verdad</strong> en distintas circunstancias. Registra la <strong>frecuencia de uso de cada función</strong>, la de los <strong>mensajes de error</strong> y la del <strong>uso de la ayuda en línea</strong>.</p>
+<p><strong>Observación de campo.</strong> Se observa a usuarios representativos <strong>en su lugar de trabajo</strong>, en el día a día, para entender cómo usan el sistema y <strong>qué modelo mental</strong> tienen de él; si hace falta, se les pregunta. Busca identificar <strong>artefactos</strong> (objetos físicos en uso: blocs de notas, formularios, informes, paredes...) y <strong>afloramientos</strong> (rasgos físicos que caracterizan el sitio: tamaño de los cubículos, qué hay escrito en las pizarras, uniformes). Sirve al principio del desarrollo y en la fase de prueba.</p>
+<p><strong>Grupo de discusión dirigido (<em>focus group</em>).</strong> Se reúne a <strong>6-9 usuarios</strong> para discutir aspectos del sistema, con un <strong>ingeniero de factores humanos</strong> como <strong>moderador</strong> (animador, dinamizador) que prepara la lista de temas y recoge la información. Permite capturar <strong>reacciones espontáneas</strong> e <strong>ideas que surgen de la dinámica del grupo</strong>.</p>
+<p><strong>Técnicas de interrogación.</strong> La mejor forma de saber si el sistema se adapta a los requisitos es <strong>preguntar al usuario</strong>: da su <strong>punto de vista directo</strong> y descubre opciones no previstas. El problema es que la información es <strong>subjetiva</strong> y es difícil obtener alternativas de diseño de alguien <strong>sin experiencia</strong>. Las dos más importantes son:</p>
+<ul>
+<li><strong>Entrevistas</strong>: forma <strong>directa y estructurada</strong> de recoger información, que se puede <strong>adaptar</strong> al contexto y al entrevistado. Suelen ir <strong>de lo general a lo concreto</strong> (arriba-abajo). Son efectivas para una evaluación <strong>de alto nivel</strong>: <strong>preferencias, impresiones y actitudes</strong>, y descubren problemas no previstos. Hay que <strong>prepararlas</strong> con un conjunto de preguntas básicas.</li>
+<li><strong>Cuestionarios</strong>: <strong>menos flexibles</strong> que la entrevista, pero <strong>llegan a más gente</strong> y se analizan <strong>con más rigor</strong>; se pueden usar varias veces durante el diseño.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Tipo de pregunta</th>
+<th>Qué recoge</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>General</strong></td>
+<td><strong>Perfil</strong> del usuario (edad, sexo, ocupación, residencia...)</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Abierta</strong></td>
+<td>Información <strong>subjetiva</strong>; puede dar ideas y detectar errores no previstos</td>
+<td>&quot;Comentario general:&quot;</td>
+</tr>
+<tr>
+<td><strong>Opción múltiple</strong></td>
+<td>Una o varias respuestas de una lista</td>
+<td>¿Tipo de software usado? Tratamiento de texto / Hoja de cálculo / Bases de datos / Contabilidad</td>
+</tr>
+<tr>
+<td><strong>Escalar</strong></td>
+<td>Valoración en una <strong>escala numérica (Likert)</strong></td>
+<td>Muy fácil – Fácil – Normal – Difícil – Muy difícil</td>
+</tr>
+<tr>
+<td><strong>Ordenada</strong></td>
+<td><strong>Ordenar</strong> una serie de opciones</td>
+<td>Ordena cómo prefieres ejecutar una acción: iconos / menú / doble clic</td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/ipo/ipo-t3-cuestionario.png" alt="Ejemplo de cuestionario|450" loading="lazy">
+<em>Preguntas con escala de muy fácil a muy difícil sobre usar el programa, encontrar funciones en los menús, entender los mensajes, recuperarse de errores y usar el manual, más preguntas de sí/no y un comentario general.</em></p>
+<h2>3.4.3 Test</h2>
+<p><strong>Pensar en voz alta (<em>thinking aloud</em>).</strong> Se pide a los usuarios que <strong>digan en voz alta lo que piensan, sienten y opinan</strong> mientras usan el sistema, lo que ayuda a ver si un elemento de diseño es bueno o malo. Capta muy bien la actividad cognitiva: el <strong>modelo mental</strong> del usuario y la <strong>terminología</strong> que usa. Si participan <strong>dos usuarios a la vez</strong>, es el método de <strong>interacción constructiva</strong>: más natural para ellos, aunque pueden usar <strong>estrategias de aprendizaje distintas</strong>.</p>
+<p><strong>Test retrospectivo.</strong> Se <strong>graba la sesión en vídeo</strong> y luego se <strong>revisa con el usuario</strong>, lo que permite obtener <strong>más comentarios</strong>.</p>
+<p><strong>Método del conductor.</strong> El evaluador <strong>guía al usuario en la dirección correcta</strong> mientras usa el sistema, y el usuario <strong>puede preguntar lo que quiera</strong>. Se usa con <strong>usuarios inexpertos</strong> y sirve para descubrir <strong>qué información necesitan</strong>.</p>
+<p><strong>Medida de prestaciones.</strong> Los participantes son <strong>usuarios reales</strong> haciendo <strong>tareas reales</strong>; se <strong>observa y registra</strong> lo que hacen y dicen, se <strong>analizan los datos</strong>, se diagnostican <strong>problemas reales</strong> y se recomiendan cambios. Es clave <strong>elegir bien las tareas</strong>: las que demuestren problemas de usabilidad, las sugeridas por la experiencia, las que los usuarios harán de verdad y las <strong>difíciles de recuperar tras un error</strong>. Se pueden medir dos cosas:</p>
+<table>
+<thead>
+<tr>
+<th>Medidas de rendimiento (lo que se ve y se cuenta)</th>
+<th>Medidas subjetivas (percepciones, opiniones, juicios)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tiempo</strong> para completar una tarea, en menús de navegación, en la ayuda, buscando en el manual o recuperándose de errores</td>
+<td><strong>Valoraciones</strong> de la facilidad de uso, de aprendizaje, de hacer una tarea, de instalar, de encontrar información en el manual, de entenderla, y de la utilidad de los ejemplos</td>
+</tr>
+<tr>
+<td><strong>Número de errores</strong>: opciones de menú, opciones en cuadros de diálogo, iconos o teclas de función incorrectos</td>
+<td><strong>Preferencias</strong> frente a una versión anterior, un producto de la competencia o la forma actual de hacer la tarea</td>
+</tr>
+<tr>
+<td><strong>Número de llamadas a la ayuda</strong> y de pantallas de ayuda consultadas; veces que se consulta el manual</td>
+<td><strong>Predicciones</strong> de comportamiento (¿comprará el producto?)</td>
+</tr>
+<tr>
+<td><strong>Observaciones</strong> de frustración, confusión y satisfacción</td>
+<td><strong>Comentarios espontáneos</strong> (&quot;estoy totalmente perdido&quot;, &quot;ha sido fácil&quot;, &quot;no comprendo el mensaje&quot;)</td>
+</tr>
+</tbody>
+</table>
+<p>Un test de prestaciones genera <strong>muchos datos</strong>: la <strong>lista de problemas</strong> surgidos, <strong>datos cuantitativos</strong> de tiempos, errores y rendimiento, <strong>valoraciones subjetivas</strong> y cuestionarios <strong>post-tarea y post-test</strong>, <strong>comentarios</strong> de las grabaciones, <strong>notas del equipo</strong> y <strong>datos de los participantes</strong> (perfiles, cuestionarios pre-test). El objetivo es <strong>encontrar problemas reales</strong> en el producto y en su proceso de desarrollo.</p>
+<h1>3.5 Coste y laboratorio de usabilidad</h1>
+<h2>3.5.1 Coste</h2>
+<p>El coste pesa mucho al elegir un método. Se mide por el <strong>personal necesario</strong> (usuarios, expertos en usabilidad, desarrolladores), el <strong>tiempo</strong> de recogida y análisis de datos y la <strong>necesidad de coordinación</strong> (si todos los participantes tienen que coincidir a la vez).</p>
+<table>
+<thead>
+<tr>
+<th>Coste</th>
+<th>Métodos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bajo</strong></td>
+<td>Evaluación heurística</td>
+</tr>
+<tr>
+<td><strong>Medio</strong></td>
+<td>Recorrido cognitivo, inspección por características, observación de campo, entrevistas, grabación de uso, cuestionarios, lista de chequeo basada en escenarios</td>
+</tr>
+<tr>
+<td><strong>Alto</strong></td>
+<td>Focus group, medida de prestaciones, pensar en voz alta</td>
+</tr>
+</tbody>
+</table>
+<p>La lógica: la <strong>evaluación heurística</strong> solo necesita a 3-5 expertos con la interfaz, mientras que los métodos <strong>caros</strong> exigen <strong>reunir y coordinar usuarios reales</strong>, grabarlos y analizar muchos datos.</p>
+<h2>3.5.2 Laboratorio de usabilidad</h2>
+<p>Es un <strong>espacio adaptado para hacer tests de usabilidad</strong>, que facilita la recogida de datos de los participantes. Suele disponer de <strong>cámaras de control remoto</strong>, <strong>micrófonos inalámbricos</strong>, <strong>mesa de mezclas digital</strong>, <strong>escáner de entrada</strong> y <strong>vídeo de grabación</strong>.</p>
+<h1>3.6 Ideas clave</h1>
+<ul>
+<li>Sin evaluación no se sabe si el sistema cumple las expectativas; los <strong>prototipos</strong> permiten evaluar <strong>desde el principio</strong>.</li>
+<li><strong>Usabilidad (ISO 9241-11)</strong>: <strong>efectividad</strong> (precisión y plenitud), <strong>eficiencia</strong> (respecto a los recursos) y <strong>satisfacción</strong> (subjetiva). ISO/IEC 9126-1: entendido, aprendido, usado y atractivo. <strong>Deciden los usuarios</strong>, no los diseñadores.</li>
+<li>Beneficios: menos costes de producción, mantenimiento y uso, y más calidad. Considerarla <strong>antes, durante y después</strong>.</li>
+<li>Prototipos: <strong>vertical</strong> (pocas funciones, completas) vs <strong>horizontal</strong> (toda la interfaz, sin funcionalidad). Tipos: <strong>maquetas</strong>, <strong>papel</strong> (barato, rápido, el usuario critica sin reparo), <strong>storyboard</strong>, <strong>escenario</strong>, <strong>vídeo</strong>, <strong>software</strong> (incremental o evolutivo).</li>
+<li>Evaluación: <strong>inspección</strong> (expertos: <strong>heurística</strong> con 3-5 evaluadores, <strong>recorrido cognitivo</strong>, <strong>estándares</strong>), <strong>indagación</strong> (logging, observación de campo, <strong>focus group</strong> 6-9 personas, entrevistas, cuestionarios), <strong>test</strong> (<strong>thinking aloud</strong>, interacción constructiva, retrospectivo, método del conductor, <strong>medida de prestaciones</strong>).</li>
+<li><strong>Shneiderman</strong>: 8 reglas de oro. <strong>Nielsen</strong>: 10 heurísticas (estado visible, lenguaje del usuario, control, consistencia, prevención de errores, memoria, flexibilidad, minimalismo, recuperación de errores, ayuda).</li>
+<li>Coste: <strong>bajo</strong> heurística; <strong>medio</strong> recorrido cognitivo, entrevistas, cuestionarios...; <strong>alto</strong> focus group, medida de prestaciones, pensar en voz alta. <strong>Laboratorio de usabilidad</strong>: cámaras, micrófonos, mesa de mezclas, grabación.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="2-el-factor-humano.html"><span class="nav-etiqueta">← anterior</span>2. El factor humano</a>
+  <a class="nav-siguiente" href="4-diseno-centrado-en-el-usuario.html"><span class="nav-etiqueta">siguiente →</span>4. Diseño centrado en el usuario</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="3. Aplicaciones y servicios en la nube — apuntes de COMPNU (cuarto curso de Ingeniería Informática).">
+<title>3. Aplicaciones y servicios en la nube · COMPNU · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">compnu</a><span class="miga-sep">/</span><span aria-current="page">3-aplicaciones-y-servicios-en-la-nube</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de COMPNU"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">COMPNU</a></p><ol><li><a href="1-introduccion-a-la-computacion-en-la-nube.html">1. Introducción a la computación en la nube</a></li><li><a href="2-mecanismos-de-virtualizacion.html">2. Mecanismos de virtualización</a></li><li><span class="actual" aria-current="page">3. Aplicaciones y servicios en la nube</span></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>COMPNU</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>3 / 3</div>
+    </div>
+    <h1>Aplicaciones y servicios en la nube</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de COMPNU · 3/3</summary><ol><li><a href="1-introduccion-a-la-computacion-en-la-nube.html">1. Introducción a la computación en la nube</a></li><li><a href="2-mecanismos-de-virtualizacion.html">2. Mecanismos de virtualización</a></li><li><span aria-current="page">3. Aplicaciones y servicios en la nube</span></li></ol></details>
+  <div class="prosa">
+<h1>3.1 AWS como ejemplo de nube pública</h1>
+<p><strong>Amazon Web Services (AWS)</strong> es la filial de Amazon que ofrece servicios en la nube de los tres tipos: <strong>IaaS, PaaS y SaaS</strong>. Se lanzó oficialmente en <strong>2006</strong> con una idea curiosa: <strong>aprovechar los recursos de los sistemas de Amazon en las épocas de pocas ventas</strong>. En <strong>2025 facturó $128,73B</strong> y hoy ofrece <strong>más de 100 servicios</strong> para alojamiento web, aplicaciones empresariales y móviles, Big Data, IoT, HPC, streaming, realidad virtual o computación cuántica.</p>
+<h2>3.1.1 Regiones y zonas de disponibilidad</h2>
+<p>AWS tiene centros de datos repartidos por <strong>regiones</strong> de todo el mundo. Dentro de cada región hay varios centros <strong>separados entre sí</strong>, llamados <strong>zonas de disponibilidad</strong> (<em>availability zones</em>, <strong>AZs</strong>), a <strong>varios kilómetros</strong> unos de otros, lo que <strong>mejora la fiabilidad mediante replicación</strong>: si una AZ cae (un incendio, un corte eléctrico), las otras siguen funcionando. Por ejemplo, la región de <strong>París</strong> tiene 3 AZs llamadas <strong>eu-west-3a, eu-west-3b y eu-west-3c</strong>, y <strong>España</strong> tiene la región <strong>eu-south-2</strong> con <strong>3 AZs</strong> desde finales de 2022. El usuario elige la región y, en algunos servicios, la AZ.</p>
+<p><img src="../../../img/compnu/compnu-t3-infraestructura.png" alt="Infraestructura global de AWS|600" loading="lazy"></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: las sucursales de un banco</p>
+<p>Una <strong>región</strong> es una ciudad donde el banco tiene presencia; las <strong>AZs</strong> son varias oficinas en barrios distintos de esa ciudad. Si una oficina se inunda, las demás siguen atendiendo, y como están en la misma ciudad pueden compartir información rápidamente.</p>
+</div>
+<h1>3.2 Servicios de computación: EC2</h1>
+<p><strong>Amazon EC2</strong> (<em>Elastic Compute Cloud</em>) es el servicio para <strong>desplegar máquinas virtuales bajo demanda</strong>; en AWS a los servidores virtuales se les llama <strong>instancias</strong>. Ofrece <strong>control total</strong> sobre las VMs (acceso como <strong>root</strong>, interfaz para parar, reiniciar y terminar), es <strong>flexible</strong> (decenas de configuraciones de CPU, memoria, disco, SO, software...), <strong>elástico</strong> (aumenta o reduce la capacidad dinámicamente), <strong>fiable</strong> (<strong>SLA del 99,99%</strong> de disponibilidad en cada región) y <strong>seguro</strong> (credenciales, cifrado, grupos de seguridad, VPC...).</p>
+<h2>3.2.1 AMIs</h2>
+<p>Las <strong>AMIs</strong> (<em>Amazon Machine Images</em>) son <strong>imágenes preconfiguradas</strong> (SO, software...) a partir de las cuales se lanzan instancias. El <strong>AWS Marketplace</strong> es un catálogo de AMIs <strong>gratuitas y de pago</strong>, incluidas las publicadas por <strong>terceros</strong>.</p>
+<h2>3.2.2 Tipos de instancias</h2>
+<p>Hay varios tipos de instancia para distintos casos de uso, agrupados en <strong>familias</strong>. Su nombre sigue un patrón:</p>
+<p><img src="../../../img/compnu/compnu-t3-nombre-instancia.png" alt="Nombre de un tipo de instancia|350" loading="lazy">
+<em>En <code>c5d.9xlarge</code>: <code>c</code> es la familia (computación), <code>5</code> la generación, <code>d</code> las capacidades adicionales (SSD local) y <code>9xlarge</code> el tamaño.</em></p>
+<p>La <strong>letra inicial</strong> indica la <strong>familia</strong>, el <strong>número</strong> la <strong>generación</strong>, y las <strong>letras finales</strong>, características adicionales: <strong>a, i, g</strong> → procesador <strong>AMD, Intel o AWS Graviton (ARM)</strong>; <strong>d</strong> → <strong>SSD NVMe locales</strong>; <strong>z, e, n, b</strong> → mejoras de <strong>CPU (z), memoria (e), red (n) o almacenamiento (b)</strong>; <strong>Flex</strong> → rendimiento base garantizado con capacidad de subir temporalmente al 100%. Las instancias usan <strong>AWS Nitro</strong>, una combinación de hardware y un <strong>hipervisor diseñado por AWS</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Familia</th>
+<th>Ejemplos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Propósito general</strong></td>
+<td>M9g(d), M8/M7/M6/M5..., T4g, T3(a), T2, M2ProMac, M1Mac</td>
+</tr>
+<tr>
+<td><strong>Optimizadas para computación</strong></td>
+<td>C9g(d), C8, C7, C6, C5</td>
+</tr>
+<tr>
+<td><strong>Optimizadas para memoria</strong></td>
+<td>R9g(d), R8, R7, R6, X8, U7i, z1d</td>
+</tr>
+<tr>
+<td><strong>Optimizadas para almacenamiento</strong></td>
+<td>I8g, I7i(e), Im4gn, Is4gen, I4, I3(en), H1, D3(en), D2</td>
+</tr>
+<tr>
+<td><strong>Con aceleradores</strong> (GPU, etc.)</td>
+<td>G7(e), P6, P5, Trn3, Trn2, Trn1, G6(e), G5, G4, P4, F2, Inf2, Inf1, DL2q, DL1, VT1</td>
+</tr>
+<tr>
+<td><strong>Optimizadas para HPC</strong></td>
+<td>Hpc8a, Hpc7(a/g), Hpc6id, Hpc6a</td>
+</tr>
+</tbody>
+</table>
+<h2>3.2.3 Formas de pago</h2>
+<table>
+<thead>
+<tr>
+<th>Modalidad</th>
+<th>Cómo funciona</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Bajo demanda</strong></td>
+<td>Pago <strong>por hora</strong> (o <strong>por segundo</strong> en Linux) mientras la instancia está encendida</td>
+<td>Uso general, sin compromiso</td>
+</tr>
+<tr>
+<td><strong>Spot</strong></td>
+<td><strong>Subasta</strong>: AWS ofrece su <strong>capacidad libre</strong> a un precio que varía con la oferta y la demanda. El cliente <strong>puja</strong>; si el precio de AWS queda <strong>por debajo de la puja</strong>, obtiene las instancias, y <strong>se las quitan</strong> en cuanto el precio <strong>supera</strong> su puja</td>
+<td>Cargas <strong>no críticas</strong> que toleran interrupciones: simulaciones, análisis de datos</td>
+</tr>
+<tr>
+<td><strong>Reservadas</strong></td>
+<td><strong>Pago por adelantado</strong> con <strong>grandes descuentos</strong> frente a bajo demanda</td>
+<td>Uso continuo y previsible</td>
+</tr>
+<tr>
+<td><strong>Dedicadas</strong></td>
+<td>Recursos <strong>en exclusiva</strong>, <strong>no compartidos</strong> con otros clientes</td>
+<td>Requisitos de aislamiento o licencias</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el transporte</p>
+<p><strong>Bajo demanda</strong> es coger un taxi: pagas por trayecto. <strong>Reservada</strong> es comprar el abono anual: más barato si lo usas mucho. <strong>Spot</strong> es el billete de avión de última hora muy barato, pero que la aerolínea puede anular si alguien paga más. <strong>Dedicada</strong> es alquilar un coche solo para ti.</p>
+</div>
+<p>Precios por hora bajo demanda (Linux, US East; varían por región y SO): propósito general de <strong>$0,0042</strong> (t4g.nano) a <strong>$36,66</strong> (m8idn.96xlarge); computación de <strong>$0,034</strong> (c6g.medium) a <strong>$26,12</strong> (c8in.96xlarge); memoria de <strong>$0,0504</strong> (r6g.medium) a <strong>$270,73</strong> (u7in-24tb.224xlarge); aceleradores de <strong>$0,202</strong> (g6f.large) a <strong>$113,93</strong> (p6-b200.48xlarge); almacenamiento de <strong>$0,14408</strong> (is4gen.medium) a <strong>$24,95</strong> (i7ie.metal-48xl). También se cobran las <strong>transferencias de datos de salida</strong>, <strong>no las de entrada</strong>. Para estimar costes hay una <strong>calculadora oficial</strong>.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://calculator.aws/">AWS Pricing Calculator</a> — calculadora oficial para estimar el coste de una arquitectura (web; enlazada en las diapositivas).</p>
+</div>
+<h1>3.3 Servicios de almacenamiento</h1>
+<p>AWS ofrece <strong>EBS</strong> (almacenamiento en <strong>bloques</strong>), <strong>S3</strong> (de <strong>objetos</strong>), <strong>EFS</strong> (de <strong>ficheros</strong>), <strong>FSx</strong> (sistemas de ficheros gestionados de alto rendimiento: Lustre, Windows File Server, NetApp ONTAP y OpenZFS), <strong>DataSync</strong> (migraciones de datos seguras), <strong>Snowball</strong> (migrar datos a escala de petabytes, en retirada) y <strong>Snowmobile</strong> (transportar exabytes en un camión, discontinuado).</p>
+<h2>3.3.1 EBS (<em>Elastic Block Storage</em>)</h2>
+<p>Son <strong>volúmenes de almacenamiento en bloques persistentes</strong> (discos duros virtuales) para las instancias EC2. Se <strong>montan como dispositivos</strong> y se accede a ellos <strong>por la red</strong>; <strong>persisten aunque la instancia desaparezca</strong>; son <strong>elásticos</strong> (se cambia su tipo y tamaño sin interrumpir el servicio); llegan a <strong>64 TiB</strong>; se <strong>replican automáticamente dentro de su AZ</strong>; admiten <strong>instantáneas (<em>snapshots</em>) incrementales</strong> guardadas en S3 y replicadas en varias AZs, y tienen una <strong>durabilidad de hasta el 99,999%</strong> (tasa de fallo anual del 0,001%).</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Características</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SSD de propósito general</strong> (gp3/gp2)</td>
+<td>1 GiB-16 TiB, máx. <strong>16.000 IOPS</strong> y 1.000 MiB/s</td>
+</tr>
+<tr>
+<td><strong>SSD con IOPS provisionadas</strong> (io2 Block Express/io1)</td>
+<td>Se <strong>especifican las IOPS</strong>: máx. <strong>256.000 IOPS</strong> y 4.000 MiB/s</td>
+</tr>
+<tr>
+<td><strong>HDD optimizado para throughput</strong> (st1)</td>
+<td>500 MiB/s</td>
+</tr>
+<tr>
+<td><strong>HDD frío</strong> (sc1)</td>
+<td>250 MiB/s</td>
+</tr>
+</tbody>
+</table>
+<p>Los precios van de <strong>$0,015 GB-mes (sc1)</strong> a <strong>$0,125 GB-mes (io2)</strong>. Las <strong>IOPS</strong> son operaciones de entrada/salida por segundo (en bloques de 16 KiB en SSD y 1 MiB en HDD).</p>
+<p><strong>Instance Store</strong> es otra opción, en las instancias que no son &quot;EBS-only&quot;: <strong>discos conectados físicamente al host</strong> donde corre la instancia. Se configuran al lanzarla y son ideales para datos que <strong>cambian mucho</strong> o como <strong>swap</strong>, pero <strong>se pierden si la instancia se para o hiberna</strong>.</p>
+<h2>3.3.2 EFS (<em>Elastic File System</em>)</h2>
+<p>Almacenamiento <strong>a nivel de fichero</strong> (compatible <strong>POSIX</strong>, como un disco de red), <strong>accesible desde varias instancias EC2 a la vez</strong> o desde servidores propios (con <strong>AWS Direct Connect</strong>). <strong>Escala automáticamente</strong> al añadir o borrar ficheros y es <strong>redundante en varias AZs</strong>.</p>
+<h2>3.3.3 S3 (<em>Simple Storage Service</em>)</h2>
+<p><strong>Almacenamiento de objetos</strong> (ficheros y carpetas) a escala global. Los objetos se guardan en <strong>depósitos (<em>buckets</em>)</strong> y cada uno es accesible mediante <strong>una URL única</strong>. Tiene una durabilidad del <strong>99,999999999% (&quot;11 nueves&quot;)</strong> gracias a la <strong>replicación en 3 AZs</strong>.</p>
+<p>Admite un <strong>número ilimitado de objetos</strong> de <strong>1 byte a 5 TB</strong>; su <strong>redundancia x3</strong> lo hace resistente a la <strong>pérdida simultánea de datos en 2 instalaciones</strong>; los objetos <strong>no salen de su región</strong> salvo que se transfieran a mano; se <strong>integra con EC2</strong> (guarda AMIs e instantáneas); ofrece varios <strong>controles de acceso</strong> (ACLs, políticas, autenticación de consultas...) y se cobra por <strong>espacio ocupado (GB/mes)</strong>, <strong>tipo de almacenamiento</strong>, <strong>número de peticiones HTTP</strong> y <strong>transferencia de datos</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Clase de S3</th>
+<th>Para qué</th>
+<th>Disponibilidad diseñada</th>
+<th>AZs</th>
+<th>Duración mínima</th>
+<th>Latencia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Estándar</strong></td>
+<td>Datos de <strong>acceso frecuente</strong></td>
+<td>99,99%</td>
+<td>≥3</td>
+<td>—</td>
+<td>ms</td>
+</tr>
+<tr>
+<td><strong>Capas inteligentes</strong></td>
+<td>Mueve los datos <strong>automáticamente</strong> entre capa frecuente e infrecuente según el uso</td>
+<td>99,9%</td>
+<td>≥3</td>
+<td>30 días</td>
+<td>ms</td>
+</tr>
+<tr>
+<td><strong>Estándar – acceso poco frecuente</strong></td>
+<td>Datos de <strong>acceso infrecuente</strong></td>
+<td>99,9%</td>
+<td>≥3</td>
+<td>30 días</td>
+<td>ms</td>
+</tr>
+<tr>
+<td><strong>Única zona – acceso poco frecuente</strong></td>
+<td>Sin replicación x3 → <strong>más barato</strong></td>
+<td>99,5%</td>
+<td><strong>1</strong></td>
+<td>30 días</td>
+<td>ms</td>
+</tr>
+<tr>
+<td><strong>Glacier</strong> (recuperación instantánea o flexible)</td>
+<td><strong>Backups</strong> a muy bajo coste</td>
+<td>99,99%</td>
+<td>≥3</td>
+<td>90 días</td>
+<td>min u horas</td>
+</tr>
+<tr>
+<td><strong>Glacier Deep Archive</strong></td>
+<td>Conservación <strong>a largo plazo</strong>, acceso muy raro (p. ej., regulaciones que obligan a guardar datos <strong>5-10 años</strong>)</td>
+<td>99,99%</td>
+<td>≥3</td>
+<td>180 días</td>
+<td>horas</td>
+</tr>
+</tbody>
+</table>
+<p>Todas las clases tienen durabilidad de <strong>11 nueves</strong>; las de acceso infrecuente y Glacier cobran además <strong>por GB recuperado</strong>.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: disco, carpeta compartida y trastero</p>
+<p><strong>EBS</strong> es el <strong>disco duro</strong> de tu ordenador (solo lo usa esa máquina). <strong>EFS</strong> es una <strong>carpeta compartida</strong> de red que usan varios ordenadores a la vez. <strong>S3</strong> es un <strong>trastero</strong> enorme donde guardas cajas etiquetadas (objetos) y las recuperas por su etiqueta (la URL); <strong>Glacier</strong> es el trastero de las afueras, baratísimo pero donde tardan horas en traerte una caja.</p>
+</div>
+<h1>3.4 Servicios de red: VPC</h1>
+<p><strong>VPC</strong> (<em>Virtual Private Cloud</em>) es un <strong>servicio de red virtual dedicada</strong>: cada VPC es la <strong>versión virtual de la red de un centro de datos</strong> tradicional. Se pueden tener <strong>una o más VPCs por región</strong>, y los recursos (como las instancias) se lanzan <strong>dentro de una VPC</strong>, lo que garantiza su <strong>aislamiento</strong> y refuerza la seguridad, porque las VPCs están <strong>aisladas entre sí</strong>.</p>
+<p>Cada usuario tiene <strong>control total</strong> sobre su red: <strong>rango de direcciones IP y DHCP</strong>, <strong>subredes</strong>, <strong>routers, gateways y seguridad</strong>. Permite subredes <strong>públicas</strong> (con acceso a Internet mediante un <strong>Internet Gateway</strong>), <strong>privadas con NAT</strong> (para instancias sin IP pública) y <strong>conexiones seguras</strong> (VPN o conexión física a la red de AWS). <strong>Usar la VPC es gratis</strong>; solo se pagan extras como las conexiones seguras o los NAT gateways.</p>
+<p><img src="../../../img/compnu/compnu-t3-vpc.png" alt="Componentes de una VPC|350" loading="lazy"></p>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Subredes</strong></td>
+<td>Rangos de direcciones IP</td>
+</tr>
+<tr>
+<td><strong>Router</strong></td>
+<td>Reglas que dirigen el tráfico de red</td>
+</tr>
+<tr>
+<td><strong>Grupos de seguridad</strong></td>
+<td><strong>Firewalls de instancia</strong></td>
+</tr>
+<tr>
+<td><strong>ACLs</strong> (listas de control de acceso)</td>
+<td><strong>Firewalls de subred</strong></td>
+</tr>
+<tr>
+<td><strong>Internet Gateway</strong></td>
+<td>Permite a las instancias de la VPC <strong>comunicarse con Internet</strong></td>
+</tr>
+<tr>
+<td><strong>NAT Gateway</strong></td>
+<td>Permite a instancias de subredes <strong>privadas iniciar conexiones salientes</strong> a Internet <strong>sin ser accesibles desde fuera</strong></td>
+</tr>
+<tr>
+<td><strong>VPC Endpoint</strong> (Private Link)</td>
+<td>Permite a subredes privadas conectarse a <strong>servicios de AWS</strong> (bases de datos, S3...) <strong>sin salir a Internet</strong></td>
+</tr>
+<tr>
+<td><strong>SSM</strong> (AWS Systems Manager)</td>
+<td>Gestiona instancias de forma <strong>remota y segura sin SSH ni RDP</strong> y <strong>sin abrir puertos</strong>; necesita un NAT Gateway o un Endpoint</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la urbanización cerrada</p>
+<p>La <strong>VPC</strong> es una urbanización con valla. Las <strong>subredes</strong> son sus calles; el <strong>router</strong>, las señales de tráfico. El <strong>Internet Gateway</strong> es la puerta principal (se entra y se sale). El <strong>NAT Gateway</strong> es una puerta de solo salida: los vecinos de las calles privadas pueden ir a comprar, pero nadie de fuera puede llamar a su casa. Los <strong>grupos de seguridad</strong> son la cerradura de cada casa, y las <strong>ACLs</strong>, el guarda de cada calle.</p>
+</div>
+<p>Cada región tiene una <strong>VPC predefinida</strong> con: bloque CIDR IPv4 <strong>172.31.0.0/16</strong> (<strong>65.536 direcciones privadas</strong>); <strong>una subred por AZ</strong> (6 en N. Virginia) de tamaño <strong>/20</strong> (<strong>4.096 direcciones</strong> cada una); <strong>un Internet Gateway</strong>; <strong>una tabla de enrutamiento</strong> que envía el tráfico no local al gateway; <strong>un grupo de seguridad y una ACL por defecto</strong> que permiten todo el tráfico interno, y reglas DHCP predeterminadas.</p>
+<p><img src="../../../img/compnu/compnu-t3-vpc-defecto.png" alt="VPC por defecto|350" loading="lazy">
+<em>Dos subredes por defecto en dos AZs (172.31.0.0/20 y 172.31.16.0/20), cada instancia con IP privada y pública, y la tabla de rutas: el tráfico a 172.31.0.0/16 es local y el resto (0.0.0.0/0) va al Internet Gateway.</em></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=jVr0knPmHiI">NAT Gateway vs Internet Gateway: VPC y subnets en AWS</a> — subredes públicas y privadas y para qué sirve cada gateway (vídeo, 6 min).</p>
+</div>
+<h1>3.5 Servicios de arquitectura software</h1>
+<h2>3.5.1 ELB (<em>Elastic Load Balancing</em>)</h2>
+<p>Un <strong>balanceador de carga</strong> reparte las peticiones entre varias instancias. AWS ofrece <strong>cuatro tipos</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Capa</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Clásico</strong></td>
+<td>—</td>
+<td>Reparte el tráfico entre instancias <strong>EC2-Classic</strong> (ya no disponibles)</td>
+</tr>
+<tr>
+<td><strong>Gateway</strong></td>
+<td><strong>3 (IP)</strong></td>
+<td>Despliega y gestiona <strong>cortafuegos</strong>, sistemas de <strong>detección y prevención de intrusiones</strong> y analizadores de tráfico</td>
+</tr>
+<tr>
+<td><strong>De red</strong></td>
+<td><strong>4 (TCP)</strong></td>
+<td>Reparte tráfico TCP entre instancias de una VPC; es el <strong>punto de entrada</strong> de todas las peticiones, que distribuye entre EC2 de <strong>distintas AZs</strong></td>
+</tr>
+<tr>
+<td><strong>De aplicaciones</strong></td>
+<td><strong>7 (aplicación)</strong></td>
+<td><strong>Accede al contenido</strong> del paquete: por ejemplo, encamina una petición HTTP según su <strong>URL o sus cabeceras</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Aporta <strong>tolerancia a fallos</strong> (detecta instancias en mal estado y <strong>redirige el tráfico</strong> a otras, incluso entre varias AZs) y <strong>seguridad</strong> (gestiona <strong>certificados SSL</strong>). Se cobra por <strong>hora de uso</strong>, número de balanceadores y <strong>capacidad (LCU)</strong> o GB transferidos: un balanceador clásico que procese unos <strong>100 GB/mes</strong> cuesta unos <strong>$18/mes</strong>, y uno de aplicaciones con <strong>1 conexión nueva por segundo</strong> de <strong>2 minutos</strong> y <strong>300 KB</strong> cada una, unos <strong>$22/mes</strong>. Usa una política <strong>round-robin</strong> para repartir el tráfico entre AZs, <strong>a nivel de instancia</strong>: <strong>cada nuevo acceso va a una instancia distinta</strong>.</p>
+<p><img src="../../../img/compnu/compnu-t3-elb.png" alt="Arquitectura del balanceador|400" loading="lazy"></p>
+<h2>3.5.2 Autoscaling</h2>
+<p><strong>Amazon Autoscaling</strong> gestiona la <strong>escalabilidad horizontal</strong>: <strong>lanza y termina VMs</strong> según la carga, la franja horaria, etc. Es adecuado para aplicaciones con <strong>picos de demanda impredecibles</strong> o con <strong>patrones variables</strong> según la hora, el día o la semana. AWS <strong>no hace escalado vertical</strong> (cambiar el tamaño) de una instancia <strong>en ejecución</strong>, solo de instancias <strong>paradas</strong>. Sus funciones avanzadas incluyen el <strong>escalado de aplicaciones</strong> (lo mismo para contenedores, clusters MapReduce, etc.) y el <strong>escalado predictivo</strong>, que usa <strong>aprendizaje automático para predecir los picos</strong>. <strong>No tiene coste adicional</strong>.</p>
+<p><strong>ELB + Autoscaling</strong> juntos dan <strong>escalabilidad, reparto de carga y tolerancia a fallos</strong>. El ejemplo de una <strong>aplicación web elástica</strong> lo muestra: se define un <strong>grupo de autoescalado</strong> con reglas basadas en las métricas de <strong>CloudWatch</strong> (por ejemplo, la carga de CPU) o en aprendizaje automático, y el balanceador <strong>reparte el tráfico</strong> entre las VMs del grupo.</p>
+<p><img src="../../../img/compnu/compnu-t3-autoscaling.png" alt="ELB + Autoscaling|350" loading="lazy"></p>
+<table>
+<thead>
+<tr>
+<th>Hora</th>
+<th>Qué pasa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>6:00</strong></td>
+<td>Carga normal: una instancia atiende el tráfico</td>
+</tr>
+<tr>
+<td><strong>10:00</strong></td>
+<td><strong>Sobrecarga de CPU</strong> → salta una <strong>alarma de CloudWatch</strong> → se <strong>lanza una nueva instancia</strong> en el grupo, y el ELB reparte entre las dos</td>
+</tr>
+<tr>
+<td><strong>19:00</strong></td>
+<td><strong>Infrautilización de CPU</strong> → salta otra alarma → se <strong>termina una instancia</strong> (y deja de recibir tráfico) → se recupera la situación inicial</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: las cajas del supermercado</p>
+<p>El <strong>ELB</strong> es el empleado que manda a cada cliente a una caja libre. El <strong>autoscaling</strong> es el encargado que, cuando ve colas largas, abre más cajas, y cuando se vacía la tienda, las cierra para no pagar cajeros de más.</p>
+</div>
+<h1>3.6 Tolerancia a fallos y alta disponibilidad (HA)</h1>
+<h2>3.6.1 IPs elásticas</h2>
+<p>Son <strong>direcciones IP que se asignan dinámicamente a las instancias</strong>: desde fuera de AWS se resuelven a la <strong>IP pública</strong> de la instancia y desde dentro a su <strong>IP privada</strong>. Sirven como mecanismo de <strong>tolerancia a fallos</strong>, porque si una instancia falla se <strong>reasigna su IP elástica a otra</strong> y el servicio no se interrumpe. <strong>Las asignadas no cuestan nada</strong>; solo se cobra la <strong>hora de IP elástica no asignada</strong>.</p>
+<p>Un ejemplo es <strong>actualizar un servidor web sin cortar el servicio</strong>. En la arquitectura, <strong>Route 53</strong> (el DNS de AWS) resuelve el dominio a la IP elástica del servidor, que corre en una instancia EC2 y consulta una base de datos <strong>RDS</strong>. Para actualizarlo, se <strong>lanza una segunda instancia</strong> con la nueva versión, se <strong>le reasigna la IP elástica</strong>, el <strong>tráfico pasa</strong> a la nueva instancia <strong>de forma transparente</strong> y se <strong>termina la primera</strong>.</p>
+<h2>3.6.2 Arquitectura tolerante a fallos</h2>
+<p>Una <strong>instancia EC2 con un volumen EBS</strong> y una <strong>IP elástica</strong> para cambiar la instancia activa de forma transparente; opcionalmente, <strong>instantáneas del volumen en S3</strong> y una <strong>instancia de respaldo en espera en otra AZ</strong>.</p>
+<p><img src="../../../img/compnu/compnu-t3-tolerante-fallos.png" alt="Arquitectura tolerante a fallos|350" loading="lazy"></p>
+<p><img src="../../../img/compnu/compnu-t3-web-basica.png" alt="Servidor web con EBS|400" loading="lazy">
+<em>Route 53 resuelve el dominio a la IP elástica de la instancia EC2 del servidor web; su información persistente está en un volumen EBS, y los datos dinámicos, en la base de datos RDS.</em></p>
+<p>Si <strong>la instancia del servidor web falla</strong>: se <strong>lanza una nueva instancia</strong> y se le <strong>asigna la IP elástica</strong> (transparente para los usuarios), y se <strong>monta en ella el volumen EBS</strong> del servidor original para recuperar la última información. <strong>El servicio solo se interrumpe</strong> el tiempo de lanzar la instancia y montar el volumen. Además, las <strong>instantáneas en S3</strong> permiten <strong>recuperar el volumen</strong> si falla el almacenamiento, y una <strong>instancia de respaldo en otra AZ</strong> permite, reasignándole la IP elástica, <strong>tolerar la caída de la AZ principal</strong>.</p>
+<h2>3.6.3 Arquitectura escalable de alta disponibilidad</h2>
+<p>Combina un <strong>balanceador de carga (ELB)</strong>, un <strong>grupo de autoescalado multizona</strong> y, opcionalmente, <strong>instancias de base de datos RDS</strong> en <strong>despliegue multizona (<em>master</em> + <em>standby</em>)</strong>, con <strong>réplicas de solo lectura</strong>, <strong>backups automáticos</strong> e <strong>instantáneas</strong>.</p>
+<p><img src="../../../img/compnu/compnu-t3-ha.png" alt="Arquitectura escalable de alta disponibilidad|550" loading="lazy">
+<em>Las instancias web, en un grupo de autoescalado repartido entre dos AZs, reciben las conexiones del ELB y consultan la base de datos activa; la standby, en la otra AZ, se mantiene sincronizada.</em></p>
+<p><strong>Si falla un servidor web.</strong> El dominio se resuelve a la IP pública del <strong>ELB</strong>, que reparte las conexiones entre las instancias. Si una falla, el grupo de autoescalado <strong>lo detecta</strong> por la monitorización y el ELB <strong>deja de enviarle conexiones</strong>, repartiéndolas entre las demás; el grupo <strong>lanza una instancia nueva</strong> automáticamente y la <strong>registra en el ELB</strong>, recuperando la situación previa.</p>
+<p><strong>Si falla la base de datos.</strong> El despliegue multizona tolera fallos de la instancia <strong>y caídas de una AZ completa</strong>: la instancia <strong>standby</strong> está en <strong>otra AZ</strong> y <strong>sincronizada</strong> con la activa (<strong>master</strong>). Si la activa falla, la <strong>standby pasa a ser la activa</strong>, las consultas se <strong>redirigen a ella</strong> y se <strong>crea una nueva standby</strong> en una AZ distinta de la nueva activa.</p>
+<p>Así, el <strong>despliegue multizona del autoescalado y de la BD</strong> tolera la <strong>caída de una zona completa</strong>, y la BD se puede reforzar con réplicas de solo lectura, backups automáticos e instantáneas.</p>
+<h1>3.7 Otros aspectos</h1>
+<h2>3.7.1 CloudWatch</h2>
+<p><strong>Servicio de monitorización</strong> de recursos y aplicaciones: <strong>recopila y visualiza métricas</strong> de EC2, EBS, ELB, RDS, aplicaciones de usuario, recursos locales..., y permite <strong>definir alarmas y acciones automáticas</strong> (como las del autoscaling). Se cobra por métrica, llamada API, alarma, panel, log y evento, aunque la <strong>capa básica es gratuita</strong> y suficiente para la mayoría.</p>
+<h2>3.7.2 Formas de acceso a AWS</h2>
+<p>Además de la <strong>consola web</strong>: <strong>apps móviles</strong> (iOS y Android), <strong>APIs</strong> REST, QUERY o SOAP (según el servicio), <strong>CLIs</strong> (terminales Linux/Unix, Mac y Windows PowerShell), <strong>SDKs</strong> (Java, JavaScript, Ruby, PHP, .NET, Python, Go, Node.js, C++, iOS, Android) y <strong>toolkits para IDEs</strong> (Eclipse, Visual Studio, IntelliJ, PyCharm, AWS Cloud9).</p>
+<p>La <strong>CLI</strong> permite gestionar todos los servicios desde un terminal o un script con el comando <strong><code>aws</code></strong>, disponible en Linux, macOS y Windows, y necesita las <strong>claves de acceso</strong>:</p>
+<pre><code class="language-bash"># Lanzar una instancia EC2 en us-east-1b
+aws ec2 run-instances --region us-east-1 --image-id ami-047a51fa27710816e --count 1 \
+  --instance-type t2.micro --key-name mikey --placement AvailabilityZone=us-east-1b \
+  --security-groups miSG \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=MiMV}]' \
+                       'ResourceType=volume,Tags=[{Key=Name,Value=MiMV}]'
+
+# Obtener información de la instancia
+aws ec2 describe-instances --region us-east-1 --instance-ids i-986f2f0e7596cd51
+
+# Terminar la instancia
+aws ec2 terminate-instances --region us-east-1 --instance-ids i-0986f2f0e7596cd51
+
+# Ayuda
+aws help
+aws ec2 help
+aws ec2 run-instances help
+</code></pre>
+<h2>3.7.3 IAM y credenciales</h2>
+<p>El usuario <strong>root</strong> tiene <strong>acceso completo</strong> a todo AWS. <strong>IAM</strong> (<em>Identity and Access Management</em>) permite crear <strong>usuarios delegados</strong> con acceso <strong>solo a ciertos servicios y recursos</strong>, cada uno con sus <strong>propias credenciales</strong>, y añadir <strong>condiciones</strong> (solo por consola o CLI, desde cierta IP...). Se pueden crear <strong>grupos</strong> con los mismos permisos, y se definen <strong>políticas de acceso</strong> que se asignan a usuarios o grupos. Los <strong>roles de IAM</strong> son entidades con una serie de permisos que se asignan a un usuario, una aplicación o un servicio (por ejemplo, para dar <strong>acceso temporal a un tercero</strong>). <strong>IAM no tiene coste</strong>.</p>
+<p>Tipos de credenciales:</p>
+<table>
+<thead>
+<tr>
+<th>Credencial</th>
+<th>Uso</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Usuario/contraseña</strong></td>
+<td>Acceso a la <strong>consola web</strong>, con <strong>MFA</strong> (autenticación multifactor) opcional</td>
+</tr>
+<tr>
+<td><strong>ID de cuenta</strong> e <strong>ID canónico</strong></td>
+<td>Número de <strong>12 dígitos</strong> que identifica la cuenta de forma única, para referenciarla desde un programa</td>
+</tr>
+<tr>
+<td><strong>Claves de acceso</strong> (<em>access keys</em>)</td>
+<td>Cifrado <strong>simétrico</strong>; para el acceso con <strong>REST y QUERY</strong> (directamente o mediante la CLI)</td>
+</tr>
+<tr>
+<td><strong>Pares de claves SSH</strong></td>
+<td>Acceso a las <strong>instancias EC2</strong>: la clave <strong>pública</strong> se añade a la VM al iniciarla y la <strong>privada</strong> la tiene el usuario (<strong>Amazon no guarda claves privadas</strong>)</td>
+</tr>
+</tbody>
+</table>
+<h2>3.7.4 Costes y formación</h2>
+<p>La <strong>calculadora de costes</strong> (<a href="https://calculator.aws/">calculator.aws</a>) estima el precio de una arquitectura. El <strong>AWS Free Tier</strong> ofrece <strong>hasta $200 a nuevos clientes</strong> y <strong>uso gratuito de servicios seleccionados durante 6 meses</strong>; <strong>AWS Academy</strong> ofrece cursos para universidades y <strong>AWS Educate</strong>, formación libre.</p>
+<h1>3.8 Ideas clave</h1>
+<ul>
+<li><strong>AWS</strong>: IaaS/PaaS/SaaS desde 2006, $128,73B en 2025, +100 servicios. <strong>Regiones</strong> con varias <strong>AZs</strong> separadas kilómetros (España: eu-south-2, 3 AZs).</li>
+<li><strong>EC2</strong>: instancias (VMs) desde <strong>AMIs</strong>; SLA 99,99%; nombre <code>familia+generación+capacidades.tamaño</code> (c5d.9xlarge); 6 familias; hipervisor <strong>Nitro</strong>. Pago <strong>bajo demanda</strong>, <strong>spot</strong> (puja, interrumpible), <strong>reservadas</strong> (descuento), <strong>dedicadas</strong>. Se cobra la transferencia de <strong>salida</strong>.</li>
+<li>Almacenamiento: <strong>EBS</strong> (bloques, persistente, 1 AZ, snapshots en S3; gp3/io2/st1/sc1), <strong>Instance Store</strong> (local, se pierde al parar), <strong>EFS</strong> (ficheros POSIX compartidos, multi-AZ), <strong>S3</strong> (objetos en buckets, URL única, <strong>11 nueves</strong>, clases Estándar → Glacier Deep Archive).</li>
+<li><strong>VPC</strong>: red virtual aislada; subredes, router, <strong>grupos de seguridad</strong> (firewall de instancia), <strong>ACLs</strong> (de subred), <strong>Internet Gateway</strong>, <strong>NAT Gateway</strong> (solo salida), <strong>Endpoint</strong>. VPC por defecto 172.31.0.0/16 con subredes /20.</li>
+<li><strong>ELB</strong> (clásico, gateway L3, red L4, aplicación L7; round-robin) + <strong>Autoscaling</strong> (horizontal, alarmas de CloudWatch) = escalabilidad + tolerancia a fallos.</li>
+<li>HA: <strong>IP elástica</strong> reasignable, EBS + snapshots en S3, instancia de respaldo en otra AZ; arquitectura escalable = <strong>ELB + autoescalado multizona + RDS multizona (master/standby)</strong>.</li>
+<li><strong>CloudWatch</strong> (monitorización y alarmas), CLI <code>aws</code>, <strong>IAM</strong> (usuarios, grupos, políticas, roles), credenciales (contraseña+MFA, access keys, pares SSH).</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="2-mecanismos-de-virtualizacion.html"><span class="nav-etiqueta">← anterior</span>2. Mecanismos de virtualización</a>
+  
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

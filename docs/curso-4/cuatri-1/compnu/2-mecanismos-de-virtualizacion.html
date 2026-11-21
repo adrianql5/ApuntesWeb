@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. Mecanismos de virtualización — apuntes de COMPNU (cuarto curso de Ingeniería Informática).">
+<title>2. Mecanismos de virtualización · COMPNU · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">compnu</a><span class="miga-sep">/</span><span aria-current="page">2-mecanismos-de-virtualizacion</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de COMPNU"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">COMPNU</a></p><ol><li><a href="1-introduccion-a-la-computacion-en-la-nube.html">1. Introducción a la computación en la nube</a></li><li><span class="actual" aria-current="page">2. Mecanismos de virtualización</span></li><li><a href="3-aplicaciones-y-servicios-en-la-nube.html">3. Aplicaciones y servicios en la nube</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>COMPNU</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>2 / 3</div>
+    </div>
+    <h1>Mecanismos de virtualización</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de COMPNU · 2/3</summary><ol><li><a href="1-introduccion-a-la-computacion-en-la-nube.html">1. Introducción a la computación en la nube</a></li><li><span aria-current="page">2. Mecanismos de virtualización</span></li><li><a href="3-aplicaciones-y-servicios-en-la-nube.html">3. Aplicaciones y servicios en la nube</a></li></ol></details>
+  <div class="prosa">
+<h1>2.1 Qué es la virtualización</h1>
+<p>La <strong>virtualización</strong> es una <strong>abstracción lógica de una infraestructura física</strong>: ofrece una <strong>vista lógica o virtual</strong> que puede ser muy diferente del sistema físico real, y permite <strong>ocultar los recursos físicos</strong> a las aplicaciones, servicios o usuarios que los usan.</p>
+<p><img src="../../../img/compnu/compnu-t2-vistas.png" alt="Vistas virtuales sobre una infraestructura física|450" loading="lazy">
+<em>Sobre la misma red de servidores físicos (abajo), la capa de virtualización ofrece a cada grupo de usuarios una vista distinta (vista virtual 1, en azul, y vista virtual 2, en rojo).</em></p>
+<p>No es algo nuevo: dos ejemplos clásicos son la <strong>memoria virtual</strong> (cada proceso ve un espacio de memoria propio y continuo, aunque en realidad está repartido entre la RAM y el disco, y compartido con otros procesos) y los <strong>sistemas de ficheros</strong> (un único árbol de directorios aunque los datos estén en varios discos).</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el piso compartido</p>
+<p>Un edificio físico (el servidor) se divide en pisos independientes (las máquinas virtuales). Cada inquilino cree tener su casa completa, con su cocina y su baño, y no puede entrar en la de los vecinos, aunque todos compartan los cimientos, el agua y la luz del edificio.</p>
+</div>
+<h1>2.2 Evolución de los centros de datos</h1>
+<p>Los centros de datos han evolucionado para responder de forma más eficiente a la creciente demanda de servicios TIC. El ejemplo de Microsoft muestra cuatro generaciones: <strong>servidores en <em>colocation</em></strong> (1989-2005), <strong>racks de alta densidad</strong> (2007), <strong>contenedores</strong> con miles de servidores (2008) y <strong>módulos prefabricados</strong> (IT-PACs, desde 2010), cada una con mejor eficiencia energética (el PUE pasa de ~2,0 a 1,05-1,20).</p>
+<p>Esta evolución cambió también la forma en que los proveedores ofrecen sus recursos. <strong>Las primeras ofertas de cloud público surgieron de los grandes propietarios de centros de datos privados</strong> (Amazon, Google, Microsoft...): su infraestructura estaba <strong>muy automatizada</strong> y sus capacidades se exponían como servicios <strong>para consumo interno</strong>; al <strong>abrir esas interfaces a los clientes</strong> con <strong>pago por uso</strong>, los clientes accedieron a las mismas capacidades que antes solo se usaban dentro.</p>
+<p>La base de esta transformación son la <strong>estandarización del hardware</strong>, la <strong>virtualización</strong> y la <strong>automatización</strong>, en dos pasos: primero la <strong>consolidación de servidores</strong> (muchas máquinas físicas infrautilizadas pasan a ser VMs en menos servidores) y después la <strong>agregación</strong> (todos los servidores forman un único conjunto de recursos compartido).</p>
+<p><img src="../../../img/compnu/compnu-t2-consolidacion.png" alt="Consolidación y agregación|550" loading="lazy">
+<em>Izquierda: cada aplicación en su servidor físico. Centro: consolidación en pocos servidores virtualizados. Derecha: agregación en una única plataforma de virtualización.</em></p>
+<p>La plataforma de virtualización <strong>abstrae el hardware y lo comparte entre las VMs</strong>, lo que permite <strong>gestión centralizada de clusters</strong>, <strong>optimización del uso de recursos</strong>, un <strong>alto grado de automatización</strong>, <strong>alta redundancia</strong>, <strong>alta disponibilidad</strong> y <strong>balanceo de carga</strong>.</p>
+<p>Hoy la virtualización está en <strong>todo tipo de componentes</strong> (servidores, almacenamiento, red, servicios), y la tendencia es el <strong>centro de datos definido por software (SDDC)</strong>: <strong>cualquier recurso</strong> (cómputo, red, almacenamiento, seguridad...) se <strong>virtualiza y se expone como servicio</strong> mediante interfaces estandarizadas, y su software de administración permite <strong>automatizar mediante políticas</strong> el aprovisionamiento, la operación y la gestión.</p>
+<h1>2.3 Virtualización de servidores</h1>
+<p>La <strong>virtualización de servidores</strong> permite <strong>compartir los recursos físicos de un servidor entre varios entornos de ejecución virtualizados, aislados entre sí</strong>. Se implementa como una <strong>capa intermedia</strong> entre el servidor físico y los virtuales, con técnicas <strong>software, hardware o ambas</strong>. Esos entornos reciben distintos nombres según la tecnología: <strong>máquina virtual (VM)</strong>, servidor virtual, <strong>contenedor</strong>...</p>
+<p><img src="../../../img/compnu/compnu-t2-capa-virtualizacion.png" alt="Capa de virtualización|400" loading="lazy"></p>
+<p>Cada entorno tiene sus <strong>propios recursos virtuales</strong> y un <strong>sistema operativo</strong> que puede ser <strong>distinto</strong> del del servidor físico y del de los demás entornos (Windows, Linux, Solaris en la misma máquina). El SO y las aplicaciones están <strong>aislados</strong>: por defecto, no pueden acceder a los datos ni recursos de los otros entornos.</p>
+<p>Sus <strong>beneficios</strong> son: <strong>varias VMs con distintos SO en un mismo host</strong>; <strong>aislamiento</strong> entre ellas; <strong>consolidación de servidores</strong>, que <strong>optimiza el uso de recursos</strong> y <strong>reduce costes</strong>; <strong>agregación de recursos</strong> (<em>resource pooling</em>), que <strong>facilita la escalabilidad</strong>; <strong>migración dinámica de VMs</strong> entre servidores, que permite <strong>balanceo de carga</strong> y <strong>tolerancia a fallos</strong>, y facilitar la <strong>administración y automatización</strong>.</p>
+<p>Tres conceptos básicos:</p>
+<table>
+<thead>
+<tr>
+<th>Término</th>
+<th>Qué es</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Anfitrión</strong> (<em>host</em>)</td>
+<td>La <strong>máquina física</strong> sobre la que se ejecutan una o más máquinas virtuales</td>
+</tr>
+<tr>
+<td><strong>Invitada</strong> (<em>guest</em>)</td>
+<td>La <strong>máquina virtual</strong> que se ejecuta en el host</td>
+</tr>
+<tr>
+<td><strong>Hipervisor o VMM</strong> (<em>Virtual Machine Monitor</em>)</td>
+<td>El <strong>software que crea y ejecuta</strong> las máquinas virtuales</td>
+</tr>
+</tbody>
+</table>
+<h1>2.4 Técnicas de virtualización de servidores</h1>
+<p>Hay tres grandes técnicas: los <strong>emuladores de hardware</strong>, la <strong>virtualización basada en hipervisor</strong> (tipos 1 y 2) y la <strong>virtualización ligera</strong> (por compartición de kernel).</p>
+<h2>2.4.1 Emulación de hardware</h2>
+<p>Se <strong>emula por software un hardware completo</strong> para ejecutar SO invitados sobre el SO del servidor. El SO invitado <strong>no sabe</strong> que corre sobre hardware emulado. Es útil para <strong>desarrollar drivers o sistemas sin tener el hardware real</strong> (por ejemplo, programar para ARM en un PC x86), pero su gran desventaja es la <strong>sobrecarga</strong>: cada instrucción se traduce por software. Ejemplos: <strong>Bochs</strong> (x86) y <strong>QEMU</strong> (x86, PowerPC, SPARC, MIPS, ARM).</p>
+<h2>2.4.2 Virtualización basada en hipervisor</h2>
+<p>Un <strong>hipervisor</strong> abstrae el hardware del servidor de los SO y aplicaciones que corren encima, de modo que <strong>varias VMs con SO distintos comparten los dispositivos físicos</strong> de un mismo servidor.</p>
+<p><img src="../../../img/compnu/compnu-t2-hipervisor.png" alt="Capas con hipervisor|450" loading="lazy">
+<em>De abajo arriba: dispositivos físicos del host, hipervisor, y en cada máquina virtual sus dispositivos virtuales, su SO invitado y sus aplicaciones.</em></p>
+<p><strong>Popek y Goldberg</strong> distinguen dos tipos de hipervisor:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Tipo 1 (nativo o <em>bare metal</em>)</th>
+<th>Tipo 2 (<em>hosted</em>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dónde se ejecuta</td>
+<td><strong>Directamente sobre el hardware</strong></td>
+<td>Sobre un <strong>SO anfitrión</strong></td>
+</tr>
+<tr>
+<td>Estructura</td>
+<td>Implementa las funciones básicas de un <strong>microkernel</strong></td>
+<td>Capa intermedia entre el SO anfitrión y las VMs</td>
+</tr>
+<tr>
+<td>Rendimiento y seguridad</td>
+<td><strong>Más eficiente y seguro</strong></td>
+<td>Menos eficiente (hay un SO de por medio)</td>
+</tr>
+<tr>
+<td>Uso típico</td>
+<td>Servidores y centros de datos</td>
+<td>Ordenadores personales, pruebas</td>
+</tr>
+<tr>
+<td>Ejemplos</td>
+<td><strong>XenServer</strong> (antes Citrix Hypervisor), <strong>VMware ESXi</strong>, <strong>Microsoft Hyper-V</strong></td>
+<td><strong>VMware Workstation</strong>, <strong>Parallels Desktop</strong>, <strong>Oracle VirtualBox</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/compnu/compnu-t2-tipos-hipervisor.png" alt="Hipervisor tipo 1 (arriba) y tipo 2 (abajo)|200" loading="lazy"></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el edificio y el piso</p>
+<p>Un hipervisor <strong>tipo 1</strong> es un edificio construido directamente sobre el terreno para alquilar pisos. Uno <strong>tipo 2</strong> es como subarrendar habitaciones de tu propio piso: funciona, pero todo pasa antes por tu casa (el SO anfitrión).</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=PcvLr1tRBnQ">Virtualización: diferencia entre hipervisor tipo 1 y tipo 2</a> — los dos tipos con ejemplos (vídeo, 6:20).</p>
+</div>
+<h3>Virtualización a nivel de kernel: KVM</h3>
+<p>Es propia de <strong>Linux</strong>: las VMs se ejecutan como <strong>procesos normales en el espacio de usuario</strong>. <strong>KVM</strong> (<em>Kernel Virtual Machine</em>) es un <strong>módulo del kernel</strong> que implementa la infraestructura de virtualización y <strong>convierte el kernel de Linux en un hipervisor híbrido</strong> (tipo 1 y 2 a la vez). <strong>Requiere un procesador con extensiones de virtualización</strong> (Intel VT-x, AMD-V...), puede ejecutar distintos SO invitados (Windows, Linux, Solaris, BSD...) y usa <strong>QEMU para emular los periféricos</strong> (discos, tarjeta de red...).</p>
+<p><img src="../../../img/compnu/compnu-t2-kvm.png" alt="KVM|300" loading="lazy">
+<em>Cada VM es un proceso Linux con su QEMU; el módulo KVM del kernel usa las extensiones de virtualización del procesador x86.</em></p>
+<h2>2.4.3 Virtualización ligera: contenedores</h2>
+<p>La <strong>virtualización ligera, por compartición de kernel o a nivel de SO</strong> es propia de UNIX y Linux. En vez de virtualizar el hardware, <strong>todos los entornos comparten el mismo kernel</strong> del SO anfitrión, pero se ejecutan en el espacio de usuario <strong>aislados entre sí</strong> gracias a mecanismos del kernel como <strong>chroot</strong>, <strong>cgroups</strong> (limitan los recursos) y <strong>namespaces</strong> (aíslan lo que cada entorno &quot;ve&quot;). Los entornos reciben distintos nombres: <strong>contenedores</strong>, particiones, <em>jails</em>, servidores virtuales privados (VPS)...</p>
+<p>Cada programa <strong>solo puede usar los recursos de su entorno</strong>, y como no hay que emular nada, se pueden ejecutar <strong>muchísimos entornos con rendimiento igual al nativo</strong>. La contrapartida es que todos deben usar <strong>el mismo kernel</strong> (no puedes ejecutar Windows en un contenedor de Linux). Ejemplos: <strong>Solaris Zones</strong>, <strong>FreeBSD Jails</strong>, <strong>HP-UX Containers</strong>, <strong>OpenVZ</strong>, <strong>Podman</strong>, <strong>Linux Containers (LXC)</strong> y <strong>Docker</strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Máquina virtual (hipervisor)</th>
+<th>Contenedor (kernel compartido)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qué se virtualiza</td>
+<td>El <strong>hardware</strong></td>
+<td>El <strong>sistema operativo</strong></td>
+</tr>
+<tr>
+<td>SO invitado</td>
+<td>Cada VM lleva <strong>su propio SO completo</strong>, que puede ser distinto</td>
+<td><strong>Comparten el kernel</strong> del anfitrión</td>
+</tr>
+<tr>
+<td>Rendimiento</td>
+<td>Sobrecarga del hipervisor</td>
+<td><strong>Igual al nativo</strong></td>
+</tr>
+<tr>
+<td>Densidad</td>
+<td>Pocas VMs por servidor</td>
+<td><strong>Muchos contenedores</strong> por servidor</td>
+</tr>
+<tr>
+<td>Aislamiento</td>
+<td>Fuerte</td>
+<td>Menor (comparten kernel)</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: casas frente a habitaciones</p>
+<p>Una VM es una <strong>casa completa</strong> con sus cimientos, fontanería y electricidad propias (su SO). Un contenedor es una <strong>habitación con cerradura</strong> dentro de un mismo piso: comparte cocina y baño (el kernel), por eso caben muchas más y se montan en segundos.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=VMECP5X9mTs">¿Virtualización vs contenedores? Máquinas virtuales vs Docker explicado</a> — la diferencia de fondo entre ambos enfoques (vídeo, 7:30).</p>
+</div>
+<h1>2.5 Virtualización en la arquitectura x86</h1>
+<h2>2.5.1 El problema</h2>
+<p><strong>Popek y Goldberg</strong> establecieron tres requisitos para que una arquitectura sea virtualizable: <strong>equivalencia</strong> (un programa se comporta igual en la VM que en la máquina real), <strong>control de recursos</strong> (el VMM controla todos los recursos virtualizados) y <strong>eficiencia</strong> (la mayoría de instrucciones se ejecutan <strong>directamente</strong>, sin intervención del VMM).</p>
+<p>Para protegerse, el SO distingue <strong>espacio de kernel</strong> y <strong>espacio de usuario</strong>. Las <strong>llamadas al sistema</strong> (<strong>instrucciones privilegiadas</strong>) generan un <strong>trap</strong> (una excepción) que fuerza el paso a modo kernel. Las <strong>instrucciones sensibles</strong> son las que <strong>modifican recursos del sistema</strong> (E/S, control de memoria...) y solo deberían ejecutarse en modo kernel. Como la VM se ejecuta en <strong>espacio de usuario</strong>, no puede ejecutar instrucciones sensibles por sí misma: <strong>el hipervisor tiene que capturarlas y procesarlas</strong>.</p>
+<p>El problema de <strong>x86</strong> es que tiene <strong>instrucciones sensibles que no son privilegiadas</strong>: no generan trap, así que el hipervisor <strong>no se entera</strong> de que se ejecutan. El ejemplo es <strong>POPF</strong>, que saca datos de la pila al registro <strong>EFLAGS</strong>; algunos de sus bits (como el <em>flag</em> de interrupción) solo deberían cambiarse en modo kernel, y la instrucción <strong>se comporta distinto</strong> en modo usuario que en modo kernel. Así, el SO invitado podría ejecutarla y <strong>modificar recursos del sistema</strong> sin que el hipervisor lo impida.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el portero que no ve una puerta</p>
+<p>El hipervisor es un portero que vigila las puertas que dan a zonas restringidas (instrucciones privilegiadas): cuando alguien intenta abrirlas, suena una alarma (trap) y él decide. En x86 hay alguna puerta a zona restringida <strong>sin alarma</strong> (POPF): alguien puede pasar sin que el portero se entere.</p>
+</div>
+<h2>2.5.2 Tres soluciones</h2>
+<table>
+<thead>
+<tr>
+<th>Modo</th>
+<th>Cómo funciona</th>
+<th>Ventajas</th>
+<th>Inconvenientes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Virtualización completa con traslación binaria</strong></td>
+<td><strong>Inspecciona bloques de código</strong> en ejecución buscando instrucciones problemáticas y las <strong>reemplaza dinámicamente</strong> por llamadas al hipervisor</td>
+<td>Ejecuta <strong>guests sin modificar</strong></td>
+<td><strong>Rendimiento más pobre</strong></td>
+</tr>
+<tr>
+<td><strong>Paravirtualización</strong></td>
+<td>Se <strong>modifica el kernel del SO invitado</strong> para sustituir las instrucciones problemáticas por <strong>llamadas al hipervisor</strong> (<em>hypercalls</em>)</td>
+<td><strong>Buen rendimiento</strong></td>
+<td>Hay que <strong>modificar el SO invitado</strong> (difícil en algunos, como Windows)</td>
+</tr>
+<tr>
+<td><strong>Asistida por hardware</strong> (<em>native virtualization</em> o <strong>HVM</strong>)</td>
+<td>Usa <strong>extensiones del procesador</strong> (<strong>Intel VT-x o VMX</strong>, <strong>AMD-V</strong>): el hipervisor <strong>atrapa directamente</strong> las instrucciones problemáticas</td>
+<td><strong>Buen rendimiento</strong>, <strong>sin emular ni modificar</strong> el SO invitado</td>
+<td>Requiere un procesador moderno</td>
+</tr>
+</tbody>
+</table>
+<p>Ejemplos de virtualización asistida por hardware: <strong>Xen HVM, KVM, VirtualBox</strong>.</p>
+<h2>2.5.3 Cómo funciona VMX (Intel VT-x)</h2>
+<p><strong>VMX</strong> añade al procesador un <strong>nuevo modo de operación</strong> con dos niveles: <strong>VMX Root</strong>, el modo privilegiado donde corre el <strong>hipervisor</strong> con control total del procesador, y <strong>VMX Non-Root</strong>, donde corre el <strong>SO invitado</strong>, que <strong>cree tener la máquina completa</strong>. Para cada VM hay una estructura <strong>VMCS</strong> (<em>Virtual Machine Control Structure</em>) que guarda el <strong>estado del invitado</strong> y los <strong>controles</strong> que deciden <strong>qué eventos provocan una salida al hipervisor</strong>.</p>
+<p><img src="../../../img/compnu/compnu-t2-vmx.png" alt="VMX: modos y transiciones|650" loading="lazy"></p>
+<p>El ciclo es:</p>
+<ol>
+<li>El invitado se ejecuta en <strong>VMX Non-Root</strong>.</li>
+<li>Si ejecuta una instrucción privilegiada o sensible (por ejemplo <code>MOV CR3</code>, <code>IN/OUT</code>, <code>HLT</code>, <code>LGDT</code>), el procesador comprueba si está <strong>interceptada según la VMCS</strong>. Si <strong>no</strong> lo está, se ejecuta con normalidad.</li>
+<li>Si <strong>sí</strong>, se produce un <strong>VM Exit</strong>: el procesador <strong>guarda el estado del invitado en la VMCS</strong> y pasa a <strong>VMX Root</strong>.</li>
+<li>El hipervisor <strong>analiza el motivo</strong> (<em>VM-Exit Reason</em>) y actúa: <strong>emula</strong> la operación, <strong>inyecta una excepción</strong> al invitado, <strong>modifica su estado</strong>, etc.</li>
+<li>Con un <strong>VM Entry</strong> (<code>VMLAUNCH</code> o <code>VMRESUME</code>) <strong>carga el contexto</strong> del invitado desde la VMCS y <strong>vuelve a VMX Non-Root</strong>.</li>
+</ol>
+<p>Pueden provocar un VM Exit: instrucciones privilegiadas (<code>MOV</code> a/desde CRx, <code>LGDT</code>, <code>LIDT</code>...), instrucciones sensibles (<code>IN/OUT</code>, <code>HLT</code>, <code>RDTSC</code>, <code>CPUID</code>...), excepciones y fallos del invitado, accesos a MSRs según la configuración, violaciones de EPT (accesos a memoria) e interrupciones externas. La <strong>idea clave</strong>: VMX añade un modo Root/Non-Root y un mecanismo de control (VMCS) con el que el hipervisor <strong>decide qué deja ejecutar al invitado y qué intercepta</strong>, manteniendo el aislamiento de forma segura y eficiente.</p>
+<h1>2.6 Gestores de máquinas virtuales</h1>
+<p>Permiten <strong>crear, editar, iniciar y parar múltiples VMs en un cluster</strong>, muestran <strong>estadísticas de rendimiento y utilización</strong> de las VMs en cada host y pueden trabajar con <strong>distintos hipervisores</strong> y tipos de virtualización. El más conocido en open source es <strong>libvirt</strong>, un demonio y una API que gestiona plataformas de virtualización con <strong>múltiples hipervisores</strong>, y que usan herramientas como <strong>virt-manager</strong>, <strong>GNOME Boxes</strong> o <strong>virsh</strong>. Hay también herramientas comerciales como <strong>SolarWinds Virtualization Manager</strong> o <strong>WhatsUpGold Virtualization Monitoring Tools</strong>.</p>
+<h1>2.7 Virtualización ligera: por qué usar contenedores</h1>
+<p>La segunda parte del tema profundiza en los contenedores (introducidos en 2.4.3) con <strong>Docker</strong>. El punto de partida es el <strong>problema del despliegue</strong> en la industria del software. <strong>Antes</strong> había aplicaciones monolíticas, ciclos de desarrollo largos, un entorno único y escalado lento. <strong>Ahora</strong> hay servicios desacoplados, mejoras rápidas e iterativas, entornos múltiples y escalado rápido. Eso genera una &quot;matriz infernal&quot;: muchas piezas de software distintas (web estática, base de datos, colas, <em>frontend</em>…) que deben funcionar en muchos entornos distintos (portátil del desarrollador, servidor de QA, CPD del cliente, nube pública, clúster de producción).</p>
+<p><img src="../../../img/compnu/compnu-t2-matriz-despliegue.png" alt="El problema: muchas pilas de software × muchos entornos de hardware|500" loading="lazy"></p>
+<p>La analogía que usa Docker es la del <strong>transporte de mercancías</strong>. Antes, cada tipo de carga (barriles, pianos, coches, sacos) se cargaba de forma distinta en cada medio (camión, tren, barco, grúa). El <strong>contenedor estándar</strong> lo resolvió: se carga cualquier cosa dentro, se sella y viaja por cualquier medio sin que nadie tenga que saber qué lleva. Eso abarató muchísimo el transporte e impulsó la globalización (hoy el 90 % de la carga viaja en contenedores estándar).</p>
+<p><img src="../../../img/compnu/compnu-t2-contenedor-transporte.png" alt="Contenedor intermodal: cualquier carga, cualquier transporte|450" loading="lazy"></p>
+<p>Docker aplica la misma idea al software: un <strong>motor que encapsula cualquier aplicación en un contenedor ligero, portable y autosuficiente</strong>, que se manipula con operaciones estándar y se ejecuta igual en prácticamente cualquier plataforma de hardware.</p>
+<p><img src="../../../img/compnu/compnu-t2-contenedor-apps.png" alt="Contenedor de software: cualquier aplicación, cualquier entorno|450" loading="lazy"></p>
+<h2>2.7.1 Cómo funciona un contenedor</h2>
+<p>Un contenedor <strong>aísla la ejecución de una aplicación en un contexto privado</strong>. Es &quot;como la virtualización, pero sin virtualización&quot;: es <strong>agnóstico</strong> respecto al contenido y al &quot;transportador&quot; (el host), ofrece <strong>aislamiento y automatización</strong> y tiene <strong>sobrecargas muy bajas</strong> comparado con una VM. Se le describe como un <strong>super chroot</strong> (<em>chroot on steroids</em>); la idea se usó durante años en <strong>Solaris</strong> y se emplea mucho en los planificadores de los centros de datos.</p>
+<p>La diferencia con una VM está en las capas: cada VM lleva su <strong>SO invitado completo</strong> encima de un hipervisor, mientras que los contenedores solo llevan la aplicación y sus librerías (<em>bins/libs</em>) y comparten el SO del host a través del <strong>Docker Engine</strong>.</p>
+<p><img src="../../../img/compnu/compnu-t2-docker-vm.png" alt="Pila de una VM: cada app con su SO invitado sobre el hipervisor|260" loading="lazy"> <img src="../../../img/compnu/compnu-t2-docker-contenedor.png" alt="Pila de contenedores: solo app + librerías sobre Docker Engine|260" loading="lazy"></p>
+<p>Frente a un <strong>proceso</strong> normal, un contenedor es un conjunto de <strong>procesos aislados</strong> con <strong>su propio espacio de procesos</strong>, <strong>su propia interfaz de red</strong> y su propia vista del sistema de ficheros, pero <strong>sin un <code>/sbin/init</code> propio</strong> y con el <strong>kernel compartido con el host</strong>.</p>
+<p><img src="../../../img/compnu/compnu-t2-proceso-contenedor.png" alt="Proceso real frente a contenedor: el contenedor ve su propia memoria, ficheros y procesos|330" loading="lazy"></p>
+<p>Las dos tecnologías del kernel Linux que lo hacen posible son:</p>
+<ul>
+<li><strong>cgroups</strong> (<em>control groups</em>, desde el kernel 2.6.24): <strong>limitan, contabilizan y aíslan el uso de recursos</strong> (CPU, memoria, disco, E/S, red…) de un grupo de procesos. Deciden <strong>cuánto</strong> puede usar el contenedor.</li>
+<li><strong>Namespaces</strong> (desde el 2.4.19): <strong>particionan los recursos del kernel</strong>, de modo que dos conjuntos de procesos ven conjuntos diferentes de recursos (procesos, red, ficheros, usuarios…). Deciden <strong>qué ve</strong> el contenedor.</li>
+</ul>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Los namespaces son las paredes de la habitación (no ves lo que hay en las otras); los cgroups son el contador de luz y agua con límite (no puedes gastar más de lo asignado).</p>
+</div>
+<h2>2.7.2 Casos de uso y tecnologías</h2>
+<p>Hay dos usos típicos. El <strong>contenedor de aplicaciones</strong> ejecuta <strong>un solo servicio o aplicación por contenedor</strong>; es la base de los <strong>microservicios</strong>, donde una aplicación grande se divide en servicios pequeños y, en vez de actualizar toda la aplicación, solo se actualizan los servicios afectados. El <strong>contenedor de sistema operativo</strong> es un entorno virtual que comparte el kernel con el host, aislado en su espacio de usuario, que puede ejecutar <strong>varios procesos y servicios</strong>; resulta práctico para ejecutar distintas versiones de Linux en la misma máquina.</p>
+<p><img src="../../../img/compnu/compnu-t2-contenedores-so.jpeg" alt="Contenedores de SO: idénticos (todos Ubuntu) o de distintas distribuciones sobre el mismo host|420" loading="lazy"></p>
+<table>
+<thead>
+<tr>
+<th>Tecnología</th>
+<th>Características</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://www.docker.com/"><strong>Docker</strong></a></td>
+<td>El más popular; orientado a microservicios; gran ecosistema; ediciones personal, pro, team y business</td>
+</tr>
+<tr>
+<td><a href="https://podman.io/"><strong>Podman</strong></a></td>
+<td>Motor de RedHat para desarrollar, gestionar y ejecutar <a href="https://opencontainers.org/">contenedores OCI</a> (el estándar abierto de contenedores); interfaz casi idéntica a la de Docker; <strong>no necesita permisos de administrador</strong></td>
+</tr>
+<tr>
+<td><a href="https://linuxcontainers.org/"><strong>Linux Containers</strong></a></td>
+<td>Contenedores de <strong>sistema operativo</strong>: ejecuta un SO completo en un contenedor; proyecto paraguas de Incus, LXC, LXCFS y otros</td>
+</tr>
+<tr>
+<td><a href="https://sylabs.io/singularity/"><strong>Singularity</strong></a></td>
+<td>Para aplicaciones <strong>científicas y HPC</strong>; versiones open source (SingularityCE/Apptainer), Pro y Enterprise; soporte nativo de OpenMPI, aceleradores gráficos y redes rápidas (InfiniBand, Intel OPA)</td>
+</tr>
+</tbody>
+</table>
+<p>Hay más ejemplos y comparativas en <a href="https://en.wikipedia.org/wiki/Operating-system-level_virtualization#IMPLEMENTATIONS">Wikipedia: OS-level virtualization</a> (enlazado en las diapositivas).</p>
+<h1>2.8 Docker</h1>
+<p>&quot;Docker&quot; designa dos cosas. <strong>La plataforma</strong>: Docker Engine, Docker Desktop, Docker Compose, Docker Swarm, Docker Hub, Docker Datacenter, etc. Y <strong>la compañía</strong>, Docker Inc., que empezó en <strong>2008</strong> como la francesa <strong>dotCloud Inc.</strong> y es el principal patrocinador del proyecto: contrata a mantenedores y contribuidores, proporciona la infraestructura y mantiene Docker Hub.</p>
+<p>Los productos son <strong>Docker Personal</strong> (gratuito para uso personal, educativo o pequeña empresa), <strong>Pro</strong> (más capacidades e integración con herramientas de desarrollo), <strong>Team</strong> (colaboración y mejoras de seguridad) y <strong>Business</strong> (grandes empresas). Varios componentes son <em>open source</em>.</p>
+<h2>2.8.1 Docker Engine y Docker Desktop</h2>
+<p><strong>Docker Engine</strong> es el motor de contenedores que se ejecuta <strong>sobre Linux</strong>. Incluye el servidor <strong><code>dockerd</code></strong>, el <strong>CLI</strong> y la <strong>API</strong> que los comunica. Para usar el CLI hacen falta <strong>privilegios de administrador</strong>: se ejecuta con <code>sudo</code> o se añade el usuario al grupo <code>docker</code>.</p>
+<p><strong>Docker Desktop</strong> es una <strong>interfaz gráfica</strong> para Linux, Windows y macOS con la misma experiencia en los tres. Se ejecuta sobre una <strong>VM Linux ligera</strong>, así que no necesita privilegios de administrador. Se pueden tener ambos y cambiar entre ellos con <code>docker context</code>.</p>
+<h2>2.8.2 Arquitectura</h2>
+<p>Docker es una aplicación <strong>cliente-servidor</strong>:</p>
+<ul>
+<li>El <strong>Docker Engine</strong> (o <em>daemon</em>) recibe y procesa las solicitudes que llegan por la API de Docker.</li>
+<li>El <strong>cliente Docker</strong> habla con el demonio a través de esa API; incluye el <strong>CLI</strong>, con el que enviamos comandos.</li>
+<li>El <strong>Docker Hub Registry</strong> es una colección de imágenes públicas; el demonio se comunica con él mediante la API del registro.</li>
+</ul>
+<p>Los comandos tienen la forma <code>docker [OPTIONS] COMMAND</code> (en Windows, desde PowerShell); <code>docker --help</code> da la ayuda general y <code>docker COMMAND --help</code> la de cada comando. La documentación está en <a href="https://docs.docker.com/">docs.docker.com</a> y la <a href="https://docs.docker.com/engine/reference/commandline/cli/">referencia del CLI</a>.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>El cliente es el camarero que toma nota (<code>docker run …</code>), el demonio es la cocina que prepara los platos (crea y ejecuta contenedores) y Docker Hub es el proveedor de ingredientes (imágenes) al que la cocina llama cuando le falta algo.</p>
+</div>
+<h1>2.9 Contenedores e imágenes Docker</h1>
+<h2>2.9.1 El primer contenedor</h2>
+<pre><code class="language-bash">docker container run -it ubuntu /bin/bash
+</code></pre>
+<p>Esto ejecuta un <strong>nuevo contenedor</strong> a partir de la imagen <strong><code>ubuntu</code></strong> (si no está en local, se <strong>descarga de Docker Hub</strong>). La opción <code>-it</code> es <code>-i</code> (interactivo: conecta la entrada estándar del contenedor) más <code>-t</code> (asigna un pseudo-terminal), y <code>/bin/bash</code> es el programa que se ejecuta dentro. Aparece un <em>prompt</em> como <code>root@0bc82356b52d9:/#</code>: estamos dentro de un Ubuntu (por ejemplo, <code>cat /etc/issue</code> muestra <em>Ubuntu 24.04.3 LTS</em>).</p>
+<p>Las diapositivas proponen comprobar qué es compartido y qué aislado: la <strong>versión del kernel</strong> (<code>uname -r</code>) es la misma que la del host, porque se comparte; el <strong>sistema de ficheros</strong> (<code>ls -la /</code>) es distinto y un fichero creado en el contenedor no aparece en el host; el proceso con <strong>PID 1</strong> dentro del contenedor es el <code>bash</code>; y un proceso como <code>yes &gt; /dev/null &amp;</code> aparece tanto en el contenedor como en el host (<code>ps -edf | grep yes</code>), pero <strong>con PID distinto</strong> en cada uno (efecto de los namespaces). También se puede instalar software dentro (<code>apt update</code>, <code>apt install figlet</code>, <code>figlet Hola mundo!</code>).</p>
+<p>Al escribir <code>exit</code>, el contenedor pasa a estado <strong>stopped</strong>: sigue existiendo en disco, pero libera CPU y memoria. <code>docker ps</code> lista los contenedores activos y <code>docker ps -a</code> todos. Si se lanza otro <code>docker container run</code> igual, el <strong>nuevo contenedor no tiene <code>figlet</code></strong>: parte de la imagen <code>ubuntu</code> original, sin los cambios del anterior.</p>
+<h2>2.9.2 Ciclo de vida de un contenedor</h2>
+<table>
+<thead>
+<tr>
+<th>Acción</th>
+<th>Comando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ver ID o nombre de los contenedores</td>
+<td><code>docker container ps -a</code> (columna CONTAINER ID y NAMES, p. ej. <code>angry_hugle</code>)</td>
+</tr>
+<tr>
+<td>Reiniciar uno parado</td>
+<td><code>docker container start angry_hugle</code></td>
+</tr>
+<tr>
+<td>Conectarse a él</td>
+<td><code>docker container attach &lt;ID&gt;</code> (puede hacerse desde varios terminales; debe estar corriendo)</td>
+</tr>
+<tr>
+<td>Borrarlo</td>
+<td><code>docker container rm &lt;ID&gt;</code></td>
+</tr>
+<tr>
+<td>Borrarlo automáticamente al pararse</td>
+<td>opción <code>--rm</code> en <code>docker run</code></td>
+</tr>
+<tr>
+<td>Ponerle nombre</td>
+<td>opción <code>--name reloj</code></td>
+</tr>
+<tr>
+<td>Desconectarse sin pararlo</td>
+<td>secuencia <code>^P ^Q</code> (Ctrl-P Ctrl-Q)</td>
+</tr>
+<tr>
+<td>Ejecutarlo en segundo plano</td>
+<td>opción <code>-d</code> (<em>daemon</em>); Docker devuelve el ID</td>
+</tr>
+<tr>
+<td>Ver su salida</td>
+<td><code>docker container logs reloj</code>; <code>--tail 3</code> (solo el final); <code>--follow</code> (en tiempo real, como <code>tail -f</code>)</td>
+</tr>
+<tr>
+<td>Pararlo</td>
+<td><code>docker container stop</code>: envía <strong>TERM</strong> y, si a los <strong>10 s</strong> no ha parado, <strong>KILL</strong></td>
+</tr>
+<tr>
+<td>Matarlo</td>
+<td><code>docker container kill</code>: <strong>KILL</strong> inmediato</td>
+</tr>
+<tr>
+<td>Ejecutar otro proceso dentro</td>
+<td><code>docker container exec -it &lt;ID&gt; /bin/sh</code></td>
+</tr>
+</tbody>
+</table>
+<p>El ejemplo de las diapositivas es <code>docker container run -it --name reloj --rm jpetazzo/clock</code>, un contenedor que imprime la hora indefinidamente (se para con <code>^C</code>). Con <code>-d</code> sigue en <em>background</em> mientras Docker guarda su salida en los logs; <code>docker container ps -q</code> muestra solo los IDs y <code>-l</code> el último contenedor creado.</p>
+<p><code>docker container exec</code> permite, por ejemplo, abrir una <em>shell</em> en un contenedor que ya está corriendo. <strong>No está pensado para producción</strong>, pero es muy útil durante el desarrollo.</p>
+<h2>2.9.3 Limitar recursos</h2>
+<p>Por defecto, un contenedor puede usar <strong>todos los recursos</strong> que le permita el SO del host. Se limitan (gracias a los cgroups) con <code>--memory</code> o <code>-m</code> (memoria máxima, <strong>mínimo 4 MB</strong>) y <code>--cpus</code> (CPU disponible):</p>
+<pre><code class="language-bash">docker container run -d --rm --memory=1g --cpus=0.5 jpetazzo/clock
+</code></pre>
+<p>Más opciones en la <a href="https://docs.docker.com/config/containers/resource_constraints/">documentación de límites de recursos</a> (enlazada en las diapositivas).</p>
+<h2>2.9.4 Imágenes y capas</h2>
+<p>Una <strong>imagen</strong> es una <strong>colección de ficheros + metadatos</strong>: los ficheros del sistema raíz del contenedor. Es un <strong>sistema de ficheros de solo lectura</strong> formado por <strong>capas</strong> apiladas; cada capa añade, cambia o elimina ficheros respecto a la anterior (es una versión diferencial). Varias imágenes pueden <strong>compartir capas</strong>, lo que ahorra disco, tiempo de transferencia y memoria. Un <strong>contenedor</strong> es un conjunto encapsulado de procesos que se ejecutan sobre una <strong>copia de lectura y escritura</strong> de ese sistema de ficheros: una capa <em>writable</em> encima de la imagen.</p>
+<p><img src="../../../img/compnu/compnu-t2-capas-imagen.png" alt="Capas: kernel, imagen base (Debian, BusyBox), capas añadidas (emacs, Apache) y capa escribible del contenedor|330" loading="lazy"></p>
+<p>Si la imagen es de solo lectura, <strong>¿cómo se cambia? No se cambia</strong>: se crea un contenedor a partir de ella, se hacen los cambios en el contenedor y, cuando estamos satisfechos, se convierten en una <strong>nueva capa</strong>, creando una <strong>nueva imagen</strong> que apila esa capa sobre la anterior. Hay dos métodos: <strong><code>docker container commit</code></strong>, que guarda los cambios de un contenedor en una nueva capa y crea una imagen como copia del contenedor; y <strong><code>docker build</code></strong>, que usa un <strong>Dockerfile</strong> y hace una construcción <strong>repetible</strong> (ver 2.11).</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Una imagen es como un pastel de capas plastificado: puedes mirarlo pero no tocarlo. Cada contenedor recibe encima una lámina de papel transparente en la que sí puede escribir. Si te gusta lo dibujado, lo plastificas (<em>commit</em>) y tienes un pastel nuevo con una capa más; los de debajo siguen intactos y se reutilizan.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=Wof_0ydXWug">Docker Imágenes vs Contenedores: Diferencias y Conceptos Fundamentales</a> — la imagen como plantilla de solo lectura y el contenedor como instancia en ejecución (vídeo, 2:27).</p>
+</div>
+<h2>2.9.5 Nombres de las imágenes</h2>
+<table>
+<thead>
+<tr>
+<th>Espacio de nombres</th>
+<th>Ejemplo</th>
+<th>Qué es</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Root namespace</strong></td>
+<td><code>ubuntu</code>, <code>busybox</code></td>
+<td><strong>Imágenes oficiales</strong>, incluidas en el Hub por Docker Inc. aunque suelen mantenerlas terceros. Hay imágenes mínimas (busybox), distribuciones base para construir encima (ubuntu, fedora) y servicios listos para usar (postgresql, redis)</td>
+</tr>
+<tr>
+<td><strong>User namespace</strong></td>
+<td><code>jpetazzo/clock</code></td>
+<td>Imágenes de usuarios y organizaciones del Hub: <code>jpetazzo</code> es el usuario y <code>clock</code> el repositorio</td>
+</tr>
+<tr>
+<td><strong>Self-hosted</strong></td>
+<td><code>myregistry.example.com:5000/myprivate/image</code></td>
+<td>Imágenes en registros de terceros: dirección, puerto, repositorio y <em>tag</em></td>
+</tr>
+</tbody>
+</table>
+<h2>2.9.6 Manejo de imágenes</h2>
+<p><code>docker image ls</code> lista las imágenes locales (repositorio, <em>tag</em>, ID, fecha y tamaño). <code>docker search wordpress</code> busca por palabras clave en el registro remoto (no se pueden listar todas); el resultado indica si son <strong>Official</strong> (del root namespace) o <strong>Automated</strong> (construidas automáticamente por Docker Hub). También se puede buscar en <a href="https://hub.docker.com">hub.docker.com</a>.</p>
+<p>Una imagen se <strong>descarga</strong> implícitamente al hacer <code>docker container run</code> si no está en local, o explícitamente con <code>docker image pull wordpress:php8.1-apache</code>. Lo que va tras los dos puntos es el <strong>tag</strong> (la versión); si no se indica, se usa <strong><code>latest</code></strong>. Los tags garantizan que se usa <strong>la misma versión en todas partes</strong> (repetibilidad). Docker descarga todas las capas necesarias. Para <strong>eliminar</strong> una imagen: <code>docker image rm imageID</code> o <code>docker image rm Repository:tag</code>.</p>
+<h2>2.9.7 Construir una imagen de forma interactiva</h2>
+<ol>
+<li>Crear un contenedor a partir de una imagen base.</li>
+<li>Instalar software manualmente dentro. Con <code>docker container diff containerID</code> se ven las diferencias con la imagen base.</li>
+<li>Convertir el contenedor en una nueva imagen: <code>docker container commit containerID nombre_imagen:mitag</code>.</li>
+<li>Ejecutar un contenedor con la nueva imagen: <code>docker container run -it nombre_imagen</code>.</li>
+</ol>
+<p>Opcionalmente se le pone otra etiqueta con <code>docker image tag nombre_imagen otratag</code>.</p>
+<h1>2.10 Redes y volúmenes</h1>
+<h2>2.10.1 Mapeo de puertos</h2>
+<p>Los contenedores tienen <strong>direcciones privadas</strong>, así que sus servicios no son accesibles desde fuera directamente: hay que <strong>exponerlos puerto a puerto</strong>, y <strong>mapearlos</strong> a puertos del host para <strong>evitar conflictos</strong> (dos contenedores pueden usar internamente el puerto 80, pero no el mismo puerto del host).</p>
+<pre><code class="language-bash">docker container run -d --rm -P nginx
+</code></pre>
+<p>Ejecuta el servidor web nginx en segundo plano; <code>-P</code> (<code>--publish-all</code>) publica sus puertos para que sea accesible desde otros equipos. <code>docker container ps</code> muestra <code>0.0.0.0:32768-&gt;80/tcp</code>: el servidor escucha en el <strong>puerto 80 del contenedor</strong>, asignado al <strong>32768 del host</strong>, así que se accede con <code>http://localhost:32768</code>. <code>docker container port &lt;ID&gt;</code> da la misma información (útil en <em>scripts</em>).</p>
+<p>Los puertos también se fijan a mano con <code>-p</code>, con la convención <strong><code>puerto-host:puerto-contenedor</code></strong>. Por ejemplo, <code>docker container run -d -p 80:80 nginx</code> expone un servidor en el puerto 80, y <code>docker container run -d -p 8080:80 -p 8000:80 nginx</code> expone un segundo servidor en los puertos 8080 y 8000.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>El contenedor es un piso dentro de un edificio (el host) con número de puerta interno (puerto 80). Desde la calle solo se ve el portal; el mapeo <code>8080:80</code> es el cartel del portal que dice &quot;para el piso del nginx, llama al timbre 8080&quot;.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=GfL_Ltu-eyw">DOCKER EXPLICADO FÁCIL – Capítulo 3</a> — puertos y volúmenes con un contenedor de nginx, paso a paso (vídeo, 12:54).</p>
+</div>
+<h2>2.10.2 Redes Docker</h2>
+<p><code>docker network create localnet</code> crea una red y <code>docker network ls</code> las lista: por defecto existen <code>bridge</code>, <code>host</code> y <code>none</code>, además de las creadas (con su <em>driver</em> y su ámbito). Conceptualmente, <strong>una red Docker es un conmutador virtual</strong>; puede ser <strong>local</strong> (un solo host) o <strong>global</strong> (varios hosts). Cada red define una <strong>subred</strong>, y los contenedores conectados reciben una IP de ella; el rango se puede elegir: <code>docker network create --subnet 10.66.0.0/16 mired</code>.</p>
+<p>En el ejemplo de las diapositivas se crean dos contenedores <code>alpine</code> en la misma red (<code>--net localnet</code>), llamados <code>srv1</code> y <code>srv2</code>, y desde uno se hace <code>ping srv1</code>: el nombre se resuelve a su IP (172.18.0.2). Es decir, <strong>los contenedores solo se pueden contactar si están en la misma red</strong>, y se accede a ellos <strong>por su nombre</strong>. Se les puede dar otro nombre en la red con <code>--hostname</code> o <code>--network-alias</code>. Un contenedor en marcha se puede añadir a otra red con <code>docker network connect localnet2 srv3</code>, y con <code>--alias dbase</code> recibe un nombre nuevo en esa red.</p>
+<p>Para ver la IP y demás datos de un contenedor se usa <code>docker container inspect</code> (con <code>--format</code> para filtrar, p. ej. <code>'{{.NetworkSettings.Networks.pubnet.IPAddress}}'</code>). Para <strong>fijar la IP</strong> se usa <code>--ip</code>, que debe estar dentro de la subred de la red: <code>docker container run ... --net pubnet --ip 10.90.99.99 -d nginx</code>.</p>
+<h2>2.10.3 Controladores de red</h2>
+<table>
+<thead>
+<tr>
+<th>Controlador</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>bridge</strong></td>
+<td><strong>Por defecto</strong>. El contenedor tiene su interfaz <code>eth0</code> virtual conectada al <em>bridge</em> <code>docker0</code></td>
+</tr>
+<tr>
+<td><strong>host</strong></td>
+<td>El contenedor usa directamente las interfaces de red del host</td>
+</tr>
+<tr>
+<td><strong>overlay</strong></td>
+<td>Redes multi-host, para Docker Swarm</td>
+</tr>
+<tr>
+<td><strong>ipvlan</strong></td>
+<td>Control total sobre las direcciones IPv4 e IPv6</td>
+</tr>
+<tr>
+<td><strong>macvlan</strong></td>
+<td>Asigna una dirección MAC al contenedor, que aparece en la red como un dispositivo físico</td>
+</tr>
+<tr>
+<td><strong>none</strong></td>
+<td>Sin red (solo <em>loopback</em>)</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-note">
+<p class="callout-titulo">note</p>
+<p>La diapositiva pone &quot;node&quot; para el controlador sin red; el nombre correcto es <strong>none</strong>, como aparece en el listado de <code>docker network ls</code>.</p>
+</div>
+<p>El controlador se elige al crear la red (<code>--driver ...</code>) o al ejecutar <code>docker run --net ...</code> en el caso de <code>none</code> o <code>host</code>.</p>
+<p>Con <strong>bridge</strong>, el contenedor obtiene una <code>eth0</code> virtual (más su <em>loopback</em>) conectada al <em>bridge</em> Docker (<code>docker0</code> por defecto, configurable con <code>--bridge</code>). Las direcciones son de una subred privada interna (<strong>172.17.0.0/16</strong> por defecto, configurable en el demonio). El tráfico <strong>saliente</strong> pasa por una regla de iptables <strong>MASQUERADE</strong> (el host traduce la IP privada a la suya) y el <strong>entrante</strong> por una regla <strong>DNAT</strong> (que redirige el puerto del host al del contenedor). El contenedor puede tener sus propias rutas y reglas de iptables.</p>
+<p>Con <strong>host</strong> (<code>docker run --net host ...</code>), el contenedor ve y usa las interfaces del host, sin NAT ni <em>bridge</em>, así que el <strong>rendimiento es nativo</strong>. Se usa en aplicaciones sensibles al rendimiento (VoIP, juegos, <em>streaming</em>…).</p>
+<h2>2.10.4 Volúmenes</h2>
+<p>Lo que se escribe en la capa del contenedor desaparece al borrarlo. Los <strong>volúmenes</strong> permiten <strong>guardar datos fuera</strong> de esa capa y <strong>compartir directorios</strong> entre contenedores, o entre el host y uno o varios contenedores. <strong>Acceden directamente al disco</strong>, así que su rendimiento de E/S es <strong>exactamente el del host</strong>. Al hacer un <code>commit</code>, el contenido de los volúmenes <strong>no se incluye</strong> en la imagen.</p>
+<table>
+<thead>
+<tr>
+<th>Acción</th>
+<th>Comando</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Crear</td>
+<td><code>docker volume create website</code></td>
+</tr>
+<tr>
+<td>Listar</td>
+<td><code>docker volume ls</code></td>
+</tr>
+<tr>
+<td>Inspeccionar</td>
+<td><code>docker volume inspect website</code></td>
+</tr>
+<tr>
+<td>Borrar</td>
+<td><code>docker volume rm compartido</code></td>
+</tr>
+</tbody>
+</table>
+<p>Un volumen se monta con <code>-v</code> (o <code>--volume</code>), indicando <code>volumen:ruta-en-el-contenedor</code>:</p>
+<pre><code class="language-bash">docker container run --rm -d -p 80:80 -v website:/usr/share/nginx/html nginx
+# alternativa: --mount source=website,target=/usr/share/nginx/html
+</code></pre>
+<p>El mismo volumen se puede usar a la vez en otro contenedor; por ejemplo, para editar la web con <code>vi</code> desde un <code>alpine</code>: <code>docker container run --rm -v website:/website -w /website -it alpine vi index.html</code>. La opción <strong><code>-w</code></strong> fija el <strong>directorio de trabajo</strong> dentro del contenedor (la pregunta que plantea la diapositiva).</p>
+<p>El volumen también se crea al lanzar el contenedor (<code>docker run -it --name alpha -v compartido:/var/log:z ubuntu bash</code>), y otro contenedor puede montar los mismos volúmenes con <code>--volumes-from alpha</code>. Si no se indica nombre, se crea un <strong>volumen sin nombre</strong>. La opción <strong><code>z</code></strong> se usa en sistemas con <strong>SELinux</strong> para indicar que el volumen se va a compartir; sin ella, otro contenedor no podría acceder por permisos.</p>
+<p>Para <strong>compartir un directorio del host</strong> se pone su <strong>ruta absoluta</strong> como nombre del volumen: <code>docker run -v /path/en/el/host:/path/en/el/contenedor:z image</code>. Es útil, por ejemplo, para editar código en el host y compilarlo o ejecutarlo en el contenedor.</p>
+<h1>2.11 Dockerfile y Docker Compose</h1>
+<p>Crear imágenes a mano es tedioso y propenso a errores; el proceso se automatiza con un <strong>Dockerfile</strong>.</p>
+<h2>2.11.1 Dockerfile</h2>
+<p>Un <strong>Dockerfile</strong> es una <strong>receta de construcción</strong> de una imagen: una serie de instrucciones que dicen cómo construirla. <code>docker build</code> crea la imagen a partir de él. Ejemplo, en un directorio <code>mydockerimage</code> con un fichero de texto llamado <code>Dockerfile</code>:</p>
+<pre><code class="language-dockerfile">FROM ubuntu
+RUN apt-get -y update
+RUN apt-get -y install figlet
+</code></pre>
+<p><strong><code>FROM</code></strong> indica la imagen base, y cada <strong><code>RUN</code></strong> se ejecuta durante la construcción (normalmente para instalar paquetes; <code>-y</code> evita que <code>apt-get</code> pregunte). Se construye con <code>docker build -t figlet-image .</code> (<code>-t</code> es el tag y <code>.</code> el directorio del Dockerfile) y se comprueba con <code>docker image ls</code>. La imagen resultante es igual que la construida a mano.</p>
+<p><strong>Caché.</strong> Si se vuelve a construir, es instantáneo: tras cada paso Docker guarda una instantánea y, antes de ejecutar un paso, comprueba si ya ha hecho exactamente la misma secuencia. Compara las <strong>cadenas exactas</strong>, así que <code>RUN apt-get install progA progB</code> es distinto de <code>RUN apt-get install progB progA</code>. Se fuerza la reconstrucción con <code>docker build --no-cache</code>.</p>
+<p><strong>Sintaxis shell frente a exec.</strong> Casi todas las instrucciones admiten dos formatos. En formato <strong>shell</strong> (<code>RUN apt-get install figlet</code>), el comando se ejecuta dentro de una <em>shell</em> (<code>/bin/sh -c comando</code>). En formato <strong>exec</strong> o JSON (<code>RUN [&quot;apt-get&quot;, &quot;-y&quot;, &quot;install&quot;, &quot;figlet&quot;]</code>) se ejecuta directamente. <strong>Se recomienda exec</strong> para evitar problemas con las señales del SO (si hay una <em>shell</em> por medio, la señal de parada le llega a ella y no al programa).</p>
+<h2>2.11.2 Comando por defecto: CMD y ENTRYPOINT</h2>
+<p><strong><code>CMD</code></strong> define el <strong>comando por defecto</strong> al arrancar el contenedor, p. ej. <code>CMD [&quot;figlet&quot;, &quot;-f&quot;, &quot;script&quot;, &quot;hola&quot;]</code> (<code>-f</code> elige la fuente). Puede estar en cualquier punto, pero <strong>cada CMD anula al anterior</strong>. Si al lanzar el contenedor se indica otro comando (<code>docker container run -it --rm figlet-image /bin/bash</code>), este <strong>sustituye</strong> al CMD.</p>
+<p><strong><code>ENTRYPOINT</code></strong> define un <strong>comando base</strong> (con sus parámetros) al que se <strong>añaden</strong> los argumentos de la línea de comandos. Con <code>ENTRYPOINT [&quot;figlet&quot;, &quot;-f&quot;, &quot;script&quot;]</code>, ejecutar <code>docker container run --rm figlet-image &quot;hola mundo!&quot;</code> dibuja &quot;hola mundo!&quot;. También cuenta solo el último.</p>
+<p><strong>Juntos</strong>, ENTRYPOINT da el comando y CMD sus <strong>parámetros por defecto</strong> (ambos en formato exec):</p>
+<pre><code class="language-dockerfile">FROM ubuntu
+RUN apt-get update
+RUN [&quot;apt-get&quot;, &quot;install&quot;, &quot;figlet&quot;]
+ENTRYPOINT [&quot;figlet&quot;, &quot;-f&quot;, &quot;script&quot;]
+CMD [&quot;hola mundo!&quot;]
+</code></pre>
+<p>Sin argumentos, se ejecuta <code>figlet -f script &quot;hola mundo!&quot;</code>; con argumentos, estos <strong>sustituyen</strong> al CMD. Por eso <code>docker run -it --rm figlet-image ls</code> no lista nada: solo dibujaría la palabra &quot;ls&quot;. Para ejecutar otra cosa hay que cambiar el ENTRYPOINT: <code>docker container run --rm --entrypoint ls figlet-image -la /usr</code> (los parámetros van tras el nombre de la imagen), o <code>--entrypoint bash</code> para una <em>shell</em>.</p>
+<table>
+<thead>
+<tr>
+<th>Al lanzar el contenedor…</th>
+<th>Solo CMD</th>
+<th>ENTRYPOINT + CMD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>…sin argumentos</td>
+<td>Ejecuta el CMD</td>
+<td>ENTRYPOINT + parámetros del CMD</td>
+</tr>
+<tr>
+<td>…con argumentos</td>
+<td>Los argumentos <strong>sustituyen</strong> al comando</td>
+<td>Los argumentos <strong>sustituyen al CMD</strong> y se pasan al ENTRYPOINT</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>ENTRYPOINT es la máquina de café (siempre hace café) y CMD es el botón preseleccionado (&quot;café solo&quot;). Si no pulsas nada, sale café solo; si pulsas &quot;con leche&quot;, sale café con leche. Para obtener té hay que cambiar de máquina (<code>--entrypoint</code>).</p>
+</div>
+<h2>2.11.3 Copiar ficheros: COPY</h2>
+<p><code>COPY</code> copia ficheros del directorio del Dockerfile a la imagen. Ejemplo: compilar un <code>hola.c</code> (un <code>puts(&quot;Hola mundo!&quot;)</code>):</p>
+<pre><code class="language-dockerfile">FROM ubuntu
+RUN apt-get update
+RUN apt-get install -y build-essential
+COPY hola.c /
+RUN make hola
+CMD /hola
+</code></pre>
+<p><code>build-essential</code> trae el compilador y <code>make</code>; <code>COPY</code> pone el fichero en la raíz del contenedor. Se construye con <code>docker build -t holamundo-image .</code> y se lanza con <code>docker container run --rm holamundo-image</code>. Docker <strong>cachea también los COPY</strong>: si el fichero no cambia, no repite el paso. Se pueden copiar directorios recursivamente. Para compilar de verdad conviene usar otro directorio (con <code>WORKDIR</code>) y, mejor aún, la <strong>imagen oficial de gcc</strong>.</p>
+<h2>2.11.4 Resumen de instrucciones</h2>
+<p>Las instrucciones se ejecutan <strong>en orden</strong> y <strong>cada una crea una nueva capa</strong>; se guardan en <strong>caché</strong> y, si no hay cambios, se reutiliza la capa. <strong><code>FROM</code> debe ser la primera instrucción</strong> no comentada, las líneas que empiezan por <code>#</code> son comentarios y <strong>solo cuentan el último CMD y el último ENTRYPOINT</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Instrucción</th>
+<th>Para qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>FROM</code></td>
+<td>Imagen base</td>
+</tr>
+<tr>
+<td><code>RUN</code></td>
+<td>Ejecutar comandos durante la construcción</td>
+</tr>
+<tr>
+<td><code>CMD</code> / <code>ENTRYPOINT</code></td>
+<td>Comando por defecto / comando base</td>
+</tr>
+<tr>
+<td><code>COPY</code></td>
+<td>Copiar ficheros del directorio local a la imagen</td>
+</tr>
+<tr>
+<td><code>ADD</code></td>
+<td>Como COPY, pero <strong>descomprime zip y tar</strong> y puede <strong>descargar ficheros remotos</strong> (sin desempaquetarlos). Es mejor usar <code>RUN</code> con <code>curl</code></td>
+</tr>
+<tr>
+<td><code>MAINTAINER</code></td>
+<td>Autor del Dockerfile (opcional, recomendado)</td>
+</tr>
+<tr>
+<td><code>EXPOSE</code></td>
+<td>Declara los puertos en los que escucha el contenedor (<code>EXPOSE 80 443</code>, <code>EXPOSE 53/tcp 53/udp</code>)</td>
+</tr>
+<tr>
+<td><code>WORKDIR</code></td>
+<td>Directorio de trabajo para las instrucciones siguientes, y también para CMD y ENTRYPOINT al arrancar</td>
+</tr>
+<tr>
+<td><code>ENV</code></td>
+<td>Variables de entorno de los contenedores (<code>ENV WEBAPP_PORT 8080</code>); también con <code>docker run -e VAR=valor</code></td>
+</tr>
+<tr>
+<td><code>VOLUME</code></td>
+<td>Crea un volumen en el contenedor (<code>VOLUME /uploads</code>)</td>
+</tr>
+<tr>
+<td><code>USER</code></td>
+<td>Usuario o UID con el que se ejecutan las instrucciones; puede cambiarse varias veces</td>
+</tr>
+</tbody>
+</table>
+<p>Sobre <strong>EXPOSE</strong>: los puertos expuestos son accesibles desde <strong>otros contenedores del mismo host</strong>, pero para que lo sean desde el host o el exterior hay que <strong>publicarlos</strong>: <code>-p &lt;puerto&gt;</code> publica un puerto aunque no esté en EXPOSE, y <code>-P</code> publica <strong>todos los declarados en EXPOSE</strong>. <code>docker container port</code> lista las asignaciones.</p>
+<p>Más detalles en la <a href="https://docs.docker.com/engine/reference/builder/">referencia del Dockerfile</a> y las <a href="https://docs.docker.com/develop/develop-images/dockerfile_best-practices/">buenas prácticas</a> (enlazadas en las diapositivas).</p>
+<h2>2.11.5 Docker Compose</h2>
+<p>Con <code>docker run</code> o un Dockerfile se manejan uno o dos contenedores. Para una <strong>pila compleja de varios contenedores</strong> se usa <strong>Docker Compose</strong>: se describe la pila en un fichero YAML <strong><code>docker-compose.yml</code></strong>, se ejecuta <strong><code>docker compose up</code></strong> y Compose descarga las imágenes, construye los contenedores y los arranca, configurando enlaces, volúmenes y demás opciones. Viene instalado con Docker Desktop (se comprueba con <code>docker compose version</code>).</p>
+<pre><code class="language-yaml">services:
+  www:
+    build: www
+    ports:
+      - 8000:5000
+    user: nobody
+    environment:
+      DEBUG: 1
+    command: python counter.py
+    volumes:
+      - www-shared:/var/www
+  redis:
+    image: redis
+    volumes:
+      - www-shared:/web
+volumes:
+  www-shared:
+</code></pre>
+<p>El ejemplo define dos servicios: <code>www</code>, que se <strong>construye</strong> a partir del Dockerfile del directorio <code>www</code>, publica el puerto 5000 del contenedor en el 8000 del host, se ejecuta como usuario <code>nobody</code> con la variable <code>DEBUG=1</code> y lanza <code>python counter.py</code>; y <code>redis</code>, que usa la <strong>imagen</strong> <code>redis</code>. Ambos comparten el volumen <code>www-shared</code>.</p>
+<p>En el fichero, <strong><code>services</code></strong> es <strong>obligatorio</strong> (los servicios que se arrancan), mientras que <strong><code>networks</code></strong> (redes en las que colocar los contenedores) y <strong><code>volumes</code></strong> (volúmenes usados y compartidos) son opcionales. Cada servicio debe tener <strong><code>build</code></strong> (ruta a un Dockerfile) <strong>o <code>image</code></strong> (imagen local o de un registro); <code>command</code> equivale a CMD y <code>ports</code> a la opción <code>-p</code>. Más opciones en la <a href="https://docs.docker.com/reference/compose-file/">referencia de Compose</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Qué hace</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker compose up</code></td>
+<td>Crea y arranca la pila (<code>-d</code>: en segundo plano)</td>
+</tr>
+<tr>
+<td><code>docker compose config</code></td>
+<td>Verifica la sintaxis del fichero</td>
+</tr>
+<tr>
+<td><code>docker compose build</code></td>
+<td>Construye los servicios que indican un Dockerfile</td>
+</tr>
+<tr>
+<td><code>docker compose ps</code></td>
+<td>Lista los contenedores de la pila</td>
+</tr>
+<tr>
+<td><code>docker compose stop</code> / <code>start</code></td>
+<td>Detiene / arranca los contenedores</td>
+</tr>
+<tr>
+<td><code>docker compose kill</code></td>
+<td>Mata todos los contenedores</td>
+</tr>
+<tr>
+<td><code>docker compose rm</code></td>
+<td>Elimina los contenedores</td>
+</tr>
+<tr>
+<td><code>docker compose down</code></td>
+<td>Detiene <strong>y</strong> elimina los contenedores</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=f3xb7kt_dH4">What is Docker Compose? | Docker Concepts</a> — idea de Compose en dos minutos, del canal oficial (vídeo, 2:33, inglés).
+<a href="https://www.youtube.com/watch?v=Qw9zlE3t8Ko">Docker Compose in 12 Minutes</a> — ejemplo práctico de una app con varios servicios en <code>docker-compose.yml</code> (vídeo, 12:00, inglés).</p>
+</div>
+<h1>2.12 Ideas clave</h1>
+<ul>
+<li><strong>Virtualización</strong>: abstracción lógica que oculta los recursos físicos (ejemplos clásicos: memoria virtual, sistemas de ficheros).</li>
+<li>Los CPD evolucionaron con <strong>estandarización + virtualización + automatización</strong> (consolidación → agregación) hacia el <strong>SDDC</strong>; los clouds públicos nacieron de abrir la infraestructura interna de Amazon, Google o Microsoft.</li>
+<li><strong>Virtualización de servidores</strong>: varios entornos aislados (con SO distintos) en un servidor. Conceptos: <strong>host</strong>, <strong>guest</strong>, <strong>hipervisor/VMM</strong>. Beneficios: consolidación, aislamiento, pooling, <strong>migración dinámica</strong>.</li>
+<li>Técnicas: <strong>emulación</strong> (QEMU, Bochs; lenta), <strong>hipervisor tipo 1</strong> <em>bare metal</em> (ESXi, Hyper-V, XenServer) y <strong>tipo 2</strong> <em>hosted</em> (VirtualBox, VMware Workstation), <strong>KVM</strong> (híbrido, necesita VT-x/AMD-V, usa QEMU) y <strong>contenedores</strong> (comparten kernel; chroot, cgroups, namespaces; Docker, LXC, Podman).</li>
+<li><strong>x86</strong>: requisitos de <strong>Popek y Goldberg</strong> (equivalencia, control, eficiencia); problema = <strong>instrucciones sensibles no privilegiadas</strong> (POPF). Soluciones: <strong>traslación binaria</strong> (sin modificar, lenta), <strong>paravirtualización</strong> (rápida, SO modificado), <strong>asistida por HW</strong> (VT-x/AMD-V).</li>
+<li><strong>VMX</strong>: modos <strong>Root</strong> (hipervisor) / <strong>Non-Root</strong> (invitado), <strong>VMCS</strong>, <strong>VM Exit</strong> / <strong>VM Entry</strong>.</li>
+<li>Gestión de VMs: <strong>libvirt</strong> (virt-manager, virsh).</li>
+<li><strong>Docker</strong>: soluciona el despliegue (muchas pilas × muchos entornos) como el contenedor de transporte. Contenedor = procesos aislados con <strong>kernel compartido</strong>; se basa en <strong>cgroups</strong> (cuánto usa) y <strong>namespaces</strong> (qué ve). Usos: contenedor de aplicación (microservicios) o de SO. Alternativas: Podman, LXC, Singularity.</li>
+<li>Arquitectura <strong>cliente-servidor</strong>: cliente/CLI → API → <strong>Docker Engine</strong> (<code>dockerd</code>) → registro <strong>Docker Hub</strong>. Docker Desktop corre sobre una VM Linux ligera.</li>
+<li><strong>Imagen</strong> = capas de solo lectura; <strong>contenedor</strong> = imagen + capa escribible. Nuevas imágenes con <code>commit</code> o <code>docker build</code>. Nombres: root, user y self-hosted; tags (<code>latest</code> por defecto).</li>
+<li>Comandos clave: <code>run -it/-d/--rm/--name</code>, <code>ps -a</code>, <code>start</code>, <code>attach</code>, <code>exec</code>, <code>logs</code>, <code>stop</code> (TERM + KILL a los 10 s), <code>kill</code>, <code>rm</code>; límites <code>--memory</code>, <code>--cpus</code>.</li>
+<li><strong>Redes</strong>: puertos con <code>-p host:contenedor</code> o <code>-P</code>; red = switch virtual con subred; contenedores de la misma red se ven por nombre; drivers bridge (defecto, NAT con iptables), host (rendimiento nativo), overlay, ipvlan, macvlan, none. <strong>Volúmenes</strong> <code>-v</code>: datos persistentes, E/S nativa, no entran en el commit.</li>
+<li><strong>Dockerfile</strong>: FROM, RUN, CMD, ENTRYPOINT, COPY, ADD, EXPOSE, WORKDIR, ENV, VOLUME, USER; cada instrucción = una capa cacheada; formato exec recomendado. <strong>Docker Compose</strong>: pila multicontenedor en <code>docker-compose.yml</code> (<code>services</code> obligatorio; <code>build</code> o <code>image</code>), <code>docker compose up/down</code>.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-introduccion-a-la-computacion-en-la-nube.html"><span class="nav-etiqueta">← anterior</span>1. Introducción a la computación en la nube</a>
+  <a class="nav-siguiente" href="3-aplicaciones-y-servicios-en-la-nube.html"><span class="nav-etiqueta">siguiente →</span>3. Aplicaciones y servicios en la nube</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

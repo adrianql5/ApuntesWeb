@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Introducción a la IPO — apuntes de IPO (cuarto curso de Ingeniería Informática).">
+<title>1. Introducción a la IPO · IPO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">ipo</a><span class="miga-sep">/</span><span aria-current="page">1-introduccion-a-la-ipo</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de IPO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">IPO</a></p><ol><li><span class="actual" aria-current="page">1. Introducción a la IPO</span></li><li><a href="2-el-factor-humano.html">2. El factor humano</a></li><li><a href="3-prototipado-y-evaluacion.html">3. Prototipado y evaluación</a></li><li><a href="4-diseno-centrado-en-el-usuario.html">4. Diseño centrado en el usuario</a></li><li><a href="5-diseno-grafico-principios-estandares-y-guias.html">5. Diseño gráfico. Principios, estándares y guías</a></li><li><a href="notas-sobre-examen.html">Notas sobre examen</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>IPO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>1 / 5</div>
+    </div>
+    <h1>Introducción a la IPO</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de IPO · 1/6</summary><ol><li><span aria-current="page">1. Introducción a la IPO</span></li><li><a href="2-el-factor-humano.html">2. El factor humano</a></li><li><a href="3-prototipado-y-evaluacion.html">3. Prototipado y evaluación</a></li><li><a href="4-diseno-centrado-en-el-usuario.html">4. Diseño centrado en el usuario</a></li><li><a href="5-diseno-grafico-principios-estandares-y-guias.html">5. Diseño gráfico. Principios, estándares y guías</a></li><li><a href="notas-sobre-examen.html">Notas sobre examen</a></li></ol></details>
+  <div class="prosa">
+<h1>1.1 Interacción persona-ordenador</h1>
+<p>La <strong>Interacción Persona-Ordenador (IPO)</strong> es la disciplina que se ocupa del <strong>diseño, la implementación y la evaluación de sistemas informáticos interactivos</strong>, es decir, de sistemas que una persona usa directamente.</p>
+<p>Su objetivo es <strong>desarrollar o mejorar la seguridad, utilidad, efectividad, eficiencia y usabilidad</strong> de los sistemas que incluyen ordenadores. Para conseguir sistemas usables hace falta <strong>comprender los factores psicológicos, ergonómicos, organizativos y sociales</strong> que determinan cómo trabaja la gente y cómo usa los ordenadores, <strong>desarrollar herramientas y técnicas</strong> que ayuden a los diseñadores, y lograr una interacción <strong>eficiente, efectiva y segura</strong>.</p>
+<p>La idea central de la asignatura es que <strong>no son los usuarios quienes tienen que cambiar radicalmente su forma de ser</strong>, sino que <strong>los sistemas deben diseñarse para satisfacer sus requisitos</strong>.</p>
+<h1>1.2 Interfaces de usuario</h1>
+<p>Una <strong>interfaz</strong> es la <strong>superficie de contacto entre dos entidades</strong>; en la IPO, esas entidades son <strong>la persona y el ordenador</strong>. Toda interfaz debe tener dos cualidades: <strong>visibilidad</strong> para el usuario y <strong>comprensión intuitiva</strong> (<em><strong>affordance</strong></em>), es decir, que se entienda <strong>dónde hay que actuar y cómo</strong>. En la vida cotidiana hay interfaces por todas partes: el salpicadero de un coche, una máquina médica, un casco de realidad virtual, un teclado...</p>
+<p><img src="../../../img/ipo/ipo-t1-ejemplos-interfaces.png" alt="Ejemplos de interfaces|500" loading="lazy"></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la manilla de la puerta</p>
+<p>Una puerta con una manilla &quot;te dice&quot; que tires de ella; una placa plana, que empujes. Eso es la <em>affordance</em>: la forma del objeto comunica cómo se usa sin necesidad de instrucciones. Cuando una puerta con manilla hay que empujarla, todo el mundo se equivoca: es un mal diseño de interfaz.</p>
+</div>
+<p>Distintos autores la han definido de formas complementarias:</p>
+<table>
+<thead>
+<tr>
+<th>Autor</th>
+<th>Definición de interfaz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Moran</strong></td>
+<td>Los <strong>aspectos del sistema con los que el usuario entra en contacto</strong></td>
+</tr>
+<tr>
+<td><strong>Laurel (1992)</strong></td>
+<td>Una <strong>superficie de contacto</strong> que refleja las propiedades físicas de quienes interactúan, en la que se tienen que <strong>intuir las funciones</strong> y que da un <strong>balance de poder y control</strong></td>
+</tr>
+<tr>
+<td><strong>Negroponte (1994)</strong></td>
+<td><strong>Donde los bits y las personas se encuentran</strong></td>
+</tr>
+<tr>
+<td><strong>Chi</strong></td>
+<td>Un <strong>lenguaje de entrada</strong> para el usuario, un <strong>lenguaje de salida</strong> para el ordenador y un <strong>protocolo</strong> para la interacción</td>
+</tr>
+</tbody>
+</table>
+<p>En resumen, son las partes del sistema con las que el usuario entra en contacto <strong>física y cognitivamente</strong>: la <strong>interacción física</strong> (teclado, ratón, pantalla...) y la <strong>interacción cognitiva</strong> (lo que se le presenta debe ser <strong>comprensible</strong> para él).</p>
+<h1>1.3 Disciplinas relacionadas con la IPO</h1>
+<p>La IPO es <strong>multidisciplinar</strong>: se nutre de la <strong>psicología</strong>, el <strong>diseño</strong>, la <strong>sociología</strong>, la <strong>ergonomía</strong>, la <strong>programación</strong>, la <strong>ingeniería del software</strong> y la <strong>inteligencia artificial</strong>.</p>
+<h1>1.4 Usabilidad</h1>
+<p>Para que un sistema interactivo cumpla sus objetivos, tiene que ser <strong>usable</strong> y <strong>accesible</strong> para la mayor parte de la población. La <strong>usabilidad</strong> es:</p>
+<blockquote>
+<p>La medida en la que un producto se puede usar por <strong>determinados usuarios</strong> para conseguir <strong>unos objetivos específicos</strong> con <strong>efectividad, eficiencia y satisfacción</strong> en un <strong>contexto de uso dado</strong>.</p>
+</blockquote>
+<p>Un <strong>software usable</strong> es <strong>fácil de utilizar</strong> (hace la tarea para la que se usa) y <strong>fácil de aprender</strong> (permite hacer las tareas rápido y sin errores). La mejor forma de resumirlo: <strong>una aplicación usable es la que permite al usuario centrarse en su tarea, no en la aplicación</strong>.</p>
+<p>Los problemas de usabilidad aparecen en objetos cotidianos, como muestran los ejemplos de <em><a href="http://baddesigns.com">baddesigns.com</a></em>: <strong>etiquetas que parecen botones</strong>, <strong>confusión entre controles similares</strong> (dos salpicaderos con indicadores casi iguales) y una mala <strong>colocación de controles</strong> (una vitrocerámica en la que no se sabe qué mando corresponde a qué fuego, o botones de un equipo de música mal situados).</p>
+<p><img src="../../../img/ipo/ipo-t1-problemas-1.png" alt="Etiquetas que parecen botones y controles confusos|450" loading="lazy"></p>
+<p><img src="../../../img/ipo/ipo-t1-problemas-2.png" alt="Mala colocación de controles|400" loading="lazy">
+<em>En la vitrocerámica de arriba no está claro qué mando enciende cada fuego; en el equipo de música, los botones del CD y de la cinta están mezclados.</em></p>
+<p>Los <strong>principios generales de usabilidad</strong> son:</p>
+<ol>
+<li><strong>Facilidad de aprendizaje</strong></li>
+<li><strong>Flexibilidad</strong></li>
+<li><strong>Consistencia</strong></li>
+<li><strong>Robustez</strong></li>
+<li><strong>Recuperabilidad</strong> (poder deshacer o recuperarse de errores)</li>
+<li><strong>Tiempo de respuesta</strong></li>
+<li><strong>Adecuación de las tareas</strong></li>
+<li><strong>Disminución de la carga cognitiva</strong></li>
+</ol>
+<h1>1.5 El diseño centrado en el usuario</h1>
+<p>Diseñar sistemas interactivos implica <strong>pensar en el usuario</strong> durante todo el desarrollo: el proceso <strong>se centra en él</strong>, se le <strong>implica tanto como sea posible</strong> (incluso <strong>dentro del equipo de diseño</strong>), se <strong>observa su trabajo habitual</strong> y se hacen <strong>prototipos, escenarios o maquetas</strong> para que pueda <strong>ir evaluando el diseño a lo largo de todo el ciclo de vida</strong>.</p>
+<p><img src="../../../img/ipo/ipo-t1-dcu.png" alt="Modelo de diseño centrado en el usuario|400" loading="lazy">
+<em>El eje de la izquierda es el ciclo clásico (análisis de requisitos → diseño → implementación → lanzamiento); a su lado, el prototipado y la evaluación, y en el centro los usuarios, que participan en todas las fases. Las flechas de vuelta indican que es un proceso iterativo.</em></p>
+<p>Cada fase del modelo agrupa una serie de actividades:</p>
+<table>
+<thead>
+<tr>
+<th>Fase</th>
+<th>Actividades</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Análisis de requisitos</strong></td>
+<td>Análisis etnográfico, perfil de usuario, análisis contextual de tareas, actores, roles y organización, listas de tareas, objetos, plataforma, perfil del entorno, objetivos de la usabilidad y de la aplicación</td>
+</tr>
+<tr>
+<td><strong>Diseño</strong></td>
+<td>Análisis de tareas, modelo conceptual, definir estilo (estándares generales, metáforas, colores, estándares particulares), diseño detallado</td>
+</tr>
+<tr>
+<td><strong>Prototipado</strong></td>
+<td>Maquetas, escenarios, prototipos de papel, storyboards, herramientas de diagramación, vídeos, prototipos software</td>
+</tr>
+<tr>
+<td><strong>Evaluación</strong></td>
+<td><strong>Inspección</strong> (heurística, recorrido de usabilidad plural, recorrido cognitivo, estándares); <strong>indagación</strong> (observación de campo, focus group, entrevistas, logging, cuestionarios); <strong>test</strong> (medida de las prestaciones, thinking aloud, interacción constructiva, test retrospectivo, método del conductor)</td>
+</tr>
+</tbody>
+</table>
+<p>El prototipado y la evaluación se desarrollan en el <a href="3-prototipado-y-evaluacion.html">tema 3</a>.</p>
+<h1>1.6 Ideas clave</h1>
+<ul>
+<li><strong>IPO</strong>: diseño, implementación y evaluación de sistemas interactivos; busca seguridad, utilidad, efectividad, eficiencia y <strong>usabilidad</strong>. <strong>El sistema se adapta al usuario</strong>, no al revés.</li>
+<li><strong>Interfaz</strong>: superficie de contacto persona-ordenador; necesita <strong>visibilidad</strong> y <strong>affordance</strong>. Contacto <strong>físico</strong> y <strong>cognitivo</strong>. Definiciones de Moran, Laurel, Negroponte y Chi.</li>
+<li>Disciplinas: psicología, diseño, sociología, ergonomía, programación, ingeniería del software, IA.</li>
+<li><strong>Usabilidad</strong>: efectividad, eficiencia y satisfacción de usuarios concretos con objetivos concretos en un contexto dado. Usable = fácil de usar + fácil de aprender; <strong>centrarse en la tarea, no en la aplicación</strong>. 8 principios (aprendizaje, flexibilidad, consistencia, robustez, recuperabilidad, tiempo de respuesta, adecuación, carga cognitiva).</li>
+<li><strong>Diseño centrado en el usuario</strong>: el usuario participa en todo el ciclo; fases de <strong>requisitos, diseño, prototipado y evaluación</strong>, de forma iterativa.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-el-factor-humano.html"><span class="nav-etiqueta">siguiente →</span>2. El factor humano</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

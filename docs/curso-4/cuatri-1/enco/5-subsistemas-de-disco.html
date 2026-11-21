@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Subsistemas de Disco — apuntes de ENCO (cuarto curso de Ingeniería Informática).">
+<title>5. Subsistemas de Disco · ENCO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enco</a><span class="miga-sep">/</span><span aria-current="page">5-subsistemas-de-disco</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENCO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENCO</a></p><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><span class="actual" aria-current="page">5. Subsistemas de Disco</span></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENCO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>5 / 6</div>
+    </div>
+    <h1>Subsistemas de Disco</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENCO · 5/6</summary><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><span aria-current="page">5. Subsistemas de Disco</span></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li></ol></details>
+  <div class="prosa">
+<h1>5.1 Qué es un subsistema de disco</h1>
+<p>Un <strong>subsistema de disco (SSdD)</strong> es un equipo independiente que <strong>agrupa muchos discos</strong> detrás de un <strong>controlador</strong> con <strong>caché</strong> y unos <strong>puertos</strong> por los que se conectan los servidores (por SCSI directamente o a través de una red Fibre Channel). Ojo: <strong>un servidor de discos no es un servidor de ficheros</strong>. El servidor de ficheros comparte <strong>ficheros</strong> por la LAN; el subsistema de disco ofrece a los servidores <strong>discos (bloques)</strong>, que ellos ven como si fueran discos propios.</p>
+<p><img src="../../../img/enco/enco-t5-servidor-discos-vs-ficheros.png" alt="Servidor de discos frente a servidor de ficheros|500" loading="lazy">
+<em>Izquierda: tres servidores conectados a los puertos de un subsistema de disco, por SCSI o por una red Fibre Channel. Derecha: por dentro, puertos, caché, controlador y discos.</em></p>
+<p>Los hay de <strong>muchos tamaños</strong> (número y capacidad de discos), y su funcionamiento es <strong>totalmente transparente</strong> para los servidores: el controlador les presenta <strong>discos lógicos</strong>, aplica <strong>RAID</strong> y <strong>virtualiza el almacenamiento</strong>, de modo que cada servidor ve &quot;sus&quot; discos sin saber en qué discos físicos están.</p>
+<p><img src="../../../img/enco/enco-t5-servidor-discos.png" alt="Servidor de discos compartido|350" loading="lazy">
+<em>Los usuarios acceden por la LAN a tres servidores, y estos, por una red de almacenamiento, al subsistema, que reparte sus discos entre ellos (Serv. 1, 2, 3) y deja algunos libres.</em></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el trastero con conserje</p>
+<p>Un subsistema de disco es como un edificio de trasteros con un conserje (el controlador). Cada vecino (servidor) tiene &quot;su trastero&quot;, pero no sabe en qué sótano está: el conserje lo coloca, hace copias de seguridad y puede moverlo de sitio sin que el vecino lo note.</p>
+</div>
+<h2>5.1.1 El tamaño de los discos</h2>
+<p>Con la <strong>misma capacidad total</strong>, conviene usar <strong>discos grandes</strong>: con 16 discos de 18 GB se llenan todas las bahías, mientras que con 8 discos de 36 GB quedan <strong>bahías libres</strong> para <strong>añadir capacidad</strong> más adelante. A cambio, menos discos significa menos discos trabajando en paralelo.</p>
+<p><img src="../../../img/enco/enco-t5-tamano-discos.png" alt="Discos pequeños frente a grandes|450" loading="lazy"></p>
+<h2>5.1.2 Canales de E/S redundantes</h2>
+<p>Los <strong>canales (buses) de E/S</strong> conectan los <strong>puertos con el controlador</strong> y el <strong>controlador con los discos</strong>: SCSI, FC, SAS, SATA... y a veces tecnologías propietarias. Para que un fallo de un canal no deje discos inaccesibles, se <strong>duplican</strong>, con varias configuraciones:</p>
+<table>
+<thead>
+<tr>
+<th>Configuración</th>
+<th>Cómo funciona</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Activo</strong></td>
+<td>Un solo canal hacia cada disco: si falla, el disco queda inaccesible</td>
+</tr>
+<tr>
+<td><strong>Activo/pasivo</strong></td>
+<td>Un canal trabaja y otro <strong>espera</strong> de reserva; entra solo si falla el primero</td>
+</tr>
+<tr>
+<td><strong>Activo/activo sin balanceo</strong></td>
+<td>Los dos canales trabajan, cada uno con <strong>su grupo de discos</strong>; si uno falla, el otro asume todo</td>
+</tr>
+<tr>
+<td><strong>Activo/activo con balanceo</strong></td>
+<td>Los dos canales trabajan y <strong>reparten la carga</strong> entre ellos</td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/enco/enco-t5-canales-1.png" alt="Canal activo y activo/pasivo|400" loading="lazy">
+<img src="../../../img/enco/enco-t5-canales-2.png" alt="Activo/activo sin y con balanceo|450" loading="lazy"></p>
+<h2>5.1.3 RAID en un subsistema de disco</h2>
+<p>El controlador del SSdD agrupa los discos en <strong>RAID</strong> y presenta el resultado a los servidores como discos lógicos. La figura muestra además qué pasa cuando <strong>falla un disco</strong>: (1) el RAID funciona con un disco <strong>libre de reserva</strong> (<em>hot spare</em>); (2) falla un disco; (3) el controlador <strong>reconstruye</strong> sus datos en el disco de reserva a partir de los demás; (4) se sustituye el disco roto, que pasa a ser el <strong>nuevo disco libre</strong>. Todo ello <strong>sin que el servidor deje de funcionar</strong>.</p>
+<p><img src="../../../img/enco/enco-t5-raid-ssdd.png" alt="RAID en un subsistema de disco|500" loading="lazy"></p>
+<h1>5.2 Subsistemas de disco inteligentes</h1>
+<p>La evolución ha sido <strong>JBOD (sin controlador) → RAID → SSdD inteligentes</strong>, que añaden tres funciones:</p>
+<ol>
+<li><strong>Copias instantáneas</strong>, para <strong>generar datos de prueba</strong>, <strong>preparar backups</strong> o <strong>copiar datos para minería de datos</strong>.</li>
+<li><strong>Mirroring remoto</strong>, para <strong>protegerse de catástrofes</strong>.</li>
+<li><strong>Enmascarado por LUN</strong>, para <strong>asignar los discos de forma segura</strong> a cada servidor.</li>
+</ol>
+<h2>5.2.1 Copias instantáneas</h2>
+<p>Una <strong>copia instantánea</strong> (<em>snapshot</em>) crea en un momento dado una copia de un disco lógico, que <strong>otro servidor</strong> puede usar (para backup, pruebas...) <strong>mientras el original sigue en marcha</strong>.</p>
+<p><img src="../../../img/enco/enco-t5-copias-instantaneas.png" alt="Copias instantáneas|300" loading="lazy">
+<em>(1) El servidor 1 trabaja con su disco. (2) Se crea la copia y el controlador copia los datos en segundo plano. (3) El servidor 2 usa la copia mientras el servidor 1 sigue con el original.</em></p>
+<p>Hay varias formas de implementarlas:</p>
+<ul>
+<li><strong>Detener el subsistema y hacer la copia</strong> (la forma <em>naïve</em>): sencillo, pero obliga a parar el servicio.</li>
+<li><strong>Partir de un RAID 1 o RAID 10 y desconectar un disco</strong> del espejo, que queda como copia. Problema: mientras está desconectado, <strong>los datos pierden su protección</strong>.</li>
+<li><strong>Hacer la copia en marcha</strong>, de tres formas: <strong>copia total</strong> (se copian todos los datos), <strong>copia parcial</strong> (solo se copian los <strong>datos que se modifican</strong>: los bloques sin cambios se leen del original) o <strong>copia incremental</strong> (la primera vez, total; después, solo parciales).</li>
+</ul>
+<p><img src="../../../img/enco/enco-t5-copias-modificados.png" alt="Copia de solo los datos modificados|300" loading="lazy">
+<em>Solo los bloques que cambian en el original se copian antes de modificarse; el resto se comparte.</em></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la foto del documento compartido</p>
+<p>Una copia total es fotocopiar el libro entero. Una copia parcial es fotocopiar solo una página justo antes de que alguien la vaya a tachar: el resto del libro se sigue leyendo del original, porque no ha cambiado.</p>
+</div>
+<p>Las <strong>bases de datos</strong> son un caso especial, porque sus datos suelen estar repartidos en <strong>varios discos</strong> que deben copiarse <strong>en el mismo instante y en orden</strong>: para eso existen los <strong>grupos de consistencia</strong> (ver más abajo).</p>
+<h2>5.2.2 Mirroring remoto</h2>
+<p>Para <strong>protegerse de catástrofes</strong> (un incendio que destruye el CPD), el subsistema del <strong>CPD primario</strong> <strong>copia continuamente sus datos</strong> a otro subsistema en un <strong>CPD de reserva</strong>, a través de una <strong>WAN</strong>.</p>
+<p><img src="../../../img/enco/enco-t5-mirroring-1.png" alt="Mirroring remoto en funcionamiento|450" loading="lazy">
+<em>(1) El servidor de aplicaciones escribe en su subsistema; (2) se confirma; (3) el subsistema copia el bloque al CPD de reserva por la WAN; (4) los usuarios trabajan con normalidad; (5) el servidor de reserva puede leer (por ejemplo, de una copia instantánea) en el CPD de reserva.</em></p>
+<p><img src="../../../img/enco/enco-t5-mirroring-2.png" alt="Mirroring remoto tras una catástrofe|450" loading="lazy">
+<em>Si el CPD primario se destruye, (6) el servidor de reserva pasa a trabajar con la copia remota y (7) los usuarios se conectan a él.</em></p>
+<p>Las copias remotas pueden ser <strong>síncronas</strong> o <strong>asíncronas</strong>:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Síncrona</th>
+<th>Asíncrona</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cómo funciona</td>
+<td>El primer subsistema <strong>espera a que el segundo confirme</strong> la escritura antes de confirmársela al servidor</td>
+<td>El primer subsistema <strong>confirma enseguida</strong> al servidor y envía el bloque al segundo <strong>después</strong></td>
+</tr>
+<tr>
+<td>Pérdida de datos si cae el CPD</td>
+<td><strong>Ninguna</strong>: la copia siempre está al día</td>
+<td>Se pueden perder las <strong>últimas escrituras</strong> aún no enviadas</td>
+</tr>
+<tr>
+<td>Rendimiento</td>
+<td><strong>Más lento</strong>: cada escritura espera el viaje por la WAN</td>
+<td><strong>Más rápido</strong></td>
+</tr>
+<tr>
+<td>Distancia</td>
+<td>Limitada (la latencia crece con la distancia)</td>
+<td>Grande</td>
+</tr>
+</tbody>
+</table>
+<p>La figura muestra también una <strong>combinación</strong>: copia <strong>síncrona</strong> a un segundo subsistema <strong>cercano</strong> y, desde este, <strong>asíncrona</strong> a un tercero <strong>lejano</strong>, para tener a la vez cero pérdida y protección a gran distancia.</p>
+<p><img src="../../../img/enco/enco-t5-sincrona-asincrona.png" alt="Copias remotas síncronas y asíncronas|500" loading="lazy">
+<em>Arriba izquierda, síncrona: la confirmación al servidor llega después de que el segundo subsistema confirme. Arriba derecha, asíncrona: el servidor recibe la confirmación antes de que el bloque llegue al segundo subsistema. Abajo: síncrona al segundo y asíncrona al tercero.</em></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el correo certificado</p>
+<p>La copia síncrona es enviar una carta certificada y <strong>no seguir hasta recibir el acuse de recibo</strong>: lento, pero seguro. La asíncrona es echar la carta al buzón y seguir con lo tuyo: rápido, pero si el cartero la pierde, no te enteras.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=YBllqcPTSr4">Understand the differences in Async and Sync technologies</a> — la replicación síncrona y asíncrona comparadas para proteger datos y servicios (vídeo, 4:50, inglés).</p>
+</div>
+<h2>5.2.3 Grupos de consistencia en bases de datos</h2>
+<p>Un <strong>grupo de consistencia</strong> es un <strong>grupo de LUNs</strong> (discos lógicos, posiblemente de servidores distintos: Unix, mainframe, Windows) en el que se <strong>garantiza que las operaciones de E/S se replican en orden estricto</strong>. Es <strong>indispensable para las bases de datos</strong>: si el registro de transacciones y los datos se copiaran desordenados, la copia en el CPD de reserva sería <strong>inconsistente</strong> e inútil.</p>
+<p><img src="../../../img/enco/enco-t5-grupo-consistencia.png" alt="Grupo de consistencia|250" loading="lazy"></p>
+<h2>5.2.4 Enmascarado por LUN</h2>
+<p>Sin control, <strong>todos los servidores verían todos los discos</strong> del subsistema, y uno podría <strong>sobrescribir los datos de otro</strong>. El <strong>enmascarado por LUN</strong> (<em>LUN masking</em>) hace que <strong>cada servidor solo vea los LUNs que tiene asignados</strong>: los demás le quedan ocultos. Los discos se identifican con la notación <strong>c_t_d_s</strong>: ID del <strong>controlador</strong> SCSI, ID del <strong>disco</strong> (target), <strong>LUN</strong> y <strong>partición</strong> (<em>slice</em>).</p>
+<p><img src="../../../img/enco/enco-t5-lun-masking.png" alt="Enmascarado por LUN|450" loading="lazy">
+<em>Izquierda, sin enmascarado: cada servidor usa sus LUN pero ve todos (flechas discontinuas). Derecha, con enmascarado: cada servidor solo ve los LUN que usa.</em></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=Iswh7VnOYEk">Zoning and LUN Masking in SAN Fabrics (Cisco)</a> — para qué sirve el enmascarado por LUN y cómo se combina con el zoning de la red (vídeo, 4:40, inglés).</p>
+</div>
+<h1>5.3 Conseguir alta disponibilidad</h1>
+<p>Para que un subsistema de disco no sea un punto único de fallo:</p>
+<ul>
+<li>Usar <strong>RAID</strong>.</li>
+<li>Que el controlador <strong>monitorice los discos</strong> (comandos SCSI o <strong>SMART</strong>).</li>
+<li>Usar <strong>canales redundantes</strong> para todos los discos y <strong>controladores redundantes</strong>.</li>
+<li><strong>Duplicar</strong> fuentes de alimentación, baterías, ventiladores, etc., y <strong>monitorizarlos</strong>.</li>
+<li>Hacer <strong>copias instantáneas</strong> para protegerse de <strong>errores humanos y de software</strong> (contra los que el RAID no sirve: si borras un fichero, el RAID borra también la copia).</li>
+<li>Hacer <strong>mirroring remoto</strong>.</li>
+<li>Implementar <strong>enmascarado por LUN</strong>.</li>
+</ul>
+<h1>5.4 All-Flash Arrays (AFAs)</h1>
+<p>Un <strong>AFA</strong>, también llamado <strong>sistema de almacenamiento de estado sólido</strong> o <strong>array de estado sólido</strong>, es un <strong>array de almacenamiento externo</strong> que usa <strong>únicamente memoria Flash</strong> para el almacenamiento persistente. Los principales proveedores son <strong>Pure Storage, EMC, HDS, IBM, HP y NetApp</strong>. Existen también <strong>arrays híbridos</strong>, que combinan <strong>SSD y HDD</strong> en el mismo chasis.</p>
+<p>Están <strong>diseñados específicamente para Flash</strong> e incorporan <strong>funciones de almacenamiento definidas por software</strong> para gestionar los datos: <strong>clonado de discos</strong>, <strong>RAID</strong>, <strong>compresión</strong>, <strong>deduplicación</strong> (guardar una sola vez los bloques repetidos) y <strong>copias instantáneas</strong>.</p>
+<h1>5.5 Ideas clave</h1>
+<ul>
+<li><strong>Subsistema de disco</strong> = puertos + caché + controlador + muchos discos; da <strong>discos (bloques)</strong> a los servidores, no ficheros (≠ servidor de ficheros). Transparente: discos lógicos, RAID, virtualización.</li>
+<li>Mejor <strong>discos grandes</strong> (dejan bahías libres para crecer). <strong>Canales redundantes</strong>: activo, <strong>activo/pasivo</strong>, <strong>activo/activo</strong> sin o con balanceo. RAID con <strong>disco de reserva</strong> (<em>hot spare</em>) y reconstrucción en caliente.</li>
+<li>SSdD inteligentes (JBOD → RAID → inteligente): <strong>copias instantáneas</strong> (naïve, desconectar espejo, en marcha: total, <strong>parcial</strong>, incremental), <strong>mirroring remoto</strong> (<strong>síncrono</strong>: sin pérdida, lento; <strong>asíncrono</strong>: rápido, puede perder lo último; combinaciones), <strong>grupos de consistencia</strong> (orden estricto para BD) y <strong>enmascarado por LUN</strong> (cada servidor ve solo sus LUN; notación c_t_d_s).</li>
+<li>Alta disponibilidad: RAID, monitorización, canales y controladores redundantes, componentes duplicados, snapshots, mirroring remoto, LUN masking.</li>
+<li><strong>All-Flash Arrays</strong>: solo Flash, con clonado, RAID, compresión, deduplicación y snapshots; híbridos con HDD.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-dispositivos-de-almacenamiento.html"><span class="nav-etiqueta">← anterior</span>4. Dispositivos de Almacenamiento</a>
+  <a class="nav-siguiente" href="6-fibre-channel-y-redes-san.html"><span class="nav-etiqueta">siguiente →</span>6. Fibre Channel y redes SAN</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

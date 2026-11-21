@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Introducción a la Ingeniería de Servicios — apuntes de ENSER (cuarto curso de Ingeniería Informática).">
+<title>1. Introducción a la Ingeniería de Servicios · ENSER · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enser</a><span class="miga-sep">/</span><span aria-current="page">1-introduccion-a-la-ingenieria-de-servicios</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENSER"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENSER</a></p><ol><li><span class="actual" aria-current="page">1. Introducción a la Ingeniería de Servicios</span></li><li><a href="2-componentes-distribuidos-y-estilos-arquitectonicos-soap-y-rest.html">2. Componentes distribuidos y estilos arquitectónicos. SOAP y REST</a></li><li><a href="3-concepto-de-servicio-y-servicios-sin-estado-buenas-practicas-en-el-diseno-de-servicios.html">3. Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios</a></li><li><a href="practicas-servicios-rest-con-spring.html">Prácticas. Servicios REST con Spring</a></li><li><a href="prueba-2.html">Prueba 2</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENSER</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>1 / 3</div>
+    </div>
+    <h1>Introducción a la Ingeniería de Servicios</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENSER · 1/5</summary><ol><li><span aria-current="page">1. Introducción a la Ingeniería de Servicios</span></li><li><a href="2-componentes-distribuidos-y-estilos-arquitectonicos-soap-y-rest.html">2. Componentes distribuidos y estilos arquitectónicos. SOAP y REST</a></li><li><a href="3-concepto-de-servicio-y-servicios-sin-estado-buenas-practicas-en-el-diseno-de-servicios.html">3. Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios</a></li><li><a href="practicas-servicios-rest-con-spring.html">Prácticas. Servicios REST con Spring</a></li><li><a href="prueba-2.html">Prueba 2</a></li></ol></details>
+  <div class="prosa">
+<h1>1.1 Aplicaciones distribuidas</h1>
+<p>Una <strong>aplicación distribuida</strong> es la que no se ejecuta en un único ordenador, sino repartida entre varias máquinas que se comunican por red. Hoy están en todas partes: plataformas de streaming, redes sociales, banca o proyectos de investigación; incluso la propia <strong>Web</strong> puede verse como una aplicación distribuida gigante.</p>
+<p>La forma de construirlas ha pasado por varias etapas, desde los grandes <strong>mainframes centralizados</strong> hasta las actuales arquitecturas <strong>sin servidor (serverless)</strong> y <strong>orientadas a eventos</strong>. El tema recorre esa evolución: cada etapa nace para resolver los problemas de la anterior.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: de un gran restaurante a una ciudad de food trucks</p>
+<p>El mainframe es un único restaurante enorme que lo hace todo. Cliente-servidor es un restaurante con camareros (los PCs) que atienden en la mesa. Las capas separan cocina, sala y almacén. Los servicios son puestos especializados (uno hace pizzas, otro postres) que se piden cosas entre sí. Y serverless es alquilar una cocina solo durante los minutos que tardas en cocinar.</p>
+</div>
+<h1>1.2 La era del mainframe (1960–1980)</h1>
+<p>Los ordenadores eran máquinas enormes que ocupaban habitaciones enteras. Las empresas basaban <strong>todas</strong> sus operaciones en un <strong>mainframe central</strong> que hacía todo el procesamiento, el almacenamiento y la lógica de negocio. Los usuarios interactuaban con él mediante <strong>terminales &quot;tontos&quot;</strong>: solo pantalla y teclado, sin capacidad de procesamiento propia.</p>
+<table>
+<thead>
+<tr>
+<th>Ventajas</th>
+<th>Desventajas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Fiabilidad extrema</strong>: diseñados con alta redundancia para funcionar años sin parar; ideales para banca o transacciones gubernamentales</td>
+<td><strong>Coste prohibitivo</strong>: inversión, mantenimiento y personal especializado carísimos</td>
+</tr>
+<tr>
+<td><strong>Seguridad robusta</strong>: sistema cerrado y centralizado, con pocos puntos de entrada para ataques</td>
+<td><strong>Baja flexibilidad</strong>: al ser monolítico, cualquier cambio era largo y complejo, y a menudo obligaba a parar todo el sistema</td>
+</tr>
+<tr>
+<td><strong>Gestión centralizada</strong>: todo en un único sistema, más fácil de administrar</td>
+<td><strong>Escalabilidad limitada</strong>: crecer implicaba actualizar o sustituir el mainframe, algo caro y disruptivo</td>
+</tr>
+<tr>
+<td><strong>Procesamiento de alto volumen</strong> de transacciones</td>
+<td><strong>Pobre experiencia de usuario</strong>: interfaces solo de texto</td>
+</tr>
+</tbody>
+</table>
+<h1>1.3 De cliente-servidor a múltiples capas</h1>
+<p>La llegada de los <strong>ordenadores personales</strong> y de las <strong>redes</strong> permitió descentralizar el procesamiento.</p>
+<h2>1.3.1 Arquitectura cliente-servidor (1990–2000)</h2>
+<p>El trabajo se reparte entre el <strong>cliente</strong>, un PC que ejecuta la interfaz de usuario y parte de la lógica de presentación, y el <strong>servidor</strong>, una máquina más potente que se encarga de la <strong>base de datos</strong> y de la <strong>lógica de negocio</strong>. Al tener capacidad propia, los clientes permitían aplicaciones mucho más ricas e interactivas. La comunicación se hacía con tecnologías como <strong>RPC</strong> (<em>Remote Procedure Call</em>, llamada a procedimiento remoto), que permiten que un programa llame a una función de otra máquina <strong>como si fuera una llamada local</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Ventajas</th>
+<th>Desventajas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Distribución de la carga</strong>, mejor rendimiento global</td>
+<td><strong>Mayor complejidad</strong>: hay que diseñar dos componentes y su comunicación</td>
+</tr>
+<tr>
+<td><strong>Escalabilidad sencilla</strong>: añadir clientes es fácil y barato</td>
+<td><strong>Dependencia de la red</strong>: el rendimiento depende de la calidad de la conexión</td>
+</tr>
+<tr>
+<td><strong>Interfaces gráficas ricas</strong></td>
+<td><strong>Mantenimiento del software cliente</strong>: actualizar el programa en cada PC es costoso</td>
+</tr>
+<tr>
+<td><strong>Mejor coste-beneficio</strong> que el mainframe</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2>1.3.2 Arquitectura de múltiples capas (finales de los 90–2000)</h2>
+<p>Para superar los problemas de escalabilidad y mantenimiento del cliente-servidor, se empezó a <strong>separar las responsabilidades de la aplicación en capas</strong> lógicas y físicas. El modelo más común tiene <strong>tres capas</strong>:</p>
+<ol>
+<li><strong>Presentación</strong>: la interfaz de usuario, que muestra la información y recoge las acciones del usuario (una web o una app móvil).</li>
+<li><strong>Lógica de negocio</strong>: el &quot;cerebro&quot;, donde se aplican las reglas de negocio. Es <strong>independiente</strong> de la presentación y de los datos.</li>
+<li><strong>Datos</strong>: se encarga únicamente de interactuar con la base de datos o el almacenamiento.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Ventajas</th>
+<th>Desventajas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mayor escalabilidad</strong>: cada capa escala por separado</td>
+<td><strong>Diseño más complejo</strong>, con más infraestructura</td>
+</tr>
+<tr>
+<td><strong>Separación de responsabilidades</strong>: más fácil de desarrollar y mantener</td>
+<td>Posible <strong>latencia adicional</strong> por la comunicación entre capas</td>
+</tr>
+<tr>
+<td><strong>Flexibilidad y reutilización</strong>: la misma lógica de negocio sirve a varios clientes (web, móvil) sin duplicar código</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1>1.4 SOA y microservicios (2000–actualidad)</h1>
+<p>Las <strong>Arquitecturas Orientadas a Servicios (SOA)</strong> fueron el siguiente paso: construir sistemas a partir de <strong>servicios reutilizables</strong>, cada uno con una <strong>funcionalidad de negocio completa</strong> (por ejemplo, &quot;procesar un pedido&quot;). Los servicios se comunicaban a través de un <strong>bus de servicio empresarial (ESB)</strong>, un canal centralizado de mensajería, y el protocolo principal era <strong>SOAP</strong>.</p>
+<h2>1.4.1 De SOAP a REST</h2>
+<p>El paso de SOAP a REST <strong>no fue un cambio de arquitectura</strong>, sino una evolución en <strong>cómo se implementa la comunicación</strong>, impulsada por la complejidad y el coste de SOAP. Sus problemas eran que era un protocolo <strong>estricto y pesado</strong>, que usaba <strong>XML</strong> (mensajes grandes y difíciles de leer) y que tendía a crear un <strong>fuerte acoplamiento</strong> entre servicios.</p>
+<p><strong>REST</strong> (<em>REpresentational State Transfer</em>) <strong>no es un protocolo, sino un estilo arquitectónico</strong> basado en los principios de la Web. Su clave es la <strong>simplicidad</strong> y reutilizar el estándar que la Web ya usa: <strong>HTTP</strong>. Sus principios son:</p>
+<ul>
+<li><strong>Recursos</strong>: todo se trata como un recurso con una <strong>URL única</strong> (<code>/clientes/123</code>).</li>
+<li><strong>Verbos HTTP</strong>: se usan los métodos estándar para operar sobre los recursos: <strong>GET</strong> para obtener, <strong>POST</strong> para crear, <strong>PUT/PATCH</strong> para actualizar y <strong>DELETE</strong> para eliminar.</li>
+<li><strong>Sin estado (stateless)</strong>: cada petición lleva <strong>toda la información necesaria</strong> para procesarse por sí sola, lo que simplifica el diseño y facilita escalar.</li>
+<li><strong>Representaciones</strong>: el servidor devuelve una representación del recurso en un formato ligero y legible, como <strong>JSON</strong>.</li>
+</ul>
+<p>Sus ventajas son la <strong>simplicidad y ligereza</strong>, la <strong>escalabilidad</strong> (al no tener estado, la carga se reparte fácilmente), la <strong>flexibilidad</strong> (cliente y servidor evolucionan por separado) y la <strong>interoperabilidad</strong> (se accede desde cualquier dispositivo con Internet).</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=hEEh0b21dIw">Diferencias entre SOAP y REST</a> — resumen rápido de ambos enfoques (vídeo, 1:36).</p>
+</div>
+<h1>1.5 Serverless y arquitecturas basadas en eventos (actualidad)</h1>
+<p>La última evolución busca <strong>abstraer al máximo la infraestructura</strong>. En <strong>serverless</strong>, el desarrollador <strong>solo escribe el código de una función</strong>; el proveedor en la nube gestiona el servidor, lo aprovisiona y lo escala, y <strong>solo se paga por el tiempo de ejecución</strong> del código.</p>
+<p>En una <strong>arquitectura basada en eventos</strong>, los componentes <strong>no se llaman directamente</strong>: se comunican <strong>emitiendo y reaccionando a eventos</strong> de forma <strong>asíncrona</strong>, lo que da un sistema muy <strong>flexible, desacoplado y resiliente</strong>. Por ejemplo, el servicio de pedidos emite un evento &quot;pedido creado&quot; y el de facturación, que está <strong>suscrito</strong> a ese evento, genera la factura sin que el primero sepa que existe.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: llamada directa frente a tablón de anuncios</p>
+<p>Llamar a otro servicio es como telefonear a un compañero: si no contesta, te quedas esperando. Con eventos, cuelgas un aviso en un tablón (&quot;pedido creado&quot;) y cada interesado lo lee cuando puede. Tú no necesitas saber quién lo lee ni esperar a nadie.</p>
+</div>
+<p>La tendencia general es hacia sistemas cada vez <strong>más modulares, autónomos y eficientes</strong>, que liberan al desarrollador de la infraestructura. Hoy destacan cuatro tendencias:</p>
+<ol>
+<li><strong>Hipermodularidad con microservicios y contenedores</strong>: descomponer la aplicación en <strong>servicios pequeños</strong> es el estándar, apoyado en <strong>contenedores (Docker)</strong> y <strong>orquestadores (Kubernetes)</strong>.</li>
+<li><strong>Desacoplamiento mediante eventos</strong>: la comunicación asíncrona aumenta la resiliencia y permite reaccionar en tiempo real.</li>
+<li><strong>Abstracción de la infraestructura (serverless)</strong>: menos complejidad y coste operativo.</li>
+<li><strong>Observabilidad</strong>: con arquitecturas tan complejas, son fundamentales las herramientas de <strong>trazas, métricas y logs</strong> para diagnosticar problemas.</li>
+</ol>
+<p>Y de cara al futuro: <strong>integración de IA</strong> para que las arquitecturas se autogestionen y optimicen, <strong>edge computing e IoT</strong> (procesar los datos cerca de donde se generan para reducir latencia) y <strong>sostenibilidad</strong> (máxima eficiencia energética de los centros de datos).</p>
+<h1>1.6 Ideas clave</h1>
+<ul>
+<li>Evolución: <strong>mainframe</strong> (centralizado, fiable pero caro e inflexible) → <strong>cliente-servidor</strong> (reparte carga, RPC) → <strong>tres capas</strong> (presentación, negocio, datos) → <strong>SOA/microservicios</strong> (servicios reutilizables; ESB + SOAP) → <strong>serverless y eventos</strong>.</li>
+<li><strong>SOAP → REST</strong> no cambia la arquitectura, sino la forma de comunicarse: SOAP es estricto, pesado, XML y acoplado.</li>
+<li><strong>REST</strong> es un <strong>estilo arquitectónico</strong> (no un protocolo) sobre HTTP: <strong>recursos con URL</strong>, <strong>verbos HTTP</strong>, <strong>sin estado</strong>, <strong>representaciones en JSON</strong>.</li>
+<li><strong>Serverless</strong>: solo escribes funciones y pagas por ejecución. <strong>Eventos</strong>: comunicación asíncrona y desacoplada (emitir/suscribirse).</li>
+<li>Tendencias: microservicios + Docker/Kubernetes, eventos, serverless, <strong>observabilidad</strong> (trazas, métricas, logs); futuro: IA, edge/IoT, sostenibilidad.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-componentes-distribuidos-y-estilos-arquitectonicos-soap-y-rest.html"><span class="nav-etiqueta">siguiente →</span>2. Componentes distribuidos y estilos arquitectónicos. SOAP y REST</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="3. Virtualización de Servidores — apuntes de ENCO (cuarto curso de Ingeniería Informática).">
+<title>3. Virtualización de Servidores · ENCO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enco</a><span class="miga-sep">/</span><span aria-current="page">3-virtualizacion-de-servidores</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENCO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENCO</a></p><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><span class="actual" aria-current="page">3. Virtualización de Servidores</span></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENCO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>3 / 6</div>
+    </div>
+    <h1>Virtualización de Servidores</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENCO · 3/6</summary><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><span aria-current="page">3. Virtualización de Servidores</span></li><li><a href="4-dispositivos-de-almacenamiento.html">4. Dispositivos de Almacenamiento</a></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li></ol></details>
+  <div class="prosa">
+<h1>3.1 Virtualización, agregación y consolidación</h1>
+<p>La <strong>virtualización de servidores</strong> <strong>independiza las funciones de un servidor de la máquina física</strong> que lo ejecuta. Gracias a eso, un servidor virtual se puede <strong>migrar de una máquina física a otra</strong>, y una misma máquina física se puede <strong>compartir entre varios servidores virtuales</strong>.</p>
+<p>Conviene distinguir tres conceptos que van juntos:</p>
+<table>
+<thead>
+<tr>
+<th>Concepto</th>
+<th>Qué es</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Agregación</strong></td>
+<td><strong>Varios recursos físicos</strong> se combinan para actuar como <strong>un único sistema</strong></td>
+<td>Un <strong>clúster</strong></td>
+</tr>
+<tr>
+<td><strong>Virtualización</strong> (o, menos usado, <strong>disgregación</strong>)</td>
+<td><strong>Un servidor físico</strong> se divide en <strong>varios servidores virtuales</strong></td>
+<td>Un host con 5 VMs</td>
+</tr>
+<tr>
+<td><strong>Consolidación</strong></td>
+<td>Las funciones de <strong>varios servidores físicos infrautilizados</strong> se pasan a servidores virtuales que se colocan en <strong>menos servidores físicos</strong></td>
+<td>10 servidores al 15% de uso → 2 servidores físicos</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la mudanza a un piso compartido</p>
+<p><strong>Consolidar</strong> es como juntar a cinco personas que vivían solas en pisos medio vacíos en un único piso grande con habitaciones separadas (las VMs): se paga un solo alquiler y se aprovecha el espacio. <strong>Agregar</strong> es lo contrario: unir varios pisos pequeños para que funcionen como una sola casa.</p>
+</div>
+<h1>3.2 Orígenes</h1>
+<p>La virtualización <strong>nació en la época de los mainframes</strong> y es parte de la razón de su éxito durante tantos años. Gracias a las máquinas virtuales, un mainframe podía <strong>ejecutar varias instancias de un sistema operativo</strong> y <strong>emular sistemas antiguos</strong>, de modo que una empresa podía <strong>comprar un mainframe nuevo y seguir ejecutando su software antiguo</strong>.</p>
+<p>En <strong>2001</strong>, <strong>VMware</strong> se dio cuenta de que <strong>no había productos similares para PCs y estaciones de trabajo</strong>. Sus productos dominaron el mercado durante años, permitiendo a usuarios de Unix, Linux, Windows y macOS usar otros sistemas operativos. Hoy hay <strong>muchas empresas y proyectos de código abierto</strong> que permiten virtualizar en todo tipo de plataformas.</p>
+<h1>3.3 Formas de virtualización de servidores</h1>
+<p>Hay seis formas, de la más lenta a la más eficiente: <strong>emulación</strong>, <strong>particionamiento hardware</strong>, <strong>virtualización a nivel del SO</strong>, <strong>anfitriones</strong> (<em>hosted</em>), <strong>paravirtualización</strong> e <strong>hipervisores</strong>.</p>
+<h2>3.3.1 Emulación</h2>
+<p>Es la forma <strong>más sencilla y menos eficiente</strong>. El emulador <strong>recrea por software un entorno completo</strong>, incluidas <strong>todas las instrucciones de la CPU</strong> y los <strong>dispositivos de E/S</strong>, así que un SO puede ejecutarse <strong>sin modificarlo</strong> sobre otra plataforma. Su gran ventaja es que <strong>se puede emular una CPU distinta</strong> a la del servidor físico; su gran desventaja, que <strong>el rendimiento cae muchísimo</strong> (cada instrucción se traduce por software).</p>
+<p>Se usa para <strong>acceder puntualmente a aplicaciones</strong> de plataformas que no tenemos, <strong>emular hardware obsoleto</strong> que ya no existe y con <strong>fines educativos</strong>. Un emulador muy extendido y de código abierto es <strong>QEMU</strong>, que <strong>traduce dinámicamente</strong> el código que ejecuta; aunque <strong>KVM con QEMU ya no hace emulación pura</strong>, sino que añade elementos de virtualización real.</p>
+<h2>3.3.2 Particionamiento hardware</h2>
+<p>Consiste en <strong>dividir los recursos</strong> de un sistema en <strong>particiones</strong>, a cada una de las cuales se le asigna <strong>una o más CPUs</strong>, una <strong>cantidad de memoria física</strong> y <strong>canales de E/S</strong>. Cada partición ejecuta <strong>su propia instancia del SO</strong>, pero <strong>tiene que ser el mismo SO en todas</strong>. Se puede hacer por software o por hardware; cada partición <strong>gestiona sus recursos sin compartirlos</strong>, aunque se puede permitir <strong>redistribuirlos dinámicamente</strong>. La mayoría de los sistemas operativos tienen versiones que lo soportan.</p>
+<h2>3.3.3 Virtualización a nivel del sistema operativo</h2>
+<p>Un <strong>único SO crea múltiples entornos virtuales de sí mismo</strong>. Cada instancia corre en su propio entorno, pero <strong>todas comparten los mismos recursos</strong>, que se pueden <strong>reasignar</strong> para dar <strong>calidad de servicio</strong>. Su ventaja es que el <strong>overhead (sobrecoste) es mínimo</strong>, pero, de nuevo, <strong>todas las instancias usan el mismo SO</strong>. Ejemplos: <strong>Solaris Containers</strong> de Sun (solo Solaris) y <strong>Virtuozzo</strong> (Windows o Linux, <strong>nunca los dos a la vez</strong>).</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://en.wikipedia.org/wiki/OS-level_virtualization">OS-level virtualization (Wikipedia)</a> — más ejemplos de virtualización a nivel de SO y su comparación (artículo, inglés; enlazado en las diapositivas).</p>
+</div>
+<h2>3.3.4 Anfitriones (<em>hosted approach</em>)</h2>
+<p>La capa de virtualización (<strong>hipervisor de tipo II</strong>) corre <strong>sobre un SO anfitrión</strong> (<em>host</em>), y los servidores virtuales corren sobre ella. La ventaja es que permite <strong>SO distintos</strong>. Las desventajas: la <strong>E/S atraviesa todas las capas y es lenta</strong>, <strong>cada capa consume recursos</strong>, y por eso <strong>no se recomienda para aplicaciones con mucha E/S</strong>. Ejemplos: <strong>Oracle VM VirtualBox</strong> y <strong>VMware Server</strong>. Productos como VirtualBox están <strong>evolucionando hacia la paravirtualización de la E/S</strong> para mejorar.</p>
+<p><img src="../../../img/enco/enco-t3-hosted.png" alt="Enfoque hosted|300" loading="lazy">
+<em>De abajo arriba: servidor físico, SO del servidor, hipervisor de tipo 2 y la máquina virtual con su SO invitado.</em></p>
+<h2>3.3.5 Paravirtualización</h2>
+<p>Usa sistemas operativos <strong>ligeramente modificados</strong> para correr virtualizados. El SO invitado usa una <strong>API especial para comunicarse con la capa de virtualización</strong>, lo que le da un acceso <strong>relativamente directo al hardware</strong> y <strong>mejora el rendimiento</strong>. Ejemplos: el hipervisor <strong>Xen</strong> cuando funciona <strong>sin soporte hardware</strong> para la virtualización, o <strong>IBM LPAR</strong>.</p>
+<h2>3.3.6 Hipervisores</h2>
+<p>Es una <strong>capa de virtualización muy ligera</strong> que se carga <strong>directamente sobre el hardware, sin SO anfitrión</strong> (<strong>hipervisor de tipo 1</strong> o <em><strong>bare-metal</strong></em>). El hipervisor crea las máquinas virtuales, y sobre ellas corren los SO invitados. Son <strong>más ligeros y eficientes</strong> que el enfoque de anfitriones. Ejemplos: <strong>VMware ESXi</strong> (antes ESX), <strong>Xen 3.0</strong> y <strong>Hyper-V</strong> de Microsoft.</p>
+<p><img src="../../../img/enco/enco-t3-hipervisor.png" alt="Hipervisor bare-metal|450" loading="lazy">
+<em>Cinco máquinas virtuales con SO distintos (Solaris, Windows, Red Hat, SUSE, Windows) sobre la capa de virtualización, que corre directamente sobre el hardware x86.</em></p>
+<table>
+<thead>
+<tr>
+<th>Forma</th>
+<th>¿SO distintos?</th>
+<th>Rendimiento</th>
+<th>Ejemplos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Emulación</td>
+<td>Sí (incluso otra CPU)</td>
+<td>Muy bajo</td>
+<td>QEMU</td>
+</tr>
+<tr>
+<td>Particionamiento hardware</td>
+<td>No (mismo SO)</td>
+<td>Alto</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Nivel de SO</td>
+<td>No (mismo SO)</td>
+<td>Muy alto (overhead mínimo)</td>
+<td>Solaris Containers, Virtuozzo</td>
+</tr>
+<tr>
+<td>Anfitriones (tipo II)</td>
+<td>Sí</td>
+<td>Bajo en E/S</td>
+<td>VirtualBox, VMware Server</td>
+</tr>
+<tr>
+<td>Paravirtualización</td>
+<td>Sí (SO modificado)</td>
+<td>Alto</td>
+<td>Xen sin soporte HW, IBM LPAR</td>
+</tr>
+<tr>
+<td>Hipervisor (tipo 1)</td>
+<td>Sí</td>
+<td>Alto</td>
+<td>VMware ESXi, Xen 3.0, Hyper-V</td>
+</tr>
+</tbody>
+</table>
+<h2>3.3.7 Soporte hardware en x86</h2>
+<p>La arquitectura x86 tiene <strong>4 niveles de privilegio</strong> (<em>rings</em>), <strong>del 0 al 3</strong>: el <strong>SO corre en el nivel 0</strong> (el de más privilegio) y las <strong>aplicaciones en el 3</strong>. Para virtualizar, el <strong>hipervisor solía ocupar el nivel 0</strong> y <strong>desplazaba al SO al nivel 1</strong> o incluso al 3 (paravirtualización en Xen), modificándolo para que <strong>no accediera al nivel 0 sin pasar por el hipervisor</strong>.</p>
+<p>Las extensiones <strong>Intel VT</strong> (<em>Virtualization Technology</em>) y <strong>AMD-V</strong> resuelven esto <strong>añadiendo un nivel -1</strong> para el hipervisor: así el <strong>SO puede seguir en el nivel 0</strong> y las <strong>aplicaciones en el 3</strong>, sin modificar nada.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el portero del edificio</p>
+<p>El nivel 0 es la llave maestra del edificio, y el SO está acostumbrado a tenerla. Antes, para poner un hipervisor, había que quitarle la llave al SO y dársela al portero (el hipervisor), y el SO tenía que pedírsela cada vez. Con VT-x/AMD-V se crea un nivel por encima (-1), una &quot;llave del propietario&quot;: el SO conserva su llave maestra y el hipervisor vigila desde arriba.</p>
+</div>
+<h2>3.3.8 Contenedores</h2>
+<p>Un <strong>contenedor</strong> incluye <strong>todo lo necesario para ejecutar un pequeño programa</strong>: el <strong>código</strong>, sus <strong>dependencias</strong> e incluso partes del <strong>sistema operativo</strong>, lo que permite ejecutarlo <strong>casi en cualquier sitio</strong>. Depende del <strong>SO del host</strong> y de una <strong>herramienta que gestiona los contenedores</strong>, como <strong>Docker</strong>.</p>
+<p>Cada contenedor <strong>comparte el kernel del SO del host</strong> y, normalmente, sus <strong>binarios y bibliotecas</strong>, que son <strong>de solo lectura</strong>. Al compartir estos recursos, apenas hay que replicar código del SO en el contenedor, así que los contenedores son <strong>excepcionalmente ligeros</strong>.</p>
+<p><img src="../../../img/enco/enco-t3-vm.png" alt="Máquina virtual|260" loading="lazy"> <img src="../../../img/enco/enco-t3-contenedor.png" alt="Contenedor|260" loading="lazy">
+<em>Izquierda: cada VM lleva su propio SO invitado (Guest OS) sobre el hipervisor. Derecha: los contenedores comparten el SO del host a través de Docker y solo llevan la aplicación y sus bibliotecas.</em></p>
+<p>La <strong>diferencia principal</strong>: al virtualizar un SO se instala y ejecuta <strong>el 100% del SO</strong> (kernel, entorno, librerías, dependencias...); con contenedores solo se crea <strong>lo mínimo</strong> (librerías y dependencias necesarias para la tarea). Los contenedores convienen cuando se necesita <strong>una aplicación concreta</strong> o <strong>varias instancias de un servidor</strong> (por ejemplo, varios servidores web <strong>Apache</strong>).</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=VMECP5X9mTs">¿Virtualización vs contenedores? Máquinas virtuales vs Docker</a> — la diferencia de fondo entre ambos enfoques (vídeo, 7:30).</p>
+</div>
+<h1>3.4 Gestión de entornos virtualizados</h1>
+<p>Con la virtualización y la consolidación, <strong>el número de servidores (virtuales) se multiplica</strong>, aparecen <strong>nuevas tareas de administración</strong> y hacen falta <strong>herramientas de gestión adaptadas</strong>. Necesitan cuatro funcionalidades:</p>
+<p><strong>Gestión y monitorización de recursos.</strong> Como los recursos están <strong>compartidos</strong>, hay que saber <strong>en cada momento cuánto se usa</strong> de cada uno para <strong>balancearlos</strong>, asignando CPU, memoria, etc., a las VMs que lo necesiten, y poder <strong>añadir o quitar recursos</strong>, mejor <strong>en caliente</strong> (sin parar).</p>
+<p><strong>Mover máquinas virtuales en caliente.</strong> Para balancear la carga entre servidores físicos y dar recursos a las VMs que los piden, interesa <strong>mover VMs de un servidor físico a otro</strong>. Algunos productos lo hacen <strong>en caliente</strong> (VMware), otros <strong>requieren parar la VM</strong> y otros <strong>no lo permiten</strong>.</p>
+<p><strong>Utilidades de migración.</strong> Migrar es <strong>pasar de un entorno a otro</strong>. El caso más útil es de <strong>físico a virtual (P2V)</strong>: se <strong>congela el estado del servidor físico</strong> (<em>snapshot</em>) y se lleva al entorno virtual. Si la virtualización no da los resultados esperados, se puede volver con <strong>virtual a físico (V2P)</strong>. También existen herramientas <strong>físico a físico (P2P)</strong> y <strong>virtual a virtual (V2V)</strong>; estas últimas se confunden con las de mover VMs.</p>
+<p><strong>Administración basada en políticas (reglas).</strong> Ante <strong>eventos inesperados</strong> (normalmente fallos), puede hacer falta aplicar <strong>una secuencia de cambios que afecta a gran parte del sistema</strong>. Por eso conviene que las herramientas apliquen esos cambios <strong>automáticamente</strong>, siguiendo <strong>reglas definidas de antemano</strong>, sin intervención de los administradores.</p>
+<h1>3.5 Otros tipos de virtualización</h1>
+<ul>
+<li><strong>Del almacenamiento</strong>: una <strong>capa de abstracción</strong> entre el almacenamiento y los servidores, que <strong>elimina la asignación de discos físicos concretos</strong> a cada servidor; <strong>optimiza el uso del disco</strong>, añade <strong>RAID</strong> y otras funciones y <strong>facilita migrar VMs</strong> entre servidores físicos.</li>
+<li><strong>De redes</strong>: se <strong>comparten las conexiones</strong> y otros dispositivos de red.</li>
+<li><strong>De E/S</strong>: en servidores <strong>blade</strong>, se instalan <strong>menos dispositivos que servidores</strong> y se <strong>comparten de forma transparente</strong> (ver <a href="1-formatos-de-servidores-racks-y-blades.html">tema 1</a>).</li>
+</ul>
+<h1>3.6 De los mainframes al cloud: un viaje de ida y vuelta</h1>
+<p>Los <strong>mainframes</strong> fueron clave en los <strong>años 60 y 70</strong>: <strong>centralizaban todo el procesamiento</strong>, con <strong>E/S especializada</strong>. En ellos nacieron innovaciones que <strong>muchos años después</strong> llegaron a los microordenadores: las <strong>memorias caché</strong>, la <strong>memoria virtual</strong> y la <strong>virtualización</strong>.</p>
+<p><strong>La huida de los mainframes.</strong> En la era del mainframe, este hacía <strong>todas las operaciones</strong>, incluso atender teclados y pantallas; con el tiempo, parte del trabajo pasó a los terminales. En los <strong>años 70</strong> llegaron los <strong>microordenadores</strong> basados en microprocesadores; en <strong>1981</strong>, el <strong>PC de IBM</strong> desató el boom de los ordenadores personales, y en <strong>1982</strong>, <strong>Sun Microsystems</strong> lanzó las <strong>estaciones de trabajo en red</strong>. Después vino la <strong>era cliente/servidor</strong>: casi todos trabajaban con PCs, y para <strong>compartir ficheros</strong> surgieron las <strong>redes de área local</strong> y los <strong>servidores de ficheros</strong>; <strong>Internet</strong> fue el apogeo de este modelo.</p>
+<p><strong>La vuelta a los mainframes.</strong> El modelo cliente/servidor trajo problemas: <strong>administrar cientos o miles de PCs</strong>, <strong>falta de estandarización</strong> y <strong>proliferación de clientes</strong>. Llegó así la <strong>era de la consolidación</strong>: las aplicaciones corren <strong>en los servidores</strong>, con <strong>mínimos problemas de compatibilidad</strong>, gracias a la <strong>consolidación y la virtualización</strong>, hasta construir <strong>grandes CPDs para cloud computing</strong>. Es una <strong>vuelta al concepto de mainframe</strong> y la <strong>decadencia del ordenador personal</strong>.</p>
+<p>El <strong>cloud computing</strong> es la <strong>última tendencia del procesamiento centralizado</strong>: las empresas que gestionan grandes CPDs ofrecen <strong>infraestructura (IaaS)</strong>, como AWS, Microsoft Azure y Google Compute Engine; <strong>plataformas (PaaS)</strong>, como Google App Engine y Windows Azure, y <strong>software (SaaS)</strong>, como Google Apps y Dropbox.</p>
+<p>En resumen, la <strong>centralización</strong> facilita la administración, y la <strong>consolidación</strong> aprovecha mejor los recursos: un servidor que funcionaba <strong>entre el 20% y el 90%</strong> de su capacidad pasa a estar <strong>compartido por 2 a 5 VMs</strong>, y los discos con distintos niveles de uso, consolidados, <strong>aumentan la capacidad lógica</strong> del sistema. La tecnología ha evolucionado <strong>de forma cíclica</strong>: los PCs dieron <strong>libertad</strong>, y la centralización <strong>reduce los costes de adquisición y administración</strong>.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el péndulo</p>
+<p>Es como un péndulo: de todo centralizado (mainframe) a todo repartido (un PC por persona) y de vuelta a centralizado (la nube), porque cada extremo resuelve los problemas del anterior y crea los suyos.</p>
+</div>
+<h1>3.7 Fisicalización</h1>
+<p>La consolidación también tiene <strong>problemas</strong>: <strong>aumenta la densidad de calor</strong> en los racks, el <strong>hardware específico para servidores es muy caro</strong>, y <strong>muchas aplicaciones no necesitan gran potencia de cálculo, pero sí mucho ancho de banda</strong> para mover datos.</p>
+<p>La <strong>fisicalización</strong> es la propuesta contraria de <strong>Rackable Systems</strong> (hoy <strong>SGI</strong>): crear un <strong>nuevo formato de servidor con hardware barato y de bajo consumo</strong> y <strong>eliminar la virtualización</strong>, de modo que <strong>cada proceso corra en su propio servidor físico</strong>. Está indicada para <strong>buscadores de Internet</strong> y <strong>servidores web que consultan una base de datos</strong>.</p>
+<p>Estos servidores, llamados <strong>microservidores</strong> (un formato que se intenta estandarizar), meten <strong>varios servidores en 1U</strong>, mantienen <strong>cierto soporte para virtualización</strong>, usan <strong>procesadores baratos y de bajo consumo</strong> y consumen <strong>menos de 10 kW por rack</strong>. El ahorro viene de usar componentes de consumo: un <strong>Xeon</strong> puede costar <strong>el triple</strong> que su equivalente casi idéntico <strong>Core i7</strong>; un disco <strong>SATA</strong> puede ser <strong>5 veces más barato</strong> que uno <strong>SAS o Fibre Channel</strong>, y la <strong>memoria para servidores</strong> es bastante más cara que la convencional.</p>
+<p>Hoy los ofrecen empresas como <strong>HP</strong> o <strong>Dell</strong>. Un ejemplo es el <strong>Dell Fortuna (2009)</strong>: un <strong>chasis de 2U</strong> con dos opciones, <strong>12 discos en el frontal y 12 servidores detrás</strong> o <strong>18 servidores</strong>; procesadores <strong>VIA Nano</strong>; cada servidor consume <strong>solo 29 W (15 W en reposo)</strong>, incluye <strong>memoria y 2 interfaces Ethernet</strong> y cuesta <strong>unos 400 $</strong>.</p>
+<p><img src="../../../img/enco/enco-t3-dell-fortuna-modulo.png" alt="Módulo de un microservidor Dell Fortuna|260" loading="lazy"> <img src="../../../img/enco/enco-t3-dell-fortuna-placa.png" alt="Placa del servidor|300" loading="lazy">
+<em>Cada servidor es un módulo extraíble con su disco y una placa mínima.</em></p>
+<h1>3.8 Ideas clave</h1>
+<ul>
+<li><strong>Virtualización</strong> (1 físico → varios virtuales), <strong>agregación</strong> (varios físicos → 1 sistema, p. ej. clúster), <strong>consolidación</strong> (muchos físicos infrautilizados → menos físicos).</li>
+<li>Origen en los <strong>mainframes</strong>; <strong>VMware</strong> la lleva al PC en <strong>2001</strong>.</li>
+<li>Formas: <strong>emulación</strong> (otra CPU, muy lenta; QEMU), <strong>particionamiento HW</strong> (mismo SO), <strong>nivel de SO</strong> (mismo SO, overhead mínimo; Solaris Containers, Virtuozzo), <strong>hosted/tipo II</strong> (SO distintos, E/S lenta; VirtualBox), <strong>paravirtualización</strong> (SO modificado; Xen, IBM LPAR), <strong>hipervisor tipo 1/bare-metal</strong> (ESXi, Xen, Hyper-V).</li>
+<li>x86: rings 0-3; <strong>Intel VT / AMD-V</strong> añaden el <strong>nivel -1</strong> para el hipervisor.</li>
+<li><strong>Contenedores</strong>: comparten el kernel del host (solo lectura), muy ligeros; VM = 100% del SO.</li>
+<li>Gestión: monitorizar recursos, <strong>mover VMs en caliente</strong>, migración <strong>P2V, V2P, P2P, V2V</strong>, administración por <strong>políticas</strong>.</li>
+<li>Otras virtualizaciones: almacenamiento, redes, E/S.</li>
+<li>Historia <strong>cíclica</strong>: mainframe → PC/cliente-servidor → consolidación/cloud (IaaS, PaaS, SaaS).</li>
+<li><strong>Fisicalización</strong>: lo contrario, un proceso por servidor físico barato (<strong>microservidores</strong>, Dell Fortuna: 29 W, ~400 $).</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="2-centros-de-procesamiento-de-datos-cpds.html"><span class="nav-etiqueta">← anterior</span>2. Centros de Procesamiento de Datos (CPDs)</a>
+  <a class="nav-siguiente" href="4-dispositivos-de-almacenamiento.html"><span class="nav-etiqueta">siguiente →</span>4. Dispositivos de Almacenamiento</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

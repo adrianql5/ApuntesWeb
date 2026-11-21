@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="4. Dispositivos de Almacenamiento — apuntes de ENCO (cuarto curso de Ingeniería Informática).">
+<title>4. Dispositivos de Almacenamiento · ENCO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enco</a><span class="miga-sep">/</span><span aria-current="page">4-dispositivos-de-almacenamiento</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENCO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENCO</a></p><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><span class="actual" aria-current="page">4. Dispositivos de Almacenamiento</span></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENCO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>4 / 6</div>
+    </div>
+    <h1>Dispositivos de Almacenamiento</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENCO · 4/6</summary><ol><li><a href="1-formatos-de-servidores-racks-y-blades.html">1. Formatos de Servidores - Racks y Blades</a></li><li><a href="2-centros-de-procesamiento-de-datos-cpds.html">2. Centros de Procesamiento de Datos (CPDs)</a></li><li><a href="3-virtualizacion-de-servidores.html">3. Virtualización de Servidores</a></li><li><span aria-current="page">4. Dispositivos de Almacenamiento</span></li><li><a href="5-subsistemas-de-disco.html">5. Subsistemas de Disco</a></li><li><a href="6-fibre-channel-y-redes-san.html">6. Fibre Channel y redes SAN</a></li></ol></details>
+  <div class="prosa">
+<h1>4.1 Por qué importa el almacenamiento</h1>
+<p>Durante <strong>tres décadas</strong> la industria del almacenamiento estuvo <strong>estancada</strong>: cambiaron las interfaces y creció la capacidad de los discos, pero la <strong>velocidad de los discos duros (HDD) apenas varió en 30 años</strong>. Mientras tanto, el rendimiento de las <strong>CPUs</strong>, siguiendo la <strong>ley de Moore</strong>, mejoró <strong>aproximadamente un millón de veces</strong>. Para compensar unos discos de rendimiento casi constante se <strong>aumentó el número de unidades</strong> y se usó <strong>RAID</strong>.</p>
+<p>La solución llegó con los <strong>discos de estado sólido (SSD)</strong>, que han cambiado los patrones de E/S para siempre: se pasa de unas <strong>300 IOPS</strong> (operaciones de entrada/salida por segundo) a <strong>40.000-400.000 IOPS</strong>.</p>
+<p><img src="../../../img/enco/enco-t4-rendimiento-cpu-hdd-ssd.jpeg" alt="Rendimiento relativo CPU, HDD y SSD|500" loading="lazy">
+<em>Escala logarítmica, tomando como base un HDD de 1984: hasta 2017 la CPU mejora 4.000.000×, las IOPS de un HDD solo 5× y las de un SSD 55.000×.</em></p>
+<div class="callout callout-note">
+<p class="callout-titulo">El texto de la diapositiva dice que la CPU mejoró &quot;un millón de veces&quot;; la gráfica marca 4.000.000×. El orden de magnitud es el mismo.</p>
+</div>
+<p>El almacenamiento es hoy un <strong>elemento central</strong> de muchos CPDs, y su <strong>gestión es más difícil que la del procesamiento</strong>, hasta el punto de hablarse de una <strong>filosofía centrada en el almacenamiento</strong>. Algunas cifras:</p>
+<ul>
+<li>El volumen mundial de datos crece <strong>un 25% al año</strong>, hasta <strong>527 ZB/año en 2029</strong> (1 ZB = <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">21</span></span></span></span></span></span></span></span></span></span></span></span></eq> bytes).</li>
+<li>El <strong>89%</strong> de los datos de los CPDs de los grandes proveedores cloud está en <strong>discos duros (HDD)</strong>.</li>
+<li>El <strong>99%</strong> de las organizaciones, según una encuesta de <strong>Seagate (2026)</strong>, espera que la <strong>IA aumente sus necesidades de almacenamiento</strong> en los próximos tres años.</li>
+</ul>
+<p><img src="../../../img/enco/enco-t4-jerarquia-memoria.png" alt="Jerarquía de almacenamiento|450" loading="lazy">
+<em>De arriba abajo, cada nivel es más grande, más barato por byte y más lento: cachés L1-L3 (nanosegundos), memoria principal (DRAM), almacenamiento secundario (SSD y HDD), almacenamiento en red y archivo/backup en cinta (hasta segundos).</em></p>
+<h1>4.2 Discos magnéticos (HDD)</h1>
+<p>Los HDD <strong>siguen siendo la tecnología dominante</strong>, aunque cabe preguntarse <strong>por cuánto tiempo</strong>. Su <strong>densidad</strong> no ha dejado de crecer (<strong>1,4 Tbits por pulgada²</strong> en 2015, Seagate) gracias a mejoras como la <strong>grabación magnética asistida por calor (HAMR)</strong>, los <strong>medios con bits modelados (BPM)</strong> y la <strong>grabación magnética en tejas (SMR)</strong>, que solapa ligeramente las pistas como las tejas de un tejado para meter más.</p>
+<p>La alternativa son los <strong>SSD</strong>: <strong>menos capacidad</strong> y <strong>más caros</strong>, pero con <strong>muy buena velocidad y consumo</strong>. Se usan en ciertas aplicaciones y se espera que <strong>convivan</strong> con los HDD.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://en.wikipedia.org/wiki/Heat-assisted_magnetic_recording">Heat-assisted magnetic recording</a> y <a href="https://en.wikipedia.org/wiki/Patterned_media">Patterned media</a> (artículos, inglés; enlazados en las diapositivas). El vídeo sobre SMR de las diapositivas ya no está disponible públicamente; la alternativa es <a href="https://en.wikipedia.org/wiki/Shingled_magnetic_recording">Shingled magnetic recording</a>.</p>
+</div>
+<h2>4.2.1 Estructura física</h2>
+<p>Un HDD tiene varios <strong>platos</strong> apilados que giran, y un <strong>brazo con una cabeza</strong> de lectura/escritura por cada superficie. Cada plato se divide en <strong>pistas</strong> concéntricas, y cada pista en <strong>sectores</strong>; el conjunto de pistas que están a la misma distancia del centro en todos los platos forma un <strong>cilindro</strong>. El <strong>número de sectores por pista depende de lo cerca que esté del centro</strong> (las pistas exteriores, más largas, tienen más).</p>
+<p><img src="../../../img/enco/enco-t4-estructura-hdd.png" alt="Estructura física de un HDD|450" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=DILf-NOaT78">Cómo funciona un disco duro (por dentro)</a> — los platos, las cabezas y la electrónica de un disco real abierto (vídeo, 5:40).</p>
+</div>
+<h2>4.2.2 Prestaciones</h2>
+<p>El rendimiento de un HDD depende de dos cosas. La <strong>velocidad de acceso</strong> suma el <strong>tiempo de búsqueda</strong> (mover la cabeza hasta la pista), el <strong>tiempo de asentamiento</strong> de la cabeza (llegar al sector) y la <strong>latencia</strong> (esperar a que los datos pasen bajo la cabeza al girar). La <strong>tasa de transferencia</strong> depende de la <strong>velocidad de giro</strong> y de la <strong>interfaz</strong> que envía los datos una vez leídos (en servidores, SATA, SCSI, SAS o FC; en el hogar, SATA, Wi-Fi, USB, FireWire...).</p>
+<p><strong>La velocidad de giro es el factor más importante</strong>: va de <strong>4.200 a 15.000 rpm</strong>, y en la mayoría de CPDs se usan <strong>7.200, 10.000 y 15.000 rpm</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>RPM</th>
+<th>Latencia (ms)</th>
+<th>Búsqueda media (ms)</th>
+<th>IOPS</th>
+<th>IOPS optimizadas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>15.000</td>
+<td>2</td>
+<td>4,6</td>
+<td>150</td>
+<td>300</td>
+</tr>
+<tr>
+<td>7.200</td>
+<td>4,2</td>
+<td>8</td>
+<td>82</td>
+<td>164</td>
+</tr>
+<tr>
+<td>5.400</td>
+<td>5,6</td>
+<td>10</td>
+<td>64</td>
+<td>128</td>
+</tr>
+</tbody>
+</table>
+<p>Un disco de <strong>15.000 rpm</strong> es aproximadamente <strong>el doble de rápido</strong> que uno de <strong>7.200 rpm</strong>, pero aun así sus tiempos de acceso son del orden de <strong>6-7 ms</strong> (una eternidad para una CPU). Las mejoras vinieron de los <strong>buses serie</strong> (SAS/SATA) y de discos <strong>más &quot;inteligentes&quot;</strong>, que leen <strong>un conjunto de comandos y los ejecutan en el orden óptimo</strong> para maximizar las IOPS (por eso la columna &quot;optimizadas&quot; duplica las IOPS): <strong>Native Command Queuing (NCQ)</strong> en SATA y <strong>Tagged Command Queuing (TCQ)</strong> en SAS.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el repartidor</p>
+<p>Si un repartidor entrega los paquetes en el orden en que se los dieron, cruza la ciudad de punta a punta varias veces. Si los reordena por calles (NCQ/TCQ), hace la misma ruta en la mitad de tiempo. La cabeza del disco es el repartidor y las pistas son las calles.</p>
+</div>
+<h2>4.2.3 Formatos y fiabilidad</h2>
+<p>Los <strong>factores de forma</strong> (anchura del disco) más comunes son <strong>3,5 y 2,5 pulgadas</strong>.</p>
+<p>En fiabilidad, el <strong>MTBF</strong> (tiempo medio entre fallos) de los discos <strong>SCSI</strong> es de <strong>1.500.000 horas</strong> y el de los <strong>SATA</strong>, de <strong>600.000 horas</strong>, aunque hay versiones SATA para servidores con fiabilidad comparable a SCSI. En un CPD fallan <strong>entre el 0,70% y el 0,78% de los discos al año</strong>. Los errores se <strong>corrigen con códigos CRC</strong>, y los fallos se <strong>predicen</strong> con <strong>SMART</strong> en SATA y <strong>mediante comandos</strong> en SCSI.</p>
+<h1>4.3 Discos de estado sólido (SSD)</h1>
+<p>Los SSD <strong>reemplazan</strong> a los discos tradicionales <strong>usando las mismas interfaces</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Ventajas</th>
+<th>Desventajas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mayor velocidad</strong> de acceso</td>
+<td><strong>Menor capacidad</strong></td>
+</tr>
+<tr>
+<td><strong>Menor consumo</strong> y <strong>menos calor</strong></td>
+<td><strong>Mayor coste</strong></td>
+</tr>
+<tr>
+<td><strong>Menor peso</strong> y <strong>menos ruido</strong></td>
+<td>Más <strong>difícil recuperar datos</strong> si fallan</td>
+</tr>
+<tr>
+<td><strong>Mayor MTBF</strong> (2 millones de horas)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Comparativa de un SSD y un HDD empresariales de la misma época:</p>
+<table>
+<thead>
+<tr>
+<th>Atributo</th>
+<th>SSD</th>
+<th>HDD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tamaño</td>
+<td>2,5&quot;</td>
+<td>2,5&quot;</td>
+</tr>
+<tr>
+<td>Capacidad</td>
+<td>100/200/400 GB</td>
+<td>146/300 GB</td>
+</tr>
+<tr>
+<td>Medio</td>
+<td>SLC NAND</td>
+<td>1-2 discos / 2-4 cabezas</td>
+</tr>
+<tr>
+<td>Interfaz</td>
+<td>SAS 6 Gbps</td>
+<td>SAS 6 Gbps</td>
+</tr>
+<tr>
+<td>Tiempo medio de acceso</td>
+<td><strong>0,1 ms</strong></td>
+<td>3,0 ms (lectura) / 2,7 ms (escritura)</td>
+</tr>
+<tr>
+<td>Lectura aleatoria (IOPS)</td>
+<td><strong>90.000</strong></td>
+<td>385</td>
+</tr>
+<tr>
+<td>Escritura aleatoria (IOPS)</td>
+<td><strong>16.000</strong></td>
+<td>325</td>
+</tr>
+<tr>
+<td>Lectura secuencial (64 K)</td>
+<td>500 MB/s</td>
+<td>200 MB/s</td>
+</tr>
+<tr>
+<td>Escritura secuencial (64 K)</td>
+<td>250 MB/s</td>
+<td>200 MB/s</td>
+</tr>
+<tr>
+<td>MTBF</td>
+<td>2,0 millones de horas</td>
+<td>1,6 millones de horas</td>
+</tr>
+<tr>
+<td>Errores de lectura irrecuperables</td>
+<td>1 por <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">17</span></span></span></span></span></span></span></span></span></span></span></span></eq></td>
+<td>1 por <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">16</span></span></span></span></span></span></span></span></span></span></span></span></eq></td>
+</tr>
+<tr>
+<td>Tensión</td>
+<td>5/12 V</td>
+<td>5/12 V</td>
+</tr>
+<tr>
+<td>Consumo en reposo</td>
+<td>&lt; 1 W</td>
+<td>4,5 W</td>
+</tr>
+<tr>
+<td>Consumo en funcionamiento</td>
+<td>6,5 W</td>
+<td>8,7 W</td>
+</tr>
+<tr>
+<td>Ruido</td>
+<td>0 dB</td>
+<td>3,3 dB</td>
+</tr>
+<tr>
+<td>Peso</td>
+<td>152 g</td>
+<td>220 g</td>
+</tr>
+<tr>
+<td>Garantía</td>
+<td>5 años</td>
+<td>5 años</td>
+</tr>
+<tr>
+<td>Coste/GB</td>
+<td><strong>0,47-1 $</strong></td>
+<td><strong>0,04-0,075 $</strong></td>
+</tr>
+</tbody>
+</table>
+<p>La diferencia clave está en el <strong>acceso aleatorio</strong>: el SSD da <strong>más de 200 veces</strong> las IOPS del HDD, porque no tiene partes móviles. En lectura <strong>secuencial</strong> la ventaja es mucho menor, y el HDD sigue siendo <strong>más de 10 veces más barato por GB</strong>.</p>
+<h2>4.3.1 Tecnología NAND Flash</h2>
+<p>Los SSD usan <strong>memoria NAND Flash</strong>, cuyas celdas se distinguen por cuántos bits guardan:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Bits por celda</th>
+<th>Escrituras soportadas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SLC</strong> (<em>single-level cell</em>)</td>
+<td>1</td>
+<td>hasta <strong>100.000</strong></td>
+</tr>
+<tr>
+<td><strong>MLC</strong> (<em>multi-level cell</em>)</td>
+<td>2</td>
+<td><strong>3.000</strong></td>
+</tr>
+<tr>
+<td><strong>eMLC</strong> (MLC para empresas)</td>
+<td>2</td>
+<td>hasta <strong>30.000</strong></td>
+</tr>
+<tr>
+<td><strong>TLC</strong> (<em>triple-level</em>) y <strong>QLC</strong> (<em>quad-level</em>)</td>
+<td>3 y 4</td>
+<td>(más capacidad, menos escrituras)</td>
+</tr>
+</tbody>
+</table>
+<p>Cuantos más bits por celda, <strong>más capacidad y menor coste</strong>, pero <strong>menos escrituras</strong> aguanta la celda.</p>
+<p><img src="../../../img/enco/enco-t4-ssd-placa.jpeg" alt="SSD por dentro|400" loading="lazy">
+<em>Interfaz SATA, controlador y chips de memoria NAND Flash en la placa del SSD.</em></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=5S_gUbzVdh8">SLC, MLC, TLC and QLC — SSD Flash Memory Explained</a> — por qué guardar más bits por celda reduce la vida útil (vídeo, 1:20, inglés).</p>
+</div>
+<h2>4.3.2 Problemas: write amplification y wear leveling</h2>
+<p>En un SSD <strong>los datos no se pueden sobrescribir</strong>: una página escrita no se puede reescribir hasta <strong>borrar el bloque entero</strong> que la contiene. Así, para modificar unas páginas, se escriben las <strong>versiones nuevas en páginas libres</strong>, las antiguas quedan <strong>inválidas</strong> y, cuando no quedan páginas libres, hay que <strong>copiar las válidas a otro bloque y borrar el antiguo</strong> (<em>garbage collection</em>). Esto provoca la <strong>amplificación de escritura</strong> (<em>write amplification</em>): el disco escribe físicamente <strong>más datos de los que pidió el usuario</strong>.</p>
+<p><img src="../../../img/enco/enco-t4-ssd-escritura.png" alt="Escritura en un SSD|500" loading="lazy">
+<em>1: se escriben 4 páginas (A-D) en el bloque X. 2: se escriben 4 páginas nuevas (E-H) y versiones nuevas de A-D (A'-D'); las originales quedan inválidas. 3: para recuperar el espacio, las páginas válidas se copian al bloque Y y el bloque X se borra entero.</em></p>
+<p>Además, <strong>los bloques se estropean si se escriben muchas veces</strong>, así que hay que <strong>repartir las escrituras por todo el disco</strong> para que se desgasten por igual: es el <strong>wear leveling</strong> (nivelación del desgaste).</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la libreta con bolígrafo</p>
+<p>Un SSD es como una libreta escrita a bolígrafo que solo se puede &quot;borrar&quot; arrancando la hoja entera. Para corregir una línea, la reescribes en una hoja nueva y tachas la vieja; cuando la libreta se llena de tachones, pasas a limpio lo útil y arrancas las hojas (garbage collection). Y si siempre escribieras en la misma hoja, se rompería antes: por eso se reparte el uso entre todas (wear leveling).</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://en.wikipedia.org/wiki/Write_amplification">Write amplification</a> y <a href="https://en.wikipedia.org/wiki/Wear_leveling">Wear leveling</a> (artículos, inglés; enlazados en las diapositivas).</p>
+</div>
+<h1>4.4 Conexión de los discos</h1>
+<h2>4.4.1 Camino de E/S entre la CPU y el almacenamiento</h2>
+<p>Los datos viajan de la <strong>RAM</strong> a los discos atravesando <strong>tres buses</strong>:</p>
+<ul>
+<li>El <strong>bus del sistema</strong> conecta <strong>CPU y RAM</strong>: muy rápido (frecuencia y ancho de banda), pero admite <strong>pocos dispositivos</strong> y es <strong>corto</strong>.</li>
+<li>Como el resto de dispositivos <strong>no caben</strong> en el bus del sistema (limitaciones físicas), se conectan al <strong>bus de E/S del host</strong>, cuya tecnología más extendida es <strong>PCI</strong>. Un chip <strong>puente</strong> (<em>bridge</em>) une ambos buses.</li>
+<li>Los discos se conectan al servidor a través de un <strong>HBA</strong> (<em>Host Bus Adapter</em>, adaptador de bus del host) o de un controlador en la placa, y la conexión entre ese controlador y el disco es el <strong>bus de E/S</strong>.</li>
+</ul>
+<p>La comunicación con los periféricos la gestionan los <strong>drivers</strong>, que son en parte programas en la CPU y en parte circuitos (<strong>ASICs</strong>) de la placa (como un controlador SCSI) o de tarjetas de expansión PCI.</p>
+<p><img src="../../../img/enco/enco-t4-camino-es.png" alt="Camino de E/S|350" loading="lazy">
+<em>CPUs y RAM en el bus del sistema; el chip puente lo une al bus de E/S del host (PCI, InfiniBand), donde se conectan los HBA (SCSI, Fibre Channel, iSCSI), la tarjeta gráfica y la tarjeta de red, cada uno con su bus de E/S.</em></p>
+<h2>4.4.2 Interfaces</h2>
+<p><strong>Los discos son todos parecidos</strong>, pero los de servidor tienen <strong>estándares de calidad más altos</strong>. Los <strong>PCs y estaciones de trabajo</strong> usan <strong>SATA</strong>; los <strong>discos de gama alta para servidores</strong> usan interfaces de la familia <strong>SCSI</strong>: <strong>SCSI</strong> paralelo, <strong>SAS</strong> (<em>Serial Attached SCSI</em>) y <strong>Fibre Channel</strong>. Para conexiones <strong>externas</strong> se usan <strong>USB</strong>, <strong>FireWire</strong>, <strong>eSATA</strong>, etc.</p>
+<h3>SCSI (<em>Small Computer System Interface</em>)</h3>
+<p>Es un <strong>bus paralelo</strong> compartido por varios dispositivos, con un <strong>protocolo SCSI</strong> que define cómo se comunican. Sus generaciones:</p>
+<table>
+<thead>
+<tr>
+<th>Interfaz</th>
+<th>Bus</th>
+<th>Reloj</th>
+<th>Ancho de banda</th>
+<th>Cable máx.</th>
+<th>Dispositivos máx.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SCSI</td>
+<td>8 bits</td>
+<td>5 MHz</td>
+<td>5 MB/s</td>
+<td>6 m</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Fast SCSI</td>
+<td>8 bits</td>
+<td>10 MHz</td>
+<td>10 MB/s</td>
+<td>1,5-3 m</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Wide SCSI</td>
+<td>16 bits</td>
+<td>10 MHz</td>
+<td>20 MB/s</td>
+<td>1,5-3 m</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Ultra SCSI</td>
+<td>8 bits</td>
+<td>20 MHz</td>
+<td>20 MB/s</td>
+<td>1,5-3 m</td>
+<td>5 a 8</td>
+</tr>
+<tr>
+<td>Ultra Wide SCSI</td>
+<td>16 bits</td>
+<td>20 MHz</td>
+<td>40 MB/s</td>
+<td>1,5-3 m</td>
+<td>5 a 8</td>
+</tr>
+<tr>
+<td>Ultra2 SCSI</td>
+<td>8 bits</td>
+<td>40 MHz</td>
+<td>40 MB/s</td>
+<td>12 m</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Ultra2 Wide SCSI</td>
+<td>16 bits</td>
+<td>40 MHz</td>
+<td>80 MB/s</td>
+<td>12 m</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Ultra3 SCSI</td>
+<td>16 bits</td>
+<td>40 MHz DDR</td>
+<td>160 MB/s</td>
+<td>12 m</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Ultra-320 SCSI</td>
+<td>16 bits</td>
+<td>80 MHz DDR</td>
+<td>320 MB/s</td>
+<td>12 m</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Ultra-640 SCSI</td>
+<td>16 bits</td>
+<td>160 MHz DDR</td>
+<td>640 MB/s</td>
+<td>—</td>
+<td>16</td>
+</tr>
+</tbody>
+</table>
+<p>El ancho de banda sale de multiplicar el ancho del bus por el reloj (y por 2 con DDR): por ejemplo, 16 bits = 2 bytes × 80 MHz × 2 = 320 MB/s en Ultra-320.</p>
+<p>Cada dispositivo del bus tiene un <strong>Target ID</strong>, que también fija su <strong>prioridad</strong> (en un bus de 16, el orden de prioridad es 7 &gt; 6 &gt; ... &gt; 0 &gt; 15 &gt; 14 &gt; ... &gt; 8), y dentro de cada uno puede haber varios <strong>LUN</strong> (<em>Logical Unit Number</em>), por ejemplo cada volumen de un subsistema de discos o cada unidad de una librería de cintas.</p>
+<p><img src="../../../img/enco/enco-t4-scsi-luns.png" alt="Target IDs y LUNs en SCSI|450" loading="lazy"></p>
+<h3>SAS (<em>Serial Attached SCSI</em>)</h3>
+<p>Es la versión <strong>serie</strong> de SCSI:</p>
+<table>
+<thead>
+<tr>
+<th>Interfaz</th>
+<th>Bus</th>
+<th>Reloj</th>
+<th>Ancho de banda</th>
+<th>Cable máx.</th>
+<th>Dispositivos máx.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SSA</td>
+<td>1 bit</td>
+<td>200 MHz</td>
+<td>40 MB/s</td>
+<td>25 m</td>
+<td>96</td>
+</tr>
+<tr>
+<td>SSA 40</td>
+<td>1 bit</td>
+<td>400 MHz</td>
+<td>80 MB/s</td>
+<td>25 m</td>
+<td>96</td>
+</tr>
+<tr>
+<td>FC-AL 1Gb</td>
+<td>1 bit</td>
+<td>1 GHz</td>
+<td>100 MB/s</td>
+<td>0,5-3 km</td>
+<td>127</td>
+</tr>
+<tr>
+<td>FC-AL 2Gb</td>
+<td>1 bit</td>
+<td>2 GHz</td>
+<td>200 MB/s</td>
+<td></td>
+<td>127</td>
+</tr>
+<tr>
+<td>FC-AL 4Gb</td>
+<td>1 bit</td>
+<td>4 GHz</td>
+<td>400 MB/s</td>
+<td></td>
+<td>127</td>
+</tr>
+<tr>
+<td>iSCSI</td>
+<td>—</td>
+<td>—</td>
+<td>Depende de la red</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>SAS 3Gbit</td>
+<td>1 bit</td>
+<td>3 GHz</td>
+<td>300 MB/s</td>
+<td>6-8 m</td>
+<td>16.256</td>
+</tr>
+<tr>
+<td>SAS 6Gbit</td>
+<td>1 bit</td>
+<td>6 GHz</td>
+<td>600 MB/s</td>
+<td>10 m</td>
+<td>16.256</td>
+</tr>
+</tbody>
+</table>
+<p>Las versiones más nuevas son <strong>SAS-3 a 12 Gbit/s (1.200 MB/s)</strong> y <strong>SAS-4 a 22,5 Gbit/s</strong>. Sus características:</p>
+<ul>
+<li>Conexiones <strong>punto a punto full duplex</strong> (envía y recibe a la vez): <strong>no se comparte el ancho de banda</strong>, salvo si se usa un <strong>expansor</strong>.</li>
+<li>Hasta <strong>16.256 dispositivos por puerto</strong> y <strong>65.536 en total</strong>.</li>
+<li>Usa <strong>los mismos comandos que SCSI</strong> y <strong>permite conectar discos SATA</strong>.</li>
+<li>Identifica los dispositivos con <strong>World Wide Names (WWN)</strong> en lugar de IDs SCSI.</li>
+</ul>
+<p><img src="../../../img/enco/enco-t4-sas-arquitectura.png" alt="Arquitectura de capas de SAS|400" loading="lazy">
+<em>Capas de SAS de arriba abajo: aplicación (SCSI, ATA, gestión), transporte (SSP, STP, SMP: definen las tramas), puerto, enlace (transmisión de tramas y gestión de la conexión), PHY (codificación 8b/10b) y física (cables, conectores).</em></p>
+<h3>Codificación 8b/10b</h3>
+<p>La usan <strong>PCI Express, FireWire 800, SATA, SAS, Fibre Channel, SSA, Gigabit Ethernet</strong> (no todos), <strong>InfiniBand, DVI y HDMI, DisplayPort, HyperTransport, USB 3.0</strong> y muchos otros. Consiste en transmitir <strong>cada dato de 8 bits como una palabra de 10 bits</strong>. Esa <strong>redundancia</strong> permite <strong>detectar errores</strong>, <strong>incluir palabras de control</strong>, <strong>equilibrar el número de unos y ceros</strong> y <strong>extraer la señal de reloj</strong> de los propios datos, porque <strong>nunca hay más de 5 bits iguales seguidos</strong>. El precio es un 20% de ancho de banda: por eso un enlace de 3 Gbit/s da 300 MB/s y no 375.</p>
+<h3>Fibre Channel (FC)</h3>
+<p>Son los <strong>discos más rápidos y caros</strong>. El protocolo FC permite <strong>transmisión serie de alta velocidad a larga distancia (kilómetros)</strong>, con <strong>baja tasa de errores</strong> y <strong>baja latencia</strong>; el <strong>protocolo FCP se implementa en hardware en el HBA</strong> para no cargar la CPU, y permite <strong>construir redes de almacenamiento</strong> (ver <a href="6-fibre-channel-y-redes-san.html">tema 6</a>).</p>
+<h3>Serial ATA (SATA)</h3>
+<p>Pensado para <strong>equipos domésticos y semiprofesionales</strong>, aunque <strong>por su bajo precio</strong> tiene cierta presencia profesional. Es un <strong>bus serie</strong> como SAS y también usa <strong>8b/10b</strong>. Versiones: <strong>SATA 3 Gbit/s (300 MB/s)</strong> y <strong>SATA 6 Gbit/s (600 MB/s)</strong>.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>SAS</th>
+<th>SATA</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dúplex</td>
+<td><strong>Full duplex</strong></td>
+<td>Half duplex</td>
+</tr>
+<tr>
+<td>Identificación</td>
+<td><strong>WWN</strong></td>
+<td>Por el <strong>puerto</strong></td>
+</tr>
+<tr>
+<td>Cola de comandos</td>
+<td>Tagged Command Queuing</td>
+<td>Native Command Queuing</td>
+</tr>
+<tr>
+<td>Dispositivos</td>
+<td>Discos, CD/DVD, escáneres, impresoras...</td>
+<td>Solo discos y CD/DVD</td>
+</tr>
+<tr>
+<td>Multipath (varias conexiones al mismo disco)</td>
+<td><strong>Sí</strong></td>
+<td>Solo algunas versiones</td>
+</tr>
+<tr>
+<td>Precio</td>
+<td><strong>Bastante más caro</strong></td>
+<td>Barato</td>
+</tr>
+<tr>
+<td>Detección y corrección de errores</td>
+<td><strong>Mejor</strong> (SMART)</td>
+<td>Peor</td>
+</tr>
+<tr>
+<td>Voltaje / longitud de cable</td>
+<td>Más alto / <strong>hasta 10 m</strong></td>
+<td>Más bajo / <strong>1 m</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>4.4.3 SSD PCIe y NVMe</h2>
+<p>Los SSD más rápidos se <strong>conectan directamente al bus PCIe</strong> con la interfaz <strong>NVMe</strong> (la más popular), <strong>evitando el cuello de botella del controlador SATA o SAS</strong>. Hay tres formatos: <strong>U.2</strong> (más caros, con más rendimiento y resistencia, típicos de CPDs), <strong>M.2</strong> (formato muy pequeño que puede usar SATA o PCIe) y <strong>tarjeta PCI Express</strong>.</p>
+<p><img src="../../../img/enco/enco-t4-ssd-pcie.png" alt="SSD típico frente a SSD PCIe|500" loading="lazy">
+<em>En un SSD normal el cuello de botella es la interfaz SATA/SAS; en un SSD PCIe, el controlador o la propia NAND.</em></p>
+<table>
+<thead>
+<tr>
+<th>Interfaz</th>
+<th>IOPS</th>
+<th>Throughput</th>
+<th>Latencia</th>
+<th>Colas</th>
+<th>Comandos por cola</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SATA</td>
+<td>60.000 a 100.000</td>
+<td>6 Gbps</td>
+<td>&lt; 1 ms a &gt; 100 ms</td>
+<td>1</td>
+<td>32</td>
+</tr>
+<tr>
+<td>SAS</td>
+<td>200.000 a 400.000</td>
+<td>12 Gbps</td>
+<td>&lt; 100 µs a &gt; 100 ms</td>
+<td>1</td>
+<td>256</td>
+</tr>
+<tr>
+<td><strong>NVMe</strong></td>
+<td><strong>200.000 a 10.000.000</strong></td>
+<td>16 Gbps (Gen3x16) / 32 Gbps (Gen4x16)</td>
+<td><strong>&lt; 10 µs a 225 µs</strong></td>
+<td><strong>65.535</strong></td>
+<td><strong>65.536</strong></td>
+</tr>
+</tbody>
+</table>
+<h1>4.5 Organización de los discos</h1>
+<ul>
+<li><strong>DAS</strong> (<em>Direct-Attached Storage</em>): discos <strong>conectados directamente</strong> al servidor; conveniente en entornos sencillos.</li>
+<li><strong>JBOD</strong> (<em>Just a Bunch Of Disks</em>): varios discos en el <strong>mismo chasis</strong>, pero <strong>sin organización especial</strong> (cada uno va por su lado, o se concatenan uno detrás de otro).</li>
+<li><strong>MAID</strong> (<em>Massive Array of Inactive Disks</em>): <strong>muchos discos baratos</strong> a los que <strong>rara vez se accede</strong> (se mantienen apagados la mayor parte del tiempo).</li>
+</ul>
+<p><img src="../../../img/enco/enco-t4-jbod-maid.png" alt="JBOD|400" loading="lazy"></p>
+<h2>4.5.1 RAID</h2>
+<p><strong>RAID</strong> (<em>Redundant Array of Independent Disks</em>) es la <strong>forma más eficiente de organizar varios discos</strong>: el controlador los presenta al sistema como <strong>un único disco lógico</strong> (<code>/dev/md0</code> en las figuras) y reparte los datos entre ellos según el <strong>nivel</strong> de RAID.</p>
+<table>
+<thead>
+<tr>
+<th>Nivel</th>
+<th>Nombre</th>
+<th>Idea</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0</strong></td>
+<td><em>Striping</em></td>
+<td>Datos <strong>entrelazados</strong> entre discos</td>
+</tr>
+<tr>
+<td><strong>1</strong></td>
+<td><em>Mirroring</em></td>
+<td>Datos <strong>duplicados</strong></td>
+</tr>
+<tr>
+<td><strong>0+1</strong></td>
+<td><em>Mirrored stripes</em></td>
+<td>Espejo de dos RAID 0</td>
+</tr>
+<tr>
+<td><strong>10</strong></td>
+<td><em>Striped mirrors</em></td>
+<td>Striping sobre parejas en espejo</td>
+</tr>
+<tr>
+<td><strong>3 y 4</strong></td>
+<td>Paridad localizada</td>
+<td>Un disco dedicado a la paridad</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td>Paridad distribuida</td>
+<td>La paridad se reparte entre todos</td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td>Paridad distribuida y duplicada</td>
+<td>Dos paridades distintas</td>
+</tr>
+</tbody>
+</table>
+<p><strong>RAID 0 (striping).</strong> Los bloques se reparten en orden entre los discos: A en el primero, B en el segundo, C en el tercero, D de nuevo en el primero... Como los discos trabajan en paralelo, es <strong>muy rápido</strong> y aprovecha <strong>todo el espacio</strong>, pero <strong>no tiene redundancia</strong>: si falla un disco, <strong>se pierde todo</strong>.</p>
+<p><img src="../../../img/enco/enco-t4-raid0.png" alt="RAID 0|300" loading="lazy"></p>
+<p><strong>RAID 1 (mirroring).</strong> Cada bloque se escribe <strong>igual en dos discos</strong>. Si uno falla, el otro tiene todo, pero se pierde <strong>la mitad del espacio</strong>.</p>
+<p><img src="../../../img/enco/enco-t4-raid1.png" alt="RAID 1|300" loading="lazy"></p>
+<p><strong>RAID 0+1 y RAID 10.</strong> Combinan los dos anteriores. En <strong>0+1</strong> (<em>mirrored stripes</em>) se hacen <strong>dos RAID 0</strong> y se ponen <strong>en espejo</strong>; en <strong>10</strong> (<em>striped mirrors</em>) se hacen <strong>parejas en espejo</strong> y se hace <strong>striping</strong> sobre ellas. RAID 10 es más robusto: si falla un disco, solo se degrada su pareja, mientras que en 0+1 cae toda una mitad.</p>
+<p><img src="../../../img/enco/enco-t4-raid01.jpeg" alt="RAID 0+1|250" loading="lazy"> <img src="../../../img/enco/enco-t4-raid10.jpeg" alt="RAID 10|250" loading="lazy"></p>
+<p><strong>RAID 3 y 4 (paridad localizada).</strong> Los datos se reparten entre varios discos y <strong>un disco dedicado</strong> guarda la <strong>paridad</strong> de cada fila (P_ABC = paridad de A, B y C). Si falla un disco de datos, se <strong>reconstruye con la paridad</strong>. El problema es que <strong>toda escritura toca el disco de paridad</strong>, que se convierte en un cuello de botella.</p>
+<p><img src="../../../img/enco/enco-t4-raid34.png" alt="RAID 3 y 4|300" loading="lazy"></p>
+<p><strong>RAID 5 (paridad distribuida).</strong> Igual que el 4, pero <strong>la paridad se reparte entre todos los discos</strong> (cada fila la guarda un disco distinto), eliminando el cuello de botella. La paridad se calcula con <strong>XOR</strong>:</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">A</span><span class="mord mathnormal mtight" style="margin-right:0.0502em;">B</span><span class="mord mathnormal mtight" style="margin-right:0.0715em;">C</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span></span></span></span></span></eqn></section><p>Para <strong>actualizar</strong> un dato <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span></span></span></span></eq> por <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9202em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9202em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">A</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:0em;"><span class="mord">˙</span></span></span></span></span></span></span></span></span></span></eq> sin leer los demás, basta con calcular el cambio <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9202em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9202em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">A</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:0em;"><span class="mord">˙</span></span></span></span></span></span></span></span></span></span></eq> y aplicarlo a la paridad: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9202em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9202em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.0556em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span></span></span></span></eq>.</p>
+<p><img src="../../../img/enco/enco-t4-raid5.png" alt="RAID 5|300" loading="lazy"></p>
+<h3>Ejemplo de paridad XOR</h3>
+<p>XOR da 1 cuando los bits son distintos y 0 cuando son iguales. Con bloques de 4 bits <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1011</span></span></span></span></eq>, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0110</span></span></span></span></eq> y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1100</span></span></span></span></eq>:</p>
+<table>
+<thead>
+<tr>
+<th>Operación</th>
+<th>Resultado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span></span></span></span></eq></td>
+<td><strong>0001</strong></td>
+</tr>
+<tr>
+<td>Falla el disco de <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span></span></span></span></eq>: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span></span></span></eq></td>
+<td><strong>0110</strong> (se recupera)</td>
+</tr>
+<tr>
+<td>Se escribe <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9202em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9202em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">A</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:0em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1001</span></span></span></span></eq>: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9202em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9202em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">A</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:0em;"><span class="mord">˙</span></span></span></span></span></span></span></span></span></span></eq></td>
+<td><strong>0010</strong></td>
+</tr>
+<tr>
+<td>Nueva paridad <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9202em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9202em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.0556em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span></span></span></span></eq></td>
+<td><strong>0011</strong> (igual que <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0035em;vertical-align:-0.0833em;"></span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.9202em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord mathnormal">A</span></span><span style="top:-3.2523em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:0em;"><span class="mord">˙</span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.0502em;">B</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span></span></span></span></eq>)</td>
+</tr>
+</tbody>
+</table>
+<p>Esto explica por qué <strong>RAID 5 escribe despacio</strong>: cada escritura obliga a <strong>leer el dato antiguo y la paridad antigua, y escribir el dato nuevo y la paridad nueva</strong> (4 operaciones). RAID 6 añade una <strong>segunda paridad</strong> distinta para aguantar <strong>dos fallos</strong>, a costa de escribir aún más lento.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la suma de comprobación</p>
+<p>La paridad es como apuntar el total de una cuenta: si sabes que A + B + C = 10 y se te borra B, puedes recuperarlo restando. Si cambias A, no hace falta volver a sumarlo todo: basta con sumar al total la diferencia. XOR funciona igual, pero con bits.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=WR226xmMVF4">RAID explicado: niveles, controladores y cómo funciona</a> — los niveles RAID con esquemas (vídeo, 9:40).</p>
+</div>
+<h3>Resumen de niveles</h3>
+<table>
+<thead>
+<tr>
+<th>Nivel</th>
+<th>Tolerancia a fallos</th>
+<th>Lectura</th>
+<th>Escritura</th>
+<th>Espacio extra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RAID 0</td>
+<td>Ninguna</td>
+<td>Buena</td>
+<td><strong>Muy buena</strong></td>
+<td>Mínimo</td>
+</tr>
+<tr>
+<td>RAID 1</td>
+<td>Alta</td>
+<td>Pobre</td>
+<td>Pobre</td>
+<td>Alto</td>
+</tr>
+<tr>
+<td>RAID 10</td>
+<td><strong>Muy alta</strong></td>
+<td><strong>Muy buena</strong></td>
+<td>Buena</td>
+<td>Alto</td>
+</tr>
+<tr>
+<td>RAID 4</td>
+<td>Alta</td>
+<td>Buena</td>
+<td>Muy, muy pobre</td>
+<td>Bajo</td>
+</tr>
+<tr>
+<td>RAID 5</td>
+<td>Alta</td>
+<td>Buena</td>
+<td>Muy pobre</td>
+<td>Bajo</td>
+</tr>
+<tr>
+<td>RAID 6</td>
+<td><strong>Muy alta</strong></td>
+<td>Buena</td>
+<td>Muy, muy pobre</td>
+<td>Bajo</td>
+</tr>
+</tbody>
+</table>
+<p>Cuándo usar cada uno: <strong>RAID 0</strong> para maximizar la velocidad de escritura <strong>cuando la fiabilidad no importa</strong>; <strong>RAID 10</strong> para <strong>muchas escrituras rápidas con gran robustez</strong> (por ejemplo, <strong>logs de transacciones de bases de datos</strong>); <strong>RAID 4 y 5</strong>, <strong>seguros y baratos</strong>, pero con <strong>bajo rendimiento en escritura</strong>; <strong>RAID 6</strong>, para <strong>archivar datos</strong> (su escritura mejora con <strong>cachés de disco</strong>).</p>
+<h1>4.6 Cachés</h1>
+<h2>4.6.1 Cachés de disco</h2>
+<p>Sirven para <strong>acelerar lecturas y escrituras</strong>, y son necesarias porque el <strong>bus de E/S es mucho más rápido</strong> que el disco leyendo o escribiendo. En <strong>lectura</strong>, se cargan los datos en la caché y se <strong>envían todos juntos</strong>, ocupando menos tiempo la interfaz y el bus, y se <strong>aprovechan los aciertos</strong> (datos que ya estaban en caché). En <strong>escritura</strong>, los datos se guardan en la caché y <strong>se escriben en el disco cuando se puede</strong>, lo que <strong>mejora la escritura de RAID 1, 4, 5 y 6</strong>.</p>
+<h2>4.6.2 Cachés en el RAID</h2>
+<p>Las cachés del controlador RAID funcionan <strong>además de</strong> las de los discos.</p>
+<p>La <strong>caché de escritura</strong> puede llegar a <strong>varios GB</strong> y, por seguridad, tiene <strong>batería de respaldo</strong> y puede estar <strong>replicada</strong>. Las escrituras se guardan en ella, donde están <strong>seguras aunque se vaya la luz</strong>, y se pasan al disco <strong>en cuanto se puede y al ritmo que se puede</strong>. Así <strong>absorbe los picos de escrituras</strong> seguidos de periodos tranquilos y las <strong>escrituras secuenciales grandes</strong>, algo especialmente útil en los <strong>niveles RAID altos</strong> (5, 6), que escriben despacio.</p>
+<p>La <strong>caché de lectura</strong> <strong>analiza los patrones de acceso</strong> para <strong>adivinar qué datos precargar</strong>. Como las lecturas son muy aleatorias, <strong>acertar un 40%</strong> ya se considera un buen resultado.</p>
+<h1>4.7 Ideas clave</h1>
+<ul>
+<li>30 años de <strong>HDD estancado</strong> (≈5× en IOPS) frente a CPU (≈10⁶×); los <strong>SSD</strong> pasan de ~300 a <strong>40.000-400.000 IOPS</strong>. Datos: +25%/año, 527 ZB en 2029; el 89% sigue en HDD.</li>
+<li><strong>HDD</strong>: platos, cabezas, pistas, sectores, cilindros. Acceso = <strong>búsqueda + asentamiento + latencia</strong>; el factor clave son las <strong>rpm</strong> (7.200 / 10.000 / 15.000); acceso ~6-7 ms; <strong>NCQ/TCQ</strong> reordenan comandos. MTBF SCSI 1,5 M h, SATA 0,6 M h; fallos 0,70-0,78%/año; CRC y SMART.</li>
+<li><strong>SSD</strong>: NAND Flash (<strong>SLC</strong> 100.000, <strong>MLC</strong> 3.000, <strong>eMLC</strong> 30.000 escrituras; TLC, QLC). No se sobrescribe → <strong>write amplification</strong>; desgaste → <strong>wear leveling</strong>. Mucho más IOPS aleatorias, pero 10× más caro por GB.</li>
+<li>Camino de E/S: <strong>bus del sistema</strong> → bridge → <strong>bus de E/S del host (PCI)</strong> → <strong>HBA</strong> → bus de E/S.</li>
+<li>Interfaces: <strong>SCSI</strong> (paralelo, Target ID con prioridad, LUNs), <strong>SAS</strong> (serie, full duplex, WWN, 16.256 disp./puerto, admite SATA), <strong>FC</strong> (km, en hardware, redes SAN), <strong>SATA</strong> (barato, half duplex, 1 m). <strong>8b/10b</strong>: 8 bits → 10 bits (errores, control, equilibrio, reloj; ≤ 5 bits iguales). <strong>NVMe</strong> sobre PCIe (U.2, M.2, tarjeta).</li>
+<li><strong>DAS, JBOD, MAID</strong>. <strong>RAID</strong>: 0 (rápido, sin redundancia), 1 (espejo), 0+1 / 10, 3-4 (paridad en un disco), 5 (paridad distribuida, <strong>XOR</strong>), 6 (doble paridad). RAID 10 para BD, 5 barato pero escritura lenta, 6 para archivo.</li>
+<li><strong>Cachés</strong>: de disco (agrupar lecturas, diferir escrituras) y de RAID (escritura con batería, GBs; lectura predictiva, 40% de acierto ya es bueno).</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="3-virtualizacion-de-servidores.html"><span class="nav-etiqueta">← anterior</span>3. Virtualización de Servidores</a>
+  <a class="nav-siguiente" href="5-subsistemas-de-disco.html"><span class="nav-etiqueta">siguiente →</span>5. Subsistemas de Disco</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="1. Introducción a la computación en la nube — apuntes de COMPNU (cuarto curso de Ingeniería Informática).">
+<title>1. Introducción a la computación en la nube · COMPNU · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">compnu</a><span class="miga-sep">/</span><span aria-current="page">1-introduccion-a-la-computacion-en-la-nube</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de COMPNU"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">COMPNU</a></p><ol><li><span class="actual" aria-current="page">1. Introducción a la computación en la nube</span></li><li><a href="2-mecanismos-de-virtualizacion.html">2. Mecanismos de virtualización</a></li><li><a href="3-aplicaciones-y-servicios-en-la-nube.html">3. Aplicaciones y servicios en la nube</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>COMPNU</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>1 / 3</div>
+    </div>
+    <h1>Introducción a la computación en la nube</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de COMPNU · 1/3</summary><ol><li><span aria-current="page">1. Introducción a la computación en la nube</span></li><li><a href="2-mecanismos-de-virtualizacion.html">2. Mecanismos de virtualización</a></li><li><a href="3-aplicaciones-y-servicios-en-la-nube.html">3. Aplicaciones y servicios en la nube</a></li></ol></details>
+  <div class="prosa">
+<h1>1.1 Introducción al cloud</h1>
+<p><em>Cloud</em> es una palabra de moda de las TIC que ya cumple <strong>más de 15 años</strong>, junto a otras como IoT o Big Data. La <strong>computación cloud</strong> es un paradigma que permite el <strong>acceso ubicuo y bajo demanda a servicios TIC a través de Internet</strong>. El término &quot;nube&quot; viene de cómo se dibujaba la red en los diagramas: una nube que <strong>abstrae la complejidad de su infraestructura</strong>.</p>
+<p>Supone una <strong>nueva forma de proveer y consumir capacidades TIC</strong>, basada en cuatro ideas: <strong>escalabilidad y elasticidad</strong>, <strong>capacidades como servicio</strong> (los modelos &quot;<em>as a Service</em>&quot;, *aaS), <strong>autoservicio bajo demanda</strong> y <strong>pago por uso</strong>.</p>
+<h2>1.1.1 El problema que resuelve</h2>
+<p>El ejemplo clásico es <strong><a href="http://Forbes.com">Forbes.com</a></strong>, que ofrece información bursátil en tiempo real: sus servidores van a tope en <strong>horario laboral de lunes a viernes</strong> y casi vacíos <strong>el resto del tiempo</strong>. Pasa lo mismo con las <strong>demandas estacionales</strong> (ventas de Navidad), los <strong>eventos masivos y puntuales</strong> (un Mundial de fútbol) y los <strong>consumos masivos</strong> (streaming de vídeo, juegos online).</p>
+<p>El problema es <strong>cómo dimensionar la capacidad</strong> de los servidores para ajustarla a la demanda. Si compras servidores para el pico, <strong>sobredimensionas</strong> y pagas por máquinas paradas la mayor parte del tiempo; si compras para la media, <strong>infradimensionas</strong> y el servicio se cae en los picos.</p>
+<p><img src="../../../img/compnu/compnu-t1-dimensionar.png" alt="Dimensionar la capacidad|500" loading="lazy">
+<em>Capacidad sobreestimada (servidores fríos, dinero desperdiciado), infraestimada (servidores saturados) y escalado bajo demanda (la capacidad sigue a la demanda).</em></p>
+<p>La respuesta del cloud es el <strong>aprovisionamiento bajo demanda</strong>: <strong>consume lo que necesites y paga por lo que consumas</strong>, de modo que la capacidad sigue a la demanda en cada momento.</p>
+<p><img src="../../../img/compnu/compnu-t1-capacidad-demanda.png" alt="Capacidad que sigue a la demanda|300" loading="lazy"></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la electricidad</p>
+<p>Nadie tiene una central eléctrica en casa dimensionada para el día que enciende todos los aparatos a la vez: te conectas a la red, consumes lo que necesitas en cada momento y pagas por los kWh gastados. El cloud hace lo mismo con servidores, almacenamiento y red.</p>
+</div>
+<h2>1.1.2 Qué cambia con el cloud</h2>
+<p>Con el cloud <strong>no hace falta comprar ni administrar hardware</strong>: se <strong>&quot;alquila&quot; cuando se necesita</strong>, y hay muchos proveedores (Amazon EC2, Microsoft Azure, GCP, Rackspace, Alibaba, ElasticHosts...). En el ejemplo de Forbes, bastaría con alojar el servidor web en un proveedor, <strong>aprovisionar servidores cada día y liberarlos por la noche</strong>, <strong>pagar por el tiempo consumido</strong> y dejar que el proveedor se preocupe del hardware.</p>
+<p>Para los proveedores también supone un cambio en cómo gestionan y ofrecen sus recursos. Sus plataformas son <strong>flexibles y &quot;elásticas&quot;</strong>: se <strong>adaptan a la demanda real</strong>, soportan mejor los <strong>picos</strong>, son <strong>escalables</strong> y <strong>tolerantes a fallos</strong>. La base tecnológica es la <strong>virtualización</strong>: los recursos se virtualizan como <strong>máquinas virtuales (VMs)</strong> que se despliegan dinámicamente bajo demanda, y se exponen <strong>como servicios a través de interfaces estandarizadas</strong>.</p>
+<h1>1.2 Definición de cloud</h1>
+<h2>1.2.1 Tres definiciones de referencia</h2>
+<p>La del <strong>NIST</strong> (<em>National Institute of Standards and Technology</em>, EE. UU.) es <strong>la más referenciada</strong> y la que usa el gobierno americano con sus proveedores:</p>
+<blockquote>
+<p>&quot;La computación cloud es un modelo que permite el <strong>acceso por red ubicuo, cómodo y bajo demanda</strong> a un <strong>conjunto compartido de recursos de computación configurables</strong> (redes, servidores, almacenamiento, aplicaciones y servicios) que pueden <strong>aprovisionarse y liberarse rápidamente</strong> con un <strong>mínimo esfuerzo de gestión</strong> o interacción con el proveedor.&quot;</p>
+</blockquote>
+<p>La norma <strong>ISO/IEC 22123-1:2023</strong> (vocabulario de cloud computing) la define como un <strong>paradigma</strong> que permite el <strong>acceso por red a un conjunto escalable y elástico de recursos físicos o virtuales compartibles</strong>, con <strong>aprovisionamiento y administración en autoservicio y bajo demanda</strong>.</p>
+<p>El informe de la <strong>ENISA</strong> (Agencia Europea de Seguridad de las Redes y de la Información) la describe como un <strong>modelo de servicio bajo demanda</strong> para la prestación de TI, a menudo basado en <strong>virtualización</strong> y <strong>tecnologías distribuidas</strong>, con seis rasgos: (1) recursos con <strong>alto grado de abstracción</strong>; (2) <strong>escalabilidad y flexibilidad</strong> casi instantáneas; (3) <strong>prestación casi instantánea</strong>; (4) <strong>recursos compartidos</strong> (hardware, bases de datos, memoria...); (5) <strong>servicio bajo demanda con pago por uso</strong>; y (6) <strong>gestión programática</strong> (por ejemplo, mediante API).</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://csrc.nist.gov/publications/detail/sp/800-145/final">NIST SP 800-145: The NIST Definition of Cloud Computing</a> — la definición original, de solo 3 páginas (documento, inglés; enlazado en las diapositivas).</p>
+</div>
+<h2>1.2.2 El modelo 5-3-4 del NIST</h2>
+<p>El modelo del NIST, usado también como referencia en Europa, se conoce como <strong>&quot;5-3-4&quot;</strong>: <strong>5 características esenciales</strong>, <strong>3 modelos de servicio</strong> y <strong>4 modelos de despliegue</strong>. Es la estructura del resto del tema.</p>
+<h1>1.3 Características esenciales</h1>
+<table>
+<thead>
+<tr>
+<th>Característica</th>
+<th>Qué significa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Autoservicio bajo demanda</strong> (<em>on-demand self-service</em>)</td>
+<td>El consumidor <strong>aprovisiona por sí mismo</strong> capacidades (tiempo de CPU, almacenamiento, datos) cuando las necesita, de forma <strong>automática y sin interacción humana</strong> con el proveedor</td>
+</tr>
+<tr>
+<td><strong>Amplio acceso por red</strong> (<em>broad network access</em>)</td>
+<td>Las capacidades están <strong>en la red</strong> y se accede con <strong>mecanismos estándar</strong> desde <strong>clientes heterogéneos</strong> (móviles, estaciones de trabajo...)</td>
+</tr>
+<tr>
+<td><strong>Agrupación de recursos</strong> (<em>resource pooling</em>)</td>
+<td>Los recursos del proveedor se <strong>agrupan para servir a muchos clientes</strong> con un modelo <strong>multi-tenant</strong> (multiinquilino) y se <strong>asignan y reasignan dinámicamente</strong> según la demanda. El cliente <strong>no controla la ubicación exacta</strong>, pero puede elegirla a alto nivel (país, estado o <em>datacenter</em>)</td>
+</tr>
+<tr>
+<td><strong>Elasticidad rápida</strong> (<em>rapid elasticity</em>)</td>
+<td>Las capacidades se <strong>aprovisionan y liberan rápida y elásticamente</strong> según la demanda; para el consumidor parecen <strong>ilimitadas</strong> y disponibles en cualquier momento y cantidad</td>
+</tr>
+<tr>
+<td><strong>Servicio medido</strong> (<em>measured service</em>)</td>
+<td>El sistema <strong>mide</strong> el uso de recursos (normalmente <strong>pago por uso</strong>) al nivel adecuado (almacenamiento, procesamiento, ancho de banda...). El uso puede <strong>monitorizarse, controlarse e informarse</strong>, con <strong>transparencia</strong> para usuario y proveedor</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: un hotel frente a comprarte una casa</p>
+<p><strong>Multi-tenant</strong> es como un hotel: muchos huéspedes comparten el mismo edificio, cada uno en su habitación aislada. Pides una habitación en recepción sin hablar con el arquitecto (<strong>autoservicio</strong>), puedes pasar de una individual a una suite en minutos (<strong>elasticidad</strong>), eliges la ciudad pero no la habitación exacta (<strong>resource pooling</strong>) y pagas por noches (<strong>servicio medido</strong>).</p>
+</div>
+<h1>1.4 Modelos de servicio</h1>
+<p>Las capacidades se ofrecen <strong>como servicios</strong>, y el NIST define <strong>tres modelos</strong>. <strong>Dependen entre sí</strong> (unos se construyen sobre otros), se orientan a <strong>usuarios y escenarios distintos</strong>, y en cada uno cambia <strong>qué gestiona el proveedor y qué el consumidor</strong>. La forma más clara de verlos es la <strong>pila de responsabilidades</strong>: de abajo arriba, <em>networking</em>, <em>storage</em>, <em>servers</em>, <em>virtualization</em>, <em>O/S</em>, <em>middleware</em>, <em>runtime</em>, <em>application</em> y <em>data</em>.</p>
+<p><strong>IaaS (<em>Infrastructure as a Service</em>).</strong> El proveedor es dueño del <strong>hardware</strong> y lo ofrece como servicio mediante interfaces para gestionarlo. El consumidor <strong>aprovisiona recursos de computación</strong> (almacenamiento, CPU, red) donde ejecuta su software: <strong>no controla la infraestructura física</strong>, pero <strong>sí el sistema operativo</strong>, el almacenamiento, la red y las aplicaciones. Perfil: <strong>arquitectos y administradores de sistemas</strong>. Ejemplos: <strong>AWS, Microsoft Azure, Google Compute Engine</strong>.</p>
+<p><img src="../../../img/compnu/compnu-t1-iaas.png" alt="Responsabilidades en IaaS|200" loading="lazy">
+<em>El proveedor gestiona de la red a la virtualización; el consumidor, del sistema operativo hacia arriba.</em></p>
+<p><strong>PaaS (<em>Platform as a Service</em>).</strong> El consumidor <strong>despliega aplicaciones</strong> (propias o adquiridas) desarrolladas con <strong>entornos de programación que soporta el proveedor</strong>, sobre la infraestructura de este. <strong>No controla</strong> ni la infraestructura ni el entorno de despliegue, <strong>pero sí sus aplicaciones</strong> y, posiblemente, la configuración del entorno. Perfil: <strong>desarrolladores</strong>. Ejemplos: <strong>OpenShift, CloudBees, Heroku, Cloud Foundry</strong>.</p>
+<p><img src="../../../img/compnu/compnu-t1-paas.png" alt="Responsabilidades en PaaS|200" loading="lazy">
+<em>El consumidor solo gestiona su aplicación y sus datos.</em></p>
+<p><strong>SaaS (<em>Software as a Service</em>).</strong> El consumidor <strong>usa las aplicaciones del proveedor</strong>, que se ejecutan en la nube. <strong>No controla</strong> ni la infraestructura ni las capacidades de la aplicación, pero <strong>posiblemente sí su configuración personal</strong>. Perfil: <strong>empleados, profesionales o particulares</strong>. Ejemplos: <strong>Google Docs, Office 365, Git, Salesforce, Moodle</strong>.</p>
+<p><img src="../../../img/compnu/compnu-t1-saas.png" alt="Responsabilidades en SaaS|200" loading="lazy">
+<em>El consumidor solo gestiona sus datos; todo lo demás es del proveedor.</em></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>IaaS</th>
+<th>PaaS</th>
+<th>SaaS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qué recibes</td>
+<td>Máquinas, discos y red virtuales</td>
+<td>Una plataforma donde desplegar tu código</td>
+<td>Una aplicación lista para usar</td>
+</tr>
+<tr>
+<td>Tú gestionas</td>
+<td>SO, middleware, runtime, aplicación, datos</td>
+<td>Aplicación y datos</td>
+<td>Solo tus datos y ajustes personales</td>
+</tr>
+<tr>
+<td>Usuario típico</td>
+<td>Administradores de sistemas</td>
+<td>Desarrolladores</td>
+<td>Usuarios finales</td>
+</tr>
+<tr>
+<td>Ejemplos</td>
+<td>AWS EC2, Azure, Google Compute Engine</td>
+<td>Heroku, OpenShift, Cloud Foundry</td>
+<td>Google Docs, Office 365, Salesforce</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la pizza</p>
+<p><strong>IaaS</strong> es alquilar una cocina equipada: pones los ingredientes, cocinas y sirves tú. <strong>PaaS</strong> es comprar una base de pizza ya hecha y un horno: solo pones los ingredientes que quieras. <strong>SaaS</strong> es pedir la pizza a domicilio: solo decides cuál y te la comes.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=o610WsevJtE">¿Cuál es la diferencia entre IaaS, PaaS y SaaS?</a> — los tres modelos comparados en poco tiempo (vídeo, 3:20).</p>
+</div>
+<h1>1.5 Modelos de despliegue</h1>
+<p>El NIST define <strong>cuatro modelos de despliegue</strong>, según a quién está destinada la infraestructura.</p>
+<p><strong>Cloud público.</strong> Infraestructura para <strong>uso del público o de empresas en general</strong>, <strong>propiedad del proveedor</strong> (una empresa, una universidad, un organismo estatal...). Tiene <strong>una interfaz interna</strong> para gestionar su infraestructura virtualizada y <strong>otra externa</strong> para que los clientes gestionen sus recursos.</p>
+<p><img src="../../../img/compnu/compnu-t1-publico.png" alt="Cloud público|400" loading="lazy"></p>
+<p><strong>Cloud privado.</strong> Para <strong>uso exclusivo de una organización</strong>, aunque con múltiples clientes dentro de ella (por ejemplo, sus departamentos). Puede ser <strong>de su propiedad (<em>on-premise</em>)</strong>, <strong>alquilado (<em>off-premise</em>)</strong> o una combinación, y permite una <strong>gestión flexible y ágil</strong> de los recursos. Los grandes proveedores públicos de IaaS <strong>empezaron creando clouds privados</strong> para gestionar mejor sus propios <em>datacenters</em>.</p>
+<p><img src="../../../img/compnu/compnu-t1-privado.png" alt="Cloud privado|400" loading="lazy"></p>
+<p><strong>Cloud comunitario.</strong> Para <strong>una comunidad de organizaciones con intereses comunes</strong>. Puede ser propiedad de una o varias de ellas, alquilado o una combinación.</p>
+<p><img src="../../../img/compnu/compnu-t1-comunitario.png" alt="Cloud comunitario|400" loading="lazy"></p>
+<p><strong>Cloud híbrido.</strong> <strong>Combinación de cloud privado y público</strong>, unidos por tecnologías (propietarias o estándar) que permiten la <strong>portabilidad de datos y aplicaciones</strong>. Permite <strong>atender los picos de carga obteniendo recursos del cloud público</strong>, de forma <strong>transparente</strong> para los usuarios del privado.</p>
+<p><img src="../../../img/compnu/compnu-t1-hibrido.png" alt="Cloud híbrido|400" loading="lazy"></p>
+<p>Hay además otros modelos: la <strong>federación de clouds</strong>, una extensión del híbrido que requiere <strong>estándares que garanticen la interoperabilidad</strong>, y el <strong>cloud brokering</strong>, el <strong>uso conjunto de varios proveedores</strong>.</p>
+<h1>1.6 Proveedores públicos</h1>
+<p>Un cloud público da acceso a <strong>recursos hardware virtualizados</strong> (computación, almacenamiento, red...) con <strong>pago por uso</strong>, a través de una interfaz interna de gestión y una <strong>interfaz externa abierta</strong> para los clientes. Una aplicación típica (balanceador + servidores de aplicación + bases de datos) cuesta, según las diapositivas, entre <strong>$0,085 y $2,88</strong> por hora.</p>
+<h2>1.6.1 El mercado</h2>
+<p>Según el <strong>cuadrante mágico de Gartner de 2026</strong>, hay <strong>tres líderes claros</strong>: <strong>AWS, Google y Microsoft</strong>, seguidos de Oracle y Alibaba. <strong>AWS domina desde hace 10 años</strong>: facturó <strong>$128,7B en 2025</strong>, lidera la cuota de mercado de infraestructura cloud con un <strong>29% en 2025</strong>, supone <strong>casi el 60% del beneficio operativo de Amazon</strong>, tiene la oferta <strong>más madura y variada</strong> y es la elegida por la mayoría de las grandes compañías (algunas gastan <strong>más de $300-400M al año</strong>). <strong>Azure</strong> es la opción principal de las empresas que usan <strong>tecnologías Microsoft</strong>, y <strong>Alibaba</strong> es líder en <strong>China</strong>, aunque su oferta internacional es menos madura.</p>
+<p><img src="../../../img/compnu/compnu-t1-cuota-mercado.png" alt="Cuota de mercado de infraestructura cloud|400" loading="lazy">
+<em>Segundo trimestre de 2025: AWS 30%, Azure 20%, Google Cloud 13%, Alibaba 4%, Oracle 3%, Salesforce 2%, IBM 2%, Tencent 2%.</em></p>
+<div class="callout callout-note">
+<p class="callout-titulo">El texto de la diapositiva da un 29% a AWS en 2025, y la gráfica, un 30% en el segundo trimestre de 2025: son dos mediciones distintas.</p>
+</div>
+<h2>1.6.2 Oferta IaaS de los principales proveedores</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>AWS</th>
+<th>Azure</th>
+<th>Google</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Computación</strong></td>
+<td>EC2, Auto Scaling, ELB, ECS, LightSail</td>
+<td>Virtual Machines; Load Balancer, Application Gateway; Container Service, Container Instances</td>
+<td>Compute Engine, Auto Scaler, Load Balancing, Container Engine</td>
+</tr>
+<tr>
+<td><strong>Almacenamiento</strong></td>
+<td>S3, EBS, Glacier, EFS</td>
+<td>Storage, Backup</td>
+<td>Storage, Persistent Disk, Coldline</td>
+</tr>
+<tr>
+<td><strong>Red</strong></td>
+<td>Elastic IP, VPC, Route 53, Direct Connect</td>
+<td>Public IP, Virtual Network, DNS, Traffic Manager, Express Route</td>
+<td>External IP Address, Virtual Network, DNS, Interconnect</td>
+</tr>
+</tbody>
+</table>
+<h2>1.6.3 Modos de tarificación</h2>
+<p>Cada servicio se cobra de forma distinta. Lo esencial:</p>
+<p><strong>Computación.</strong> <strong>Amazon EC2</strong> cobra <strong>por hora</strong> (mínimo 1 h; según tipo de instancia y SO) o <strong>por segundo</strong> en algunos casos, más los <strong>GB/mes de almacenamiento EBS</strong>, y permite <strong>instancias reservadas</strong> y <strong>spot</strong> más baratas; <strong>ELB</strong> se cobra por hora más GB procesados o LCU/hora (<em>LB Capacity Units</em>); <strong>Auto Scaling</strong> es <strong>gratuito</strong> (se pagan las métricas de CloudWatch); <strong>ECS</strong> es gratuito (se pagan los EC2 y EBS usados), y <strong>LightSail</strong>, por hora hasta el máximo del plan (<strong>$5-$100/mes</strong>) más el exceso de tráfico. <strong>Azure Virtual Machines</strong> cobra <strong>por minuto</strong> más almacenamiento, con autoescalado y balanceador <strong>incluidos</strong> en la mayoría de instancias; <strong>Load Balancer</strong>, por reglas/hora más GB (gratis sin reglas); <strong>Application Gateway</strong>, por hora más datos; <strong>Container Service</strong>, gratis (se pagan los recursos); <strong>Container Instances</strong>, por instancia más GB/s y cores/s. <strong>Google Compute Engine</strong> cobra <strong>por minuto (mínimo 10)</strong>, con un <strong>descuento de hasta el 30%</strong> si se usa entre el 25% y el 100% del periodo de facturación, e instancias <strong>interrumpibles (<em>preemptible</em>)</strong>, <strong>personalizadas</strong> y reservadas; <strong>Load Balancing</strong>, por regla/hora más GB; <strong>Auto Scaler</strong>, gratis; <strong>Container Engine</strong>, por hora para clusters de <strong>más de 6 nodos</strong> más las instancias.</p>
+<p><strong>Almacenamiento.</strong> <strong>S3</strong>: por <strong>GB/mes</strong> (por tramos), número de <strong>solicitudes</strong> y administración opcional, más barato con redundancia reducida o acceso infrecuente. <strong>EBS</strong>: por GB/mes según tipo de disco (<strong>SSD o magnético</strong>) y uso, más snapshots e IOPS opcionales. <strong>Glacier</strong>: por solicitudes de subida/recuperación y GB recuperados según la modalidad (<em>expedited</em>, <em>standard</em>, <em>bulk</em>). <strong>EFS</strong>: por GB/mes. En <strong>Azure</strong>, los discos se cobran por GB/mes según tipo y redundancia, más transacciones (estándar) o snapshots (premium); <strong>Backup</strong>, por instancia protegida más almacenamiento. En <strong>Google</strong>, <strong>Storage</strong> cobra por GB/mes, solicitudes API y GB recuperados (en <em>nearline</em> y <em>coldline</em>), según sea multirregional, regional, nearline o coldline; <strong>Persistent Disk</strong>, por GB/mes según tipo.</p>
+<p><strong>Red.</strong> En <strong>AWS</strong>, una <strong>IP elástica asignada a una instancia es gratis</strong>; se cobran las adicionales o las <strong>no asignadas</strong>, y los remapeos (100 gratis). <strong>VPC</strong> es <strong>gratuita</strong> (se pagan la VPN y el NAT gateway); <strong>Route 53</strong>, por zona, políticas de tráfico y consultas; <strong>Direct Connect</strong>, por puerto/hora y GB salientes. <strong>Azure</strong> cobra las IPs públicas por hora según tipo, la Virtual Network es gratuita (se pagan los gateways), DNS por zona y consultas, <strong>Traffic Manager</strong> por consultas y endpoints, y <strong>Express Route</strong> por puerto/mes. <strong>Google</strong> cobra las <strong>IPs externas solo si no se usan</strong> (las IPv6, nunca), la Virtual Network es gratuita, DNS por zonas y solicitudes, e <strong>Interconnect</strong> por conexión más tráfico saliente.</p>
+<p>Para comparar ofertas hay comparadores como <a href="https://cloudprice.app/">cloudprice.app</a> y <a href="https://www.howmuchcloud.com/">howmuchcloud.com</a>.</p>
+<h1>1.7 Gestores de cloud</h1>
+<h2>1.7.1 Desplegar un cloud privado</h2>
+<p>Para montar un <strong>cloud privado <em>on-premise</em></strong> se usa un <em>middleware</em> específico, las <strong>plataformas de administración cloud</strong>, que permiten <strong>instalar, configurar y gestionar tu propio cloud</strong>. Sirven para un modelo privado o híbrido, e incluso como base de un cloud público sobre infraestructura propia.</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Ejemplos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Open source</strong></td>
+<td>OpenStack, OpenNebula, CloudStack</td>
+</tr>
+<tr>
+<td><strong>Comerciales</strong> (<em>enterprise</em>)</td>
+<td>VMware Cloud Foundation, Azure Local, Nutanix Cloud Infrastructure</td>
+</tr>
+<tr>
+<td><strong>Infraestructura integrada</strong> (<em>cloud-on-premises</em>)</td>
+<td>AWS Outposts, Google Distributed Cloud, Dell APEX, HPE Greenlake</td>
+</tr>
+</tbody>
+</table>
+<h2>1.7.2 OpenStack</h2>
+<p><strong>OpenStack</strong> es un proyecto <strong>open source</strong> iniciado en <strong>2010 por la NASA y Rackspace</strong> para desarrollar un <strong>sistema operativo cloud abierto</strong> para clouds privados y públicos. Tiene el apoyo de muchas empresas a través de la <strong>OpenInfra Foundation</strong> (antes OpenStack Foundation), como Huawei, Ericsson, Microsoft, WindRiver u Okestro, y es la base de muchas <strong>distribuciones cloud de Linux</strong> (Red Hat, Ubuntu, Debian, SUSE). Hoy es un proyecto colaborativo con <strong>licencia Apache 2.0</strong>; la versión actual (abril de 2025) se llama <strong>Epoxy</strong>.</p>
+<p>Es un <strong>&quot;sistema operativo para el cloud&quot;</strong>: <strong>controla los recursos de computación, almacenamiento y red</strong> de un centro de datos y permite a los usuarios aprovisionarlos mediante una <strong>interfaz web o una API</strong>.</p>
+<p><img src="../../../img/compnu/compnu-t1-openstack.png" alt="OpenStack como SO del cloud|550" loading="lazy">
+<em>El plano de control de OpenStack gestiona bare metal, VMs, contenedores y almacenamiento de objetos, ficheros y bloques sobre una red común, y los expone por API a las aplicaciones, al panel web y a las herramientas de monitorización.</em></p>
+<p>En realidad es una <strong>colección de proyectos</strong>, cada uno con un nombre propio:</p>
+<p><img src="../../../img/compnu/compnu-t1-openstack-proyectos.png" alt="Proyectos de OpenStack|450" loading="lazy"></p>
+<table>
+<thead>
+<tr>
+<th>Proyecto</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Horizon</strong></td>
+<td>Panel web (<em>dashboard</em>)</td>
+</tr>
+<tr>
+<td><strong>Nova</strong></td>
+<td>Computación</td>
+</tr>
+<tr>
+<td><strong>Neutron</strong></td>
+<td>Red</td>
+</tr>
+<tr>
+<td><strong>Swift</strong> y <strong>Cinder</strong></td>
+<td>Almacenamiento de objetos y de bloques</td>
+</tr>
+<tr>
+<td><strong>Keystone</strong></td>
+<td>Identidad</td>
+</tr>
+<tr>
+<td><strong>Glance</strong></td>
+<td>Imágenes</td>
+</tr>
+<tr>
+<td><strong>Heat</strong></td>
+<td>Orquestación</td>
+</tr>
+<tr>
+<td><strong>Ceilometer</strong></td>
+<td>Telemetría</td>
+</tr>
+<tr>
+<td><strong>Trove</strong>, <strong>Sahara</strong>, <strong>Ironic</strong></td>
+<td>Bases de datos, procesamiento de datos, aprovisionamiento <em>bare-metal</em></td>
+</tr>
+</tbody>
+</table>
+<h2>1.7.3 OpenNebula</h2>
+<p><strong>OpenNebula</strong> es un <strong>toolkit open source para clouds IaaS</strong> que permite implementar clouds <strong>privados, públicos o híbridos</strong>. Se desarrolló en la <strong>Universidad Complutense de Madrid</strong> y hoy lo mantiene la empresa <strong>OpenNebula Systems</strong>. Tiene una <strong>arquitectura abierta y adaptable</strong>: usa <strong>estándares</strong> para la interoperabilidad y la portabilidad, y soporta <strong>múltiples servicios</strong> de virtualización, seguridad, almacenamiento y red.</p>
+<p><img src="../../../img/compnu/compnu-t1-opennebula.png" alt="OpenNebula|450" loading="lazy">
+<em>Gestión del cloud (multi-tenancy, interfaces, elasticidad, federación) y de la infraestructura virtual (capacidad, optimización, alta disponibilidad) sobre hipervisores KVM, Xen o VMware, con conexión a clouds públicos.</em></p>
+<h1>1.8 Beneficios, retos y recomendaciones</h1>
+<h2>1.8.1 Beneficios</h2>
+<table>
+<thead>
+<tr>
+<th>Beneficio</th>
+<th>Por qué</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Reducción de costes</strong></td>
+<td><strong>Pago por uso</strong>, sin <strong>inversión inicial</strong> ni hardware que se queda <strong>desfasado</strong>; facilita la <strong>innovación</strong> → oportunidad para <strong>pymes y startups</strong></td>
+</tr>
+<tr>
+<td><strong>Mejora de la eficiencia</strong></td>
+<td><strong>Rapidez y escalabilidad</strong> al aprovisionar; acceso a recursos (teóricamente) <strong>ilimitados</strong> → más competitividad; se <strong>delega la gestión TIC</strong> → más recursos para la actividad propia</td>
+</tr>
+<tr>
+<td><strong>Flexibilidad</strong></td>
+<td>Los proveedores ofrecen las <strong>últimas tecnologías</strong>; se puede <strong>trabajar desde cualquier lugar</strong></td>
+</tr>
+<tr>
+<td><strong>Continuidad del negocio</strong></td>
+<td>Facilita <strong>tolerancia a fallos y alta disponibilidad</strong> (redundancia, replicación, distribución geográfica); <strong>asistencia 24/7</strong></td>
+</tr>
+<tr>
+<td><strong>Seguridad</strong></td>
+<td>Los proveedores suelen tener <strong>mejores prácticas y sistemas</strong> que sus clientes e invierten en <strong>certificaciones</strong> y cumplimiento normativo</td>
+</tr>
+</tbody>
+</table>
+<h2>1.8.2 Retos</h2>
+<table>
+<thead>
+<tr>
+<th>Reto</th>
+<th>Problemas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Dependencia de la red</strong></td>
+<td>Ancho de banda limitado, prestaciones impredecibles (redes lentas en hora punta), necesidad de estar siempre conectado</td>
+</tr>
+<tr>
+<td><strong>Dependencia del proveedor</strong> (<em>vendor lock-in</em>)</td>
+<td>Difícil mover cargas entre proveedores, <strong>fallos masivos</strong> o <strong>cese de actividad</strong> del proveedor, escasa <strong>interoperabilidad</strong> por falta de estándares</td>
+</tr>
+<tr>
+<td><strong>Aspectos legislativos</strong></td>
+<td>Que el proveedor cumpla la ley (<strong>LOPD, RGPD</strong>, propiedad intelectual...), qué legislación se aplica en un conflicto, regulaciones sectoriales (salud, banca, pagos...)</td>
+</tr>
+<tr>
+<td><strong>Integridad de los datos</strong></td>
+<td>Miedo a <strong>perder el control</strong> de los datos, <strong>privacidad</strong> y confidencialidad (¿podemos fiarnos del proveedor?), garantías al <strong>sacar datos de la UE</strong></td>
+</tr>
+<tr>
+<td><strong>Seguridad</strong></td>
+<td><strong>Cifrado</strong> de la información confidencial, <strong>aislamiento</strong> en la virtualización y <strong>responsabilidad compartida</strong> entre proveedor y consumidor según el modelo (IaaS, PaaS o SaaS)</td>
+</tr>
+</tbody>
+</table>
+<h2>1.8.3 Recomendaciones</h2>
+<p><strong>Analizar el nivel de seguridad necesario.</strong> No todas las aplicaciones manejan información sensible: cada tipo (personal, corporativa, de ciudadanos) necesita un nivel distinto, y para las <strong>más sensibles</strong> conviene un despliegue <strong>privado o híbrido</strong>. La seguridad es una <strong>responsabilidad compartida</strong>, y la parte del proveedor depende del modelo de servicio.</p>
+<p><strong>Estar preparado para lo inesperado.</strong> Tener un <strong>plan de continuidad del negocio</strong> con opciones dentro y fuera del cloud (un proveedor alternativo o un servicio <strong>DRaaS</strong>, <em>Disaster Recovery as a Service</em>); usar <strong>arquitecturas tolerantes a fallos o multiproveedor</strong> (por ejemplo, replicar servicios en varias <strong>zonas de disponibilidad</strong> de AWS); mantener <strong>backups locales</strong> o en terceros, y adoptar <strong>modelos híbridos</strong>.</p>
+<p><strong>Analizar la oferta del proveedor.</strong> En cuanto al <strong>nivel de servicio</strong>: condiciones, soporte, <strong>indemnizaciones</strong> por interrupciones y si se puede negociar el <strong>SLA</strong> (<em>Service Level Agreement</em>). En cuanto a la <strong>seguridad</strong>: si cumple <strong>estándares y certificaciones</strong>, la legislación (LOPD, RGPD), cómo garantiza <strong>privacidad, autenticación y control de acceso</strong>, y qué responsabilidad asume si <strong>se pierden los datos</strong>.</p>
+<h1>1.9 Ideas clave</h1>
+<ul>
+<li><strong>Cloud</strong>: acceso <strong>ubicuo y bajo demanda</strong> a servicios TIC por Internet; escalabilidad/elasticidad, *aaS, autoservicio, <strong>pago por uso</strong>. Resuelve el problema de <strong>dimensionar</strong> para una demanda variable. Base: <strong>virtualización</strong>.</li>
+<li>Definiciones: <strong>NIST</strong> (la más usada), <strong>ISO/IEC 22123-1:2023</strong>, <strong>ENISA</strong>. Modelo NIST <strong>5-3-4</strong>.</li>
+<li><strong>5 características</strong>: autoservicio bajo demanda, amplio acceso por red, <strong>resource pooling</strong> (multi-tenant), <strong>elasticidad rápida</strong>, <strong>servicio medido</strong>.</li>
+<li><strong>3 modelos de servicio</strong>: <strong>IaaS</strong> (tú gestionas desde el SO; administradores), <strong>PaaS</strong> (tu aplicación; desarrolladores), <strong>SaaS</strong> (solo usas la aplicación; usuarios finales).</li>
+<li><strong>4 modelos de despliegue</strong>: <strong>público</strong>, <strong>privado</strong> (on/off-premise), <strong>comunitario</strong>, <strong>híbrido</strong> (picos al público); además federación y brokering.</li>
+<li>Mercado: <strong>AWS</strong> (~29-30%), <strong>Azure</strong> (20%), <strong>Google</strong> (13%); tarificación por hora/minuto/segundo + almacenamiento + transferencia.</li>
+<li>Gestores de cloud privado: <strong>OpenStack</strong> (NASA + Rackspace, 2010; Nova, Neutron, Swift/Cinder, Keystone, Glance, Horizon...) y <strong>OpenNebula</strong> (UCM).</li>
+<li>Beneficios: costes, eficiencia, flexibilidad, continuidad, seguridad. Retos: red, <strong>vendor lock-in</strong>, legislación, integridad de datos, seguridad (<strong>responsabilidad compartida</strong>).</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <span></span>
+  <a class="nav-siguiente" href="2-mecanismos-de-virtualizacion.html"><span class="nav-etiqueta">siguiente →</span>2. Mecanismos de virtualización</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

@@ -553,6 +553,49 @@ kbd {
 .prosa .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.25rem 0; }
 .imagen-rota { color: var(--acento); font-family: var(--mono); font-size: 0.85rem; }
 
+/* ---------- Anotaciones por párrafo (botón al margen → GitHub Issue) ---------- */
+.anotable { position: relative; scroll-margin-top: 5rem; }
+.anotar, .anotacion {
+  position: absolute;
+  top: 0.15em;
+  left: -2.4rem;
+  width: 1.7rem;
+  height: 1.7rem;
+  display: grid;
+  place-items: center;
+  font: 600 0.8rem/1 var(--sans);
+  font-style: normal;
+  border-radius: 50%;
+  text-decoration: none;
+}
+.prosa li > .anotar, .prosa li > .anotacion { left: -4.4rem; }
+.anotar {
+  border: 1px solid var(--linea);
+  background: var(--superficie);
+  color: var(--gris);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.anotable:hover > .anotar, .anotar:focus-visible { opacity: 1; }
+.anotar:hover { color: var(--acento); border-color: var(--acento); }
+.con-anotacion > .anotar { display: none; }
+.anotacion { background: var(--acento); color: var(--acento-tinta); }
+.con-anotacion { background: linear-gradient(90deg, var(--acento-velo), transparent 70%); }
+.anotable-destacado { outline: 2px solid var(--acento); outline-offset: 4px; }
+@media (max-width: 56rem), (pointer: coarse) {
+  .anotar, .anotacion, .prosa li > .anotar, .prosa li > .anotacion {
+    left: auto;
+    right: -0.6rem;
+    width: 1.4rem;
+    height: 1.4rem;
+    font-size: 0.7rem;
+  }
+  .anotable { padding-right: 1.2rem; }
+  .anotar { opacity: 0.35; }
+}
+@media print { .anotar, .anotacion { display: none; } }
+
 /* ---------- Callouts ---------- */
 .callout {
   margin: 1.4rem 0;

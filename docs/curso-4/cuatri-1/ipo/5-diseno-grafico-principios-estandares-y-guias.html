@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="5. Diseño gráfico. Principios, estándares y guías — apuntes de IPO (cuarto curso de Ingeniería Informática).">
+<title>5. Diseño gráfico. Principios, estándares y guías · IPO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">ipo</a><span class="miga-sep">/</span><span aria-current="page">5-diseno-grafico-principios-estandares-y-guias</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de IPO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">IPO</a></p><ol><li><a href="1-introduccion-a-la-ipo.html">1. Introducción a la IPO</a></li><li><a href="2-el-factor-humano.html">2. El factor humano</a></li><li><a href="3-prototipado-y-evaluacion.html">3. Prototipado y evaluación</a></li><li><a href="4-diseno-centrado-en-el-usuario.html">4. Diseño centrado en el usuario</a></li><li><span class="actual" aria-current="page">5. Diseño gráfico. Principios, estándares y guías</span></li><li><a href="notas-sobre-examen.html">Notas sobre examen</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>IPO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>5 / 5</div>
+    </div>
+    <h1>Diseño gráfico. Principios, estándares y guías</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de IPO · 5/6</summary><ol><li><a href="1-introduccion-a-la-ipo.html">1. Introducción a la IPO</a></li><li><a href="2-el-factor-humano.html">2. El factor humano</a></li><li><a href="3-prototipado-y-evaluacion.html">3. Prototipado y evaluación</a></li><li><a href="4-diseno-centrado-en-el-usuario.html">4. Diseño centrado en el usuario</a></li><li><span aria-current="page">5. Diseño gráfico. Principios, estándares y guías</span></li><li><a href="notas-sobre-examen.html">Notas sobre examen</a></li></ol></details>
+  <div class="prosa">
+<h1>5.1 Elementos de la imagen</h1>
+<p>Una imagen se puede ver como una <strong>composición de elementos grafo-morfológicos</strong> (puntos, líneas, formas, colores...) organizada según <strong>normas basadas en los principios de la percepción humana</strong> (ver <a href="2-el-factor-humano.html">tema 2</a>).</p>
+<p>El <strong>principio de simplicidad estructural</strong> busca <strong>aumentar la eficacia</strong> de la imagen mediante tres cosas: la <strong>pregnancia de la forma</strong> (que se perciba con <strong>claridad</strong>, a la primera), la <strong>composición plástica</strong> (cómo se reparten los elementos) y la <strong>correspondencia entre forma y contenido</strong> (que lo que se ve encaje con lo que significa).</p>
+<p>Los elementos básicos de una imagen son los <strong>puntos y líneas</strong>, que forman <strong>figuras</strong>; la <strong>iluminación y el color</strong>, y la <strong>composición</strong> (tamaño y formato).</p>
+<p><img src="../../../img/ipo/ipo-t5-elementos-imagen.png" alt="Elementos de la imagen|180" loading="lazy">
+<em>Formas (cuadrado, círculo, triángulo), un mismo cuadrado rojo sobre fondos de distinto color (el fondo cambia cómo se percibe) y una composición con perspectiva.</em></p>
+<h1>5.2 El uso del color</h1>
+<h2>5.2.1 Simplicidad, consistencia y claridad</h2>
+<p>El color debe usarse con <strong>simplicidad y consistencia</strong>: vincular <strong>significados prácticos e intuitivos</strong> a los colores primarios (<strong>rojo, verde, amarillo y azul</strong>), que son fáciles de aprender y recordar; usar <strong>pocos colores, 5 ± 2</strong>, y <strong>no sobrecargar</strong> un color con más de un significado: <strong>conceptos diferentes, colores diferentes</strong>.</p>
+<p>También debe aportar <strong>claridad</strong>: si el usuario <strong>conoce de antemano el color</strong> de una información, <strong>la encuentra antes</strong>; conviene usar <strong>colores estandarizados</strong>. Bien usado, el color mejora la <strong>estética</strong> y el <strong>atractivo</strong> de la interfaz, y también la <strong>efectividad del procesamiento de la información</strong> y el <strong>rendimiento de la memoria</strong>. La usabilidad mejora al <strong>agrupar con colores la información relacionada</strong> y al usar <strong>códigos de color en los mensajes</strong> (rojo para errores, por ejemplo).</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el semáforo y el metro</p>
+<p>En un semáforo cada color significa una sola cosa, y siempre la misma: por eso nadie duda. En un plano de metro, cada línea tiene su color y basta con 5-10. Si una misma línea cambiara de color en cada estación, o si usaran 30 tonos parecidos, el plano sería inútil.</p>
+</div>
+<h2>5.2.2 El lenguaje del color</h2>
+<p>Combinar colores con buenos resultados requiere técnica. Una <strong>mala combinación de fondo y primer plano</strong> crea ilusiones ópticas que <strong>fuerzan la vista</strong>; usar <strong>muchos colores puros o muy saturados</strong> obliga al ojo a <strong>reenfocar constantemente</strong> y causa <strong>fatiga</strong>, y usar <strong>colores difíciles de enfocar</strong> (como el azul) en <strong>texto o líneas finas</strong> produce <strong>fatiga y estrés</strong>.</p>
+<p><img src="../../../img/ipo/ipo-t5-color-macos.png" alt="Ejemplos de uso del color en Mac OS X|450" loading="lazy">
+<em>Arriba, legibilidad: el elemento seleccionado se resalta con un fondo de color que mantiene el texto legible, y los botones de reproducción de QuickTime usan un único color neutro. Abajo, significado del color: en el diálogo &quot;Revert&quot; el botón &quot;No&quot; lleva una X roja y &quot;Yes&quot; una marca verde.</em></p>
+<p><img src="../../../img/ipo/ipo-t5-color-hall-shame.png" alt="Mal uso del color: Easy CD Creator|450" loading="lazy">
+<em>Ejemplos del &quot;Interface Hall of Shame&quot;: colores fijados en el código que no siguen el sistema (botones Yes/No en amarillo y rojo) y un proceso de grabación de CD que muestra la misma barra azul y casi el mismo icono tanto si ha habido errores como si ha terminado bien.</em></p>
+<div class="callout callout-note">
+<p class="callout-titulo">La web del *Interface Hall of Shame* que enlaza la diapositiva (hallofshame.gp.co.at) ya no responde.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=op2jYWXuHiM">Color en las interfaces (curso de diseño UI)</a> — cómo elegir y usar colores con significado en una interfaz (vídeo, 11:30).</p>
+</div>
+<h1>5.3 Técnicas de diseño gráfico e iconos</h1>
+<h2>5.3.1 Técnicas de diseño gráfico</h2>
+<ul>
+<li><strong>Disposición</strong>: <strong>cómo se colocan los elementos</strong> en la pantalla; permite dar más importancia a unos que a otros. El <strong>orden de lectura</strong> importa y <strong>depende de la cultura</strong> (izquierda a derecha, derecha a izquierda...).</li>
+<li><strong>Énfasis</strong>: los elementos <strong>realzados se ven antes</strong> y se perciben <strong>más importantes</strong>. Si todo tiene el mismo peso, la composición es <strong>aburrida y la navegación difícil</strong>. Se consigue con la <strong>posición</strong>, el <strong>color</strong> y los <strong>atributos del texto</strong> (tamaño, negrita).</li>
+<li><strong>Foco</strong>: el <strong>centro de atención</strong>, el punto que se ve primero; sirve para <strong>dirigir al usuario</strong> a la información que interesa.</li>
+<li><strong>Alineación</strong>: aporta <strong>equilibrio, armonía, unidad y modularidad</strong>. Una alineación <strong>exacta y consistente</strong> es <strong>la forma más fácil de mejorar la estética</strong> de una interfaz.</li>
+</ul>
+<p><img src="../../../img/ipo/ipo-t5-composiciones.png" alt="Ejemplos de composición|350" loading="lazy">
+<em>Distintas formas de disponer los mismos bloques en una pantalla; la última muestra la rejilla (líneas discontinuas) a la que se alinean los elementos.</em></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=e2mzaycwsck">Jerarquía visual: qué es y cómo usarla</a> — énfasis, foco y orden de lectura aplicados a un diseño (vídeo, 7:20).</p>
+</div>
+<h2>5.3.2 Recomendaciones de diseño</h2>
+<ol>
+<li><strong>Facilitar la visibilidad</strong>: centrarse en el <strong>contenido</strong>.</li>
+<li>Usar <strong>diálogos simples y naturales</strong>, con <strong>lenguaje cercano</strong> a los usuarios.</li>
+<li><strong>Reducir el esfuerzo cognitivo</strong> (memorización) haciendo <strong>visible toda la información</strong>: evitar desplazamientos (<em>scroll</em>).</li>
+<li><strong>Reducir la complejidad de las acciones</strong>: <strong>predicción</strong> y <strong>realimentación</strong>.</li>
+<li><strong>Marcar con claridad las opciones de navegación</strong> y ofrecer <strong>atajos</strong>.</li>
+<li><strong>Agrupar los datos lógicamente</strong>, <strong>jerarquizar</strong> la información y <strong>mostrar solo la necesaria</strong>.</li>
+<li><strong>Flexibilizar la presentación</strong>: permitir <strong>personalizarla</strong>.</li>
+<li>Diseñar con una <strong>&quot;imagen global&quot;</strong>: <strong>estructura gráfica y de navegación común</strong> a todas las pantallas, con elementos comunes (por ejemplo, los iconos).</li>
+</ol>
+<h2>5.3.3 Iconos</h2>
+<p>Los iconos se usan desde la <strong>primera interfaz gráfica</strong> (<strong>Xerox Star</strong>) y son útiles por dos motivos: las personas <strong>reaccionan instintivamente a las imágenes</strong>, y son <strong>pequeños</strong>, algo importante en una pantalla de espacio limitado. Representan tanto <strong>objetos</strong> como <strong>funciones</strong>.</p>
+<p>Su significado depende de tres factores: el <strong>contexto</strong> (el entorno donde se usa), la <strong>función</strong> (el tipo de tarea) y la <strong>forma representativa</strong>, que puede ser un <strong>objeto concreto</strong>, un <strong>objeto abstracto</strong> o una <strong>combinación de ambos</strong>, que da los iconos <strong>más comprensibles</strong>.</p>
+<p><img src="../../../img/ipo/ipo-t5-iconos-forma.png" alt="Formas representativas de un icono|350" loading="lazy">
+<em>Señales de tráfico y de aviso: (a) desprendimientos, (b) restaurante (cuchillo y tenedor), (c) bar (copa) y (d) riesgo biológico, de lo más concreto a lo más abstracto.</em></p>
+<p>Tras elegir qué objeto representar hay que decidir <strong>cómo dibujarlo</strong> (simple o detallado) y crear un <strong>&quot;lenguaje icónico&quot;</strong>: una forma coherente de representar <strong>distintas acciones sobre un mismo elemento</strong> (por ejemplo, el mismo documento con un lápiz para editar, con una flecha para enviar...). Los <strong>sistemas complejos</strong> tienen un lenguaje icónico <strong>simple y consistente</strong>.</p>
+<p><img src="../../../img/ipo/ipo-t5-lenguaje-iconico.png" alt="Lenguaje icónico|400" loading="lazy">
+<em>Abajo a la derecha, una familia de iconos que comparten el mismo documento base y solo cambian en el detalle que indica la acción.</em></p>
+<h1>5.4 Principios y directrices</h1>
+<h2>5.4.1 Principios de diseño</h2>
+<p>Un <strong>principio</strong> es una afirmación <strong>muy general</strong>, normalmente basada en <strong>investigaciones sobre cómo aprenden y trabajan las personas</strong>. Son de <strong>alto nivel</strong> y sirven para alcanzar ciertos objetivos (por ejemplo, <strong>minimizar el trabajo del usuario</strong>) y para <strong>organizar el diseño</strong>, pero <strong>no dicen cómo conseguirlos</strong>, lo que limita su uso práctico.</p>
+<p>Distintos autores han propuesto sus listas:</p>
+<table>
+<thead>
+<tr>
+<th>Autor</th>
+<th>Principios</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Simpson (1985)</strong></td>
+<td>Definir los usuarios; dejarles el control; minimizar su trabajo; programas sencillos; consistencia; realimentación; no cargar la memoria de trabajo; no abusar de la memoria a largo plazo</td>
+</tr>
+<tr>
+<td><strong>Preece (1994)</strong></td>
+<td>Estudiar la población de usuarios; reducir la carga cognitiva; aplicar técnicas de ingeniería contra el error humano; consistencia y claridad</td>
+</tr>
+<tr>
+<td><strong>Dix (1998)</strong></td>
+<td>Facilidad de aprendizaje; flexibilidad; robustez</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Mandel (1997)</strong> los organiza en <strong>tres reglas de oro</strong>:</p>
+<ol>
+<li><strong>Dar el control al usuario</strong>: permitir <strong>teclado y ratón</strong>, que el usuario <strong>cambie de foco de atención</strong>, mostrar <strong>mensajes y textos descriptivos</strong>, ofrecer <strong>acciones inmediatas, reversibles y con realimentación</strong>, permitir <strong>personalizar</strong> la interfaz y <strong>manipular sus objetos</strong>, y <strong>adaptarse a distintos niveles de habilidad</strong>.</li>
+<li><strong>Reducir la carga de memoria</strong>: dar <strong>pistas visuales</strong>, <strong>opciones por defecto</strong> y <strong>atajos</strong>, usar <strong>metáforas del mundo real</strong>, aplicar la <strong>revelación progresiva</strong> (mostrar las opciones avanzadas solo cuando hacen falta, para no abrumar) y buscar <strong>claridad visual</strong>.</li>
+<li><strong>Hacer la interfaz consistente.</strong></li>
+</ol>
+<p><strong>IBM (2001)</strong> propone once:</p>
+<table>
+<thead>
+<tr>
+<th>Principio</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Simplicidad</strong></td>
+<td>No sacrificar la usabilidad por la funcionalidad</td>
+</tr>
+<tr>
+<td><strong>Apoyo</strong></td>
+<td>Dar al usuario el control del sistema</td>
+</tr>
+<tr>
+<td><strong>Familiaridad</strong></td>
+<td>Diseñar según lo que el usuario ya sabe</td>
+</tr>
+<tr>
+<td><strong>Evidencia</strong></td>
+<td>Objetos y controles <strong>visibles e intuitivos</strong></td>
+</tr>
+<tr>
+<td><strong>Estímulo</strong></td>
+<td>Acciones <strong>previsibles y reversibles</strong></td>
+</tr>
+<tr>
+<td><strong>Satisfacción</strong></td>
+<td>Crear <strong>sensación de progreso y logro</strong></td>
+</tr>
+<tr>
+<td><strong>Disponibilidad</strong></td>
+<td>Todos los objetos disponibles <strong>en cualquier orden y momento</strong></td>
+</tr>
+<tr>
+<td><strong>Seguridad</strong></td>
+<td>Evitar errores con distintos tipos de <strong>ayuda</strong></td>
+</tr>
+<tr>
+<td><strong>Versatilidad</strong></td>
+<td>Soportar varias técnicas de interacción para que el usuario elija la mejor para su situación</td>
+</tr>
+<tr>
+<td><strong>Personalización</strong></td>
+<td>Permitir adaptar la interfaz a sus necesidades</td>
+</tr>
+<tr>
+<td><strong>Afinidad</strong></td>
+<td>Objetos gráficos <strong>parecidos a los de la vida real</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Fíjate en que todas las listas repiten las mismas ideas de fondo: <strong>control</strong> del usuario, <strong>consistencia</strong>, <strong>realimentación</strong>, <strong>poca carga de memoria</strong> y <strong>prevención de errores</strong> (las mismas que las heurísticas de Nielsen y las reglas de Shneiderman del <a href="3-prototipado-y-evaluacion.html">tema 3</a>).</p>
+<h2>5.4.2 Directrices</h2>
+<p>Las <strong>directrices</strong> recomiendan <strong>acciones concretas</strong> basadas en los principios. Son <strong>más específicas</strong> y requieren <strong>menos experiencia</strong> para interpretarlas; los especialistas en IPO las concretan a partir de los principios para usuarios, entornos y tecnologías distintos. Permiten <strong>asegurar la consistencia</strong> dentro de un sistema o una familia de sistemas, algo fundamental para las empresas de software. <strong>Ejemplo</strong>: <em>no poner botones de cerrar en los diálogos modales</em> (obliga al usuario a elegir una respuesta).</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: principio, directriz y estándar</p>
+<p>Un <strong>principio</strong> es &quot;conduce con seguridad&quot; (general, no dice cómo). Una <strong>directriz</strong> es &quot;guarda dos segundos de distancia con el coche de delante&quot; (concreta y fácil de aplicar). Un <strong>estándar</strong> es el código de circulación aprobado por ley (obligatorio y acordado oficialmente).</p>
+</div>
+<h1>5.5 Estándares</h1>
+<p>Un <strong>estándar</strong> es un <strong>requisito, regla o recomendación basada en principios probados y en la práctica</strong>, que representa el <strong>acuerdo de un grupo de profesionales oficialmente autorizados</strong> a nivel local, nacional o internacional. Su objetivo es conseguir <strong>software más fácil y seguro</strong>, fijando <strong>requisitos mínimos</strong> y <strong>eliminando inconsistencias y variaciones innecesarias</strong> entre interfaces. Sus beneficios son una <strong>terminología común</strong>, facilidad de <strong>mantenimiento y evolución</strong>, una <strong>identidad común</strong> y <strong>menos formación</strong> necesaria.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Estándares <em>de iure</em></th>
+<th>Estándares <em>de facto</em></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Origen</td>
+<td><strong>Comités con estatus legal</strong>, con apoyo de un gobierno o institución</td>
+<td><strong>Productos de éxito en el mercado</strong> o desarrollos universitarios muy difundidos</td>
+</tr>
+<tr>
+<td>Por qué son estándar</td>
+<td>Se <strong>aprueban</strong> mediante un proceso formal: <strong>documento preliminar público → enmiendas → aprobación</strong></td>
+<td>Se <strong>aceptan por su uso generalizado</strong></td>
+</tr>
+<tr>
+<td>Dónde se definen</td>
+<td>En el documento oficial del organismo</td>
+<td>En <strong>manuales, libros o artículos</strong></td>
+</tr>
+<tr>
+<td>Ejemplos</td>
+<td>Normas <strong>ISO</strong></td>
+<td><strong>X-Window</strong>, <strong>lenguaje C</strong>, normas <strong>CUA</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Estándares <em>de iure</em> importantes en IPO:</p>
+<table>
+<thead>
+<tr>
+<th>Norma</th>
+<th>Tema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ISO/IEC 9126</strong></td>
+<td>Evaluación de productos software: características de calidad y directrices</td>
+</tr>
+<tr>
+<td><strong>ISO 9241</strong></td>
+<td>Requisitos ergonómicos para trabajar con terminales de presentación visual (VDT)</td>
+</tr>
+<tr>
+<td><strong>ISO/IEC 10741</strong></td>
+<td>Interacción de diálogos</td>
+</tr>
+<tr>
+<td><strong>ISO/IEC 11581</strong></td>
+<td>Símbolos y funciones de los iconos</td>
+</tr>
+<tr>
+<td><strong>ISO 11064</strong></td>
+<td>Diseño ergonómico de centros de control</td>
+</tr>
+<tr>
+<td><strong>ISO 13406</strong></td>
+<td>Requisitos ergonómicos de las pantallas planas</td>
+</tr>
+<tr>
+<td><strong>ISO 13407</strong></td>
+<td>Procesos de diseño centrados en la persona para sistemas interactivos</td>
+</tr>
+<tr>
+<td><strong>ISO 14915</strong></td>
+<td>Requisitos de las interfaces multimedia</td>
+</tr>
+<tr>
+<td><strong>ISO/IEC 18019</strong></td>
+<td>Diseño y preparación de documentación</td>
+</tr>
+</tbody>
+</table>
+<h1>5.6 Guías de estilo</h1>
+<h2>5.6.1 Qué son</h2>
+<p>Para asegurar la <strong>consistencia</strong> entre las partes de un sistema o una familia de sistemas, los desarrolladores deben basar sus diseños en un conjunto de <strong>principios y directrices</strong>. Las organizaciones suelen tener <strong>guías que siguen sus desarrolladores</strong>, llamadas <strong>guías de estilo</strong>, con objetivos muy variados. Su <strong>ventaja</strong> es que <strong>mejoran la usabilidad gracias a la consistencia</strong> que imponen. En la industria se las llama el <strong>&quot;look and feel&quot;</strong> (el aspecto y el comportamiento).</p>
+<p>Las publican <strong>fabricantes de software y hardware</strong> y suelen ser <strong>estándares de facto</strong>: <strong>Apple</strong>, <strong>Motif</strong>, <strong>OS/2</strong>, <strong>Windows</strong>, <strong>Open Look</strong>, <strong>CDE</strong> (<em>Common Desktop Environment</em>), <strong>KDE</strong>, <strong>Java Swing</strong>... (Motif, OS/2 y Windows siguen las normas <strong>CUA</strong>). Contienen directrices <strong>muy concretas</strong>, de muy bajo nivel.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p>Las guías actuales de los dos grandes fabricantes (las de las diapositivas redirigen a ellas): <a href="https://developer.apple.com/design/human-interface-guidelines">Apple Human Interface Guidelines</a> y <a href="https://learn.microsoft.com/en-us/windows/apps/design/">Windows app design (Microsoft)</a> (webs, inglés).</p>
+</div>
+<div class="callout callout-note">
+<p class="callout-titulo">Las diapositivas enlazan las guías antiguas de Windows (MSDN), de Mac y de iPhone, que hoy redirigen a las de arriba, y un repositorio de guías de experiencedynamics.com que ya no existe.</p>
+</div>
+<h2>5.6.2 Guías de estilo en la web</h2>
+<p>En la web <strong>no hay una guía de estilo propia</strong>: se pone más énfasis en el <strong>impacto</strong> que en la <strong>consistencia</strong>. La <strong>metáfora</strong> de la interfaz es la <strong>página</strong>: el usuario interactúa con ella y <strong>navega de página en página</strong>. Una referencia es la <a href="https://www.webstyleguide.com/wsg3/index.html">Web Style Guide</a>.</p>
+<h2>5.6.3 Guías de estilo corporativas</h2>
+<p>Ayudan a una organización a dar <strong>el mismo estilo a todos sus productos</strong>. Para crear la suya, una organización <strong>parte de una guía de estilo comercial</strong> y le <strong>añade características propias</strong> que den una <strong>imagen coherente</strong> de la organización. Un ejemplo es la guía de imagen web de la <strong>USC</strong>.</p>
+<div class="callout callout-note">
+<p class="callout-titulo">El enlace a la guía de la USC de las diapositivas ya no está disponible.</p>
+</div>
+<h2>5.6.4 Consideraciones</h2>
+<p>Los estándares y guías son una <strong>base</strong> para el diseño, pero <strong>no garantizan que la interfaz sea usable</strong>. Aun así, <strong>es mejor seguirlas que no hacerlo</strong>: se puede llegar a un buen diseño sin ellas, pero aportan <strong>más ventajas que inconvenientes</strong>. Para que se apliquen de verdad conviene <strong>facilitárselo</strong> a diseñadores y programadores: dar <strong>ejemplos en la documentación</strong>, <strong>incorporar las guías a las herramientas</strong> y ofrecer <strong>formación</strong>.</p>
+<h1>5.7 Ideas clave</h1>
+<ul>
+<li>Imagen = elementos (puntos, líneas, formas, color, composición) organizados según la percepción. <strong>Simplicidad estructural</strong>: pregnancia, composición plástica, correspondencia forma-contenido.</li>
+<li><strong>Color</strong>: significados intuitivos para rojo, verde, amarillo y azul; <strong>5 ± 2 colores</strong>; <strong>un concepto, un color</strong>; colores estandarizados; agrupar y codificar mensajes. Evitar fondos/primer plano que fuerzan la vista, colores saturados y colores difíciles de enfocar en texto fino.</li>
+<li>Técnicas: <strong>disposición</strong> (orden de lectura según cultura), <strong>énfasis</strong>, <strong>foco</strong>, <strong>alineación</strong> (la forma más fácil de mejorar la estética). 8 recomendaciones (visibilidad, lenguaje natural, menos memoria, realimentación, navegación clara, agrupar, personalizar, imagen global).</li>
+<li><strong>Iconos</strong> (desde Xerox Star): significado según contexto, función y forma (concreta, abstracta o combinada); <strong>lenguaje icónico</strong> simple y consistente.</li>
+<li><strong>Principios</strong> (generales, no dicen cómo): Simpson, Preece, Dix, <strong>Mandel</strong> (control, menos memoria, consistencia), <strong>IBM</strong> (11). <strong>Directrices</strong>: más concretas (no poner &quot;cerrar&quot; en un diálogo modal).</li>
+<li><strong>Estándares</strong>: <strong>de iure</strong> (comités oficiales, normas ISO: 9241, 13407, 11581...) y <strong>de facto</strong> (X-Window, C, CUA).</li>
+<li><strong>Guías de estilo</strong> (&quot;look and feel&quot;): de fabricantes (Apple, Windows, KDE...), web (la página como metáfora) y corporativas. No garantizan la usabilidad, pero es mejor seguirlas.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="4-diseno-centrado-en-el-usuario.html"><span class="nav-etiqueta">← anterior</span>4. Diseño centrado en el usuario</a>
+  <a class="nav-siguiente" href="notas-sobre-examen.html"><span class="nav-etiqueta">siguiente →</span>Notas sobre examen</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

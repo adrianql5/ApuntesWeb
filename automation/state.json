@@ -1,7 +1,7 @@
 {
   "vaults": {
     "2-1": {
-      "fecha": "2026-09-28T19:05:49.457Z",
+      "fecha": "2026-11-21T10:26:48.098Z",
       "hashes": {
         "AED/1. ÁRBOLES BINARIOS.md": "125e4a6b730c773b5d0a1e65999613a734cebec2",
         "AED/2. ESTRUCTURAS PARA BÚSQUEDA.md": "2dc7ffe18a9f58a6d16b387c0d8a61fa539b1782",
@@ -42,7 +42,7 @@
       }
     },
     "2-2": {
-      "fecha": "2026-09-28T19:05:49.461Z",
+      "fecha": "2026-11-21T10:26:48.101Z",
       "hashes": {
         "AQRCOMP/1. Sistemas Multinúcleo.md": "16bacebaf0fdc589b11186fa040f06f8e9add308",
         "AQRCOMP/2. Segmentación.md": "7ef25c0c2197520b7ab1c2c78f4c894d81748ee6",
@@ -84,7 +84,7 @@
       }
     },
     "3-1": {
-      "fecha": "2026-09-28T19:05:49.463Z",
+      "fecha": "2026-11-21T10:26:48.102Z",
       "hashes": {
         "ASR/1. Instalación de Linux Debian.md": "c18dfa35e160f960860b69eba5404740c720541c",
         "ASR/2. Instalación de Software.md": "f4b321001a6b3ed9ab66ac01304aebc3ea9d1b05",
@@ -122,7 +122,7 @@
       }
     },
     "3-2": {
-      "fecha": "2026-09-28T19:05:49.463Z",
+      "fecha": "2026-11-21T10:26:48.102Z",
       "hashes": {
         "CIBER/1. Introducción.md": "c9049b66b0d8490e6d339c0b317566c965ec22bb",
         "CIBER/2. Criptografía.md": "05f85a60edc24c58290103b5c0b89fb34ca5ec2c",
@@ -151,7 +151,7 @@
       }
     },
     "legacy": {
-      "fecha": "2026-09-28T19:05:49.464Z",
+      "fecha": "2026-11-21T10:26:48.103Z",
       "hashes": {
         "Algebra/README.md": "cb0a10e15606ee89eac28d25f3ad9ed336044f92",
         "Calculo/README.md": "aa67f3533d3776381d2e91c7575eebaa509b8a13",
@@ -166,14 +166,33 @@
       }
     },
     "4-1": {
-      "fecha": "2026-09-28T19:05:49.464Z",
+      "fecha": "2026-11-21T10:26:48.103Z",
       "hashes": {
+        "COMPNU/1. Introducción a la computación en la nube.md": "0187173ef64839bb2e4c24cf0b4a314c2035e161",
+        "COMPNU/2. Mecanismos de virtualización.md": "8b7b5cd30370e65b09d135b7ae251799234e7ead",
+        "COMPNU/3. Aplicaciones y servicios en la nube.md": "fd2c83229bc2b41783277c71f0d994136c3d7842",
         "ENCO/1. Formatos de Servidores - Racks y Blades.md": "dd598c2df0b41281907ef79e58088ad2084680ac",
         "ENCO/2. Centros de Procesamiento de Datos (CPDs).md": "ff0372bf14d88862bcb6ed7c175da1c4938a6e2f",
-        "MYAD/1. Almacenes de Datos.md": "a0fa18678b6326224b25b07ca47dea33308a19f7",
-        "MYAD/Práctica 1.md": "6e5b391ee63b6aeb8a286c70a40769d31b921550",
-        "SISIN/1. Temple Simulado.md": "414063328e4b1a9c7ec50c025ec2275b8489d43c",
-        "README.md": "01b0a483dcc6778d58db7dfd8279f30ac3fbc1de"
+        "ENCO/3. Virtualización de Servidores.md": "8550ee78dccdabc74ddeec3941d79509cf3bdc80",
+        "ENCO/4. Dispositivos de Almacenamiento.md": "40edd5b839f9371c416e95835be5d62ecd1891ca",
+        "ENCO/5. Subsistemas de Disco.md": "073a338b310a840dc399fae3cf07ca57c74786a7",
+        "ENCO/6. Fibre Channel y redes SAN.md": "fd762e05bebc57e7caef9a442080a2b149eb6470",
+        "ENSER/1. Introducción a la Ingeniería de Servicios.md": "ff555c17a07776922fb983f6b0a8e42d93a06822",
+        "ENSER/2. Componentes distribuidos y estilos arquitectónicos. SOAP y REST.md": "4efa134f34608438d07c1e5ee528b7e68f6f5a03",
+        "ENSER/3. Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios.md": "ac621a06ae513acd7a7161e2213810c26b241da9",
+        "ENSER/Prácticas. Servicios REST con Spring.md": "10dd0b1726e6b919b75e76f43cc6758abfc067eb",
+        "ENSER/Prueba 2.md": "1062ea604be8adec32e2c153706ecf285cd4ed4a",
+        "IPO/1. Introducción a la IPO.md": "0395f5b724597c49cbdc174042a71d6979c02821",
+        "IPO/2. El factor humano.md": "4324b709b9af670534411f4a7eaa0d93fb37e9db",
+        "IPO/3. Prototipado y evaluación.md": "ff5d4e51b7b5bf6a47bb28c29baa474ac55f9ce6",
+        "IPO/4. Diseño centrado en el usuario.md": "4832910182a8e0ef72cb4e6d3b00f6dc8ebf7ad8",
+        "IPO/5. Diseño gráfico. Principios, estándares y guías.md": "7b64debb02eb4ee11251291264fac11a61b95f76",
+        "IPO/Notas sobre examen.md": "658519aef781c733cda5f1463bc4a57a6f3d084d",
+        "MYAD/1. Almacenes de Datos.md": "9cd4df8d3bf17391129c5e69a51d3971a1679f79",
+        "MYAD/2. Extracción, Transformación y Carga (ETL).md": "0a1441fafd91eb1cd747b47b7bf58ea0be13eb00",
+        "SISIN/1. Búsqueda local, Temple Simulado y CSP.md": "db52ee60102ce0b6ec9dfadcf4dad20c60e54298",
+        "SISIN/2. Metaheurísticas basadas en poblaciones.md": "bd24bd9802e47af0e89c0e3ff689c3f4ca98981c",
+        "README.md": "c87b7d06ce13bc92d7fa3427129bf09bd1c8e964"
       }
     }
   }

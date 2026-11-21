@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="3. Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios — apuntes de ENSER (cuarto curso de Ingeniería Informática).">
+<title>3. Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios · ENSER · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enser</a><span class="miga-sep">/</span><span aria-current="page">3-concepto-de-servicio-y-servicios-sin-estado-buenas-practicas-en-el-diseno-de-servicios</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENSER"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENSER</a></p><ol><li><a href="1-introduccion-a-la-ingenieria-de-servicios.html">1. Introducción a la Ingeniería de Servicios</a></li><li><a href="2-componentes-distribuidos-y-estilos-arquitectonicos-soap-y-rest.html">2. Componentes distribuidos y estilos arquitectónicos. SOAP y REST</a></li><li><span class="actual" aria-current="page">3. Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios</span></li><li><a href="practicas-servicios-rest-con-spring.html">Prácticas. Servicios REST con Spring</a></li><li><a href="prueba-2.html">Prueba 2</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENSER</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>3 / 3</div>
+    </div>
+    <h1>Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENSER · 3/5</summary><ol><li><a href="1-introduccion-a-la-ingenieria-de-servicios.html">1. Introducción a la Ingeniería de Servicios</a></li><li><a href="2-componentes-distribuidos-y-estilos-arquitectonicos-soap-y-rest.html">2. Componentes distribuidos y estilos arquitectónicos. SOAP y REST</a></li><li><span aria-current="page">3. Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios</span></li><li><a href="practicas-servicios-rest-con-spring.html">Prácticas. Servicios REST con Spring</a></li><li><a href="prueba-2.html">Prueba 2</a></li></ol></details>
+  <div class="prosa">
+<h1>3.1 Punto de partida: peticiones, respuestas y endpoints</h1>
+<p>Antes de las reglas del tema conviene tener claro el vocabulario básico, porque todo lo demás se apoya en él.</p>
+<p>Una <strong>API</strong> (<em>Application Programming Interface</em>) es la &quot;puerta&quot; que un programa ofrece para que otros programas lo usen. En una <strong>API REST</strong>, esa puerta funciona sobre <strong>HTTP</strong>, el mismo protocolo que usa tu navegador: un <strong>cliente</strong> (una app móvil, una web, otro servicio) envía una <strong>petición</strong> y el <strong>servidor</strong> devuelve una <strong>respuesta</strong>.</p>
+<p>Una <strong>petición HTTP</strong> tiene cuatro partes:</p>
+<ul>
+<li><strong>Verbo</strong> (o método): qué quieres hacer (<code>GET</code> obtener, <code>POST</code> crear, <code>PUT</code>/<code>PATCH</code> modificar, <code>DELETE</code> borrar).</li>
+<li><strong>URL</strong>: sobre qué recurso lo quieres hacer (<code>/aulas/12</code>).</li>
+<li><strong>Cabeceras</strong>: metadatos (quién eres, en qué formato envías o quieres los datos).</li>
+<li><strong>Cuerpo</strong> (opcional): los datos que envías, normalmente en <strong>JSON</strong>.</li>
+</ul>
+<p>La <strong>respuesta</strong> tiene un <strong>código de estado</strong> (un número que dice cómo fue: <code>200</code> bien, <code>404</code> no existe...), <strong>cabeceras</strong> y, opcionalmente, un <strong>cuerpo</strong> con los datos.</p>
+<pre><code class="language-http">POST /aulas HTTP/1.1                     ← verbo + URL
+Host: api.etse.gal
+Content-Type: application/json           ← cabeceras
+Authorization: Bearer eyJhbGciOi...
+
+{ &quot;nome&quot;: &quot;Aula 3&quot;, &quot;capacidade&quot;: 20 }   ← cuerpo
+</code></pre>
+<pre><code class="language-http">HTTP/1.1 201 Created                     ← código de estado
+Location: https://api.etse.gal/aulas/15  ← cabeceras
+Content-Type: application/json
+
+{ &quot;id&quot;: 15, &quot;nome&quot;: &quot;Aula 3&quot;, &quot;capacidade&quot;: 20 }   ← cuerpo
+</code></pre>
+<p>Un <strong>endpoint</strong> es simplemente <strong>la combinación de un verbo y una URL</strong> que la API ofrece para hacer una operación concreta. <code>GET /aulas</code> (listar aulas) y <code>POST /aulas</code> (crear un aula) son <strong>dos endpoints distintos</strong> aunque compartan URL. <strong>Diseñar una API</strong> es decidir qué endpoints existen y qué recibe y devuelve cada uno.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la carta de un restaurante</p>
+<p>La API es la <strong>carta</strong>: te dice qué puedes pedir y cómo. Cada <strong>endpoint</strong> es un plato de la carta (&quot;POST /reservas&quot; = &quot;reservar mesa&quot;). La <strong>petición</strong> es lo que le dices al camarero, con tus datos (el cuerpo: &quot;para 4, a las 21:00&quot;). La <strong>respuesta</strong> es lo que te traen, y el <strong>código de estado</strong> es lo que te dice el camarero: &quot;marchando&quot; (201), &quot;no queda&quot; (404), &quot;esa zona es solo para socios&quot; (403).</p>
+</div>
+<p>Dos palabras más: un <strong>recurso</strong> es cualquier &quot;cosa&quot; identificable (un aula, una reserva) y una <strong>colección</strong> es el conjunto de recursos del mismo tipo (todas las aulas). En la URL, <code>/aulas</code> es la colección y <code>/aulas/12</code> es un recurso concreto.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=LQdJG8Qc5xo">Qué es una REST API y cómo funciona</a> — explicación para principiantes de API, peticiones, respuestas y verbos (vídeo, 11 min).</p>
+</div>
+<h1>3.2 El servicio y su ciclo de vida</h1>
+<p>Como vimos en el tema 2, un <strong>servicio</strong> es un componente de negocio con una <strong>interfaz bien definida</strong>, <strong>autónomo</strong>, <strong>desacoplado</strong> y con un <strong>objetivo limitado</strong>: por ejemplo, listar todas las películas de una plataforma de streaming u obtener los detalles de un libro de una biblioteca.</p>
+<p>Los servicios web tienen un <strong>ciclo de vida de cuatro fases</strong>:</p>
+<ol>
+<li><strong>Análisis y diseño</strong>: identificar qué servicios necesita la organización y definir formalmente sus <strong>interfaces</strong> (el &quot;contrato&quot;), incluidos los <strong>requisitos no funcionales</strong> como la <strong>seguridad</strong>, el <strong>rendimiento</strong> y el <strong>nivel de servicio</strong> esperado.</li>
+<li><strong>Desarrollo e implementación</strong>: programar el servicio, eligiendo las <strong>tecnologías</strong> que permitan cumplir los requisitos anteriores.</li>
+<li><strong>Despliegue y gestión</strong>: poner el servicio en producción con técnicas de automatización como <strong>CI/CD</strong> (Integración/Despliegue Continuo) y <strong>monitorizar</strong> constantemente su salud, por ejemplo para <strong>escalar o desescalar</strong> instancias.</li>
+<li><strong>Retiro y obsolescencia</strong>: al final de su vida útil, el servicio debe <strong>retirarse de forma planificada</strong> para minimizar el impacto en los consumidores, ya sea <strong>sustituyéndolo por una nueva versión</strong> o con una <strong>retirada gradual y comunicada</strong> de antemano.</li>
+</ol>
+<h1>3.3 Servicios sin estado (<em>stateless</em>)</h1>
+<p>Una de las características más importantes de REST es la <strong>ausencia de estado</strong>: el servidor <strong>no guarda información sobre las peticiones anteriores</strong> de un cliente para poder resolver una nueva. Cada petición es <strong>autocontenida</strong>: lleva <strong>toda la información necesaria</strong> para que el servidor la ejecute por sí sola.</p>
+<p>Esto <strong>simplifica mucho el diseño y el escalado</strong>, porque reduce el acoplamiento entre llamadas sucesivas: <strong>cualquier servidor puede atender cualquier petición</strong>, así que la carga se reparte fácilmente, y los resultados son <strong>consistentes y repetibles</strong> sin importar el orden o la máquina que los procese.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el cajero que no te conoce</p>
+<p>Un servicio con estado es como un camarero que recuerda lo que pediste antes (&quot;¿lo de siempre?&quot;): si ese camarero se va, el siguiente no sabe nada. Un servicio sin estado es como una máquina expendedora: cada vez le das el producto y el dinero completos, y da igual qué máquina uses. Por eso es fácil poner diez máquinas en lugar de una.</p>
+</div>
+<h1>3.4 Recursos y URLs</h1>
+<p>Las APIs REST se organizan en torno a <strong>recursos</strong>. Un recurso es cualquier entidad (o colección de entidades) lo bastante importante como para ser <strong>identificada y referenciada por sí misma</strong>: un documento, un registro de una base de datos o el resultado de una operación. La <strong>única restricción</strong> es que tiene que poder <strong>referenciarse mediante una URL</strong>.</p>
+<h2>3.4.1 Anatomía de una URL</h2>
+<p>Una URL es el identificador para acceder a un recurso, y debería <strong>comunicar claramente a qué recurso se refiere</strong> sin necesidad de abrirla. Todas siguen el formato del <strong>RFC 3986</strong>:</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord text"><span class="mord">URL</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.9167em;vertical-align:-0.2222em;"></span><span class="mord text"><span class="mord texttt">&lt;esquema&gt;://&lt;autoridad&gt;/&lt;ruta&gt;[?&lt;consulta&gt;]</span></span></span></span></span></span></eqn></section><table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Qué define</th>
+<th>Ejemplo en <code>https://api.biblioteca.gal:8443/libros?page=2</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Esquema</strong> (<em>scheme</em>)</td>
+<td>El protocolo, normalmente <code>https</code> (o <code>http</code>)</td>
+<td><code>https</code></td>
+</tr>
+<tr>
+<td><strong>Autoridad</strong> (<em>authority</em>)</td>
+<td>El <strong>dominio</strong> del servidor (el proveedor); puede incluir un <strong>puerto</strong></td>
+<td><code>api.biblioteca.gal:8443</code></td>
+</tr>
+<tr>
+<td><strong>Ruta</strong> (<em>path</em>)</td>
+<td>La <strong>ruta jerárquica</strong> hasta el recurso</td>
+<td><code>/libros</code></td>
+</tr>
+<tr>
+<td><strong>Consulta</strong> (<em>query</em>)</td>
+<td><strong>Parámetros opcionales</strong> para filtrar, paginar, ordenar...</td>
+<td><code>page=2</code></td>
+</tr>
+</tbody>
+</table>
+<h2>3.4.2 Reglas de diseño de URLs</h2>
+<p>Estas reglas son las que se aplican al diseñar los endpoints en los ejercicios:</p>
+<table>
+<thead>
+<tr>
+<th>Regla</th>
+<th>✅ Bien</th>
+<th>❌ Mal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Siempre en <strong>minúsculas</strong></td>
+<td><code>https://api.biblioteca.gal/libros</code></td>
+<td><code>HTTPS://API.BIBLIOTECA.GAL/LIBROS</code>, <code>https://api.biblioteca.gal/LIBROS</code></td>
+</tr>
+<tr>
+<td><strong>Guiones</strong> (<code>-</code>) para separar palabras, no guiones bajos</td>
+<td><code>/libros/le-petit-prince</code></td>
+<td><code>/libros/le_petit_prince</code>, <code>/libros/le+petit+prince</code>, <code>/libros/lepetitprince</code>, <code>/libros/le%20petit%20prince</code></td>
+</tr>
+<tr>
+<td><strong>Colecciones</strong> con sustantivo en <strong>plural</strong></td>
+<td><code>/libros</code></td>
+<td><code>/libro</code></td>
+</tr>
+<tr>
+<td><strong>Recursos individuales</strong>: la colección + <strong>identificador único</strong></td>
+<td><code>/libros/le-petit-prince</code>, <code>/produtos/123</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>Sin verbos</strong> en la URL: la operación la dice el verbo HTTP</td>
+<td><code>GET /libros</code></td>
+<td><code>/getlibros</code>, <code>/libros/obter_libros</code>, <code>/libros/consultar</code>, <code>/libros/ver-todos</code></td>
+</tr>
+<tr>
+<td><strong>Sin barra final</strong></td>
+<td><code>/libros</code></td>
+<td><code>/libros/</code></td>
+</tr>
+<tr>
+<td><strong>Filtrado, paginación y ordenación en la query</strong>, nunca en el path</td>
+<td><code>/libros?page=2&amp;size=5</code></td>
+<td><code>/libros/2/5</code>, <code>/libros/page/2/size/5</code></td>
+</tr>
+</tbody>
+</table>
+<p>Una idea útil: el <strong>path identifica QUÉ recurso</strong> y la <strong>query dice CÓMO lo quieres</strong> (filtrado, orden, página). Si un dato identifica un recurso concreto (su id), va en el path; si solo acota o modifica el resultado, va en la query.</p>
+<h1>3.5 Verbos HTTP</h1>
+<p>Las APIs REST usan los <strong>verbos HTTP</strong> para indicar la operación sobre los recursos, de forma parecida a las operaciones de una base de datos (crear, leer, actualizar, borrar).</p>
+<h2>3.5.1 Idempotencia y seguridad</h2>
+<p>Una operación es <strong>idempotente</strong> si ejecutarla <strong>una o varias veces con la misma petición produce el mismo efecto en el servidor</strong>. Ojo: no garantiza que la <strong>respuesta</strong> sea la misma (el código de estado puede cambiar), sino que el <strong>estado del recurso</strong> no cambia más allá de la primera ejecución.</p>
+<p>Una operación es <strong>segura</strong> si <strong>no causa ningún cambio en el servidor</strong>: es de solo lectura, así que puedes llamarla cuantas veces quieras sin miedo a modificar los datos.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>GET</th>
+<th>POST</th>
+<th>PUT</th>
+<th>PATCH</th>
+<th>DELETE</th>
+<th>QUERY</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Idempotente</strong></td>
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+<td>❌</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><strong>Seguro</strong></td>
+<td>✅</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<p>Por qué cada uno:</p>
+<ul>
+<li><strong>GET</strong> solo lee: es <strong>seguro</strong> y, por tanto, también <strong>idempotente</strong>.</li>
+<li><strong>PUT</strong> es idempotente porque, aunque lo envíes varias veces con el mismo contenido, el recurso <strong>acaba siempre igual</strong>.</li>
+<li><strong>DELETE</strong> es idempotente porque, tras borrar en la primera llamada, las siguientes no hacen nada, pero el recurso <strong>sigue borrado</strong> (la respuesta puede pasar de <code>204</code> a <code>404</code>, pero el estado del servidor es el mismo).</li>
+<li><strong>POST</strong> <strong>no</strong> es idempotente: <strong>cada llamada crea un recurso nuevo</strong>; llamarlo dos veces crea dos pedidos distintos.</li>
+<li><strong>PATCH</strong> <strong>no</strong> es idempotente porque, según la lógica del servidor, <strong>ejecutarlo varias veces puede dar resultados distintos</strong> (por ejemplo, &quot;añade un autor a la lista&quot; añade uno más cada vez).</li>
+<li><strong>Ninguno de los que modifican</strong> (POST, PUT, PATCH, DELETE) es seguro.</li>
+</ul>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el interruptor y el botón del ascensor</p>
+<p><strong>PUT</strong> es como poner el interruptor en &quot;encendido&quot;: da igual cuántas veces lo hagas, la luz queda encendida (idempotente). <strong>POST</strong> es como echar una moneda en una hucha: cada vez hay una moneda más (no idempotente). <strong>GET</strong> es como mirar la luz: no cambia nada (seguro).</p>
+</div>
+<h2>3.5.2 Guía de uso de cada verbo</h2>
+<table>
+<thead>
+<tr>
+<th>Verbo</th>
+<th>Para qué</th>
+<th>Sobre qué se aplica</th>
+<th>Cuerpo de la petición</th>
+<th>Ejemplo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>GET</strong></td>
+<td><strong>Recuperar</strong> la representación de un recurso o colección</td>
+<td>Colecciones <strong>y</strong> recursos concretos</td>
+<td><strong>Nada</strong></td>
+<td><code>GET /produtos</code>, <code>GET /produtos/123</code></td>
+</tr>
+<tr>
+<td><strong>POST</strong></td>
+<td><strong>Crear</strong> un recurso nuevo. Excepcionalmente, <strong>consultas complejas</strong> que no caben en la URL</td>
+<td><strong>Solo colecciones</strong> (añades un elemento a la colección)</td>
+<td>La <strong>representación del recurso a crear</strong></td>
+<td><code>POST /produtos</code></td>
+</tr>
+<tr>
+<td><strong>PUT</strong></td>
+<td><strong>Sustituir por completo</strong> un recurso</td>
+<td><strong>Solo recursos concretos</strong></td>
+<td>La <strong>representación completa</strong> del recurso modificado</td>
+<td><code>PUT /produtos/123</code></td>
+</tr>
+<tr>
+<td><strong>PATCH</strong></td>
+<td><strong>Modificar parcialmente</strong> un recurso</td>
+<td><strong>Solo recursos concretos</strong></td>
+<td>Una <strong>lista de instrucciones</strong> de cambio (<strong>JSON Patch</strong>)</td>
+<td><code>PATCH /produtos/123</code></td>
+</tr>
+<tr>
+<td><strong>DELETE</strong></td>
+<td><strong>Eliminar</strong> un recurso (o una colección)</td>
+<td>Normalmente <strong>recursos concretos</strong>; sobre colecciones es posible pero <strong>peligroso y poco habitual</strong></td>
+<td><strong>Nada</strong></td>
+<td><code>DELETE /produtos/123</code></td>
+</tr>
+<tr>
+<td><strong>QUERY</strong></td>
+<td><strong>Recuperar</strong> datos, como GET, pero con una <strong>consulta compleja en el cuerpo</strong></td>
+<td>Colecciones</td>
+<td>La <strong>consulta</strong></td>
+<td><code>QUERY /libros</code></td>
+</tr>
+</tbody>
+</table>
+<p>La diferencia entre <strong>PUT y PATCH</strong> cae mucho en los exámenes: con <strong>PUT</strong> mandas <strong>el recurso entero</strong> tal como debe quedar (si omites un campo, se entiende que lo quieres vacío); con <strong>PATCH</strong> mandas <strong>solo las instrucciones de lo que cambia</strong>.</p>
+<h2>3.5.3 PATCH y JSON Patch</h2>
+<p>El cuerpo de un PATCH es un <strong>array de operaciones</strong> en formato <strong>JSON Patch</strong> (RFC 6902). Cada operación tiene <code>op</code> (qué hacer: <code>add</code>, <code>replace</code>, <code>remove</code>, <code>test</code>, <code>copy</code>, <code>move</code>), <code>path</code> (qué campo) y <code>value</code> (el nuevo valor, si hace falta). La petición se envía con <code>Content-Type: application/json-patch+json</code>.</p>
+<pre><code class="language-json">[
+  { &quot;op&quot;: &quot;add&quot;,     &quot;path&quot;: &quot;/authors/0&quot;, &quot;value&quot;: &quot;Miguel de Cervantes Saavedra&quot; },
+  { &quot;op&quot;: &quot;replace&quot;, &quot;path&quot;: &quot;/edition&quot;,   &quot;value&quot;: &quot;500 Aniversary Edition&quot; }
+]
+</code></pre>
+<p><em>Añade un autor en la primera posición de la lista <code>authors</code> y sustituye el valor del campo <code>edition</code>.</em></p>
+<h2>3.5.4 QUERY</h2>
+<p><strong>QUERY</strong> sirve, como GET, para <strong>recuperar datos</strong>, pero <strong>permite incluir información en el cuerpo</strong> de la petición, lo que lo hace ideal para <strong>consultas complejas</strong>. Es <strong>seguro e idempotente</strong>. Según las diapositivas, antes de su <strong>estandarización (2026)</strong> estas consultas se hacían con <strong>POST</strong>, que no es ni seguro ni idempotente.</p>
+<p>El cuerpo puede usar distintos lenguajes de consulta. Todos estos piden &quot;título, autor e ISBN de los libros de precio menor que 10 y categoría fantasía o ciencia ficción&quot;:</p>
+<table>
+<thead>
+<tr>
+<th>Lenguaje</th>
+<th>Consulta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>JSON Path</strong></td>
+<td><code>$[?(@.price &lt; 10 &amp;&amp; (@.category == 'fantasy' || @.category == 'sci-fi'))]['title','author','isbn']</code></td>
+</tr>
+<tr>
+<td><strong>JMES Path</strong></td>
+<td><code>[?price &lt; `10` &amp;&amp; (category == 'fantasy' || category == 'sci-fi')].{title: title, author: author, isbn: isbn}</code></td>
+</tr>
+<tr>
+<td><strong>Mongo Query Language</strong></td>
+<td><code>{&quot;filter&quot;: {&quot;price&quot;: {&quot;$lt&quot;: 10}, &quot;category&quot;: {&quot;$in&quot;: [&quot;fantasy&quot;,&quot;sci-fi&quot;]}}, &quot;projection&quot;: {&quot;title&quot;:1,&quot;author&quot;:1,&quot;isbn&quot;:1}}</code></td>
+</tr>
+<tr>
+<td><strong>OASIS OData</strong></td>
+<td><code>{&quot;$select&quot;: [&quot;title&quot;,&quot;author&quot;,&quot;isbn&quot;], &quot;$filter&quot;: &quot;price lt 10 and (category eq 'fantasy' or category eq 'sci-fi')&quot;}</code></td>
+</tr>
+<tr>
+<td><strong>SQL</strong> (<em>from-less</em>)</td>
+<td><code>SELECT title, author, isbn WHERE price &lt; 10 AND category IN ('fantasy','sci-fi');</code></td>
+</tr>
+<tr>
+<td>Otros</td>
+<td>SPARQL, GraphQL, PRQL...</td>
+</tr>
+</tbody>
+</table>
+<h1>3.6 Problemas de diseño habituales</h1>
+<p>Las diapositivas plantean tres problemas típicos que no encajan a la primera en REST, con su solución.</p>
+<p><strong>¿Cómo hacer idempotente un POST?</strong> Si el cliente repite un POST (por ejemplo, porque se cortó la red y no sabe si llegó), se crearían dos recursos. La solución es incluir en la petición una <strong>clave de idempotencia</strong> (<em>idempotency key</em>) para <strong>deduplicar</strong> llamadas. El <strong>cliente</strong> debe enviar <strong>siempre la misma clave para la misma petición</strong> y <strong>nunca repetirla</strong> en peticiones distintas; el <strong>servidor</strong> guarda las claves y, <strong>antes de procesar</strong> una petición, comprueba si esa clave ya está en el sistema y en qué estado.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el número de ticket</p>
+<p>Es como el número de un pedido en un restaurante de comida rápida: si vuelves a la caja con el mismo número, no te cobran otra hamburguesa, te dicen &quot;ese pedido ya está hecho&quot;.</p>
+</div>
+<p><strong>¿Cómo ejecutar tareas asíncronas o de larga duración?</strong> (por ejemplo, generar un informe que tarda minutos). Se hace un <strong>POST para crear un recurso &quot;tarea&quot;</strong> que permita monitorizar la ejecución. Después, cuando el cliente hace <strong>GET</strong> de esa tarea: <strong>mientras no haya terminado</strong> (o si <strong>ha fallado</strong>), se devuelve la representación de la tarea <strong>con su estado</strong>; si <strong>ha terminado bien</strong>, se devuelve una <strong>redirección a la URL del resultado</strong>. (Aunque las diapositivas no lo detallan, lo habitual es responder al POST con <code>202 Accepted</code> y redirigir con <code>303 See Other</code>.)</p>
+<p><strong>¿Cómo soportar la ejecución de funciones o métodos?</strong> (algo que es más una acción que una &quot;cosa&quot;). Se <strong>representa la función como un recurso</strong> (por ejemplo, calcular una ruta entre dos sitios: <code>/routes</code>) y se hace un <strong>GET pasando los parámetros en la query</strong>: <code>GET /routes?from=Santiago&amp;to=Lugo</code>. Así se evita meter verbos en la URL (<code>/calcular-ruta</code>).</p>
+<h1>3.7 Códigos de estado HTTP</h1>
+<p>Las APIs REST usan los <strong>códigos de estado estándar de HTTP</strong> para notificar el resultado de una operación. Son una señal clara y <strong>legible por máquinas</strong> para que el cliente reaccione adecuadamente.</p>
+<h2>3.7.1 Categorías</h2>
+<table>
+<thead>
+<tr>
+<th>Categoría</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>1XX – Informativos</strong></td>
+<td>La petición <strong>está en proceso</strong>. Poco comunes en APIs REST</td>
+</tr>
+<tr>
+<td><strong>2XX – Éxito</strong></td>
+<td>La petición se <strong>procesó correctamente</strong></td>
+</tr>
+<tr>
+<td><strong>3XX – Redirecciones</strong></td>
+<td>El cliente debe hacer <strong>alguna acción adicional</strong> (por ejemplo, ir a otra URL)</td>
+</tr>
+<tr>
+<td><strong>4XX – Error del cliente</strong></td>
+<td>Hay un <strong>error en la petición</strong>: el cliente debe <strong>modificarla</strong> para que sea válida</td>
+</tr>
+<tr>
+<td><strong>5XX – Error del servidor</strong></td>
+<td>Falló el <strong>servidor</strong> al procesarla, <strong>aunque la petición fuera correcta</strong></td>
+</tr>
+</tbody>
+</table>
+<h2>3.7.2 Reglas de uso</h2>
+<p><strong>Minimizar los 5XX que llegan al cliente.</strong> Los 5XX son errores del servidor sobre los que el cliente <strong>no puede hacer nada</strong>. Por eso el servidor debe <strong>tratar las excepciones</strong> y, siempre que sea posible, devolver el <strong>4XX adecuado</strong>, que el cliente sí puede corregir. La mayoría de errores que vea un cliente deberían ser 4XX.</p>
+<p><strong>Usar siempre el código más específico posible.</strong> <code>200 OK</code> y <code>400 Bad Request</code> son <strong>genéricos</strong> y aportan poca información; <code>400</code> solo se usa cuando <strong>no hay un 4XX más específico</strong>. Los códigos concretos que hay que conocer:</p>
+<table>
+<thead>
+<tr>
+<th>Código</th>
+<th>Cuándo se usa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>200 OK</strong></td>
+<td>Éxito genérico cuando <strong>no</strong> se crea ni se elimina nada (p. ej., un GET)</td>
+</tr>
+<tr>
+<td><strong>201 Created</strong></td>
+<td>Se <strong>creó</strong> un recurso (POST). Debe incluir la cabecera <strong><code>Location</code></strong> con la URL del nuevo recurso</td>
+</tr>
+<tr>
+<td><strong>204 No Content</strong></td>
+<td>Éxito con <strong>cuerpo intencionadamente vacío</strong> (p. ej., tras un DELETE o una actualización sin devolver nada)</td>
+</tr>
+<tr>
+<td><strong>400 Bad Request</strong></td>
+<td>Error genérico del cliente, cuando no hay otro más preciso (JSON mal formado, parámetros inválidos)</td>
+</tr>
+<tr>
+<td><strong>401 Unauthorized</strong></td>
+<td><strong>Error de autenticación</strong>: faltan las credenciales o son incorrectas. &quot;No sé quién eres&quot;</td>
+</tr>
+<tr>
+<td><strong>403 Forbidden</strong></td>
+<td><strong>Error de autorización</strong>: credenciales correctas, pero <strong>sin permiso</strong> para ese recurso u operación. &quot;Sé quién eres, pero no puedes&quot;</td>
+</tr>
+<tr>
+<td><strong>404 Not Found</strong></td>
+<td>El recurso <strong>no existe</strong></td>
+</tr>
+<tr>
+<td><strong>406 Not Acceptable</strong></td>
+<td>El servidor no puede responder en ninguno de los formatos que el cliente pide en <code>Accept</code></td>
+</tr>
+<tr>
+<td><strong>409 Conflict</strong></td>
+<td>La petición <strong>choca con el estado actual</strong> del recurso (p. ej., reservar un aula ya reservada a esa hora)</td>
+</tr>
+<tr>
+<td><strong>422 Unprocessable Entity</strong></td>
+<td>La petición está bien formada pero sus datos <strong>no pasan la validación</strong> (p. ej., capacidad negativa)</td>
+</tr>
+<tr>
+<td><strong>429 Too Many Requests</strong></td>
+<td>El cliente ha hecho <strong>demasiadas peticiones</strong> en poco tiempo</td>
+</tr>
+</tbody>
+</table>
+<p>(Las diapositivas enumeran 406, 409, 422 y 429 como ejemplos de códigos específicos; la descripción de cada uno es la estándar de HTTP.)</p>
+<p>Dos distinciones que se preguntan mucho:</p>
+<p><strong>401 frente a 403.</strong> El <strong>401</strong> es un problema de <strong>autenticación</strong> (no has demostrado quién eres o lo has hecho mal); el <strong>403</strong> es de <strong>autorización</strong> (se sabe quién eres, pero no tienes permiso). Un alumno sin iniciar sesión que intenta crear un aula → <strong>401</strong>; un alumno identificado que intenta crear un aula (solo para administradores) → <strong>403</strong>.</p>
+<p><strong>204, 404 y 200 con lista vacía.</strong> <strong>204 No Content</strong>: el cuerpo está vacío <strong>a propósito</strong>. <strong>404 Not Found</strong>: el recurso <strong>no existe</strong>. <strong>200 OK con <code>[]</code></strong>: la colección <strong>sí existe</strong>, pero <strong>ningún elemento cumple el filtro</strong> (por ejemplo, <code>GET /produtos?categoria=inexistente</code>), así que se devuelve una <strong>lista vacía</strong>, que <strong>no es lo mismo</strong> que no devolver nada.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=9rIFUDCcRm8">Códigos de estado HTTP – Curso de APIs</a> — las familias de códigos y los más usados (vídeo, 13 min).</p>
+</div>
+<h1>3.8 Cabeceras y cuerpo de los mensajes</h1>
+<p>Además del código de estado, un mensaje HTTP tiene <strong>cuerpo</strong> y <strong>cabeceras</strong>. El <strong>cuerpo</strong> contiene la <strong>representación en texto</strong> del recurso o colección, en formatos como <strong>JSON, XML, CSV o YAML</strong>; el <strong>estándar de facto</strong> es <strong>JSON</strong>, por su ligereza y legibilidad. Las <strong>cabeceras</strong> son <strong>metadatos</strong>: contienen lo necesario para que la comunicación funcione, <strong>sin formar parte del contenido</strong>.</p>
+<h2>3.8.1 Media types</h2>
+<p>Como el cuerpo puede venir en muchos formatos, hay que <strong>identificar en cuál está</strong>. Para eso están los <strong>Media Types</strong> (o tipos <strong>MIME</strong>), que estandarizan cómo nombrar un formato y se usan en la <strong>negociación de contenidos</strong>. Su forma completa es:</p>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9167em;vertical-align:-0.2222em;"></span><span class="mord text"><span class="mord texttt">tipo/subtipo+sufijo;par</span><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6111em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord texttt">a</span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.2625em;"><span class="mord texttt">ˊ</span></span></span></span></span></span></span><span class="mord texttt">metros</span></span></span></span></span></span></eqn></section><ul>
+<li><strong>Tipo</strong>: la categoría general (<code>text</code>, <code>image</code>, <code>audio</code>, <code>video</code>, <code>application</code>, <code>multipart</code>...). Debe ser una de las definidas por la <strong>IANA</strong>.</li>
+<li><strong>Subtipo</strong>: el formato concreto. Puede ser <strong>estándar</strong> (<code>html</code>, <code>json</code>, <code>txt</code>) o <strong>propietario</strong> de una aplicación (<code>application/vnd.app.user</code>, <code>application/vnd.ms-word</code>, <code>application/vnd.openxmlformats-officedocument.wordprocessingml.document</code>).</li>
+<li><strong>Sufijo</strong>: indica que el subtipo <strong>se basa en un formato más conocido</strong> y sigue su sintaxis: <code>application/json-patch+json</code>, <code>application/hal+json</code>, <code>application/problem+json</code> (todos son JSON &quot;por debajo&quot;).</li>
+<li><strong>Parámetros</strong>: información extra: <code>text/html;charset=utf8</code>, <code>application/vnd.app.user;version=2</code>.</li>
+</ul>
+<h2>3.8.2 Tipos de cabeceras</h2>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Cabecera</th>
+<th>Qué indica</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>De contenido</strong> (metadatos del cuerpo)</td>
+<td><code>Content-Type</code></td>
+<td><strong>Formato</strong> de los datos del cuerpo (<code>application/json</code>)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>Content-Length</code></td>
+<td><strong>Tamaño</strong> del cuerpo</td>
+</tr>
+<tr>
+<td></td>
+<td><code>Content-Language</code></td>
+<td><strong>Idioma</strong> del contenido</td>
+</tr>
+<tr>
+<td><strong>De negociación</strong> (cliente y servidor acuerdan el formato)</td>
+<td><code>Accept</code></td>
+<td>Formatos que el <strong>cliente acepta</strong> en la respuesta (<code>Accept: application/json</code>)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>Accept-Language</code></td>
+<td>Idiomas que prefiere el cliente (<code>Accept-Language: gl, es-ES;q=0.9</code>)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>Accept-Encoding</code></td>
+<td>Algoritmos de <strong>compresión</strong> que entiende el cliente</td>
+</tr>
+<tr>
+<td><strong>De autenticación y autorización</strong></td>
+<td><code>Authorization</code></td>
+<td><strong>Credenciales o token</strong> del cliente para acceder a recursos protegidos</td>
+</tr>
+<tr>
+<td><strong>De enlaces</strong> (autodescubrimiento)</td>
+<td><code>Location</code></td>
+<td>En la respuesta a un POST (<code>201</code>), <strong>URL del recurso creado</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>Link</code></td>
+<td><strong>Enlaces a recursos relacionados</strong>; es uno de los principios de <strong>HATEOAS</strong> (<em>Hypermedia as the Engine of Application State</em>), una forma avanzada de diseñar APIs REST</td>
+</tr>
+<tr>
+<td><strong>De caché</strong></td>
+<td><code>Cache-Control</code></td>
+<td>Controla la caché (edad máxima, prohibir guardar...)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>Expires</code></td>
+<td>Fecha y hora en que caduca la copia en caché</td>
+</tr>
+<tr>
+<td></td>
+<td><code>Age</code></td>
+<td>Segundos que lleva el recurso en caché</td>
+</tr>
+</tbody>
+</table>
+<p>La pareja que más confunde: <strong><code>Content-Type</code></strong> dice <strong>en qué formato va lo que envío</strong>; <strong><code>Accept</code></strong> dice <strong>en qué formato quiero lo que me respondas</strong>.</p>
+<h2>3.8.3 Reglas para modelar peticiones y respuestas</h2>
+<ul>
+<li><strong>Soportar JSON</strong> siempre por defecto. Otros formatos (XML, CSV) son recomendables para sistemas antiguos, pero opcionales.</li>
+<li><strong>Sin envoltorios adicionales</strong>: el cuerpo debe ser directamente el recurso. En vez de <code>{ &quot;data&quot;: { &quot;nome&quot;: &quot;Exemplo&quot; } }</code>, se devuelve <code>{ &quot;nome&quot;: &quot;Exemplo&quot; }</code>; así el cliente lo procesa más fácil.</li>
+<li><strong>Usar siempre <code>Content-Type</code></strong>, en petición y respuesta. Puede ser genérico (<code>application/json</code>) o específico de la aplicación (<code>application/vnd.gal.usc.etse.User+json</code>), lo que permite negociar contenido y <strong>versionar</strong> la API.</li>
+<li><strong>Enlaces a sí mismos</strong>: toda respuesta de un recurso debería incluir un enlace a él mismo, para que la API sea <strong>autodescubrible</strong> y el cliente no tenga que conocer toda su estructura.</li>
+<li><strong><code>Location</code> en los recursos nuevos</strong>: al crear con POST (<code>201 Created</code>), devolver en <code>Location</code> la <strong>URL completa</strong> del recurso creado, para que el cliente acceda a él sin construir la URL.</li>
+</ul>
+<h1>3.9 Manejo de errores</h1>
+<p>Los errores son inevitables en una API pública, así que su gestión debe ser <strong>minuciosa y estar bien documentada</strong>. Hay que <strong>minimizar los 5XX</strong> (tratando las excepciones y devolviendo el 4XX adecuado) y, como los códigos se quedan cortos (un <code>400</code> puede significar un campo que falta, un valor inválido, un formato incorrecto...), <strong>acompañar el código con un cuerpo que explique qué falló y por qué</strong>. Así el cliente puede tratar los errores <strong>de forma programática</strong>.</p>
+<p>El formato estándar es el <strong>RFC 7807: <em>Problem Details for HTTP APIs</em></strong>, un JSON con estos campos:</p>
+<table>
+<thead>
+<tr>
+<th>Campo</th>
+<th>Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>type</code></td>
+<td>Enlace a la documentación del <strong>tipo de error</strong> (un código más específico)</td>
+</tr>
+<tr>
+<td><code>title</code></td>
+<td><strong>Título corto</strong> y legible que resume el error</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>El <strong>código HTTP</strong> usado (p. ej., <code>400</code>)</td>
+</tr>
+<tr>
+<td><code>detail</code></td>
+<td><strong>Descripción larga</strong> y específica del problema</td>
+</tr>
+<tr>
+<td><code>instance</code></td>
+<td><strong>Identificador único</strong> de esta ocurrencia concreta, para rastrearla en los logs</td>
+</tr>
+<tr>
+<td><code>errors</code></td>
+<td>(Opcional) <strong>Lista de errores detallados</strong> si hay varios problemas</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-json">{
+  &quot;type&quot;: &quot;https://api.empresa.com/docs/erros/validación&quot;,
+  &quot;title&quot;: &quot;A petición contén campos non válidos&quot;,
+  &quot;status&quot;: 400,
+  &quot;detail&quot;: &quot;Un ou máis campos da petición non pasaron a validación. Verifique os detalles a continuación.&quot;,
+  &quot;instance&quot;: &quot;a6b7c8d9-e0f1-2345-6789-abcd0123ef45&quot;,
+  &quot;errors&quot;: [
+    { &quot;field&quot;: &quot;correo&quot;, &quot;message&quot;: &quot;O formato do correo non é válido&quot; },
+    { &quot;field&quot;: &quot;contrasinal&quot;, &quot;message&quot;: &quot;O contrasinal debe ter polo menos 8 caracteres&quot; }
+  ]
+}
+</code></pre>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.rfc-editor.org/rfc/rfc7807.html">RFC 7807: Problem Details for HTTP APIs</a> — el estándar completo (documento, inglés; enlazado en el tema).</p>
+</div>
+<h1>3.10 Ejercicios resueltos</h1>
+<h2>3.10.1 Método para resolver un ejercicio de diseño de API</h2>
+<p>Los ejercicios de examen piden, para cada funcionalidad, <strong>URL, verbo, descripción, parámetros/cuerpo</strong> y a veces <strong>cabeceras y códigos</strong>. Se resuelven siempre con los mismos pasos:</p>
+<ol>
+<li><strong>Busca los sustantivos</strong> del enunciado: son los <strong>recursos</strong>. Nómbralos en <strong>plural</strong> como colecciones (<code>/aulas</code>, <code>/reservas</code>, <code>/usuarios</code>). Si uno &quot;pertenece&quot; a otro, se puede <strong>anidar</strong>: <code>/proxectos/{id}/tarefas</code>.</li>
+<li><strong>Traduce la acción a un verbo HTTP</strong>: consultar → <strong>GET</strong>; crear → <strong>POST</strong> (sobre la colección); modificar todo → <strong>PUT</strong>; modificar una parte → <strong>PATCH</strong>; eliminar/cancelar → <strong>DELETE</strong> (sobre un recurso concreto).</li>
+<li><strong>Decide path o query</strong>: si el dato <strong>identifica</strong> un recurso concreto (su id), va en el <strong>path</strong> (<code>/aulas/{id}</code>); si <strong>filtra, pagina u ordena</strong>, va en la <strong>query</strong> (<code>?capacidade-min=10</code>).</li>
+<li><strong>Cuerpo</strong>: solo en <strong>POST</strong> (el recurso a crear), <strong>PUT</strong> (el recurso completo) y <strong>PATCH</strong> (instrucciones JSON Patch). <strong>GET y DELETE no llevan cuerpo</strong>.</li>
+<li><strong>Cabeceras</strong>: <code>Authorization</code> si hace falta estar identificado; <code>Content-Type</code> si envías cuerpo; <code>Accept</code> si esperas cuerpo en la respuesta.</li>
+<li><strong>Códigos</strong>: el de éxito según el verbo (<strong>GET → 200</strong>, <strong>POST → 201 + Location</strong>, <strong>PUT → 200</strong>, <strong>PATCH → 200 o 204</strong>, <strong>DELETE → 204</strong>) y los errores típicos (<strong>400/422</strong> datos malos, <strong>401</strong> sin identificar, <strong>403</strong> sin permiso, <strong>404</strong> no existe, <strong>409</strong> conflicto).</li>
+<li><strong>Repasa las reglas de URL</strong>: minúsculas, guiones, plural, sin verbos, sin barra final.</li>
+</ol>
+<h2>3.10.2 Ejercicio 1: aulas de estudio de la ETSE</h2>
+<p><strong>Enunciado.</strong> La ETSE quiere modernizar la gestión de sus aulas de estudio, que hoy es manual, con una API REST para <strong>alumnos</strong> y <strong>administradores</strong>. Debe permitir consultar aulas disponibles por <strong>capacidad o fecha</strong>, <strong>reservar franjas horarias para grupos</strong>, <strong>consultar las reservas propias</strong>, <strong>cancelar una reserva</strong> y, para administración, <strong>gestionar el catálogo de aulas</strong>. Para cada funcionalidad hay que indicar <strong>URL, verbo, descripción y parámetros/cuerpo</strong>, siguiendo el formato del ejemplo:</p>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>Verbo</th>
+<th>Descripción</th>
+<th>Parámetros/Cuerpo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/libros</code></td>
+<td><code>POST</code></td>
+<td>Añadir un nuevo libro al catálogo</td>
+<td>Cuerpo: <code>{ &quot;titulo&quot;: &quot;...&quot;, &quot;autor&quot;: &quot;...&quot; }</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Análisis.</strong> Los sustantivos son <strong>aulas</strong>, <strong>reservas</strong> y <strong>usuarios</strong> (alumnos): tres colecciones, <code>/aulas</code>, <code>/reservas</code> y <code>/usuarios</code>. Las reservas se crean, se consultan por alumno y se cancelan por sí mismas, así que tienen su propia colección.</p>
+<p><strong>Solución:</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>URL</th>
+<th>Verbo</th>
+<th>Descripción</th>
+<th>Parámetros / Cuerpo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>/reservas</code></td>
+<td><code>POST</code></td>
+<td>Crear una nueva reserva de un aula para un grupo</td>
+<td>Cuerpo: <code>{ &quot;aulaId&quot;: 12, &quot;usuarioId&quot;: 345, &quot;data&quot;: &quot;2026-10-15&quot;, &quot;horaInicio&quot;: &quot;10:00&quot;, &quot;horaFin&quot;: &quot;12:00&quot;, &quot;numeroPersoas&quot;: 4 }</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>/aulas</code></td>
+<td><code>GET</code></td>
+<td>Consultar las aulas que cumplen ciertos criterios de búsqueda</td>
+<td>Query: <code>?capacidade-min=4&amp;data=2026-10-15&amp;hora-inicio=10:00&amp;hora-fin=12:00</code> (todos opcionales; también <code>page</code>, <code>size</code>)</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>/aulas/{id}</code></td>
+<td><code>GET</code></td>
+<td>Consultar los detalles de un aula concreta</td>
+<td>Path: <code>id</code> del aula. Sin cuerpo</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>/usuarios/{id}/reservas</code></td>
+<td><code>GET</code></td>
+<td>Consultar las reservas activas de un alumno concreto</td>
+<td>Path: <code>id</code> del alumno. Query: <code>?estado=activa</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>/reservas/{id}</code></td>
+<td><code>DELETE</code></td>
+<td>Cancelar una reserva existente</td>
+<td>Path: <code>id</code> de la reserva. Sin cuerpo</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>/aulas</code></td>
+<td><code>POST</code></td>
+<td>Crear una nueva aula (administración)</td>
+<td>Cuerpo: <code>{ &quot;nome&quot;: &quot;Aula de estudo 3&quot;, &quot;edificio&quot;: &quot;ETSE&quot;, &quot;capacidade&quot;: 20, &quot;equipamento&quot;: [&quot;proxector&quot;, &quot;encerado&quot;] }</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>/aulas/{id}</code></td>
+<td><code>PUT</code></td>
+<td>Modificar los datos de un aula existente (sustitución completa)</td>
+<td>Path: <code>id</code>. Cuerpo: la representación completa del aula <code>{ &quot;nome&quot;: &quot;...&quot;, &quot;edificio&quot;: &quot;...&quot;, &quot;capacidade&quot;: 25, &quot;equipamento&quot;: [...] }</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Por qué cada decisión:</strong></p>
+<ol>
+<li><strong>Crear</strong> → <code>POST</code> sobre la <strong>colección</strong> <code>/reservas</code>. Los datos de la reserva van en el <strong>cuerpo</strong>. Respondería <code>201 Created</code> con <code>Location: /reservas/{nuevoId}</code>.</li>
+<li><strong>Buscar con criterios</strong> → <code>GET</code> sobre la colección, con los criterios en la <strong>query</strong> porque <strong>filtran</strong>, no identifican. Sería un error poner <code>/aulas/capacidade/4/data/2026-10-15</code> (filtros en el path) o <code>/buscar-aulas</code> (verbo en la URL). Si no hay aulas que cumplan el filtro: <code>200 OK</code> con <code>[]</code>, <strong>no</strong> <code>404</code>.</li>
+<li><strong>Detalle</strong> → <code>GET</code> sobre un <strong>recurso concreto</strong>: el id <strong>identifica</strong>, así que va en el <strong>path</strong>.</li>
+<li><strong>Reservas de un alumno</strong> → las reservas &quot;pertenecen&quot; al alumno, así que se <strong>anida</strong>: <code>/usuarios/{id}/reservas</code>. El &quot;activas&quot; <strong>filtra</strong>, por eso va en la query. Una alternativa igual de válida es <code>GET /reservas?usuario={id}&amp;estado=activa</code>.</li>
+<li><strong>Cancelar</strong> → <code>DELETE</code> sobre la reserva concreta, sin cuerpo; respondería <code>204 No Content</code>. Si se quisiera <strong>conservar el historial</strong> de reservas canceladas, otra opción válida es cambiar su estado con <code>PATCH /reservas/{id}</code> y el cuerpo <code>[{&quot;op&quot;: &quot;replace&quot;, &quot;path&quot;: &quot;/estado&quot;, &quot;value&quot;: &quot;cancelada&quot;}]</code>.</li>
+<li><strong>Crear aula</strong> → igual que la 1, <code>POST</code> sobre <code>/aulas</code>. Al ser solo para administración, un alumno identificado recibiría <code>403 Forbidden</code>.</li>
+<li><strong>Modificar</strong> → <code>PUT</code> si se envían <strong>todos</strong> los datos del aula; si solo se quisieran cambiar algunos campos (por ejemplo, la capacidad), <code>PATCH /aulas/{id}</code> con JSON Patch.</li>
+</ol>
+<h2>3.10.3 Ejercicio 2: &quot;ProXecto Áxil&quot;</h2>
+<p><strong>Enunciado.</strong> Una startup quiere una API REST para su servicio de gestión de proyectos en equipo, &quot;ProXecto Áxil&quot;, que consumirán apps web y móviles. Los <strong>usuarios autenticados</strong> deben poder gestionar las <strong>tareas</strong> de sus proyectos. Hay que diseñar <strong>5 endpoints</strong> indicando <strong>todos</strong> estos elementos: <strong>URL</strong>, <strong>verbo</strong>, <strong>descripción</strong>, <strong>parámetros</strong> (query o cuerpo, con los campos principales), <strong>cabeceras</strong> que debe enviar el cliente y <strong>códigos de estado</strong> de éxito y de error más comunes.</p>
+<ol>
+<li><strong>Crear una tarea</strong> dentro de un proyecto, validando que el usuario tiene permisos en él.</li>
+<li><strong>Consultar las tareas</strong> de un proyecto, pudiendo <strong>filtrar por estado</strong>.</li>
+<li><strong>Actualizar parcialmente</strong> una tarea: <strong>solo su estado</strong>, ningún otro campo.</li>
+<li><strong>Consultar el detalle</strong> de una tarea por su identificador único.</li>
+<li><strong>Eliminar</strong> una tarea, comprobando que el usuario es <strong>administrador del proyecto</strong>.</li>
+</ol>
+<p><strong>Análisis.</strong> Los recursos son <strong>proyectos</strong> y <strong>tareas</strong>, y cada tarea pertenece a un proyecto, así que las tareas se <strong>anidan</strong>: <code>/proxectos/{proxectoId}/tarefas</code>. Como &quot;los usuarios autenticados&quot; son los únicos que pueden usar la API, <strong>todas</strong> las peticiones llevan <code>Authorization</code>, y en <strong>todas</strong> pueden aparecer <strong>401</strong> (sin token o token inválido), <strong>403</strong> (sin permiso en ese proyecto) y <strong>404</strong> (el proyecto o la tarea no existen).</p>
+<p><strong>Solución resumida:</strong></p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>URL</th>
+<th>Verbo</th>
+<th>Parámetros / Cuerpo</th>
+<th>Cabeceras</th>
+<th>Éxito</th>
+<th>Errores</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><code>/proxectos/{proxectoId}/tarefas</code></td>
+<td><code>POST</code></td>
+<td>Cuerpo: <code>titulo</code>, <code>descricion</code>, <code>estado</code>, <code>responsableId</code>, <code>dataLimite</code></td>
+<td><code>Authorization</code>, <code>Content-Type: application/json</code>, <code>Accept: application/json</code></td>
+<td><strong>201 Created</strong> + <code>Location</code></td>
+<td>400/422, 401, 403, 404</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>/proxectos/{proxectoId}/tarefas</code></td>
+<td><code>GET</code></td>
+<td>Query: <code>?estado=en-curso</code> (opcional; también <code>page</code>, <code>size</code>)</td>
+<td><code>Authorization</code>, <code>Accept: application/json</code></td>
+<td><strong>200 OK</strong> (lista, puede ser <code>[]</code>)</td>
+<td>400, 401, 403, 404</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>/proxectos/{proxectoId}/tarefas/{tarefaId}</code></td>
+<td><code>PATCH</code></td>
+<td>Cuerpo JSON Patch: <code>[{&quot;op&quot;:&quot;replace&quot;,&quot;path&quot;:&quot;/estado&quot;,&quot;value&quot;:&quot;completada&quot;}]</code></td>
+<td><code>Authorization</code>, <code>Content-Type: application/json-patch+json</code></td>
+<td><strong>200 OK</strong> (tarea actualizada) o <strong>204</strong></td>
+<td>400, 401, 403, 404, 422</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>/proxectos/{proxectoId}/tarefas/{tarefaId}</code></td>
+<td><code>GET</code></td>
+<td>Path: ids. Sin cuerpo</td>
+<td><code>Authorization</code>, <code>Accept: application/json</code></td>
+<td><strong>200 OK</strong></td>
+<td>401, 403, 404</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>/proxectos/{proxectoId}/tarefas/{tarefaId}</code></td>
+<td><code>DELETE</code></td>
+<td>Path: ids. Sin cuerpo</td>
+<td><code>Authorization</code></td>
+<td><strong>204 No Content</strong></td>
+<td>401, 403, 404</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Detalle de cada operación:</strong></p>
+<h3>1. Crear una tarea</h3>
+<pre><code class="language-http">POST /proxectos/42/tarefas
+Authorization: Bearer &lt;token&gt;
+Content-Type: application/json
+Accept: application/json
+
+{ &quot;titulo&quot;: &quot;Deseñar a base de datos&quot;, &quot;descricion&quot;: &quot;Modelo E-R inicial&quot;,
+  &quot;estado&quot;: &quot;pendente&quot;, &quot;responsableId&quot;: 7, &quot;dataLimite&quot;: &quot;2026-10-20&quot; }
+</code></pre>
+<p>Se crea con <strong>POST</strong> sobre la <strong>colección de tareas del proyecto</strong>. Si va bien: <strong><code>201 Created</code></strong> con <code>Location: /proxectos/42/tarefas/128</code> y la tarea creada en el cuerpo. Errores: <strong><code>400 Bad Request</code></strong> si el JSON está mal formado; <strong><code>422 Unprocessable Entity</code></strong> si falta el título o la fecha no es válida; <strong><code>401</code></strong> sin token; <strong><code>403</code></strong> si el usuario <strong>no tiene permisos en ese proyecto</strong> (la validación que pide el enunciado); <strong><code>404</code></strong> si el proyecto 42 no existe.</p>
+<h3>2. Consultar las tareas de un proyecto</h3>
+<pre><code class="language-http">GET /proxectos/42/tarefas?estado=en-curso
+Authorization: Bearer &lt;token&gt;
+Accept: application/json
+</code></pre>
+<p><strong>GET</strong> sobre la colección, y el filtro por estado en la <strong>query</strong> porque <strong>filtra</strong>. Éxito: <strong><code>200 OK</code></strong> con la lista; si ninguna tarea tiene ese estado, <strong><code>200 OK</code> con <code>[]</code></strong> (la colección existe, <strong>no</strong> es un 404). Errores: <strong><code>400</code></strong> si el valor de <code>estado</code> no es válido; <strong><code>401</code></strong>, <strong><code>403</code></strong> (no es miembro del proyecto), <strong><code>404</code></strong> (el proyecto no existe).</p>
+<h3>3. Actualizar solo el estado de una tarea</h3>
+<pre><code class="language-http">PATCH /proxectos/42/tarefas/128
+Authorization: Bearer &lt;token&gt;
+Content-Type: application/json-patch+json
+
+[ { &quot;op&quot;: &quot;replace&quot;, &quot;path&quot;: &quot;/estado&quot;, &quot;value&quot;: &quot;completada&quot; } ]
+</code></pre>
+<p>Es una <strong>modificación parcial</strong>, así que el verbo es <strong>PATCH</strong> (no PUT, que exigiría mandar la tarea entera). El servidor debe <strong>rechazar cualquier operación cuyo <code>path</code> no sea <code>/estado</code></strong>, porque el enunciado prohíbe cambiar otros campos: en ese caso responde <strong><code>422 Unprocessable Entity</code></strong> (la petición está bien formada, pero no es aceptable). Éxito: <strong><code>200 OK</code></strong> con la tarea actualizada (o <strong><code>204 No Content</code></strong> si no se devuelve cuerpo). Otros errores: <strong><code>400</code></strong> si el JSON Patch está mal formado, <strong><code>401</code></strong>, <strong><code>403</code></strong>, <strong><code>404</code></strong>.</p>
+<h3>4. Consultar el detalle de una tarea</h3>
+<pre><code class="language-http">GET /proxectos/42/tarefas/128
+Authorization: Bearer &lt;token&gt;
+Accept: application/json
+</code></pre>
+<p><strong>GET</strong> sobre el <strong>recurso concreto</strong>, con el identificador en el <strong>path</strong>. Éxito: <strong><code>200 OK</code></strong> con la tarea completa. Errores: <strong><code>401</code></strong>, <strong><code>403</code></strong>, <strong><code>404</code></strong> si la tarea no existe. Como el enunciado dice que el identificador es <strong>único</strong>, también sería válido <code>GET /tarefas/128</code>; lo importante es ser <strong>coherente</strong> en todo el diseño.</p>
+<h3>5. Eliminar una tarea</h3>
+<pre><code class="language-http">DELETE /proxectos/42/tarefas/128
+Authorization: Bearer &lt;token&gt;
+</code></pre>
+<p><strong>DELETE</strong> sobre el recurso concreto, <strong>sin cuerpo</strong>. Éxito: <strong><code>204 No Content</code></strong>. Errores: <strong><code>401</code></strong> sin token; <strong><code>403</code></strong> si el usuario <strong>no es administrador del proyecto</strong> (la comprobación que pide el enunciado: es un problema de <strong>autorización</strong>, no de autenticación); <strong><code>404</code></strong> si la tarea no existe.</p>
+<div class="callout callout-note">
+<p class="callout-titulo">En estos ejercicios **no hay una única respuesta correcta**: se valora que el diseño **respete las reglas** (recursos en plural, sin verbos en la URL, filtros en la query, verbo y código adecuados) y que sea **coherente**. Si eliges una alternativa, justifícala en una línea.</p>
+</div>
+<h1>3.11 Ideas clave</h1>
+<ul>
+<li><strong>Endpoint</strong> = <strong>verbo + URL</strong>. Petición: verbo, URL, cabeceras, cuerpo. Respuesta: código, cabeceras, cuerpo.</li>
+<li>Ciclo de vida: <strong>análisis y diseño → desarrollo → despliegue y gestión (CI/CD, monitorización) → retiro planificado</strong>.</li>
+<li><strong>Stateless</strong>: cada petición lleva todo lo necesario; cualquier servidor puede atenderla → fácil de escalar.</li>
+<li>URL = <code>esquema://autoridad/ruta?consulta</code>. Reglas: <strong>minúsculas</strong>, <strong>guiones</strong>, colecciones en <strong>plural</strong>, recurso = colección + <strong>id</strong>, <strong>sin verbos</strong>, <strong>sin barra final</strong>, filtros/paginación/orden en la <strong>query</strong>.</li>
+<li>Idempotentes: <strong>GET, PUT, DELETE, QUERY</strong>. Seguros: <strong>GET, QUERY</strong>. POST y PATCH no son ni una cosa ni otra.</li>
+<li><strong>POST</strong> solo sobre colecciones (crea); <strong>PUT</strong> sustituye entero; <strong>PATCH</strong> modifica parcialmente con <strong>JSON Patch</strong> (<code>application/json-patch+json</code>); <strong>GET/DELETE</strong> sin cuerpo.</li>
+<li>Problemas: POST idempotente → <strong>idempotency key</strong>; tareas largas → recurso <strong>&quot;tarea&quot;</strong> + GET de su estado/redirección; funciones → <strong>recurso + GET con query</strong>.</li>
+<li>Códigos: <strong>201 + Location</strong> al crear, <strong>204</strong> cuerpo vacío, <strong>200 + <code>[]</code></strong> si el filtro no encuentra nada (no 404), <strong>401</strong> autenticación vs <strong>403</strong> autorización, <strong>409</strong> conflicto, <strong>422</strong> validación. Minimizar 5XX y usar el código más específico.</li>
+<li>Media type: <code>tipo/subtipo+sufijo;parámetros</code>. <code>Content-Type</code> = formato de lo que envío; <code>Accept</code> = formato que quiero recibir.</li>
+<li>Errores con <strong>RFC 7807</strong> (<code>type</code>, <code>title</code>, <code>status</code>, <code>detail</code>, <code>instance</code>, <code>errors</code>).</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="2-componentes-distribuidos-y-estilos-arquitectonicos-soap-y-rest.html"><span class="nav-etiqueta">← anterior</span>2. Componentes distribuidos y estilos arquitectónicos. SOAP y REST</a>
+  <a class="nav-siguiente" href="practicas-servicios-rest-con-spring.html"><span class="nav-etiqueta">siguiente →</span>Prácticas. Servicios REST con Spring</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

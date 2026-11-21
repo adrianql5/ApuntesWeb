@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="4. Diseño centrado en el usuario — apuntes de IPO (cuarto curso de Ingeniería Informática).">
+<title>4. Diseño centrado en el usuario · IPO · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">ipo</a><span class="miga-sep">/</span><span aria-current="page">4-diseno-centrado-en-el-usuario</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de IPO"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">IPO</a></p><ol><li><a href="1-introduccion-a-la-ipo.html">1. Introducción a la IPO</a></li><li><a href="2-el-factor-humano.html">2. El factor humano</a></li><li><a href="3-prototipado-y-evaluacion.html">3. Prototipado y evaluación</a></li><li><span class="actual" aria-current="page">4. Diseño centrado en el usuario</span></li><li><a href="5-diseno-grafico-principios-estandares-y-guias.html">5. Diseño gráfico. Principios, estándares y guías</a></li><li><a href="notas-sobre-examen.html">Notas sobre examen</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>IPO</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>4 / 5</div>
+    </div>
+    <h1>Diseño centrado en el usuario</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de IPO · 4/6</summary><ol><li><a href="1-introduccion-a-la-ipo.html">1. Introducción a la IPO</a></li><li><a href="2-el-factor-humano.html">2. El factor humano</a></li><li><a href="3-prototipado-y-evaluacion.html">3. Prototipado y evaluación</a></li><li><span aria-current="page">4. Diseño centrado en el usuario</span></li><li><a href="5-diseno-grafico-principios-estandares-y-guias.html">5. Diseño gráfico. Principios, estándares y guías</a></li><li><a href="notas-sobre-examen.html">Notas sobre examen</a></li></ol></details>
+  <div class="prosa">
+<h1>4.1 Introducción</h1>
+<p>En un sistema interactivo lo más importante es el <strong>diálogo con el usuario</strong>, así que la <strong>interfaz es fundamental y hay que pensarla desde el principio</strong>. Es lo que más determina la <strong>percepción e impresión</strong> que el usuario tiene de la aplicación, porque al usuario <strong>no le interesa su estructura interna, sino cómo usarla</strong>.</p>
+<p>Además, una vez hecha la especificación, propuesto el diseño y escrito el código, <strong>es muy difícil cambiar la interacción y la presentación</strong>, salvo pequeños detalles. Por eso hay que <strong>empezar con una idea clara de cómo será la interfaz y las interacciones</strong>, y después desarrollar las <strong>especificaciones funcionales</strong> que guíen el diseño. Se pueden aplicar técnicas de <strong>ingeniería del software</strong>, pero <strong>adaptando</strong> algunos aspectos de los métodos clásicos a los sistemas interactivos.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la casa y la distribución</p>
+<p>Cambiar la interfaz al final es como querer mover la cocina cuando la casa ya está construida: se puede pintar o cambiar los muebles (pequeños detalles), pero no tirar tabiques. La distribución de las habitaciones (la interacción) se decide en los planos.</p>
+</div>
+<p>Para que el diseño satisfaga las demandas de los usuarios hay que analizar tres cosas: <strong>las características del usuario</strong> (físicas, cognitivas, culturales, sociales...), <strong>las actividades que realiza y cómo</strong> (lograr un objetivo implica hacer una serie de <strong>tareas</strong> en un orden), y <strong>el escenario</strong> físico y social donde las realiza. Y el diseño debe basarse en <strong>criterios consistentes fruto de la experiencia</strong>, no en <strong>juicios intuitivos</strong>: principios generales de diseño, guías, estándares... (que se ven en el <a href="5-diseno-grafico-principios-estandares-y-guias.html">tema 5</a>).</p>
+<h1>4.2 Modelo conceptual</h1>
+<p>Hay que distinguir dos modelos:</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Modelo conceptual</th>
+<th>Modelo mental</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qué es</td>
+<td>Abstracción <strong>externa</strong> que describe <strong>lo que el usuario debería saber</strong> del sistema</td>
+<td>Abstracción del conocimiento <strong>interno</strong> que <strong>realmente</strong> tiene el usuario</td>
+</tr>
+<tr>
+<td>Quién lo hace</td>
+<td>El <strong>diseñador</strong>, con diagramas y descripciones, usando <strong>métodos formales</strong></td>
+<td>Se forma en la cabeza del usuario (ver <a href="2-el-factor-humano.html">tema 2</a>)</td>
+</tr>
+<tr>
+<td>Cómo es</td>
+<td>Busca <strong>completitud, consistencia y exactitud</strong></td>
+<td>Refleja lo que el usuario <strong>piensa y sabe</strong>, guía sus intenciones y <strong>cambia con la interacción</strong></td>
+</tr>
+</tbody>
+</table>
+<p>El modelo conceptual <strong>informa al usuario de qué hace el sistema y con qué mecanismos</strong>, y debe <strong>favorecer el aprendizaje</strong> y que el usuario desarrolle <strong>estrategias para resolver problemas</strong>. Para ello debe ser <strong>asimilable</strong> (usar conceptos familiares), <strong>consistente</strong> (coherente) y <strong>simple</strong> (al alcance de un usuario medio). La meta es que el modelo mental del usuario se parezca lo más posible al conceptual.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la papelera</p>
+<p>El modelo conceptual de &quot;borrar un archivo&quot; en un escritorio es una <strong>papelera</strong>: algo familiar (asimilable), que funciona siempre igual (consistente) y fácil de entender (simple). El usuario no necesita saber cómo se liberan los bloques del disco; le basta saber que lo tirado se puede recuperar hasta que se vacía.</p>
+</div>
+<p>Hay varios <strong>modelos de descripción conceptual</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Modelo</th>
+<th>Cómo ve el usuario el sistema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>(a) Caja negra</strong></td>
+<td><strong>Desconoce por completo</strong> su funcionamiento interno: solo ve entradas y salidas</td>
+</tr>
+<tr>
+<td><strong>(b) Caja negra particionada</strong></td>
+<td>Varias cajas negras: entradas y salidas separadas por función</td>
+</tr>
+<tr>
+<td><strong>(c) Basado en estados</strong></td>
+<td>Un <strong>conjunto de estados</strong>; las <strong>transiciones</strong> las provocan <strong>eventos</strong> bien definidos y el usuario <strong>observa los cambios</strong></td>
+</tr>
+<tr>
+<td><strong>(d) Funcional jerárquico</strong></td>
+<td>Las funciones se <strong>agrupan en jerarquías</strong>, partiendo el problema para reducir la complejidad</td>
+</tr>
+<tr>
+<td><strong>(e) Basado en objetos y acciones</strong></td>
+<td>Se trabaja <strong>directamente con entidades</strong> (físicas o abstractas) sobre las que se hacen <strong>acciones</strong>; el usuario conoce los objetos, sus atributos y acciones</td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/ipo/ipo-t4-modelos-conceptuales.png" alt="Modelos de descripción conceptual|450" loading="lazy">
+<em>(a) caja negra, (b) caja negra particionada, (c) modelo de estados, (d) jerarquía funcional y (e) modelo objeto/acción.</em></p>
+<div class="callout callout-note">
+<p class="callout-titulo">El texto de la diapositiva enumera cuatro modelos (caja negra, funcional jerárquico, estados y objetos-acciones); la figura añade la caja negra particionada.</p>
+</div>
+<h1>4.3 Análisis de tareas: HTA</h1>
+<h2>4.3.1 Análisis de tareas</h2>
+<p>El análisis de tareas parte del <strong>conocimiento del usuario y de las tareas que realiza</strong>, y recoge la información con una <strong>notación que permita formalizarla</strong>. Usa tres conceptos:</p>
+<ul>
+<li><strong>Tarea</strong>: unidad <strong>significativa de trabajo</strong> de una persona (sobre una aplicación) para conseguir un objetivo. Se descompone en acciones.</li>
+<li><strong>Acción</strong>: cada uno de los <strong>pasos</strong> para hacer una tarea.</li>
+<li><strong>Objetivo</strong>: el <strong>estado que el usuario quiere alcanzar</strong>.</li>
+</ul>
+<p>Sus beneficios son que da un <strong>diseño consistente con el modelo mental del usuario</strong> y que <strong>facilita evaluar la usabilidad</strong>, permitiendo <strong>predecir el rendimiento</strong> e identificar problemas de uso.</p>
+<p><strong>Definición</strong>: es el <strong>proceso de analizar cómo las personas hacen su trabajo</strong>: <strong>qué hacen</strong>, <strong>sobre qué cosas actúan</strong> y <strong>qué necesitan saber</strong>. En concreto estudia la <strong>información que necesita el usuario</strong> para la tarea (qué hacer), la <strong>terminología y los símbolos</strong> del dominio (elementos) y <strong>cómo se hacen actualmente</strong> las tareas (cómo).</p>
+<p>El resultado es una <strong>lista de tareas relevantes</strong> con información adicional (atributos, restricciones...), relacionada con conceptos como el <strong>modelo de diálogo</strong> persona-ordenador, el <strong>modelo de tareas</strong>, el <strong>dominio</strong> del sistema, el <strong>modelo de usuarios</strong> y las <strong>propiedades del sistema</strong> (seguridad, robustez...).</p>
+<p>Hay tres <strong>métodos</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>En qué se centra</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Descomposición de tareas</strong></td>
+<td>Dividir las tareas en una <strong>jerarquía</strong> de subtareas (como HTA)</td>
+</tr>
+<tr>
+<td><strong>Análisis basado en conocimiento</strong></td>
+<td><strong>Qué conocimiento</strong> necesita el usuario para la tarea y <strong>cómo lo tiene organizado</strong></td>
+</tr>
+<tr>
+<td><strong>Análisis de relaciones entre entidades</strong></td>
+<td>Enfoque <strong>orientado a objetos</strong>: actores, objetos, sus relaciones y sus acciones</td>
+</tr>
+</tbody>
+</table>
+<h2>4.3.2 Análisis jerárquico de tareas (HTA)</h2>
+<p>El <strong>HTA</strong> (<em>Hierarchical Task Analysis</em>) describe las tareas en términos de <strong>operaciones</strong> y <strong>planes</strong>. Una <strong>operación</strong> es una actividad a realizar para alcanzar un objetivo, y se <strong>descompone jerárquicamente</strong> en suboperaciones. Un <strong>plan</strong> es el <strong>conjunto de condiciones</strong> que deben darse al realizar una operación: indica <strong>en qué orden y cuándo</strong> se hacen sus suboperaciones.</p>
+<p>Las ramas del árbol pueden ser de cuatro tipos:</p>
+<table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Secuencia</strong></td>
+<td>Tareas que se hacen <strong>en un orden</strong> temporal fijo</td>
+</tr>
+<tr>
+<td><strong>Selección</strong></td>
+<td>Se <strong>elige una</strong> tarea de un conjunto</td>
+</tr>
+<tr>
+<td><strong>Iteración</strong></td>
+<td>Un conjunto de tareas se <strong>repite</strong></td>
+</tr>
+<tr>
+<td><strong>Tarea unitaria</strong></td>
+<td>Actividad <strong>indivisible</strong> (una hoja del árbol)</td>
+</tr>
+</tbody>
+</table>
+<p>El ejemplo de la diapositiva es <strong>hacer té</strong>:</p>
+<p><img src="../../../img/ipo/ipo-t4-hta-te.png" alt="HTA: hacer té|550" loading="lazy"></p>
+<pre><code>0. Hacer té
+   Plan 0: hacer 1; al mismo tiempo, si la tetera está llena, hacer 2;
+           3-4-5; después de 4-5 minutos, hacer 6
+   1. Calentar agua
+      Plan 1: hacer 1.1-1.2-1.3-1.4; cuando hierva el agua, hacer 1.5
+      1.1 Llenar el cazo
+      1.2 Encender el fuego
+      1.3 Poner el cazo en el fuego
+      1.4 Esperar
+      1.5 Apagar el fuego
+   2. Vaciar la tetera
+   3. Poner el té en la tetera
+   4. Poner agua en la tetera
+   5. Esperar
+   6. Servir el té
+</code></pre>
+<p>En el ejemplo aparecen los cuatro tipos: el plan 1 es una <strong>secuencia</strong> (1.1 → 1.4); &quot;si la tetera está llena, hacer 2&quot; es una <strong>selección</strong> (solo se hace si se cumple la condición); &quot;esperar hasta que hierva&quot; implica una <strong>iteración</strong> (seguir esperando mientras no hierva); y cada caja final, como &quot;llenar el cazo&quot;, es una <strong>tarea unitaria</strong>.</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=ZVCwynpdCn8">HCI: Hierarchical Task Analysis (HTA) Model with Examples</a> — cómo construir un árbol de HTA con sus planes, con varios ejemplos (vídeo, 8:40, inglés).</p>
+</div>
+<h1>4.4 Modelo objeto-acción</h1>
+<p>Se trabaja con <strong>objetos físicos o conceptuales</strong> sobre los que se <strong>ejecutan acciones</strong>, <strong>sin indicar cómo</strong> se van a realizar esas acciones. <strong>Casi todo el software reciente para ordenadores personales</strong> se basa en este modelo (seleccionas un archivo y luego eliges qué hacer con él).</p>
+<p>Sus aportaciones son una <strong>representación visual del sistema</strong>, <strong>sencilla y fácil de aprender y manipular</strong>, y <strong>modelos sencillos de sistemas complejos</strong>, con mucha <strong>flexibilidad para mejoras y cambios</strong> futuros. Su <strong>modelo de diálogo</strong> tiene dos partes: un <strong>conjunto de objetos</strong> que representan elementos de información y las <strong>acciones</strong> que el usuario puede hacer sobre ellos.</p>
+<p><strong>Lenguajes de órdenes</strong> para manipular objetos:</p>
+<ul>
+<li><strong>Seleccionar / deseleccionar</strong> un objeto.</li>
+<li><strong>Buscar / identificar</strong> un objeto.</li>
+<li><strong>Crear / eliminar</strong> objetos.</li>
+<li><strong>Mover / copiar</strong> objetos.</li>
+<li><strong>Obtener / cambiar</strong> los valores de sus atributos.</li>
+<li><strong>Visualizar</strong> el objeto.</li>
+</ul>
+<p><strong>Diálogos modales.</strong> Un <strong>modo</strong> es un <strong>estado</strong> (o conjunto de estados) en el que se puede realizar un determinado conjunto de tareas. Por ejemplo: un estado en el que unas órdenes <strong>solo se aplican al objeto seleccionado</strong>; uno en el que hay que <strong>completar un cuadro de diálogo antes de hacer otra cosa</strong> (una <strong>ventana modal</strong>, como &quot;¿Guardar cambios?&quot;), o uno en el que se usa <strong>un programa externo</strong> para modificar un objeto (un gráfico, un diagrama...).</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: el modo del bolígrafo</p>
+<p>Un bolígrafo de cuatro colores tiene &quot;modos&quot;: según el que pulses, todo lo que escribes sale de ese color. Es útil, pero si olvidas en qué modo estás, te equivocas. Por eso una ventana modal bloquea todo lo demás hasta que respondes: deja claro en qué modo estás.</p>
+</div>
+<h1>4.5 Implementación</h1>
+<p>Una vez modeladas las tareas, hay que <strong>implementarlas correctamente</strong>, teniendo en cuenta:</p>
+<ul>
+<li>Los <strong>tipos de interacción</strong>: posicionamiento, valor, texto, selección, arrastre...</li>
+<li>Los <strong>principios, guías de estilo y estándares</strong>.</li>
+<li>La <strong>gestión de las entradas</strong> del usuario: por <strong>petición</strong> (el programa espera a que el usuario introduzca algo), por <strong>muestreo</strong> (lee periódicamente el estado del dispositivo) o por <strong>evento</strong> (reacciona cuando el usuario hace algo).</li>
+<li>El <strong>diseño de la presentación</strong>.</li>
+<li>La <strong>gestión de errores</strong>.</li>
+</ul>
+<h1>4.6 Ideas clave</h1>
+<ul>
+<li>La interfaz se piensa <strong>desde el principio</strong>: cambiarla al final es muy difícil. Analizar <strong>usuario</strong>, <strong>tareas</strong> y <strong>escenario</strong>; diseñar con <strong>criterios basados en la experiencia</strong> (principios, guías, estándares).</li>
+<li><strong>Modelo conceptual</strong> (externo, lo diseña el diseñador; completo, consistente, exacto) vs <strong>modelo mental</strong> (interno, del usuario). El conceptual debe ser <strong>asimilable, consistente y simple</strong>.</li>
+<li>Modelos de descripción: <strong>caja negra</strong>, <strong>funcional jerárquico</strong>, <strong>basado en estados</strong>, <strong>objetos y acciones</strong>.</li>
+<li>Análisis de tareas: <strong>tarea</strong> (unidad de trabajo), <strong>acción</strong> (paso), <strong>objetivo</strong> (estado deseado); qué hacen, sobre qué actúan, qué necesitan saber. Métodos: descomposición, basado en conocimiento, relaciones entre entidades.</li>
+<li><strong>HTA</strong>: <strong>operaciones</strong> (jerárquicas) + <strong>planes</strong> (condiciones y orden); ramas de <strong>secuencia, selección, iteración y tarea unitaria</strong> (ejemplo: hacer té).</li>
+<li><strong>Modelo objeto-acción</strong>: objetos + acciones (seleccionar, buscar, crear, mover, cambiar atributos, visualizar); <strong>diálogos modales</strong> (ventana modal).</li>
+<li>Implementación: tipos de interacción, estándares, gestión de entradas (<strong>petición, muestreo, evento</strong>), presentación y errores.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="3-prototipado-y-evaluacion.html"><span class="nav-etiqueta">← anterior</span>3. Prototipado y evaluación</a>
+  <a class="nav-siguiente" href="5-diseno-grafico-principios-estandares-y-guias.html"><span class="nav-etiqueta">siguiente →</span>5. Diseño gráfico. Principios, estándares y guías</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

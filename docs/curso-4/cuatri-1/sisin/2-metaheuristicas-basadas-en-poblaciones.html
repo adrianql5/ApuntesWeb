@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. Metaheurísticas basadas en poblaciones — apuntes de SISIN (cuarto curso de Ingeniería Informática).">
+<title>2. Metaheurísticas basadas en poblaciones · SISIN · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">sisin</a><span class="miga-sep">/</span><span aria-current="page">2-metaheuristicas-basadas-en-poblaciones</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de SISIN"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">SISIN</a></p><ol><li><a href="1-busqueda-local-temple-simulado-y-csp.html">1. Búsqueda local, Temple Simulado y CSP</a></li><li><span class="actual" aria-current="page">2. Metaheurísticas basadas en poblaciones</span></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>SISIN</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>2 / 2</div>
+    </div>
+    <h1>Metaheurísticas basadas en poblaciones</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de SISIN · 2/2</summary><ol><li><a href="1-busqueda-local-temple-simulado-y-csp.html">1. Búsqueda local, Temple Simulado y CSP</a></li><li><span aria-current="page">2. Metaheurísticas basadas en poblaciones</span></li></ol></details>
+  <div class="prosa">
+<h1>2.1 Metaheurísticas basadas en poblaciones</h1>
+<p>En el <a href="1-busqueda-local-temple-simulado-y-csp.html">tema 1</a> las metaheurísticas (MH) trabajaban con <strong>una sola solución</strong> que se iba moviendo por el espacio de búsqueda (búsqueda local, temple simulado, tabú). Este tema pasa a las <strong>MH basadas en poblaciones</strong>: en vez de una solución, se mantiene <strong>un conjunto de soluciones</strong> que evoluciona a la vez. El tema incluye la <strong>computación bioinspirada</strong>, los <strong>algoritmos genéticos</strong>, las <strong>colonias de hormigas</strong> (ACO, <em>Ant Colony Optimization</em>), los <strong>enjambres de partículas</strong> (PSO, <em>Particle Swarm Optimization</em>) y la <strong>programación genética</strong>; esta parte desarrolla la computación evolutiva y los algoritmos genéticos.</p>
+<p>Las MH se clasifican en tres familias. Los <strong>métodos constructivos</strong> (GRASP, ACO) construyen la solución pieza a pieza. Los de <strong>búsqueda o trayectorias</strong> recorren el espacio de soluciones mediante una transformación iterativa de una solución de partida (búsqueda local: enfriamiento simulado, búsqueda tabú…). Y los de <strong>poblaciones</strong> hacen evolucionar conjuntos de soluciones, habitualmente con procedimientos aleatorios (computación evolutiva, PSO…). Las diapositivas recogen también la taxonomía de Duarte (2004), que separa las MH según si están inspiradas en la naturaleza, si usan memoria y si se basan en trayectoria o en población.</p>
+<p><img src="../../../img/sisin/sisin-t2-taxonomia-mh.png" alt="Taxonomía de metaheurísticas: basadas en población (arriba) y en trayectoria (abajo)|420" loading="lazy"></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Una MH de trayectoria es <strong>un único montañero</strong> buscando la cumbre en la niebla: si sube a un pico local, se queda ahí. Una MH de población es <strong>un grupo de montañeros repartidos por la sierra</strong> que se comunican: los que están más alto atraen al resto, y es mucho menos probable que todos se queden atascados en el mismo pico pequeño.</p>
+</div>
+<p><img src="../../../img/sisin/sisin-t2-poblacion-paisaje.png" alt="Muchos montañeros explorando a la vez el paisaje|380" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://es.wikipedia.org/wiki/Metaheur%C3%ADstica">Metaheurística (Wikipedia)</a> — clasificación general de las metaheurísticas (artículo; enlazado en las diapositivas).</p>
+</div>
+<h1>2.2 Computación evolutiva</h1>
+<p>La <strong>computación evolutiva</strong> (CE) usa <strong>modelos computacionales de los procesos evolutivos</strong> (Holland, 1975): incorpora los mecanismos naturales de <strong>selección y supervivencia</strong> para resolver problemas de IA que la naturaleza ya había &quot;resuelto&quot; muy eficientemente. Son métodos <strong>&quot;débiles&quot;</strong>: no requieren conocimiento específico del problema. Sus variantes son las <strong>estrategias de evolución</strong> (Rechenberg, 1973), la <strong>programación evolutiva</strong> (Fogel y otros, 1966), la <strong>programación genética</strong> (Koza) y los <strong>algoritmos genéticos</strong> (Goldberg, 1989), entre otras.</p>
+<p>La <strong>metáfora biológica</strong> es común a todas: en una población de individuos con <strong>recursos limitados</strong>, la competencia produce <strong>selección natural</strong> y sobreviven los que mejor se adaptan al medio. La <strong>evolución</strong> es la mejora de la adaptación de la población al medio.</p>
+<p>En computación, la CE está formada por modelos de evolución de <strong>poblaciones de elementos que representan soluciones</strong> a un problema. Simular la evolución de esa población da una <strong>técnica de optimización probabilística</strong>. Es una <strong>metaheurística</strong>: un procedimiento general que se parametriza para cada problema y que conduce, de forma eficiente, a soluciones <strong>subóptimas</strong> (buenas, pero sin garantía de ser la mejor).</p>
+<p><img src="../../../img/sisin/sisin-t2-metafora.png" alt="Metáfora biológica: reproducción, selección, mutación y cruce|300" loading="lazy"></p>
+<h2>2.2.1 La estrategia evolutiva</h2>
+<p>En un problema de optimización, la <strong>calidad</strong> de cada solución (su <strong>fitness</strong> o adaptación al medio) se mide con la <strong>función objetivo</strong> o de coste. La estrategia es:</p>
+<ol>
+<li>Generar un conjunto aleatorio de soluciones: la <strong>población inicial</strong>.</li>
+<li><strong>Evaluar el fitness</strong> de cada solución.</li>
+<li><strong>Seleccionar</strong> a los mejores como base de la siguiente generación y aplicarles los <strong>operadores de variación</strong>: la <strong>recombinación</strong> (cruce) aplicada a dos &quot;padres&quot; produce &quot;hijos&quot;, y la <strong>mutación</strong> aplicada a un individuo produce otro nuevo.</li>
+<li>Evaluar el fitness de la descendencia. Los hijos <strong>compiten con la población anterior</strong> para formar parte de la nueva generación (<strong>reemplazo</strong>).</li>
+<li>Iterar hasta encontrar un candidato de calidad suficiente o llegar a un límite.</li>
+</ol>
+<p>Hay dos fuerzas que tiran en sentidos contrarios. Los operadores de <strong>variación</strong> (cruce y mutación) <strong>introducen diversidad</strong>; la <strong>selección</strong> <strong>aumenta la calidad media</strong> de la población. Combinadas, el fitness mejora generación tras generación.</p>
+<p><img src="../../../img/sisin/sisin-t2-ciclo-evolutivo.png" alt="Ciclo de un algoritmo evolutivo: población → selección → padres → cruce y mutación → descendientes → reemplazo|330" loading="lazy"></p>
+<p>La MH es <strong>aleatoria</strong> por varios motivos: la <strong>selección</strong> da cierta probabilidad a individuos de fitness bajo (igual que el SA o la búsqueda tabú aceptan a veces soluciones peores), la <strong>recombinación</strong> elige al azar los fragmentos que se combinan, y la <strong>mutación</strong> elige al azar el fragmento que cambia.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>Es la cría de caballos de carreras. Empiezas con caballos variados (población), mides lo rápido que corren (fitness), cruzas preferentemente a los más rápidos (selección + cruce), de vez en cuando nace uno con algún rasgo nuevo (mutación), y los potros compiten por un sitio en la cuadra (reemplazo). Generación tras generación, la cuadra es más rápida.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=VCN3CqCO2KQ">Algoritmos genéticos (UPV)</a> — el ciclo completo de un algoritmo genético con un ejemplo, de la Universitat Politècnica de València (vídeo, 9:40).</p>
+</div>
+<h2>2.2.2 Ejemplo: 8-reinas con un algoritmo genético</h2>
+<p>En el ejemplo de Russell y Norvig, cada individuo es una cadena de 8 dígitos (la fila de la reina en cada columna) y el fitness es el <strong>número de pares de reinas que no se atacan</strong> (28 = solución). La población inicial (24748552, 32752411, 24415124, 32543213) tiene fitness 24, 23, 20 y 11; las probabilidades de selección son proporcionales (31 %, 29 %, 26 %, 14 %). Se seleccionan parejas, se cruzan cortando por un punto aleatorio y se mutan algunos dígitos.</p>
+<p><img src="../../../img/sisin/sisin-t2-ag-8reinas.png" alt="Algoritmo genético para 8-reinas: población, fitness, selección, cruce y mutación|500" loading="lazy"></p>
+<h2>2.2.3 Tipos de algoritmos evolutivos</h2>
+<p>Todos comparten la estrategia general y se diferencian en los <strong>operadores</strong> y en <strong>cómo incorporan las nuevas soluciones</strong> a la población. Los <strong>algoritmos genéticos</strong> representan soluciones de n variables; la <strong>programación genética</strong>, soluciones en forma de <strong>árboles</strong> (programas). Las soluciones candidatas pueden tener <strong>codificación numérica entera o real</strong>; por ejemplo, cruzar (2.1, −0.3, 4.6) y (9.1, 0.2, 7.2) intercambiando las dos últimas componentes da (2.1, 0.2, 7.2) y (9.1, −0.3, 4.6).</p>
+<h1>2.3 Componentes de un algoritmo evolutivo</h1>
+<p>Los AE siguen un esquema de <strong>generar y probar</strong>: la función de fitness es una <strong>estimación heurística</strong> de la calidad de cada solución, y la búsqueda la dirigen los operadores de <strong>variación</strong> y <strong>selección</strong>. Diseñar un AE es decidir sus seis componentes:</p>
+<ol>
+<li><strong>Representación</strong> de los individuos (y cómo inicializar la población).</li>
+<li><strong>Función de fitness</strong> (cómo evaluar un individuo).</li>
+<li><strong>Población</strong> (tamaño, inicialización).</li>
+<li><strong>Mecanismo de selección</strong> de padres.</li>
+<li><strong>Operadores de variación</strong>: cruce y mutación.</li>
+<li><strong>Mecanismo de reemplazo</strong> generacional.</li>
+</ol>
+<p>Además hay que fijar la <strong>condición de parada</strong>. Los componentes que dependen del problema son la representación, la correspondencia genotipo–fenotipo y la evaluación; el resto son componentes del algoritmo.</p>
+<p><img src="../../../img/sisin/sisin-t2-pasos-diseno.png" alt="Pasos para diseñar un AG: unos dependen del problema y otros del algoritmo|420" loading="lazy"></p>
+<h2>2.3.1 Representación</h2>
+<p>Representar es <strong>modelar la solución</strong> real en forma de individuo del AE: codificar la solución (<strong>fenotipo</strong>) como una cadena de genes (<strong>genotipo</strong>). Una vez elegida la representación, los operadores deben ser <strong>compatibles</strong> con ella. El vocabulario es biológico:</p>
+<table>
+<thead>
+<tr>
+<th>Término</th>
+<th>Significado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cromosoma</strong> o genotipo</td>
+<td>Vector que codifica la solución</td>
+</tr>
+<tr>
+<td><strong>Gen</strong></td>
+<td>Elemento mínimo del cromosoma (un atributo)</td>
+</tr>
+<tr>
+<td><strong>Alelo</strong></td>
+<td>Valor que toma cada gen</td>
+</tr>
+<tr>
+<td><strong>Fenotipo</strong></td>
+<td>La solución real que representa el cromosoma</td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/sisin/sisin-t2-cromosoma-gen.png" alt="Cromosoma binario y gen|330" loading="lazy"></p>
+<p>En el problema del viajante (<strong>TSP</strong>, recorrer todas las ciudades una vez con la distancia mínima), el genotipo es la secuencia de ciudades y el fenotipo, la ruta.</p>
+<p><img src="../../../img/sisin/sisin-t2-tsp-galicia.jpeg" alt="Ruta del viajante por ciudades de Galicia|300" loading="lazy"></p>
+<p>Hay varias codificaciones:</p>
+<ul>
+<li><strong>Binaria</strong>: cada individuo es una secuencia de bits y <strong>cada gen es un bit</strong>; cómo se interpreta cada alelo depende de la aplicación. Por ejemplo, el genotipo 10100011 puede representar el entero <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">7</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8974em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord">1</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">128</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">32</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">163</span></span></span></span></eq>, o un real entre 2,5 y 20,5 con 8 bits: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">2.5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1.1901em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">256</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">163</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mopen">(</span><span class="mord">20.5</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2.5</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">13.9609</span></span></span></span></eq>.</li>
+<li><strong>Real</strong>: cada individuo es una secuencia de números reales. El fenotipo no tiene por qué coincidir con el genotipo: con el genotipo (22, 5, 7), el fenotipo puede ser el propio vector o, por ejemplo, su suma (34).</li>
+<li><strong>De orden</strong>: cada individuo es una <strong>permutación</strong> (como en el TSP). Necesita <strong>operadores especiales con reparación</strong> para que el resultado de cruzar o mutar siga siendo una permutación.</li>
+</ul>
+<p><img src="../../../img/sisin/sisin-t2-binaria-real.png" alt="Codificación binaria de un real entre 2,5 y 20,5|330" loading="lazy"></p>
+<p>El <strong>paso de genotipo a fenotipo</strong> a veces es obvio (TSP), pero otras es complejo: el genotipo puede ser el conjunto de <strong>parámetros de entrada de otro algoritmo</strong> que obtiene la solución final (una simulación numérica, una visualización 3D, un sistema basado en reglas…).</p>
+<p><img src="../../../img/sisin/sisin-t2-genotipo-fenotipo.png" alt="Del genotipo al fenotipo a través de un algoritmo|220" loading="lazy"></p>
+<h2>2.3.2 Población</h2>
+<p>La población representa las posibles soluciones y es <strong>la unidad de la evolución</strong> (lo que evoluciona es la población, no cada individuo). Importa su <strong>diversidad</strong>: cuántas soluciones distintas contiene. La <strong>inicialización</strong> puede ser <strong>aleatoria</strong> (uniforme en el rango de cada parámetro, para repartir las soluciones por todo el espacio: en binario cada bit 0 o 1 con p = 0,5; en real, uniforme en [a, b]), <strong>heurística</strong> o una combinación de ambas.</p>
+<h2>2.3.3 Función de calidad (fitness)</h2>
+<p>Representa los <strong>requisitos a los que debe adaptarse</strong> la población y cuantifica su mejora. Es la <strong>etapa más costosa: hasta el 95 % de la CPU</strong>, porque se evalúa cada individuo de cada generación. Puede ser una función simple (un número real), un procedimiento, un simulador o incluso un proceso externo (experimentos). A veces es un vector, ordenable o no. En los problemas típicos de optimización es la <strong>función objetivo</strong>; si hay <strong>varios objetivos</strong>, se <strong>agregan</strong> en una solución de compromiso (media ponderada, máximo, mínimo…).</p>
+<h2>2.3.4 Selección</h2>
+<p>La selección distingue a los individuos según su calidad. Los elegidos son los <strong>padres</strong>, que formarán la descendencia (<em>offspring</em>, candidatos a entrar en la nueva generación). Es <strong>probabilística</strong>: los mejores tienen más probabilidad, pero los peores también tienen opciones, lo que <strong>mantiene la diversidad</strong> y evita quedarse atrapado en un óptimo local (<em>local trapping</em>). La <strong>presión selectiva</strong> mide hasta qué punto el proceso está dirigido por los mejores individuos.</p>
+<table>
+<thead>
+<tr>
+<th>Método</th>
+<th>Cómo elige</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Aleatoria</strong></td>
+<td>Al azar, sin mirar el fitness</td>
+</tr>
+<tr>
+<td><strong>Torneo</strong></td>
+<td>Se escogen k individuos al azar y gana el mejor (binario k = 2, ternario k = 3)</td>
+</tr>
+<tr>
+<td><strong>Orden lineal</strong> (<em>ranking</em>)</td>
+<td>Se ordena la población por fitness y la probabilidad depende de la <strong>posición</strong></td>
+</tr>
+<tr>
+<td><strong>Ruleta</strong></td>
+<td>Probabilidad <strong>proporcional al fitness</strong></td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/sisin/sisin-t2-torneo.png" alt="Torneo con k = 3: de la población se sacan 3 concursantes y gana el mejor|380" loading="lazy"></p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>La ruleta es una rifa en la que cada individuo compra tantas papeletas como fitness tiene: el mejor tiene más papeletas, pero cualquiera puede ganar. El torneo es un &quot;mejor de k&quot;: sacas k al azar y pasa el ganador, así que cuanto mayor es k, más difícil lo tienen los débiles (más presión selectiva).</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=rUsRkaqSRJI">Selección por ruleta en algoritmos genéticos</a> — cómo se calculan las probabilidades y se gira la ruleta, paso a paso (vídeo, 11:33).</p>
+</div>
+<h2>2.3.5 Cruce</h2>
+<p>El cruce <strong>mezcla los genotipos de dos padres</strong>. Debe diseñarse de acuerdo con la representación para dar individuos <strong>válidos</strong>. Se aplica con <strong>probabilidad alta, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0715em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0.6</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">0.9</span><span class="mclose">]</span></span></span></span></eq></strong>; si no se da, los hijos son copias de los padres.</p>
+<p>En <strong>binario</strong>, el más simple es el <strong>cruce de un punto</strong>: se corta a los dos padres por el mismo punto aleatorio y se intercambian las colas. Con 1111111 y 0000000 cortados tras el tercer gen salen 1110000 y 0001111. El <strong>cruce de dos puntos</strong> intercambia el segmento central.</p>
+<p><img src="../../../img/sisin/sisin-t2-cruce-un-punto.png" alt="Cruce de un punto|330" loading="lazy"></p>
+<p><img src="../../../img/sisin/sisin-t2-cruce-dos-puntos.jpeg" alt="Cruce de dos puntos|330" loading="lazy"></p>
+<p>En la <strong>representación de orden</strong> un cruce normal produciría ciudades repetidas, así que se usan cruces con <strong>reparación</strong>:</p>
+<p><strong>OX</strong> (<em>order crossover</em>): se copia un segmento aleatorio del padre 1 en el hijo y se completa con el resto de alelos <strong>en el orden en que aparecen en el padre 2</strong>, empezando tras el segundo punto de corte. Con P1 = (1 2 3 | 4 5 6 7 | 8 9) y P2 = (9 3 7 | 8 2 6 5 | 1 4): se copia 4 5 6 7; el padre 2 leído desde el segundo corte es 1 4 9 3 7 8 2 6 5; quitando los ya usados queda 1 9 3 8 2, que se coloca a partir del segundo corte (y da la vuelta): <strong>H1 = (3 8 2 4 5 6 7 1 9)</strong>.</p>
+<p><strong>PMX</strong> (<em>partially mapped crossover</em>): se elige una subcadena central y se establece una <strong>correspondencia por posición</strong> entre los valores de ambas. Cada hijo recibe la subcadena central de un padre y el mayor número posible de valores del otro en sus posiciones; si un valor ya está, se sigue la correspondencia. Con P1 = (1 2 3 | 4 5 6 7 | 8 9) y P2 = (4 5 3 | 1 8 7 6 | 9 2), las correspondencias son 1↔4, 8↔5, 7↔6, 6↔7. El hijo 1 toma el centro de P2 (1 8 7 6) y el resto de P1: el 1 ya está, así que pasa a 4; el 8 ya está, pasa a 5 → <strong>H1 = (4 2 3 | 1 8 7 6 | 5 9)</strong>. Análogamente, <strong>H2 = (1 8 3 | 4 5 6 7 | 9 2)</strong>.</p>
+<p><strong>CX</strong> (<em>cycle crossover</em>): cada valor del hijo conserva <strong>la posición que tenía en uno de los padres</strong>. Partiendo de un valor <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6595em;"></span><span class="mord mathnormal">i</span></span></span></span></eq> del padre 1, se mira qué valor <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span></span></span></span></eq> tiene el padre 2 en esa misma posición, y se coloca <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.0572em;">j</span></span></span></span></eq> donde está en el padre 1; así hasta cerrar un <strong>ciclo</strong>. Con P1 = (1 2 3 4 5 6 7 8) y P2 = (2 4 6 8 7 5 3 1): eligiendo 1 en la posición 1, P2 tiene un 1 en la 8, luego va el 8 en la 8; P2 tiene un 8 en la 4 → el 4 en la 4; P2 tiene un 4 en la 2 → el 2 en la 2; y P2 tiene un 2 en la 1, que ya está: ciclo cerrado, (1 2 * 4 * * * 8). Para la posición 3 se elige al azar entre 3 y 6; con 6 se fuerza el 5 en la 6, el 7 en la 5 y el 3 en la 7: <strong>H = (1 2 6 4 7 5 3 8)</strong>.</p>
+<p>En <strong>representación real</strong>:</p>
+<ul>
+<li><strong>Cruce aritmético</strong>: combinación convexa con un parámetro α. Con (22, 10, 4), (12, 6, 9) y α = 0,1: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mclose">)</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">13</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">6.4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">8.5</span><span class="mclose">)</span></span></span></span></eq> y <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mclose">)</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">21</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">9.6</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">4.5</span><span class="mclose">)</span></span></span></span></eq>.</li>
+<li><strong>Cruce plano</strong>: cada gen del hijo se toma con distribución uniforme en el intervalo que forman los padres: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">12</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">22</span><span class="mclose">]</span></span></span></span></eq>, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">6</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">10</span><span class="mclose">]</span></span></span></span></eq>, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">9</span><span class="mclose">]</span></span></span></span></eq>.</li>
+</ul>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>El cruce es como combinar dos recetas buenas: la base de una y la salsa de otra. En el TSP no vale &quot;cortar y pegar&quot; sin más, porque saldría una ruta que visita Lugo dos veces y se salta Vigo; OX, PMX y CX son formas de mezclar las rutas <strong>reparando</strong> las repeticiones.</p>
+</div>
+<h2>2.3.6 Mutación</h2>
+<p>Es una operación <strong>unaria</strong> sobre un genotipo que produce un descendiente <strong>ligeramente modificado</strong>. Debe permitir <strong>alcanzar cualquier parte del espacio</strong> de búsqueda, su <strong>tamaño debe estar controlado</strong> y debe dar genotipos <strong>válidos</strong>. Se aplica <strong>después del cruce</strong>, con una probabilidad <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> <strong>muy baja sobre cada gen</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Representación</th>
+<th>Mutación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Binaria</strong></td>
+<td>Invertir un bit: 1111111 → 1110111</td>
+</tr>
+<tr>
+<td><strong>Entera</strong></td>
+<td><em>Random resetting</em>: con probabilidad <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>, el gen toma un valor aleatorio del rango válido</td>
+</tr>
+<tr>
+<td><strong>De orden</strong></td>
+<td><strong>Intercambio recíproco</strong> de dos valores al azar; <strong>inserción</strong> (se toma un valor y se inserta junto a otro); <strong>mezcla</strong> (se barajan los valores de un tramo)</td>
+</tr>
+<tr>
+<td><strong>Real</strong></td>
+<td>Sumar ruido gaussiano: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0106em;vertical-align:-0.2587em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7519em;"><span style="top:-2.4413em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2587em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>, con media 0 y desviación típica <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq></td>
+</tr>
+</tbody>
+</table>
+<p><img src="../../../img/sisin/sisin-t2-mutacion-binaria.png" alt="Mutación binaria: un gen cambia|280" loading="lazy"></p>
+<h2>2.3.7 Reemplazo</h2>
+<p>Determina <strong>qué individuos forman la nueva generación</strong>, es decir, qué descendientes sobreviven. Se parece a la selección pero ocurre después de generar la descendencia, y usa métodos similares (torneo, lineal, aleatorio, ruleta…). Hay dos modelos:</p>
+<ul>
+<li><strong>Generacional</strong>: la descendencia <strong>sustituye por completo</strong> a la generación anterior. Se seleccionan H padres, se cruzan con <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0715em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>, se mutan con <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> y los H hijos forman la nueva población. Con <strong>elitismo</strong> se conserva el mejor individuo de la generación anterior para no perderlo.</li>
+<li><strong>Permanente</strong> (estacionario): se seleccionan solo <strong>dos padres</strong>, se cruzan (con probabilidad 1) y se mutan, y los <strong>dos hijos compiten</strong> por entrar en la población actual reemplazando a otros individuos.</li>
+</ul>
+<p><img src="../../../img/sisin/sisin-t2-generacional.png" alt="Modelo generacional con elitismo|450" loading="lazy"></p>
+<p><img src="../../../img/sisin/sisin-t2-permanente.png" alt="Modelo permanente: dos hijos compiten por entrar|450" loading="lazy"></p>
+<p>En el modelo permanente hay varias estrategias de reemplazo:</p>
+<table>
+<thead>
+<tr>
+<th>Estrategia</th>
+<th>A quién reemplaza el hijo</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>RW</strong> (<em>replace worst</em>)</td>
+<td>Al peor de la población</td>
+<td>Alta presión selectiva</td>
+</tr>
+<tr>
+<td><strong>RTS</strong> (torneo restringido)</td>
+<td>Al más parecido de entre w individuos (w = 3…)</td>
+<td>Mantiene cierta diversidad</td>
+</tr>
+<tr>
+<td><strong>WAMS</strong> (peor entre semejantes)</td>
+<td>Al peor de los w individuos más parecidos al hijo (de toda la población)</td>
+<td>Equilibrio diversidad / presión selectiva</td>
+</tr>
+<tr>
+<td><strong>DC</strong> (<em>crowding</em> determinístico)</td>
+<td>Al padre más parecido</td>
+<td>Mantiene la diversidad</td>
+</tr>
+</tbody>
+</table>
+<h2>2.3.8 Experimentación, diversidad y exploración</h2>
+<p>Como el algoritmo es aleatorio, <strong>nunca se sacan conclusiones de una única ejecución</strong>: se hacen <strong>varias ejecuciones independientes</strong> y se dan la <strong>media y la desviación típica</strong>, con <strong>tests estadísticos</strong> de significancia. Los ejemplos deben ser representativos del caso real, ni triviales ni demasiado simples.</p>
+<p><strong>Diversidad.</strong> Una <strong>presión selectiva alta</strong> hace que todos los individuos se parezcan (<strong>falta de diversidad</strong>) y provoca <strong>convergencia prematura</strong> hacia la zona de los primeros buenos individuos. Se combate con <strong>mecanismos de diversidad</strong> o <strong>reinicializando</strong> el algoritmo.</p>
+<p><strong>Exploración frente a explotación</strong> (lo mismo que diversificación e intensificación en el tema 1). La <strong>exploración</strong> visita zonas desconocidas del espacio; en exceso es una búsqueda aleatoria que no converge. La <strong>explotación</strong> mejora localmente a los individuos; en exceso se convierte en búsqueda local y converge a un óptimo local.</p>
+<h1>2.4 Ejemplo trabajado: una generación paso a paso</h1>
+<p>Se busca <strong>maximizar <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.1076em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></eq></strong> con <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord">31</span><span class="mclose">]</span></span></span></span></eq>, codificando <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></eq> en <strong>5 bits</strong>. La población inicial de 4 individuos es la de la tabla de la ruleta de las diapositivas:</p>
+<table>
+<thead>
+<tr>
+<th>Individuo</th>
+<th>x</th>
+<th>Fitness <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></eq></th>
+<th>% del total</th>
+<th>Copias esperadas (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">4</span><span class="mpunct">⋅</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">p</span></span></span></span></eq>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01101</td>
+<td>13</td>
+<td>169</td>
+<td>14,4 %</td>
+<td>0,58</td>
+</tr>
+<tr>
+<td>11000</td>
+<td>24</td>
+<td>576</td>
+<td>49,2 %</td>
+<td>1,97</td>
+</tr>
+<tr>
+<td>01000</td>
+<td>8</td>
+<td>64</td>
+<td>5,5 %</td>
+<td>0,22</td>
+</tr>
+<tr>
+<td>10011</td>
+<td>19</td>
+<td>361</td>
+<td>30,9 %</td>
+<td>1,23</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td><strong>1170</strong></td>
+<td>100 %</td>
+<td>4</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Selección por ruleta.</strong> Girando la ruleta 4 veces, lo esperable es que 11000 salga unas 2 veces, 10011 y 01101 una vez, y 01000 ninguna. Supongamos que salen 01101, 11000, 11000 y 10011.</p>
+<p><strong>Cruce de un punto.</strong> Se emparejan (01101, 11000) con corte tras el bit 4 y (11000, 10011) con corte tras el bit 2:</p>
+<table>
+<thead>
+<tr>
+<th>Padres</th>
+<th>Corte</th>
+<th>Hijos</th>
+<th>x</th>
+<th>Fitness</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0110|1 × 1100|0</td>
+<td>4</td>
+<td>01100, 11001</td>
+<td>12, 25</td>
+<td>144, 625</td>
+</tr>
+<tr>
+<td>11|000 × 10|011</td>
+<td>2</td>
+<td>11011, 10000</td>
+<td>27, 16</td>
+<td>729, 256</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Mutación.</strong> Con <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> muy baja (p. ej. 0,001 por bit), en 20 bits lo normal es que no cambie ninguno.</p>
+<p><strong>Resultado.</strong> Con reemplazo generacional, la nueva población tiene <strong>fitness total 1754</strong> (antes 1170), <strong>media 438,5</strong> (antes 292,5) y <strong>máximo 729</strong> (antes 576). En una sola generación, la selección ha concentrado los genes buenos y el cruce ha creado un individuo (11011) mejor que cualquiera de sus padres.</p>
+<h2>2.4.1 Parámetros y su efecto</h2>
+<table>
+<thead>
+<tr>
+<th>Parámetro</th>
+<th>Qué representa</th>
+<th>Valores típicos</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tamaño de población N</td>
+<td>Cuántas soluciones evolucionan a la vez</td>
+<td>Decenas a cientos</td>
+</tr>
+<tr>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0715em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq></td>
+<td>Probabilidad de cruzar una pareja</td>
+<td>0,6 – 0,9</td>
+</tr>
+<tr>
+<td><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq></td>
+<td>Probabilidad de mutar cada gen</td>
+<td>Muy baja (p. ej. 1/longitud del cromosoma)</td>
+</tr>
+<tr>
+<td>k (torneo)</td>
+<td>Nº de concursantes por torneo</td>
+<td>2 (binario), 3 (ternario)</td>
+</tr>
+<tr>
+<td>σ</td>
+<td>Tamaño de la mutación gaussiana (real)</td>
+<td>Pequeño respecto al rango</td>
+</tr>
+<tr>
+<td>Elitismo</td>
+<td>Nº de mejores que pasan sin cambios</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>¿Qué pasa si…?</th>
+<th>Efecto</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>…subo <strong>N</strong></td>
+<td>Más diversidad y mejor exploración, pero cada generación cuesta más (el fitness es el 95 % de la CPU)</td>
+</tr>
+<tr>
+<td>…subo <strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0715em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq></strong></td>
+<td>Más mezcla de buenas partes; si es muy baja, la población apenas cambia</td>
+</tr>
+<tr>
+<td>…subo mucho <strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq></strong></td>
+<td>Demasiada exploración: se rompen las buenas soluciones y se acerca a una búsqueda aleatoria</td>
+</tr>
+<tr>
+<td>…pongo <strong><eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0</span></span></span></span></eq></strong></td>
+<td>Si un alelo desaparece de la población, ya no puede volver: riesgo de estancarse</td>
+</tr>
+<tr>
+<td>…subo <strong>k</strong> o uso RW</td>
+<td>Más presión selectiva: converge antes, pero con riesgo de <strong>convergencia prematura</strong></td>
+</tr>
+<tr>
+<td>…uso crowding (DC) o RTS</td>
+<td>Más diversidad; converge más despacio pero explora mejor</td>
+</tr>
+<tr>
+<td>…quito el <strong>elitismo</strong></td>
+<td>Se puede perder la mejor solución encontrada de una generación a otra</td>
+</tr>
+</tbody>
+</table>
+<h1>2.5 Ejercicios</h1>
+<h3>Ejercicio 1: 8-reinas</h3>
+<p>El <strong>espacio de búsqueda</strong> son todas las configuraciones posibles de reinas. El <strong>fitness</strong> es el <strong>número de reinas atacadas</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">q</span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mclose">)</span></span></span></span></eq>, donde 0 es solución; para maximizar se usa su inverso, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1/</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0359em;">q</span><span class="mopen">(</span><span class="mord mathnormal">p</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">ε</span><span class="mclose">)</span></span></span></span></eq> (ε evita dividir entre 0). El <strong>genotipo</strong> es una permutación de {1, …, 8} (la fila de cada columna), que <strong>evita automáticamente</strong> los conflictos de fila y columna, así que solo quedan las diagonales.</p>
+<p>Los operadores son: <strong>mutación</strong> por intercambio de dos posiciones aleatorias; <strong>cruce</strong> eligiendo un punto aleatorio i, que corta a P1 y P2 en dos segmentos: el hijo 1 empieza con el primer segmento de P1 y se completa con los valores que faltan en el orden de P2 (y el hijo 2 al revés), para que sigan siendo permutaciones. La <strong>selección</strong> toma como padres a los 2 mejores de 5 elegidos al azar (torneo). En la <strong>población</strong>, 2 padres dan 2 hijos: la población pasa a n + 2 y se eliminan los dos peores (modelo permanente).</p>
+<h3>Ejercicio 2: problema de la mochila</h3>
+<p>Hay N objetos con peso <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> y valor <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq>, y una mochila de capacidad C. Se quiere elegir un subconjunto que <strong>maximice el valor total</strong> sin <strong>superar la capacidad</strong>. La representación es un <strong>vector binario</strong> <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3011em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.109em;">N</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>, con <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5806em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></eq> si el objeto va en la mochila.</p>
+<p><img src="../../../img/sisin/sisin-t2-mochila.png" alt="Problema de la mochila|260" loading="lazy"></p>
+<p>El <strong>espacio de búsqueda</strong> son todos los vectores binarios de longitud N: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8413em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.109em;">N</span></span></span></span></span></span></span></span></span></span></span></eq> soluciones. La <strong>función objetivo</strong> es maximizar <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0497em;vertical-align:-0.2997em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.162em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.0359em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> sujeta a <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0497em;vertical-align:-0.2997em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.162em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3117em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span></span></span></span></eq>. Como el cruce y la mutación pueden producir mochilas que se pasan de peso, hay que <strong>penalizar</strong> el fitness de las soluciones no factibles (p. ej. fitness 0, o restar una penalización proporcional al exceso) o <strong>repararlas</strong> quitando objetos hasta que quepan.</p>
+<h3>Ejercicio 3: problema del viajante (TSP)</h3>
+<p>El diseño propuesto es:</p>
+<table>
+<thead>
+<tr>
+<th>Componente</th>
+<th>Elección</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Solución inicial</td>
+<td>Aleatoria o <em>greedy</em></td>
+</tr>
+<tr>
+<td>Representación</td>
+<td>De orden: permutación de {1, …, n}</td>
+</tr>
+<tr>
+<td>Selección</td>
+<td>Torneo binario</td>
+</tr>
+<tr>
+<td>Enfoque</td>
+<td>Generacional con elitismo (1 individuo)</td>
+</tr>
+<tr>
+<td>Cruce</td>
+<td>OX</td>
+</tr>
+<tr>
+<td>Mutación</td>
+<td>Intercambio de 2 genes</td>
+</tr>
+<tr>
+<td>Función objetivo (minimizar)</td>
+<td>Distancia recorrida: <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0715em;">C</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1.2537em;vertical-align:-0.2997em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:0em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.954em;"><span style="top:-2.4003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mopen">[</span><span class="mord mathnormal">i</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mopen">[</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">]]</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mopen">[</span><span class="mord mathnormal">n</span><span class="mclose">]</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0576em;">S</span><span class="mopen">[</span><span class="mord">1</span><span class="mclose">]]</span></span></span></span></eq></td>
+</tr>
+</tbody>
+</table>
+<p>En la función objetivo, <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.0278em;">D</span></span></span></span></eq> es la matriz de distancias y el último término cierra el ciclo volviendo a la ciudad inicial. Para profundizar, las diapositivas citan la revisión de Larrañaga et al. (1999) sobre representaciones y operadores para el TSP.</p>
+<h1>2.6 Ideas clave</h1>
+<ul>
+<li><strong>MH basadas en poblaciones</strong>: evolucionan un conjunto de soluciones (CE, PSO) frente a las de trayectoria (SA, tabú) o constructivas (GRASP, ACO).</li>
+<li><strong>Computación evolutiva</strong> (Holland, 1975): selección natural sobre una población de soluciones; método &quot;débil&quot; y probabilístico que da soluciones subóptimas de forma eficiente. Variantes: estrategias de evolución, programación evolutiva, programación genética (árboles), algoritmos genéticos (vectores).</li>
+<li>Ciclo: población inicial → fitness → <strong>selección</strong> → <strong>cruce</strong> (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.1389em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.1389em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.0715em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> 0,6–0,9) → <strong>mutación</strong> (<eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.1944em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">m</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></eq> muy baja) → <strong>reemplazo</strong> → parada. Variación = diversidad; selección = calidad.</li>
+<li><strong>Representación</strong>: cromosoma, gen, alelo; genotipo ↔ fenotipo. Binaria, real, de orden (necesita reparación).</li>
+<li><strong>Fitness</strong>: hasta el 95 % de la CPU; varios objetivos se agregan.</li>
+<li><strong>Selección</strong>: aleatoria, torneo (k), ranking, ruleta (proporcional). <strong>Presión selectiva</strong>.</li>
+<li><strong>Cruce</strong>: 1 y 2 puntos (binario); <strong>OX, PMX, CX</strong> (orden); aritmético y plano (real). <strong>Mutación</strong>: bit, <em>random resetting</em>, intercambio/inserción/mezcla, gaussiana <eq><span class="katex"><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.109em;">N</span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.0359em;">σ</span><span class="mclose">)</span></span></span></span></eq>.</li>
+<li><strong>Reemplazo</strong>: generacional (con elitismo) o permanente (RW, RTS, WAMS, DC).</li>
+<li>Varias ejecuciones + estadística. Presión alta → <strong>convergencia prematura</strong>. Equilibrio <strong>exploración / explotación</strong>.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-busqueda-local-temple-simulado-y-csp.html"><span class="nav-etiqueta">← anterior</span>1. Búsqueda local, Temple Simulado y CSP</a>
+  
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

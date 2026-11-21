@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. Extracción, Transformación y Carga (ETL) — apuntes de MYAD (cuarto curso de Ingeniería Informática).">
+<title>2. Extracción, Transformación y Carga (ETL) · MYAD · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">myad</a><span class="miga-sep">/</span><span aria-current="page">2-extraccion-transformacion-y-carga-etl</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de MYAD"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">MYAD</a></p><ol><li><a href="1-almacenes-de-datos.html">1. Almacenes de Datos</a></li><li><span class="actual" aria-current="page">2. Extracción, Transformación y Carga (ETL)</span></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>MYAD</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>2 / 2</div>
+    </div>
+    <h1>Extracción, Transformación y Carga (ETL)</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de MYAD · 2/2</summary><ol><li><a href="1-almacenes-de-datos.html">1. Almacenes de Datos</a></li><li><span aria-current="page">2. Extracción, Transformación y Carga (ETL)</span></li></ol></details>
+  <div class="prosa">
+<h1>2.1 Introducción</h1>
+<p>El <strong>sistema ETL</strong> (<em>Extract, Transform, Load</em>) es el puente entre los <strong>sistemas operacionales &quot;fuente&quot;</strong> y el <strong>almacén de datos</strong> (DW). Sus tres fases son:</p>
+<ul>
+<li><strong>Extraer</strong> de los sistemas operacionales: leer y <strong>comprender</strong> los datos de las fuentes, que muchas veces (no siempre) son sistemas <strong>OLTP</strong>. No es sencillo, por la complejidad y la <strong>falta de documentación</strong> de las fuentes, y porque puede ser necesario repetir la operación muchas veces.</li>
+<li><strong>Transformar</strong>: <strong>limpiar</strong> los datos, <strong>combinar</strong> los de varias fuentes y <strong>eliminar duplicados</strong>, hasta dejarlos en un estado consolidado que pueda pasar al almacén.</li>
+<li><strong>Cargar</strong> los datos en el DW.</li>
+</ul>
+<p>El desarrollo del ETL supone <strong>un porcentaje muy grande</strong> del esfuerzo de construir un entorno DW/BI, así que hay que gestionarlo con eficiencia. Puede programarse a mano, pero existen herramientas que ayudan, como <strong>Pentaho Data Integration</strong>.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>El ETL es la cocina de un restaurante: los proveedores (fuentes) traen ingredientes de calidad desigual y en formatos distintos; en cocina se lavan, se descartan los malos, se cortan y se combinan (transformar), y al final se emplatan en la sala (el DW), donde el cliente (el usuario de BI) solo ve platos listos para consumir.</p>
+</div>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=qG2u6WUHjd8">DATOS: PROCESO ETL/ELT EXPLICADO</a> — las tres fases y la variante ELT (vídeo, 12:39).</p>
+</div>
+<h1>2.2 Requisitos del sistema ETL</h1>
+<p>Antes de diseñar el ETL hay que <strong>definir los requisitos, realidades y limitaciones</strong> que lo afectan:</p>
+<table>
+<thead>
+<tr>
+<th>Requisito</th>
+<th>Qué hay que determinar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>De negocio</strong></td>
+<td>Las necesidades de información de los usuarios del DW/BI; deciden qué fuentes se eligen y cómo se transforman</td>
+</tr>
+<tr>
+<td><strong>De conformidad</strong></td>
+<td>Cumplimiento de normativas: qué datos e informes requieren mantener la <strong>cadena de custodia</strong> y qué marco legal aplica</td>
+</tr>
+<tr>
+<td><strong>De calidad de datos</strong></td>
+<td>Qué elementos tienen problemas de calidad conocidos y si se pueden corregir en los sistemas operacionales antes de extraerlos; incluye el seguimiento de la calidad</td>
+</tr>
+<tr>
+<td><strong>De seguridad</strong></td>
+<td>Nivel de sensibilidad de los datos: quién puede ver datos e informes y quién accede a los <em>backups</em></td>
+</tr>
+<tr>
+<td><strong>De integración</strong></td>
+<td>Acordar un conjunto de <strong>dimensiones y hechos compartidos</strong> entre los procesos de negocio de la organización</td>
+</tr>
+<tr>
+<td><strong>De latencia</strong></td>
+<td>Con qué rapidez deben llegar los datos al usuario; condiciona mucho la arquitectura (paralelización, <em>microbatches</em>…)</td>
+</tr>
+<tr>
+<td><strong>De archivado y seguimiento</strong></td>
+<td>Copias y política de retención, y <strong>reproducibilidad</strong>: metainformación sobre las fuentes y los pasos para reproducir los resultados</td>
+</tr>
+<tr>
+<td><strong>De interfaces BI</strong></td>
+<td>Que los datos lleguen a las aplicaciones de forma rápida, simple y fiable; qué hechos y dimensiones se exponen (coordinando equipo ETL, arquitectos de datos y desarrolladores)</td>
+</tr>
+<tr>
+<td><strong>De conocimientos</strong></td>
+<td>Adaptarse a las tecnologías que la empresa y sus trabajadores dominan (herramientas ETL, lenguajes, SGBD, SQL…)</td>
+</tr>
+<tr>
+<td><strong>De licencias / sistemas legados</strong></td>
+<td>A veces hay que trabajar con tecnologías heredadas que no se pueden elegir; hay que distinguir si su uso es obligatorio o solo recomendable</td>
+</tr>
+</tbody>
+</table>
+<p>El requisito de integración es el <strong>bus de Kimball</strong> del <a href="1-almacenes-de-datos.html">tema 1</a>: varios procesos (ventas, pedidos, inventario) comparten las mismas dimensiones (producto, fecha, tienda…).</p>
+<p><img src="../../../img/myad/myad-t2-bus-integracion.png" alt="Procesos de negocio que comparten dimensiones|300" loading="lazy"></p>
+<h1>2.3 Los 34 subsistemas ETL de Kimball</h1>
+<p>Kimball organiza todo lo que debe hacer un ETL en <strong>34 subsistemas</strong>, agrupados en cuatro bloques: <strong>extraer</strong> (1–3), <strong>limpieza y conformidad</strong> (4–8), <strong>entrega</strong> (9–21) y <strong>gestión</strong> (22–34).</p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.kimballgroup.com/2007/10/subsystems-of-etl-revisited/">Subsystems of ETL Revisited (Kimball Group)</a> — la lista original de los 34 subsistemas con una descripción breve de cada uno (artículo, inglés).</p>
+</div>
+<h2>2.3.1 Extracción (1–3)</h2>
+<p><strong>1. Perfilado de datos.</strong> Se analizan las fuentes para conocer su <strong>contenido, consistencia y estructura</strong>. Un análisis rápido sirve para decidir si se incorpora una fuente; uno profundo, para evaluar sus problemas, la dificultad de limpiarla, sus limitaciones y planificar el proceso.</p>
+<p><strong>2. Captura de cambios</strong> (<em>change data capture</em>). La <strong>primera carga</strong> del DW incluye todos los datos de las fuentes, pero repetirlo en cada ejecución del ETL no es viable. Hace falta una estrategia (compleja, no trivial) para transferir <strong>solo los cambios desde la última extracción</strong>.</p>
+<p><strong>3. Sistema de extracción.</strong> Cada origen puede estar en un sistema, entorno o SGBD distinto, con sus propios retos. Hay dos formas principales de obtener los datos: <strong>ficheros</strong> (XML, csv, txt…) o un <strong>flujo de datos</strong> iniciado mediante una consulta.</p>
+<h2>2.3.2 Limpieza y conformidad (4–8)</h2>
+<p>Son los subsistemas que <strong>cambian los datos y les añaden valor</strong>. Tienen un conflicto de fondo: se espera que la limpieza <strong>corrija los datos defectuosos</strong>, pero también que el almacén dé <strong>una imagen precisa de los datos tal como fueron</strong>, así que hay que encontrar el equilibrio. Deben generar <strong>metadatos</strong> que sirvan para diagnosticar los problemas de las fuentes. La clave es un sistema capaz de <strong>corregir, rechazar o cargar</strong> cada dato y de <strong>dejar constancia</strong> de las modificaciones, estandarizaciones, reglas y suposiciones aplicadas, de modo que <strong>se autodocumente</strong>.</p>
+<p><strong>4. Limpieza de datos.</strong> Implementa procesos de calidad para <strong>encontrar violaciones de calidad</strong>.</p>
+<p><strong>5. Esquema de eventos de error.</strong> Un <strong>esquema dimensional centralizado</strong> donde se guardan los eventos de los chequeos de calidad, para usarlos después en mejorar la calidad. Tiene una tabla de hechos de eventos de error (con fecha, lote, chequeo y gravedad) y una tabla de detalle que apunta a la tabla, campo y registro concretos que fallaron.</p>
+<p><img src="../../../img/myad/myad-t2-esquema-errores.png" alt="Esquema de eventos de error|480" loading="lazy"></p>
+<p><strong>6. Dimensión de auditoría.</strong> Una dimensión que el ETL <strong>añade a la tabla de hechos</strong> para evaluar la calidad de los datos insertados. Contiene metadatos (calificación de calidad global, indicadores de completitud, validación, valores fuera de rango, registro modificado, versión del ETL…) que las aplicaciones de BI pueden consultar.</p>
+<p><img src="../../../img/myad/myad-t2-dimension-auditoria.png" alt="Dimensión de auditoría unida a una tabla de hechos de envíos|420" loading="lazy"></p>
+<p><strong>7. Sistema de deduplicación.</strong> Integra datos de <strong>fuentes diferentes</strong> para construir una imagen que combine, en cada fila, <strong>las columnas de mayor calidad</strong> (<strong>proceso de supervivencia</strong>). Necesita reglas de negocio claras sobre qué fuente tiene prioridad para cada campo.</p>
+<p><strong>8. Sistema de conformidad.</strong> Todos los pasos para ajustar los atributos comunes a las <strong>dimensiones acordadas</strong> (<em>conformed</em>) y las métricas comunes de las tablas de hechos de los distintos procesos de la organización.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>La deduplicación es como fusionar las agendas de contactos del móvil, el correo y el trabajo: de cada persona te quedas con el teléfono de la agenda más fiable y el email de la más actualizada (supervivencia), según reglas fijadas de antemano.</p>
+</div>
+<h2>2.3.3 Entrega (9–21)</h2>
+<p>Preparan y cargan los datos en las tablas de destino.</p>
+<h3>Subsistema 9: dimensiones lentamente cambiantes (SCD)</h3>
+<p>Cuando un atributo de una dimensión cambia respecto al valor almacenado, hay que decidir qué hacer (ver <a href="1-almacenes-de-datos.html">tema 1, sección 1.5</a>). Las tres aproximaciones típicas, con el ejemplo de un producto que pasa de la categoría <em>Tecnología</em> a <em>Educación</em>:</p>
+<p><strong>Tipo 1 – sobrescribir.</strong> Se cambia el valor viejo por el nuevo en la misma fila. El atributo refleja siempre el valor actual y la tabla de hechos no se modifica. Es lo más simple, pero <strong>se pierde el historial</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>ProductID</th>
+<th>RefProducto</th>
+<th>Nombre</th>
+<th>Categoría</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12345</td>
+<td>ABC-999-ES</td>
+<td>EducationIA</td>
+<td><s>Tecnología</s> → <strong>Educación</strong></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tipo 2 – añadir una nueva fila.</strong> Se añade a la dimensión una fila nueva, copia de la anterior salvo en los campos que cambian y <strong>con una clave subrogada nueva</strong>. La tabla de hechos no se modifica: los hechos antiguos siguen apuntando a la fila original y los nuevos a la nueva. Es la <strong>aproximación habitual</strong>, y conviene incluir información de estado (fechas de inicio y fin, estado).</p>
+<table>
+<thead>
+<tr>
+<th>ProductID</th>
+<th>RefProducto</th>
+<th>Nombre</th>
+<th>Categoría</th>
+<th>Fecha inicio</th>
+<th>Fecha fin</th>
+<th>Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12345</td>
+<td>ABC-999-ES</td>
+<td>EducationIA</td>
+<td>Tecnología</td>
+<td>01/01/2018</td>
+<td>01/10/2023</td>
+<td>Expirado</td>
+</tr>
+<tr>
+<td>25984</td>
+<td>ABC-999-ES</td>
+<td>EducationIA</td>
+<td>Educación</td>
+<td>02/10/2023</td>
+<td>31/12/9999</td>
+<td>Actual</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Tipo 3 – añadir un nuevo atributo (columna).</strong> No se añaden filas, sino columnas con el valor anterior. El atributo se sobrescribe como en el tipo 1 y la tabla de hechos no cambia. <strong>No es habitual ni mejor que el tipo 2</strong>, y no sirve para atributos que cambian de forma impredecible (como la dirección de un cliente). Puede valer para cambios que afectan a muchas filas a la vez, como una reorganización de líneas de producto o de departamentos.</p>
+<table>
+<thead>
+<tr>
+<th>ProductID</th>
+<th>RefProducto</th>
+<th>Nombre</th>
+<th>Categoría</th>
+<th>Categoría previa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>12345</td>
+<td>ABC-999-ES</td>
+<td>EducationIA</td>
+<td>Educación</td>
+<td>Tecnología</td>
+</tr>
+</tbody>
+</table>
+<h3>Subsistemas 10–14: claves, jerarquías, dimensiones especiales y hechos</h3>
+<p><strong>10. Generador de claves subrogadas.</strong> Se recomienda usar <strong>claves subrogadas</strong> (enteros sin significado de negocio) como clave primaria de las dimensiones, y hace falta un mecanismo robusto para generarlas; en PostgreSQL basta una <strong>secuencia autoincremental</strong>.</p>
+<p><strong>11. Gestor de jerarquías.</strong> Es habitual que una dimensión tenga varias jerarquías. Las <strong>fijas</strong> tienen siempre los mismos niveles y cada nivel es un atributo de la dimensión (país, región, ciudad). Las <strong>desiguales</strong> (<em>ragged</em>) tienen estructura no uniforme y profundidad variable (categoría, subcategoría, familia, subfamilia, producto); según lo irregulares que sean, se tratan como fijas o con técnicas más complejas, como las <strong>tablas puente</strong>.</p>
+<p><strong>12. Gestor de dimensiones especiales.</strong> Se ocupa de dimensiones que requieren un trato especial:</p>
+<ul>
+<li><strong>De tiempo y fecha</strong>: normalmente no tienen datos de origen (se generan), pero son críticas para la analítica.</li>
+<li><strong>Basura</strong> (<em>junk</em>): producto cartesiano de varias dimensiones pequeñas; agrupa atributos sueltos (indicadores, códigos) que no encajan en otra dimensión y no justifican una propia.</li>
+<li><strong>Encogidas</strong> (<em>shrunken</em>): subconjuntos de dimensiones grandes creados para mejorar el rendimiento (por ejemplo, una dimensión &quot;mes&quot; a partir de &quot;fecha&quot;); exigen más mantenimiento y sincronización.</li>
+</ul>
+<p><strong>13. Constructores de tablas de hechos.</strong> Construyen los tres tipos de tablas de hechos: <strong>transaccionales</strong> (un evento medido en un instante concreto, según la granularidad), <strong>instantáneas periódicas</strong> (se cargan a intervalos regulares y representan periodos) e <strong>instantáneas acumuladas</strong> (procesos finitos con inicio y final bien definidos que evolucionan, como un pedido).</p>
+<p><strong>14. Pipeline de claves subrogadas.</strong> Sustituye en cada registro de hechos las <strong>claves naturales</strong> de los sistemas operacionales por las <strong>claves subrogadas</strong> de las dimensiones (<em>key lookup process</em>).</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía</p>
+<p>El pipeline de claves subrogadas es como la recepción de un hotel: el cliente llega con su DNI (clave natural), y recepción busca en el registro qué número de habitación (clave subrogada) le corresponde; el resto del hotel solo trabaja con números de habitación.</p>
+</div>
+<h3>Subsistema 15: tablas puente para dimensiones multivaluadas</h3>
+<p>Construye y mantiene <strong>tablas puente</strong> que permiten relaciones <strong>muchos a muchos</strong> entre hechos y dimensiones (también sirven para jerarquías irregulares). Ejemplos: pacientes y diagnósticos, clases y profesores.</p>
+<p>En el ejemplo, cada ingreso en urgencias (tabla de hechos) puede tener <strong>varios diagnósticos</strong>. En vez de repetir el hecho una vez por diagnóstico, el hecho apunta a un <strong>grupo de diagnósticos</strong> (p. ej. el grupo 1 = B58.09, I13.10, K35.2), y la <strong>tabla puente</strong> enlaza cada grupo con sus diagnósticos individuales de la dimensión ICD10.</p>
+<p><img src="../../../img/myad/myad-t2-puente-1.png" alt="Ingresos con varios diagnósticos y grupos de diagnóstico|420" loading="lazy"></p>
+<p><img src="../../../img/myad/myad-t2-puente-2.png" alt="Tabla puente grupo–diagnóstico y dimensión de diagnósticos|480" loading="lazy"></p>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.kimballgroup.com/2012/02/design-tip-142-building-bridges/">Design Tip #142 Building Bridges (Kimball Group)</a> — el ejemplo de los diagnósticos explicado por Kimball, origen de las figuras (artículo, inglés; enlazado en las diapositivas).</p>
+</div>
+<h3>Subsistemas 16–21: datos retrasados, publicación y agregados</h3>
+<p><strong>16. Gestor de datos retrasados.</strong> En un sistema real no todo llega a la vez: puede haber <strong>medidas sin su contexto completo</strong> (dimensiones aún desconocidas) o <strong>medidas que llegan tarde</strong>. Lo grave que sea depende de si se puede esperar a cargar hasta resolverlo; si no, hace falta un subsistema que modifique el procedimiento estándar. Una solución es asignar un <strong>valor por defecto</strong> a la dimensión hasta conocerla (p. ej. nombre de cliente: <em>TBD</em>).</p>
+<p><strong>17. Sistema de gestión de las dimensiones.</strong> Autoridad <strong>centralizada</strong> que prepara y <strong>publica las dimensiones acordadas</strong>. Cada dimensión acordada debe ser un recurso gestionado centralmente con <strong>una fuente única y coherente</strong>.</p>
+<p><strong>18. Sistema de provisión de tablas de hechos.</strong> Administra una o varias tablas de hechos (creación, mantenimiento y uso): recibe las dimensiones del gestor de dimensiones, añade y actualiza filas, asegura la calidad de los hechos base y agregados, y <strong>notifica a los usuarios</strong> de cambios, actualizaciones y problemas.</p>
+<p><strong>19. Constructor de agregaciones.</strong> Crea y mantiene estructuras de <strong>agregados</strong> para acelerar las consultas.</p>
+<p><strong>20. Constructor de cubos OLAP.</strong> Alimenta los <strong>cubos OLAP</strong> con los datos de los esquemas dimensionales relacionales; hay que actualizarlos si cambian hechos o dimensiones.</p>
+<p><strong>21. Gestor de propagación de datos.</strong> Mueve datos de la capa de presentación del DW/BI a <strong>otros entornos</strong>, por ejemplo a aplicaciones de analítica propietarias que no pueden acceder directamente al DW.</p>
+<h2>2.3.4 Gestión del entorno (22–34)</h2>
+<p>El entorno ETL debe ser <strong>fiable</strong> (<em>reliability</em>), tener <strong>alta disponibilidad</strong> (<em>availability</em>) y ser muy <strong>gestionable</strong> (<em>manageability</em>). Para ello:</p>
+<table>
+<thead>
+<tr>
+<th>Nº</th>
+<th>Subsistema</th>
+<th>Función</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>22</td>
+<td><strong>Programador de trabajos</strong> (<em>job scheduler</em>)</td>
+<td>Programa y lanza los trabajos ETL, controlando las <strong>dependencias</strong> entre ellos</td>
+</tr>
+<tr>
+<td>23</td>
+<td><strong>Backup</strong></td>
+<td>Almacena, archiva y recupera elementos del sistema ETL</td>
+</tr>
+<tr>
+<td>24</td>
+<td><strong>Recuperación y reinicio</strong></td>
+<td>Los trabajos deben recuperarse ante errores y poder reiniciarse</td>
+</tr>
+<tr>
+<td>25</td>
+<td><strong>Control de versiones</strong></td>
+<td>Versiones de scripts, SQL, <em>jobs</em>… (Git, SVN)</td>
+</tr>
+<tr>
+<td>26</td>
+<td><strong>Migración de versiones</strong></td>
+<td>Pasar los cambios de desarrollo a pruebas y a producción</td>
+</tr>
+<tr>
+<td>27</td>
+<td><strong>Monitor del flujo de trabajo</strong></td>
+<td>Panel e informes de los trabajos lanzados, para comprobar que funcionan</td>
+</tr>
+<tr>
+<td>28</td>
+<td><strong>Ordenación</strong> (<em>sorting</em>)</td>
+<td>Ordenar datos rápido, clave para agregaciones y <em>joins</em>; tan importante que es un subsistema propio</td>
+</tr>
+<tr>
+<td>29</td>
+<td><strong>Linaje y dependencias</strong></td>
+<td>Saber de qué fuentes y transformaciones sale cualquier dato o informe, en cualquier etapa</td>
+</tr>
+<tr>
+<td>30</td>
+<td><strong>Escalado de problemas</strong></td>
+<td>El ETL funciona solo y se monitoriza; un error se registra y se <strong>notifica</strong> automáticamente a quien deba resolverlo</td>
+</tr>
+<tr>
+<td>31</td>
+<td><strong>Paralelización / pipelining</strong></td>
+<td>Aprovechar los recursos de cómputo para cumplir las restricciones de tiempo</td>
+</tr>
+<tr>
+<td>32</td>
+<td><strong>Seguridad</strong></td>
+<td>Seguridad por usuario y rol de todos los datos y metadatos del ETL, incluido el backup</td>
+</tr>
+<tr>
+<td>33</td>
+<td><strong>Gestor de conformidad</strong> (<em>compliance</em>)</td>
+<td>Cadena de custodia y registro de accesos en entornos regulados (banca, salud…); todo cambio se registra y se puede llegar al dato original</td>
+</tr>
+<tr>
+<td>34</td>
+<td><strong>Repositorio de metadatos</strong></td>
+<td>Gestiona todos los metadatos del ETL (de procesos, técnicos y de negocio), incluida la lógica de las transformaciones</td>
+</tr>
+</tbody>
+</table>
+<h1>2.4 Planificar e implementar el ETL</h1>
+<p>Los pasos son:</p>
+<ol>
+<li><strong>Esbozar un plan de alto nivel</strong>: identificar fuentes y destinos (tablas de hechos y dimensiones).</li>
+<li><strong>Elegir una herramienta ETL</strong>: se podrían programar algoritmos <em>ad hoc</em>, pero no es lo recomendable.</li>
+<li><strong>Desarrollar estrategias por defecto</strong> para las tareas comunes: extracción y archivado, monitorizar la calidad de hechos y dimensiones, gestionar los cambios en los atributos de las dimensiones, cumplir los requisitos de disponibilidad, diseñar la auditoría de datos y organizar el <strong>staging area</strong> (almacenamiento temporal intermedio del ETL).</li>
+<li><strong>Detallar el pipeline</strong> de cada fuente a cada tabla destino, con sus transformaciones, apoyándose en diagramas de flujo o esquemas.</li>
+<li><strong>Cargar las dimensiones con los datos históricos</strong>: se hace una sola vez y es distinto de la carga incremental. Se empieza por las tablas más simples y requiere transformaciones, combinar fuentes, asignar claves subrogadas, decodificar códigos de producción, etc.</li>
+<li><strong>Cargar los hechos históricos</strong>: más directo que las dimensiones. Requiere transformaciones (sustituir valores &quot;especiales&quot; por NULL, calcular hechos complejos, insertar claves de auditoría…) y el <strong>pipeline de <em>lookup</em></strong> de claves subrogadas.</li>
+<li><strong>Procesado incremental de las dimensiones</strong>: el volumen impide recargarlo todo cada vez. Reutiliza parte de la lógica de la carga histórica y es <strong>automático</strong>. El reto es <strong>identificar los datos nuevos o modificados</strong>; la mayoría son <em>inserts</em>, pero las actualizaciones y borrados son inevitables y costosos.</li>
+<li><strong>Procesado incremental de los hechos</strong>: también automático, con <strong>chequeo de calidad</strong> obligatorio; la <strong>paralelización</strong> puede ser determinante.</li>
+<li><strong>Actualizar tablas resumen (agregados) y cubos OLAP</strong>: procesado adicional, más allá del esquema en estrella, para optimizar; los cambios en los datos base les afectan directamente.</li>
+<li><strong>Operación y automatización</strong>: programar los trabajos, gestionar errores y excepciones, y operaciones de mantenimiento de las bases de datos (actualizar estadísticas, recrear índices, limpiar datos…).</li>
+</ol>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=IQEUpFFn8GI">Datawarehouse y ETL: Aprende los fundamentos paso a paso</a> — de las fuentes al almacén, con datamarts y proceso ETL (vídeo, 18:20).</p>
+</div>
+<h1>2.5 Ideas clave</h1>
+<ul>
+<li><strong>ETL</strong> = extraer de las fuentes (a menudo OLTP), transformar (limpiar, combinar, deduplicar) y cargar en el DW. Es <strong>la mayor parte del esfuerzo</strong> de un proyecto DW/BI; herramientas como Pentaho Data Integration.</li>
+<li><strong>Requisitos</strong>: negocio, conformidad, calidad, seguridad, integración (dimensiones compartidas), latencia, archivado/linaje, interfaces BI, conocimientos y sistemas legados.</li>
+<li><strong>34 subsistemas de Kimball</strong> en 4 bloques: <strong>extracción</strong> (perfilado, captura de cambios, extracción), <strong>limpieza y conformidad</strong> (limpieza, esquema de errores, dimensión de auditoría, deduplicación por supervivencia, conformidad), <strong>entrega</strong> (SCD, claves subrogadas, jerarquías, dimensiones especiales, tablas de hechos, pipeline de claves, tablas puente, datos retrasados, gestión de dimensiones, provisión de hechos, agregados, cubos, propagación) y <strong>gestión</strong> (scheduler, backup, recuperación, versiones, monitor, sorting, linaje, escalado, paralelización, seguridad, compliance, metadatos).</li>
+<li><strong>SCD</strong>: tipo 1 sobrescribe (sin historia), <strong>tipo 2 nueva fila con nueva clave subrogada y fechas (lo habitual)</strong>, tipo 3 columna con el valor previo (raro).</li>
+<li>Dimensiones especiales: fecha/tiempo, <strong>junk</strong> (atributos sueltos), <strong>shrunken</strong> (subconjunto). Hechos: transaccionales, instantáneas periódicas y acumuladas. <strong>Tablas puente</strong> para relaciones N:M.</li>
+<li>Implementación: plan → herramienta → estrategias → pipeline → carga histórica (dimensiones y luego hechos) → cargas incrementales → agregados/cubos → automatización.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-almacenes-de-datos.html"><span class="nav-etiqueta">← anterior</span>1. Almacenes de Datos</a>
+  
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>

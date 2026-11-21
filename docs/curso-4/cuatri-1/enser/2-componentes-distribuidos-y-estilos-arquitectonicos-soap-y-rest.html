@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="2. Componentes distribuidos y estilos arquitectónicos. SOAP y REST — apuntes de ENSER (cuarto curso de Ingeniería Informática).">
+<title>2. Componentes distribuidos y estilos arquitectónicos. SOAP y REST · ENSER · ApuntesWeb</title>
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11171c" media="(prefers-color-scheme: dark)">
+<link rel="stylesheet" href="../../../vendor/katex/katex.min.css">
+<link rel="stylesheet" href="../../../css/estilos.css">
+<script>
+// Aplica el tema guardado antes del primer pintado para evitar parpadeo
+try { const t = localStorage.getItem('tema'); if (t) document.documentElement.dataset.tema = t; } catch (e) {}
+</script>
+</head>
+<body data-rel="../../../">
+<div class="progreso" id="progreso" hidden></div>
+<a class="salto" href="#contenido">Saltar al contenido</a>
+<header class="cabecera">
+  <div class="cabecera-interior">
+    <a class="marca" href="../../../index.html">Apuntes<span class="marca-web">Web</span></a>
+    <button id="boton-buscar" type="button">Buscar <kbd>Ctrl</kbd><kbd>K</kbd></button>
+    <button id="boton-atajos" type="button" aria-label="Atajos de teclado" hidden>?</button>
+    <button id="boton-tema" type="button" aria-label="Cambiar tema claro/oscuro">◐</button>
+  </div>
+</header>
+<nav class="migas" aria-label="Estás en"><a href="../../../index.html">inicio</a><span class="miga-sep">/</span><a href="../../index.html">curso-4</a><span class="miga-sep">/</span><a href="../index.html">cuatri-1</a><span class="miga-sep">/</span><a href="index.html">enser</a><span class="miga-sep">/</span><span aria-current="page">2-componentes-distribuidos-y-estilos-arquitectonicos-soap-y-rest</span></nav>
+<div class="disposicion con-lateral">
+<aside class="lateral" aria-label="Temas de ENSER"><div class="lateral-interior"><p class="lateral-titulo"><a href="index.html">ENSER</a></p><ol><li><a href="1-introduccion-a-la-ingenieria-de-servicios.html">1. Introducción a la Ingeniería de Servicios</a></li><li><span class="actual" aria-current="page">2. Componentes distribuidos y estilos arquitectónicos. SOAP y REST</span></li><li><a href="3-concepto-de-servicio-y-servicios-sin-estado-buenas-practicas-en-el-diseno-de-servicios.html">3. Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios</a></li><li><a href="practicas-servicios-rest-con-spring.html">Prácticas. Servicios REST con Spring</a></li><li><a href="prueba-2.html">Prueba 2</a></li></ol></div></aside>
+<main class="principal" id="contenido">
+<article class="nota">
+  <header class="ficha">
+    <div class="ficha-datos">
+      <div><span class="ficha-etiqueta">Asignatura</span>ENSER</div>
+      <div><span class="ficha-etiqueta">Curso</span>4.º · C1</div>
+      <div><span class="ficha-etiqueta">Tema</span>2 / 3</div>
+    </div>
+    <h1>Componentes distribuidos y estilos arquitectónicos. SOAP y REST</h1>
+  </header>
+<details class="indice-movil"><summary>Temas de ENSER · 2/5</summary><ol><li><a href="1-introduccion-a-la-ingenieria-de-servicios.html">1. Introducción a la Ingeniería de Servicios</a></li><li><span aria-current="page">2. Componentes distribuidos y estilos arquitectónicos. SOAP y REST</span></li><li><a href="3-concepto-de-servicio-y-servicios-sin-estado-buenas-practicas-en-el-diseno-de-servicios.html">3. Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios</a></li><li><a href="practicas-servicios-rest-con-spring.html">Prácticas. Servicios REST con Spring</a></li><li><a href="prueba-2.html">Prueba 2</a></li></ol></details>
+  <div class="prosa">
+<h1>2.1 Qué es un servicio</h1>
+<p>Un <strong>servicio</strong> (<em>servizo</em>) es un <strong>componente de negocio con una interfaz bien definida</strong>, que actúa como una entidad <strong>autónoma</strong>, <strong>desacoplada</strong> y con un <strong>objetivo específico y bien delimitado</strong>. En una tienda online, por ejemplo, puede haber un servicio para gestionar clientes, otro para las ventas y otro para modificar el inventario.</p>
+<p>Como su interfaz es <strong>formal y explícita</strong>, los servicios permiten la <strong>interoperabilidad</strong> entre sistemas, plataformas y lenguajes distintos: da igual en qué esté programado cada uno mientras respete la interfaz. Esto facilita <strong>escalar</strong> las aplicaciones y <strong>hacerlas evolucionar sin interrumpir</strong> su funcionamiento. Ser <strong>autónomos y débilmente acoplados</strong> es el pilar de las arquitecturas distribuidas modernas.</p>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: la ventanilla</p>
+<p>Un servicio es como una ventanilla de la administración: tiene un horario y unos formularios concretos (la interfaz), hace una sola cosa (renovar el DNI) y a ti no te importa cómo lo gestionan por dentro. Si reorganizan la oficina, mientras la ventanilla y los formularios sigan igual, tú no notas nada.</p>
+</div>
+<p>Hay dos grandes formas de implementar servicios web: <strong>SOAP</strong> y <strong>REST</strong>.</p>
+<h1>2.2 SOAP (<em>Simple Object Access Protocol</em>)</h1>
+<p>SOAP es el <strong>origen de las arquitecturas orientadas a servicios</strong>, y su propuesta se centra en la <strong>formalidad y la robustez</strong>. Es un <strong>protocolo de mensajería</strong> para intercambiar información estructurada en <strong>XML</strong>. Su rasgo principal es que <strong>estandariza cómo empaquetar, enviar y recibir mensajes</strong> sobre distintos protocolos de transporte: <strong>HTTP, SMTP, JMS o FTP</strong>. Como los mensajes están definidos de forma estricta en un <strong>contrato de servicio</strong>, la comunicación es <strong>fiable y validada</strong>.</p>
+<h2>2.2.1 Componentes de una arquitectura SOAP</h2>
+<ul>
+<li><strong>Proveedor de servicios</strong>: el sistema que implementa la lógica de negocio y la ofrece a otros como servicio.</li>
+<li><strong>Consumidor de servicios</strong>: la aplicación que invoca el servicio. Lo trata como una <strong>&quot;caja negra&quot;</strong>: no necesita conocer su complejidad interna, lo que reduce la dependencia entre ambos.</li>
+<li><strong>Registro de servicios (broker)</strong>: un <strong>repositorio central</strong> donde los proveedores publican la descripción de sus servicios y donde los consumidores los <strong>buscan y descubren dinámicamente</strong>. El estándar más conocido es <strong>UDDI</strong>.</li>
+<li><strong>Contrato de servicio</strong>: la interfaz de cada servicio se define formalmente en un documento <strong>WSDL</strong> (<em>Web Services Description Language</em>), que describe las <strong>operaciones</strong> disponibles y la <strong>estructura de los datos</strong> de entrada y salida (con <strong>XML Schema</strong>). Es el &quot;manual de instrucciones&quot; para los clientes.</li>
+<li><strong>Bus de Servicio Empresarial (ESB)</strong>: en arquitecturas complejas, una <strong>capa intermedia que gestiona toda la comunicación</strong>: <strong>enruta</strong> mensajes, <strong>transforma</strong> datos (por ejemplo, de XML a JSON) y <strong>orquesta</strong> servicios para crear flujos de trabajo complejos.</li>
+</ul>
+<h2>2.2.2 Estructura de un mensaje SOAP</h2>
+<p>Todos los mensajes son <strong>XML</strong> y tienen estas partes:</p>
+<table>
+<thead>
+<tr>
+<th>Parte</th>
+<th>Obligatoria</th>
+<th>Contenido</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Sobre</strong> (<em>Envelope</em>)</td>
+<td>Sí</td>
+<td>Elemento raíz que encapsula todo el mensaje</td>
+</tr>
+<tr>
+<td><strong>Cabecera</strong> (<em>Header</em>)</td>
+<td>No</td>
+<td>Metadatos o información de control (seguridad, enrutamiento)</td>
+</tr>
+<tr>
+<td><strong>Cuerpo</strong> (<em>Body</em>)</td>
+<td>Sí</td>
+<td>La información principal: la llamada al método y sus parámetros</td>
+</tr>
+<tr>
+<td><strong>Fallo</strong> (<em>Fault</em>)</td>
+<td>No</td>
+<td>Dentro del cuerpo; sirve para informar de errores al procesar el mensaje</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-example">
+<p class="callout-titulo">Analogía: una carta certificada</p>
+<p>El <strong>sobre</strong> lo envuelve todo; la <strong>cabecera</strong> son los sellos e instrucciones de envío; el <strong>cuerpo</strong> es la carta en sí, y el <strong>fallo</strong> es el aviso de &quot;destinatario desconocido&quot; que te devuelven si algo sale mal.</p>
+</div>
+<p>El precio de esa robustez y formalidad es que SOAP es un protocolo <strong>pesado y tedioso de implementar</strong>, con una complejidad <strong>excesiva para muchas aplicaciones</strong>. Esa es la razón principal de la evolución hacia REST.</p>
+<h1>2.3 REST (<em>Representational State Transfer</em>)</h1>
+<p>REST <strong>no es un protocolo, sino un estilo arquitectónico</strong> que nació para simplificar los servicios web. Su filosofía se basa en los principios <strong>KISS</strong> (<em>Keep It Simple, Stupid</em>, mantenlo simple) y <strong>DRY</strong> (<em>Don't Repeat Yourself</em>, no te repitas): en vez de inventar un protocolo nuevo, <strong>reaprovecha todo lo que HTTP ya ofrece</strong>. Usa los <strong>verbos HTTP</strong> (GET, POST, PUT, DELETE), sus <strong>códigos de estado</strong> y sus <strong>cabeceras</strong>, y aprovecha toda la infraestructura de Internet ya existente (<strong>cachés, proxies, CDNs</strong>).</p>
+<p>Sus ventajas son:</p>
+<ul>
+<li><strong>Simplicidad y ligereza</strong>: al reutilizar HTTP es mucho más fácil de usar. Sus mensajes no están atados a ninguna codificación, aunque se suelen usar formatos ligeros como <strong>JSON</strong> en lugar de XML.</li>
+<li><strong>Orientación a recursos</strong>: el diseño gira en torno a <strong>recursos</strong> (<code>/clientes</code>, <code>/productos</code>) accesibles mediante <strong>URLs</strong>, algo intuitivo y parecido a navegar por la web.</li>
+<li><strong>Cacheabilidad sencilla</strong>: aprovecha la <strong>caché nativa de HTTP</strong>, de modo que los recursos se guardan temporalmente en clientes o intermediarios, lo que mejora el rendimiento y reduce la carga del servidor.</li>
+<li><strong>Escalabilidad</strong>: al ser <strong>sin estado (stateless)</strong>, cada petición contiene todo lo necesario para procesarse de forma independiente, así que la carga se reparte fácilmente entre varios servidores.</li>
+<li><strong>Alta interoperabilidad</strong>: al basarse en HTTP, se accede desde prácticamente cualquier dispositivo conectado, y por eso es el <strong>estándar de facto</strong> para integrar sistemas y desarrollar APIs.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>SOAP</th>
+<th>REST</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qué es</td>
+<td><strong>Protocolo</strong> de mensajería</td>
+<td><strong>Estilo arquitectónico</strong></td>
+</tr>
+<tr>
+<td>Formato</td>
+<td>Siempre <strong>XML</strong></td>
+<td>Cualquiera; normalmente <strong>JSON</strong></td>
+</tr>
+<tr>
+<td>Transporte</td>
+<td>HTTP, SMTP, JMS, FTP...</td>
+<td><strong>HTTP</strong></td>
+</tr>
+<tr>
+<td>Contrato</td>
+<td>Formal y estricto (<strong>WSDL</strong>)</td>
+<td>Recursos + verbos + códigos HTTP</td>
+</tr>
+<tr>
+<td>Enfoque</td>
+<td>Operaciones (llamar a métodos)</td>
+<td><strong>Recursos</strong> (URLs)</td>
+</tr>
+<tr>
+<td>Puntos fuertes</td>
+<td>Formalidad, robustez, validación</td>
+<td>Simplicidad, ligereza, caché, escalabilidad</td>
+</tr>
+<tr>
+<td>Punto débil</td>
+<td>Pesado, tedioso, acoplamiento</td>
+<td>Menos formal</td>
+</tr>
+</tbody>
+</table>
+<div class="callout callout-tip">
+<p class="callout-titulo">Para entenderlo mejor</p>
+<p><a href="https://www.youtube.com/watch?v=VCPluX3VZpU">Diferencias entre servicios REST y SOAP</a> — comparación de ambos con ejemplos de mensajes (vídeo, 5 min).</p>
+</div>
+<h1>2.4 Ideas clave</h1>
+<ul>
+<li><strong>Servicio</strong>: componente de negocio con <strong>interfaz bien definida</strong>, <strong>autónomo</strong>, <strong>desacoplado</strong> y con un objetivo concreto. Permite interoperabilidad y evolución sin interrupciones.</li>
+<li><strong>SOAP</strong>: <strong>protocolo</strong> de mensajería en <strong>XML</strong>, formal y robusto, sobre varios transportes (HTTP, SMTP, JMS, FTP).</li>
+<li>Componentes SOAP: <strong>proveedor</strong>, <strong>consumidor</strong> (caja negra), <strong>registro/broker</strong> (<strong>UDDI</strong>), <strong>contrato</strong> (<strong>WSDL</strong> + XML Schema) y <strong>ESB</strong> (enrutar, transformar, orquestar).</li>
+<li>Mensaje SOAP: <strong>Envelope</strong> (obligatorio) → <strong>Header</strong> (opcional) + <strong>Body</strong> (obligatorio) → <strong>Fault</strong> (opcional, dentro del Body).</li>
+<li><strong>REST</strong>: <strong>estilo arquitectónico</strong> (KISS + DRY) que reutiliza HTTP (verbos, códigos, cabeceras, cachés). Ventajas: simple, orientado a recursos, cacheable, escalable (stateless), interoperable.</li>
+</ul>
+
+  </div>
+</article>
+<nav class="nota-nav" aria-label="Navegación entre temas">
+  <a class="nav-anterior" href="1-introduccion-a-la-ingenieria-de-servicios.html"><span class="nav-etiqueta">← anterior</span>1. Introducción a la Ingeniería de Servicios</a>
+  <a class="nav-siguiente" href="3-concepto-de-servicio-y-servicios-sin-estado-buenas-practicas-en-el-diseno-de-servicios.html"><span class="nav-etiqueta">siguiente →</span>3. Concepto de servicio y servicios sin estado. Buenas prácticas en el diseño de servicios</a>
+</nav>
+
+</main>
+</div>
+<div class="paleta-fondo" id="paleta-fondo" hidden>
+  <div class="paleta" role="dialog" aria-modal="true" aria-label="Buscar en los apuntes">
+    <input id="paleta-entrada" type="search" name="buscar" aria-label="Buscar en los apuntes"
+      placeholder="Busca un tema, asignatura o apartado…" autocomplete="off" spellcheck="false">
+    <ul id="paleta-resultados" aria-live="polite"></ul>
+    <div class="paleta-pie">
+      <span><kbd>↑</kbd><kbd>↓</kbd> moverse</span>
+      <span><kbd>↵</kbd> abrir</span>
+      <span><kbd>Esc</kbd> cerrar</span>
+    </div>
+  </div>
+</div>
+<dialog class="atajos" id="atajos" aria-labelledby="atajos-titulo">
+  <h2 id="atajos-titulo">Atajos de teclado</h2>
+  <dl>
+    <dt><kbd>Ctrl</kbd><kbd>K</kbd></dt><dd>Buscar</dd>
+    <dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>Tema anterior / siguiente</dd>
+    <dt><kbd>j</kbd> <kbd>k</kbd></dt><dd>Apartado siguiente / anterior</dd>
+    <dt><kbd>t</kbd></dt><dd>Tema claro / oscuro</dd>
+    <dt><kbd>?</kbd></dt><dd>Esta ayuda</dd>
+  </dl>
+  <form method="dialog"><button type="submit">Cerrar</button></form>
+</dialog>
+<script src="../../../js/app.js"></script>
+</body>
+</html>
